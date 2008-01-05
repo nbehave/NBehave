@@ -11,39 +11,6 @@ namespace NBehave.Spec.Framework
 
     public delegate void RunnersStartListeningHandler();
 
-    public class SpecifyContext<T>
-    {
-        private readonly T _value;
-
-        public SpecifyContext(T value)
-        {
-            _value = value;
-        }
-
-        public T Value
-        {
-            get { return _value; }
-        }
-
-        public static implicit operator T(SpecifyContext<T> sc)
-        {
-            return sc.Value;
-        }
-
-        public static explicit operator SpecifyContext<T>(T value)
-        {
-            return new SpecifyContext<T>(value);
-        }
-
-        public static SpecifyContext<bool> ShouldBeFalse<T>(T value)
-            where T : SpecifyContext<bool>
-        {
-            comparer = new BooleanComparer(false, Actual);
-
-            return comparer as BooleanComparer;
-        }
-    }
-
     public class Specify
     {
         private static bool broadcastNextSpec = true;
@@ -89,9 +56,11 @@ namespace NBehave.Spec.Framework
                 StartListening();
         }
 
-        public static SpecifyContext<T> That<T>(T value)
+        public static Specify That(object value)
         {
-            return new SpecifyContext<T>(value);
+            Specify r = new Specify(value);
+
+            return r;
         }
 
         public static Specify ThrownBy(MethodThatThrows method)
