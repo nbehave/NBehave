@@ -40,5 +40,13 @@ namespace NBehave.Console.Tests
 
             Assert.That(arguments.StoryOutput, Is.EqualTo("behavior.txt"));
         }
+
+        [Test]
+        public void Should_recognize_xml_output_switch()
+        {
+            Arguments arguments = new Arguments(new string[] { "/xml:behavior.xml" });
+
+            Assert.That(arguments.XmlOutput, Is.EqualTo("behavior.xml"));
+        }
     }
 }

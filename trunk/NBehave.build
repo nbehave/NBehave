@@ -32,21 +32,10 @@
   <target name="run-unit-tests">
     <mkdir dir="${build.dir}\test-reports" />
 
-    <exec program="NBehave.Runner.Console.exe" basedir="${build.dir}\Debug\UnitTests" workingdir="${build.dir}\Debug\UnitTests">
-      <arg value="/assembly:NBehave.Spec.Framework.Specification.dll" />
-      <arg value="/output:..\..\test-reports\NBehave.Spec.Framework.Specification.results.xml" />
-      <arg value="/behaviourOutput:..\..\test-reports\NBehave.Spec.Framework.Specification.results.txt" />
-    </exec>
-
-    <exec program="NBehave.Runner.Console.exe" basedir="${build.dir}\Debug\UnitTests" workingdir="${build.dir}\Debug\UnitTests">
-      <arg value="/assembly:NBehave.Runner.Console.Specifications.dll" />
-      <arg value="/output:..\..\test-reports\NBehave.Runner.Console.Specifications.results.xml" />
-      <arg value="/behaviourOutput:..\..\test-reports\NBehave.Runner.Console.Specifications.results.txt" />
-    </exec>
-
     <exec program="nunit-console.exe" basedir="tools\nunit" workingdir="${build.dir}\Debug\UnitTests">
       <arg value="NBehave.Narrator.Framework.Specifications.dll" />
       <arg value="NBehave.Console.Tests.dll" />
+      <arg value="NBehave.Spec.NUnit.Specs.dll" />
       <arg value="/xml:..\..\test-reports\UnitTests.xml" />
     </exec>
 
@@ -54,18 +43,6 @@
 
   <target name="run-unit-tests-with-coverage">
     <mkdir dir="${build.dir}\test-reports" />
-
-    <exec program="NBehave.Runner.Console.exe" basedir="${build.dir}\Debug\UnitTests" workingdir="${build.dir}\Debug\UnitTests">
-      <arg value="/assembly:NBehave.Spec.Framework.Specification.dll" />
-      <arg value="/output:..\..\test-reports\NBehave.Spec.Framework.Specification.results.xml" />
-      <arg value="/behaviourOutput:..\..\test-reports\NBehave.Spec.Framework.Specification.results.txt" />
-    </exec>
-
-    <exec program="NBehave.Runner.Console.exe" basedir="${build.dir}\Debug\UnitTests" workingdir="${build.dir}\Debug\UnitTests">
-      <arg value="/assembly:NBehave.Runner.Console.Specifications.dll" />
-      <arg value="/output:..\..\test-reports\NBehave.Runner.Console.Specifications.results.xml" />
-      <arg value="/behaviourOutput:..\..\test-reports\NBehave.Runner.Console.Specifications.results.txt" />
-    </exec>
 
     <!-- This runs NUnit through NCover.org version 1.3, giving coverage results.--> 
     <exec program="regsvr32" workingdir="tools\NCover" commandline="/s CoverLib.dll" />
@@ -76,6 +53,7 @@
       <arg value="..\..\..\tools\nunit\nunit-console.exe" />
       <arg value="NBehave.Narrator.Framework.Specifications.dll" />
       <arg value="NBehave.Console.Tests.dll" />
+      <arg value="NBehave.Spec.NUnit.Specs.dll" />
       <arg value="/xml:..\..\test-reports\UnitTests.xml" />
       <arg value="/nologo" />
       <arg value="//w" />

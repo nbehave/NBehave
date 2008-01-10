@@ -25,11 +25,11 @@ namespace NBehave.Examples
             transferStory
                 .WithScenario("Savings account is in credit")
 
-                    .Given("my savings account balance is", 100, delegate(int accountBalance) { savings = new Account(accountBalance); })
-                        .And("my cash account balance is", 10, delegate(int accountBalance) { cash = new Account(accountBalance); })
-                    .When("I transfer to cash account", 20, delegate(int transferAmount) { savings.TransferTo(cash, transferAmount); })
-                    .Then("my savings account balance should be", 80, delegate(int expectedBalance) { Assert.That(savings.Balance, Is.EqualTo(expectedBalance)); })
-                        .And("my cash account balance should be", 30, delegate(int expectedBalance) { Assert.That(cash.Balance, Is.EqualTo(expectedBalance)); })
+                    .Given("my savings account balance is", 100, accountBalance => { savings = new Account(accountBalance); })
+                        .And("my cash account balance is", 10, accountBalance => { cash = new Account(accountBalance); })
+                    .When("I transfer to cash account", 20, transferAmount => { savings.TransferTo(cash, transferAmount); })
+                    .Then("my savings account balance should be", 80, expectedBalance => { Assert.That(savings.Balance, Is.EqualTo(expectedBalance)); })
+                        .And("my cash account balance should be", 30, expectedBalance => { Assert.That(cash.Balance, Is.EqualTo(expectedBalance)); })
 
                     .Given("my savings account balance is", 400)
                         .And("my cash account balance is", 100)

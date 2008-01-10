@@ -43,7 +43,7 @@ namespace NBehave.Console
             System.Console.WriteLine();
             System.Console.WriteLine("NBehave-Console [inputfiles] [options]");
             System.Console.WriteLine();
-            System.Console.WriteLine("Runs a set of Behave# stories from the console.");
+            System.Console.WriteLine("Runs a set of NBehave stories from the console.");
             System.Console.WriteLine();
             System.Console.WriteLine("You may specify one or more assemblies.");
             System.Console.WriteLine();

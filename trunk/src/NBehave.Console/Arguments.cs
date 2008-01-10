@@ -8,6 +8,7 @@ namespace NBehave.Console
         private bool _showHelp = false;
         private List<string> _assemblyPaths = new List<string>();
         private string _storyOutput;
+        private string _xmlOutput;
 
         public Arguments(string[] args)
         {
@@ -35,6 +36,11 @@ namespace NBehave.Console
             get { return _storyOutput; }
         }
 
+        public string XmlOutput
+        {
+            get { return _xmlOutput; }
+        }
+
         private void ParseArguments(string[] args)
         {
             if ((args == null) || (args.Length == 0))
@@ -58,6 +64,10 @@ namespace NBehave.Console
                     if (command.Equals("/storyOutput", StringComparison.CurrentCultureIgnoreCase))
                     {
                         _storyOutput = argument;
+                    }
+                    else if (command.Equals("/xml", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        _xmlOutput = argument;
                     }
                 }
                 else
