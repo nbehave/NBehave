@@ -164,4 +164,31 @@ namespace NBehave.Spec.NUnit.Specs
             5.ShouldBeLessThanOrEqualTo(6);
         }
     }
+
+    [TestFixture]
+    public class When_specifying_exceptions_to_be_thrown
+    {
+        [Test]
+        public void Should_pass_when_exception_is_thrown()
+        {
+            (typeof(ApplicationException)).ShouldBeThrownBy(
+                () => { throw new ApplicationException(); });
+        }
+
+        [Test]
+        [ExpectedException(typeof(AssertionException))]
+        public void Should_fail_when_exception_is_not_thrown()
+        {
+            (typeof(ApplicationException)).ShouldBeThrownBy(
+                () => { ; });
+        }
+
+        [Test]
+        [ExpectedException(typeof(AssertionException))]
+        public void Should_fail_when_exception_is_a_different_type()
+        {
+            (typeof(SystemException)).ShouldBeThrownBy(
+                () => { throw new ApplicationException(); });
+        }
+    }
 }

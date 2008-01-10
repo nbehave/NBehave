@@ -121,6 +121,21 @@ namespace NBehave.Spec.NUnit
             Assert.That(value, Is.Not.Null);
         }
 
+        public static void ShouldBeThrownBy(this Type exceptionType, Action action)
+        {
+            Exception e = null;
 
+            try
+            {
+                action();
+            }
+            catch (Exception ex)
+            {
+                e = ex;
+            }
+
+            e.ShouldNotBeNull();
+            e.ShouldBeInstanceOfType(exceptionType);
+        }
     }
 }
