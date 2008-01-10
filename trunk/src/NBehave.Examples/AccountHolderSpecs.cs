@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using NBehave.Narrator.Framework;
+using NBehave.Spec.NUnit;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 
@@ -25,13 +26,13 @@ namespace NBehave.Examples
             AccountHolder holder = null;
 
             story.WithScenario("new account")
-                .Given("my account holder is", "Joe", delegate(string name) { holder = new AccountHolder(name); })
-                    .And("a new account with balance", 0, delegate (int balance) { account = new Account(balance); } )
+                .Given("my account holder is", "Joe", (name) => { holder = new AccountHolder(name); })
+                    .And("a new account with balance", 0, (balance) => { account = new Account(balance); } )
                 .When("the new account is added to the account holder", account, 
-                        delegate(Account accountToAdd) { holder.AddAccount(accountToAdd);} )
+                        (accountToAdd) => { holder.AddAccount(accountToAdd);} )
                 .Then("the new account should be held by the account holder", holder, account, 
-                    delegate (AccountHolder accountHolder, Account accountHeld) {
-                        Assert.That(accountHolder.AccountsHeld[0], Is.EqualTo(accountHeld)); } )
+                    (accountHolder, accountHeld) => {
+                        accountHolder.AccountsHeld[0].ShouldEqual(accountHeld); } )
             ;
         }
     }
