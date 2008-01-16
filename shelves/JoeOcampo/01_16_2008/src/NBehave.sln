@@ -1,0 +1,171 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{32A51014-8E9C-49F1-9CDF-A39CE01EAFA1}"
+	ProjectSection(SolutionItems) = preProject
+		..\go.bat = ..\go.bat
+		..\NBehave.build = ..\NBehave.build
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NBehave.Spec", "NBehave.Spec", "{2EF1C1FB-3D4F-4ADD-8431-D29386A9DE21}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NBehave.Narrator", "NBehave.Narrator", "{269CB317-6533-4826-8029-438300872EB9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NBehave.Runner", "NBehave.Runner", "{324DF465-63AB-40F3-905A-259C56D3224B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NBehave.Example", "NBehave.Example", "{78E62BFB-D059-42BB-B21D-F5A552557514}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.Narrator.Framework", "NBehave.Framework\NBehave.Narrator.Framework.csproj", "{9C2E9E17-2A2C-4F6C-8072-D160A7EA9A51}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.Narrator.Framework.Specifications", "NBehave.Framework.Tests\NBehave.Narrator.Framework.Specifications.csproj", "{9F7DCAC2-5148-40AF-B588-A784C646E12E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestAssembly", "TestAssembly\TestAssembly.csproj", "{E0CCE2D9-9720-4119-98D5-CDE44E283847}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.Console", "NBehave.Console\NBehave.Console.csproj", "{2162701A-70E9-4659-B17C-DEBA72C175D4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.Console.Tests", "NBehave.Console.Tests\NBehave.Console.Tests.csproj", "{D8A52514-2077-4363-BDCF-FDCD2EE24117}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.Examples", "NBehave.Examples\NBehave.Examples.csproj", "{5CBAFACF-8BD9-46FB-A0BC-276EDE593186}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.Spec.NUnit", "NBehave.Spec.NUnit\NBehave.Spec.NUnit.csproj", "{7BDFA147-A451-4FB0-8536-94EC1C52926E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.Spec.NUnit.Specs", "NBehave.Spec.NUnit.Specs\NBehave.Spec.NUnit.Specs.csproj", "{B7F6CEC7-B298-467F-ABE2-9ABCF4394FAD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.Spec.MbUnit", "NBehave.Spec.MbUnit\NBehave.Spec.MbUnit.csproj", "{FB62C290-3C9C-4CE7-A798-E2BE3A1F12EA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.Spec.MbUnit.Specs", "NBehave.Spec.MbUnit.Specs\NBehave.Spec.MbUnit.Specs.csproj", "{A9673996-D4FD-46C2-A749-42115A5FA835}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		AutomatedDebug|Any CPU = AutomatedDebug|Any CPU
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9C2E9E17-2A2C-4F6C-8072-D160A7EA9A51}.AutomatedDebug|Any CPU.ActiveCfg = AutomatedDebug|Any CPU
+		{9C2E9E17-2A2C-4F6C-8072-D160A7EA9A51}.AutomatedDebug|Any CPU.Build.0 = AutomatedDebug|Any CPU
+		{9C2E9E17-2A2C-4F6C-8072-D160A7EA9A51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C2E9E17-2A2C-4F6C-8072-D160A7EA9A51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C2E9E17-2A2C-4F6C-8072-D160A7EA9A51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C2E9E17-2A2C-4F6C-8072-D160A7EA9A51}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F7DCAC2-5148-40AF-B588-A784C646E12E}.AutomatedDebug|Any CPU.ActiveCfg = AutomatedDebug|Any CPU
+		{9F7DCAC2-5148-40AF-B588-A784C646E12E}.AutomatedDebug|Any CPU.Build.0 = AutomatedDebug|Any CPU
+		{9F7DCAC2-5148-40AF-B588-A784C646E12E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F7DCAC2-5148-40AF-B588-A784C646E12E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F7DCAC2-5148-40AF-B588-A784C646E12E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F7DCAC2-5148-40AF-B588-A784C646E12E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0CCE2D9-9720-4119-98D5-CDE44E283847}.AutomatedDebug|Any CPU.ActiveCfg = AutomatedDebug|Any CPU
+		{E0CCE2D9-9720-4119-98D5-CDE44E283847}.AutomatedDebug|Any CPU.Build.0 = AutomatedDebug|Any CPU
+		{E0CCE2D9-9720-4119-98D5-CDE44E283847}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0CCE2D9-9720-4119-98D5-CDE44E283847}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0CCE2D9-9720-4119-98D5-CDE44E283847}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0CCE2D9-9720-4119-98D5-CDE44E283847}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2162701A-70E9-4659-B17C-DEBA72C175D4}.AutomatedDebug|Any CPU.ActiveCfg = AutomatedDebug|Any CPU
+		{2162701A-70E9-4659-B17C-DEBA72C175D4}.AutomatedDebug|Any CPU.Build.0 = AutomatedDebug|Any CPU
+		{2162701A-70E9-4659-B17C-DEBA72C175D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2162701A-70E9-4659-B17C-DEBA72C175D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2162701A-70E9-4659-B17C-DEBA72C175D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2162701A-70E9-4659-B17C-DEBA72C175D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8A52514-2077-4363-BDCF-FDCD2EE24117}.AutomatedDebug|Any CPU.ActiveCfg = AutomatedDebug|Any CPU
+		{D8A52514-2077-4363-BDCF-FDCD2EE24117}.AutomatedDebug|Any CPU.Build.0 = AutomatedDebug|Any CPU
+		{D8A52514-2077-4363-BDCF-FDCD2EE24117}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8A52514-2077-4363-BDCF-FDCD2EE24117}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8A52514-2077-4363-BDCF-FDCD2EE24117}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8A52514-2077-4363-BDCF-FDCD2EE24117}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CBAFACF-8BD9-46FB-A0BC-276EDE593186}.AutomatedDebug|Any CPU.ActiveCfg = AutomatedDebug|Any CPU
+		{5CBAFACF-8BD9-46FB-A0BC-276EDE593186}.AutomatedDebug|Any CPU.Build.0 = AutomatedDebug|Any CPU
+		{5CBAFACF-8BD9-46FB-A0BC-276EDE593186}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CBAFACF-8BD9-46FB-A0BC-276EDE593186}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CBAFACF-8BD9-46FB-A0BC-276EDE593186}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CBAFACF-8BD9-46FB-A0BC-276EDE593186}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7BDFA147-A451-4FB0-8536-94EC1C52926E}.AutomatedDebug|Any CPU.ActiveCfg = AutomatedDebug|Any CPU
+		{7BDFA147-A451-4FB0-8536-94EC1C52926E}.AutomatedDebug|Any CPU.Build.0 = AutomatedDebug|Any CPU
+		{7BDFA147-A451-4FB0-8536-94EC1C52926E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7BDFA147-A451-4FB0-8536-94EC1C52926E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7BDFA147-A451-4FB0-8536-94EC1C52926E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7BDFA147-A451-4FB0-8536-94EC1C52926E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7F6CEC7-B298-467F-ABE2-9ABCF4394FAD}.AutomatedDebug|Any CPU.ActiveCfg = AutomatedDebug|Any CPU
+		{B7F6CEC7-B298-467F-ABE2-9ABCF4394FAD}.AutomatedDebug|Any CPU.Build.0 = AutomatedDebug|Any CPU
+		{B7F6CEC7-B298-467F-ABE2-9ABCF4394FAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7F6CEC7-B298-467F-ABE2-9ABCF4394FAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7F6CEC7-B298-467F-ABE2-9ABCF4394FAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7F6CEC7-B298-467F-ABE2-9ABCF4394FAD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB62C290-3C9C-4CE7-A798-E2BE3A1F12EA}.AutomatedDebug|Any CPU.ActiveCfg = AutomatedDebug|Any CPU
+		{FB62C290-3C9C-4CE7-A798-E2BE3A1F12EA}.AutomatedDebug|Any CPU.Build.0 = AutomatedDebug|Any CPU
+		{FB62C290-3C9C-4CE7-A798-E2BE3A1F12EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB62C290-3C9C-4CE7-A798-E2BE3A1F12EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB62C290-3C9C-4CE7-A798-E2BE3A1F12EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB62C290-3C9C-4CE7-A798-E2BE3A1F12EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9673996-D4FD-46C2-A749-42115A5FA835}.AutomatedDebug|Any CPU.ActiveCfg = AutomatedDebug|Any CPU
+		{A9673996-D4FD-46C2-A749-42115A5FA835}.AutomatedDebug|Any CPU.Build.0 = AutomatedDebug|Any CPU
+		{A9673996-D4FD-46C2-A749-42115A5FA835}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9673996-D4FD-46C2-A749-42115A5FA835}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9673996-D4FD-46C2-A749-42115A5FA835}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9673996-D4FD-46C2-A749-42115A5FA835}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7BDFA147-A451-4FB0-8536-94EC1C52926E} = {2EF1C1FB-3D4F-4ADD-8431-D29386A9DE21}
+		{B7F6CEC7-B298-467F-ABE2-9ABCF4394FAD} = {2EF1C1FB-3D4F-4ADD-8431-D29386A9DE21}
+		{FB62C290-3C9C-4CE7-A798-E2BE3A1F12EA} = {2EF1C1FB-3D4F-4ADD-8431-D29386A9DE21}
+		{A9673996-D4FD-46C2-A749-42115A5FA835} = {2EF1C1FB-3D4F-4ADD-8431-D29386A9DE21}
+		{9C2E9E17-2A2C-4F6C-8072-D160A7EA9A51} = {269CB317-6533-4826-8029-438300872EB9}
+		{9F7DCAC2-5148-40AF-B588-A784C646E12E} = {269CB317-6533-4826-8029-438300872EB9}
+		{E0CCE2D9-9720-4119-98D5-CDE44E283847} = {269CB317-6533-4826-8029-438300872EB9}
+		{2162701A-70E9-4659-B17C-DEBA72C175D4} = {324DF465-63AB-40F3-905A-259C56D3224B}
+		{D8A52514-2077-4363-BDCF-FDCD2EE24117} = {324DF465-63AB-40F3-905A-259C56D3224B}
+		{5CBAFACF-8BD9-46FB-A0BC-276EDE593186} = {78E62BFB-D059-42BB-B21D-F5A552557514}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 12
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tfs04.codeplex.com/
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = TestAssembly\\TestAssembly.csproj
+		SccProjectTopLevelParentUniqueName1 = NBehave.sln
+		SccProjectName1 = TestAssembly
+		SccLocalPath1 = TestAssembly
+		SccProjectUniqueName2 = NBehave.Console\\NBehave.Console.csproj
+		SccProjectTopLevelParentUniqueName2 = NBehave.sln
+		SccProjectName2 = NBehave.Console
+		SccLocalPath2 = NBehave.Console
+		SccProjectUniqueName3 = NBehave.Console.Tests\\NBehave.Console.Tests.csproj
+		SccProjectTopLevelParentUniqueName3 = NBehave.sln
+		SccProjectName3 = NBehave.Console.Tests
+		SccLocalPath3 = NBehave.Console.Tests
+		SccProjectUniqueName4 = NBehave.Examples\\NBehave.Examples.csproj
+		SccProjectTopLevelParentUniqueName4 = NBehave.sln
+		SccProjectName4 = NBehave.Examples
+		SccLocalPath4 = NBehave.Examples
+		SccProjectUniqueName5 = NBehave.Spec\\NBehave.Spec.Framework\\NBehave.Spec.Framework.csproj
+		SccProjectTopLevelParentUniqueName5 = NBehave.sln
+		SccProjectName5 = NBehave.Spec/NBehave.Spec.Framework
+		SccLocalPath5 = NBehave.Spec\\NBehave.Spec.Framework
+		SccProjectUniqueName6 = NBehave.Spec\\NBehave.Spec.Framework.Specification\\NBehave.Spec.Framework.Specification.csproj
+		SccProjectTopLevelParentUniqueName6 = NBehave.sln
+		SccProjectName6 = NBehave.Spec/NBehave.Spec.Framework.Specification
+		SccLocalPath6 = NBehave.Spec\\NBehave.Spec.Framework.Specification
+		SccProjectUniqueName7 = NBehave.Runner\\NBehave.Runner.Console\\NBehave.Runner.Console.csproj
+		SccProjectTopLevelParentUniqueName7 = NBehave.sln
+		SccProjectName7 = NBehave.Runner/NBehave.Runner.Console
+		SccLocalPath7 = NBehave.Runner\\NBehave.Runner.Console
+		SccProjectUniqueName8 = NBehave.Spec\\DummySpecAssembly\\DummySpecAssembly.csproj
+		SccProjectTopLevelParentUniqueName8 = NBehave.sln
+		SccProjectName8 = NBehave.Spec/DummySpecAssembly
+		SccLocalPath8 = NBehave.Spec\\DummySpecAssembly
+		SccProjectUniqueName9 = NBehave.Runner\\NBehave.Runner.Specifications\\NBehave.Runner.Console.Specifications.csproj
+		SccProjectTopLevelParentUniqueName9 = NBehave.sln
+		SccProjectName9 = NBehave.Runner/NBehave.Runner.Specifications
+		SccLocalPath9 = NBehave.Runner\\NBehave.Runner.Specifications
+		SccProjectUniqueName10 = NBehave.Framework\\NBehave.Narrator.Framework.csproj
+		SccProjectTopLevelParentUniqueName10 = NBehave.sln
+		SccProjectName10 = NBehave.Framework
+		SccLocalPath10 = NBehave.Framework
+		SccProjectUniqueName11 = NBehave.Framework.Tests\\NBehave.Narrator.Framework.Specifications.csproj
+		SccProjectTopLevelParentUniqueName11 = NBehave.sln
+		SccProjectName11 = NBehave.Framework.Tests
+		SccLocalPath11 = NBehave.Framework.Tests
+	EndGlobalSection
+EndGlobal
