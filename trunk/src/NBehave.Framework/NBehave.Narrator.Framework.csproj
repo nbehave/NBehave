@@ -69,6 +69,10 @@
     <Compile Include="AsAFragment.cs" />
     <Compile Include="DisposableAction.cs" />
     <Compile Include="EventArgs.cs" />
+    <Compile Include="EventListeners\FileOutputEventListener.cs" />
+    <Compile Include="EventListeners\MultiOutputEventListener.cs" />
+    <Compile Include="EventListeners\NullEventListener.cs" />
+    <Compile Include="EventListeners\TextWriterEventListener.cs" />
     <Compile Include="EventMessageProvider.cs" />
     <Compile Include="GivenFragment.cs" />
     <Compile Include="IEventListener.cs" />
@@ -76,6 +80,7 @@
     <Compile Include="IWantFragment.cs" />
     <Compile Include="MessageProviderRegistry.cs" />
     <Compile Include="Pair.cs" />
+    <Compile Include="PlainTextOutput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scenario.cs" />
     <Compile Include="ScenarioFragment.cs" />

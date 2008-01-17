@@ -4,6 +4,7 @@ using NBehave.Narrator.Framework;
 
 namespace NBehave.Console
 {
+    [Obsolete("Use NBehave.Narrator.Framework.PlainTextOutput passing in Console.Out instead")]
     public class ConsoleOutput
     {
         public void WriteHeader()

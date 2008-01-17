@@ -1,22 +1,32 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using NBehave.Narrator.Framework;
 
 namespace NBehave.Console
 {
+    [Obsolete("Use NBehave.Narrator.Framework.EventListeners.FileOuputEventListener instead")]
     public class FileOutputEventListener : IEventListener, IDisposable
     {
         private readonly string _path;
         private bool _disposed = false;
-        private StreamWriter _writer;
         private bool _insideNamedTheme = false;
+        private StreamWriter _writer;
 
         public FileOutputEventListener(string path)
         {
             _path = path;
         }
+
+        #region IDisposable Members
+
+        void IDisposable.Dispose()
+        {
+            RunFinished();
+        }
+
+        #endregion
+
+        #region IEventListener Members
 
         public void StoryCreated()
         {
@@ -56,10 +66,7 @@ namespace NBehave.Console
             _writer.WriteLine();
         }
 
-        void IDisposable.Dispose()
-        {
-            RunFinished();
-        }
+        #endregion
 
         protected virtual void Dispose(bool disposing)
         {

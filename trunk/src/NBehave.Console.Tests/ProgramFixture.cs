@@ -71,7 +71,7 @@ namespace NBehave.Console.Tests
             string expectedOutput = "NBehave version 0.3.0.0\r\nCopyright (C) 2007 Jimmy Bogard, Joe Ocampo, Morgan Persson, Tim Haughton.\r\nAll Rights Reserved.\r\n\r\n";
             expectedOutput += runtime;
 
-            Assert.That(_output.ToString(), Text.Not.StartsWith(expectedOutput));
+            Assert.That(_output.ToString(), Text.DoesNotStartWith(expectedOutput));
         }
 
         [Test]

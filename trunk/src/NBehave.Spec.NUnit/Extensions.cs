@@ -71,9 +71,19 @@ namespace NBehave.Spec.NUnit
             Assert.That(actual, Is.AssignableFrom(expected));
         }
 
+        public static void ShouldBeAssignableFrom<ExpectedType>(this Object actual)
+        {
+            actual.ShouldBeAssignableFrom(typeof (ExpectedType));
+        }
+
         public static void ShouldNotBeAssignableFrom(this object actual, Type expected)
         {
             Assert.That(actual, Is.Not.AssignableFrom(expected));
+        }
+
+        public static void ShouldNotBeAssignableFrom<ExpectedType>(this object actual)
+        {
+            actual.ShouldNotBeAssignableFrom(typeof (ExpectedType));
         }
 
         public static void ShouldBeEmpty(this string value)
@@ -101,9 +111,19 @@ namespace NBehave.Spec.NUnit
             Assert.That(actual, Is.InstanceOfType(expected));
         }
 
+        public static void ShouldBeInstanceOf<ExpectedType>(this object actual)
+        {
+            actual.ShouldBeInstanceOfType(typeof (ExpectedType));
+        }
+
         public static void ShouldNotBeInstanceOfType(this object actual, Type expected)
         {
             Assert.That(actual, Is.Not.InstanceOfType(expected));
+        }
+
+        public static void ShouldNotBeInstanceOf<ExpectedType>(this object actual)
+        {
+            actual.ShouldNotBeInstanceOfType(typeof (ExpectedType));
         }
 
         public static void ShouldBeNaN(this double value)

@@ -67,6 +67,7 @@ namespace NBehave.Console
             return new NoOpEventListener();
         }
 
+        [Obsolete("Use NBehave.Narrator.Framework.EventListeners.NullEventListener instead")]
         private class NoOpEventListener : IEventListener
         {
             public void StoryCreated()
