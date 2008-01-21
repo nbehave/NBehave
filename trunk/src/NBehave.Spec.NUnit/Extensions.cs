@@ -118,7 +118,7 @@ namespace NBehave.Spec.NUnit
 
 		public static void should_be_less_than_or_equal_to(this IComparable arg1, IComparable arg2)
 		{
-			Assert.That(arg1, Is.LessThanOrEqualTo(arg2));
+			arg1.ShouldBeLessThanOrEqualTo(arg2);
 		}
 
         public static void ShouldBeAssignableFrom(this object actual, Type expected)
@@ -128,7 +128,7 @@ namespace NBehave.Spec.NUnit
 
 		public static void should_be_assignable_from(this object actual, Type expected)		
 		{
-			Assert.That(actual, Is.AssignableFrom(expected));
+			actual.ShouldBeAssignableFrom(expected);
 		}
 
         public static void ShouldBeAssignableFrom<ExpectedType>(this Object actual)
@@ -148,7 +148,7 @@ namespace NBehave.Spec.NUnit
 
 		public static void should_not_be_assignable_from(this object actual, Type expected)
 		{
-			Assert.That(actual, Is.Not.AssignableFrom(expected));
+			actual.ShouldNotBeAssignableFrom(expected);
 		}
 
         public static void ShouldNotBeAssignableFrom<ExpectedType>(this object actual)
@@ -168,7 +168,7 @@ namespace NBehave.Spec.NUnit
 
 		public static void should_be_empty(this string value)
 		{
-			Assert.That(value, Is.Empty);
+			value.ShouldBeEmpty();
 		}
 
         public static void ShouldNotBeEmpty(this string value)
@@ -178,7 +178,7 @@ namespace NBehave.Spec.NUnit
 
 		public static void should_not_be_empty(this string value)
 		{
-			Assert.That(value, Is.Not.Empty);
+			value.ShouldNotBeEmpty();
 		}
 
         public static void ShouldBeEmpty(this ICollection collection)
@@ -188,7 +188,7 @@ namespace NBehave.Spec.NUnit
 
 		public static void should_be_empty(this ICollection collection)
 		{
-			Assert.That(collection, Is.Empty);
+			collection.ShouldBeEmpty();
 		}
 
         public static void ShouldNotBeEmpty(this ICollection collection)
@@ -198,7 +198,7 @@ namespace NBehave.Spec.NUnit
 
 		public static void should_not_be_empty(this ICollection collection)
 		{
-			Assert.That(collection, Is.Not.Empty);
+			collection.ShouldNotBeEmpty();
 		}
 
         public static void ShouldBeInstanceOfType(this object actual, Type expected)
@@ -208,7 +208,7 @@ namespace NBehave.Spec.NUnit
 
 		public static void should_be_instance_of_type(this object actual, Type expected)
 		{
-			Assert.That(actual, Is.InstanceOfType(expected));
+			actual.ShouldBeInstanceOfType(expected);
 		}
 
         public static void ShouldBeInstanceOf<ExpectedType>(this object actual)
@@ -228,7 +228,7 @@ namespace NBehave.Spec.NUnit
 
 		public static void should_not_be_instance_of_type(this object actual, Type expected)
 		{
-			Assert.That(actual, Is.Not.InstanceOfType(expected));
+			actual.ShouldNotBeInstanceOfType(expected);
 		}
 
         public static void ShouldNotBeInstanceOf<ExpectedType>(this object actual)
@@ -248,7 +248,7 @@ namespace NBehave.Spec.NUnit
 
 		public static void should_be_NaN(this double value)
 		{
-			Assert.That(value, Is.NaN);
+			value.ShouldBeNaN();
 		}
 
         public static void ShouldBeNull(this object value)
@@ -258,7 +258,7 @@ namespace NBehave.Spec.NUnit
 
 		public static void should_be_null(this object value)
 		{
-			Assert.That(value, Is.Null);
+			value.ShouldBeNull();
 		}
 
         public static void ShouldNotBeNull(this object value)
@@ -268,7 +268,7 @@ namespace NBehave.Spec.NUnit
 
 		public static void should_not_be_null(this object value)
 		{
-			Assert.That(value, Is.Not.Null);
+			value.ShouldNotBeNull();
 		}
 
         public static void ShouldBeThrownBy(this Type exceptionType, Action action)
@@ -290,19 +290,7 @@ namespace NBehave.Spec.NUnit
 
 		public static void should_be_thrown_by(this Type exceptionType, Action action)
 		{
-			Exception e = null;
-
-			try
-			{
-				action();
-			}
-			catch (Exception ex)
-			{
-				e = ex;
-			}
-
-			e.ShouldNotBeNull();
-			e.ShouldBeInstanceOfType(exceptionType);
+			exceptionType.ShouldBeThrownBy(action);
 		}
     }
 }
