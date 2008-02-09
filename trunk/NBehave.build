@@ -36,6 +36,7 @@
       <arg value="NBehave.Narrator.Framework.Specifications.dll" />
       <arg value="NBehave.Console.Tests.dll" />
       <arg value="NBehave.Spec.NUnit.Specs.dll" />
+      <arg value="NBehave.Spec.MbUnit.Specs.dll" />
       <arg value="NBehave.NAnt.Tests.dll" />
       <arg value="/xml:..\..\test-reports\UnitTests.xml" />
     </exec>
