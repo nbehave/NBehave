@@ -1,8 +1,8 @@
 ﻿using System;
-using NUnit.Framework;
+using MbUnit.Framework;
 using AssertionException=MbUnit.Core.Exceptions.AssertionException;
-using Context = NUnit.Framework.TestFixtureAttribute;
-using Specification = NUnit.Framework.TestAttribute;
+using Context = MbUnit.Framework.TestFixtureAttribute;
+using Specification = MbUnit.Framework.TestAttribute;
 
 namespace NBehave.Spec.MbUnit.Specs
 {

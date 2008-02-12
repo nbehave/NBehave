@@ -24,6 +24,7 @@
     <OldToolsVersion>2.0</OldToolsVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -53,7 +54,34 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Castle.Core, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\castle-1.0.rc3\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.DynamicProxy, Version=1.1.5.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\castle-1.0.rc3\Castle.DynamicProxy.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.DynamicProxy2, Version=2.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\castle-1.0.rc3\Castle.DynamicProxy2.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.MicroKernel, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\castle-1.0.rc3\Castle.MicroKernel.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Windsor, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\castle-1.0.rc3\Castle.Windsor.dll</HintPath>
+    </Reference>
+    <Reference Include="Rhino.Mocks, Version=3.3.0.906, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\rhinomocks-3.3\Rhino.Mocks.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -61,6 +89,18 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AutoMocking\AbstractMockingStrategy.cs" />
+    <Compile Include="AutoMocking\AutoMockingContainer.cs" />
+    <Compile Include="AutoMocking\AutoMockingDependencyResolver.cs" />
+    <Compile Include="AutoMocking\AutoMockingFacility.cs" />
+    <Compile Include="AutoMocking\AutoMockingNamingSubSystem.cs" />
+    <Compile Include="AutoMocking\DynamicMockingStrategy.cs" />
+    <Compile Include="AutoMocking\IAutoMockingRepository.cs" />
+    <Compile Include="AutoMocking\IMockingStrategy.cs" />
+    <Compile Include="AutoMocking\NonMockedStrategy.cs" />
+    <Compile Include="AutoMocking\StandardMockingStrategy.cs" />
+    <Compile Include="AutoMocking\StubbedStrategy.cs" />
+    <Compile Include="AutoMocking\TypeMarker.cs" />
     <Compile Include="Comparison\GenericComparer.cs" />
     <Compile Include="Comparison\Int32Comparer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -82,6 +122,7 @@
     <Compile Include="Failure.cs" />
     <Compile Include="Mocks\Interaction.cs" />
     <Compile Include="Mocks\NoMatchingConstructorException.cs" />
+    <Compile Include="SpecBase.cs" />
     <Compile Include="Specify.cs" />
     <Compile Include="SpecRunner.cs" />
     <Compile Include="TextBehaviourListener.cs" />
