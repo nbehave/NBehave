@@ -30,6 +30,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'AutomatedDebug|AnyCPU' ">
+    <OutputPath>..\..\build\Debug\UnitTests\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="CollectionGen, Version=1.0.834.34691, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>

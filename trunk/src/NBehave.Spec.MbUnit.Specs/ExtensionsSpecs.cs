@@ -1,8 +1,9 @@
 ﻿using System;
+using MbUnit.Core.Exceptions;
 using MbUnit.Framework;
-using AssertionException=MbUnit.Core.Exceptions.AssertionException;
-using Context = MbUnit.Framework.TestFixtureAttribute;
-using Specification = MbUnit.Framework.TestAttribute;
+using ExpectedExceptionNUnit = NUnit.Framework.ExpectedExceptionAttribute;
+using Context = NUnit.Framework.TestFixtureAttribute;
+using Specification = NUnit.Framework.TestAttribute;
 
 namespace NBehave.Spec.MbUnit.Specs
 {
@@ -262,7 +263,7 @@ namespace NBehave.Spec.MbUnit.Specs
     public class When_specifying_exceptions_to_be_thrown
     {
         [Specification]
-        [ExpectedException(typeof(AssertionException))]
+        [ExpectedExceptionNUnit(typeof(AssertionException))]
         public void Should_fail_when_exception_is_a_different_type()
         {
             (typeof(SystemException)).ShouldBeThrownBy(
@@ -270,7 +271,7 @@ namespace NBehave.Spec.MbUnit.Specs
         }
 
         [Specification]
-        [ExpectedException(typeof(AssertionException))]
+        [ExpectedExceptionNUnit(typeof(AssertionException))]
         public void Should_fail_when_exception_is_a_different_type_underscores()
         {
             (typeof(SystemException)).should_be_thrown_by(
@@ -279,7 +280,7 @@ namespace NBehave.Spec.MbUnit.Specs
 
 
         [Specification]
-        [ExpectedException(typeof(AssertionException))]
+        [ExpectedExceptionNUnit(typeof(AssertionException))]
         public void Should_fail_when_exception_is_not_thrown()
         {
             (typeof(ApplicationException)).ShouldBeThrownBy(delegate { });

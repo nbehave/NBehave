@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{A9673996-D4FD-46C2-A749-42115A5FA835}</ProjectGuid>
+    <ProjectGuid>{69D6B05D-C1AE-48B1-807F-7DB1EDC8E24E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NBehave.Spec.MbUnit.Specs</RootNamespace>
-    <AssemblyName>NBehave.Spec.MbUnit.Specs</AssemblyName>
+    <RootNamespace>NBehave.Spec.MSTest.Specs</RootNamespace>
+    <AssemblyName>NBehave.Spec.MSTest.Specs</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -36,15 +36,10 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
-    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MbUnit.Framework, Version=1.0.2700.29885, Culture=neutral, PublicKeyToken=5e72ecd30bc408d5">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\MbUnit.Framework.dll</HintPath>
-    </Reference>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="nunit.framework, Version=2.4.3.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\nunit.framework.dll</HintPath>
@@ -72,9 +67,9 @@
     <Compile Include="SpecBaseSpecs.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NBehave.Spec.MbUnit\NBehave.Spec.MbUnit.csproj">
-      <Project>{FB62C290-3C9C-4CE7-A798-E2BE3A1F12EA}</Project>
-      <Name>NBehave.Spec.MbUnit</Name>
+    <ProjectReference Include="..\NBehave.Spec.MSTest\NBehave.Spec.MSTest.csproj">
+      <Project>{32745321-6BAF-46A1-B3C4-E82CBA663F55}</Project>
+      <Name>NBehave.Spec.MSTest</Name>
     </ProjectReference>
     <ProjectReference Include="..\NBehave.Spec\NBehave.Spec.Framework\NBehave.Spec.Framework.csproj">
       <Project>{87B1B4CA-3EF7-44EB-BF48-5A472E26F1B0}</Project>
