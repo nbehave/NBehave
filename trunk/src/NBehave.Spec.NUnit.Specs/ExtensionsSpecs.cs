@@ -1,4 +1,5 @@
 ﻿using System;
+using NBehave.Spec.NUnit.Underscore;
 using NUnit.Framework;
 using Context = NUnit.Framework.TestFixtureAttribute;
 using Specification = NUnit.Framework.TestAttribute;

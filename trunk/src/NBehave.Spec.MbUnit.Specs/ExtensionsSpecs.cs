@@ -1,6 +1,7 @@
 ﻿using System;
 using MbUnit.Core.Exceptions;
 using MbUnit.Framework;
+using NBehave.Spec.MbUnit.Underscore;
 using ExpectedExceptionNUnit = NUnit.Framework.ExpectedExceptionAttribute;
 using Context = NUnit.Framework.TestFixtureAttribute;
 using Specification = NUnit.Framework.TestAttribute;

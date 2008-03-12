@@ -88,6 +88,7 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="NUnitSpecBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UnderscoreExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\NBehave.snk">
