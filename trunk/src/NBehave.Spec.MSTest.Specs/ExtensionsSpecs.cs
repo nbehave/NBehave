@@ -126,7 +126,8 @@ namespace NBehave.Spec.MSTest.Specs
         public void Should_fail_when_exception_is_of_a_different_type()
         {
             ExceptionThrower thrower = new ExceptionThrower();
-            thrower.WhenCalling(x => x.ThrowException(5)).ShouldThrow<ApplicationException>();
+
+            thrower.ShouldThrow(typeof (ApplicationException)).WhenCalling(x => x.ThrowException(5));
         }
 
         [Specification]
@@ -137,10 +138,19 @@ namespace NBehave.Spec.MSTest.Specs
         }
 
         [Specification]
+        public void Should_return_exception_thrown_from_action()
+        {
+            Exception exception = new Action(() => { throw new ArgumentException(); }).GetException();
+
+            exception.ShouldBeInstanceOf<ArgumentException>();
+        }
+        
+        [Specification]
         public void Should_pass_when_exception_is_of_the_correct_type()
         {
             ExceptionThrower thrower = new ExceptionThrower();
-            thrower.WhenCalling(x => x.ThrowException(5)).ShouldThrow<ArgumentException>();
+
+            thrower.ShouldThrow(typeof(ArgumentException)).WhenCalling(x => x.ThrowException(5));
         }
 
         [Specification]

@@ -7,8 +7,38 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace NBehave.Spec.MSTest
 {
+
     public static class Extensions
     {
+        private class ActionSpecification<T> : IActionSpecification<T>
+        {
+            private readonly T _value;
+            private readonly Type _exceptionType;
+
+            public ActionSpecification(T value, Type exceptionType)
+            {
+                _value = value;
+                _exceptionType = exceptionType;
+            }
+
+            public void WhenCalling(Action<T> action)
+            {
+                Exception e = null;
+
+                try
+                {
+                    action(_value);
+                }
+                catch (Exception ex)
+                {
+                    e = ex;
+                }
+
+                e.ShouldNotBeNull();
+                e.ShouldBeInstanceOf(_exceptionType);
+            }
+        }
+
         public static void ShouldBeTrue(this bool condition)
         {
             Assert.IsTrue(condition);
@@ -86,9 +116,23 @@ namespace NBehave.Spec.MSTest
             e.ShouldBeInstanceOf(exceptionType);
         }
 
-        public static IActionSpecification WhenCalling<T>(this T value, Action<T> expression)
+        public static IActionSpecification<T> ShouldThrow<T>(this T value, Type exception)
         {
-            return new ActionSpecification<T>(value, expression);
+            return new ActionSpecification<T>(value, exception);
+        }
+
+        public static Exception GetException(this Action action)
+        {
+            Exception e = null;
+            try
+            {
+                action();
+            }
+            catch (Exception exc)
+            {
+                e = exc;
+            }
+            return e;
         }
 
         public static void ShouldContain(this string value, string substring)
@@ -144,35 +188,6 @@ namespace NBehave.Spec.MSTest
         public static void ShouldNotBeEqualTo(this ICollection actual, ICollection expected)
         {
             CollectionAssert.AreNotEqual(expected, actual);
-        }
-
-        private class ActionSpecification<T> : IActionSpecification
-        {
-            private readonly T _value;
-            private readonly Action<T> _expression;
-
-            public ActionSpecification(T value, Action<T> expression)
-            {
-                _value = value;
-                _expression = expression;
-            }
-
-            public void ShouldThrow<TException>() where TException : Exception
-            {
-                Exception e = null;
-
-                try
-                {
-                    _expression(_value);
-                }
-                catch (Exception ex)
-                {
-                    e = ex;
-                }
-
-                e.ShouldNotBeNull();
-                e.ShouldBeInstanceOf<TException>();
-            }
         }
     }
 }

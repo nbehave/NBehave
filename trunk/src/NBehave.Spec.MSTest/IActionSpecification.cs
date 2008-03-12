@@ -2,8 +2,8 @@ using System;
 
 namespace NBehave.Spec.MSTest
 {
-    public interface IActionSpecification
+    public interface IActionSpecification<T>
     {
-        void ShouldThrow<TException>() where TException : Exception;
+        void WhenCalling(Action<T> action);
     }
 }
