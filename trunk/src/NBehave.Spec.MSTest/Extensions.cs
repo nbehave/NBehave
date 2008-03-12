@@ -4,41 +4,13 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NBehave.Spec.Framework;
 
 namespace NBehave.Spec.MSTest
 {
 
     public static class Extensions
     {
-        private class ActionSpecification<T> : IActionSpecification<T>
-        {
-            private readonly T _value;
-            private readonly Type _exceptionType;
-
-            public ActionSpecification(T value, Type exceptionType)
-            {
-                _value = value;
-                _exceptionType = exceptionType;
-            }
-
-            public void WhenCalling(Action<T> action)
-            {
-                Exception e = null;
-
-                try
-                {
-                    action(_value);
-                }
-                catch (Exception ex)
-                {
-                    e = ex;
-                }
-
-                e.ShouldNotBeNull();
-                e.ShouldBeInstanceOf(_exceptionType);
-            }
-        }
-
         public static void ShouldBeTrue(this bool condition)
         {
             Assert.IsTrue(condition);

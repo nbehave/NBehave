@@ -1,6 +1,6 @@
 using System;
 
-namespace NBehave.Spec.MSTest
+namespace NBehave.Spec.Framework
 {
     public interface IActionSpecification<T>
     {

@@ -103,6 +103,7 @@
     <Compile Include="AutoMocking\TypeMarker.cs" />
     <Compile Include="Comparison\GenericComparer.cs" />
     <Compile Include="Comparison\Int32Comparer.cs" />
+    <Compile Include="IActionSpecification.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Attributes\ContextSetUpAttribute.cs" />
     <Compile Include="Attributes\ContextTearDownAttribute.cs" />
