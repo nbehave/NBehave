@@ -1,5 +1,7 @@
 using System;
 using NBehave.Narrator.Framework;
+using NBehave.Narrator.Framework.EventListeners;
+
 
 namespace NBehave.Console
 {
@@ -8,7 +10,7 @@ namespace NBehave.Console
         [STAThread]
         public static int Main(string[] args)
         {
-            ConsoleOutput output = new ConsoleOutput();
+            PlainTextOutput output = new PlainTextOutput(System.Console.Out);
             ConsoleOptions options = new ConsoleOptions(args);
 
             if (!options.nologo)
@@ -62,40 +64,9 @@ namespace NBehave.Console
         public static IEventListener CreateEventListener(ConsoleOptions options)
         {
             if (options.HasStoryOutput)
-                return new FileOutputEventListener(options.storyOutput);
+                return new NBehave.Narrator.Framework.EventListeners.FileOutputEventListener(options.storyOutput);
 
-            return new NoOpEventListener();
+            return new NullEventListener();
         }
-
-        [Obsolete("Use NBehave.Narrator.Framework.EventListeners.NullEventListener instead")]
-        private class NoOpEventListener : IEventListener
-        {
-            public void StoryCreated()
-            {
-
-            }
-
-            public void StoryMessageAdded(string message)
-            {
-            }
-
-            public void RunStarted()
-            {
-            }
-
-            public void RunFinished()
-            {
-            }
-
-            public void ThemeStarted(string name)
-            {
-
-            }
-
-            public void ThemeFinished()
-            {
-            }
-        }
-
     }
 }

@@ -68,8 +68,6 @@
     <Compile Include="Arguments.cs" />
     <Compile Include="CommandLineOptions.cs" />
     <Compile Include="ConsoleOptions.cs" />
-    <Compile Include="ConsoleOutput.cs" />
-    <Compile Include="FileOutputEventListener.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

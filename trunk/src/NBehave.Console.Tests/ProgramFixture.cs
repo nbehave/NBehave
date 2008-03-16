@@ -6,6 +6,7 @@ using NBehave.Narrator.Framework;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using gen = System.Collections.Generic;
+using NBehave.Narrator.Framework.EventListeners;
 
 namespace NBehave.Console.Tests
 {
