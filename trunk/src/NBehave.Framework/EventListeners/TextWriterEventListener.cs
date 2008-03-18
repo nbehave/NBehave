@@ -14,7 +14,7 @@ namespace NBehave.Narrator.Framework.EventListeners
 
         #region IEventListener Members
 
-        public void StoryCreated()
+        public void StoryCreated(string story)
         {
             writer.WriteLine("story created");
         }
@@ -42,6 +42,10 @@ namespace NBehave.Narrator.Framework.EventListeners
         public void ThemeFinished()
         {
             writer.WriteLine("theme finished");
+        }
+
+        public void StoryResults(StoryResults results)
+        {
         }
 
         #endregion

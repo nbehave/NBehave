@@ -11,9 +11,9 @@ namespace NBehave.Narrator.Framework.Specifications
     {
         private class NoOpEventListener : IEventListener
         {
-            public void StoryCreated()
+            public void StoryCreated(string message)
             {
-                
+
             }
 
             public void StoryMessageAdded(string message)
@@ -26,17 +26,21 @@ namespace NBehave.Narrator.Framework.Specifications
 
             public void RunFinished()
             {
-                
+
             }
 
             public void ThemeStarted(string name)
             {
-                
+
             }
 
             public void ThemeFinished()
             {
-                
+
+            }
+
+            public void StoryResults(StoryResults results)
+            {
             }
         }
 
@@ -118,8 +122,10 @@ namespace NBehave.Narrator.Framework.Specifications
                 LastCall.Repeat.Once();
                 listener.ThemeStarted("");
                 LastCall.IgnoreArguments().Repeat.Once();
-                listener.StoryCreated();
-                LastCall.Repeat.Times(3);
+                listener.StoryCreated("");
+                LastCall.IgnoreArguments().Repeat.Times(3);
+                listener.StoryResults(null);
+                LastCall.IgnoreArguments().Repeat.Times(3);
                 listener.StoryMessageAdded("");
                 LastCall.IgnoreArguments().Repeat.AtLeastOnce();
                 listener.ThemeFinished();
@@ -149,8 +155,10 @@ namespace NBehave.Narrator.Framework.Specifications
                 LastCall.Repeat.Once();
                 listener.ThemeStarted("");
                 LastCall.IgnoreArguments().Repeat.Once();
-                listener.StoryCreated();
-                LastCall.Repeat.Times(3);
+                listener.StoryCreated("");
+                LastCall.IgnoreArguments().Repeat.Times(3);
+                listener.StoryResults(null);
+                LastCall.IgnoreArguments().Repeat.Times(3);
                 listener.StoryMessageAdded("");
                 LastCall.IgnoreArguments().Repeat.Times(55);
                 listener.ThemeFinished();
@@ -167,6 +175,42 @@ namespace NBehave.Narrator.Framework.Specifications
                 runner.LoadAssembly("TestAssembly.dll");
                 runner.Run(listener);
             }
+        }
+
+        [Test]
+        public void Should_only_add_themes_within_given_namespace_that_matches_namespacefilter()
+        {
+            StoryRunner runner = new StoryRunner();
+
+            runner.StoryRunnerFilter = new StoryRunnerFilter("TestAssembly", ".", ".");
+            runner.LoadAssembly("TestAssembly.dll");
+            StoryResults results = runner.Run(new NoOpEventListener());
+
+            Assert.That(results.NumberOfThemes, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void Should_not_find_any_themes_within_given_namespace_given_the_namespacefilter_TestAssemblyThatDoesntExists()
+        {
+            StoryRunner runner = new StoryRunner();
+
+            runner.StoryRunnerFilter = new StoryRunnerFilter("TestAssemblyThatDoesntExists", ".", ".");
+            runner.LoadAssembly("TestAssembly.dll");
+            StoryResults results = runner.Run(new NoOpEventListener());
+
+            Assert.That(results.NumberOfThemes, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void Should_only_match_stories_within_given_methodFilter()
+        {
+            StoryRunner runner = new StoryRunner();
+
+            runner.StoryRunnerFilter = new StoryRunnerFilter(".", ".", "Transfer_to_cash_account");
+            runner.LoadAssembly("TestAssembly.dll");
+            StoryResults results = runner.Run(new NoOpEventListener());
+
+            Assert.That(results.NumberOfStories, Is.EqualTo(1));
         }
     }
 }

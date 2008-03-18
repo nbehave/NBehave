@@ -92,6 +92,7 @@
     <Compile Include="StoryAttribute.cs" />
     <Compile Include="StoryResults.cs" />
     <Compile Include="StoryRunner.cs" />
+    <Compile Include="StoryRunnerFilter.cs" />
     <Compile Include="ThemeAttribute.cs" />
     <Compile Include="ThenFragment.cs" />
     <Compile Include="WhenFragment.cs" />

@@ -4,7 +4,7 @@
     {
         #region IEventListener Members
 
-        public void StoryCreated()
+        public void StoryCreated(string story)
         {
         }
 
@@ -25,6 +25,10 @@
         }
 
         public void ThemeFinished()
+        {
+        }
+
+        public void StoryResults(StoryResults results)
         {
         }
 

@@ -6,11 +6,13 @@ namespace NBehave.Narrator.Framework
 {
     public interface IEventListener
     {
-        void StoryCreated();
+        void StoryCreated(string story);
         void StoryMessageAdded(string message);
         void RunStarted();
         void RunFinished();
         void ThemeStarted(string name);
         void ThemeFinished();
+
+        void StoryResults(StoryResults results);
     }
 }
