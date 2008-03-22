@@ -11,7 +11,7 @@ namespace NBehave.NAnt.Tests
         public void Execute_tests_in_test_build_script()
         {
             Project project = new Project("NBehaveTestScript.build", Level.Debug, 1);
-            project.MessageLogged += delegate(object sender, BuildEventArgs e) { Console.Out.WriteLine(e.Message); };
+            project.MessageLogged += (sender, e) => Console.Out.WriteLine(e.Message);
 
             Assert.IsTrue(project.Run(), "Something went wrong executing the test script.  Check log.");
         }
