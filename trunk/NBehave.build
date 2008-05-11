@@ -74,7 +74,7 @@
   <target name="dist">
     <copy todir="${build.dir}\dist">
       <fileset basedir="${build.dir}\Debug\NBehave">
-        <include name="**\*"/>
+        <include name="**\NBehave*"/>
         <exclude name="**\*.pdb" />
       </fileset>
     </copy>

@@ -22,7 +22,7 @@ namespace NBehave.Spec
 		}
 
 		
-		protected virtual void MainTeardown()
+		public virtual void MainTeardown()
 		{
 			After_each_spec();
 		}

@@ -16,7 +16,7 @@ namespace NBehave.Spec.MSTest
 		}
 
 		[TestCleanup]
-		protected override void MainTeardown()
+		public override void MainTeardown()
 		{
 			base.MainTeardown();
 		}

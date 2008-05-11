@@ -12,29 +12,30 @@
         <xsl:value-of select="@name"/>
       </xsl:attribute>
       <xsl:attribute name="date">
-        <xsl:value-of select="@date"/>
+        <xsl:value-of select="@run-date"/>
       </xsl:attribute>
       <xsl:attribute name="time">
-        <xsl:value-of select="@time"/>
+        <xsl:value-of select="@run-time"/>
       </xsl:attribute>
       <xsl:attribute name="total">
         <xsl:value-of select="@total"/>
       </xsl:attribute>
       <xsl:attribute name="failures">
-        <xsl:value-of select="@failures"/>
+        <xsl:value-of select="@failed"/>
       </xsl:attribute>
       <xsl:attribute name="not-run">
-        <xsl:value-of select="@not-run"/>
+        <xsl:value-of select="@skipped"/>
       </xsl:attribute>
       <test-suite>
         <xsl:attribute name="name">
           <xsl:value-of select="@name"/>
         </xsl:attribute>
         <xsl:attribute name="success">
-          <xsl:value-of select="@success"/>
+          <xsl:if test="@failed > 0">False</xsl:if>
+          <xsl:if test="@failed = 0">True</xsl:if>
         </xsl:attribute>
         <xsl:attribute name="time">
-          <xsl:value-of select="@test-time"/>
+          <xsl:value-of select="@time"/>
         </xsl:attribute>
         <results>
           <xsl:apply-templates select="class"/>
@@ -49,7 +50,8 @@
         <xsl:value-of select="@name"/>
       </xsl:attribute>
       <xsl:attribute name="success">
-        <xsl:value-of select="@success"/>
+        <xsl:if test="@failed > 0">False</xsl:if>
+        <xsl:if test="@failed = 0">True</xsl:if>
       </xsl:attribute>
       <xsl:attribute name="time">
         <xsl:value-of select="@time"/>
@@ -74,11 +76,13 @@
         <xsl:value-of select="@name"/>
       </xsl:attribute>
       <xsl:attribute name="executed">
-        <xsl:value-of select="@executed"/>
+        <xsl:if test="@result='Skip'">False</xsl:if>
+        <xsl:if test="@result!='Skip'">True</xsl:if>
       </xsl:attribute>
-      <xsl:if test="@success">
+      <xsl:if test="@result!='Skip'">
         <xsl:attribute name="success">
-          <xsl:value-of select="@success"/>
+          <xsl:if test="@result='Fail'">False</xsl:if>
+          <xsl:if test="@result='Pass'">True</xsl:if>
         </xsl:attribute>
       </xsl:if>
       <xsl:if test="@time">

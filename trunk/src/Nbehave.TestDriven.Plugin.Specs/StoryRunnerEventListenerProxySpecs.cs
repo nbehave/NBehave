@@ -33,7 +33,7 @@ namespace Nbehave.TestDriven.Plugin.Specs
                 LastCall.IgnoreArguments().Repeat.Twice();
 
                 tddNetListener.TestFinished(null);
-                LastCall.Callback(new VerifyTestResult(r => { return r.TotalTests == 1 && r.Name == myScenario; }));
+                LastCall.Callback(new VerifyTestResult(r => r.TotalTests == 1 && r.Name == myScenario));
 
                 result = new StoryResults();
                 result.AddResult(new ScenarioResults(myStory, myScenario));

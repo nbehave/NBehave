@@ -1,6 +1,7 @@
 ﻿using Rhino.Mocks;
 using Xunit;
 using NBehave.Spec.Xunit;
+using XunitExt;
 using Specification = Xunit.FactAttribute;
 
 namespace Xunit.SpecBase_Specifications

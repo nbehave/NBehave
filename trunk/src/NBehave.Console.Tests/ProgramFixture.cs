@@ -43,7 +43,7 @@ namespace NBehave.Console.Tests
 
             string runtime = "Runtime Environment -\r\n   OS Version: " + osVersion + "\r\n  CLR Version: " + clrVersion + "\r\n";
 
-            string expectedOutput = "NBehave version 0.3.0.0\r\nCopyright (C) 2007 Jimmy Bogard, Joe Ocampo, Morgan Persson, Tim Haughton.\r\nAll Rights Reserved.\r\n\r\n";
+            string expectedOutput = "NBehave version 0.4.0.0\r\nCopyright (C) 2007 Jimmy Bogard, Joe Ocampo, Morgan Persson, Tim Haughton.\r\nAll Rights Reserved.\r\n\r\n";
             expectedOutput += runtime;
 
             //Debt: JO Need to fix the sample project and get this test to pass.
@@ -69,7 +69,7 @@ namespace NBehave.Console.Tests
 
             string runtime = "Runtime Environment -\r\n   OS Version: " + osVersion + "\r\n  CLR Version: " + clrVersion + "\r\n";
 
-            string expectedOutput = "NBehave version 0.3.0.0\r\nCopyright (C) 2007 Jimmy Bogard, Joe Ocampo, Morgan Persson, Tim Haughton.\r\nAll Rights Reserved.\r\n\r\n";
+            string expectedOutput = "NBehave version 0.4.0.0\r\nCopyright (C) 2007 Jimmy Bogard, Joe Ocampo, Morgan Persson, Tim Haughton.\r\nAll Rights Reserved.\r\n\r\n";
             expectedOutput += runtime;
 
             Assert.That(_output.ToString(), Text.DoesNotStartWith(expectedOutput));
