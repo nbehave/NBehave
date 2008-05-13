@@ -78,11 +78,12 @@
         <exclude name="**\*.pdb" />
       </fileset>
     </copy>
-    <zip zipfile="${build.dir}\NBehave.zip">
-      <fileset basedir="${build.dir}\dist">
-        <include name="**\*" />
-      </fileset>
-    </zip>
+    <exec
+      program="tools\nsis\makensis.exe"
+      workingdir="src\Installer">
+      <arg value="NBehave.nsi" />
+    </exec>
+
   </target>
 
 </project>
