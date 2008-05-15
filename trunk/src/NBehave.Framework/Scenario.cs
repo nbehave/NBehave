@@ -104,7 +104,7 @@ namespace NBehave.Narrator.Framework
             return new GivenFragment(this);
         }
 
-                public GivenFragment Given<TArg0, TArg1, TArg2>(string context, TArg0 arg0, TArg1 arg1, TArg2 arg2, Action<TArg0, TArg1, TArg2> action)
+        public GivenFragment Given<TArg0, TArg1, TArg2>(string context, TArg0 arg0, TArg1 arg1, TArg2 arg2, Action<TArg0, TArg1, TArg2> action)
         {
             if (CanAddMessage)
             {

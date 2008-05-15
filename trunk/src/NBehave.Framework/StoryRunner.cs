@@ -8,11 +8,13 @@ namespace NBehave.Narrator.Framework
 {
     public class StoryRunner
     {
-        private List<Pair<string, object>> _themes = new List<Pair<string, object>>();
+        private readonly List<Pair<string, object>> _themes = new List<Pair<string, object>>();
         private List<Story> _stories = null;
         private EventHandler<EventArgs<Story>> _storyCreatedEventHandler;
         private bool _isDryRun;
         private StoryRunnerFilter _storyRunnerFilter = new StoryRunnerFilter();
+
+        protected List<Story> Stories { get { return _stories; } }
 
         public bool IsDryRun
         {
@@ -80,20 +82,15 @@ namespace NBehave.Narrator.Framework
                     listener.ThemeStarted(themeName);
 
                     MethodInfo[] themeMethods = GetThemeMethods(themeClass);
-
                     MethodInfo[] storyMethods = GetStoryMethods(themeMethods);
 
                     foreach (MethodInfo storyMethod in storyMethods)
                     {
                         InvokeStoryMethod(storyMethod, themeClass);
-
                         CompileStoryResults(results);
-
                         listener.StoryResults(results);
-
                         ClearStoryList();
                     }
-
                     listener.ThemeFinished();
                 }
             }

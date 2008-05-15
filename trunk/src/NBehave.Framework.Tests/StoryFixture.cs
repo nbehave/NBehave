@@ -151,6 +151,7 @@ namespace NBehave.Narrator.Framework.Specifications
             }
         }
 
+
         [Test]
         public void Scenario_given_accepts_multiple_inputs()
         {

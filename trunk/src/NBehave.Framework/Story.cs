@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using NBehave.Narrator.Framework;
+using System.Globalization;
 
 namespace NBehave.Narrator.Framework
 {
@@ -9,9 +11,9 @@ namespace NBehave.Narrator.Framework
     {
         private readonly string _title = null;
         private readonly IMessageProvider _messageProvider = null;
-        private readonly Hashtable _actions = null;
-        private List<Scenario> _scenarios = null;
-        private LinkedList<ScenarioResults> _scenarioResults = null;
+        private readonly List<Scenario> _scenarios = null;
+        private readonly ActionCatalog _catalog = new ActionCatalog();
+        private readonly LinkedList<ScenarioResults> _scenarioResults = null;
         private bool _isDryRun;
 
         public static event EventHandler<EventArgs<Story>> StoryCreated;
@@ -31,7 +33,6 @@ namespace NBehave.Narrator.Framework
             _messageProvider = messageProvider;
             _scenarios = new List<Scenario>();
             _scenarioResults = new LinkedList<ScenarioResults>();
-            _actions = new Hashtable();
 
             OnStoryCreated(new EventArgs<Story>(this));
 
@@ -87,12 +88,16 @@ namespace NBehave.Narrator.Framework
             _messageProvider.AddMessage(message);
         }
 
-        private void InvokeActionBase(string type, string message, object originalAction, Action actionCallback, string outputMessage, params object[] messageParameters)
+        private void InvokeActionBase(string type, string message, object originalAction, Action actionCallback, params object[] messageParameters)
         {
+            string formatString = BuildFormatString(message, messageParameters);
+            string messageToUse = _catalog.BuildMessage(message, messageParameters);
+
             List<object> fullMessageParameters = new List<object>();
             fullMessageParameters.Add(type);
-            fullMessageParameters.Add(message);
+            fullMessageParameters.Add(messageToUse);
             fullMessageParameters.AddRange(messageParameters);
+
 
             if (!IsDryRun)
             {
@@ -103,48 +108,82 @@ namespace NBehave.Narrator.Framework
                 catch (Exception ex)
                 {
                     _scenarioResults.Last.Value.Fail(ex);
-                    AddMessage(string.Format(outputMessage + " - FAILED", fullMessageParameters.ToArray()));
+                    AddMessage(string.Format(formatString + " - FAILED", fullMessageParameters.ToArray()));
                     throw;
                 }
             }
-
-            AddMessage(string.Format(outputMessage, fullMessageParameters.ToArray()));
-
+            AddMessage(string.Format(formatString, fullMessageParameters.ToArray()));
             CatalogAction(message, originalAction);
         }
 
         internal void InvokeAction(string type, string message, Action action)
         {
-            InvokeActionBase(type, message, action, delegate { action(); }, "{0} {1}");
+            InvokeActionBase(type, message, action, delegate { action(); });
+        }
+
+
+        private string BuildFormatString(string message, object[] args)
+        {
+            string messageToUse = _catalog.BuildMessage(message, args);
+            if ((message.IndexOf(ActionCatalog.TokenPrefix) == -1)
+            && (!(_catalog.ActionExists(message) && _catalog.CatalogedActionIsTokenized(message))))
+            {
+                if (args.Length == 0)
+                    return "{0} {1}";
+                else if (args.Length == 1)
+                    return "{0} {1}: {2}";
+                else
+                {
+                    string formatString = "{0} {1}: (";
+                    for (int i = 0; i < args.Length; i++)
+                        formatString += "{" + (i + 2).ToString() + "}, ";
+                    return formatString.Remove(formatString.Length - 2) + ")";
+                }
+            }
+            return "{0} {1}";
         }
 
         internal void InvokeAction<TArg0>(string type, string message, Action<TArg0> action, TArg0 arg0)
         {
-            InvokeActionBase(type, message, action, delegate { action(arg0); }, "{0} {1}: {2}", new object[] {arg0});
+            InvokeActionBase(type, message, action, delegate { action(arg0); }, new object[] { arg0 });
         }
 
         internal void InvokeAction<TArg0, TArg1>(string type, string message, Action<TArg0, TArg1> action, TArg0 arg0, TArg1 arg1)
         {
-            InvokeActionBase(type, message, action, delegate { action(arg0, arg1); }, "{0} {1}: ({2}, {3})", new object[] { arg0, arg1 });
+            InvokeActionBase(type, message, action, delegate { action(arg0, arg1); }, new object[] { arg0, arg1 });
         }
 
         internal void InvokeAction<TArg0, TArg1, TArg2>(string type, string message, Action<TArg0, TArg1, TArg2> action, TArg0 arg0, TArg1 arg1, TArg2 arg2)
         {
-            InvokeActionBase(type, message, action, delegate { action(arg0, arg1, arg2); }, "{0} {1}: ({2}, {3}, {4})", new object[] { arg0, arg1, arg2 });
+            InvokeActionBase(type, message, action, delegate { action(arg0, arg1, arg2); }, new object[] { arg0, arg1, arg2 });
         }
 
         internal void InvokeAction<TArg0, TArg1, TArg2, TArg3>(string type, string message, Action<TArg0, TArg1, TArg2, TArg3> action, TArg0 arg0, TArg1 arg1, TArg2 arg2, TArg3 arg3)
         {
-            InvokeActionBase(type, message, action, delegate { action(arg0, arg1, arg2, arg3); }, "{0} {1}: ({2}, {3}, {4}, {5})", new object[] { arg0, arg1, arg2, arg3 });
+            InvokeActionBase(type, message, action, delegate { action(arg0, arg1, arg2, arg3); }, new object[] { arg0, arg1, arg2, arg3 });
         }
 
         internal void InvokeActionFromCatalog(string type, string message)
         {
-            ValidateActionExists(message);
-
-            Action action = (Action)GetActionFromCatalog(message);
-
-            InvokeAction(type, message, action);
+            try
+            {
+                ValidateActionExists(message);
+                object action = GetActionFromCatalog(message);
+                Type actionType = action.GetType().GetGenericTypeDefinition();
+                MethodInfo methodInfo = actionType.GetMethod("DynamicInvoke");
+                object[] actionParamValues = _catalog.GetParametersForMessage(message);
+                InvokeActionBase(type, message, action,
+                    delegate
+                    {
+                        methodInfo.Invoke(action, BindingFlags.InvokeMethod, null,
+                            new object[] { actionParamValues }, CultureInfo.CurrentCulture);
+                    }, actionParamValues);
+            }
+            catch (Exception e)
+            {
+                ScenarioResults result = _scenarioResults.Last.Value;
+                result.Fail(e);
+            }
         }
 
         internal void InvokeActionFromCatalog<TArg0>(string type, string message, TArg0 arg0)
@@ -185,15 +224,14 @@ namespace NBehave.Narrator.Framework
 
         private void CatalogAction(string message, object action)
         {
-            if (_actions.ContainsKey(message))
+            if (_catalog.ActionExists(message))
                 return;
-
-            _actions.Add(message, action);
+            _catalog.Add(message, action);
         }
 
         private void ValidateActionExists(string message)
         {
-            if (!_actions.ContainsKey(message)  && ! IsDryRun)
+            if (!_catalog.ActionExists(message) && !IsDryRun)
                 throw new ActionMissingException(string.Format("Action missing for action '{0}'.", message));
         }
 
@@ -202,7 +240,7 @@ namespace NBehave.Narrator.Framework
             if (IsDryRun)
                 return null;
 
-            return _actions[message];
+            return _catalog.GetAction(message);
         }
 
         private void AddScenario(Scenario scenario)
