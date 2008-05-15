@@ -3,7 +3,7 @@
 using NBehave.Narrator.Framework;
 using TestDriven.Framework;
 
-
+//IF you change the namespace or the name of the class dont forget to update the installer.
 namespace NBehave.TestDriven.Plugin
 {
     public class NBehaveStoryRunner : ITestRunner
