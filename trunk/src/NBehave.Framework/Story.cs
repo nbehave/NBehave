@@ -169,7 +169,7 @@ namespace NBehave.Narrator.Framework
             {
                 ValidateActionExists(message);
                 object action = GetActionFromCatalog(message);
-                Type actionType = action.GetType().GetGenericTypeDefinition();
+                Type actionType = action.GetType().IsGenericType ? action.GetType().GetGenericTypeDefinition() : action.GetType();
                 MethodInfo methodInfo = actionType.GetMethod("DynamicInvoke");
                 object[] actionParamValues = _catalog.GetParametersForMessage(message);
                 InvokeActionBase(type, message, action,

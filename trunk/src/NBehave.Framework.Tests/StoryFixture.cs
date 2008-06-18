@@ -774,6 +774,47 @@ namespace NBehave.Narrator.Framework.Specifications
             }
         }
 
+		[Test]
+		public void Should_invoke_cataloged_actions_which_has_no_parameters()
+		{
+			int runActionCounter = 0;
+			MockRepository repo = new MockRepository();
+
+			IMessageProvider provider = repo.CreateMock<IMessageProvider>();
+
+			using (repo.Record())
+			{
+				provider.AddMessage("Story: Simple story");
+				LastCall.Repeat.Once();
+				provider.AddMessage("");
+				LastCall.Repeat.Once();
+				provider.AddMessage("\tScenario 1: Scenario that counts how many times actions run");
+				LastCall.Repeat.Once();
+				provider.AddMessage("\t\tGiven initialized counter by: 0");
+				LastCall.Repeat.Once();
+				provider.AddMessage("\t\tWhen increase counter by action");
+				LastCall.Repeat.Once();
+				provider.AddMessage("\t\t\tAnd increase counter by action");
+				LastCall.Repeat.Once();
+				provider.AddMessage("\t\tThen counter should be: 2");
+				LastCall.Repeat.Once();
+			}
+
+			using (repo.Playback())
+			{
+				Story story = new Story("Simple story", provider);
+
+				story
+					.WithScenario("Scenario that counts how many times actions run")
+					.Given("initialized counter by", 0, x => runActionCounter = x)
+					.When("increase counter by action", () => runActionCounter++)
+						.And("increase counter by action")
+					.Then("counter should be", 2, x => Assert.That(runActionCounter, Is.EqualTo(x)));
+
+			}
+		}
+
+
         private void DoNothing()
         {
             // Placeholder for delegates
