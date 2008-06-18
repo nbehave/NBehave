@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using NBehave.Specs.AutoMocking;
 using Rhino.Mocks;
 
@@ -10,7 +8,6 @@ namespace NBehave.Spec
 	{
 		private MockRepository _mocks;
 		private AutoMockingContainer _autoMockingContainer;
-
 		
 		public virtual void MainSetup()
 		{
@@ -21,8 +18,12 @@ namespace NBehave.Spec
 			Before_each_spec();
 		}
 
-		
-		public virtual void MainTeardown()
+	    protected TypeMarker Mark<T>()
+	    {
+	        return _autoMockingContainer.Mark<T>();
+	    }
+
+	    public virtual void MainTeardown()
 		{
 			After_each_spec();
 		}

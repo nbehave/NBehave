@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MbUnit.Framework;
+﻿using MbUnit.Framework;
 
 namespace NBehave.Spec.MbUnit
 {
-	[TestFixture]
-	public class MbUnitSpecBase : SpecBase
+	public abstract class MbUnitSpecBase : SpecBase
 	{
 		[SetUp]
 		public override void MainSetup()

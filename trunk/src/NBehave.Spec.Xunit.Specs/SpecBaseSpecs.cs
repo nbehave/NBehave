@@ -1,4 +1,5 @@
 ﻿using Rhino.Mocks;
+using Rhino.Mocks.Exceptions;
 using Xunit;
 using NBehave.Spec.Xunit;
 using XunitExt;
@@ -49,6 +50,29 @@ namespace Xunit.SpecBase_Specifications
         }
     }
 
+    public class When_overriding_mocking_strategy_in_before_each_spec : XunitSpecBase
+    {
+        protected override void Before_each_spec()
+        {
+            Mark<ITimer>().NonDynamic();
+        }
+
+        [Specification]
+        public void should_apply_the_new_mocking_strategy()
+        {
+            using (RecordExpectedBehavior)
+            {
+                Expect.Call(Get<ITimer>().Start);
+            }
+
+            Mocks.ReplayAll();
+
+            Get<ITimer>().Start();
+            Assert.ThrowsDelegate d = () => { Get<ITimer>().Start(); };
+            Assert.Throws(typeof(ExpectationViolationException), d);
+        }
+    }
+
     public class StopWatch
     {
         private readonly ITimer _timer;
@@ -71,5 +95,6 @@ namespace Xunit.SpecBase_Specifications
     public interface ITimer
     {
         bool Start(string reason);
+        void Start();
     }
 }

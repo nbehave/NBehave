@@ -1,6 +1,6 @@
 ﻿using NBehave.Spec.MbUnit;
 using Rhino.Mocks;
-using AssertionException = MbUnit.Core.Exceptions.AssertionException;
+using Rhino.Mocks.Exceptions;
 using Context = MbUnit.Framework.TestFixtureAttribute;
 using Specification = MbUnit.Framework.TestAttribute;
 
@@ -51,27 +51,51 @@ namespace MbUnit.SpecBase_Specifications
 		}
 	}
 
-	public class StopWatch
-	{
-		private readonly ITimer _timer;
+    [Context]
+    public class When_overriding_mocking_strategy_in_before_each_spec : MbUnitSpecBase
+    {
+        protected override void Before_each_spec()
+        {
+            Mark<ITimer>().NonDynamic();
+        }
 
-		public StopWatch()
-		{
-		}
+        [Specification]
+        public void should_apply_the_new_mocking_strategy()
+        {
+            using (RecordExpectedBehavior)
+            {
+                Expect.Call(Get<ITimer>().Start);
+            }
 
-		public StopWatch(ITimer timer)
-		{
-			_timer = timer;
-		}
+            Mocks.ReplayAll();
 
-		public void Start()
-		{
-			_timer.Start("");
-		}
-	}
+            Get<ITimer>().Start();
+            typeof(ExpectationViolationException).ShouldBeThrownBy(Get<ITimer>().Start);
+        }
+    }
 
-	public interface ITimer
-	{
-		bool Start(string reason);
-	}
+    public class StopWatch
+    {
+        private readonly ITimer _timer;
+
+        public StopWatch()
+        {
+        }
+
+        public StopWatch(ITimer timer)
+        {
+            _timer = timer;
+        }
+
+        public void Start()
+        {
+            _timer.Start("");
+        }
+    }
+
+    public interface ITimer
+    {
+        bool Start(string reason);
+        void Start();
+    }
 }
