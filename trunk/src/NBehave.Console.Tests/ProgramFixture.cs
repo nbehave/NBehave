@@ -7,6 +7,8 @@ using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using gen = System.Collections.Generic;
 using NBehave.Narrator.Framework.EventListeners;
+using NBehave.Narrator.Framework.EventListeners.Xml;
+
 
 namespace NBehave.Console.Tests
 {
@@ -108,6 +110,27 @@ namespace NBehave.Console.Tests
             {
                 if (listener != null)
                     listener.RunFinished();
+            }
+        }
+
+        [Test]
+        public void Should_create_xml_listener_when_story_output_argument_passed_in()
+        {
+            ConsoleOptions options = new ConsoleOptions(new string[] { "TestAssembly.dll", "/xml:XmlOutput.xml" });
+
+            IEventListener listener = null;
+            try
+            {
+                listener = Program.CreateEventListener(options);
+                Assert.That(listener, Is.TypeOf(typeof(XmlOutputEventListener)));
+            }
+            finally
+            {
+                if (listener != null)
+                {
+                    listener.RunStarted();
+                    listener.RunFinished();
+                }
             }
         }
     }

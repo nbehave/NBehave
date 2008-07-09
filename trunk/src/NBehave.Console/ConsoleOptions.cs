@@ -6,6 +6,9 @@ namespace NBehave.Console
     {
         private bool _isInvalid;
 
+        [Option(Description = "Xml file to receive story output")]
+        public string xml;
+
         [Option(Description = "File to receive story output")]
         public string storyOutput;
 
@@ -32,6 +35,13 @@ namespace NBehave.Console
             }
         }
 
+        public bool HasStoryXmlOutput
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(xml);
+            }
+        }
         public bool IsInvalid
         {
             get { return _isInvalid; }

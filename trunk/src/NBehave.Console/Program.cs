@@ -1,6 +1,9 @@
 using System;
 using NBehave.Narrator.Framework;
 using NBehave.Narrator.Framework.EventListeners;
+using System.IO;
+using System.Xml;
+using System.Text;
 
 
 namespace NBehave.Console
@@ -65,7 +68,11 @@ namespace NBehave.Console
         {
             if (options.HasStoryOutput)
                 return new NBehave.Narrator.Framework.EventListeners.FileOutputEventListener(options.storyOutput);
-
+            if (options.HasStoryXmlOutput)
+            {
+                XmlTextWriter writer = new XmlTextWriter(options.xml, Encoding.UTF8);
+                return new NBehave.Narrator.Framework.EventListeners.Xml.XmlOutputEventListener(writer);
+            }
             return new NullEventListener();
         }
     }
