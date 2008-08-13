@@ -21,6 +21,7 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
         private Timer _currentStoryExecutionTime;
         private string _narrative;
         private LastCall _lastCall = LastCall.Story;
+        private string _currentStory = string.Empty;
 
         private Dictionary<string, ScenarioResults> _scenarioResults = new Dictionary<string, ScenarioResults>();
 
@@ -32,14 +33,15 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
 
         public void StoryCreated(string story)
         {
+            _currentStory = story;
             _scenarioNodeWritten = false;
             _lastCall = LastCall.StoryMsg;
             _currentStoryExecutionTime = new Timer();
-            var refToStory = _currentStoryExecutionTime;
+            var refToStoryExecutiontime = _currentStoryExecutionTime;
             Actions.Enqueue(
                 () =>
                 {
-                    WriteToStream(refToStory, "story", story);
+                    WriteToStream(refToStoryExecutiontime, "story", story);
                     WriteScenarioResult();
                 });
         }
@@ -150,8 +152,8 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
         public override void DoResults(StoryResults results)
         {
             _currentStoryExecutionTime.Stop();
-            foreach (ScenarioResults s in results.ScenarioResults)
-                _scenarioResults.Add(s.ScenarioTitle, s);
+            IEnumerable<ScenarioResults> resultsForStory = GetScenarioResultsForCurrentStory(results);
+
             _lastCall = LastCall.Story;
             if (_scenarioNodeWritten)
             {
@@ -169,8 +171,26 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
                     Writer.WriteEndElement(); // </scenarios>
                     Writer.WriteEndElement(); // </story>
                 });
-            base.DoResults(results);
+            DoSummaryResult(resultsForStory);
             //This is the end of the story
+        }
+
+        private IEnumerable<ScenarioResults> GetScenarioResultsForCurrentStory(StoryResults results)
+        {
+            var resultsForStory = from res in results.ScenarioResults
+                                  where res.StoryTitle == _currentStory
+                                  select res;
+            foreach (var r in resultsForStory)
+                _scenarioResults.Add(r.ScenarioTitle, r);
+            return resultsForStory;
+        }
+
+        private void DoSummaryResult(IEnumerable<ScenarioResults> resultsForStory)
+        {
+            StoryResults  rr = new StoryResults();
+            foreach (var s in resultsForStory)
+                rr.AddResult(s);
+            base.DoResults(rr);
         }
     }
 }

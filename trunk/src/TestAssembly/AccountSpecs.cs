@@ -60,7 +60,7 @@ namespace TestAssembly
         public void Withdraw_from_savings_account_pending()
         {
 
-            Story transferStory = new Story("Transfer to cash account");
+            Story transferStory = new Story("Withdraw from savings account");
 
             transferStory
                 .AsA("savings account holder")

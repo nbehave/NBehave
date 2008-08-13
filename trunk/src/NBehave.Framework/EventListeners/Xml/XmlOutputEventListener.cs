@@ -58,12 +58,10 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
             if (storyWriter != null)
             {
                 Actions.Enqueue(
-                    () =>
-                    {
-                        Writer.WriteEndElement();
-                    });
+                    () => Writer.WriteEndElement());
             }
             themeWriter.ThemeFinished();
+            DoResults(_storyResults);
             storyWriter = null;
         }
 
@@ -73,10 +71,7 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
             if (storyWriter == null)
             {
                 Actions.Enqueue(
-                    () =>
-                    {
-                        Writer.WriteStartElement("stories");
-                    });
+                    () => Writer.WriteStartElement("stories"));
             }
             storyWriter = new StoryXmlOutputWriter(Writer, Actions);
             storyWriter.StoryCreated(story);
@@ -89,16 +84,17 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
             storyWriter.StoryMessageAdded(message);
         }
 
+        private StoryResults _storyResults;
         void IEventListener.StoryResults(StoryResults results)
         {
-            DoResults(results);
+            _storyResults = results;
+            storyWriter.DoResults(results);
         }
 
         public override void DoResults(StoryResults results)
         {
-            storyWriter.DoResults(results);
-            themeWriter.DoResults(results);
-            base.DoResults(results);
+            themeWriter.DoResults(_storyResults);
+            base.DoResults(_storyResults);
         }
     }
 }

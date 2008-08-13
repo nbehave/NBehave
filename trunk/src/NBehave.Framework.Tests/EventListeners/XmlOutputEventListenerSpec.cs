@@ -52,14 +52,22 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
             listener.StoryMessageAdded("And my cash account balance should be: 60");
             scenarioResults = new ScenarioResults("This seems brittle", "Savings account is in credit 2", ScenarioResult.Passed);
             results.AddResult(scenarioResults);
+            listener.StoryResults(results);
 
-            listener.StoryMessageAdded("Scenario 3: Savings account is in credit 3");
+            listener.StoryCreated("This seems brittle 2");
+            listener.StoryMessageAdded("Story: This seems brittle 2");
+            listener.StoryMessageAdded("Narrative:");
+            listener.StoryMessageAdded("As a savings account holder");
+            listener.StoryMessageAdded("I want to transfer money from my savings account");
+            listener.StoryMessageAdded("So that I can get cash easily from an ATM");
+
+            listener.StoryMessageAdded("Scenario 1: Savings account is in credit");
             listener.StoryMessageAdded("Given my savings account balance is: 300");
             listener.StoryMessageAdded("And my cash account balance is: 30");
             listener.StoryMessageAdded("When I transfer to cash account: 25");
             listener.StoryMessageAdded("Then my savings account balance should be: 275");
             listener.StoryMessageAdded("And my cash account balance should be: 55");
-            scenarioResults = new ScenarioResults("This seems brittle", "Savings account is in credit 3", ScenarioResult.Failed);
+            scenarioResults = new ScenarioResults("This seems brittle 2", "Savings account is in credit", ScenarioResult.Failed);
             results.AddResult(scenarioResults);
             listener.StoryResults(results);
             listener.ThemeFinished();
@@ -118,7 +126,7 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
         public void Xml_should_summary_in_root_node()
         {
             Assert.AreEqual("1", xmlDoc.SelectSingleNode(@"results").Attributes["themes"].Value);
-            Assert.AreEqual("1", xmlDoc.SelectSingleNode(@"results").Attributes["stories"].Value);
+            Assert.AreEqual("2", xmlDoc.SelectSingleNode(@"results").Attributes["stories"].Value);
             Assert.AreEqual("3", xmlDoc.SelectSingleNode(@"results").Attributes["scenarios"].Value);
             Assert.AreEqual("1", xmlDoc.SelectSingleNode(@"results").Attributes["scenariosFailed"].Value);
             Assert.AreEqual("0", xmlDoc.SelectSingleNode(@"results").Attributes["scenariosPending"].Value);
@@ -133,7 +141,7 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
         [Test]
         public void Theme_nodes_should_have_summary()
         {
-            Assert.AreEqual("1", xmlDoc.SelectSingleNode(@"results/theme").Attributes["stories"].Value);
+            Assert.AreEqual("2", xmlDoc.SelectSingleNode(@"results/theme").Attributes["stories"].Value);
             Assert.AreEqual("3", xmlDoc.SelectSingleNode(@"results/theme").Attributes["scenarios"].Value);
             Assert.AreEqual("1", xmlDoc.SelectSingleNode(@"results/theme").Attributes["scenariosFailed"].Value);
             Assert.AreEqual("0", xmlDoc.SelectSingleNode(@"results/theme").Attributes["scenariosPending"].Value);
@@ -142,8 +150,8 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
         [Test]
         public void Story_nodes_should_have_summary()
         {
-            Assert.AreEqual("3", xmlDoc.SelectSingleNode(@"results/theme/stories/story").Attributes["scenarios"].Value);
-            Assert.AreEqual("1", xmlDoc.SelectSingleNode(@"results/theme/stories/story").Attributes["scenariosFailed"].Value);
+            Assert.AreEqual("2", xmlDoc.SelectSingleNode(@"results/theme/stories/story").Attributes["scenarios"].Value);
+            Assert.AreEqual("0", xmlDoc.SelectSingleNode(@"results/theme/stories/story").Attributes["scenariosFailed"].Value);
             Assert.AreEqual("0", xmlDoc.SelectSingleNode(@"results/theme/stories/story").Attributes["scenariosPending"].Value);
         }
 
