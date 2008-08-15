@@ -40,7 +40,8 @@
       <arg value="NBehave.Spec.MSTest.Specs.dll" />
       <arg value="NBehave.Spec.Xunit.Specs.dll" />
       <arg value="NBehave.NAnt.Tests.dll" />
-      <arg value="Nbehave.TestDriven.Plugin.Specs.dll" />
+			<arg value="NBehave.MSBuild.Tests.dll" />
+			<arg value="NBehave.TestDriven.Plugin.Specs.dll" />
       <arg value="/xml:..\..\test-reports\UnitTests.xml" />
     </exec>
 
@@ -60,8 +61,12 @@
       <arg value="NBehave.Console.Tests.dll" />
       <arg value="NBehave.Spec.NUnit.Specs.dll" />
       <arg value="NBehave.Spec.MbUnit.Specs.dll" />
+      <arg value="NBehave.Spec.MSTest.Specs.dll" />
+      <arg value="NBehave.Spec.Xunit.Specs.dll" />
       <arg value="NBehave.NAnt.Tests.dll" />
-      <arg value="/xml:..\..\test-reports\UnitTests.xml" />
+      <arg value="NBehave.MSBuild.Tests.dll" />
+			<arg value="NBehave.TestDriven.Plugin.Specs.dll" />
+			<arg value="/xml:..\..\test-reports\UnitTests.xml" />
       <arg value="/nologo" />
       <arg value="//w" />
       <arg value="." />
@@ -78,7 +83,12 @@
         <exclude name="**\*.pdb" />
       </fileset>
     </copy>
-    <exec
+		<zip zipfile="${build.dir}\NBehave.zip">
+			<fileset basedir="${build.dir}\dist">
+				<include name="**\*" />
+			</fileset>
+		</zip>
+		<exec
       program="tools\nsis\makensis.exe"
       workingdir="src\Installer">
       <arg value="NBehave.nsi" />

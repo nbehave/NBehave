@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
+using Microsoft.Build.Framework;
 using Microsoft.Win32;
 using NBehave.MSBuild;
 using NBehave.Narrator.Framework;
 using NUnit.Framework;
 using System.IO;
+using Rhino.Mocks;
 
 
 namespace NBehave.MSBuild.Tests
@@ -36,8 +38,9 @@ namespace NBehave.MSBuild.Tests
         {
             var storyAssemblies = new string[] { this.GetType().Assembly.Location };
             var outputPath = Path.Combine(Path.GetDirectoryName(storyAssemblies[0]), "result.xml");
+        	var buildEngine = MockRepository.GenerateStub<IBuildEngine2>();
 
-            var task = new NBehaveTask { DryRun = false, FailBuild = true, StoryOutputPath = outputPath, TestAssemblies = storyAssemblies };
+            var task = new NBehaveTask(buildEngine) { DryRun = false, FailBuild = true, StoryOutputPath = outputPath, TestAssemblies = storyAssemblies };
 
             task.Execute();
             Assert.AreEqual(1, task.StoryResults.NumberOfPassingScenarios);
@@ -54,7 +57,8 @@ namespace NBehave.MSBuild.Tests
             using (Process process = new Process())
             {
                 process.StartInfo = new ProcessStartInfo(msbuild, "nbehaveTaskTestScript.msbuild");
-                process.StartInfo.WorkingDirectory = Path.GetDirectoryName(this.GetType().Assembly.Location);
+				process.StartInfo.WorkingDirectory = Path.GetDirectoryName(this.GetType().Assembly.CodeBase.Replace(@"file:///", ""));
+				Debug.WriteLine(process.StartInfo.WorkingDirectory);
                 process.StartInfo.UseShellExecute = false;
                 process.StartInfo.RedirectStandardOutput = true;
                 process.Start();

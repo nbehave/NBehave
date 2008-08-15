@@ -17,7 +17,7 @@ namespace NBehave.TestDriven.Plugin
 
             tddNetStory
                 .AsA("fan of NBehave")
-                .IWant("Nbehave to work with Testdriven.NET")
+                .IWant("NBehave to work with Testdriven.NET")
                 .SoThat("I get less friction developing code using NBehave");
 
             tddNetStory
@@ -46,7 +46,7 @@ namespace NBehave.TestDriven.Plugin
 
             tddNetStory
                 .AsA("addict of NBehave")
-                .IWant("Nbehave to work with Testdriven.NET")
+                .IWant("NBehave to work with Testdriven.NET")
                 .SoThat("I get my fix");
 
             tddNetStory

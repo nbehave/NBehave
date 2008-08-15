@@ -5,7 +5,7 @@ Name "NBehave"
 
 
 ; The files to write
-Outfile "..\..\Build\Nbehave ${VERSION}.exe"
+Outfile "..\..\Build\NBehave ${VERSION}.exe"
 
 ; The default installation directory
 InstallDir $PROGRAMFILES\NBehave\${VERSION}
@@ -47,18 +47,7 @@ Section "Framework Files (required)" ;No components page, name is not important
 	File "${FILES}\NBehave.Spec.MSTest.dll"
 	File "${FILES}\NBehave.Spec.NUnit.dll"
 	File "${FILES}\NBehave.Spec.Xunit.dll"
-
-	File "${FILES}\Castle.Core.dll"
-	File "${FILES}\Castle.DynamicProxy.dll"
-	File "${FILES}\Castle.DynamicProxy2.dll"
-	File "${FILES}\Castle.MicroKernel.dll"
-	File "${FILES}\Castle.Windsor.dll"
-	File "${FILES}\log4net.dll"
-	File "${FILES}\MbUnit.Framework.dll"
-	File "${FILES}\NAnt.Core.dll"
-	File "${FILES}\nunit.framework.dll"
-	File "${FILES}\Rhino.Mocks.dll"
-	File "${FILES}\xunit.dll"
+	File "${FILES}\NBehave.TestDriven.Plugin.dll"
 
 	; Write the installation path into the registry
 	WriteRegStr HKLM SOFTWARE\NBehave\${VERSION} "Install_Dir" "$INSTDIR"

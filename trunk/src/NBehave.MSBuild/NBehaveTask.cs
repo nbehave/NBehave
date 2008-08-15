@@ -32,7 +32,12 @@ namespace NBehave.MSBuild
             FailBuild = true;
         }
 
-        public override bool Execute()
+    	public NBehaveTask(IBuildEngine buildEngine) : this()
+    	{
+    		BuildEngine = buildEngine;
+    	}
+
+    	public override bool Execute()
         {
             if (TestAssemblies.Length == 0)
                 throw new ArgumentException("At least one test assembly is required");
@@ -57,7 +62,8 @@ namespace NBehave.MSBuild
                 return true;
 
             WriteResultsInto(output, StoryResults);
-            Log.LogMessage(logString.ToString());
+        	string message = logString.ToString();
+        	Log.LogMessage(message);
 
             if (FailBuild && FailBuildBasedOn(StoryResults))
                 return false;

@@ -10,7 +10,7 @@ using Specification = NUnit.Framework.TestAttribute;
 using Rhino.Mocks.Constraints;
 
 
-namespace Nbehave.TestDriven.Plugin.Specs
+namespace NBehave.TestDriven.Plugin.Specs
 {
     [Context()]
     public class When_running_stories_from_testdriven_net
