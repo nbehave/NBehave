@@ -1,46 +1,39 @@
 ﻿using System;
-using NBehave.Specs.AutoMocking;
 using Rhino.Mocks;
 
 namespace NBehave.Spec
 {
-	public abstract class SpecBase
+	public abstract class SpecBase<T>
 	{
 		private MockRepository _mocks;
-		private AutoMockingContainer _autoMockingContainer;
-		
+
 		public virtual void MainSetup()
 		{
 			_mocks = new MockRepository();
-			_autoMockingContainer = new AutoMockingContainer(_mocks);
-			_autoMockingContainer.Initialize();
 
 			Before_each_spec();
+			Sut = Given_these_conditions();
+			Because();
 		}
 
-	    protected TypeMarker Mark<T>()
-	    {
-	        return _autoMockingContainer.Mark<T>();
-	    }
-
-	    public virtual void MainTeardown()
+		public virtual void MainTeardown()
 		{
 			After_each_spec();
 		}
 
-		public MockRepository Mocks
+		protected abstract void Because();
+
+		protected abstract T Given_these_conditions();
+
+		protected virtual void Before_each_spec() {}
+
+		protected virtual void After_each_spec() {}
+
+		protected T Sut { get; private set; }
+
+		protected MockRepository Mocks
 		{
 			get { return _mocks; }
-		}
-
-		protected virtual void Before_each_spec()
-		{
-
-		}
-
-		protected virtual void After_each_spec()
-		{
-
 		}
 
 		protected IDisposable RecordExpectedBehavior
@@ -53,40 +46,20 @@ namespace NBehave.Spec
 			get { return _mocks.Playback(); }
 		}
 
-		protected TType Mock<TType>()
+		protected TType CreateDependency<TType>()
 		{
-			return _mocks.DynamicMock<TType>();
+			return MockRepository.GenerateMock<TType>();
 		}
 
-		protected TType Mock<TType>(object[] prams)
+		protected TType CreateStub<TType>()
 		{
-			return _mocks.DynamicMock<TType>(prams);
+			return MockRepository.GenerateStub<TType>();
 		}
 
 		protected TType Partial<TType>()
 		   where TType : class
 		{
 			return _mocks.PartialMock<TType>();
-		}
-
-		protected TType Get<TType>() where TType : class
-		{
-			return _autoMockingContainer.Get<TType>();
-		}
-
-		protected TType Create<TType>() where TType : class
-		{
-			return _autoMockingContainer.Create<TType>();
-		}
-
-		protected TType Stub<TType>()
-		{
-			return _mocks.Stub<TType>();
-		}
-
-		protected void Verify(object mock)
-		{
-			_mocks.Verify(mock);
 		}
 
 		protected void VerifyAll()

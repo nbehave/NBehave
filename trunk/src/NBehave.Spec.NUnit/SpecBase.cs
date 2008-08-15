@@ -2,7 +2,7 @@
 
 namespace NBehave.Spec.NUnit
 {
-	public abstract class NUnitSpecBase : SpecBase
+	public abstract class SpecBase<T> : Spec.SpecBase<T>
 	{
 		[SetUp]
 		public override void MainSetup()

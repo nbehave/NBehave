@@ -1,77 +1,52 @@
-﻿﻿using System;
-using NBehave.Spec.NUnit;
+﻿using NBehave.Spec.NUnit;
 using Rhino.Mocks;
-using Rhino.Mocks.Exceptions;
 using Context = NUnit.Framework.TestFixtureAttribute;
 using Specification = NUnit.Framework.TestAttribute;
 
 namespace NUnit.SpecBase_Specifications
 {
     [Context]
-    public class When_initializing_the_SpecBase : NUnitSpecBase
+    public class When_initializing_the_SpecBase : SpecBase<StopWatch>
     {
-        private StopWatch _stopWatch;
+    	protected override StopWatch Given_these_conditions()
+    	{
+    		return new StopWatch();
+    	}
 
-        protected override void Before_each_spec()
-        {
-            _stopWatch = new StopWatch();
-        }
+    	protected override void Because()
+    	{
+    	}
 
         [Specification]
-        public void should_call_the_before_each_spec_before_starting_the_specification()
+        public void should_populate_the_SUT_before_starting_the_specification()
         {
-            _stopWatch.ShouldNotBeNull();
+            Sut.ShouldNotBeNull();
         }
     }
 
     [Context]
-    public class When_initializing_the_SpecBase_with_mocks : NUnitSpecBase
+    public class When_initializing_the_SpecBase_with_mocks : SpecBase<StopWatch>
     {
-        private StopWatch _stopWatch;
         private ITimer _timer;
 
-        protected override void Before_each_spec()
-        {
-            _timer = Mock<ITimer>();
-            _stopWatch = new StopWatch(_timer);
-        }
+    	protected override StopWatch Given_these_conditions()
+    	{
+			_timer = CreateDependency<ITimer>();
+
+    		_timer.Stub(x => x.Start(null)).IgnoreArguments().Return(true);
+
+			return new StopWatch(_timer);
+		}
+
+    	protected override void Because()
+    	{
+			Sut.Start();
+    	}
 
         [Specification]
         public void should_call_the_before_each_spec_before_starting_the_specification()
         {
-            using (RecordExpectedBehavior)
-            {
-                Expect.Call(_timer.Start(null))
-                    .IgnoreArguments().Return(true);
-            }
-
-            using (PlaybackBehavior)
-            {
-                _stopWatch.Start();
-            }
-        }
-    }
-
-    [Context]
-    public class When_overriding_mocking_strategy_in_before_each_spec : NUnitSpecBase
-    {
-        protected override void Before_each_spec()
-        {
-            Mark<ITimer>().NonDynamic();
-        }
-
-        [Specification]
-        public void should_apply_the_new_mocking_strategy()
-        {
-            using (RecordExpectedBehavior)
-            {
-                Expect.Call(Get<ITimer>().Start);
-            }
-
-            Mocks.ReplayAll();
-
-            Get<ITimer>().Start();
-            typeof (ExpectationViolationException).ShouldBeThrownBy(Get<ITimer>().Start);
+			_timer.AssertWasCalled(x => x.Start(null), opt => opt.IgnoreArguments());
         }
     }
 

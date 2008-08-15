@@ -59,7 +59,7 @@
   <ItemGroup>
     <Compile Include="ActionSpecification.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="MSTestSpecBase.cs" />
+    <Compile Include="SpecBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

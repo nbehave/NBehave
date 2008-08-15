@@ -89,24 +89,10 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AutoMocking\AbstractMockingStrategy.cs" />
-    <Compile Include="AutoMocking\AutoMockingContainer.cs" />
-    <Compile Include="AutoMocking\AutoMockingDependencyResolver.cs" />
-    <Compile Include="AutoMocking\AutoMockingFacility.cs" />
-    <Compile Include="AutoMocking\AutoMockingNamingSubSystem.cs" />
-    <Compile Include="AutoMocking\DynamicMockingStrategy.cs" />
-    <Compile Include="AutoMocking\IAutoMockingRepository.cs" />
-    <Compile Include="AutoMocking\IMockingStrategy.cs" />
-    <Compile Include="AutoMocking\NonMockedStrategy.cs" />
-    <Compile Include="AutoMocking\StandardMockingStrategy.cs" />
-    <Compile Include="AutoMocking\StubbedStrategy.cs" />
-    <Compile Include="AutoMocking\TypeMarker.cs" />
     <Compile Include="IActionSpecification.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Mocks\Interaction.cs" />
-    <Compile Include="Mocks\NoMatchingConstructorException.cs" />
     <Compile Include="SpecBase.cs" />
   </ItemGroup>
   <ItemGroup>

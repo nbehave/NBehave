@@ -2,7 +2,7 @@
 
 namespace NBehave.Spec.MbUnit
 {
-	public abstract class MbUnitSpecBase : SpecBase
+	public abstract class SpecBase<T> : Spec.SpecBase<T>
 	{
 		[SetUp]
 		public override void MainSetup()

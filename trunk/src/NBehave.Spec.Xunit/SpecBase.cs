@@ -2,9 +2,9 @@
 
 namespace NBehave.Spec.Xunit
 {
-	public class XunitSpecBase : SpecBase, IDisposable
+	public abstract class SpecBase<T> : Spec.SpecBase<T>, IDisposable
 	{
-        public XunitSpecBase()
+		protected SpecBase()
         {
             base.MainSetup();
         }
