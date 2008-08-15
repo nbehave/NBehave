@@ -3,7 +3,7 @@ using Rhino.Mocks;
 
 namespace NBehave.Spec
 {
-	public abstract class SpecBase
+	public abstract class SpecBase<T>
 	{
 		private MockRepository _mocks;
 
@@ -12,6 +12,8 @@ namespace NBehave.Spec
 			_mocks = new MockRepository();
 
 			Before_each_spec();
+			Sut = Given_these_conditions();
+			Because();
 		}
 
 		public virtual void MainTeardown()
@@ -19,9 +21,15 @@ namespace NBehave.Spec
 			After_each_spec();
 		}
 
+		protected abstract void Because();
+
+		protected abstract T Given_these_conditions();
+
 		protected virtual void Before_each_spec() {}
 
 		protected virtual void After_each_spec() {}
+
+		protected T Sut { get; private set; }
 
 		protected MockRepository Mocks
 		{

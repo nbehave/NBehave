@@ -2,7 +2,7 @@
 
 namespace NBehave.Spec.MSTest
 {
-	public abstract class SpecBase : Spec.SpecBase
+	public abstract class SpecBase<T> : Spec.SpecBase<T>
 	{
 		[TestInitialize]
 		public override void MainSetup()

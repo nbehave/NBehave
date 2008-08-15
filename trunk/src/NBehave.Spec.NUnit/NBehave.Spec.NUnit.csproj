@@ -65,8 +65,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Extensions.cs" />
     <Compile Include="SpecBase.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="SpecBase_generic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnderscoreExtensions.cs" />
   </ItemGroup>

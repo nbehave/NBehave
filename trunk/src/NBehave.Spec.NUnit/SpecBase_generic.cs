@@ -1,8 +1,8 @@
-﻿using MbUnit.Framework;
+﻿using NUnit.Framework;
 
-namespace NBehave.Spec.MbUnit
+namespace NBehave.Spec.NUnit
 {
-	public abstract class SpecBase : Spec.SpecBase
+	public abstract class SpecBase<T> : Spec.SpecBase<T>
 	{
 		[SetUp]
 		public override void MainSetup()

@@ -57,6 +57,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SpecBase_generic.cs" />
     <Compile Include="SpecBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
