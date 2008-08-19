@@ -2,6 +2,7 @@
 
 namespace NBehave.Spec.NUnit
 {
+	[TestFixture]
 	public abstract class SpecBase : Spec.SpecBase
 	{
 		[SetUp]
