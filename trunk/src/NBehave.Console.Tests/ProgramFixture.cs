@@ -38,43 +38,17 @@ namespace NBehave.Console.Tests
         [Test]
         public void Should_run_example_framework_correctly()
         {
-            int result = Program.Main(new string[] { "TestAssembly.dll" });
+            Program.Main(new[] { "TestAssembly.dll" });
 
-            string osVersion = Environment.OSVersion.ToString();
-            string clrVersion = Environment.Version.ToString();
-
-            string runtime = "Runtime Environment -\r\n   OS Version: " + osVersion + "\r\n  CLR Version: " + clrVersion + "\r\n";
-
-            string expectedOutput = "NBehave version 0.4.0.0\r\nCopyright (C) 2007 Jimmy Bogard, Joe Ocampo, Morgan Persson, Tim Haughton.\r\nAll Rights Reserved.\r\n\r\n";
-            expectedOutput += runtime;
-
-            //Debt: JO Need to fix the sample project and get this test to pass.
-            /*
-             * Need to fix the sample project.
-            expectedOutput += "\r\n..PF\r\n";
-            expectedOutput += "Scenarios run: 4, Failures: 1, Pending: 1\r\n";
-            expectedOutput += "\r\nFailures:\r\n1) Deposit to cash account (Savings account is in credit) FAILED\r\n  NUnit.Framework.AssertionException :   Expected: 120\r\n  But was:  100\r\n\r\n";
-            */
-
-            System.Console.Write("OutPut: " + expectedOutput);
-            Assert.That(_output.ToString(), Text.StartsWith(expectedOutput));
-            //Assert.That(result, Is.EqualTo(2));
+            Assert.That(_output.ToString(), Text.Contains("Scenarios"));
         }
 
         [Test]
         public void Should_not_display_header_when_nologo_argument_set()
         {
-            Program.Main(new string[] { "TestAssembly.dll", "/nologo" });
+            Program.Main(new[] { "TestAssembly.dll", "/nologo" });
 
-            string osVersion = Environment.OSVersion.ToString();
-            string clrVersion = Environment.Version.ToString();
-
-            string runtime = "Runtime Environment -\r\n   OS Version: " + osVersion + "\r\n  CLR Version: " + clrVersion + "\r\n";
-
-            string expectedOutput = "NBehave version 0.4.0.0\r\nCopyright (C) 2007 Jimmy Bogard, Joe Ocampo, Morgan Persson, Tim Haughton.\r\nAll Rights Reserved.\r\n\r\n";
-            expectedOutput += runtime;
-
-            Assert.That(_output.ToString(), Text.DoesNotStartWith(expectedOutput));
+            Assert.That(_output.ToString(), Text.DoesNotContain("Copyright"));
         }
 
         [Test]
