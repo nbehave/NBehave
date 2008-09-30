@@ -9,12 +9,22 @@ namespace NBehave.Spec
 
 		public virtual void MainSetup()
 		{
+			Before_all_specs();
+		}
+
+		public virtual void MainTeardown()
+		{
+			After_all_specs();
+		}
+
+		public virtual void SpecSetup()
+		{
 			_mocks = new MockRepository();
 
 			Before_each_spec();
 		}
 
-		public virtual void MainTeardown()
+		public virtual void SpecTeardown()
 		{
 			After_each_spec();
 		}
@@ -22,6 +32,10 @@ namespace NBehave.Spec
 		protected virtual void Before_each_spec() {}
 
 		protected virtual void After_each_spec() {}
+
+		protected virtual void Before_all_specs() {}
+
+		protected virtual void After_all_specs() {}
 
 		protected MockRepository Mocks
 		{
@@ -46,12 +60,6 @@ namespace NBehave.Spec
 		protected TType CreateStub<TType>()
 		{
 			return MockRepository.GenerateStub<TType>();
-		}
-
-		protected TType Partial<TType>()
-		   where TType : class
-		{
-			return _mocks.PartialMock<TType>();
 		}
 
 		protected void VerifyAll()

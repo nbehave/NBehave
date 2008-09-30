@@ -1,19 +1,20 @@
-﻿﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿﻿using System;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace NBehave.Spec.MSTest
 {
 	public abstract class SpecBase : Spec.SpecBase
 	{
 		[TestInitialize]
-		public override void MainSetup()
+		public override void SpecSetup()
 		{
-			base.MainSetup();
+			base.SpecSetup();
 		}
 
 		[TestCleanup]
-		public override void MainTeardown()
+		public override void SpecTeardown()
 		{
-			base.MainTeardown();
+			base.SpecTeardown();
 		}
 	}
 }

@@ -6,12 +6,24 @@ namespace NBehave.Spec.NUnit
 	public abstract class SpecBase : Spec.SpecBase
 	{
 		[SetUp]
+		public override void SpecSetup()
+		{
+			base.SpecSetup();
+		}
+
+		[TearDown]
+		public override void SpecTeardown()
+		{
+			base.SpecTeardown();
+		}
+
+		[TestFixtureSetUp]
 		public override void MainSetup()
 		{
 			base.MainSetup();
 		}
 
-		[TearDown]
+		[TestFixtureTearDown]
 		public override void MainTeardown()
 		{
 			base.MainTeardown();

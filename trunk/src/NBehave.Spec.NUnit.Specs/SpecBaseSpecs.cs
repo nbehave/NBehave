@@ -1,4 +1,6 @@
-﻿using NBehave.Spec.NUnit;
+﻿using System.Diagnostics;
+using NBehave.Spec.NUnit;
+using NUnit.Framework;
 using Rhino.Mocks;
 using Context = NUnit.Framework.TestFixtureAttribute;
 using Specification = NUnit.Framework.TestAttribute;
@@ -23,6 +25,101 @@ namespace NUnit.SpecBase_Specifications
             Sut.ShouldNotBeNull();
         }
     }
+
+	[Context]
+	public class When_using_the_setup_methods_in_non_generic_specs : SpecBase
+	{
+		private static int _beforeEachCount;
+		private static int _beforeAllCount;
+		private static int _afterEachCount;
+		private static int _afterAllCount;
+
+		protected override void Before_each_spec()
+		{
+			_beforeEachCount++;
+		}
+
+		protected override void Before_all_specs()
+		{
+			_beforeAllCount++;
+		}
+
+		protected override void After_each_spec()
+		{
+			_afterEachCount++;
+		}
+
+		protected override void After_all_specs()
+		{
+			_afterAllCount++;
+			_beforeEachCount.ShouldEqual(2);
+			_beforeAllCount.ShouldEqual(1);
+			_afterEachCount.ShouldEqual(2);
+			_afterAllCount.ShouldEqual(1);
+		}
+
+		[Specification]
+		public void dummy_test_1()
+		{
+		}
+
+		[Specification]
+		public void dummy_test_2()
+		{
+		}
+	}
+
+	[Context]
+	public class When_using_the_setup_methods_in_generic_specs : SpecBase<object>
+	{
+		private static int _beforeEachCount;
+		private static int _beforeAllCount;
+		private static int _afterEachCount;
+		private static int _afterAllCount;
+
+		protected override void Because()
+		{
+		}
+
+		protected override object Given_these_conditions()
+		{
+			return null;
+		}
+
+		protected override void Before_each_spec()
+		{
+			_beforeEachCount++;
+		}
+
+		protected override void Before_all_specs()
+		{
+			_beforeAllCount++;
+		}
+
+		protected override void After_each_spec()
+		{
+			_afterEachCount++;
+		}
+
+		protected override void After_all_specs()
+		{
+			_afterAllCount++;
+			_beforeEachCount.ShouldEqual(2);
+			_beforeAllCount.ShouldEqual(1);
+			_afterEachCount.ShouldEqual(2);
+			_afterAllCount.ShouldEqual(1);
+		}
+
+		[Specification]
+		public void dummy_test_1()
+		{
+		}
+
+		[Specification]
+		public void dummy_test_2()
+		{
+		}
+	}
 
     [Context]
     public class When_initializing_the_SpecBase_with_mocks : SpecBase<StopWatch>

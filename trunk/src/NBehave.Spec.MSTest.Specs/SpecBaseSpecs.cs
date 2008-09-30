@@ -1,4 +1,5 @@
-﻿using Rhino.Mocks;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Rhino.Mocks;
 using Rhino.Mocks.Exceptions;
 using Context = Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute;
 using Specification = Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute;

@@ -5,15 +5,15 @@ namespace NBehave.Spec.MbUnit
 	public abstract class SpecBase<T> : Spec.SpecBase<T>
 	{
 		[SetUp]
-		public override void MainSetup()
+		public override void SpecSetup()
 		{
-			base.MainSetup();
+			base.SpecSetup();
 		}
 
 		[TearDown]
-		public override void MainTeardown()
+		public override void SpecTeardown()
 		{
-			base.MainTeardown();
+			base.SpecTeardown();
 		}
 	}
 }
