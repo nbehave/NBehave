@@ -14,6 +14,11 @@ namespace NBehave.Narrator.Framework
             this.writer = writer;
         }
 
+        public void WriteLine(string text)
+        {
+            writer.WriteLine(text);
+        }
+
         public void WriteHeader()
         {
             Assembly executingAssembly = Assembly.GetExecutingAssembly();
@@ -21,7 +26,7 @@ namespace NBehave.Narrator.Framework
 
             AssemblyCopyrightAttribute[] copyrights =
                 (AssemblyCopyrightAttribute[])
-                Attribute.GetCustomAttributes(executingAssembly, typeof (AssemblyCopyrightAttribute));
+                Attribute.GetCustomAttributes(executingAssembly, typeof(AssemblyCopyrightAttribute));
 
             writer.WriteLine("NBehave version {0}", version);
 

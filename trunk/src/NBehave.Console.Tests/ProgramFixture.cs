@@ -107,5 +107,14 @@ namespace NBehave.Console.Tests
                 }
             }
         }
+
+        [Test]
+        public void Should_display_errormessage_if_assembly_doesnt_exist()
+        {
+            TextWriter output = System.Console.Out;
+            Program.Main(new string[] { "IDontExist.dll" });
+            output.Flush();
+            Assert.IsTrue(output.ToString().Contains("File not found: IDontExist.dll"));
+        }
     }
 }

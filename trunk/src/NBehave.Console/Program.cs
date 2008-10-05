@@ -45,7 +45,14 @@ namespace NBehave.Console
 
             foreach (string path in options.Parameters)
             {
-                runner.LoadAssembly(path);
+                try
+                {
+                    runner.LoadAssembly(path);
+                }
+                catch (FileNotFoundException e)
+                {
+                    output.WriteLine(string.Format("File not found: {0}", e.FileName));
+                }
             }
             IEventListener listener = CreateEventListener(options);
 
