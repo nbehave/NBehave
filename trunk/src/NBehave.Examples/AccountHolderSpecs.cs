@@ -15,7 +15,7 @@ namespace NBehave.Examples
         public void Add_account_to_holder()
         {
             
-            Story story = new Story("Add account ot holder");
+            Story story = new Story("Add account to holder");
 
             story
                 .AsA("account holder")
