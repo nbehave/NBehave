@@ -6,9 +6,11 @@ using NBehave.Narrator.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using NUnit.Framework;
 using Rhino.Mocks;
+using NBehave.Narrator.Framework.EventListeners;
+using TestPlainTextAssembly;
+
 using Context = NUnit.Framework.TestFixtureAttribute;
 using Specification = NUnit.Framework.TestAttribute;
-using TestPlainTextAssembly;
 
 
 namespace NBehave.Narrator.Framework.Specifications
@@ -102,7 +104,7 @@ namespace NBehave.Narrator.Framework.Specifications
         public void should_output_full_story_for_dry_run()
         {
             MockRepository mocks = new MockRepository();
-            IEventListener listener = mocks.CreateMock<IEventListener>();
+            IEventListener listener = mocks.StrictMock<IEventListener>();
 
             using (mocks.Record())
             {
@@ -111,11 +113,11 @@ namespace NBehave.Narrator.Framework.Specifications
                 listener.ThemeStarted("");
                 LastCall.IgnoreArguments().Repeat.Once();
                 listener.StoryCreated("");
-                LastCall.IgnoreArguments().Repeat.Times(1);
+                LastCall.IgnoreArguments().Repeat.Once();
                 listener.StoryResults(null);
-                LastCall.IgnoreArguments().Repeat.Times(1);
+                LastCall.IgnoreArguments().Repeat.Once();
                 listener.StoryMessageAdded("");
-                LastCall.IgnoreArguments().Repeat.Times(15);
+                LastCall.IgnoreArguments().Repeat.Any();
                 listener.ThemeFinished();
                 LastCall.Repeat.Once();
                 listener.RunFinished();
@@ -161,6 +163,51 @@ namespace NBehave.Narrator.Framework.Specifications
         public void Should_report_the_number_of_passing_scenarios()
         {
             Assert.That(results.NumberOfPassingScenarios, Is.EqualTo(2));
+        }
+    }
+
+    [Context()]
+    public class When_dry_running_asembly_with_tokenized_scenario
+    {
+        TextWriter writer;
+
+        [SetUp]
+        public void SetupSpec()
+        {
+            writer = new StringWriter();
+            IEventListener evt = new TextWriterEventListener(writer);
+            StoryRunner runner = new StoryRunner();
+            runner.LoadAssembly("TestPlainTextAssembly.dll");
+            runner.IsDryRun = true;
+            StoryResults results = runner.Run(evt);
+        }
+
+        [Specification]
+        public void Should_have_given_after_Scenario1()
+        {
+            writer.Flush();
+            string output = writer.ToString();
+
+            int posOfFirstScenario = output.IndexOf("Scenario 1:");
+            int posOfFirstGiven = output.IndexOf(Environment.NewLine, posOfFirstScenario) + Environment.NewLine.Length;
+            int endOfLinePos = output.IndexOf(Environment.NewLine, posOfFirstGiven);
+            string given = output.Substring(posOfFirstGiven, +endOfLinePos - posOfFirstGiven);
+
+            Assert.IsTrue(given.EndsWith("Given my savings account balance is 100"));
+        }
+
+        [Specification]
+        public void Should_have_given_after_Scenario2()
+        {
+            writer.Flush();
+            string output = writer.ToString();
+
+            int posOfFirstScenario = output.IndexOf("Scenario 2:");
+            int posOfFirstGiven = output.IndexOf(Environment.NewLine, posOfFirstScenario) + Environment.NewLine.Length;
+            int endOfLinePos = output.IndexOf(Environment.NewLine, posOfFirstGiven);
+            string given = output.Substring(posOfFirstGiven, +endOfLinePos - posOfFirstGiven);
+
+            Assert.IsTrue(given.EndsWith("Given my savings account balance is 500"));
         }
     }
 }

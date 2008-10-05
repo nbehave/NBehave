@@ -168,16 +168,23 @@ namespace NBehave.Narrator.Framework
             try
             {
                 ValidateActionExists(message);
-                object action = GetActionFromCatalog(message);
-                Type actionType = action.GetType().IsGenericType ? action.GetType().GetGenericTypeDefinition() : action.GetType();
-                MethodInfo methodInfo = actionType.GetMethod("DynamicInvoke");
-                object[] actionParamValues = _catalog.GetParametersForMessage(message);
-                InvokeActionBase(type, message, action,
-                    delegate
-                    {
-                        methodInfo.Invoke(action, BindingFlags.InvokeMethod, null,
-                            new object[] { actionParamValues }, CultureInfo.CurrentCulture);
-                    }, actionParamValues);
+                if (IsDryRun)
+                {
+                    InvokeActionBase(type, message, null, null, _catalog.GetParametersForMessage(message));
+                }
+                else
+                {
+                    object action = GetActionFromCatalog(message);
+                    Type actionType = action.GetType().IsGenericType ? action.GetType().GetGenericTypeDefinition() : action.GetType();
+                    MethodInfo methodInfo = actionType.GetMethod("DynamicInvoke");
+                    object[] actionParamValues = _catalog.GetParametersForMessage(message);
+                    InvokeActionBase(type, message, action,
+                        delegate
+                        {
+                            methodInfo.Invoke(action, BindingFlags.InvokeMethod, null,
+                                new object[] { actionParamValues }, CultureInfo.CurrentCulture);
+                        }, actionParamValues);
+                }
             }
             catch (Exception e)
             {
