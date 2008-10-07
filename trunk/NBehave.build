@@ -34,7 +34,7 @@
   <target name="test-with-coverage" depends="compile, run-unit-tests-with-coverage"
     description="Compile and run tests with coverage" />
 
-  <target name="full" depends="clean, commonassemblyinfo, test-with-coverage, dist"
+  <target name="full" depends="clean, commonassemblyinfo, test, dist"
           description="Compiles, tests, and produces distributions" />
 
 	<target name="version" description="mark AssemblyInfo builds with the build number">

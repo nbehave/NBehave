@@ -51,7 +51,7 @@ namespace NBehave.Console
                 }
                 catch (FileNotFoundException e)
                 {
-                    output.WriteLine(string.Format("File not found: {0}", e.FileName));
+					output.WriteLine(string.Format("File not found: {0}", path));
                 }
             }
             IEventListener listener = CreateEventListener(options);
