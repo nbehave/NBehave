@@ -4,10 +4,16 @@
         <name>nunit.framework</name>
     </assembly>
     <members>
-        <member name="T:NUnit.Framework.Constraints.SubstringConstraint">
+        <member name="T:NUnit.Framework.Constraints.EmptyStringConstraint">
             <summary>
-            SubstringConstraint can test whether a string contains
-            the expected substring.
+            EmptyStringConstraint tests whether a string is empty.
+            </summary>
+        </member>
+        <member name="T:NUnit.Framework.Constraints.EmptyConstraint">
+            <summary>
+            EmptyConstraint tests a whether a string or collection is empty,
+            postponing the decision about which test is applied until the
+            type of the actual argument is known.
             </summary>
         </member>
         <member name="T:NUnit.Framework.Constraints.Constraint">
@@ -26,6 +32,11 @@
         <member name="F:NUnit.Framework.Constraints.Constraint.caseInsensitive">
             <summary>
             If true, all string comparisons will ignore case
+            </summary>
+        </member>
+        <member name="F:NUnit.Framework.Constraints.Constraint.clipStrings">
+            <summary>
+            If true, strings in error messages will be clipped
             </summary>
         </member>
         <member name="F:NUnit.Framework.Constraints.Constraint.compareAsCollection">
@@ -122,6 +133,12 @@
             Flag the constraint to ignore case and return self.
             </summary>
         </member>
+        <member name="P:NUnit.Framework.Constraints.Constraint.NoClip">
+            <summary>
+            Flag the constraint to suppress string clipping 
+            and return self.
+            </summary>
+        </member>
         <member name="P:NUnit.Framework.Constraints.Constraint.AsCollection">
             <summary>
             Flag the constraint to compare arrays as collections
@@ -133,6 +150,38 @@
             Class used to detect any derived constraints
             that fail to set the actual value in their
             Matches override.
+            </summary>
+        </member>
+        <member name="M:NUnit.Framework.Constraints.EmptyConstraint.Matches(System.Object)">
+            <summary>
+            Test whether the constraint is satisfied by a given value
+            </summary>
+            <param name="actual">The value to be tested</param>
+            <returns>True for success, false for failure</returns>
+        </member>
+        <member name="M:NUnit.Framework.Constraints.EmptyConstraint.WriteDescriptionTo(NUnit.Framework.MessageWriter)">
+            <summary>
+            Write the constraint description to a MessageWriter
+            </summary>
+            <param name="writer">The writer on which the description is displayed</param>
+        </member>
+        <member name="M:NUnit.Framework.Constraints.EmptyStringConstraint.Matches(System.Object)">
+            <summary>
+            Test whether the constraint is satisfied by a given value
+            </summary>
+            <param name="actual">The value to be tested</param>
+            <returns>True for success, false for failure</returns>
+        </member>
+        <member name="M:NUnit.Framework.Constraints.EmptyStringConstraint.WriteDescriptionTo(NUnit.Framework.MessageWriter)">
+            <summary>
+            Write the constraint description to a MessageWriter
+            </summary>
+            <param name="writer">The writer on which the description is displayed</param>
+        </member>
+        <member name="T:NUnit.Framework.Constraints.SubstringConstraint">
+            <summary>
+            SubstringConstraint can test whether a string contains
+            the expected substring.
             </summary>
         </member>
         <member name="M:NUnit.Framework.Constraints.SubstringConstraint.#ctor(System.String)">
@@ -228,26 +277,6 @@
             <returns>True for success, false for failure</returns>
         </member>
         <member name="M:NUnit.Framework.Constraints.RegexConstraint.WriteDescriptionTo(NUnit.Framework.MessageWriter)">
-            <summary>
-            Write the constraint description to a MessageWriter
-            </summary>
-            <param name="writer">The writer on which the description is displayed</param>
-        </member>
-        <member name="T:NUnit.Framework.Constraints.EmptyConstraint">
-            <summary>
-            EmptyConstraint tests a whether a string or collection is empty,
-            postponing the decision about which test is applied until the
-            type of the actual argument is known.
-            </summary>
-        </member>
-        <member name="M:NUnit.Framework.Constraints.EmptyConstraint.Matches(System.Object)">
-            <summary>
-            Test whether the constraint is satisfied by a given value
-            </summary>
-            <param name="actual">The value to be tested</param>
-            <returns>True for success, false for failure</returns>
-        </member>
-        <member name="M:NUnit.Framework.Constraints.EmptyConstraint.WriteDescriptionTo(NUnit.Framework.MessageWriter)">
             <summary>
             Write the constraint description to a MessageWriter
             </summary>
@@ -499,11 +528,11 @@
             <param name="actual">The value to be tested</param>
             <returns>True for success, false for failure</returns>
         </member>
-        <member name="M:NUnit.Framework.Constraints.CollectionConstraint.doMatch(System.Collections.ICollection)">
+        <member name="M:NUnit.Framework.Constraints.CollectionConstraint.doMatch(System.Collections.IEnumerable)">
             <summary>
             Protected method to be implemented by derived classes
             </summary>
-            <param name="collecton"></param>
+            <param name="collection"></param>
             <returns></returns>
         </member>
         <member name="T:NUnit.Framework.Constraints.CollectionConstraint.CollectionTally">
@@ -516,7 +545,7 @@
             <summary>
             Construct a CollectionTally object from a collection
             </summary>
-            <param name="collection"></param>
+            <param name="c"></param>
         </member>
         <member name="M:NUnit.Framework.Constraints.CollectionConstraint.CollectionTally.CanRemove(System.Collections.IEnumerable)">
             <summary>
@@ -539,16 +568,33 @@
             Get the count of the number of times an object is present in the tally
             </summary>
         </member>
+        <member name="T:NUnit.Framework.Constraints.EmptyCollectionConstraint">
+            <summary>
+            EmptyCollectionConstraint tests whether a colletion is empty. 
+            </summary>
+        </member>
+        <member name="M:NUnit.Framework.Constraints.EmptyCollectionConstraint.doMatch(System.Collections.IEnumerable)">
+            <summary>
+            Check that the collection is empty
+            </summary>
+            <param name="collection"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NUnit.Framework.Constraints.EmptyCollectionConstraint.WriteDescriptionTo(NUnit.Framework.MessageWriter)">
+            <summary>
+            Write the constraint description to a MessageWriter
+            </summary>
+            <param name="writer"></param>
+        </member>
         <member name="T:NUnit.Framework.Constraints.UniqueItemsConstraint">
             <summary>
             UniqueItemsConstraint tests whether all the items in a 
             collection are unique.
             </summary>
         </member>
-        <member name="M:NUnit.Framework.Constraints.UniqueItemsConstraint.doMatch(System.Collections.ICollection)">
+        <member name="M:NUnit.Framework.Constraints.UniqueItemsConstraint.doMatch(System.Collections.IEnumerable)">
             <summary>
-            Apply the item constraint to each item in the collection,
-            failing if any item fails.
+            Check that all items are unique.
             </summary>
             <param name="actual"></param>
             <returns></returns>
@@ -571,7 +617,7 @@
             </summary>
             <param name="expected"></param>
         </member>
-        <member name="M:NUnit.Framework.Constraints.CollectionContainsConstraint.doMatch(System.Collections.ICollection)">
+        <member name="M:NUnit.Framework.Constraints.CollectionContainsConstraint.doMatch(System.Collections.IEnumerable)">
             <summary>
             Test whether the expected item is contained in the collection
             </summary>
@@ -596,7 +642,7 @@
             </summary>
             <param name="expected"></param>
         </member>
-        <member name="M:NUnit.Framework.Constraints.CollectionEquivalentConstraint.doMatch(System.Collections.ICollection)">
+        <member name="M:NUnit.Framework.Constraints.CollectionEquivalentConstraint.doMatch(System.Collections.IEnumerable)">
             <summary>
             Test whether two collections are equivalent
             </summary>
@@ -621,7 +667,7 @@
             </summary>
             <param name="expected">The collection that the actual value is expected to be a subset of</param>
         </member>
-        <member name="M:NUnit.Framework.Constraints.CollectionSubsetConstraint.doMatch(System.Collections.ICollection)">
+        <member name="M:NUnit.Framework.Constraints.CollectionSubsetConstraint.doMatch(System.Collections.IEnumerable)">
             <summary>
             Test whether the actual collection is a subset of 
             the expected collection provided.
@@ -643,7 +689,7 @@
         </member>
         <member name="M:NUnit.Framework.Constraints.EqualConstraint.#ctor(System.Object)">
             <summary>
-            Initializes a new instance of the <see cref="T:EqualConstraint"/> class.
+            Initializes a new instance of the <see cref="T:NUnit.Framework.Constraints.EqualConstraint"/> class.
             </summary>
             <param name="expected">The expected value.</param>
         </member>
@@ -671,6 +717,14 @@
             <summary>
             Helper method to compare two arrays
             </summary>
+        </member>
+        <member name="M:NUnit.Framework.Constraints.EqualConstraint.DirectoriesEqual(System.IO.DirectoryInfo,System.IO.DirectoryInfo)">
+            <summary>
+            Method to compare two DirectoryInfo objects
+            </summary>
+            <param name="expected">first directory to compare</param>
+            <param name="actual">second directory to compare</param>
+            <returns>true if equivalent, false if not</returns>
         </member>
         <member name="M:NUnit.Framework.Constraints.EqualConstraint.DisplayCollectionDifferences(NUnit.Framework.MessageWriter,System.Collections.ICollection,System.Collections.ICollection,System.Int32)">
             <summary>
@@ -1058,6 +1112,54 @@
             </summary>
             <param name="expected">The expected value.</param>
         </member>
+        <member name="T:NUnit.Framework.Constraints.Numerics">
+            <summary>
+            The Numerics class contains common operations on numeric values.
+            </summary>
+        </member>
+        <member name="M:NUnit.Framework.Constraints.Numerics.IsNumericType(System.Object)">
+            <summary>
+            Checks the type of the object, returning true if
+            the object is a numeric type.
+            </summary>
+            <param name="obj">The object to check</param>
+            <returns>true if the object is a numeric type</returns>
+        </member>
+        <member name="M:NUnit.Framework.Constraints.Numerics.IsFloatingPointNumeric(System.Object)">
+            <summary>
+            Checks the type of the object, returning true if
+            the object is a floating point numeric type.
+            </summary>
+            <param name="obj">The object to check</param>
+            <returns>true if the object is a floating point numeric type</returns>
+        </member>
+        <member name="M:NUnit.Framework.Constraints.Numerics.IsFixedPointNumeric(System.Object)">
+            <summary>
+            Checks the type of the object, returning true if
+            the object is a fixed point numeric type.
+            </summary>
+            <param name="obj">The object to check</param>
+            <returns>true if the object is a fixed point numeric type</returns>
+        </member>
+        <member name="M:NUnit.Framework.Constraints.Numerics.AreEqual(System.Object,System.Object,System.Object@)">
+            <summary>
+            Test two numeric values for equality, performing the usual numeric 
+            conversions and using a provided or default tolerance. If the value 
+            referred to by tolerance is null, this method may set it to a default.
+            </summary>
+            <param name="expected">The expected value</param>
+            <param name="actual">The actual value</param>
+            <param name="tolerance">A reference to the numeric tolerance in effect</param>
+            <returns>True if the values are equal</returns>
+        </member>
+        <member name="M:NUnit.Framework.Constraints.Numerics.Compare(System.IComparable,System.Object)">
+            <summary>
+            Compare two numeric values, performing the usual numeric conversions.
+            </summary>
+            <param name="expected">The expected value</param>
+            <param name="actual">The actual value</param>
+            <returns></returns>
+        </member>
         <member name="T:NUnit.Framework.Constraints.ContainsConstraint">
             <summary>
             ContainsConstraint tests a whether a string contains a substring
@@ -1194,35 +1296,6 @@
             Write a description for this contraint to a MessageWriter
             </summary>
             <param name="writer">The MessageWriter to receive the description</param>
-        </member>
-        <member name="T:NUnit.Framework.Constraints.Numerics">
-            <summary>
-            The Numerics class contains common operations on numeric values.
-            </summary>
-        </member>
-        <member name="M:NUnit.Framework.Constraints.Numerics.IsNumericType(System.Object)">
-            <summary>
-            Checks the type of the object, returning true if
-            the object is a numeric type.
-            </summary>
-            <param name="obj">The object to check</param>
-            <returns>true if the object is a numeric type</returns>
-        </member>
-        <member name="M:NUnit.Framework.Constraints.Numerics.IsFloatingPointNumeric(System.Object)">
-            <summary>
-            Checks the type of the object, returning true if
-            the object is a floating point numeric type.
-            </summary>
-            <param name="obj">The object to check</param>
-            <returns>true if the object is a floating point numeric type</returns>
-        </member>
-        <member name="M:NUnit.Framework.Constraints.Numerics.IsFixedPointNumeric(System.Object)">
-            <summary>
-            Checks the type of the object, returning true if
-            the object is a fixed point numeric type.
-            </summary>
-            <param name="obj">The object to check</param>
-            <returns>true if the object is a fixed point numeric type</returns>
         </member>
         <member name="T:NUnit.Framework.SyntaxHelpers.Is">
             <summary>
@@ -3609,374 +3682,374 @@
             <param name="a"></param>
             <param name="b"></param>
         </member>
-        <member name="M:NUnit.Framework.CollectionAssert.AllItemsAreInstancesOfType(System.Collections.ICollection,System.Type)">
+        <member name="M:NUnit.Framework.CollectionAssert.AllItemsAreInstancesOfType(System.Collections.IEnumerable,System.Type)">
             <summary>
             Asserts that all items contained in collection are of the type specified by expectedType.
             </summary>
-            <param name="collection">ICollection of objects to be considered</param>
+            <param name="collection">IEnumerable containing objects to be considered</param>
             <param name="expectedType">System.Type that all objects in collection must be instances of</param>
         </member>
-        <member name="M:NUnit.Framework.CollectionAssert.AllItemsAreInstancesOfType(System.Collections.ICollection,System.Type,System.String)">
+        <member name="M:NUnit.Framework.CollectionAssert.AllItemsAreInstancesOfType(System.Collections.IEnumerable,System.Type,System.String)">
             <summary>
             Asserts that all items contained in collection are of the type specified by expectedType.
             </summary>
-            <param name="collection">ICollection of objects to be considered</param>
+            <param name="collection">IEnumerable containing objects to be considered</param>
             <param name="expectedType">System.Type that all objects in collection must be instances of</param>
             <param name="message">The message that will be displayed on failure</param>
         </member>
-        <member name="M:NUnit.Framework.CollectionAssert.AllItemsAreInstancesOfType(System.Collections.ICollection,System.Type,System.String,System.Object[])">
+        <member name="M:NUnit.Framework.CollectionAssert.AllItemsAreInstancesOfType(System.Collections.IEnumerable,System.Type,System.String,System.Object[])">
             <summary>
             Asserts that all items contained in collection are of the type specified by expectedType.
             </summary>
-            <param name="collection">ICollection of objects to be considered</param>
+            <param name="collection">IEnumerable containing objects to be considered</param>
             <param name="expectedType">System.Type that all objects in collection must be instances of</param>
             <param name="message">The message that will be displayed on failure</param>
             <param name="args">Arguments to be used in formatting the message</param>
         </member>
-        <member name="M:NUnit.Framework.CollectionAssert.AllItemsAreNotNull(System.Collections.ICollection)">
+        <member name="M:NUnit.Framework.CollectionAssert.AllItemsAreNotNull(System.Collections.IEnumerable)">
             <summary>
             Asserts that all items contained in collection are not equal to null.
             </summary>
-            <param name="collection">ICollection of objects to be considered</param>
+            <param name="collection">IEnumerable containing objects to be considered</param>
         </member>
-        <member name="M:NUnit.Framework.CollectionAssert.AllItemsAreNotNull(System.Collections.ICollection,System.String)">
+        <member name="M:NUnit.Framework.CollectionAssert.AllItemsAreNotNull(System.Collections.IEnumerable,System.String)">
             <summary>
             Asserts that all items contained in collection are not equal to null.
             </summary>
-            <param name="collection">ICollection of objects to be considered</param>
+            <param name="collection">IEnumerable containing objects to be considered</param>
             <param name="message">The message that will be displayed on failure</param>
         </member>
-        <member name="M:NUnit.Framework.CollectionAssert.AllItemsAreNotNull(System.Collections.ICollection,System.String,System.Object[])">
+        <member name="M:NUnit.Framework.CollectionAssert.AllItemsAreNotNull(System.Collections.IEnumerable,System.String,System.Object[])">
             <summary>
             Asserts that all items contained in collection are not equal to null.
             </summary>
-            <param name="collection">ICollection of objects to be considered</param>
+            <param name="collection">IEnumerable of objects to be considered</param>
             <param name="message">The message that will be displayed on failure</param>
             <param name="args">Arguments to be used in formatting the message</param>
         </member>
-        <member name="M:NUnit.Framework.CollectionAssert.AllItemsAreUnique(System.Collections.ICollection)">
+        <member name="M:NUnit.Framework.CollectionAssert.AllItemsAreUnique(System.Collections.IEnumerable)">
             <summary>
             Ensures that every object contained in collection exists within the collection
             once and only once.
             </summary>
-            <param name="collection">ICollection of objects to be considered</param>
+            <param name="collection">IEnumerable of objects to be considered</param>
         </member>
-        <member name="M:NUnit.Framework.CollectionAssert.AllItemsAreUnique(System.Collections.ICollection,System.String)">
+        <member name="M:NUnit.Framework.CollectionAssert.AllItemsAreUnique(System.Collections.IEnumerable,System.String)">
             <summary>
             Ensures that every object contained in collection exists within the collection
             once and only once.
             </summary>
-            <param name="collection">ICollection of objects to be considered</param>
+            <param name="collection">IEnumerable of objects to be considered</param>
             <param name="message">The message that will be displayed on failure</param>
         </member>
-        <member name="M:NUnit.Framework.CollectionAssert.AllItemsAreUnique(System.Collections.ICollection,System.String,System.Object[])">
+        <member name="M:NUnit.Framework.CollectionAssert.AllItemsAreUnique(System.Collections.IEnumerable,System.String,System.Object[])">
             <summary>
             Ensures that every object contained in collection exists within the collection
             once and only once.
             </summary>
-            <param name="collection">ICollection of objects to be considered</param>
+            <param name="collection">IEnumerable of objects to be considered</param>
             <param name="message">The message that will be displayed on failure</param>
             <param name="args">Arguments to be used in formatting the message</param>
         </member>
-        <member name="M:NUnit.Framework.CollectionAssert.AreEqual(System.Collections.ICollection,System.Collections.ICollection)">
+        <member name="M:NUnit.Framework.CollectionAssert.AreEqual(System.Collections.IEnumerable,System.Collections.IEnumerable)">
             <summary>
             Asserts that expected and actual are exactly equal.  The collections must have the same count, 
             and contain the exact same objects in the same order.
             </summary>
-            <param name="expected">The first ICollection of objects to be considered</param>
-            <param name="actual">The second ICollection of objects to be considered</param>
+            <param name="expected">The first IEnumerable of objects to be considered</param>
+            <param name="actual">The second IEnumerable of objects to be considered</param>
         </member>
-        <member name="M:NUnit.Framework.CollectionAssert.AreEqual(System.Collections.ICollection,System.Collections.ICollection,System.Collections.IComparer)">
+        <member name="M:NUnit.Framework.CollectionAssert.AreEqual(System.Collections.IEnumerable,System.Collections.IEnumerable,System.Collections.IComparer)">
             <summary>
             Asserts that expected and actual are exactly equal.  The collections must have the same count, 
             and contain the exact same objects in the same order.
             If comparer is not null then it will be used to compare the objects.
             </summary>
-            <param name="expected">The first ICollection of objects to be considered</param>
-            <param name="actual">The second ICollection of objects to be considered</param>
-            <param name="comparer">The IComparer to use in comparing objects from each ICollection</param>
+            <param name="expected">The first IEnumerable of objects to be considered</param>
+            <param name="actual">The second IEnumerable of objects to be considered</param>
+            <param name="comparer">The IComparer to use in comparing objects from each IEnumerable</param>
         </member>
-        <member name="M:NUnit.Framework.CollectionAssert.AreEqual(System.Collections.ICollection,System.Collections.ICollection,System.String)">
+        <member name="M:NUnit.Framework.CollectionAssert.AreEqual(System.Collections.IEnumerable,System.Collections.IEnumerable,System.String)">
             <summary>
             Asserts that expected and actual are exactly equal.  The collections must have the same count, 
             and contain the exact same objects in the same order.
             </summary>
-            <param name="expected">The first ICollection of objects to be considered</param>
-            <param name="actual">The second ICollection of objects to be considered</param>
+            <param name="expected">The first IEnumerable of objects to be considered</param>
+            <param name="actual">The second IEnumerable of objects to be considered</param>
             <param name="message">The message that will be displayed on failure</param>
         </member>
-        <member name="M:NUnit.Framework.CollectionAssert.AreEqual(System.Collections.ICollection,System.Collections.ICollection,System.Collections.IComparer,System.String)">
-            <summary>
-            Asserts that expected and actual are exactly equal.  The collections must have the same count, 
-            and contain the exact same objects in the same order.
-            If comparer is not null then it will be used to compare the objects.
-            </summary>
-            <param name="expected">The first ICollection of objects to be considered</param>
-            <param name="actual">The second ICollection of objects to be considered</param>
-            <param name="comparer">The IComparer to use in comparing objects from each ICollection</param>
-            <param name="message">The message that will be displayed on failure</param>
-        </member>
-        <member name="M:NUnit.Framework.CollectionAssert.AreEqual(System.Collections.ICollection,System.Collections.ICollection,System.String,System.Object[])">
-            <summary>
-            Asserts that expected and actual are exactly equal.  The collections must have the same count, 
-            and contain the exact same objects in the same order.
-            </summary>
-            <param name="expected">The first ICollection of objects to be considered</param>
-            <param name="actual">The second ICollection of objects to be considered</param>
-            <param name="message">The message that will be displayed on failure</param>
-            <param name="args">Arguments to be used in formatting the message</param>
-        </member>
-        <member name="M:NUnit.Framework.CollectionAssert.AreEqual(System.Collections.ICollection,System.Collections.ICollection,System.Collections.IComparer,System.String,System.Object[])">
+        <member name="M:NUnit.Framework.CollectionAssert.AreEqual(System.Collections.IEnumerable,System.Collections.IEnumerable,System.Collections.IComparer,System.String)">
             <summary>
             Asserts that expected and actual are exactly equal.  The collections must have the same count, 
             and contain the exact same objects in the same order.
             If comparer is not null then it will be used to compare the objects.
             </summary>
-            <param name="expected">The first ICollection of objects to be considered</param>
-            <param name="actual">The second ICollection of objects to be considered</param>
-            <param name="comparer">The IComparer to use in comparing objects from each ICollection</param>
+            <param name="expected">The first IEnumerable of objects to be considered</param>
+            <param name="actual">The second IEnumerable of objects to be considered</param>
+            <param name="comparer">The IComparer to use in comparing objects from each IEnumerable</param>
+            <param name="message">The message that will be displayed on failure</param>
+        </member>
+        <member name="M:NUnit.Framework.CollectionAssert.AreEqual(System.Collections.IEnumerable,System.Collections.IEnumerable,System.String,System.Object[])">
+            <summary>
+            Asserts that expected and actual are exactly equal.  The collections must have the same count, 
+            and contain the exact same objects in the same order.
+            </summary>
+            <param name="expected">The first IEnumerable of objects to be considered</param>
+            <param name="actual">The second IEnumerable of objects to be considered</param>
             <param name="message">The message that will be displayed on failure</param>
             <param name="args">Arguments to be used in formatting the message</param>
         </member>
-        <member name="M:NUnit.Framework.CollectionAssert.AreEquivalent(System.Collections.ICollection,System.Collections.ICollection)">
+        <member name="M:NUnit.Framework.CollectionAssert.AreEqual(System.Collections.IEnumerable,System.Collections.IEnumerable,System.Collections.IComparer,System.String,System.Object[])">
+            <summary>
+            Asserts that expected and actual are exactly equal.  The collections must have the same count, 
+            and contain the exact same objects in the same order.
+            If comparer is not null then it will be used to compare the objects.
+            </summary>
+            <param name="expected">The first IEnumerable of objects to be considered</param>
+            <param name="actual">The second IEnumerable of objects to be considered</param>
+            <param name="comparer">The IComparer to use in comparing objects from each IEnumerable</param>
+            <param name="message">The message that will be displayed on failure</param>
+            <param name="args">Arguments to be used in formatting the message</param>
+        </member>
+        <member name="M:NUnit.Framework.CollectionAssert.AreEquivalent(System.Collections.IEnumerable,System.Collections.IEnumerable)">
             <summary>
             Asserts that expected and actual are equivalent, containing the same objects but the match may be in any order.
             </summary>
-            <param name="expected">The first ICollection of objects to be considered</param>
-            <param name="actual">The second ICollection of objects to be considered</param>
+            <param name="expected">The first IEnumerable of objects to be considered</param>
+            <param name="actual">The second IEnumerable of objects to be considered</param>
         </member>
-        <member name="M:NUnit.Framework.CollectionAssert.AreEquivalent(System.Collections.ICollection,System.Collections.ICollection,System.String)">
+        <member name="M:NUnit.Framework.CollectionAssert.AreEquivalent(System.Collections.IEnumerable,System.Collections.IEnumerable,System.String)">
             <summary>
             Asserts that expected and actual are equivalent, containing the same objects but the match may be in any order.
             </summary>
-            <param name="expected">The first ICollection of objects to be considered</param>
-            <param name="actual">The second ICollection of objects to be considered</param>
+            <param name="expected">The first IEnumerable of objects to be considered</param>
+            <param name="actual">The second IEnumerable of objects to be considered</param>
             <param name="message">The message that will be displayed on failure</param>
         </member>
-        <member name="M:NUnit.Framework.CollectionAssert.AreEquivalent(System.Collections.ICollection,System.Collections.ICollection,System.String,System.Object[])">
+        <member name="M:NUnit.Framework.CollectionAssert.AreEquivalent(System.Collections.IEnumerable,System.Collections.IEnumerable,System.String,System.Object[])">
             <summary>
             Asserts that expected and actual are equivalent, containing the same objects but the match may be in any order.
             </summary>
-            <param name="expected">The first ICollection of objects to be considered</param>
-            <param name="actual">The second ICollection of objects to be considered</param>
+            <param name="expected">The first IEnumerable of objects to be considered</param>
+            <param name="actual">The second IEnumerable of objects to be considered</param>
             <param name="message">The message that will be displayed on failure</param>
             <param name="args">Arguments to be used in formatting the message</param>
         </member>
-        <member name="M:NUnit.Framework.CollectionAssert.AreNotEqual(System.Collections.ICollection,System.Collections.ICollection)">
+        <member name="M:NUnit.Framework.CollectionAssert.AreNotEqual(System.Collections.IEnumerable,System.Collections.IEnumerable)">
             <summary>
             Asserts that expected and actual are not exactly equal.
             </summary>
-            <param name="expected">The first ICollection of objects to be considered</param>
-            <param name="actual">The second ICollection of objects to be considered</param>
+            <param name="expected">The first IEnumerable of objects to be considered</param>
+            <param name="actual">The second IEnumerable of objects to be considered</param>
         </member>
-        <member name="M:NUnit.Framework.CollectionAssert.AreNotEqual(System.Collections.ICollection,System.Collections.ICollection,System.Collections.IComparer)">
-            <summary>
-            Asserts that expected and actual are not exactly equal.
-            If comparer is not null then it will be used to compare the objects.
-            </summary>
-            <param name="expected">The first ICollection of objects to be considered</param>
-            <param name="actual">The second ICollection of objects to be considered</param>
-            <param name="comparer">The IComparer to use in comparing objects from each ICollection</param>
-        </member>
-        <member name="M:NUnit.Framework.CollectionAssert.AreNotEqual(System.Collections.ICollection,System.Collections.ICollection,System.String)">
-            <summary>
-            Asserts that expected and actual are not exactly equal.
-            </summary>
-            <param name="expected">The first ICollection of objects to be considered</param>
-            <param name="actual">The second ICollection of objects to be considered</param>
-            <param name="message">The message that will be displayed on failure</param>
-        </member>
-        <member name="M:NUnit.Framework.CollectionAssert.AreNotEqual(System.Collections.ICollection,System.Collections.ICollection,System.Collections.IComparer,System.String)">
+        <member name="M:NUnit.Framework.CollectionAssert.AreNotEqual(System.Collections.IEnumerable,System.Collections.IEnumerable,System.Collections.IComparer)">
             <summary>
             Asserts that expected and actual are not exactly equal.
             If comparer is not null then it will be used to compare the objects.
             </summary>
-            <param name="expected">The first ICollection of objects to be considered</param>
-            <param name="actual">The second ICollection of objects to be considered</param>
-            <param name="comparer">The IComparer to use in comparing objects from each ICollection</param>
-            <param name="message">The message that will be displayed on failure</param>
+            <param name="expected">The first IEnumerable of objects to be considered</param>
+            <param name="actual">The second IEnumerable of objects to be considered</param>
+            <param name="comparer">The IComparer to use in comparing objects from each IEnumerable</param>
         </member>
-        <member name="M:NUnit.Framework.CollectionAssert.AreNotEqual(System.Collections.ICollection,System.Collections.ICollection,System.String,System.Object[])">
+        <member name="M:NUnit.Framework.CollectionAssert.AreNotEqual(System.Collections.IEnumerable,System.Collections.IEnumerable,System.String)">
             <summary>
             Asserts that expected and actual are not exactly equal.
             </summary>
-            <param name="expected">The first ICollection of objects to be considered</param>
-            <param name="actual">The second ICollection of objects to be considered</param>
+            <param name="expected">The first IEnumerable of objects to be considered</param>
+            <param name="actual">The second IEnumerable of objects to be considered</param>
             <param name="message">The message that will be displayed on failure</param>
-            <param name="args">Arguments to be used in formatting the message</param>
         </member>
-        <member name="M:NUnit.Framework.CollectionAssert.AreNotEqual(System.Collections.ICollection,System.Collections.ICollection,System.Collections.IComparer,System.String,System.Object[])">
+        <member name="M:NUnit.Framework.CollectionAssert.AreNotEqual(System.Collections.IEnumerable,System.Collections.IEnumerable,System.Collections.IComparer,System.String)">
             <summary>
             Asserts that expected and actual are not exactly equal.
             If comparer is not null then it will be used to compare the objects.
             </summary>
-            <param name="expected">The first ICollection of objects to be considered</param>
-            <param name="actual">The second ICollection of objects to be considered</param>
-            <param name="comparer">The IComparer to use in comparing objects from each ICollection</param>
+            <param name="expected">The first IEnumerable of objects to be considered</param>
+            <param name="actual">The second IEnumerable of objects to be considered</param>
+            <param name="comparer">The IComparer to use in comparing objects from each IEnumerable</param>
+            <param name="message">The message that will be displayed on failure</param>
+        </member>
+        <member name="M:NUnit.Framework.CollectionAssert.AreNotEqual(System.Collections.IEnumerable,System.Collections.IEnumerable,System.String,System.Object[])">
+            <summary>
+            Asserts that expected and actual are not exactly equal.
+            </summary>
+            <param name="expected">The first IEnumerable of objects to be considered</param>
+            <param name="actual">The second IEnumerable of objects to be considered</param>
             <param name="message">The message that will be displayed on failure</param>
             <param name="args">Arguments to be used in formatting the message</param>
         </member>
-        <member name="M:NUnit.Framework.CollectionAssert.AreNotEquivalent(System.Collections.ICollection,System.Collections.ICollection)">
+        <member name="M:NUnit.Framework.CollectionAssert.AreNotEqual(System.Collections.IEnumerable,System.Collections.IEnumerable,System.Collections.IComparer,System.String,System.Object[])">
+            <summary>
+            Asserts that expected and actual are not exactly equal.
+            If comparer is not null then it will be used to compare the objects.
+            </summary>
+            <param name="expected">The first IEnumerable of objects to be considered</param>
+            <param name="actual">The second IEnumerable of objects to be considered</param>
+            <param name="comparer">The IComparer to use in comparing objects from each IEnumerable</param>
+            <param name="message">The message that will be displayed on failure</param>
+            <param name="args">Arguments to be used in formatting the message</param>
+        </member>
+        <member name="M:NUnit.Framework.CollectionAssert.AreNotEquivalent(System.Collections.IEnumerable,System.Collections.IEnumerable)">
             <summary>
             Asserts that expected and actual are not equivalent.
             </summary>
-            <param name="expected">The first ICollection of objects to be considered</param>
-            <param name="actual">The second ICollection of objects to be considered</param>
+            <param name="expected">The first IEnumerable of objects to be considered</param>
+            <param name="actual">The second IEnumerable of objects to be considered</param>
         </member>
-        <member name="M:NUnit.Framework.CollectionAssert.AreNotEquivalent(System.Collections.ICollection,System.Collections.ICollection,System.String)">
+        <member name="M:NUnit.Framework.CollectionAssert.AreNotEquivalent(System.Collections.IEnumerable,System.Collections.IEnumerable,System.String)">
             <summary>
             Asserts that expected and actual are not equivalent.
             </summary>
-            <param name="expected">The first ICollection of objects to be considered</param>
-            <param name="actual">The second ICollection of objects to be considered</param>
+            <param name="expected">The first IEnumerable of objects to be considered</param>
+            <param name="actual">The second IEnumerable of objects to be considered</param>
             <param name="message">The message that will be displayed on failure</param>
         </member>
-        <member name="M:NUnit.Framework.CollectionAssert.AreNotEquivalent(System.Collections.ICollection,System.Collections.ICollection,System.String,System.Object[])">
+        <member name="M:NUnit.Framework.CollectionAssert.AreNotEquivalent(System.Collections.IEnumerable,System.Collections.IEnumerable,System.String,System.Object[])">
             <summary>
             Asserts that expected and actual are not equivalent.
             </summary>
-            <param name="expected">The first ICollection of objects to be considered</param>
-            <param name="actual">The second ICollection of objects to be considered</param>
+            <param name="expected">The first IEnumerable of objects to be considered</param>
+            <param name="actual">The second IEnumerable of objects to be considered</param>
             <param name="message">The message that will be displayed on failure</param>
             <param name="args">Arguments to be used in formatting the message</param>
         </member>
-        <member name="M:NUnit.Framework.CollectionAssert.Contains(System.Collections.ICollection,System.Object)">
+        <member name="M:NUnit.Framework.CollectionAssert.Contains(System.Collections.IEnumerable,System.Object)">
             <summary>
             Asserts that collection contains actual as an item.
             </summary>
-            <param name="collection">ICollection of objects to be considered</param>
+            <param name="collection">IEnumerable of objects to be considered</param>
             <param name="actual">Object to be found within collection</param>
         </member>
-        <member name="M:NUnit.Framework.CollectionAssert.Contains(System.Collections.ICollection,System.Object,System.String)">
+        <member name="M:NUnit.Framework.CollectionAssert.Contains(System.Collections.IEnumerable,System.Object,System.String)">
             <summary>
             Asserts that collection contains actual as an item.
             </summary>
-            <param name="collection">ICollection of objects to be considered</param>
+            <param name="collection">IEnumerable of objects to be considered</param>
             <param name="actual">Object to be found within collection</param>
             <param name="message">The message that will be displayed on failure</param>
         </member>
-        <member name="M:NUnit.Framework.CollectionAssert.Contains(System.Collections.ICollection,System.Object,System.String,System.Object[])">
+        <member name="M:NUnit.Framework.CollectionAssert.Contains(System.Collections.IEnumerable,System.Object,System.String,System.Object[])">
             <summary>
             Asserts that collection contains actual as an item.
             </summary>
-            <param name="collection">ICollection of objects to be considered</param>
+            <param name="collection">IEnumerable of objects to be considered</param>
             <param name="actual">Object to be found within collection</param>
             <param name="message">The message that will be displayed on failure</param>
             <param name="args">Arguments to be used in formatting the message</param>
         </member>
-        <member name="M:NUnit.Framework.CollectionAssert.DoesNotContain(System.Collections.ICollection,System.Object)">
+        <member name="M:NUnit.Framework.CollectionAssert.DoesNotContain(System.Collections.IEnumerable,System.Object)">
             <summary>
             Asserts that collection does not contain actual as an item.
             </summary>
-            <param name="collection">ICollection of objects to be considered</param>
+            <param name="collection">IEnumerable of objects to be considered</param>
             <param name="actual">Object that cannot exist within collection</param>
         </member>
-        <member name="M:NUnit.Framework.CollectionAssert.DoesNotContain(System.Collections.ICollection,System.Object,System.String)">
+        <member name="M:NUnit.Framework.CollectionAssert.DoesNotContain(System.Collections.IEnumerable,System.Object,System.String)">
             <summary>
             Asserts that collection does not contain actual as an item.
             </summary>
-            <param name="collection">ICollection of objects to be considered</param>
+            <param name="collection">IEnumerable of objects to be considered</param>
             <param name="actual">Object that cannot exist within collection</param>
             <param name="message">The message that will be displayed on failure</param>
         </member>
-        <member name="M:NUnit.Framework.CollectionAssert.DoesNotContain(System.Collections.ICollection,System.Object,System.String,System.Object[])">
+        <member name="M:NUnit.Framework.CollectionAssert.DoesNotContain(System.Collections.IEnumerable,System.Object,System.String,System.Object[])">
             <summary>
             Asserts that collection does not contain actual as an item.
             </summary>
-            <param name="collection">ICollection of objects to be considered</param>
+            <param name="collection">IEnumerable of objects to be considered</param>
             <param name="actual">Object that cannot exist within collection</param>
             <param name="message">The message that will be displayed on failure</param>
             <param name="args">Arguments to be used in formatting the message</param>
         </member>
-        <member name="M:NUnit.Framework.CollectionAssert.IsNotSubsetOf(System.Collections.ICollection,System.Collections.ICollection)">
+        <member name="M:NUnit.Framework.CollectionAssert.IsNotSubsetOf(System.Collections.IEnumerable,System.Collections.IEnumerable)">
             <summary>
             Asserts that superset is not a subject of subset.
             </summary>
-            <param name="subset">The ICollection superset to be considered</param>
-            <param name="superset">The ICollection subset to be considered</param>
+            <param name="subset">The IEnumerable superset to be considered</param>
+            <param name="superset">The IEnumerable subset to be considered</param>
         </member>
-        <member name="M:NUnit.Framework.CollectionAssert.IsNotSubsetOf(System.Collections.ICollection,System.Collections.ICollection,System.String)">
+        <member name="M:NUnit.Framework.CollectionAssert.IsNotSubsetOf(System.Collections.IEnumerable,System.Collections.IEnumerable,System.String)">
             <summary>
             Asserts that superset is not a subject of subset.
             </summary>
-            <param name="subset">The ICollection superset to be considered</param>
-            <param name="superset">The ICollection subset to be considered</param>
+            <param name="subset">The IEnumerable superset to be considered</param>
+            <param name="superset">The IEnumerable subset to be considered</param>
             <param name="message">The message that will be displayed on failure</param>
         </member>
-        <member name="M:NUnit.Framework.CollectionAssert.IsNotSubsetOf(System.Collections.ICollection,System.Collections.ICollection,System.String,System.Object[])">
+        <member name="M:NUnit.Framework.CollectionAssert.IsNotSubsetOf(System.Collections.IEnumerable,System.Collections.IEnumerable,System.String,System.Object[])">
             <summary>
             Asserts that superset is not a subject of subset.
             </summary>
-            <param name="subset">The ICollection superset to be considered</param>
-            <param name="superset">The ICollection subset to be considered</param>
+            <param name="subset">The IEnumerable superset to be considered</param>
+            <param name="superset">The IEnumerable subset to be considered</param>
             <param name="message">The message that will be displayed on failure</param>
             <param name="args">Arguments to be used in formatting the message</param>
         </member>
-        <member name="M:NUnit.Framework.CollectionAssert.IsSubsetOf(System.Collections.ICollection,System.Collections.ICollection)">
+        <member name="M:NUnit.Framework.CollectionAssert.IsSubsetOf(System.Collections.IEnumerable,System.Collections.IEnumerable)">
             <summary>
             Asserts that superset is a subset of subset.
             </summary>
-            <param name="subset">The ICollection superset to be considered</param>
-            <param name="superset">The ICollection subset to be considered</param>
+            <param name="subset">The IEnumerable superset to be considered</param>
+            <param name="superset">The IEnumerable subset to be considered</param>
         </member>
-        <member name="M:NUnit.Framework.CollectionAssert.IsSubsetOf(System.Collections.ICollection,System.Collections.ICollection,System.String)">
+        <member name="M:NUnit.Framework.CollectionAssert.IsSubsetOf(System.Collections.IEnumerable,System.Collections.IEnumerable,System.String)">
             <summary>
             Asserts that superset is a subset of subset.
             </summary>
-            <param name="subset">The ICollection superset to be considered</param>
-            <param name="superset">The ICollection subset to be considered</param>
+            <param name="subset">The IEnumerable superset to be considered</param>
+            <param name="superset">The IEnumerable subset to be considered</param>
             <param name="message">The message that will be displayed on failure</param>
         </member>
-        <member name="M:NUnit.Framework.CollectionAssert.IsSubsetOf(System.Collections.ICollection,System.Collections.ICollection,System.String,System.Object[])">
+        <member name="M:NUnit.Framework.CollectionAssert.IsSubsetOf(System.Collections.IEnumerable,System.Collections.IEnumerable,System.String,System.Object[])">
             <summary>
             Asserts that superset is a subset of subset.
             </summary>
-            <param name="subset">The ICollection superset to be considered</param>
-            <param name="superset">The ICollection subset to be considered</param>
+            <param name="subset">The IEnumerable superset to be considered</param>
+            <param name="superset">The IEnumerable subset to be considered</param>
             <param name="message">The message that will be displayed on failure</param>
             <param name="args">Arguments to be used in formatting the message</param>
         </member>
-        <member name="M:NUnit.Framework.CollectionAssert.IsEmpty(System.Collections.ICollection,System.String,System.Object[])">
+        <member name="M:NUnit.Framework.CollectionAssert.IsEmpty(System.Collections.IEnumerable,System.String,System.Object[])">
             <summary>
             Assert that an array, list or other collection is empty
             </summary>
-            <param name="collection">An array, list or other collection implementing ICollection</param>
+            <param name="collection">An array, list or other collection implementing IEnumerable</param>
             <param name="message">The message to be displayed on failure</param>
             <param name="args">Arguments to be used in formatting the message</param>
         </member>
-        <member name="M:NUnit.Framework.CollectionAssert.IsEmpty(System.Collections.ICollection,System.String)">
+        <member name="M:NUnit.Framework.CollectionAssert.IsEmpty(System.Collections.IEnumerable,System.String)">
             <summary>
             Assert that an array, list or other collection is empty
             </summary>
-            <param name="collection">An array, list or other collection implementing ICollection</param>
+            <param name="collection">An array, list or other collection implementing IEnumerable</param>
             <param name="message">The message to be displayed on failure</param>
         </member>
-        <member name="M:NUnit.Framework.CollectionAssert.IsEmpty(System.Collections.ICollection)">
+        <member name="M:NUnit.Framework.CollectionAssert.IsEmpty(System.Collections.IEnumerable)">
             <summary>
             Assert that an array,list or other collection is empty
             </summary>
-            <param name="collection">An array, list or other collection implementing ICollection</param>
+            <param name="collection">An array, list or other collection implementing IEnumerable</param>
         </member>
-        <member name="M:NUnit.Framework.CollectionAssert.IsNotEmpty(System.Collections.ICollection,System.String,System.Object[])">
+        <member name="M:NUnit.Framework.CollectionAssert.IsNotEmpty(System.Collections.IEnumerable,System.String,System.Object[])">
             <summary>
             Assert that an array, list or other collection is empty
             </summary>
-            <param name="collection">An array, list or other collection implementing ICollection</param>
+            <param name="collection">An array, list or other collection implementing IEnumerable</param>
             <param name="message">The message to be displayed on failure</param>
             <param name="args">Arguments to be used in formatting the message</param>
         </member>
-        <member name="M:NUnit.Framework.CollectionAssert.IsNotEmpty(System.Collections.ICollection,System.String)">
+        <member name="M:NUnit.Framework.CollectionAssert.IsNotEmpty(System.Collections.IEnumerable,System.String)">
             <summary>
             Assert that an array, list or other collection is empty
             </summary>
-            <param name="collection">An array, list or other collection implementing ICollection</param>
+            <param name="collection">An array, list or other collection implementing IEnumerable</param>
             <param name="message">The message to be displayed on failure</param>
         </member>
-        <member name="M:NUnit.Framework.CollectionAssert.IsNotEmpty(System.Collections.ICollection)">
+        <member name="M:NUnit.Framework.CollectionAssert.IsNotEmpty(System.Collections.IEnumerable)">
             <summary>
             Assert that an array,list or other collection is empty
             </summary>
-            <param name="collection">An array, list or other collection implementing ICollection</param>
+            <param name="collection">An array, list or other collection implementing IEnumerable</param>
         </member>
         <member name="T:NUnit.Framework.AbstractAsserter">
             <summary>
@@ -4576,7 +4649,7 @@
             <param name="actual">The actual value causing the failure</param>
             <param name="tolerance">The tolerance within which the test was made</param>
         </member>
-        <member name="M:NUnit.Framework.MessageWriter.DisplayStringDifferences(System.String,System.String,System.Int32,System.Boolean)">
+        <member name="M:NUnit.Framework.MessageWriter.DisplayStringDifferences(System.String,System.String,System.Int32,System.Boolean,System.Boolean)">
             <summary>
             Display the expected and actual string values on separate lines.
             If the mismatch parameter is >=0, an additional line is displayed
@@ -4586,6 +4659,7 @@
             <param name="actual">The actual string value</param>
             <param name="mismatch">The point at which the strings don't match or -1</param>
             <param name="ignoreCase">If true, case is ignored in locating the point where the strings differ</param>
+            <param name="clipping">If true, the strings should be clipped to fit the line</param>
         </member>
         <member name="M:NUnit.Framework.MessageWriter.WriteConnector(System.String)">
             <summary>
@@ -4636,6 +4710,79 @@
             <summary>
             Abstract method to get the max line length
             </summary>
+        </member>
+        <member name="T:NUnit.Framework.MsgUtils">
+            <summary>
+            Static methods used in creating messages
+            </summary>
+        </member>
+        <member name="F:NUnit.Framework.MsgUtils.ELLIPSIS">
+            <summary>
+            Static string used when strings are clipped
+            </summary>
+        </member>
+        <member name="M:NUnit.Framework.MsgUtils.GetTypeRepresentation(System.Object)">
+            <summary>
+            Returns the representation of a type as used in NUnitLite.
+            This is the same as Type.ToString() except for arrays,
+            which are displayed with their declared sizes.
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NUnit.Framework.MsgUtils.ConvertWhitespace(System.String)">
+            <summary>
+            Converts any control characters in a string 
+            to their escaped representation.
+            </summary>
+            <param name="s">The string to be converted</param>
+            <returns>The converted string</returns>
+        </member>
+        <member name="M:NUnit.Framework.MsgUtils.GetArrayIndicesAsString(System.Int32[])">
+            <summary>
+            Return the a string representation for a set of indices into an array
+            </summary>
+            <param name="indices">Array of indices for which a string is needed</param>
+        </member>
+        <member name="M:NUnit.Framework.MsgUtils.GetArrayIndicesFromCollectionIndex(System.Collections.ICollection,System.Int32)">
+            <summary>
+            Get an array of indices representing the point in a collection or
+            array corresponding to a single int index into the collection.
+            </summary>
+            <param name="collection">The collection to which the indices apply</param>
+            <param name="index">Index in the collection</param>
+            <returns>Array of indices</returns>
+        </member>
+        <member name="M:NUnit.Framework.MsgUtils.ClipString(System.String,System.Int32,System.Int32)">
+            <summary>
+            Clip a string to a given length, starting at a particular offset, returning the clipped
+            string with ellipses representing the removed parts
+            </summary>
+            <param name="s">The string to be clipped</param>
+            <param name="maxStringLength">The maximum permitted length of the result string</param>
+            <param name="clipStart">The point at which to start clipping</param>
+            <returns>The clipped string</returns>
+        </member>
+        <member name="M:NUnit.Framework.MsgUtils.ClipExpectedAndActual(System.String@,System.String@,System.Int32,System.Int32)">
+            <summary>
+            Clip the expected and actual strings in a coordinated fashion, 
+            so that they may be displayed together.
+            </summary>
+            <param name="expected"></param>
+            <param name="actual"></param>
+            <param name="maxDisplayLength"></param>
+            <param name="mismatch"></param>
+        </member>
+        <member name="M:NUnit.Framework.MsgUtils.FindMismatchPosition(System.String,System.String,System.Int32,System.Boolean)">
+            <summary>
+            Shows the position two strings start to differ.  Comparison 
+            starts at the start index.
+            </summary>
+            <param name="expected">The expected string</param>
+            <param name="actual">The actual string</param>
+            <param name="istart">The index in the strings at which comparison should start</param>
+            <param name="ignoreCase">Boolean indicating whether case should be ignored</param>
+            <returns>-1 if no mismatch found, or the index where mismatch found</returns>
         </member>
         <member name="T:NUnit.Framework.SetCultureAttribute">
             <summary>
@@ -4759,7 +4906,7 @@
             <param name="actual">The actual value causing the failure</param>
             <param name="tolerance">The tolerance within which the test was made</param>
         </member>
-        <member name="M:NUnit.Framework.TextMessageWriter.DisplayStringDifferences(System.String,System.String,System.Int32,System.Boolean)">
+        <member name="M:NUnit.Framework.TextMessageWriter.DisplayStringDifferences(System.String,System.String,System.Int32,System.Boolean,System.Boolean)">
             <summary>
             Display the expected and actual string values on separate lines.
             If the mismatch parameter is >=0, an additional line is displayed
@@ -4769,6 +4916,7 @@
             <param name="actual">The actual string value</param>
             <param name="mismatch">The point at which the strings don't match or -1</param>
             <param name="ignoreCase">If true, case is ignored in string comparisons</param>
+            <param name="clipping">If true, clip the strings to fit the max line length</param>
         </member>
         <member name="M:NUnit.Framework.TextMessageWriter.WriteConnector(System.String)">
             <summary>
@@ -4849,7 +4997,7 @@
         </member>
         <member name="P:NUnit.Framework.TextMessageWriter.MaxLineLength">
             <summary>
-            Gets the maximum line length for this writer
+            Gets or sets the maximum line length for this writer
             </summary>
         </member>
         <member name="T:NUnit.Framework.StringAssert">
@@ -4993,64 +5141,6 @@
             </summary>
             <param name="expected">The expected expression</param>
             <param name="actual">The actual string</param>
-        </member>
-        <member name="T:NUnit.Framework.MsgUtils">
-            <summary>
-            Static methods used in creating messages
-            </summary>
-        </member>
-        <member name="M:NUnit.Framework.MsgUtils.GetTypeRepresentation(System.Object)">
-            <summary>
-            Returns the representation of a type as used in NUnitLite.
-            This is the same as Type.ToString() except for arrays,
-            which are displayed with their declared sizes.
-            </summary>
-            <param name="obj"></param>
-            <returns></returns>
-        </member>
-        <member name="M:NUnit.Framework.MsgUtils.ConvertWhitespace(System.String)">
-            <summary>
-            Converts any control characters in a string 
-            to their escaped representation.
-            </summary>
-            <param name="s">The string to be converted</param>
-            <returns>The converted string</returns>
-        </member>
-        <member name="M:NUnit.Framework.MsgUtils.GetArrayIndicesAsString(System.Int32[])">
-            <summary>
-            Return the a string representation for a set of indices into an array
-            </summary>
-            <param name="indices">Array of indices for which a string is needed</param>
-        </member>
-        <member name="M:NUnit.Framework.MsgUtils.GetArrayIndicesFromCollectionIndex(System.Collections.ICollection,System.Int32)">
-            <summary>
-            Get an array of indices representing the point in a collection or
-            array corresponding to a single int index into the collection.
-            </summary>
-            <param name="collection">The collection to which the indices apply</param>
-            <param name="index">Index in the collection</param>
-            <returns>Array of indices</returns>
-        </member>
-        <member name="M:NUnit.Framework.MsgUtils.ClipString(System.String,System.Int32,System.Int32)">
-            <summary>
-            Clip a string around a particular point, returning the clipped
-            string with ellipses representing the removed parts
-            </summary>
-            <param name="s">The string to be clipped</param>
-            <param name="maxStringLength">The maximum permitted length of the result string</param>
-            <param name="mismatch">The point around which clipping is to occur</param>
-            <returns>The clipped string</returns>
-        </member>
-        <member name="M:NUnit.Framework.MsgUtils.FindMismatchPosition(System.String,System.String,System.Int32,System.Boolean)">
-            <summary>
-            Shows the position two strings start to differ.  Comparison 
-            starts at the start index.
-            </summary>
-            <param name="expected">The expected string</param>
-            <param name="actual">The actual string</param>
-            <param name="istart">The index in the strings at which comparison should start</param>
-            <param name="ignoreCase">Boolean indicating whether case should be ignored</param>
-            <returns>-1 if no mismatch found, or the index where mismatch found</returns>
         </member>
         <member name="T:NUnit.Framework.AssertionHelper">
             <summary>
@@ -5341,6 +5431,17 @@
         <member name="M:NUnit.Framework.IgnoreException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
             <summary>
             Serialization Constructor
+            </summary>
+        </member>
+        <member name="T:NUnit.Framework.GlobalSettings">
+            <summary>
+            GlobalSettings is a place for setting default values used
+            by the framework in performing asserts.
+            </summary>
+        </member>
+        <member name="F:NUnit.Framework.GlobalSettings.DefaultFloatingPointTolerance">
+            <summary>
+            Default tolerance for floating point equality
             </summary>
         </member>
         <member name="T:NUnit.Framework.TestCase">
