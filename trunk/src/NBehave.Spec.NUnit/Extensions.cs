@@ -15,7 +15,7 @@ namespace NBehave.Spec.NUnit
         {
             Assert.That(condition, Is.True);
         }
-		
+
         public static void ShouldBeFalse(this bool condition)
         {
             Assert.That(condition, Is.False);
@@ -46,6 +46,16 @@ namespace NBehave.Spec.NUnit
             Assert.Contains(expected, actual);
         }
 
+        public static void ShouldContain(this IEnumerable actual, object expected)
+        {
+            ArrayList lst = new ArrayList();
+            foreach (var o in actual)
+            {
+                lst.Add(o);
+            }
+            ShouldContain(lst, expected);
+        }
+
         public static void ShouldBeGreaterThan(this IComparable arg1, IComparable arg2)
         {
             Assert.That(arg1, Is.GreaterThan(arg2));
@@ -73,7 +83,7 @@ namespace NBehave.Spec.NUnit
 
         public static void ShouldBeAssignableFrom<ExpectedType>(this Object actual)
         {
-            actual.ShouldBeAssignableFrom(typeof (ExpectedType));
+            actual.ShouldBeAssignableFrom(typeof(ExpectedType));
         }
 
         public static void ShouldNotBeAssignableFrom(this object actual, Type expected)
@@ -83,7 +93,7 @@ namespace NBehave.Spec.NUnit
 
         public static void ShouldNotBeAssignableFrom<ExpectedType>(this object actual)
         {
-            actual.ShouldNotBeAssignableFrom(typeof (ExpectedType));
+            actual.ShouldNotBeAssignableFrom(typeof(ExpectedType));
         }
 
         public static void ShouldBeEmpty(this string value)
@@ -123,7 +133,7 @@ namespace NBehave.Spec.NUnit
 
         public static void ShouldNotBeInstanceOf<ExpectedType>(this object actual)
         {
-            actual.ShouldNotBeInstanceOfType(typeof (ExpectedType));
+            actual.ShouldNotBeInstanceOfType(typeof(ExpectedType));
         }
 
         public static void ShouldBeNaN(this double value)

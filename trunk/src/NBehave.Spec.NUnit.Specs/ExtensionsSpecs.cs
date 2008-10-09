@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using NBehave.Spec.NUnit.Underscore;
 using NUnit.Framework;
 using Context = NUnit.Framework.TestFixtureAttribute;
@@ -105,7 +106,15 @@ namespace NBehave.Spec.NUnit.Specs
 
 			vals.should_not_be_empty();
 		}
-	}
+	
+        [Specification]
+        public void should_allow_substitution_for_contains_on_ienumerable()
+        {
+            IEnumerable lst = new ArrayList {1, 2, 3, 4};
+            lst.ShouldContain(3);
+            lst.should_contain(3);
+        }
+    }
 
 	[Context]
 	public class When_using_BDD_style_language_for_integer_assertions

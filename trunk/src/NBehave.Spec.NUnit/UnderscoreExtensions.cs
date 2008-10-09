@@ -40,6 +40,11 @@ namespace NBehave.Spec.NUnit.Underscore
             actual.ShouldContain(expected);
         }
 
+        public static void should_contain(this IEnumerable actual, object expected)
+        {
+            actual.ShouldContain(expected);
+        }
+
         public static void should_be_greater_than(this IComparable arg1, IComparable arg2)
         {
             arg1.ShouldBeGreaterThan(arg2);
