@@ -15,7 +15,7 @@ namespace NBehave.Narrator.Framework.EventListeners
 
         public void StoryCreated(string story)
         {
-            Invoke(MethodInfo.GetCurrentMethod().Name);
+            Invoke(MethodInfo.GetCurrentMethod().Name, story);
         }
 
         public void StoryMessageAdded(string message)
@@ -45,6 +45,7 @@ namespace NBehave.Narrator.Framework.EventListeners
 
         public void StoryResults(StoryResults results)
         {
+            Invoke(MethodInfo.GetCurrentMethod().Name, results);
         }
 
         #endregion
