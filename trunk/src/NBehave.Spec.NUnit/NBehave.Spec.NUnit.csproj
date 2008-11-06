@@ -57,6 +57,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\CommonAssemblyInfo.cs">
+      <Link>CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="SpecBase.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="SpecBase_generic.cs" />
