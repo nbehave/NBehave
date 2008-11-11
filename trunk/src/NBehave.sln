@@ -3,11 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{32A51014-8E9C-49F1-9CDF-A39CE01EAFA1}"
 	ProjectSection(SolutionItems) = preProject
+		..\clicktobuild.bat = ..\clicktobuild.bat
+		..\clicktobuildfull.bat = ..\clicktobuildfull.bat
 		..\go.bat = ..\go.bat
 		LocalTestRun.testrunconfig = LocalTestRun.testrunconfig
 		..\NBehave.build = ..\NBehave.build
 		Installer\NBehave.nsi = Installer\NBehave.nsi
 		NBehave.vsmdi = NBehave.vsmdi
+		..\run-story-sample.bat = ..\run-story-sample.bat
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NBehave.Spec", "NBehave.Spec", "{2EF1C1FB-3D4F-4ADD-8431-D29386A9DE21}"

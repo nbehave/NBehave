@@ -69,6 +69,14 @@ Section "Testdriven.NET plugin"
 	WriteRegStr HKLM "SOFTWARE\MutantDesign\TestDriven.NET\TestRunners\NBehave ${VERSION}" "Application" "$INSTDIR\NBehave.TestDriven.Plugin.dll"
 	WriteRegStr HKLM "SOFTWARE\MutantDesign\TestDriven.NET\TestRunners\NBehave ${VERSION}" "TypeName" "NBehave.TestDriven.Plugin.NBehaveStoryRunner"
 SectionEnd
+Section "MSbuild task"
+	File "${FILES}\NBehave.MSBuild.dll"
+SectionEnd
+
+Section "NAnt task"
+	File "${FILES}\NBehave.NAnt.dll"
+SectionEnd
+
 ; Uninstaller
 
 Section "Uninstall"
