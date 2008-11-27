@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using MbUnit.Framework;
 
 namespace NBehave.Spec.MbUnit
@@ -16,30 +17,37 @@ namespace NBehave.Spec.MbUnit
             Assert.IsFalse(condition);
         }
 
-        public static void ShouldEqual(this object actual, object expected)
+        public static void ShouldEqual<T>(this T actual, T expected)
         {
             Assert.AreEqual(actual, expected);
         }
 
-        public static void ShouldNotEqual(this object actual, object expected)
+        public static void ShouldNotEqual<T>(this T actual, T expected)
         {
             Assert.AreNotEqual(actual, expected);
         }
 
-        public static void ShouldBeTheSameAs(this object actual, object expected)
+        public static void ShouldBeTheSameAs<T>(this T actual, T expected)
+			where T : class
         {
             Assert.AreSame(actual, expected);
         }
 
-        public static void ShouldNotBeTheSameAs(this object actual, object expected)
+        public static void ShouldNotBeTheSameAs<T>(this T actual, T expected)
+			where T : class
         {
             Assert.AreNotSame(actual, expected);
         }
 
-        public static void ShouldContain(this ICollection actual, object expected)
+        public static void ShouldContain<T>(this IEnumerable<T> actual, T expected)
         {
-            CollectionAssert.Contains(actual, expected);
+            Assert.Contains(actual, expected);
         }
+
+		public static void ShouldContain(this string actual, string expected)
+		{
+			Assert.Contains(actual, expected);
+		}
 
         public static void ShouldBeGreaterThan(this IComparable arg1, IComparable arg2)
         {
@@ -48,17 +56,17 @@ namespace NBehave.Spec.MbUnit
 
         public static void ShouldBeGreaterThanOrEqualTo(this IComparable arg1, IComparable arg2)
         {
-            Assert.GreaterEqualThan(arg1, arg2);
+            Assert.GreaterThanOrEqualTo(arg1, arg2);
         }
 
         public static void ShouldBeLessThan(this IComparable arg1, IComparable arg2)
         {
-            Assert.LowerThan(arg1, arg2);
+            Assert.LessThan(arg1, arg2);
         }
 
         public static void ShouldBeLessThanOrEqualTo(this IComparable arg1, IComparable arg2)
         {
-            Assert.LowerEqualThan(arg1, arg2);
+            Assert.LessThanOrEqualTo(arg1, arg2);
         }
 
         public static void ShouldBeAssignableFrom(this object actual, Type expected)
@@ -91,14 +99,14 @@ namespace NBehave.Spec.MbUnit
             Assert.IsNotEmpty(value);
         }
 
-        public static void ShouldBeEmpty(this ICollection collection)
+        public static void ShouldBeEmpty(this IEnumerable collection)
         {
-            CollectionAssert.AreCountEqual(0, collection);
+            Assert.IsEmpty(collection);
         }
 
-        public static void ShouldNotBeEmpty(this ICollection collection)
+		public static void ShouldNotBeEmpty(this IEnumerable collection)
         {
-            Assert.IsTrue(collection.Count > 0);
+			Assert.IsNotEmpty(collection);
         }
 
         public static void ShouldBeInstanceOfType(this object actual, Type expected)
@@ -123,7 +131,7 @@ namespace NBehave.Spec.MbUnit
 
         public static void ShouldBeNaN(this double value)
         {
-            Assert.IsNaN(value);
+            Assert.AreEqual(value, double.NaN);
         }
 
         public static void ShouldBeNull(this object value)
@@ -138,19 +146,7 @@ namespace NBehave.Spec.MbUnit
 
         public static void ShouldBeThrownBy(this Type exceptionType, Action action)
         {
-            Exception e = null;
-
-            try
-            {
-                action();
-            }
-            catch (Exception ex)
-            {
-                e = ex;
-            }
-
-            e.ShouldNotBeNull();
-            e.ShouldBeInstanceOfType(exceptionType);
+        	Assert.Throws(exceptionType, new Gallio.Action(action));
         }
 
     }

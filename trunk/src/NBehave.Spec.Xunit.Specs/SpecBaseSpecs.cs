@@ -7,12 +7,12 @@ namespace Xunit.SpecBase_Specifications
 {
 	public class When_initializing_the_SpecBase : SpecBase<StopWatch>
 	{
-		protected override StopWatch Given_these_conditions()
+		protected override StopWatch Establish_context()
 		{
 			return new StopWatch();
 		}
 
-		protected override void Because()
+		protected override void Because_of()
 		{
 		}
 
@@ -27,7 +27,7 @@ namespace Xunit.SpecBase_Specifications
 	{
 		private ITimer _timer;
 
-		protected override StopWatch Given_these_conditions()
+		protected override StopWatch Establish_context()
 		{
 			_timer = CreateDependency<ITimer>();
 
@@ -36,7 +36,7 @@ namespace Xunit.SpecBase_Specifications
 			return new StopWatch(_timer);
 		}
 
-		protected override void Because()
+		protected override void Because_of()
 		{
 			Sut.Start();
 		}

@@ -6,12 +6,12 @@ namespace NBehave.Spec.Xunit
 	{
 		protected SpecBase()
         {
-            base.SpecSetup();
+            base.MainSetup();
         }
 
 	    public void Dispose()
 	    {
-	        base.SpecTeardown();
+	        base.MainTeardown();
 	    }
 	}
 }

@@ -2,16 +2,16 @@
 
 namespace NBehave.Spec.Xunit
 {
-	public abstract class SpecBase<T> : Spec.SpecBase<T>, IDisposable
+	public abstract class SpecBase<TContext> : Spec.SpecBase<TContext>, IDisposable
 	{
 		protected SpecBase()
         {
-            base.SpecSetup();
+            base.MainSetup();
         }
 
 	    public void Dispose()
 	    {
-	        base.SpecTeardown();
+	        base.MainTeardown();
 	    }
 	}
 }

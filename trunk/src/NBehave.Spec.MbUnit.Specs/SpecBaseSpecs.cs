@@ -1,6 +1,4 @@
-﻿using System;
-using MbUnit.Framework;
-using NBehave.Spec.MbUnit;
+﻿using NBehave.Spec.MbUnit;
 using Rhino.Mocks;
 using Context = MbUnit.Framework.TestFixtureAttribute;
 using Specification = MbUnit.Framework.TestAttribute;
@@ -10,12 +8,12 @@ namespace MbUnit.SpecBase_Specifications
 	[Context]
 	public class When_initializing_the_SpecBase : SpecBase<StopWatch>
 	{
-		protected override StopWatch Given_these_conditions()
+		protected override StopWatch Establish_context()
 		{
 			return new StopWatch();
 		}
 
-		protected override void Because()
+		protected override void Because_of()
 		{
 		}
 
@@ -29,33 +27,26 @@ namespace MbUnit.SpecBase_Specifications
 	[Context]
 	public class When_using_the_setup_methods_in_non_generic_specs : SpecBase
 	{
-		private static int _beforeEachCount;
-		private static int _beforeAllCount;
-		private static int _afterEachCount;
-		private static int _afterAllCount;
+		private static int _estContextCount;
+		private static int _becauseOfCount;
+		private static int _cleanupCount;
 
-		protected override void Before_each_spec()
+		protected override void Establish_context()
 		{
-			_beforeEachCount++;
+			_estContextCount++;
 		}
 
-		protected override void Before_all_specs()
+		protected override void Because_of()
 		{
-			_beforeAllCount++;
+			_becauseOfCount++;
 		}
 
-		protected override void After_each_spec()
+		protected override void Cleanup()
 		{
-			_afterEachCount++;
-		}
-
-		protected override void After_all_specs()
-		{
-			_afterAllCount++;
-			_beforeEachCount.ShouldEqual(2);
-			_beforeAllCount.ShouldEqual(1);
-			_afterEachCount.ShouldEqual(2);
-			_afterAllCount.ShouldEqual(1);
+			_cleanupCount++;
+			_estContextCount.ShouldEqual(1);
+			_becauseOfCount.ShouldEqual(1);
+			_cleanupCount.ShouldEqual(1);
 		}
 
 		[Specification]
@@ -72,42 +63,27 @@ namespace MbUnit.SpecBase_Specifications
 	[Context]
 	public class When_using_the_setup_methods_in_generic_specs : SpecBase<object>
 	{
-		private static int _beforeEachCount;
-		private static int _beforeAllCount;
-		private static int _afterEachCount;
-		private static int _afterAllCount;
+		private static int _estContextCount;
+		private static int _becauseOfCount;
+		private static int _cleanupCount;
 
-		protected override void Because()
+		protected override object Establish_context()
 		{
-		}
-
-		protected override object Given_these_conditions()
-		{
+			_estContextCount++;
 			return null;
 		}
 
-		protected override void Before_each_spec()
+		protected override void Because_of()
 		{
-			_beforeEachCount++;
+			_becauseOfCount++;
 		}
 
-		protected override void Before_all_specs()
+		protected override void Cleanup()
 		{
-			_beforeAllCount++;
-		}
-
-		protected override void After_each_spec()
-		{
-			_afterEachCount++;
-		}
-
-		protected override void After_all_specs()
-		{
-			_afterAllCount++;
-			_beforeEachCount.ShouldEqual(2);
-			_beforeAllCount.ShouldEqual(1);
-			_afterEachCount.ShouldEqual(2);
-			_afterAllCount.ShouldEqual(1);
+			_cleanupCount++;
+			_estContextCount.ShouldEqual(1);
+			_becauseOfCount.ShouldEqual(1);
+			_cleanupCount.ShouldEqual(1);
 		}
 
 		[Specification]
@@ -126,7 +102,7 @@ namespace MbUnit.SpecBase_Specifications
 	{
 		private ITimer _timer;
 
-		protected override StopWatch Given_these_conditions()
+		protected override StopWatch Establish_context()
 		{
 			_timer = CreateDependency<ITimer>();
 
@@ -135,7 +111,7 @@ namespace MbUnit.SpecBase_Specifications
 			return new StopWatch(_timer);
 		}
 
-		protected override void Because()
+		protected override void Because_of()
 		{
 			Sut.Start();
 		}

@@ -3,18 +3,19 @@
 
 namespace NBehave.Spec.MSTest
 {
+	[TestClass]
 	public abstract class SpecBase : Spec.SpecBase
 	{
-		[TestInitialize]
-		public override void SpecSetup()
+		[ClassInitialize]
+		public override void MainSetup()
 		{
-			base.SpecSetup();
+			base.MainSetup();
 		}
 
-		[TestCleanup]
-		public override void SpecTeardown()
+		[ClassCleanup]
+		public override void MainTeardown()
 		{
-			base.SpecTeardown();
+			base.MainTeardown();
 		}
 	}
 }
