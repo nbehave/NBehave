@@ -23,7 +23,7 @@ namespace NBehave.Narrator.Framework.Specifications
         {
             MockRepository repo = new MockRepository();
 
-            IMessageProvider provider = repo.CreateMock<IMessageProvider>();
+            IMessageProvider provider = repo.StrictMock<IMessageProvider>();
 
             using (repo.Record())
             {
@@ -53,7 +53,7 @@ namespace NBehave.Narrator.Framework.Specifications
         {
             MockRepository repo = new MockRepository();
 
-            IMessageProvider provider = repo.CreateMock<IMessageProvider>();
+            IMessageProvider provider = repo.StrictMock<IMessageProvider>();
 
             using (repo.Record())
             {

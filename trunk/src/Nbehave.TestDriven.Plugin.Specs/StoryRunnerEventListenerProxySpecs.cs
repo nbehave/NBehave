@@ -23,7 +23,7 @@ namespace NBehave.TestDriven.Plugin.Specs
         {
             const string myStory = "My story";
             const string myScenario = "My scenario";
-            ITestListener tddNetListener = mocks.CreateMock<ITestListener>();
+            ITestListener tddNetListener = mocks.StrictMock<ITestListener>();
             StoryResults result = null;
             IEventListener storyRunner = null;
 

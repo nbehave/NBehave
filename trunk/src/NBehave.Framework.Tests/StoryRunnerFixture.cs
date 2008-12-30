@@ -114,7 +114,7 @@ namespace NBehave.Narrator.Framework.Specifications
         public void Should_raise_events_for_messages_written()
         {
             MockRepository repo = new MockRepository();
-            IEventListener listener = repo.CreateMock<IEventListener>();
+            IEventListener listener = repo.StrictMock<IEventListener>();
 
             using (repo.Record())
             {
@@ -147,7 +147,7 @@ namespace NBehave.Narrator.Framework.Specifications
         public void Should_output_full_story_for_dry_run()
         {
             MockRepository repo = new MockRepository();
-            IEventListener listener = repo.CreateMock<IEventListener>();
+            IEventListener listener = repo.StrictMock<IEventListener>();
 
             using (repo.Record())
             {

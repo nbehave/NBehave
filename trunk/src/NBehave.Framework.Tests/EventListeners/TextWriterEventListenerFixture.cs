@@ -17,7 +17,7 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
         {
             MockRepository mockery = new MockRepository();
 
-            TextWriter mockTextWriter = mockery.CreateMock<TextWriter>();
+            TextWriter mockTextWriter = mockery.StrictMock<TextWriter>();
 
             using (mockery.Record())
             {
