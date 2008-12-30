@@ -9,39 +9,9 @@ namespace NBehave.Narrator.Framework.Specifications
     [TestFixture]
     public class StoryRunnerFixture
     {
-        private class NoOpEventListener : IEventListener
+        private IEventListener GetStubbedListener()
         {
-            public void StoryCreated(string message)
-            {
-
-            }
-
-            public void StoryMessageAdded(string message)
-            {
-            }
-
-            public void RunStarted()
-            {
-            }
-
-            public void RunFinished()
-            {
-
-            }
-
-            public void ThemeStarted(string name)
-            {
-
-            }
-
-            public void ThemeFinished()
-            {
-
-            }
-
-            public void StoryResults(StoryResults results)
-            {
-            }
+            return MockRepository.GenerateStub<IEventListener>();
         }
 
         [Test]
@@ -50,7 +20,7 @@ namespace NBehave.Narrator.Framework.Specifications
             StoryRunner runner = new StoryRunner();
 
             runner.LoadAssembly("TestAssembly.dll");
-            StoryResults results = runner.Run(new NoOpEventListener());
+            StoryResults results = runner.Run(GetStubbedListener());
 
             Assert.That(results.NumberOfThemes, Is.EqualTo(1));
         }
@@ -61,7 +31,7 @@ namespace NBehave.Narrator.Framework.Specifications
             StoryRunner runner = new StoryRunner();
 
             runner.LoadAssembly("TestAssembly.dll");
-            StoryResults results = runner.Run(new NoOpEventListener());
+            StoryResults results = runner.Run(GetStubbedListener());
 
             Assert.That(results.NumberOfStories, Is.EqualTo(3));
         }
@@ -72,7 +42,7 @@ namespace NBehave.Narrator.Framework.Specifications
             StoryRunner runner = new StoryRunner();
 
             runner.LoadAssembly("TestAssembly.dll");
-            StoryResults results = runner.Run(new NoOpEventListener());
+            StoryResults results = runner.Run(GetStubbedListener());
 
             Assert.That(results.NumberOfScenariosFound, Is.EqualTo(4));
         }
@@ -83,7 +53,7 @@ namespace NBehave.Narrator.Framework.Specifications
             StoryRunner runner = new StoryRunner();
 
             runner.LoadAssembly("TestAssembly.dll");
-            StoryResults results = runner.Run(new NoOpEventListener());
+            StoryResults results = runner.Run(GetStubbedListener());
 
             Assert.That(results.NumberOfFailingScenarios, Is.EqualTo(1));
         }
@@ -94,7 +64,7 @@ namespace NBehave.Narrator.Framework.Specifications
             StoryRunner runner = new StoryRunner();
 
             runner.LoadAssembly("TestAssembly.dll");
-            StoryResults results = runner.Run(new NoOpEventListener());
+            StoryResults results = runner.Run(GetStubbedListener());
 
             Assert.That(results.NumberOfPendingScenarios, Is.EqualTo(1));
         }
@@ -105,7 +75,7 @@ namespace NBehave.Narrator.Framework.Specifications
             StoryRunner runner = new StoryRunner();
 
             runner.LoadAssembly("TestAssembly.dll");
-            StoryResults results = runner.Run(new NoOpEventListener());
+            StoryResults results = runner.Run(GetStubbedListener());
 
             Assert.That(results.NumberOfPassingScenarios, Is.EqualTo(2));
         }
@@ -184,7 +154,7 @@ namespace NBehave.Narrator.Framework.Specifications
 
             runner.StoryRunnerFilter = new StoryRunnerFilter("TestAssembly", ".", ".");
             runner.LoadAssembly("TestAssembly.dll");
-            StoryResults results = runner.Run(new NoOpEventListener());
+            StoryResults results = runner.Run(GetStubbedListener());
 
             Assert.That(results.NumberOfThemes, Is.EqualTo(1));
         }
@@ -196,7 +166,7 @@ namespace NBehave.Narrator.Framework.Specifications
 
             runner.StoryRunnerFilter = new StoryRunnerFilter("TestAssemblyThatDoesntExists", ".", ".");
             runner.LoadAssembly("TestAssembly.dll");
-            StoryResults results = runner.Run(new NoOpEventListener());
+            StoryResults results = runner.Run(GetStubbedListener());
 
             Assert.That(results.NumberOfThemes, Is.EqualTo(0));
         }
@@ -208,7 +178,7 @@ namespace NBehave.Narrator.Framework.Specifications
 
             runner.StoryRunnerFilter = new StoryRunnerFilter(".", ".", "Transfer_to_cash_account");
             runner.LoadAssembly("TestAssembly.dll");
-            StoryResults results = runner.Run(new NoOpEventListener());
+            StoryResults results = runner.Run(GetStubbedListener());
 
             Assert.That(results.NumberOfStories, Is.EqualTo(1));
         }
