@@ -15,16 +15,15 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
         [Test]
         public void Should_write_text_to_specified_text_writer()
         {
-            MockRepository mockery = new MockRepository();
-
-            TextWriter mockTextWriter = mockery.StrictMock<TextWriter>();
+            var mockery = new MockRepository();
+            var mockTextWriter = mockery.StrictMock<TextWriter>();
 
             using (mockery.Record())
             {
-                Expect.Call(delegate { mockTextWriter.WriteLine(string.Empty); }).IgnoreArguments().Constraints(Is.TypeOf<string>());
+                Expect.Call(() => mockTextWriter.WriteLine(string.Empty)).IgnoreArguments().Constraints(Is.TypeOf<string>());
             }
 
-            TextWriterEventListener listener = new TextWriterEventListener(mockTextWriter);
+            IEventListener listener = new TextWriterEventListener(mockTextWriter);
             using (mockery.Playback())
             {
                 listener.RunStarted();

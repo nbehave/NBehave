@@ -1,5 +1,3 @@
-using System;
-using NBehave.Narrator.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -98,6 +96,10 @@ namespace NBehave.Narrator.Framework.Specifications
                 LastCall.IgnoreArguments().Repeat.Times(3);
                 listener.StoryMessageAdded("");
                 LastCall.IgnoreArguments().Repeat.AtLeastOnce();
+                listener.ScenarioCreated(null);
+                LastCall.IgnoreArguments().Repeat.AtLeastOnce();
+                listener.ScenarioMessageAdded(null);
+                LastCall.IgnoreArguments().Repeat.AtLeastOnce();
                 listener.ThemeFinished();
                 LastCall.Repeat.Once();
                 listener.RunFinished();
@@ -116,8 +118,8 @@ namespace NBehave.Narrator.Framework.Specifications
         [Test]
         public void Should_output_full_story_for_dry_run()
         {
-            MockRepository repo = new MockRepository();
-            IEventListener listener = repo.StrictMock<IEventListener>();
+            var repo = new MockRepository();
+            var listener = repo.StrictMock<IEventListener>();
 
             using (repo.Record())
             {
@@ -130,7 +132,11 @@ namespace NBehave.Narrator.Framework.Specifications
                 listener.StoryResults(null);
                 LastCall.IgnoreArguments().Repeat.Times(3);
                 listener.StoryMessageAdded("");
-                LastCall.IgnoreArguments().Repeat.Times(55);
+                LastCall.IgnoreArguments().Repeat.Times(9);
+                listener.ScenarioCreated(null);
+                LastCall.IgnoreArguments().Repeat.Times(4);
+                listener.ScenarioMessageAdded(null);
+                LastCall.IgnoreArguments().Repeat.Times(26);
                 listener.ThemeFinished();
                 LastCall.Repeat.Once();
                 listener.RunFinished();
@@ -139,7 +145,7 @@ namespace NBehave.Narrator.Framework.Specifications
 
             using (repo.Playback())
             {
-                StoryRunner runner = new StoryRunner();
+                var runner = new StoryRunner();
 
                 runner.IsDryRun = true;
                 runner.LoadAssembly("TestAssembly.dll");

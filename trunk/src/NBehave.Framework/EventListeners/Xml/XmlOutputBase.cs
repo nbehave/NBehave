@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Xml;
 
 namespace NBehave.Narrator.Framework.EventListeners.Xml
@@ -15,17 +13,16 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
         public int TotalScenariosPending { get; set; }
         public int TotalScenariosFailed { get; set; }
 
-
-        public XmlOutputBase(XmlWriter writer, Queue<Action> actions)
+        protected XmlOutputBase(XmlWriter writer, Queue<Action> actions)
         {
             Writer = writer;
             Actions = actions;
         }
 
-        protected void WriteToStream(Timer result, string element, string name)
+        protected void WriteStartElement(string elementName, string attributeName, Timer result)
         {
-            Writer.WriteStartElement(element);
-            Writer.WriteAttributeString("name", name);
+            Writer.WriteStartElement(elementName);
+            Writer.WriteAttributeString("name", attributeName);
             Writer.WriteAttributeString("time", result.TimeTaken.ToString());
         }
 

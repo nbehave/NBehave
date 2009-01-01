@@ -1,8 +1,6 @@
 using System;
-using NBehave.Narrator.Framework;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
-using Rhino.Mocks;
 
 namespace NBehave.Narrator.Framework.Specifications
 {
@@ -10,595 +8,304 @@ namespace NBehave.Narrator.Framework.Specifications
     public class StoryFixture
     {
         [Test]
-        public void Story_writes_title_to_messageprovider()
+        public void Story_raises_StoryCreated_event()
         {
-            MockRepository repo = new MockRepository();
-
-            IMessageProvider provider = repo.StrictMock<IMessageProvider>();
-
-            using (repo.Record())
-            {
-                provider.AddMessage("Story: Transfer to cash account");
-                LastCall.Repeat.Once();
-            }
-
-            using (repo.Playback())
-            {
-                new Story("Transfer to cash account", provider);
-            }
+            EventArgs<Story> eventArgs = null;
+            Story.StoryCreated += ((sender, e) => eventArgs = e);
+            new Story("Transfer to cash account");
+            Assert.IsNotNull(eventArgs);
+            Assert.That(eventArgs.EventData.Title, Is.EqualTo("Transfer to cash account"));
         }
 
         [Test]
-        public void Story_writes_narrative_to_messageprovider()
+        public void Story_sends_narrative_to_MessageAddedEvent()
         {
-            MockRepository repo = new MockRepository();
-
-            IMessageProvider provider = repo.StrictMock<IMessageProvider>();
-
-            using (repo.Record())
-            {
-                provider.AddMessage("Story: Transfer to cash account");
-                LastCall.Repeat.Once();
-                provider.AddMessage("");
-                LastCall.Repeat.Once();
-                provider.AddMessage("Narrative:");
-                LastCall.Repeat.Once();
-                provider.AddMessage("\tAs a Account Holder");
-                LastCall.Repeat.Once();
-                provider.AddMessage("\tI want to withdraw cash from an ATM");
-                LastCall.Repeat.Once();
-                provider.AddMessage("\tSo that I can get money when the bank is closed");
-                LastCall.Repeat.Once();
-            }
-
-            using (repo.Playback())
-            {
-                new Story("Transfer to cash account", provider)
+            string narrative = string.Empty;
+            Story.MessageAdded += (sender, e) => narrative += string.Format("{0}: {1}{2}", e.EventData.Type, e.EventData.Message, Environment.NewLine);
+            new Story("Transfer to cash account")
                     .AsA("Account Holder")
                     .IWant("to withdraw cash from an ATM")
                     .SoThat("I can get money when the bank is closed");
-            }
+            Assert.AreEqual("Narrative: As a Account Holder" + Environment.NewLine +
+                            "Narrative: I want to withdraw cash from an ATM" + Environment.NewLine +
+                            "Narrative: So that I can get money when the bank is closed" + Environment.NewLine
+                            , narrative);
         }
 
         [Test]
-        public void Scenario_writes_title_to_messageprovider()
+        public void ScenarioCreated_event_has_title_set()
         {
-            MockRepository repo = new MockRepository();
+            string message = string.Empty;
+            Story.ScenarioCreated += (sender, e) => message = e.EventData.Title;
 
-            IMessageProvider provider = repo.StrictMock<IMessageProvider>();
-
-            using (repo.Record())
-            {
-                provider.AddMessage("Story: Transfer to cash account");
-                LastCall.Repeat.Once();
-                provider.AddMessage("");
-                LastCall.Repeat.Once();
-                provider.AddMessage("\tScenario 1: Account has sufficient funds");
-                LastCall.Repeat.Once();
-            }
-
-            using (repo.Playback())
-            {
-                new Story("Transfer to cash account", provider)
-                    .WithScenario("Account has sufficient funds");
-            }
+            new Story("Transfer to cash account")
+                .WithScenario("Account has sufficient funds");
+            Assert.AreEqual("Account has sufficient funds", message);
         }
 
         [Test]
-        public void Scenario_writes_title_with_correct_numbers()
+        public void Scenario_writes_title()
         {
-            MockRepository repo = new MockRepository();
+            string actual = string.Empty;
+            Story.ScenarioCreated += (sender, e) => actual += string.Format("Scenario: {0}{1}", e.EventData.Title, Environment.NewLine);
+            //Story.MessageAdded += (sender, e) => actual += string.Format("{0}: {1}{2}", e.EventData.Type, e.EventData.Message, Environment.NewLine);
 
-            IMessageProvider provider = repo.StrictMock<IMessageProvider>();
+            new Story("Transfer to cash account")
+                .WithScenario("Account has sufficient funds")
+                .Given("", () => { })
+                .When("", () => { })
+                .Then("", () => { })
+                .WithScenario("Account has insufficient funds");
 
-            using (repo.Record())
-            {
-                provider.AddMessage("Story: Transfer to cash account");
-                LastCall.Repeat.Once();
-                provider.AddMessage("");
-                LastCall.Repeat.Once();
-                provider.AddMessage("\tScenario 1: Account has sufficient funds");
-                LastCall.Repeat.Once();
-                provider.AddMessage("\t\tGiven ");
-                LastCall.Repeat.Once();
-                provider.AddMessage("\t\tWhen ");
-                LastCall.Repeat.Once();
-                provider.AddMessage("\t\tThen ");
-                LastCall.Repeat.Once();
-                provider.AddMessage("");
-                LastCall.Repeat.Once();
-                provider.AddMessage("\tScenario 2: Account has insufficient funds");
-                LastCall.Repeat.Once();
-            }
-
-            using (repo.Playback())
-            {
-                new Story("Transfer to cash account", provider)
-                    .WithScenario("Account has sufficient funds")
-                    .Given("", delegate { DoNothing(); })
-                    .When("", delegate { DoNothing(); })
-                    .Then("", delegate { DoNothing(); })
-                    .WithScenario("Account has insufficient funds");
-            }
+            Assert.AreEqual("Scenario: Account has sufficient funds" + Environment.NewLine +
+                "Scenario: Account has insufficient funds" + Environment.NewLine
+                , actual);
         }
 
         [Test]
         public void Scenario_given_writes_value()
         {
-            MockRepository repo = new MockRepository();
+            string actual = string.Empty;
+            Story.MessageAdded += (sender, e) => actual += string.Format("{0}: {1}{2}", e.EventData.Type, e.EventData.Message, Environment.NewLine);
 
-            IMessageProvider provider = repo.StrictMock<IMessageProvider>();
+            new Story("Transfer to cash account")
+                .WithScenario("Account has sufficient funds")
+                .Given("the account balance is", 20, accountBalance => { });
 
-            using (repo.Record())
-            {
-                provider.AddMessage("Story: Transfer to cash account");
-                LastCall.Repeat.Once();
-                provider.AddMessage("");
-                LastCall.Repeat.Once();
-                provider.AddMessage("\tScenario 1: Account has sufficient funds");
-                LastCall.Repeat.Once();
-                provider.AddMessage("\t\tGiven the account balance is: 20");
-                LastCall.Repeat.Once();
-            }
-
-            Account account = null;
-
-            using (repo.Playback())
-            {
-                new Story("Transfer to cash account", provider)
-                    .WithScenario("Account has sufficient funds")
-                    .Given("the account balance is", 20, delegate(int accountBalance) { account = new Account(accountBalance); });
-            }
+            Assert.AreEqual(
+                "Given: Given the account balance is: 20" + Environment.NewLine, actual);
         }
-
 
         [Test]
         public void Scenario_given_accepts_multiple_inputs()
         {
-            MockRepository repo = new MockRepository();
+            string actual = string.Empty;
+            Story.MessageAdded += (sender, e) => actual += string.Format("{0}: {1}{2}", e.EventData.Type, e.EventData.Message, Environment.NewLine);
 
-            IMessageProvider provider = repo.StrictMock<IMessageProvider>();
+            new Story("Something with addresses")
+                .WithScenario("Address has some values")
+                .Given("the address is", "123 anywhere", "Austin", "TX",
+                       (address1, city, state) => { });
 
-            using (MessageProviderRegistry.RegisterScopedInstance(provider))
-            {
-
-                using (repo.Record())
-                {
-                    provider.AddMessage("Story: Something with addresses");
-                    LastCall.Repeat.Once();
-                    provider.AddMessage("");
-                    LastCall.Repeat.Once();
-                    provider.AddMessage("\tScenario 1: Address has some values");
-                    LastCall.Repeat.Once();
-                    provider.AddMessage("\t\tGiven the address is: (123 anywhere, Austin, TX)");
-                    LastCall.Repeat.Once();
-                }
-
-                Address address = null;
-
-                using (repo.Playback())
-                {
-                    new Story("Something with addresses", provider)
-                        .WithScenario("Address has some values")
-                        .Given("the address is", "123 anywhere", "Austin", "TX", delegate(string address1, string city, string state) { address = new Address(address1, city, state); });
-                }
-
-            }
+            Assert.AreEqual(
+                "Given: Given the address is: (123 anywhere, Austin, TX)" + Environment.NewLine, actual);
         }
 
         [Test]
         public void Given_and_writes_value()
         {
-            MockRepository repo = new MockRepository();
+            string actual = string.Empty;
+            Story.MessageAdded += (sender, e) => actual += string.Format("{0}: {1}{2}", e.EventData.Type, e.EventData.Message, Environment.NewLine);
 
-            IMessageProvider provider = repo.StrictMock<IMessageProvider>();
+            new Story("Transfer to cash account")
+                .WithScenario("Account has sufficient funds")
+                .Given("the account balance is", 20, accountBalance => { })
+                .And("the card is valid", "4111111111111111", number => { });
 
-            using (repo.Record())
-            {
-                provider.AddMessage("Story: Transfer to cash account");
-                LastCall.Repeat.Once();
-                provider.AddMessage("");
-                LastCall.Repeat.Once();
-                provider.AddMessage("\tScenario 1: Account has sufficient funds");
-                LastCall.Repeat.Once();
-                provider.AddMessage("\t\tGiven the account balance is: 20");
-                LastCall.Repeat.Once();
-                provider.AddMessage("\t\t\tAnd the card is valid: 4111111111111111");
-                LastCall.Repeat.Once();
-            }
-
-            Card card = null;
-            Account account = null;
-
-            using (repo.Playback())
-            {
-                new Story("Transfer to cash account", provider)
-                    .WithScenario("Account has sufficient funds")
-                    .Given("the account balance is", 20, delegate(int accountBalance) { account = new Account(accountBalance); })
-                    .And("the card is valid", "4111111111111111", delegate(string number) { card = new Card(number); });
-            }
+            Assert.AreEqual(
+                "Given: Given the account balance is: 20" + Environment.NewLine +
+                "And: And the card is valid: 4111111111111111" + Environment.NewLine, actual);
         }
 
         [Test]
         public void Given_and_accepts_multiple_inputs()
         {
-            MockRepository repo = new MockRepository();
+            string actual = string.Empty;
+            Story.MessageAdded += (sender, e) => actual += string.Format("{0}: {1}{2}", e.EventData.Type, e.EventData.Message, Environment.NewLine);
 
-            IMessageProvider provider = repo.StrictMock<IMessageProvider>();
+            new Story("Something with addresses")
+                .WithScenario("Address has some values")
+                .Given("the address is", "123 anywhere", "Austin", "TX", (address1, city, state) => { })
+                .And("the other address is", "456 anywhere", "New York", "NY", (address1, city, state) => { });
 
-            using (MessageProviderRegistry.RegisterScopedInstance(provider))
-            {
-
-                using (repo.Record())
-                {
-                    provider.AddMessage("Story: Something with addresses");
-                    LastCall.Repeat.Once();
-                    provider.AddMessage("");
-                    LastCall.Repeat.Once();
-                    provider.AddMessage("\tScenario 1: Address has some values");
-                    LastCall.Repeat.Once();
-                    provider.AddMessage("\t\tGiven the address is: (123 anywhere, Austin, TX)");
-                    LastCall.Repeat.Once();
-                    provider.AddMessage("\t\t\tAnd the other address is: (456 anywhere, New York, NY)");
-                    LastCall.Repeat.Once();
-                }
-
-                Address address = null;
-
-                using (repo.Playback())
-                {
-                    new Story("Something with addresses")
-                        .WithScenario("Address has some values")
-                        .Given("the address is", "123 anywhere", "Austin", "TX", delegate(string address1, string city, string state) { address = new Address(address1, city, state); })
-                        .And("the other address is", "456 anywhere", "New York", "NY", delegate(string address1, string city, string state) { address = new Address(address1, city, state); });
-                }
-
-            }
+            Assert.AreEqual(
+                "Given: Given the address is: (123 anywhere, Austin, TX)" + Environment.NewLine +
+                "And: And the other address is: (456 anywhere, New York, NY)" + Environment.NewLine
+                , actual);
         }
 
         [Test]
         public void Story_matches_titles_with_actions_inside_one_scenario()
         {
-            MockRepository repo = new MockRepository();
+            string actual = string.Empty;
+            Story.MessageAdded += (sender, e) => actual += string.Format("{0}: {1}{2}", e.EventData.Type, e.EventData.Message, Environment.NewLine);
 
-            IMessageProvider provider = repo.StrictMock<IMessageProvider>();
+            Scenario scenario = new Story("Transfer to cash account")
+                .WithScenario("Account has sufficient funds");
 
-            using (MessageProviderRegistry.RegisterScopedInstance(provider))
-            {
+            scenario.Given("the account balance is", 20, accountBalance => { });
+            scenario.Given("the account balance is", 30);
 
-                using (repo.Record())
-                {
-                    provider.AddMessage("Story: Transfer to cash account");
-                    LastCall.Repeat.Once();
-                    provider.AddMessage("");
-                    LastCall.Repeat.Once();
-                    provider.AddMessage("\tScenario 1: Account has sufficient funds");
-                    LastCall.Repeat.Once();
-                    provider.AddMessage("\t\tGiven the account balance is: 20");
-                    LastCall.Repeat.Once();
-                    provider.AddMessage("");
-                    LastCall.Repeat.Once();
-                    provider.AddMessage("\t\tGiven the account balance is: 30");
-                    LastCall.Repeat.Once();
-                }
+            Assert.AreEqual(
+                "Given: Given the account balance is: 20" + Environment.NewLine +
+                "Given: Given the account balance is: 30" + Environment.NewLine
+                , actual);
 
-                Account account = null;
-
-                using (repo.Playback())
-                {
-                    Scenario scenario = new Story("Transfer to cash account", provider)
-                        .WithScenario("Account has sufficient funds");
-
-                    scenario.Given("the account balance is", 20, delegate(int accountBalance) { account = new Account(accountBalance); });
-
-                    scenario.Given("the account balance is", 30);
-                }
-
-            }
         }
 
         [Test, ExpectedException(typeof(ActionMissingException))]
         public void Story_with_unmatched_title_throws_exception()
         {
-            MockRepository repo = new MockRepository();
-
-            IMessageProvider provider = repo.Stub<IMessageProvider>();
-
-            new Story("Transfer to cash account", provider)
+            new Story("Transfer to cash account")
                 .WithScenario("Account has sufficient funds")
                 .Given("the account balance is", 20);
+            Assert.Fail("Should throw an exception");
         }
 
         [Test]
         public void Story_matches_titles_with_actions_between_many_scenarios()
         {
-            MockRepository repo = new MockRepository();
+            string actual = string.Empty;
+            Story.MessageAdded += (sender, e) => actual += string.Format("{0}: {1}{2}", e.EventData.Type, e.EventData.Message, Environment.NewLine);
 
-            IMessageProvider provider = repo.StrictMock<IMessageProvider>();
+            var story = new Story("Transfer to cash account");
 
-            using (MessageProviderRegistry.RegisterScopedInstance(provider))
-            {
+            story.WithScenario("Account has sufficient funds")
+                .Given("the account balance is", 20, accountBalance => { });
 
-                using (repo.Record())
-                {
-                    provider.AddMessage("Story: Transfer to cash account");
-                    LastCall.Repeat.Once();
-                    provider.AddMessage("");
-                    LastCall.Repeat.Once();
-                    provider.AddMessage("\tScenario 1: Account has sufficient funds");
-                    LastCall.Repeat.Once();
-                    provider.AddMessage("\t\tGiven the account balance is: 20");
-                    LastCall.Repeat.Once();
-                    provider.AddMessage("");
-                    LastCall.Repeat.Once();
-                    provider.AddMessage("\tScenario 2: Account has insufficient funds");
-                    LastCall.Repeat.Once();
-                    provider.AddMessage("\t\tGiven the account balance is: 30");
-                    LastCall.Repeat.Once();
-                }
+            story.WithScenario("Account has insufficient funds")
+                .Given("the account balance is", 30);
 
-                Account account = null;
-
-                using (repo.Playback())
-                {
-                    Story story = new Story("Transfer to cash account", provider);
-
-                    story.WithScenario("Account has sufficient funds")
-                        .Given("the account balance is", 20, delegate(int accountBalance) { account = new Account(accountBalance); });
-
-                    story.WithScenario("Account has insufficient funds")
-                        .Given("the account balance is", 30);
-                }
-
-            }
+            Assert.AreEqual(
+                "Given: Given the account balance is: 20" + Environment.NewLine +
+                "Given: Given the account balance is: 30" + Environment.NewLine
+                , actual);
         }
 
         [Test]
         public void Scenario_when_writes_value()
         {
-            MockRepository repo = new MockRepository();
+            string actual = string.Empty;
+            Story.MessageAdded += (sender, e) => actual += string.Format("{0}: {1}{2}", e.EventData.Type, e.EventData.Message, Environment.NewLine);
 
-            IMessageProvider provider = repo.StrictMock<IMessageProvider>();
+            new Story("Transfer to cash account")
+                .WithScenario("Account has sufficient funds")
+                .Given("the account balance is", 40, accountBalance => { })
+                .When("the account holder requests", 20, requestAmount => { });
 
-            using (repo.Record())
-            {
-                provider.AddMessage("Story: Transfer to cash account");
-                LastCall.Repeat.Once();
-                provider.AddMessage("");
-                LastCall.Repeat.Once();
-                provider.AddMessage("\tScenario 1: Account has sufficient funds");
-                LastCall.Repeat.Once();
-                provider.AddMessage("\t\tGiven the account balance is: 40");
-                LastCall.Repeat.Once();
-                provider.AddMessage("\t\tWhen the account holder requests: 20");
-                LastCall.Repeat.Once();
-            }
-
-            Account account = null;
-
-            using (repo.Playback())
-            {
-                new Story("Transfer to cash account", provider)
-                    .WithScenario("Account has sufficient funds")
-                    .Given("the account balance is", 40, delegate(int accountBalance) { account = new Account(accountBalance); })
-                    .When("the account holder requests", 20, delegate(int requestAmount) { account.Withdraw(requestAmount); });
-            }
+            Assert.AreEqual(
+                  "Given: Given the account balance is: 40" + Environment.NewLine +
+                  "When: When the account holder requests: 20" + Environment.NewLine
+                  , actual);
         }
 
         [Test]
         public void Given_when_accepts_multiple_inputs()
         {
-            MockRepository repo = new MockRepository();
+            string actual = string.Empty;
+            Story.MessageAdded += (sender, e) => actual += string.Format("{0}: {1}{2}", e.EventData.Type, e.EventData.Message, Environment.NewLine);
 
-            IMessageProvider provider = repo.StrictMock<IMessageProvider>();
-
-            using (MessageProviderRegistry.RegisterScopedInstance(provider))
-            {
-
-                using (repo.Record())
-                {
-                    provider.AddMessage("Story: Something with addresses");
-                    LastCall.Repeat.Once();
-                    provider.AddMessage("");
-                    LastCall.Repeat.Once();
-                    provider.AddMessage("\tScenario 1: Address has some values");
-                    LastCall.Repeat.Once();
-                    provider.AddMessage("\t\tGiven the address is: (123 anywhere, Austin, TX)");
-                    LastCall.Repeat.Once();
-                    provider.AddMessage("\t\tWhen the other address is: (456 anywhere, New York, NY)");
-                    LastCall.Repeat.Once();
-                }
-
-                Address address = null;
-
-                using (repo.Playback())
-                {
-                    new Story("Something with addresses")
+            new Story("Something with addresses")
                         .WithScenario("Address has some values")
-                        .Given("the address is", "123 anywhere", "Austin", "TX", delegate(string address1, string city, string state) { address = new Address(address1, city, state); })
-                        .When("the other address is", "456 anywhere", "New York", "NY", delegate(string address1, string city, string state) { address = new Address(address1, city, state); });
-                }
+                        .Given("the address is", "123 anywhere", "Austin", "TX", (address1, city, state) => { })
+                        .When("the other address is", "456 anywhere", "New York", "NY", (address1, city, state) => { });
 
-            }
+            Assert.AreEqual(
+                "Given: Given the address is: (123 anywhere, Austin, TX)" + Environment.NewLine +
+                "When: When the other address is: (456 anywhere, New York, NY)" + Environment.NewLine
+                      , actual);
         }
 
         [Test]
         public void Scenario_then_writes_value()
         {
-            MockRepository repo = new MockRepository();
+            string actual = string.Empty;
+            Story.MessageAdded += (sender, e) => actual += string.Format("{0}: {1}{2}", e.EventData.Type, e.EventData.Message, Environment.NewLine);
 
-            IMessageProvider provider = repo.StrictMock<IMessageProvider>();
+            new Story("Transfer to cash account")
+                .WithScenario("Account has sufficient funds")
+                .Given("the account balance is", 40, accountBalance => { })
+                .When("the account holder requests", 10, requestAmount => { })
+                .Then("the account balance should be", 30, expectedBalance => Assert.IsTrue(true));
 
-            using (repo.Record())
-            {
-                provider.AddMessage("Story: Transfer to cash account");
-                LastCall.Repeat.Once();
-                provider.AddMessage("");
-                LastCall.Repeat.Once();
-                provider.AddMessage("\tScenario 1: Account has sufficient funds");
-                LastCall.Repeat.Once();
-                provider.AddMessage("\t\tGiven the account balance is: 40");
-                LastCall.Repeat.Once();
-                provider.AddMessage("\t\tWhen the account holder requests: 10");
-                LastCall.Repeat.Once();
-                provider.AddMessage("\t\tThen the account balance should be: 30");
-                LastCall.Repeat.Once();
-            }
-
-            Account account = null;
-
-            using (repo.Playback())
-            {
-                new Story("Transfer to cash account", provider)
-                    .WithScenario("Account has sufficient funds")
-                    .Given("the account balance is", 40, delegate(int accountBalance) { account = new Account(accountBalance); })
-                    .When("the account holder requests", 10, delegate(int requestAmount) { account.Withdraw(requestAmount); })
-                    .Then("the account balance should be", 30, delegate(int expectedBalance) { Assert.AreEqual(expectedBalance, account.Balance); });
-            }
+            Assert.AreEqual(
+                "Given: Given the account balance is: 40" + Environment.NewLine +
+                "When: When the account holder requests: 10" + Environment.NewLine +
+                "Then: Then the account balance should be: 30" + Environment.NewLine
+              , actual);
         }
 
         [Test]
         public void Scenario_given_when_then_back_to_given_writes_value()
         {
-            MockRepository repo = new MockRepository();
+            string actual = string.Empty;
+            Story.MessageAdded += (sender, e) => actual += string.Format("{0}: {1}{2}", e.EventData.Type, e.EventData.Message, Environment.NewLine);
 
-            IMessageProvider provider = repo.StrictMock<IMessageProvider>();
+            new Story("Transfer to cash account")
+                .WithScenario("Account has sufficient funds")
+                .Given("the account balance is", 40, accountBalance => { })
+                .When("the account holder requests", 10, requestAmount => { })
+                .Then("the account balance should be", 30, expectedBalance => Assert.IsTrue(true))
+                .Given("the account balance is", 20);
 
-            using (repo.Record())
-            {
-                provider.AddMessage("Story: Transfer to cash account");
-                LastCall.Repeat.Once();
-                provider.AddMessage("");
-                LastCall.Repeat.Once();
-                provider.AddMessage("\tScenario 1: Account has sufficient funds");
-                LastCall.Repeat.Once();
-                provider.AddMessage("\t\tGiven the account balance is: 40");
-                LastCall.Repeat.Once();
-                provider.AddMessage("\t\tWhen the account holder requests: 10");
-                LastCall.Repeat.Once();
-                provider.AddMessage("\t\tThen the account balance should be: 30");
-                LastCall.Repeat.Once();
-                provider.AddMessage("");
-                LastCall.Repeat.Once();
-                provider.AddMessage("\t\tGiven the account balance is: 20");
-                LastCall.Repeat.Once();
-            }
-
-            Account account = null;
-
-            using (repo.Playback())
-            {
-                new Story("Transfer to cash account", provider)
-                    .WithScenario("Account has sufficient funds")
-                    .Given("the account balance is", 40, delegate(int accountBalance) { account = new Account(accountBalance); })
-                    .When("the account holder requests", 10, delegate(int requestAmount) { account.Withdraw(requestAmount); })
-                    .Then("the account balance should be", 30, delegate(int expectedBalance) { Assert.That(account.Balance, Is.EqualTo(expectedBalance)); })
-                    .Given("the account balance is", 20);
-            }
+            Assert.AreEqual(
+                   "Given: Given the account balance is: 40" + Environment.NewLine +
+                   "When: When the account holder requests: 10" + Environment.NewLine +
+                   "Then: Then the account balance should be: 30" + Environment.NewLine +
+                   "Given: Given the account balance is: 20" + Environment.NewLine
+                   , actual);
         }
 
         [Test]
         public void Failing_scenarios_write_failures()
         {
-            MockRepository repo = new MockRepository();
+            string actual = string.Empty;
+            Story.MessageAdded += (sender, e) => actual += string.Format("{0}: {1}{2}", e.EventData.Type, e.EventData.Message, Environment.NewLine);
 
-            IMessageProvider provider = repo.StrictMock<IMessageProvider>();
-
-            using (repo.Record())
+            try
             {
-                provider.AddMessage("Story: Transfer to cash account");
-                LastCall.Repeat.Once();
-                provider.AddMessage("");
-                LastCall.Repeat.Once();
-                provider.AddMessage("\tScenario 1: Account has sufficient funds");
-                LastCall.Repeat.Once();
-                provider.AddMessage("\t\tGiven the account balance is: 40");
-                LastCall.Repeat.Once();
-                provider.AddMessage("\t\tWhen the account holder requests: 10");
-                LastCall.Repeat.Once();
-                provider.AddMessage("\t\tThen the account balance should be: 30 - FAILED");
+                new Story("Transfer to cash account")
+                    .WithScenario("Account has sufficient funds")
+                    .Given("the account balance is", 40, accountBalance => { })
+                    .When("the account holder requests", 10, requestAmount => { })
+                    .Then("the account balance should be", 30, obj => { throw new Exception("Error"); });
             }
+            catch { }
 
-            Account account = null;
-
-            using (repo.Playback())
-            {
-                try
-                {
-                    new Story("Transfer to cash account", provider)
-                        .WithScenario("Account has sufficient funds")
-                        .Given("the account balance is", 40,
-                               delegate(int accountBalance) { account = new Account(accountBalance); })
-                        .When("the account holder requests", 10,
-                              delegate(int requestAmount) { account.Withdraw(requestAmount); })
-                        .Then("the account balance should be", 30,
-                              delegate { throw new Exception("Error"); });
-                }
-                catch { }
-            }
+            Assert.AreEqual(
+                           "Given: Given the account balance is: 40" + Environment.NewLine +
+                           "When: When the account holder requests: 10" + Environment.NewLine +
+                           "Then: Then the account balance should be: 30 - FAILED" + Environment.NewLine
+                           , actual);
         }
 
         [Test]
         public void Pending_scenarios_write_pending_reason()
         {
-            MockRepository repo = new MockRepository();
+            string actual = string.Empty;
+            Story.MessageAdded += (sender, e) => actual += string.Format("{0}: {1}{2}", e.EventData.Type, e.EventData.Message, Environment.NewLine);
 
-            IMessageProvider provider = repo.StrictMock<IMessageProvider>();
+            new Story("Transfer to cash account")
+                .WithScenario("Account has sufficient funds")
+                .Pending("needs an Account");
 
-            using (repo.Record())
-            {
-                provider.AddMessage("Story: Transfer to cash account");
-                LastCall.Repeat.Once();
-                provider.AddMessage("");
-                LastCall.Repeat.Once();
-                provider.AddMessage("\tScenario 1: Account has sufficient funds");
-                LastCall.Repeat.Once();
-                provider.AddMessage("\t\tPending: needs an Account");
-                LastCall.Repeat.Once();
-            }
-
-            using (repo.Playback())
-            {
-                new Story("Transfer to cash account", provider)
-                    .WithScenario("Account has sufficient funds")
-                    .Pending("needs an Account");
-            }
+            Assert.AreEqual(
+                            "Pending: needs an Account" + Environment.NewLine
+                            , actual);
         }
 
         [Test]
         public void Pending_scenarios_dont_write_new_messages()
         {
-            MockRepository repo = new MockRepository();
+            string actual = string.Empty;
+            Story.MessageAdded += (sender, e) => actual += string.Format("{0}: {1}{2}", e.EventData.Type, e.EventData.Message, Environment.NewLine);
 
-            IMessageProvider provider = repo.StrictMock<IMessageProvider>();
+            new Story("Transfer to cash account")
+                .WithScenario("Account has sufficient funds")
+                .Pending("needs an Account")
+                .Given("the account balance is", 40)
+                .When("the account holder requests", 10)
+                .Then("the account balance should be", 30);
 
-            using (repo.Record())
-            {
-                provider.AddMessage("Story: Transfer to cash account");
-                LastCall.Repeat.Once();
-                provider.AddMessage("");
-                LastCall.Repeat.Once();
-                provider.AddMessage("\tScenario 1: Account has sufficient funds");
-                LastCall.Repeat.Once();
-                provider.AddMessage("\t\tPending: needs an Account");
-                LastCall.Repeat.Once();
-            }
-
-            using (repo.Playback())
-            {
-                new Story("Transfer to cash account", provider)
-                    .WithScenario("Account has sufficient funds")
-                    .Pending("needs an Account")
-                    .Given("the account balance is", 40)
-                    .When("the account holder requests", 10)
-                    .Then("the account balance should be", 30);
-            }
+            Assert.AreEqual(
+                            "Pending: needs an Account" + Environment.NewLine
+                            , actual);
         }
 
         [Test]
         public void Should_set_the_story_title_when_created()
         {
-            Story story = new Story("Title");
+            var story = new Story("Title");
 
             Assert.That(story.Title, Is.EqualTo("Title"));
         }
@@ -606,11 +313,11 @@ namespace NBehave.Narrator.Framework.Specifications
         [Test]
         public void Should_report_passing_scenario_into_story_results()
         {
-            Story story = new Story("Title");
+            var story = new Story("Title");
 
             story.WithScenario("Test title");
 
-            StoryResults results = new StoryResults();
+            var results = new StoryResults();
 
             story.CompileResults(results);
 
@@ -622,12 +329,12 @@ namespace NBehave.Narrator.Framework.Specifications
         [Test]
         public void Should_report_pending_scenario_into_story_results()
         {
-            Story story = new Story("Title");
+            var story = new Story("Title");
 
             story.WithScenario("Test title")
                 .Pending("Pending reason");
 
-            StoryResults results = new StoryResults();
+            var results = new StoryResults();
 
             story.CompileResults(results);
 
@@ -639,7 +346,7 @@ namespace NBehave.Narrator.Framework.Specifications
         [Test]
         public void Should_report_failing_scenario_into_story_results()
         {
-            Story story = new Story("Title");
+            var story = new Story("Title");
 
             try
             {
@@ -648,7 +355,7 @@ namespace NBehave.Narrator.Framework.Specifications
             }
             catch { }
 
-            StoryResults results = new StoryResults();
+            var results = new StoryResults();
 
             story.CompileResults(results);
 
@@ -660,7 +367,7 @@ namespace NBehave.Narrator.Framework.Specifications
         [Test]
         public void Should_include_exception_message_with_failing_scenario()
         {
-            Story story = new Story("Title");
+            var story = new Story("Title");
 
             try
             {
@@ -669,7 +376,7 @@ namespace NBehave.Narrator.Framework.Specifications
             }
             catch { }
 
-            StoryResults results = new StoryResults();
+            var results = new StoryResults();
 
             story.CompileResults(results);
 
@@ -679,12 +386,12 @@ namespace NBehave.Narrator.Framework.Specifications
         [Test]
         public void Should_include_pending_message_with_pending_scenario()
         {
-            Story story = new Story("Title");
+            var story = new Story("Title");
 
             story.WithScenario("Test title")
                 .Pending("reason");
 
-            StoryResults results = new StoryResults();
+            var results = new StoryResults();
 
             story.CompileResults(results);
 
@@ -694,32 +401,32 @@ namespace NBehave.Narrator.Framework.Specifications
         [Test]
         public void Should_report_multiple_scenarios_into_story_results()
         {
-            Story story = new Story("Title");
+            var story = new Story("Title");
 
             try
             {
                 story.WithScenario("Failing Scenario")
                     .Given("Throwing exception", delegate { throw new Exception(); })
-                    .When("Nothing", DoNothing)
-                    .Then("Nothing", DoNothing);
+                    .When("Nothing", () => { })
+                    .Then("Nothing", () => { });
             }
             catch { }
 
             story.WithScenario("Passing Scenario")
-                .Given("Nothing", DoNothing)
-                .When("Nothing", DoNothing)
-                .Then("Nothing", DoNothing);
+                .Given("Nothing", () => { })
+                .When("Nothing", () => { })
+                .Then("Nothing", () => { });
 
             story.WithScenario("Pending Scenario")
                 .Pending("Nothing");
 
             story.WithScenario("Passing Scenario")
-                .Given("Nothing", DoNothing)
-                .When("Nothing", DoNothing)
-                .Then("Nothing", DoNothing);
+                .Given("Nothing", () => { })
+                .When("Nothing", () => { })
+                .Then("Nothing", () => { });
 
 
-            StoryResults results = new StoryResults();
+            var results = new StoryResults();
 
             story.CompileResults(results);
 
@@ -731,93 +438,51 @@ namespace NBehave.Narrator.Framework.Specifications
         [Test]
         public void Should_ignore_pending_and_errors_for_dry_runs()
         {
-            MockRepository repo = new MockRepository();
+            string actual = string.Empty;
+            Story.MessageAdded += (sender, e) => actual += string.Format("{0}: {1}{2}", e.EventData.Type, e.EventData.Message, Environment.NewLine);
 
-            IMessageProvider provider = repo.StrictMock<IMessageProvider>();
+            var story = new Story("Transfer to cash account");
+            story.IsDryRun = true;
 
-            using (repo.Record())
-            {
-                provider.AddMessage("Story: Transfer to cash account");
-                LastCall.Repeat.Once();
-                provider.AddMessage("");
-                LastCall.Repeat.Once();
-                provider.AddMessage("\tScenario 1: Account has sufficient funds");
-                LastCall.Repeat.Once();
-                provider.AddMessage("\t\tPending: needs an Account");
-                LastCall.Repeat.Once();
-                provider.AddMessage("\t\tGiven the account balance is: 40");
-                LastCall.Repeat.Once();
-                provider.AddMessage("\t\tWhen the account holder requests: 10");
-                LastCall.Repeat.Once();
-                provider.AddMessage("\t\tThen the account balance should be: 30");
-                LastCall.Repeat.Once();
-                provider.AddMessage("");
-                LastCall.Repeat.Once();
-                provider.AddMessage("\t\tGiven the account balance is: 20");
-                LastCall.Repeat.Once();
-            }
+            story
+                .WithScenario("Account has sufficient funds")
+                .Pending("needs an Account")
+                .Given("the account balance is", 40)
+                .When("the account holder requests", 10)
+                .Then("the account balance should be", 30)
+                .Given("the account balance is", 20, delegate { throw new Exception("error"); });
 
-            using (repo.Playback())
-            {
-                Story story = new Story("Transfer to cash account", provider);
+            Assert.AreEqual(
+               "Given: Given the account balance is: 40" + Environment.NewLine +
+               "When: When the account holder requests: 10" + Environment.NewLine +
+               "Then: Then the account balance should be: 30" + Environment.NewLine +
+               "Given: Given the account balance is: 20" + Environment.NewLine
+               , actual);
 
-                story.IsDryRun = true;
-
-                story
-                    .WithScenario("Account has sufficient funds")
-                    .Pending("needs an Account")
-                    .Given("the account balance is", 40)
-                    .When("the account holder requests", 10)
-                    .Then("the account balance should be", 30)
-                    .Given("the account balance is", 20, delegate { throw new Exception("error"); });
-
-            }
         }
 
-		[Test]
-		public void Should_invoke_cataloged_actions_which_has_no_parameters()
-		{
-			int runActionCounter = 0;
-			MockRepository repo = new MockRepository();
-
-			IMessageProvider provider = repo.StrictMock<IMessageProvider>();
-
-			using (repo.Record())
-			{
-				provider.AddMessage("Story: Simple story");
-				LastCall.Repeat.Once();
-				provider.AddMessage("");
-				LastCall.Repeat.Once();
-				provider.AddMessage("\tScenario 1: Scenario that counts how many times actions run");
-				LastCall.Repeat.Once();
-				provider.AddMessage("\t\tGiven initialized counter by: 0");
-				LastCall.Repeat.Once();
-				provider.AddMessage("\t\tWhen increase counter by action");
-				LastCall.Repeat.Once();
-				provider.AddMessage("\t\t\tAnd increase counter by action");
-				LastCall.Repeat.Once();
-				provider.AddMessage("\t\tThen counter should be: 2");
-				LastCall.Repeat.Once();
-			}
-
-			using (repo.Playback())
-			{
-				Story story = new Story("Simple story", provider);
-
-				story
-					.WithScenario("Scenario that counts how many times actions run")
-					.Given("initialized counter by", 0, x => runActionCounter = x)
-					.When("increase counter by action", () => runActionCounter++)
-						.And("increase counter by action")
-					.Then("counter should be", 2, x => Assert.That(runActionCounter, Is.EqualTo(x)));
-
-			}
-		}
-
-
-        private void DoNothing()
+        [Test]
+        public void Should_invoke_cataloged_actions_which_has_no_parameters()
         {
-            // Placeholder for delegates
+            string actual = string.Empty;
+            Story.MessageAdded += (sender, e) => actual += string.Format("{0}: {1}{2}", e.EventData.Type, e.EventData.Message, Environment.NewLine);
+
+            var story = new Story("Simple story");
+            int runActionCounter = 0;
+
+            story
+                .WithScenario("Scenario that counts how many times actions run")
+                .Given("initialized counter by", 0, x => runActionCounter = x)
+                .When("increase counter by action", () => runActionCounter++)
+                    .And("increase counter by action")
+                .Then("counter should be", 2, x => Assert.That(runActionCounter, Is.EqualTo(x)));
+
+            Assert.AreEqual(
+               "Given: Given initialized counter by: 0" + Environment.NewLine +
+               "When: When increase counter by action" + Environment.NewLine +
+               "And: And increase counter by action" + Environment.NewLine +
+               "Then: Then counter should be: 2" + Environment.NewLine
+               , actual);
         }
 
     }
@@ -852,41 +517,6 @@ namespace NBehave.Narrator.Framework.Specifications
                 throw new ArgumentException("Amount exceeds balance", "amount");
 
             Balance -= amount;
-        }
-    }
-
-    public class Address
-    {
-        private readonly string _address1;
-        private readonly string _city;
-        private readonly string _state;
-
-        public Address(string address1, string city, string state)
-        {
-            _address1 = address1;
-            _city = city;
-            _state = state;
-        }
-    }
-
-    public class Card
-    {
-        private string number;
-
-        public Card(string number)
-        {
-            this.number = number;
-        }
-
-        public string Number
-        {
-            get { return number; }
-            set { number = value; }
-        }
-
-        public bool IsValid()
-        {
-            return true;
         }
     }
 }

@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
-using NBehave.Narrator.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using NUnit.Framework;
 using Rhino.Mocks;
 using NBehave.Narrator.Framework.EventListeners;
-using TestPlainTextAssembly;
 
 using Context = NUnit.Framework.TestFixtureAttribute;
 using Specification = NUnit.Framework.TestAttribute;
@@ -21,90 +17,41 @@ namespace NBehave.Narrator.Framework.Specifications
         [Specification]
         public void should_replace_token_with_value()
         {
-            MockRepository repo = new MockRepository();
+            string actual = string.Empty;
+            Story.MessageAdded += (sender, e) => actual += string.Format("{0}: {1}{2}", e.EventData.Type, e.EventData.Message, Environment.NewLine);
 
-            IMessageProvider provider = repo.StrictMock<IMessageProvider>();
+            new Story("Transfer to cash account")
+                .WithScenario("Account has sufficient funds")
+                .Given("the account balance is $balance", 20, accountBalance => { });
 
-            using (repo.Record())
-            {
-                provider.AddMessage("Story: Transfer to cash account");
-                LastCall.Repeat.Once();
-                provider.AddMessage("");
-                LastCall.Repeat.Once();
-                provider.AddMessage("\tScenario 1: Account has sufficient funds");
-                LastCall.Repeat.Once();
-                provider.AddMessage("\t\tGiven the account balance is 20");
-                LastCall.Repeat.Once();
-            }
-
-            Account account = null;
-
-            using (repo.Playback())
-            {
-                new Story("Transfer to cash account", provider)
-                    .WithScenario("Account has sufficient funds")
-                    .Given("the account balance is $balance", 20, delegate(int accountBalance) { account = new Account(accountBalance); });
-            }
+            Assert.AreEqual(
+                               "Given: Given the account balance is 20" + Environment.NewLine
+                               , actual);
         }
-
 
         [Specification]
         public void should_not_add_value_to_reused_token()
         {
-            MockRepository repo = new MockRepository();
+            string actual = string.Empty;
+            Story.MessageAdded += (sender, e) => actual += string.Format("{0}: {1}{2}", e.EventData.Type, e.EventData.Message, Environment.NewLine);
 
-            IMessageProvider provider = repo.StrictMock<IMessageProvider>();
+            new Story("Transfer to cash account")
+                .WithScenario("Account has sufficient funds")
+                .Given("the account balance is $balance", 20, accountBalance => { })
+                .And("the account balance is 30");
 
-            using (repo.Record())
-            {
-                provider.AddMessage("Story: Transfer to cash account");
-                LastCall.Repeat.Once();
-                provider.AddMessage("");
-                LastCall.Repeat.Once();
-                provider.AddMessage("\tScenario 1: Account has sufficient funds");
-                LastCall.Repeat.Once();
-                provider.AddMessage("\t\tGiven the account balance is 20");
-                LastCall.Repeat.Once();
-                provider.AddMessage("\t\t\tAnd the account balance is 30");
-                LastCall.Repeat.Once();
-            }
+            Assert.AreEqual(
+                       "Given: Given the account balance is 20" + Environment.NewLine +
+                       "And: And the account balance is 30" + Environment.NewLine
+                       , actual);
 
-            Account account = null;
-
-            using (repo.Playback())
-            {
-                new Story("Transfer to cash account", provider)
-                    .WithScenario("Account has sufficient funds")
-                    .Given("the account balance is $balance", 20, delegate(int accountBalance) { account = new Account(accountBalance); })
-                    .And("the account balance is 30");
-            }
         }
-
-
-
-        //[Specification()]
-        //public void should_run_plaintext_story()
-        //{
-        //    string scenario = "Savings account is in credit" + Environment.NewLine +
-        //                      "Given my savings account balance is 50" + Environment.NewLine +
-        //                      "And my cash account balance is 80" + Environment.NewLine +
-        //                      "When I transfer 20 to cash account" + Environment.NewLine +
-        //                      "Then my savings account balance should be 30" + Environment.NewLine +
-        //                      "And my cash account balance should be 100" + Environment.NewLine;
-
-        //    PlainTextScenario builder = new PlainTextScenario(AccountSpecs.StoryTitle, scenario);
-
-        //    Assert.That(builder.Given.Length, Is.EqualTo(2));
-        //    Assert.That(builder.When, Is.EqualTo("When I transfer 20 to cash account"));
-        //    Assert.That(builder.Then.Length, Is.EqualTo(2));
-        //}
-
 
         [Specification]
         public void should_output_full_story_for_dry_run()
         {
-            MockRepository mocks = new MockRepository();
-            IEventListener listener = mocks.StrictMock<IEventListener>();
+            var mocks = new MockRepository();
+            var listener = mocks.StrictMock<IEventListener>();
 
             using (mocks.Record())
             {
@@ -117,7 +64,11 @@ namespace NBehave.Narrator.Framework.Specifications
                 listener.StoryResults(null);
                 LastCall.IgnoreArguments().Repeat.Once();
                 listener.StoryMessageAdded("");
-                LastCall.IgnoreArguments().Repeat.Any();
+                LastCall.IgnoreArguments().Repeat.AtLeastOnce();
+                listener.ScenarioCreated(null);
+                LastCall.IgnoreArguments().Repeat.AtLeastOnce();
+                listener.ScenarioMessageAdded(null);
+                LastCall.IgnoreArguments().Repeat.AtLeastOnce();
                 listener.ThemeFinished();
                 LastCall.Repeat.Once();
                 listener.RunFinished();
@@ -126,28 +77,27 @@ namespace NBehave.Narrator.Framework.Specifications
 
             using (mocks.Playback())
             {
-                StoryRunner runner = new StoryRunner();
+                var runner = new StoryRunner();
 
                 runner.IsDryRun = true;
                 runner.LoadAssembly("TestPlainTextAssembly.dll");
                 runner.Run(listener);
             }
         }
-
     }
 
 
-    [Context()]
+    [Context]
     public class When_running_assembly_with_tokenized_scenario
     {
-        private StoryResults results = null;
+        private StoryResults results;
 
         [SetUp]
         public void SetupSpec()
         {
-            MockRepository mocks = new MockRepository();
-            IEventListener evt = mocks.Stub<IEventListener>();
-            StoryRunner runner = new StoryRunner();
+            var mocks = new MockRepository();
+            var evt = mocks.Stub<IEventListener>();
+            var runner = new StoryRunner();
 
             runner.LoadAssembly("TestPlainTextAssembly.dll");
             results = runner.Run(evt);
@@ -166,7 +116,7 @@ namespace NBehave.Narrator.Framework.Specifications
         }
     }
 
-    [Context()]
+    [Context]
     public class When_dry_running_asembly_with_tokenized_scenario
     {
         TextWriter writer;
@@ -176,10 +126,10 @@ namespace NBehave.Narrator.Framework.Specifications
         {
             writer = new StringWriter();
             IEventListener evt = new TextWriterEventListener(writer);
-            StoryRunner runner = new StoryRunner();
+            var runner = new StoryRunner();
             runner.LoadAssembly("TestPlainTextAssembly.dll");
             runner.IsDryRun = true;
-            StoryResults results = runner.Run(evt);
+            runner.Run(evt);
         }
 
         [Specification]
@@ -188,7 +138,7 @@ namespace NBehave.Narrator.Framework.Specifications
             writer.Flush();
             string output = writer.ToString();
 
-            int posOfFirstScenario = output.IndexOf("Scenario 1:");
+            int posOfFirstScenario = output.IndexOf("scenario created: Savings account is in credit");
             int posOfFirstGiven = output.IndexOf(Environment.NewLine, posOfFirstScenario) + Environment.NewLine.Length;
             int endOfLinePos = output.IndexOf(Environment.NewLine, posOfFirstGiven);
             string given = output.Substring(posOfFirstGiven, +endOfLinePos - posOfFirstGiven);
@@ -202,7 +152,7 @@ namespace NBehave.Narrator.Framework.Specifications
             writer.Flush();
             string output = writer.ToString();
 
-            int posOfFirstScenario = output.IndexOf("Scenario 2:");
+            int posOfFirstScenario = output.IndexOf("scenario created: Savings account is in credit with text");
             int posOfFirstGiven = output.IndexOf(Environment.NewLine, posOfFirstScenario) + Environment.NewLine.Length;
             int endOfLinePos = output.IndexOf(Environment.NewLine, posOfFirstGiven);
             string given = output.Substring(posOfFirstGiven, +endOfLinePos - posOfFirstGiven);
