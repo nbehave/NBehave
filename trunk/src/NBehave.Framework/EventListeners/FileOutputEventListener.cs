@@ -29,6 +29,9 @@ namespace NBehave.Narrator.Framework.EventListeners
         void IEventListener.StoryCreated(string story)
         {
             _writer.WriteLine();
+            if (_insideNamedTheme)
+                _writer.Write('\t');
+            _writer.WriteLine("Story: " + story);
         }
 
         void IEventListener.StoryMessageAdded(string message)
@@ -36,19 +39,24 @@ namespace NBehave.Narrator.Framework.EventListeners
             if (_insideNamedTheme)
                 _writer.Write('\t');
 
+            _writer.Write('\t');
             _writer.WriteLine(message);
         }
 
         void IEventListener.ScenarioCreated(string scenarioTitle)
         {
             _writer.WriteLine();
+            if (_insideNamedTheme)
+                _writer.Write('\t');
+            _writer.Write('\t');
+            _writer.WriteLine("Scenario: " + scenarioTitle);
         }
 
         void IEventListener.ScenarioMessageAdded(string message)
         {
             if (_insideNamedTheme)
                 _writer.Write('\t');
-            _writer.Write('\t');
+            _writer.Write("\t\t");
 
             _writer.WriteLine(message);
         }
