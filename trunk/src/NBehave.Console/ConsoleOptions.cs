@@ -6,6 +6,9 @@ namespace NBehave.Console
     {
         private bool _isInvalid;
 
+        [Option(Description = "Scenario file to run")]
+        public string file;
+
         [Option(Description = "Xml file to receive story output")]
         public string xml;
 

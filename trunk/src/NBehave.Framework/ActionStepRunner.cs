@@ -74,16 +74,33 @@ namespace NBehave.Narrator.Framework
             using (MessageProviderRegistry.RegisterScopedInstance(messageProvider))
             {
                 listener.ThemeStarted(string.Empty);
-                foreach (var scenario in _scenarios)
+                listener.StoryCreated(string.Empty);
+                RunScenarios(results, listener);
+                CompileStoryResults(results);
+                listener.StoryResults(results);
+                listener.ThemeFinished();
+                ClearStoryList();
+            }
+        }
+
+        private void RunScenarios(StoryResults results, IEventListener listener)
+        {
+            foreach (var scenario in _scenarios)
+            {
+                ScenarioResults scenarioResult = new ScenarioResults("a", "a");
+                foreach (var row in scenario.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    foreach (var row in scenario.Split(new string[] { Environment.NewLine},StringSplitOptions.RemoveEmptyEntries))
+                    listener.StoryMessageAdded(row);
+                    try
                     {
-                        listener.StoryMessageAdded(row);
                         InvokeTokenString(row);
-                        //Hmm, what about hte outcome?
+                    }
+                    catch (Exception e)
+                    {
+                        scenarioResult.Fail(e);
                     }
                 }
-                listener.ThemeFinished();
+                results.AddResult(scenarioResult);
             }
         }
 

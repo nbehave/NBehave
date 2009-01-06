@@ -17,6 +17,7 @@ namespace NBehave.Narrator.Framework
         private EventHandler<EventArgs<Story>> _storyCreatedEventHandler;
 
         protected List<Pair<string, object>> Themes { get { return _themes; } }
+      
         protected List<Story> Stories { get { return _stories; } }
 
         public bool IsDryRun { get; set; }
@@ -49,6 +50,7 @@ namespace NBehave.Narrator.Framework
         {
             ParseAssembly(assembly);
         }
+        
         public StoryRunnerFilter StoryRunnerFilter
         {
             get { return _storyRunnerFilter; }

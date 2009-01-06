@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
+using System.Xml;
 using NBehave.Narrator.Framework;
 using NBehave.Narrator.Framework.EventListeners;
 using NUnit.Framework.SyntaxHelpers;
 using NUnit.Framework;
 using Rhino.Mocks;
+using NBehave.Narrator.Framework.EventListeners.Xml;
+using System.Text;
 
 namespace NBehave.Narrator.Framework.Specifications
 {
@@ -43,7 +46,6 @@ namespace NBehave.Narrator.Framework.Specifications
                 _runner.InvokeTokenString("This doesnt exist");
             }
 
-            // Test fails due to a bug in ActionCatalog, it extracts the name Morgan!” in the Then part.
             [Test]
             public void Should_run_text_scenario_in_stream()
             {
@@ -63,32 +65,45 @@ namespace NBehave.Narrator.Framework.Specifications
             }
 
             [Test]
-            public void Should_run_scenarios_in_files()
+            public void Should_run_scenarios_in_text_file()
             {
                 var writer = new StringWriter();
                 var listener = new TextWriterEventListener(writer);
                 _runner.Load(new string[] { @"GreetingSystem.txt" });
                 _runner.Run(listener);
                 var output = writer.ToString();
+                Assert.That(output.IndexOf("story message added: Given my name Morgan"), Is.GreaterThan(0));
+                Assert.That(output.IndexOf("story message added: When I ask to be greeted"), Is.GreaterThan(0));
+                Assert.That(output.IndexOf("story message added: Then I should be greeted with “Hello, Morgan!”"), Is.GreaterThan(0));
             }
 
+            [Test]
+            public void Should_get_result_of_running_scenarios_in_text_file()
+            {
+                var writer = new StringWriter();
+                var listener = new TextWriterEventListener(writer);
+                _runner.Load(new string[] { @"GreetingSystem.txt" });
+                StoryResults results = _runner.Run(listener);
+                Assert.That(results.NumberOfThemes, Is.EqualTo(0));
+                Assert.That(results.NumberOfStories, Is.EqualTo(0));
+                Assert.That(results.NumberOfScenariosFound, Is.EqualTo(1));
+                Assert.That(results.NumberOfPassingScenarios, Is.EqualTo(1));
+            }
+
+            [Test]
+            public void Should_not_throw_when_using_xml_listener()
+            {
+                var xs = new XmlWriterSettings();
+                xs.ConformanceLevel = ConformanceLevel.Auto;
+                var memStream = new MemoryStream();
+                var writer = XmlWriter.Create(memStream,xs);
+                var listener = new XmlOutputEventListener(writer);
+                _runner.Load(new string[] { @"GreetingSystem.txt" });
+                StoryResults results = _runner.Run(listener);
+                memStream.Seek(0, SeekOrigin.Begin);
+                var b = new StreamReader(memStream);
+                Assert.That(b.ToString(), Is.EqualTo("<"));
+            }
         }
-
-        //[Specification()]
-        //public void should_run_plaintext_story()
-        //{
-        //    string scenario = "Savings account is in credit" + Environment.NewLine +
-        //                      "Given my savings account balance is 50" + Environment.NewLine +
-        //                      "And my cash account balance is 80" + Environment.NewLine +
-        //                      "When I transfer 20 to cash account" + Environment.NewLine +
-        //                      "Then my savings account balance should be 30" + Environment.NewLine +
-        //                      "And my cash account balance should be 100" + Environment.NewLine;
-
-        //    PlainTextScenario builder = new PlainTextScenario(AccountSpecs.StoryTitle, scenario);
-
-        //    Assert.That(builder.Given.Length, Is.EqualTo(2));
-        //    Assert.That(builder.When, Is.EqualTo("When I transfer 20 to cash account"));
-        //    Assert.That(builder.Then.Length, Is.EqualTo(2));
-        //}
     }
 }

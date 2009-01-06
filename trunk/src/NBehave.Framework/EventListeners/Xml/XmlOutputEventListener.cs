@@ -8,6 +8,9 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
     {
         private int _totalThemes = 0;
         private int _totalStories = 0;
+        private ThemeXmlOutputWriter _themeWriter;
+        StoryXmlOutputWriter _storyWriter;
+        private StoryResults _storyResults;
 
         public XmlOutputEventListener(XmlWriter writer)
             : base(writer, new Queue<Action>())
@@ -45,55 +48,52 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
         }
 
 
-        private ThemeXmlOutputWriter themeWriter;
         void IEventListener.ThemeStarted(string name)
         {
-            themeWriter = new ThemeXmlOutputWriter(Writer, Actions);
-            themeWriter.ThemeStarted(name);
+            _themeWriter = new ThemeXmlOutputWriter(Writer, Actions);
+            _themeWriter.ThemeStarted(name);
             _totalThemes++;
         }
 
         void IEventListener.ThemeFinished()
         {
-            if (storyWriter != null)
+            if (_storyWriter != null)
             {
                 Actions.Enqueue(
                     () => Writer.WriteEndElement());
             }
-            themeWriter.ThemeFinished();
+            _themeWriter.ThemeFinished();
             DoResults(_storyResults);
-            storyWriter = null;
+            _storyWriter = null;
         }
 
-        StoryXmlOutputWriter storyWriter;
         void IEventListener.StoryCreated(string story)
         {
-            if (storyWriter == null)
+            if (_storyWriter == null)
             {
                 Actions.Enqueue(
                     () => Writer.WriteStartElement("stories"));
             }
-            storyWriter = new StoryXmlOutputWriter(Writer, Actions);
-            storyWriter.StoryCreated(story);
+            _storyWriter = new StoryXmlOutputWriter(Writer, Actions);
+            _storyWriter.StoryCreated(story);
             _totalStories++;
-            themeWriter.TotalStories++;
+            _themeWriter.TotalStories++;
         }
 
         void IEventListener.StoryMessageAdded(string message)
         {
-            storyWriter.StoryMessageAdded(message);
+            _storyWriter.StoryMessageAdded(message);
         }
 
-        private StoryResults _storyResults;
         void IEventListener.StoryResults(StoryResults results)
         {
             _storyResults = results;
-            storyWriter.DoResults(results);
+            _storyWriter.DoResults(results);
         }
 
         public override void DoResults(StoryResults results)
         {
-            themeWriter.DoResults(_storyResults);
+            _themeWriter.DoResults(_storyResults);
             base.DoResults(_storyResults);
         }
     }

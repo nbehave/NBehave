@@ -39,8 +39,15 @@ namespace NBehave.Console
                 return 2;
             }
 
+            RunnerBase runner;
+            if (string.IsNullOrEmpty(options.file))
+                runner = new StoryRunner();
+            else
+            {
+                runner = new ActionStepRunner();
+                ((ActionStepRunner)runner).Load(options.file.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
+            }
 
-            StoryRunner runner = new StoryRunner();
             runner.IsDryRun = options.dryRun;
 
             foreach (string path in options.Parameters)
@@ -51,7 +58,7 @@ namespace NBehave.Console
                 }
                 catch (FileNotFoundException e)
                 {
-					output.WriteLine(string.Format("File not found: {0}", path));
+                    output.WriteLine(string.Format("File not found: {0}", path));
                 }
             }
             IEventListener listener = CreateEventListener(options);

@@ -24,7 +24,7 @@ namespace TestPlainTextAssembly
         }
 
         [Then("I should be greeted with “Hello, $name!”")]
-        public void I_should_be_greeted(string name)
+        public void Then_I_should_be_greeted(string name)
         {
             _greeting.ShouldEqual(string.Format("“Hello, {0}!”", name));
         }

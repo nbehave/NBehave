@@ -114,7 +114,6 @@ namespace NBehave.Narrator.Framework.Specifications
         }
     }
 
-
     [Context()]
     public class When_running_assembly_with_tokenized_scenario
     {
