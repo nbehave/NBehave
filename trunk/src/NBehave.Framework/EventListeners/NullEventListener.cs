@@ -2,40 +2,36 @@
 {
     public class NullEventListener : IEventListener
     {
-         void IEventListener.StoryCreated(string story)
+        #region IEventListener Members
+
+        public void StoryCreated(string story)
         {
         }
 
-        void IEventListener.StoryMessageAdded(string message)
+        public void StoryMessageAdded(string message)
         {
         }
 
-        void IEventListener.ScenarioCreated(string scenarioTitle)
-        {            
-        }
-
-        void IEventListener.ScenarioMessageAdded(string message)
+        public void RunStarted()
         {
         }
 
-        void IEventListener.RunStarted()
+        public void RunFinished()
         {
         }
 
-        void IEventListener.RunFinished()
+        public void ThemeStarted(string name)
         {
         }
 
-        void IEventListener.ThemeStarted(string name)
+        public void ThemeFinished()
         {
         }
 
-        void IEventListener.ThemeFinished()
+        public void StoryResults(StoryResults results)
         {
         }
 
-        void IEventListener.StoryResults(StoryResults results)
-        {
-        }
+        #endregion
     }
 }

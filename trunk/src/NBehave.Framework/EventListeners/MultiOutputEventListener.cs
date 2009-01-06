@@ -15,47 +15,37 @@ namespace NBehave.Narrator.Framework.EventListeners
 
         public void StoryCreated(string story)
         {
-            Invoke(MethodBase.GetCurrentMethod().Name, story);
+            Invoke(MethodInfo.GetCurrentMethod().Name, story);
         }
 
         public void StoryMessageAdded(string message)
         {
-            Invoke(MethodBase.GetCurrentMethod().Name, message);
-        }
-
-        public void ScenarioCreated(string scenarioTitle)
-        {
-            Invoke(MethodBase.GetCurrentMethod().Name, scenarioTitle);            
-        }
-
-        public void ScenarioMessageAdded(string message)
-        {
-            Invoke(MethodBase.GetCurrentMethod().Name, message);
+            Invoke(MethodInfo.GetCurrentMethod().Name, message);
         }
 
         public void RunStarted()
         {
-            Invoke(MethodBase.GetCurrentMethod().Name);
+            Invoke(MethodInfo.GetCurrentMethod().Name);
         }
 
         public void RunFinished()
         {
-            Invoke(MethodBase.GetCurrentMethod().Name);
+            Invoke(MethodInfo.GetCurrentMethod().Name);
         }
 
         public void ThemeStarted(string name)
         {
-            Invoke(MethodBase.GetCurrentMethod().Name, name);
+            Invoke(MethodInfo.GetCurrentMethod().Name, name);
         }
 
         public void ThemeFinished()
         {
-            Invoke(MethodBase.GetCurrentMethod().Name);
+            Invoke(MethodInfo.GetCurrentMethod().Name);
         }
 
         public void StoryResults(StoryResults results)
         {
-            Invoke(MethodBase.GetCurrentMethod().Name, results);
+            Invoke(MethodInfo.GetCurrentMethod().Name, results);
         }
 
         #endregion

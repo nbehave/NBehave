@@ -19,59 +19,37 @@ namespace NBehave.Narrator.Framework.EventListeners
 
         void IDisposable.Dispose()
         {
-            Dispose(true);
+            RunFinished();
         }
 
         #endregion
 
         #region IEventListener Members
 
-        void IEventListener.StoryCreated(string story)
+        public void StoryCreated(string story)
         {
             _writer.WriteLine();
-            if (_insideNamedTheme)
-                _writer.Write('\t');
-            _writer.WriteLine("Story: " + story);
         }
 
-        void IEventListener.StoryMessageAdded(string message)
+        public void StoryMessageAdded(string message)
         {
             if (_insideNamedTheme)
                 _writer.Write('\t');
-
-            _writer.Write('\t');
-            _writer.WriteLine(message);
-        }
-
-        void IEventListener.ScenarioCreated(string scenarioTitle)
-        {
-            _writer.WriteLine();
-            if (_insideNamedTheme)
-                _writer.Write('\t');
-            _writer.Write('\t');
-            _writer.WriteLine("Scenario: " + scenarioTitle);
-        }
-
-        void IEventListener.ScenarioMessageAdded(string message)
-        {
-            if (_insideNamedTheme)
-                _writer.Write('\t');
-            _writer.Write("\t\t");
 
             _writer.WriteLine(message);
         }
 
-        void IEventListener.RunStarted()
+        public void RunStarted()
         {
             _writer = File.CreateText(_path);
         }
 
-        void IEventListener.RunFinished()
+        public void RunFinished()
         {
             Dispose(true);
         }
 
-        void IEventListener.ThemeStarted(string name)
+        public void ThemeStarted(string name)
         {
             if (! string.IsNullOrEmpty(name))
             {
@@ -80,13 +58,13 @@ namespace NBehave.Narrator.Framework.EventListeners
             }
         }
 
-        void IEventListener.ThemeFinished()
+        public void ThemeFinished()
         {
             _insideNamedTheme = false;
             _writer.WriteLine();
         }
 
-        void IEventListener.StoryResults(StoryResults results)
+        public void StoryResults(StoryResults results)
         {
         }
 

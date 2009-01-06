@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Xml;
 
 
@@ -21,7 +23,7 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
             Actions.Enqueue(
                 () =>
                 {
-                    WriteStartElement("theme", name, themeTimer);
+                    WriteToStream(themeTimer, "theme", name);
                     Writer.WriteAttributeString("stories", TotalStories.ToString());
                     WriteScenarioResult();
                 });
@@ -31,7 +33,10 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
         {
             currentThemeTimer.Stop();
             Actions.Enqueue(
-               () => Writer.WriteEndElement()); // </theme>
+               () =>
+               {
+                   Writer.WriteEndElement(); // </theme>
+               });
         }
     }
 }

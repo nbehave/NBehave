@@ -4,7 +4,7 @@ namespace NBehave.Narrator.Framework
 {
     public class GivenFragment : ScenarioFragment<GivenFragment>
     {
-        private const string WhenType = "When";
+        private const string WhenType = "\t\tWhen";
 
         internal GivenFragment(Scenario scenario) : base(scenario) { }
 

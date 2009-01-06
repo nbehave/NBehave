@@ -1,6 +1,5 @@
 !define VERSION "0.4"
 !define FILES "..\..\Build\dist"
-!define EXAMPLEFILES "..\..\Build"
 ; The name of the installer
 Name "NBehave"
 
@@ -60,7 +59,7 @@ Section "Framework Files (required)" ;No components page, name is not important
 	WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\NBehave ${VERSION}" "NoRepair" 1
 	WriteUninstaller "uninstall.exe"
 
-SectionEnd
+SectionEnd ; end the section
 
 Section "Testdriven.NET plugin"
 	File "${FILES}\NBehave.TestDriven.Plugin.dll"
@@ -70,19 +69,8 @@ Section "Testdriven.NET plugin"
 	WriteRegStr HKLM "SOFTWARE\MutantDesign\TestDriven.NET\TestRunners\NBehave ${VERSION}" "Application" "$INSTDIR\NBehave.TestDriven.Plugin.dll"
 	WriteRegStr HKLM "SOFTWARE\MutantDesign\TestDriven.NET\TestRunners\NBehave ${VERSION}" "TypeName" "NBehave.TestDriven.Plugin.NBehaveStoryRunner"
 SectionEnd
-Section "MSbuild task"
-	File "${FILES}\NBehave.MSBuild.dll"
-SectionEnd
-
-Section "NAnt task"
-	File "${FILES}\NBehave.NAnt.dll"
-SectionEnd
-
-Section "NBehave Example code"
-	File "${EXAMPLEFILES}\NBehave.Examples.zip"
-SectionEnd
-
 ; Uninstaller
+
 Section "Uninstall"
   
   ; Remove registry keys
@@ -90,8 +78,7 @@ Section "Uninstall"
   DeleteRegKey HKLM SOFTWARE\NBehave\${VERSION}
   DeleteRegKey HKLM "SOFTWARE\MutantDesign\TestDriven.NET\TestRunners\NBehave ${VERSION}"
   ; Remove files and uninstaller
-  Delete $INSTDIR\*.dll
-  Delete $INSTDIR\*.zip
+  Delete $INSTDIR\*.DLL
   Delete $INSTDIR\NBehave-Console.exe
   Delete $INSTDIR\uninstall.exe
 

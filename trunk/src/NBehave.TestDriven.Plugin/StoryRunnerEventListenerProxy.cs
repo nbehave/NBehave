@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using NBehave.Narrator.Framework;
 using TestDriven.Framework;
 
@@ -7,7 +8,7 @@ namespace NBehave.TestDriven.Plugin
 {
     public class StoryRunnerEventListenerProxy : IEventListener
     {
-        private readonly ITestListener _listener;
+        private ITestListener _listener;
         private string _story;
 
         public StoryRunnerEventListenerProxy(ITestListener listener)
@@ -17,7 +18,7 @@ namespace NBehave.TestDriven.Plugin
 
         #region IEventListener Members
 
-               void IEventListener.RunStarted()
+        void IEventListener.RunStarted()
         {
         }
 
@@ -33,15 +34,6 @@ namespace NBehave.TestDriven.Plugin
         }
 
         void IEventListener.StoryMessageAdded(string message)
-        {
-        }
-
-        void IEventListener.ScenarioCreated(string scenarioTitle)
-        {
-            _listener.WriteLine("\t\tScenario: " + scenarioTitle, Category.Output);
-        }
-
-        void IEventListener.ScenarioMessageAdded(string message)
         {
         }
 
@@ -67,7 +59,7 @@ namespace NBehave.TestDriven.Plugin
 
             foreach (var result in resultsFromStory)
             {
-                var testResult = new TestResult
+                TestResult testResult = new TestResult
                     {
                         Message = result.Message,
                         Name = result.Name,

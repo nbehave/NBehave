@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace NBehave.Narrator.Framework
 {
@@ -24,13 +25,13 @@ namespace NBehave.Narrator.Framework
         {
             bool actionExist = _actions.ContainsKey(message);
             if (actionExist == false)
-                actionExist = (FindMathingAction(message) != null);
+                actionExist = (FindMathingActionKey(message) != null);
             return actionExist;
         }
 
         public bool CatalogedActionIsTokenized(string message)
         {
-            string catalogedAction = FindMathingAction(message);
+            string catalogedAction = FindMathingActionKey(message);
             return (catalogedAction != null && catalogedAction.IndexOf(TokenPrefix) > -1);
         }
 
@@ -40,7 +41,7 @@ namespace NBehave.Narrator.Framework
             bool actionExist = _actions.ContainsKey(keyToUse);
             if (actionExist == false)
             {
-                keyToUse = FindMathingAction(message);
+                keyToUse = FindMathingActionKey(message);
                 actionExist = (keyToUse != null);
             }
             if (actionExist)
@@ -48,35 +49,104 @@ namespace NBehave.Narrator.Framework
             return null;
         }
 
-        private string FindMathingAction(string message)
+        private string FindMathingActionKey(string message)
         {
             string[] messageWords = SplitWordsToArray(message);
-            string mathingMessage = null;
             foreach (string key in _actions.Keys)
             {
-                string[] words = SplitWordsToArray(key);
-                if (messageWords.Length == words.Length)
+                bool allEqual = true;
+                int messageWordPos = 0;
+                bool isMatch = false;
+                string[] actionWords = SplitWordsToArray(key);
+                for (int actionWordPos = 0; actionWordPos < actionWords.Length; actionWordPos++)
                 {
-                    bool allEqual = true;
-                    for (int i = 0; i < messageWords.Length; i++)
+                    isMatch = false;
+                    var word = actionWords[actionWordPos];
+                    if (WordIsToken(word))
                     {
-                        if (words[i].IndexOf(TokenPrefix) == -1)
+                        if (actionWordPos + 1 == actionWords.Length)
                         {
-                            allEqual &= messageWords[i].Equals(words[i], StringComparison.InvariantCultureIgnoreCase);
+                            isMatch = true;
+                        }
+                        else
+                        {
+                            if (messageWords[messageWordPos].EndsWith(actionWords[actionWordPos + 1], StringComparison.InvariantCultureIgnoreCase))
+                            {
+                                isMatch = true;
+                                actionWordPos++;
+                            }
+                            else if (actionWords[actionWordPos + 1] == messageWords[messageWordPos + 1]) //Dont need to look ahead
+                            {
+                                isMatch = true;
+                            }
                         }
                     }
-                    if (allEqual)
+                    else
                     {
-                        mathingMessage = key;
+                        isMatch = word.Equals(messageWords[messageWordPos], StringComparison.CurrentCultureIgnoreCase);
                     }
+                    allEqual &= isMatch;
+                    if (!allEqual)
+                        actionWordPos = actionWords.Length;
+                    messageWordPos++;
+                }
+                if (allEqual)
+                {
+                    return key;
                 }
             }
-            return mathingMessage;
+            return null;
         }
 
-        private string[] SplitWordsToArray(string message)
+        public object[] GetParametersForMessage(string message)
         {
-            return message.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            object action = GetAction(message);
+            Type[] args = action.GetType().GetGenericArguments();
+            object[] values = new object[args.Length];
+            int argNumber = 0;
+
+            string[] messageWords = SplitWordsToArray(message);
+            string[] actionWords = SplitWordsToArray(FindMathingActionKey(message));
+            int messageWordPos = 0;
+
+            for (int actionWordPos = 0; actionWordPos < actionWords.Length; actionWordPos++)
+            {
+                var word = actionWords[actionWordPos];
+                if (WordIsToken(word))
+                {
+                    if (word != messageWords[messageWordPos] && actionWordPos + 1 < actionWords.Length)
+                    {
+                        if (messageWords[messageWordPos].EndsWith(actionWords[actionWordPos + 1], StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            int charsToRemove = actionWords[actionWordPos + 1].Length;
+                            string strParam = messageWords[messageWordPos];
+                            strParam = strParam.Remove(strParam.Length - charsToRemove, charsToRemove);
+                            values[argNumber] = Convert.ChangeType(strParam, args[argNumber]); //converts string to an instance of args[argNumber]
+                            argNumber++;
+                            actionWordPos++;
+                        }
+                        else
+                        {
+                            string strParam = messageWords[messageWordPos];
+                            values[argNumber] = Convert.ChangeType(strParam, args[argNumber]); //converts string to an instance of args[argNumber]
+                            argNumber++;
+                        }
+                    }
+                    else
+                    {
+                        string strParam = messageWords[messageWordPos];
+                        values[argNumber] = Convert.ChangeType(strParam, args[argNumber]); //converts string to an instance of args[argNumber]
+                        argNumber++;
+                    }
+                }
+                messageWordPos++;
+            }
+            return values;
+        }
+
+        private bool WordIsToken(string word)
+        {
+            return word.StartsWith("$");
         }
 
         public object GetAction(string message)
@@ -84,42 +154,56 @@ namespace NBehave.Narrator.Framework
             return GetActionFromCatalog(message);
         }
 
-        public object[] GetParametersForMessage(string message)
-        {
-            string[] messageAction = SplitWordsToArray(message);
-            string[] catalogedAction = SplitWordsToArray(FindMathingAction(message));
-            object action = GetAction(message);
-
-            Type[] args = action.GetType().GetGenericArguments();
-            object[] values = new object[args.Length];
-            int argNumber = 0;
-            for (int i = 0; i < catalogedAction.Length; i++)
-            {
-                if (catalogedAction[i].StartsWith(TokenPrefix.ToString()))
-                {
-                    values[argNumber] = Convert.ChangeType(messageAction[i], args[argNumber]); //convert string to an instance of args[argNumber]
-                    argNumber++;
-                }
-            }
-            return values;
-        }
-
         public string BuildMessage(string message, object[] parameters)
         {
             string resultString = message;
-            for (int i = 0; i < parameters.Length; i++)
+            string[] tokens = GetTokensInMessage(message);
+            if (tokens.Length > 0 && tokens.Length != parameters.Length)
+                throw new ArgumentException(string.Format("message has {0} tokens and there are {1} parameters", tokens.Length, parameters.Length));
+            for (int i = 0; i < tokens.Length; i++)
             {
-                int keyWordStartPos = resultString.IndexOf(TokenPrefix);
-                if (keyWordStartPos > -1)
+                resultString = resultString.Replace(tokens[i], parameters[i].ToString());
+            }
+
+            return resultString;
+        }
+
+        private string[] GetTokensInMessage(string message)
+        {
+            List<string> tokens = new List<string>();
+
+            var matches = Regex.Matches(message, @"\$[a-zA-Z]+");
+            foreach (var match in matches)
+            {
+                tokens.Add(match.ToString());
+            }
+            return tokens.ToArray();
+        }
+
+        private string[] SplitWordsToArray(string message)
+        {
+            List<string> finalWordList = new List<string>();
+            string[] words = message.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] tokens = GetTokensInMessage(message);
+            foreach (var word in words)
+            {
+                if (tokens.Length == 0)
                 {
-                    int keyWordEnd = resultString.IndexOf(' ', keyWordStartPos);
-                    if (keyWordEnd == -1)
-                        keyWordEnd = resultString.Length;
-                    string keyWord = resultString.Substring(keyWordStartPos, keyWordEnd - keyWordStartPos);
-                    resultString = resultString.Replace(keyWord, parameters[i].ToString());
+                    finalWordList.Add(word);
+                    continue;
+                }
+                foreach (var token in tokens)
+                {
+                    if (WordIsToken(word) && word != token)
+                    {
+                        finalWordList.Add(token);
+                        finalWordList.Add(word.Remove(0, token.Length));
+                    }
+                    else
+                        finalWordList.Add(word);
                 }
             }
-            return resultString;
+            return finalWordList.ToArray();
         }
     }
 }

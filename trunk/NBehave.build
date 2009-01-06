@@ -134,22 +134,12 @@
 				<include name="**\*" />
 			</fileset>
 		</zip>
-    <property name="exampleFiles" value="${build.dir}\NBehave.Examples.zip" />
-    <zip zipfile="${exampleFiles}">
-      <fileset basedir="${solution.dir}\NBehave.Examples">
-        <exclude name="**\bin\**\*.*" />
-        <include name="**\*.cs" />
-        <include name="**\*.csproj" />
-        <include name="**\*.msbuild" />
-        <include name="**\*.build" />
-      </fileset>
-    </zip>
 		<exec
       program="tools\nsis\makensis.exe"
       workingdir="src\Installer">
       <arg value="NBehave.nsi" />
     </exec>
-    <delete file="${exampleFiles}" if="${file::exists(exampleFiles)}" />
+
   </target>
 
 </project>

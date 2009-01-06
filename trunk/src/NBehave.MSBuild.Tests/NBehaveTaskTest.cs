@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using Microsoft.Build.Framework;
 using Microsoft.Win32;
+using NBehave.MSBuild;
 using NBehave.Narrator.Framework;
 using NUnit.Framework;
 using System.IO;
@@ -35,7 +36,7 @@ namespace NBehave.MSBuild.Tests
         [Test]
         public void ShouldExecuteTheOneStory()
         {
-            var storyAssemblies = new[] { GetType().Assembly.Location };
+            var storyAssemblies = new string[] { this.GetType().Assembly.Location };
             var outputPath = Path.Combine(Path.GetDirectoryName(storyAssemblies[0]), "result.xml");
         	var buildEngine = MockRepository.GenerateStub<IBuildEngine2>();
 
@@ -53,10 +54,11 @@ namespace NBehave.MSBuild.Tests
                                     "v3.5"),
                                 "MSBuild.exe");
 
-            using (var process = new Process())
+            using (Process process = new Process())
             {
                 process.StartInfo = new ProcessStartInfo(msbuild, "nbehaveTaskTestScript.msbuild");
-				process.StartInfo.WorkingDirectory = Path.GetDirectoryName(GetType().Assembly.CodeBase.Replace(@"file:///", ""));
+				process.StartInfo.WorkingDirectory = Path.GetDirectoryName(this.GetType().Assembly.CodeBase.Replace(@"file:///", ""));
+				Debug.WriteLine(process.StartInfo.WorkingDirectory);
                 process.StartInfo.UseShellExecute = false;
                 process.StartInfo.RedirectStandardOutput = true;
                 process.Start();
@@ -65,7 +67,7 @@ namespace NBehave.MSBuild.Tests
                     process.WaitForExit();
 
                     string result = sr.ReadToEnd();
-                    string[] results = result.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries);
+                    string[] results = result.Split(new char[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries);
                     Assert.Contains("Build succeeded.",results);
                     Assert.Contains("  Scenarios run: 1, Failures: 0, Pending: 0", results);
                 }

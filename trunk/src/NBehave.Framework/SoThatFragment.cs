@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using NBehave.Narrator.Framework;
 
 namespace NBehave.Narrator.Framework
 {
@@ -9,8 +10,10 @@ namespace NBehave.Narrator.Framework
         internal SoThatFragment(string benefit, Story story)
         {
             Debug.Assert(story != null);
+
             _story = story;
-            _story.OnMessageAdded(this, new EventArgs<MessageEventData>(new MessageEventData("Narrative", "So that " + benefit)));
+
+            _story.AddMessage("\tSo that " + benefit);
         }
 
         public Scenario WithScenario(string title)

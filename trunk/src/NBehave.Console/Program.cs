@@ -1,10 +1,10 @@
 using System;
-using System.IO;
-using System.Text;
-using System.Xml;
 using NBehave.Narrator.Framework;
 using NBehave.Narrator.Framework.EventListeners;
-using NBehave.Narrator.Framework.EventListeners.Xml;
+using System.IO;
+using System.Xml;
+using System.Text;
+
 
 namespace NBehave.Console
 {
@@ -13,8 +13,8 @@ namespace NBehave.Console
         [STAThread]
         public static int Main(string[] args)
         {
-            var output = new PlainTextOutput(System.Console.Out);
-            var options = new ConsoleOptions(args);
+            PlainTextOutput output = new PlainTextOutput(System.Console.Out);
+            ConsoleOptions options = new ConsoleOptions(args);
 
             if (!options.nologo)
             {
@@ -23,6 +23,8 @@ namespace NBehave.Console
                 output.WriteRuntimeEnvironment();
                 output.WriteSeparator();
             }
+
+            int result = 0;
 
             if (options.help)
             {
@@ -37,7 +39,8 @@ namespace NBehave.Console
                 return 2;
             }
 
-            var runner = new StoryRunner();
+
+            StoryRunner runner = new StoryRunner();
             runner.IsDryRun = options.dryRun;
 
             foreach (string path in options.Parameters)
@@ -46,9 +49,9 @@ namespace NBehave.Console
                 {
                     runner.LoadAssembly(path);
                 }
-                catch (FileNotFoundException)
+                catch (FileNotFoundException e)
                 {
-                    output.WriteLine(string.Format("File not found: {0}", path));
+					output.WriteLine(string.Format("File not found: {0}", path));
                 }
             }
             IEventListener listener = CreateEventListener(options);
@@ -63,7 +66,7 @@ namespace NBehave.Console
             output.WriteFailures(results);
             output.WritePending(results);
 
-            int result = results.NumberOfFailingScenarios > 0 ? 2 : 0;
+            result = results.NumberOfFailingScenarios > 0 ? 2 : 0;
 
             return result;
         }
@@ -71,11 +74,11 @@ namespace NBehave.Console
         public static IEventListener CreateEventListener(ConsoleOptions options)
         {
             if (options.HasStoryOutput)
-                return new FileOutputEventListener(options.storyOutput);
+                return new NBehave.Narrator.Framework.EventListeners.FileOutputEventListener(options.storyOutput);
             if (options.HasStoryXmlOutput)
             {
-                var writer = new XmlTextWriter(options.xml, Encoding.UTF8);
-                return new XmlOutputEventListener(writer);
+                XmlTextWriter writer = new XmlTextWriter(options.xml, Encoding.UTF8);
+                return new NBehave.Narrator.Framework.EventListeners.Xml.XmlOutputEventListener(writer);
             }
             return new NullEventListener();
         }

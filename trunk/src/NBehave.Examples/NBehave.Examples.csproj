@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{5CBAFACF-8BD9-46FB-A0BC-276EDE593186}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -54,10 +54,6 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NAnt.Contrib.Tasks, Version=0.85.2479.0, Culture=neutral">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\tools\nant\tasks\net\NAnt.Contrib.Tasks.dll</HintPath>
-    </Reference>
     <Reference Include="nunit.framework, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\nunit.framework.dll</HintPath>
@@ -80,14 +76,6 @@
       <Project>{9C2E9E17-2A2C-4F6C-8072-D160A7EA9A51}</Project>
       <Name>NBehave.Narrator.Framework</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NBehave.MSBuild\NBehave.MSBuild.csproj">
-      <Project>{8FF0E10C-FC63-4630-89AF-B039D341FA7D}</Project>
-      <Name>NBehave.MSBuild</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NBehave.NAnt\NBehave.NAnt.csproj">
-      <Project>{3CF07281-565F-412E-9710-E8104E0391D9}</Project>
-      <Name>NBehave.NAnt</Name>
-    </ProjectReference>
     <ProjectReference Include="..\NBehave.Spec.NUnit\NBehave.Spec.NUnit.csproj">
       <Project>{7BDFA147-A451-4FB0-8536-94EC1C52926E}</Project>
       <Name>NBehave.Spec.NUnit</Name>
@@ -96,12 +84,6 @@
   <ItemGroup>
     <None Include="..\NBehave.snk">
       <Link>NBehave.snk</Link>
-    </None>
-    <None Include="msbuildTask.msbuild">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="nantTask.build">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

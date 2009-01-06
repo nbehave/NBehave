@@ -12,8 +12,8 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
         {
             MockRepository mockery = new MockRepository();
 
-            IEventListener mockFirstEventListener = mockery.StrictMock<IEventListener>();
-            IEventListener mockSecondEventListener = mockery.StrictMock<IEventListener>();
+            IEventListener mockFirstEventListener = mockery.CreateMock<IEventListener>();
+            IEventListener mockSecondEventListener = mockery.CreateMock<IEventListener>();
 
             using (mockery.Record())
             {
