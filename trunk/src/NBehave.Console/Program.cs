@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Xml;
@@ -77,14 +78,18 @@ namespace NBehave.Console
 
         public static IEventListener CreateEventListener(ConsoleOptions options)
         {
+            var eventListeners = new List<IEventListener>();
             if (options.HasStoryOutput)
-                return new FileOutputEventListener(options.storyOutput);
+                eventListeners.Add(new FileOutputEventListener(options.storyOutput));
             if (options.HasStoryXmlOutput)
             {
                 var writer = new XmlTextWriter(options.xml, Encoding.UTF8);
-                return new XmlOutputEventListener(writer);
+                eventListeners.Add(new XmlOutputEventListener(writer));
             }
-            return new NullEventListener();
+            if (eventListeners.Count == 0)
+                eventListeners.Add(new NullEventListener());
+
+            return new MultiOutputEventListener(eventListeners.ToArray());
         }
     }
 }

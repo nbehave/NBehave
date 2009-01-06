@@ -6,13 +6,13 @@ namespace NBehave.Console
     {
         private bool _isInvalid;
 
-        [Option(Description = "Scenario file to run")]
+        [Option(Short = "f", Description = "Scenario file(s) to run. Ex: file:scenario1.txt;scenario2.txt")]
         public string file;
 
-        [Option(Description = "Xml file to receive story output")]
+        [Option(Short = "x", Description = "Xml file to receive story output")]
         public string xml;
 
-        [Option(Description = "File to receive story output")]
+        [Option(Short = "o", Description = "File to receive story output")]
         public string storyOutput;
 
         [Option(Short = "?", Description = "Display help")]
@@ -45,14 +45,17 @@ namespace NBehave.Console
                 return !string.IsNullOrEmpty(xml);
             }
         }
+
         public bool IsInvalid
         {
             get { return _isInvalid; }
         }
 
+
+
         public override void Help()
         {
-            
+
             System.Console.WriteLine();
             System.Console.WriteLine("NBehave-Console [inputfiles] [options]");
             System.Console.WriteLine();

@@ -73,9 +73,9 @@ namespace Codeblast
     public abstract class CommandLineOptions
     {
         protected ArrayList parameters;
-        private int optionCount;
+        private readonly int optionCount;
 
-        public CommandLineOptions(string[] args)
+        protected CommandLineOptions(string[] args)
         {
             optionCount = Init(args);
         }
@@ -117,21 +117,23 @@ namespace Codeblast
         // An option starts with "/", "-" or "--":
         protected virtual int IsOption(string opt)
         {
-            char[] c = null;
+            char[] c;
             if (opt.Length < 2)
             {
                 return 0;
             }
-            else if (opt.Length > 2)
+            if (opt.Length > 2)
             {
                 c = opt.ToCharArray(0, 3);
-                if (c[0] == '-' && c[1] == '-' && IsOptionNameChar(c[2])) return 2;
+                if (c[0] == '-' && c[1] == '-' && IsOptionNameChar(c[2]))
+                    return 2;
             }
             else
             {
                 c = opt.ToCharArray(0, 2);
             }
-            if ((c[0] == '-' || c[0] == '/') && IsOptionNameChar(c[1])) return 1;
+            if ((c[0] == '-' || c[0] == '/') && IsOptionNameChar(c[1]))
+                return 1;
             return 0;
         }
 
@@ -154,7 +156,7 @@ namespace Codeblast
 
         protected virtual FieldInfo GetMemberField(string name)
         {
-            Type t = this.GetType();
+            Type t = GetType();
             FieldInfo[] fields = t.GetFields(BindingFlags.Instance | BindingFlags.Public);
             foreach (FieldInfo field in fields)
             {
@@ -169,7 +171,7 @@ namespace Codeblast
             object[] atts = field.GetCustomAttributes(typeof(OptionAttribute), true);
             if (atts.Length > 0)
             {
-                OptionAttribute att = (OptionAttribute)atts[0];
+                var att = (OptionAttribute)atts[0];
                 return att.Value;
             }
             return null;
@@ -194,8 +196,9 @@ namespace Codeblast
                         {
                             value = cmdLineVal ?? args[++index];
                             field.SetValue(this, Convert.ChangeType(value, field.FieldType));
-                            string stringValue = (string)value;
-                            if (stringValue == null || stringValue.Length == 0) return false;
+                            var stringValue = (string)value;
+                            if (string.IsNullOrEmpty(stringValue))
+                                return false;
                             return true;
                         }
                         else
@@ -215,7 +218,7 @@ namespace Codeblast
         protected virtual void SplitOptionAndValue(ref string opt, ref object val)
         {
             // Look for ":" or "=" separator in the option:
-            int pos = opt.IndexOfAny(new char[] { ':', '=' });
+            int pos = opt.IndexOfAny(new[] { ':', '=' });
             if (pos < 1) return;
 
             val = opt.Substring(pos + 1);
@@ -252,16 +255,16 @@ namespace Codeblast
 
         public virtual string GetHelpText()
         {
-            StringBuilder helpText = new StringBuilder();
+            var helpText = new StringBuilder();
 
-            Type t = this.GetType();
-            FieldInfo[] fields = t.GetFields(BindingFlags.Instance | BindingFlags.Public);
+            Type t = GetType();
+            FieldInfo[] fields = t.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             foreach (FieldInfo field in fields)
             {
                 object[] atts = field.GetCustomAttributes(typeof(OptionAttribute), true);
                 if (atts.Length > 0)
                 {
-                    OptionAttribute att = (OptionAttribute)atts[0];
+                    var att = (OptionAttribute)atts[0];
                     if (att.Description != null)
                     {
                         string valType = "";

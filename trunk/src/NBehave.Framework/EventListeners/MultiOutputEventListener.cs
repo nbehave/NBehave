@@ -4,11 +4,16 @@ namespace NBehave.Narrator.Framework.EventListeners
 {
     public class MultiOutputEventListener : IEventListener
     {
-        private readonly IEventListener[] listeners;
+        private readonly IEventListener[] _listeners;
 
         public MultiOutputEventListener(params IEventListener[] listeners)
         {
-            this.listeners = listeners;
+            _listeners = listeners;
+        }
+
+        public IEventListener[] Listeners
+        {
+            get { return _listeners; }
         }
 
         #region IEventListener Members
@@ -62,7 +67,7 @@ namespace NBehave.Narrator.Framework.EventListeners
 
         private void Invoke(string methodName, params object[] args)
         {
-            foreach (IEventListener listener in listeners)
+            foreach (IEventListener listener in Listeners)
             {
                 typeof (IEventListener).GetMethod(methodName).Invoke(listener, args);
             }
