@@ -1,7 +1,5 @@
 ﻿using System;
-using MbUnit.Core.Exceptions;
-using MbUnit.Framework;
-using NBehave.Spec.MbUnit.Underscore;
+using Gallio.Framework.Assertions;
 using ExpectedExceptionNUnit = NUnit.Framework.ExpectedExceptionAttribute;
 using Context = NUnit.Framework.TestFixtureAttribute;
 using Specification = NUnit.Framework.TestAttribute;
@@ -16,16 +14,12 @@ namespace NBehave.Spec.MbUnit.Specs
         public void Should_allow_substitution_for_IsFalse()
         {
             false.ShouldBeFalse();
-
-            false.should_be_false();
         }
 
         [Specification]
         public void Should_allow_substitution_for_IsTrue()
         {
             true.ShouldBeTrue();
-
-            true.should_be_true();
         }
     }
 
@@ -40,7 +34,6 @@ namespace NBehave.Spec.MbUnit.Specs
             j = 5;
 
             i.ShouldEqual(j);
-            i.should_equal(j);
         }
 
         [Specification]
@@ -50,7 +43,6 @@ namespace NBehave.Spec.MbUnit.Specs
             int j = 6;
 
             i.ShouldNotEqual(j);
-            i.should_not_equal(j);
         }
 
         [Specification]
@@ -60,8 +52,6 @@ namespace NBehave.Spec.MbUnit.Specs
             object test2 = "splorg";
 
             test2.ShouldNotBeTheSameAs(test1);
-
-            test2.should_not_be_the_same_as(test1);
         }
 
         [Specification]
@@ -71,8 +61,6 @@ namespace NBehave.Spec.MbUnit.Specs
             object test2 = test1;
 
             test2.ShouldBeTheSameAs(test1);
-
-            test2.should_be_the_same_as(test1);
         }
     }
 
@@ -85,8 +73,6 @@ namespace NBehave.Spec.MbUnit.Specs
             int[] vals = { 5, 6, 7, 8 };
 
             vals.ShouldContain(6);
-
-            vals.should_contain(6);
         }
 
         [Specification]
@@ -95,8 +81,6 @@ namespace NBehave.Spec.MbUnit.Specs
             int[] vals = { };
 
             vals.ShouldBeEmpty();
-
-            vals.should_be_empty();
         }
 
         [Specification]
@@ -105,8 +89,6 @@ namespace NBehave.Spec.MbUnit.Specs
             int[] vals = { 1, 2, 3 };
 
             vals.ShouldNotBeEmpty();
-
-            vals.should_not_be_empty();
         }
 
     }
@@ -118,41 +100,30 @@ namespace NBehave.Spec.MbUnit.Specs
         public void Should_allow_substitution_for_Greater()
         {
             5.ShouldBeGreaterThan(4);
-
-            5.should_be_greater_than(4);
         }
 
         [Specification]
         public void Should_allow_substitution_for_GreaterOrEqual()
         {
             5.ShouldBeGreaterThanOrEqualTo(5);
-
-            5.should_be_greater_than_or_equal_to(5);
         }
 
         [Specification]
         public void Should_allow_substitution_for_IsNaN()
         {
             double.NaN.ShouldBeNaN();
-
-            double.NaN.should_be_NaN();
-
         }
 
         [Specification]
         public void Should_allow_substitution_for_Less()
         {
             5.ShouldBeLessThan(6);
-
-            5.should_be_less_than(6);
         }
 
         [Specification]
         public void Should_allow_substitution_for_LessOrEqualTo()
         {
             5.ShouldBeLessThanOrEqualTo(6);
-
-            5.should_be_less_than_or_equal_to(6);
         }
     }
 
@@ -163,16 +134,12 @@ namespace NBehave.Spec.MbUnit.Specs
         public void Should_allow_substitution_for_IsNotEmpty_for_strings()
         {
             "blarg".ShouldNotBeEmpty();
-
-            "lost".should_not_be_empty();
         }
 
         [Specification]
         public void Should_allow_substitution_for_IsEmpty_for_strings()
         {
             string.Empty.ShouldBeEmpty();
-
-            string.Empty.should_be_empty();
         }
 
     }
@@ -184,16 +151,12 @@ namespace NBehave.Spec.MbUnit.Specs
         public void Should_allow_substitution_for_IsAssignableFrom()
         {
             5.ShouldBeAssignableFrom(typeof(int));
-
-            5.should_be_assignable_from(typeof(int));
         }
 
         [Specification]
         public void Should_allow_substitution_for_IsInstanceOfType()
         {
             5.ShouldBeInstanceOfType(typeof(int));
-
-            5.should_be_instance_of_type(typeof(int));
         }
 
         [Specification]
@@ -206,8 +169,6 @@ namespace NBehave.Spec.MbUnit.Specs
         public void Should_allow_substitution_for_IsNotInstanceOfType()
         {
             5.ShouldNotBeInstanceOfType(typeof(double));
-
-            5.should_not_be_instance_of_type(typeof(double));
         }
 
         [Specification]
@@ -216,7 +177,6 @@ namespace NBehave.Spec.MbUnit.Specs
             object value = "blarg";
 
             value.ShouldNotBeNull();
-            5.should_not_be_assignable_from(typeof(string));
         }
 
         [Specification]
@@ -225,8 +185,6 @@ namespace NBehave.Spec.MbUnit.Specs
             object value = null;
 
             value.ShouldBeNull();
-
-            value.should_be_null();
         }
     }
 
@@ -243,8 +201,6 @@ namespace NBehave.Spec.MbUnit.Specs
         public void Should_allow_substitution_for_IsInstanceOfType()
         {
             5.ShouldBeInstanceOf<int>();
-
-            5.should_be_instance_of<int>();
         }
 
         [Specification]
@@ -264,42 +220,24 @@ namespace NBehave.Spec.MbUnit.Specs
     public class When_specifying_exceptions_to_be_thrown
     {
         [Specification]
-        [ExpectedExceptionNUnit(typeof(AssertionException))]
+		[ExpectedExceptionNUnit(typeof(AssertionFailureException))]
         public void Should_fail_when_exception_is_a_different_type()
         {
             (typeof(SystemException)).ShouldBeThrownBy(
                 delegate { throw new ApplicationException(); });
         }
 
-        [Specification]
-        [ExpectedExceptionNUnit(typeof(AssertionException))]
-        public void Should_fail_when_exception_is_a_different_type_underscores()
-        {
-            (typeof(SystemException)).should_be_thrown_by(
-                delegate { throw new ApplicationException(); });
-        }
-
-
-        [Specification]
-        [ExpectedExceptionNUnit(typeof(AssertionException))]
+		[Specification]
+        [ExpectedExceptionNUnit(typeof(AssertionFailureException))]
         public void Should_fail_when_exception_is_not_thrown()
         {
             (typeof(ApplicationException)).ShouldBeThrownBy(delegate { });
-            (typeof(ApplicationException)).should_be_thrown_by(delegate { });
         }
 
         [Specification]
         public void Should_pass_when_exception_is_thrown()
         {
             (typeof(ApplicationException)).ShouldBeThrownBy(
-                delegate { throw new ApplicationException(); });
-
-        }
-
-        [Specification]
-        public void Should_pass_when_exception_is_thrown_Underscores()
-        {
-            (typeof(ApplicationException)).should_be_thrown_by(
                 delegate { throw new ApplicationException(); });
 
         }

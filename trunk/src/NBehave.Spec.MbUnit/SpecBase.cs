@@ -2,27 +2,16 @@
 
 namespace NBehave.Spec.MbUnit
 {
+	[TestFixture]
 	public abstract class SpecBase : Spec.SpecBase
 	{
-		[SetUp]
-		public override void SpecSetup()
-		{
-			base.SpecSetup();
-		}
-
-		[TearDown]
-		public override void SpecTeardown()
-		{
-			base.SpecTeardown();
-		}
-
-		[TestFixtureSetUp]
+		[FixtureSetUp]
 		public override void MainSetup()
 		{
 			base.MainSetup();
 		}
 
-		[TestFixtureTearDown]
+		[FixtureTearDown]
 		public override void MainTeardown()
 		{
 			base.MainTeardown();

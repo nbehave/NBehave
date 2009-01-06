@@ -10,12 +10,12 @@ namespace NUnit.SpecBase_Specifications
     [Context]
     public class When_initializing_the_SpecBase : SpecBase<StopWatch>
     {
-        protected override StopWatch Given_these_conditions()
+        protected override StopWatch Establish_context()
         {
             return new StopWatch();
         }
 
-        protected override void Because()
+        protected override void Because_of()
         {
         }
 
@@ -29,33 +29,26 @@ namespace NUnit.SpecBase_Specifications
     [Context]
     public class When_using_the_setup_methods_in_non_generic_specs : SpecBase
     {
-        private static int _beforeEachCount;
-        private static int _beforeAllCount;
-        private static int _afterEachCount;
-        private static int _afterAllCount;
+        private static int _estContextCount;
+        private static int _becauseOfCount;
+        private static int _cleanupCount;
 
-        protected override void Before_each_spec()
+        protected override void Establish_context()
         {
-            _beforeEachCount++;
+			_estContextCount++;
         }
 
-        protected override void Before_all_specs()
-        {
-            _beforeAllCount++;
-        }
+		protected override void Because_of()
+		{
+			_becauseOfCount++;
+		}
 
-        protected override void After_each_spec()
+        protected override void Cleanup()
         {
-            _afterEachCount++;
-        }
-
-        protected override void After_all_specs()
-        {
-            _afterAllCount++;
-            _beforeEachCount.ShouldEqual(2);
-            _beforeAllCount.ShouldEqual(1);
-            _afterEachCount.ShouldEqual(2);
-            _afterAllCount.ShouldEqual(1);
+            _cleanupCount++;
+            _estContextCount.ShouldEqual(1);
+			_becauseOfCount.ShouldEqual(1);
+            _cleanupCount.ShouldEqual(1);
         }
 
         [Specification]
@@ -72,64 +65,46 @@ namespace NUnit.SpecBase_Specifications
     [Context]
     public class When_using_the_setup_methods_in_generic_specs : SpecBase<object>
     {
-        private static int _beforeEachCount;
-        private static int _beforeAllCount;
-        private static int _afterEachCount;
-        private static int _afterAllCount;
+		private static int _estContextCount;
+		private static int _becauseOfCount;
+		private static int _cleanupCount;
 
-        protected override void Because()
-        {
-        }
+		protected override object Establish_context()
+		{
+			_estContextCount++;
+			return null;
+		}
 
-        protected override object Given_these_conditions()
-        {
-            return null;
-        }
+		protected override void Because_of()
+		{
+			_becauseOfCount++;
+		}
 
-        protected override void Before_each_spec()
-        {
-            _beforeEachCount++;
-        }
+		protected override void Cleanup()
+		{
+			_cleanupCount++;
+			_estContextCount.ShouldEqual(1);
+			_becauseOfCount.ShouldEqual(1);
+			_cleanupCount.ShouldEqual(1);
+		}
 
-        protected override void Before_all_specs()
-        {
-            _beforeAllCount++;
-        }
+		[Specification]
+		public void dummy_test_1()
+		{
+		}
 
-        protected override void After_each_spec()
-        {
-            _afterEachCount++;
-        }
-
-        protected override void After_all_specs()
-        {
-            _afterAllCount++;
-            _beforeEachCount.ShouldEqual(2);
-            _beforeAllCount.ShouldEqual(1);
-            _afterEachCount.ShouldEqual(2);
-            _afterAllCount.ShouldEqual(1);
-        }
-                
-
-        [Specification]
-        public void dummy_test_1()
-        {
-            Assert.AreEqual(1, _beforeAllCount);
-        }
-
-        [Specification]
-        public void dummy_test_2()
-        {
-            Assert.AreEqual(1, _beforeAllCount);
-        }
-    }
+		[Specification]
+		public void dummy_test_2()
+		{
+		}
+	}
 
     [Context]
     public class When_initializing_the_SpecBase_with_mocks : SpecBase<StopWatch>
     {
         private ITimer _timer;
 
-        protected override StopWatch Given_these_conditions()
+        protected override StopWatch Establish_context()
         {
             _timer = CreateDependency<ITimer>();
 
@@ -138,7 +113,7 @@ namespace NUnit.SpecBase_Specifications
             return new StopWatch(_timer);
         }
 
-        protected override void Because()
+        protected override void Because_of()
         {
             Sut.Start();
         }

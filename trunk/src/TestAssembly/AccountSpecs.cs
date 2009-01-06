@@ -26,11 +26,11 @@ namespace TestAssembly
             transferStory
                 .WithScenario("Savings account is in credit")
 
-                    .Given("my savings account balance is", 100, (accountBalance) => { savings = new Account(accountBalance); })
-                        .And("my cash account balance is", 10, (accountBalance) => { cash = new Account(accountBalance); })
-                    .When("I transfer to cash account", 20, (transferAmount) => { savings.TransferTo(cash, transferAmount); })
-                    .Then("my savings account balance should be", 80, (expectedBalance) => { savings.Balance.ShouldEqual(expectedBalance); })
-                        .And("my cash account balance should be", 30, (expectedBalance) => { cash.Balance.ShouldEqual(expectedBalance); })
+                    .Given("my savings account balance is", 100, accountBalance => savings = new Account(accountBalance))
+                        .And("my cash account balance is", 10, accountBalance => cash = new Account(accountBalance))
+                    .When("I transfer to cash account", 20, transferAmount => savings.TransferTo(cash, transferAmount))
+                    .Then("my savings account balance should be", 80, expectedBalance => savings.Balance.ShouldEqual(expectedBalance))
+                        .And("my cash account balance should be", 30, expectedBalance => cash.Balance.ShouldEqual(expectedBalance))
 
                     .Given("my savings account balance is", 400)
                         .And("my cash account balance is", 100)
@@ -93,10 +93,10 @@ namespace TestAssembly
             transferStory
                 .WithScenario("Savings account is in credit")
                 .Given("my cash account balance is", 100,
-                       (accountBalance) => { cash = new Account(accountBalance); })
-                .When("I deposit into my cash account", 20, (depositAmount) => { cash.Deposit(depositAmount); })
+                       accountBalance => cash = new Account(accountBalance))
+                .When("I deposit into my cash account", 20, depositAmount => cash.Deposit(depositAmount))
                 .Then("my cash account balance should be", 120,
-                      (expectedBalance) => { cash.Balance.ShouldEqual(expectedBalance); });
+                      expectedBalance => cash.Balance.ShouldEqual(expectedBalance));
 
         }
     }

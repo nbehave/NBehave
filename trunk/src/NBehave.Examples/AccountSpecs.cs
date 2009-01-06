@@ -26,32 +26,32 @@ namespace NBehave.Examples
             transferStory
                 .WithScenario("Savings account is in credit")
 
-                    .Given("my savings account balance is", 100, accountBalance => { savings = new Account(accountBalance); })
-                        .And("my cash account balance is", 10, accountBalance => { cash = new Account(accountBalance); })
-                    .When("I transfer to cash account", 20, transferAmount => { savings.TransferTo(cash, transferAmount); })
-                    .Then("my savings account balance should be", 80, expectedBalance => { savings.Balance.ShouldEqual(expectedBalance); })
-                        .And("my cash account balance should be", 30, expectedBalance => { cash.Balance.ShouldEqual(expectedBalance); })
+                    .Given("my savings account balance is $balance", 100, accountBalance => { savings = new Account(accountBalance); })
+                        .And("my cash account balance is $balance", 10, accountBalance => { cash = new Account(accountBalance); })
+                    .When("I transfer $amount to cash account", 20, transferAmount => { savings.TransferTo(cash, transferAmount); })
+                    .Then("my savings account balance should be $balance", 80, expectedBalance => { savings.Balance.ShouldEqual(expectedBalance); })
+                        .And("my cash account balance should be $balance", 30, expectedBalance => { cash.Balance.ShouldEqual(expectedBalance); })
 
-                    .Given("my savings account balance is", 400)
-                        .And("my cash account balance is", 100)
-                    .When("I transfer to cash account", 100)
-                    .Then("my savings account balance should be", 300)
-                        .And("my cash account balance should be", 200)
+                    .Given("my savings account balance is 400")
+                        .And("my cash account balance is 100")
+                    .When("I transfer 100 to cash account")
+                    .Then("my savings account balance should be 300")
+                        .And("my cash account balance should be 200")
 
-                    .Given("my savings account balance is", 500)
-                        .And("my cash account balance is", 20)
-                    .When("I transfer to cash account", 30)
-                    .Then("my savings account balance should be", 470)
-                        .And("my cash account balance should be", 50);
+                    .Given("my savings account balance is 500")
+                        .And("my cash account balance is 20")
+                    .When("I transfer 30 to cash account")
+                    .Then("my savings account balance should be 470")
+                        .And("my cash account balance should be 50");
 
             transferStory
                 .WithScenario("Savings account is overdrawn")
 
-                    .Given("my savings account balance is", -20)
-                        .And("my cash account balance is", 10)
-                    .When("I transfer to cash account", 20)
-                    .Then("my savings account balance should be", -20)
-                        .And("my cash account balance should be", 10);
+                    .Given("my savings account balance is  -20")
+                        .And("my cash account balance is 10")
+                    .When("I transfer 20 to cash account")
+                    .Then("my savings account balance should be -20")
+                        .And("my cash account balance should be 10");
 
 
         }
@@ -60,7 +60,7 @@ namespace NBehave.Examples
         public void Withdraw_from_savings_account_pending()
         {
 
-            Story transferStory = new Story("Transfer to cash account");
+            Story transferStory = new Story("Withdraw from savings account");
 
             transferStory
                 .AsA("savings account holder")
@@ -71,9 +71,9 @@ namespace NBehave.Examples
                 .WithScenario("Savings account is in credit")
                     .Pending("ability to withdraw from accounts")
 
-                    .Given("my savings account balance is", 400)
-                    .When("I withdraw from my savings account", 100)
-                    .Then("my savings account balance should be", 300);
+                    .Given("my savings account balance is 400")
+                    .When("I withdraw $amount from my savings account", 100)
+                    .Then("my savings account balance should be 300");
 
         }
 
