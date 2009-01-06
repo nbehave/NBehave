@@ -97,11 +97,24 @@ namespace NBehave.Narrator.Framework
                     }
                     catch (Exception e)
                     {
-                        scenarioResult.Fail(e);
+                        Exception realException = FindUsefulException(e);
+                        scenarioResult.Fail(realException);
                     }
                 }
                 results.AddResult(scenarioResult);
             }
+        }
+
+        private static Exception FindUsefulException(Exception e)
+        {
+            Exception realException = e;
+            while (realException != null && realException.GetType() == typeof(TargetInvocationException))
+            {
+                realException = realException.InnerException;
+            }
+            if (realException == null)
+                return e;
+            return realException;
         }
 
         private void FindActionSteps(Assembly assembly)

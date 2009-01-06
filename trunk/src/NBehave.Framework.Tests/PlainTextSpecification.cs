@@ -91,12 +91,23 @@ namespace NBehave.Narrator.Framework.Specifications
             }
 
             [Test]
+            public void Should_get_correct_errormessage_from_failed_scenario()
+            {
+                var writer = new StringWriter();
+                var listener = new TextWriterEventListener(writer);
+                _runner.Load(new string[] { @"GreetingSystemFailure.txt" });
+                StoryResults results = _runner.Run(listener);
+                Assert.That(results.NumberOfFailingScenarios, Is.EqualTo(1));
+                Assert.That(results.ScenarioResults[0].Message.StartsWith("NUnit.Framework.AssertionException :   String lengths are both 13. Strings differ at index 8."), Is.True);
+            }
+
+            [Test, Ignore]
             public void Should_not_throw_when_using_xml_listener()
             {
                 var xs = new XmlWriterSettings();
                 xs.ConformanceLevel = ConformanceLevel.Auto;
                 var memStream = new MemoryStream();
-                var writer = XmlWriter.Create(memStream,xs);
+                var writer = XmlWriter.Create(memStream, xs);
                 var listener = new XmlOutputEventListener(writer);
                 _runner.Load(new string[] { @"GreetingSystem.txt" });
                 StoryResults results = _runner.Run(listener);
