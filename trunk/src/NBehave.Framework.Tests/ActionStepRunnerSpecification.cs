@@ -7,9 +7,9 @@ using NUnit.Framework;
 namespace NBehave.Narrator.Framework.Specifications
 {
     [TestFixture]
-    public class PlainTextSpecification
+    public class ActionStepRunnerSpecification
     {
-        public class When_running_plain_text_scenarios : PlainTextSpecification
+        public class When_running_plain_text_scenarios : ActionStepRunnerSpecification
         {
             private ActionStepRunner _runner;
             [SetUp]

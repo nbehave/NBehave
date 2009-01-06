@@ -39,12 +39,12 @@ namespace NBehave.Console
             }
 
             RunnerBase runner;
-            if (string.IsNullOrEmpty(options.file))
+            if (string.IsNullOrEmpty(options.scenarioFiles))
                 runner = new StoryRunner();
             else
             {
                 runner = new ActionStepRunner();
-                ((ActionStepRunner)runner).Load(options.file.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
+                ((ActionStepRunner)runner).Load(options.scenarioFiles.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
             }
             runner.IsDryRun = options.dryRun;
 
