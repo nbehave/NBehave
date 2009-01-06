@@ -105,6 +105,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="GreetingSystem_ManyGreetings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="GreetingSystemFailure.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

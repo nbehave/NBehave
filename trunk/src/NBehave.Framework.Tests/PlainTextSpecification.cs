@@ -1,15 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.IO;
-using System.Xml;
-using NBehave.Narrator.Framework;
 using NBehave.Narrator.Framework.EventListeners;
 using NUnit.Framework.SyntaxHelpers;
 using NUnit.Framework;
-using Rhino.Mocks;
-using NBehave.Narrator.Framework.EventListeners.Xml;
-using System.Text;
 
 namespace NBehave.Narrator.Framework.Specifications
 {
@@ -69,7 +62,7 @@ namespace NBehave.Narrator.Framework.Specifications
             {
                 var writer = new StringWriter();
                 var listener = new TextWriterEventListener(writer);
-                _runner.Load(new string[] { @"GreetingSystem.txt" });
+                _runner.Load(new[] { @"GreetingSystem.txt" });
                 _runner.Run(listener);
                 var output = writer.ToString();
                 Assert.That(output.IndexOf("story message added: Given my name Morgan"), Is.GreaterThan(0));
@@ -82,7 +75,7 @@ namespace NBehave.Narrator.Framework.Specifications
             {
                 var writer = new StringWriter();
                 var listener = new TextWriterEventListener(writer);
-                _runner.Load(new string[] { @"GreetingSystem.txt" });
+                _runner.Load(new[] { @"GreetingSystem.txt" });
                 StoryResults results = _runner.Run(listener);
                 Assert.That(results.NumberOfThemes, Is.EqualTo(0));
                 Assert.That(results.NumberOfStories, Is.EqualTo(0));
@@ -95,26 +88,25 @@ namespace NBehave.Narrator.Framework.Specifications
             {
                 var writer = new StringWriter();
                 var listener = new TextWriterEventListener(writer);
-                _runner.Load(new string[] { @"GreetingSystemFailure.txt" });
+                _runner.Load(new[] { @"GreetingSystemFailure.txt" });
                 StoryResults results = _runner.Run(listener);
                 Assert.That(results.NumberOfFailingScenarios, Is.EqualTo(1));
                 Assert.That(results.ScenarioResults[0].Message.StartsWith("NUnit.Framework.AssertionException :   String lengths are both 13. Strings differ at index 8."), Is.True);
             }
 
-            [Test, Ignore]
-            public void Should_not_throw_when_using_xml_listener()
+            [Test]
+            public void Should_execute_more_than_one_scenario_in_text_file()
             {
-                var xs = new XmlWriterSettings();
-                xs.ConformanceLevel = ConformanceLevel.Auto;
-                var memStream = new MemoryStream();
-                var writer = XmlWriter.Create(memStream, xs);
-                var listener = new XmlOutputEventListener(writer);
-                _runner.Load(new string[] { @"GreetingSystem.txt" });
+                var writer = new StringWriter();
+                var listener = new TextWriterEventListener(writer);
+                _runner.Load(new[] { @"GreetingSystem_ManyGreetings.txt" });
                 StoryResults results = _runner.Run(listener);
-                memStream.Seek(0, SeekOrigin.Begin);
-                var b = new StreamReader(memStream);
-                Assert.That(b.ToString(), Is.EqualTo("<"));
+                Assert.That(results.NumberOfThemes, Is.EqualTo(0));
+                Assert.That(results.NumberOfStories, Is.EqualTo(0));
+                Assert.That(results.NumberOfScenariosFound, Is.EqualTo(2));
+                Assert.That(results.NumberOfPassingScenarios, Is.EqualTo(2));
             }
+
         }
     }
 }

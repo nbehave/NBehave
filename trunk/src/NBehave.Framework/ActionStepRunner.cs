@@ -52,9 +52,9 @@ namespace NBehave.Narrator.Framework
     public class ActionStepRunner : RunnerBase
     {
         private readonly List<string> _scenarios = new List<string>();
-        
+
         public ActionCatalog ActionCatalog { get; protected set; }
-        
+
         public ActionStepRunner()
         {
             ActionCatalog = new ActionCatalog();
@@ -81,7 +81,7 @@ namespace NBehave.Narrator.Framework
         {
             foreach (var scenario in _scenarios)
             {
-                var scenarioResult = new ScenarioResults("a", "a");
+                var scenarioResult = new ScenarioResults(string.Empty, string.Empty);
                 foreach (var row in scenario.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries))
                 {
                     listener.StoryMessageAdded(row);
@@ -198,7 +198,6 @@ namespace NBehave.Narrator.Framework
                         new object[] { actionParamValues }, CultureInfo.CurrentCulture);
         }
 
-        //Take URI's so we can read files, http etc.
         public void Load(IEnumerable<string> scenarioLocations)
         {
             foreach (var location in scenarioLocations)
@@ -212,7 +211,25 @@ namespace NBehave.Narrator.Framework
         {
             using (var fs = new StreamReader(stream))
             {
-                _scenarios.Add(fs.ReadToEnd());
+                string scenario = string.Empty;
+                bool previousRowWasThen = false;
+                while (fs.EndOfStream == false)
+                {
+                    string row = fs.ReadLine().Trim(new[] { '\t', ' ' }) ?? string.Empty;
+                    if (string.IsNullOrEmpty(row) == false)
+                    {
+                        if (previousRowWasThen && row.StartsWith("Given", true, CultureInfo.CurrentCulture))
+                        {
+                            _scenarios.Add(scenario);
+                            scenario = string.Empty;
+                            previousRowWasThen = false;
+                        }
+                        scenario += row + Environment.NewLine;
+                    }
+                    if (row.StartsWith("Then", true, CultureInfo.CurrentCulture))
+                        previousRowWasThen = true;
+                }
+                _scenarios.Add(scenario);
             }
         }
     }

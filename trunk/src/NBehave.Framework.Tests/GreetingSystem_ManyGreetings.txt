@@ -1,0 +1,7 @@
+﻿Given my name Morgan
+When I ask to be greeted
+Then I should be greeted with “Hello, Morgan!”
+
+Given my name Scott
+When I ask to be greeted
+Then I should be greeted with “Hello, Scott!”
