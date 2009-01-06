@@ -1,5 +1,4 @@
 using System.IO;
-using NBehave.Narrator.Framework;
 
 namespace NBehave.Narrator.Framework.EventListeners
 {
@@ -12,42 +11,49 @@ namespace NBehave.Narrator.Framework.EventListeners
             this.writer = writer;
         }
 
-        #region IEventListener Members
-
-        public void StoryCreated(string story)
+        void IEventListener.StoryCreated(string story)
         {
-            writer.WriteLine("story created");
+            writer.WriteLine("story created: {0}", story);
         }
 
-        public void StoryMessageAdded(string message)
+        void IEventListener.StoryMessageAdded(string message)
         {
             writer.WriteLine("story message added: {0}", message);
         }
 
-        public void RunStarted()
+        void IEventListener.ScenarioCreated(string scenarioTitle)
+        {
+            writer.WriteLine("scenario created: {0}", scenarioTitle);            
+        }
+
+        void IEventListener.ScenarioMessageAdded(string message)
+        {
+            writer.WriteLine("scenario message added: {0}", message);
+        }
+
+        void IEventListener.RunStarted()
         {
             writer.WriteLine("run started");
         }
 
-        public void RunFinished()
+        void IEventListener.RunFinished()
         {
             writer.WriteLine("run finished");
         }
 
-        public void ThemeStarted(string name)
+        void IEventListener.ThemeStarted(string name)
         {
             writer.WriteLine("theme started: {0}", name);
         }
 
-        public void ThemeFinished()
+        void IEventListener.ThemeFinished()
         {
             writer.WriteLine("theme finished");
         }
 
-        public void StoryResults(StoryResults results)
+        void IEventListener.StoryResults(StoryResults results)
         {
         }
 
-        #endregion
     }
 }

@@ -1,12 +1,11 @@
 using System;
-using NBehave.Narrator.Framework;
 
 namespace NBehave.Narrator.Framework
 {
     public class ScenarioFragment<T>
         where T : ScenarioFragment<T>
     {
-        private const string AndType = "\t\t\tAnd";
+        private const string AndType = "And";
         private readonly Scenario _scenario;
 
         protected ScenarioFragment(Scenario scenario)

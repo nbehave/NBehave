@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
-using NBehave.Narrator.Framework;
 
 namespace NBehave.Narrator.Framework
 {
@@ -14,7 +12,7 @@ namespace NBehave.Narrator.Framework
             {
                 if (t.GetCustomAttributes(typeof(ThemeAttribute), false).Length > 0)
                 {
-                    ThemeAttribute themeAttribute = (ThemeAttribute)t.GetCustomAttributes(typeof(ThemeAttribute), false)[0];
+                    var themeAttribute = (ThemeAttribute)t.GetCustomAttributes(typeof(ThemeAttribute), false)[0];
                     object themeInstance = Activator.CreateInstance(t);
 
                     if (StoryRunnerFilter.NamespaceFilter.IsMatch(t.Namespace) &&
@@ -24,29 +22,26 @@ namespace NBehave.Narrator.Framework
             }
         }
 
-        protected override void RunStories(StoryResults results, IMessageProvider messageProvider, IEventListener listener)
+        protected override void RunStories(StoryResults results, IEventListener listener)
         {
-            using (MessageProviderRegistry.RegisterScopedInstance(messageProvider))
+            foreach (Pair<string, object> theme in Themes)
             {
-                foreach (Pair<string, object> theme in Themes)
+                string themeName = theme.First;
+                object themeClass = theme.Second;
+
+                listener.ThemeStarted(themeName);
+
+                IEnumerable<MethodInfo> themeMethods = GetThemeMethods(themeClass);
+                IEnumerable<MethodInfo> storyMethods = GetStoryMethods(themeMethods);
+
+                foreach (MethodInfo storyMethod in storyMethods)
                 {
-                    string themeName = theme.First;
-                    object themeClass = theme.Second;
-
-                    listener.ThemeStarted(themeName);
-
-                    MethodInfo[] themeMethods = GetThemeMethods(themeClass);
-                    MethodInfo[] storyMethods = GetStoryMethods(themeMethods);
-
-                    foreach (MethodInfo storyMethod in storyMethods)
-                    {
-                        InvokeStoryMethod(storyMethod, themeClass);
-                        CompileStoryResults(results);
-                        listener.StoryResults(results);
-                        ClearStoryList();
-                    }
-                    listener.ThemeFinished();
+                    InvokeStoryMethod(storyMethod, themeClass);
+                    CompileStoryResults(results);
+                    listener.StoryResults(results);
+                    ClearStoryList();
                 }
+                listener.ThemeFinished();
             }
         }
 
@@ -59,9 +54,9 @@ namespace NBehave.Narrator.Framework
             catch { }
         }
 
-        private MethodInfo[] GetStoryMethods(MethodInfo[] themeMethods)
+        private IEnumerable<MethodInfo> GetStoryMethods(IEnumerable<MethodInfo> themeMethods)
         {
-            List<MethodInfo> storyMethods = new List<MethodInfo>();
+            var storyMethods = new List<MethodInfo>();
             foreach (MethodInfo themeMethod in themeMethods)
             {
                 if ((themeMethod.GetCustomAttributes(typeof(StoryAttribute), false).Length > 0) &&
@@ -70,21 +65,13 @@ namespace NBehave.Narrator.Framework
                     storyMethods.Add(themeMethod);
                 }
             }
-            return storyMethods.ToArray();
+            return storyMethods;
         }
 
-        private MethodInfo[] GetThemeMethods(object theme)
+        private IEnumerable<MethodInfo> GetThemeMethods(object theme)
         {
             Type themeType = theme.GetType();
             return themeType.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-        }
-
-        private class NoOpMessageProvider : IMessageProvider
-        {
-            public void AddMessage(string message)
-            {
-                //do nothing
-            }
         }
     }
 }

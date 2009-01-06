@@ -9,10 +9,8 @@ namespace NBehave.Narrator.Framework
         internal IWantFragment(string feature, Story story)
         {
             Debug.Assert(story != null);
-
             _story = story;
-
-            _story.AddMessage("\tI want " + feature);
+            _story.OnMessageAdded(this, new EventArgs<MessageEventData>(new MessageEventData("Narrative", "I want " + feature)));
         }
 
         public SoThatFragment SoThat(string benefit)

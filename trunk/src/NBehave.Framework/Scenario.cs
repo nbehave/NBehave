@@ -1,74 +1,62 @@
 using System;
 using System.Diagnostics;
-using NBehave.Narrator.Framework;
 
 namespace NBehave.Narrator.Framework
 {
+    public class ScenarioMessage
+    {
+        public ScenarioMessage(string category, string message)
+        {
+            Category = category;
+            Message = message;
+        }
+
+        public string Category { get; private set; }
+        public string Message { get; private set; }
+    }
+
     public class Scenario
     {
-        private const string GivenType = "\t\tGiven";
-        private readonly Story _story = null;
-        private readonly string _title = null;
-        private bool _isBlank;
-        private bool _isPending;
+        private const string GivenType = "Given";
+
+        public event EventHandler<EventArgs<ScenarioMessage>> ScenarioMessageAdded;
 
         internal Scenario(string title, Story story)
         {
             Debug.Assert(story != null);
+            OnScenarioMessageAdded(new ScenarioMessage("Scenario Title", title));
 
-            _title = title;
-            _story = story;
-            _isBlank = true;
-            _isPending = false;
+            Title = title;
+            Story = story;
+            IsPending = false;
         }
 
-        public string Title
-        {
-            get { return _title; }
-        }
+        public string Title { get; private set; }
 
-        internal bool IsPending
-        {
-            get { return _isPending; }
-        }
+        internal bool IsPending { get; private set; }
 
-        internal Story Story
-        {
-            get { return _story; }
-        }
+        internal Story Story { get; private set; }
 
         internal bool CanAddMessage
         {
-            get { return !IsPending || _story.IsDryRun; }
+            get { return !IsPending || Story.IsDryRun; }
         }
 
-        private void AddBlankMessage()
+        protected void OnScenarioMessageAdded(ScenarioMessage scenarioMessageEventArgs)
         {
-            if (!_isBlank)
-            {
-                AddFragmentMessage("");
-            }
+            if (ScenarioMessageAdded == null)
+                return;
 
-            _isBlank = false;
-        }
-
-        internal void AddFragmentMessage(string message)
-        {
-            if (CanAddMessage)
-            {
-                _story.AddMessage(message);
-            }
+            var e = new EventArgs<ScenarioMessage>(scenarioMessageEventArgs);
+            ScenarioMessageAdded(this, e);
         }
 
         public GivenFragment Given(string context, Action action)
         {
             if (CanAddMessage)
             {
-                AddBlankMessage();
-
-                _story.InvokeAction(GivenType, context, action);
+                Story.InvokeAction(GivenType, context, action);
             }
-
             return new GivenFragment(this);
         }
 
@@ -76,11 +64,8 @@ namespace NBehave.Narrator.Framework
         {
             if (CanAddMessage)
             {
-                AddBlankMessage();
-
-                _story.InvokeAction(GivenType, context, action, arg0);
+                Story.InvokeAction(GivenType, context, action, arg0);
             }
-
             return new GivenFragment(this);
         }
 
@@ -88,35 +73,28 @@ namespace NBehave.Narrator.Framework
         {
             if (CanAddMessage)
             {
-                AddBlankMessage();
-
-                _story.InvokeAction(GivenType, context, action, arg0, arg1);
+                Story.InvokeAction(GivenType, context, action, arg0, arg1);
             }
-
             return new GivenFragment(this);
         }
 
-        public GivenFragment Given<TArg0, TArg1, TArg2>(string context, TArg0 arg0, TArg1 arg1, TArg2 arg2, Action<TArg0, TArg1, TArg2> action)
+        public GivenFragment Given<TArg0, TArg1, TArg2>(string context, TArg0 arg0, TArg1 arg1, TArg2 arg2,
+                                                        Action<TArg0, TArg1, TArg2> action)
         {
             if (CanAddMessage)
             {
-                AddBlankMessage();
-
-                _story.InvokeAction(GivenType, context, action, arg0, arg1, arg2);
+                Story.InvokeAction(GivenType, context, action, arg0, arg1, arg2);
             }
-
             return new GivenFragment(this);
         }
 
-        public GivenFragment Given<TArg0, TArg1, TArg2, TArg3>(string context, TArg0 arg0, TArg1 arg1, TArg2 arg2, TArg3 arg3, Action<TArg0, TArg1, TArg2, TArg3> action)
+        public GivenFragment Given<TArg0, TArg1, TArg2, TArg3>(string context, TArg0 arg0, TArg1 arg1, TArg2 arg2,
+                                                               TArg3 arg3, Action<TArg0, TArg1, TArg2, TArg3> action)
         {
             if (CanAddMessage)
             {
-                AddBlankMessage();
-
-                _story.InvokeAction(GivenType, context, action, arg0, arg1, arg2, arg3);
+                Story.InvokeAction(GivenType, context, action, arg0, arg1, arg2, arg3);
             }
-
             return new GivenFragment(this);
         }
 
@@ -124,11 +102,8 @@ namespace NBehave.Narrator.Framework
         {
             if (CanAddMessage)
             {
-                AddBlankMessage();
-
-                _story.InvokeActionFromCatalog(GivenType, context);
+                Story.InvokeActionFromCatalog(GivenType, context);
             }
-
             return new GivenFragment(this);
         }
 
@@ -136,11 +111,8 @@ namespace NBehave.Narrator.Framework
         {
             if (CanAddMessage)
             {
-                AddBlankMessage();
-
-                _story.InvokeActionFromCatalog(GivenType, context, arg0);
+                Story.InvokeActionFromCatalog(GivenType, context, arg0);
             }
-
             return new GivenFragment(this);
         }
 
@@ -148,11 +120,8 @@ namespace NBehave.Narrator.Framework
         {
             if (CanAddMessage)
             {
-                AddBlankMessage();
-
-                _story.InvokeActionFromCatalog(GivenType, context, arg0, arg1);
+                Story.InvokeActionFromCatalog(GivenType, context, arg0, arg1);
             }
-
             return new GivenFragment(this);
         }
 
@@ -160,32 +129,28 @@ namespace NBehave.Narrator.Framework
         {
             if (CanAddMessage)
             {
-                AddBlankMessage();
-
-                _story.InvokeActionFromCatalog(GivenType, context, arg0, arg1, arg2);
+                Story.InvokeActionFromCatalog(GivenType, context, arg0, arg1, arg2);
             }
-
             return new GivenFragment(this);
         }
 
-        public GivenFragment Given<TArg0, TArg1, TArg2, TArg3>(string context, TArg0 arg0, TArg1 arg1, TArg2 arg2, TArg3 arg3)
+        public GivenFragment Given<TArg0, TArg1, TArg2, TArg3>(string context, TArg0 arg0, TArg1 arg1, TArg2 arg2,
+                                                               TArg3 arg3)
         {
             if (CanAddMessage)
             {
-                AddBlankMessage();
-
-                _story.InvokeActionFromCatalog(GivenType, context, arg0, arg1, arg2, arg3);
+                Story.InvokeActionFromCatalog(GivenType, context, arg0, arg1, arg2, arg3);
             }
-
             return new GivenFragment(this);
         }
 
         public Scenario Pending(string reason)
         {
-            _story.AddMessage(string.Format("\t\tPending: {0}", reason));
-            _story.PendLastScenarioResults(reason);
+            if (Story.IsDryRun == false)
+                OnScenarioMessageAdded(new ScenarioMessage("Pending", reason));
+            Story.PendLastScenarioResults(reason);
 
-            _isPending = true;
+            IsPending = true;
 
             return this;
         }

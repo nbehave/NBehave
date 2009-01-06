@@ -3,7 +3,6 @@ using System.Linq;
 using System.IO;
 using System.Collections.Generic;
 using System.Reflection;
-using NBehave.Narrator.Framework;
 using System.Globalization;
 
 namespace NBehave.Narrator.Framework
@@ -15,15 +14,11 @@ namespace NBehave.Narrator.Framework
     [AttributeUsage(AttributeTargets.Method)]
     public class ActionStepAttribute : Attribute
     {
-        private string _tokenString = string.Empty;
-        public string TokenString
-        {
-            get { return _tokenString; }
-        }
+        public string TokenString { get; private set; }
 
         public ActionStepAttribute(string tokenString)
         {
-            _tokenString = tokenString;
+            TokenString = tokenString;
         }
     }
 
@@ -56,8 +51,10 @@ namespace NBehave.Narrator.Framework
 
     public class ActionStepRunner : RunnerBase
     {
-        private List<string> _scenarios = new List<string>();
+        private readonly List<string> _scenarios = new List<string>();
+        
         public ActionCatalog ActionCatalog { get; protected set; }
+        
         public ActionStepRunner()
         {
             ActionCatalog = new ActionCatalog();
@@ -69,26 +66,23 @@ namespace NBehave.Narrator.Framework
             FindActionSteps(assembly);
         }
 
-        protected override void RunStories(StoryResults results, IMessageProvider messageProvider, IEventListener listener)
+        protected override void RunStories(StoryResults results, IEventListener listener)
         {
-            using (MessageProviderRegistry.RegisterScopedInstance(messageProvider))
-            {
-                listener.ThemeStarted(string.Empty);
-                listener.StoryCreated(string.Empty);
-                RunScenarios(results, listener);
-                CompileStoryResults(results);
-                listener.StoryResults(results);
-                listener.ThemeFinished();
-                ClearStoryList();
-            }
+            listener.ThemeStarted(string.Empty);
+            listener.StoryCreated(string.Empty);
+            RunScenarios(results, listener);
+            CompileStoryResults(results);
+            listener.StoryResults(results);
+            listener.ThemeFinished();
+            ClearStoryList();
         }
 
         private void RunScenarios(StoryResults results, IEventListener listener)
         {
             foreach (var scenario in _scenarios)
             {
-                ScenarioResults scenarioResult = new ScenarioResults("a", "a");
-                foreach (var row in scenario.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries))
+                var scenarioResult = new ScenarioResults("a", "a");
+                foreach (var row in scenario.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries))
                 {
                     listener.StoryMessageAdded(row);
                     try
@@ -123,8 +117,6 @@ namespace NBehave.Narrator.Framework
             {
                 if (t.GetCustomAttributes(typeof(ActionStepsAttribute), false).Length > 0)
                 {
-                    ActionStepsAttribute actionStepsAttribute = (ActionStepsAttribute)t.GetCustomAttributes(typeof(ActionStepsAttribute), false)[0];
-
                     if (StoryRunnerFilter.NamespaceFilter.IsMatch(t.Namespace) &&
                         StoryRunnerFilter.ClassNameFilter.IsMatch(t.Name))
                     {
@@ -150,19 +142,19 @@ namespace NBehave.Narrator.Framework
             object action = null;
             switch (CountTokensInTokenString(method.TokenString))
             {
-                case 0: Action a0 = delegate { method.MethodInfo.Invoke(instance, null); };
+                case 0: Action a0 = () => method.MethodInfo.Invoke(instance, null);
                     action = a0;
                     break;
-                case 1: Action<object> a1 = (a) => { method.MethodInfo.Invoke(instance, new object[] { a }); };
+                case 1: Action<object> a1 = a => method.MethodInfo.Invoke(instance, new[] { a });
                     action = a1;
                     break;
-                case 2: Action<object, object> a2 = (a, b) => { method.MethodInfo.Invoke(instance, new object[] { a, b }); };
+                case 2: Action<object, object> a2 = (a, b) => method.MethodInfo.Invoke(instance, new[] { a, b });
                     action = a2;
                     break;
-                case 3: Action<object, object, object> a3 = (a, b, c) => { method.MethodInfo.Invoke(instance, new object[] { a, b, c }); };
+                case 3: Action<object, object, object> a3 = (a, b, c) => method.MethodInfo.Invoke(instance, new[] { a, b, c });
                     action = a3;
                     break;
-                case 4: Action<object, object, object, object> a4 = (a, b, c, d) => { method.MethodInfo.Invoke(instance, new object[] { a, b, c, d }); };
+                case 4: Action<object, object, object, object> a4 = (a, b, c, d) => method.MethodInfo.Invoke(instance, new[] { a, b, c, d });
                     action = a4;
                     break;
             }
@@ -187,7 +179,7 @@ namespace NBehave.Narrator.Framework
 
         private int CountTokensInTokenString(string tokenString)
         {
-            string[] words = tokenString.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] words = tokenString.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             return words.Where(s => s.StartsWith(ActionCatalog.TokenPrefix.ToString())).Count();
         }
 
@@ -211,7 +203,7 @@ namespace NBehave.Narrator.Framework
         {
             foreach (var location in scenarioLocations)
             {
-                Stream stream = File.OpenRead(location.ToString());
+                Stream stream = File.OpenRead(location);
                 Load(stream);
             }
         }

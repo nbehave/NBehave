@@ -19,19 +19,19 @@ namespace NBehave.Narrator.Framework.EventListeners
 
         void IDisposable.Dispose()
         {
-            RunFinished();
+            Dispose(true);
         }
 
         #endregion
 
         #region IEventListener Members
 
-        public void StoryCreated(string story)
+        void IEventListener.StoryCreated(string story)
         {
             _writer.WriteLine();
         }
 
-        public void StoryMessageAdded(string message)
+        void IEventListener.StoryMessageAdded(string message)
         {
             if (_insideNamedTheme)
                 _writer.Write('\t');
@@ -39,17 +39,31 @@ namespace NBehave.Narrator.Framework.EventListeners
             _writer.WriteLine(message);
         }
 
-        public void RunStarted()
+        void IEventListener.ScenarioCreated(string scenarioTitle)
+        {
+            _writer.WriteLine();
+        }
+
+        void IEventListener.ScenarioMessageAdded(string message)
+        {
+            if (_insideNamedTheme)
+                _writer.Write('\t');
+            _writer.Write('\t');
+
+            _writer.WriteLine(message);
+        }
+
+        void IEventListener.RunStarted()
         {
             _writer = File.CreateText(_path);
         }
 
-        public void RunFinished()
+        void IEventListener.RunFinished()
         {
             Dispose(true);
         }
 
-        public void ThemeStarted(string name)
+        void IEventListener.ThemeStarted(string name)
         {
             if (! string.IsNullOrEmpty(name))
             {
@@ -58,13 +72,13 @@ namespace NBehave.Narrator.Framework.EventListeners
             }
         }
 
-        public void ThemeFinished()
+        void IEventListener.ThemeFinished()
         {
             _insideNamedTheme = false;
             _writer.WriteLine();
         }
 
-        public void StoryResults(StoryResults results)
+        void IEventListener.StoryResults(StoryResults results)
         {
         }
 

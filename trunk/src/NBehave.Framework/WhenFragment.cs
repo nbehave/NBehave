@@ -5,7 +5,7 @@ namespace NBehave.Narrator.Framework
 {
     public class WhenFragment : ScenarioFragment<WhenFragment>
     {
-        private const string ThenType = "\t\tThen";
+        private const string ThenType = "Then";
 
         internal WhenFragment(Scenario scenario) : base(scenario) { }
 
