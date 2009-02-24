@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using MbUnit.Framework;
+using System.Text.RegularExpressions;
 
 namespace NBehave.Spec.MbUnit
 {
@@ -28,13 +29,13 @@ namespace NBehave.Spec.MbUnit
         }
 
         public static void ShouldBeTheSameAs<T>(this T actual, T expected)
-			where T : class
+            where T : class
         {
             Assert.AreSame(actual, expected);
         }
 
         public static void ShouldNotBeTheSameAs<T>(this T actual, T expected)
-			where T : class
+            where T : class
         {
             Assert.AreNotSame(actual, expected);
         }
@@ -44,10 +45,20 @@ namespace NBehave.Spec.MbUnit
             Assert.Contains(actual, expected);
         }
 
-		public static void ShouldContain(this string actual, string expected)
-		{
-			Assert.Contains(actual, expected);
-		}
+        public static void ShouldNotContain<T>(this IEnumerable<T> actual, T expected)
+        {
+            Assert.DoesNotContain(actual, expected);
+        }
+
+        public static void ShouldContain(this string actual, string expected)
+        {
+            Assert.Contains(actual, expected);
+        }
+
+        public static void ShouldNotContain(this string actual, string expected)
+        {
+            Assert.DoesNotContain(actual, expected);
+        }
 
         public static void ShouldBeGreaterThan(this IComparable arg1, IComparable arg2)
         {
@@ -104,9 +115,9 @@ namespace NBehave.Spec.MbUnit
             Assert.IsEmpty(collection);
         }
 
-		public static void ShouldNotBeEmpty(this IEnumerable collection)
+        public static void ShouldNotBeEmpty(this IEnumerable collection)
         {
-			Assert.IsNotEmpty(collection);
+            Assert.IsNotEmpty(collection);
         }
 
         public static void ShouldBeInstanceOfType(this object actual, Type expected)
@@ -146,8 +157,47 @@ namespace NBehave.Spec.MbUnit
 
         public static void ShouldBeThrownBy(this Type exceptionType, Action action)
         {
-        	Assert.Throws(exceptionType, new Gallio.Action(action));
+            Assert.Throws(exceptionType, new Gallio.Action(action));
         }
 
+        public static void ShouldApproximatelyEqual<T>(this T actual, T expected, T delta)
+        {
+            Assert.AreApproximatelyEqual(expected, actual, delta);
+        }
+
+        public static void ShouldNotApproximatelyEqual<T>(this T actual, T expected, T delta)
+        {
+            Assert.AreNotApproximatelyEqual(expected, actual, delta);
+        }
+
+        public static void ShouldEndWith(this string actual, string expected)
+        {
+            Assert.EndsWith(actual, expected);
+        }
+
+        public static void ShouldStartWith(this string actual, string expected)
+        {
+            Assert.StartsWith(actual, expected);
+        }
+
+        public static void ShouldFullyMatch(this string actual, string regExPattern)
+        {
+            Assert.FullMatch(actual, regExPattern);
+        }
+
+        public static void ShouldFullyMatch(this string actual, string regexPattern, RegexOptions regexOptions)
+        {
+            Assert.FullMatch(actual, regexPattern, regexOptions);
+        }
+
+        public static void ShouldMatch(this string actual, string regexPattern)
+        {
+            Assert.Like(actual, regexPattern);
+        }
+
+        public static void ShouldMatch(this string actual, string regexPattern, RegexOptions regexOptions)
+        {
+            Assert.Like(actual, regexPattern, regexOptions);
+        }
     }
 }

@@ -76,6 +76,14 @@ namespace NBehave.Spec.MbUnit.Specs
         }
 
         [Specification]
+        public void Should_allow_substitution_for_DoesNotContains_on_collections()
+        {
+            int[] vals = { 5, 6, 7, 8 };
+
+            vals.ShouldNotContain(9);
+        }
+
+        [Specification]
         public void Should_allow_substitution_for_IsEmpty_for_collections()
         {
             int[] vals = { };
@@ -142,6 +150,41 @@ namespace NBehave.Spec.MbUnit.Specs
             string.Empty.ShouldBeEmpty();
         }
 
+        [Specification]
+        public void Should_allow_substitution_for_ShouldContain()
+        {
+            "Lorem ipsum dolor sit amet.".ShouldContain("dolor");
+        }
+
+        [Specification]
+        public void Should_allow_substitution_for_ShouldNotContain()
+        {
+            "Lorem ipsum dolor sit amet.".ShouldNotContain("foo");
+        }
+
+        [Specification]
+        public void Should_allow_substitution_for_EndsWith()
+        {
+            "Lorem ipsum dolor sit amet.".ShouldEndWith("amet.");
+        }
+
+        [Specification]
+        public void Should_allow_substitution_for_StartsWith()
+        {
+            "Lorem ipsum dolor sit amet.".ShouldStartWith("Lorem");
+        }
+
+        [Specification]
+        public void Should_allow_substitution_for_FullMatch()
+        {
+            "I have 5 euros in my pocket".ShouldFullyMatch(@"I have \d+ euros in my pocket");
+        }
+
+        [Specification]
+        public void Should_allow_substitution_for_Like()
+        {
+            "I have 5 euros in my pocket".ShouldMatch(@"\d+ euros");
+        }
     }
 
     [Context]
@@ -240,6 +283,53 @@ namespace NBehave.Spec.MbUnit.Specs
             (typeof(ApplicationException)).ShouldBeThrownBy(
                 delegate { throw new ApplicationException(); });
 
+        }
+    }
+
+
+    [Context]
+    public class When_using_BDD_style_language_for_double_assertions
+    {
+        [Specification]
+        public void Should_allow_substitution_for_Greater()
+        {
+            5.1.ShouldBeGreaterThan(4.5);
+        }
+
+        [Specification]
+        public void Should_allow_substitution_for_GreaterOrEqual()
+        {
+            5.1.ShouldBeGreaterThanOrEqualTo(5.1);
+        }
+
+        [Specification]
+        public void Should_allow_substitution_for_IsNaN()
+        {
+            double.NaN.ShouldBeNaN();
+        }
+
+        [Specification]
+        public void Should_allow_substitution_for_Less()
+        {
+            5.1.ShouldBeLessThan(5.2);
+        }
+
+        [Specification]
+        public void Should_allow_substitution_for_LessOrEqualTo()
+        {
+            5.1.ShouldBeLessThanOrEqualTo(6.2);
+        }
+
+        [Specification]
+        public void Should_allow_substitiution_for_AreApproximatelyEqual()
+        {
+            5.1.ShouldApproximatelyEqual(5.2, 0.11);
+        }
+
+        [Specification]
+        public void Should_allow_substitiution_for_AreNotApproximatelyEqual()
+        {
+            5.1.ShouldNotApproximatelyEqual(5.3, 0.1);
         }
     }
 }
