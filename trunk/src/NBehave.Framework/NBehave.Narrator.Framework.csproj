@@ -55,9 +55,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Data" />
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
@@ -66,6 +68,7 @@
     </Compile>
     <Compile Include="ActionCatalog.cs" />
     <Compile Include="ActionMissingException.cs" />
+    <Compile Include="ActionStepAlias.cs" />
     <Compile Include="ActionStepRunner.cs" />
     <Compile Include="AsAFragment.cs" />
     <Compile Include="DisposableAction.cs" />

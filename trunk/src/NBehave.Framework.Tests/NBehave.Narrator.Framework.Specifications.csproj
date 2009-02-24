@@ -66,6 +66,7 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Data" />
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
@@ -73,6 +74,7 @@
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="ActionCatalogSpec.cs" />
+    <Compile Include="ActionStepAliasSpec.cs" />
     <Compile Include="EventListeners\MultiOutputEventListenerFixture.cs" />
     <Compile Include="EventListeners\TextWriterEventListenerFixture.cs" />
     <Compile Include="ActionsWithTokensSpec.cs" />
@@ -114,6 +116,9 @@
     <Content Include="GreetingSystem.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

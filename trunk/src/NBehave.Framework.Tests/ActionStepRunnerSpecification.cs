@@ -28,6 +28,15 @@ namespace NBehave.Narrator.Framework.Specifications
             }
 
             [Test]
+            public void Should_register_alias_And_for_Given()
+            {
+                Assert.That(_runner.ActionCatalog.ActionExists("Given my name Axel"), Is.True);
+                Assert.That(_runner.ActionCatalog.ActionExists("And my name Axel"), Is.True);
+            }
+
+
+
+            [Test]
             public void Should_invoke_action_given_a_token_string()
             {
                 _runner.InvokeTokenString("Given my name Morgan");
@@ -42,8 +51,6 @@ namespace NBehave.Narrator.Framework.Specifications
             [Test]
             public void Should_run_text_scenario_in_stream()
             {
-                var writer = new StringWriter();
-                var listener = new TextWriterEventListener(writer);
                 var ms = new MemoryStream();
                 var sr = new StreamWriter(ms);
                 sr.WriteLine("Given my name Morgan");
@@ -52,6 +59,8 @@ namespace NBehave.Narrator.Framework.Specifications
                 sr.Flush();
                 ms.Seek(0, SeekOrigin.Begin);
                 _runner.Load(ms);
+                var writer = new StringWriter();
+                var listener = new TextWriterEventListener(writer);
                 _runner.Run(listener);
                 var output = writer.ToString();
                 Assert.That(output.IndexOf("Given my name Morgan"), Is.GreaterThan(0));
@@ -105,8 +114,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 Assert.That(results.NumberOfStories, Is.EqualTo(0));
                 Assert.That(results.NumberOfScenariosFound, Is.EqualTo(2));
                 Assert.That(results.NumberOfPassingScenarios, Is.EqualTo(2));
-            }
-
+            }           
         }
     }
 }

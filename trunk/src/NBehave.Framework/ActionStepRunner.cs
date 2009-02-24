@@ -52,6 +52,7 @@ namespace NBehave.Narrator.Framework
     public class ActionStepRunner : RunnerBase
     {
         private readonly List<string> _scenarios = new List<string>();
+        private ActionStepAlias _actionStepAlias = new ActionStepAlias();
 
         public ActionCatalog ActionCatalog { get; protected set; }
 
@@ -134,6 +135,16 @@ namespace NBehave.Narrator.Framework
             {
                 object action = CreateAction(instance, method);
                 ActionCatalog.Add(method.TokenString, action);
+                RegisterAliases(method, action);
+            }
+        }
+
+        private void RegisterAliases(ActionMethodInfo method, object action)
+        {
+            IEnumerable<string> tokenStringAliases = _actionStepAlias.GetAliasForTokenString(method.TokenString);
+            foreach (var tokenAlias in tokenStringAliases)
+            {
+                ActionCatalog.Add(tokenAlias, action);
             }
         }
 
@@ -212,25 +223,44 @@ namespace NBehave.Narrator.Framework
             using (var fs = new StreamReader(stream))
             {
                 string scenario = string.Empty;
-                bool previousRowWasThen = false;
+                string newScenarioShouldStartRowWith = string.Empty;
+                bool isFirstRow = true;
+                bool notOnFirstRowType = false;
                 while (fs.EndOfStream == false)
                 {
-                    string row = fs.ReadLine().Trim(new[] { '\t', ' ' }) ?? string.Empty;
+                    string row = fs.ReadLine() ?? string.Empty;
+                    row = TrimInput(row);
                     if (string.IsNullOrEmpty(row) == false)
                     {
-                        if (previousRowWasThen && row.StartsWith("Given", true, CultureInfo.CurrentCulture))
+                        if (isFirstRow)
+                        {
+                            isFirstRow = false;
+                            newScenarioShouldStartRowWith = row.Split(new char[] { ' ' }).First();
+                        }
+
+                        var currentRowStartsWith = row.Split(new char[] { ' ' }).First();
+                        if (currentRowStartsWith != newScenarioShouldStartRowWith)
+                            notOnFirstRowType = true;
+                        if (notOnFirstRowType && row.StartsWith(newScenarioShouldStartRowWith, true, CultureInfo.CurrentCulture))
                         {
                             _scenarios.Add(scenario);
                             scenario = string.Empty;
-                            previousRowWasThen = false;
+                            notOnFirstRowType = false;
                         }
                         scenario += row + Environment.NewLine;
                     }
-                    if (row.StartsWith("Then", true, CultureInfo.CurrentCulture))
-                        previousRowWasThen = true;
+                    if (row.StartsWith(newScenarioShouldStartRowWith, true, CultureInfo.CurrentCulture) == false)
+                        notOnFirstRowType = true;
                 }
                 _scenarios.Add(scenario);
             }
+        }
+
+        private string TrimInput(string row)
+        {
+            var newRow = row.Trim(new[] { '\t', ' ' });
+
+            return newRow;
         }
     }
 }
