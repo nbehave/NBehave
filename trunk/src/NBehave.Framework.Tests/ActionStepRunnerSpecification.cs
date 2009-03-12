@@ -114,7 +114,20 @@ namespace NBehave.Narrator.Framework.Specifications
                 Assert.That(results.NumberOfStories, Is.EqualTo(0));
                 Assert.That(results.NumberOfScenariosFound, Is.EqualTo(2));
                 Assert.That(results.NumberOfPassingScenarios, Is.EqualTo(2));
-            }           
+            }
+
+            [Test]
+            public void Should_run_scenario_in_text_file_with_scenario_title()
+            {
+                var writer = new StringWriter();
+                var listener = new TextWriterEventListener(writer);
+                _runner.Load(new[] { @"GreetingSystemWithScenarioTitle.txt" });
+                var results = _runner.Run(listener);
+                var output = writer.ToString();
+
+                Assert.That(results.ScenarioResults[0].ScenarioTitle, Is.EqualTo("A simple greeting example"));
+                Assert.That(results.ScenarioResults[0].ScenarioResult, Is.EqualTo(ScenarioResult.Passed));
+            }
         }
     }
 }

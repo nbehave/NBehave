@@ -7,7 +7,7 @@ namespace NBehave.Narrator.Framework
     public class ScenarioResults
     {
         private readonly string _storyTitle;
-        private readonly string _scenarioTitle;
+        private string _scenarioTitle;
         private ScenarioResult _scenarioResult;
         private string _message = null;
         private string _stackTrace;
@@ -31,6 +31,7 @@ namespace NBehave.Narrator.Framework
         public string ScenarioTitle
         {
             get { return _scenarioTitle; }
+            set { _scenarioTitle = value; }
         }
 
         public ScenarioResult ScenarioResult

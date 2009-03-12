@@ -43,6 +43,28 @@ namespace NBehave.Narrator.Framework
         { }
     }
 
+    public class ScenarioTitle
+    {
+        public bool IsScenarioTitle(string text)
+        {
+            return (text.ToLower().StartsWith("scenario"));
+        }
+
+        public string GetTitleText(string text)
+        {
+            string title = string.Empty;
+            if (text.ToLower().StartsWith("scenario"))
+            {
+                int firstSpaceAt = text.IndexOf(' ');
+                if (firstSpaceAt > 0)
+                    title = text.Substring(firstSpaceAt + 1);
+                else
+                    title = string.Empty;
+            }
+            return title;
+        }
+    }
+
     public class ActionMethodInfo
     {
         public string TokenString { get; set; }
@@ -82,13 +104,21 @@ namespace NBehave.Narrator.Framework
         {
             foreach (var scenario in _scenarios)
             {
+                ScenarioTitle scenarioTitle = new ScenarioTitle();
                 var scenarioResult = new ScenarioResults(string.Empty, string.Empty);
                 foreach (var row in scenario.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries))
                 {
                     listener.StoryMessageAdded(row);
                     try
                     {
-                        InvokeTokenString(row);
+                        if (scenarioTitle.IsScenarioTitle(row))
+                        {
+                            scenarioResult.ScenarioTitle = scenarioTitle.GetTitleText(row);
+                        }
+                        else
+                        {
+                            InvokeTokenString(row);
+                        }
                     }
                     catch (Exception e)
                     {

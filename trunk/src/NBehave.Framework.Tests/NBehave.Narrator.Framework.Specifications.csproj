@@ -107,6 +107,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="GreetingSystemWithScenarioTitle.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="GreetingSystem_ManyGreetings.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
