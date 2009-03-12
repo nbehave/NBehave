@@ -74,6 +74,14 @@ namespace NBehave.Spec.NUnit.Specs
 			vals.ShouldContain(6);
 		}
 
+        [Specification]
+        public void Should_allow_substitution_for_ShouldNotContain_on_collections()
+        {
+            int[] vals = { 5, 6, 7, 8 };
+
+            vals.ShouldNotContain(1);
+        }
+
 		[Specification]
 		public void Should_allow_substitution_for_IsEmpty_for_collections()
 		{
