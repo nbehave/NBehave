@@ -66,9 +66,11 @@ Section "Testdriven.NET plugin"
 	File "${FILES}\NBehave.TestDriven.Plugin.dll"
 	;File "${FILES}\TestDriven.Framework.dll"
 	
+	WriteRegStr HKLM "SOFTWARE\MutantDesign\TestDriven.NET\TestRunners\NBehave ${VERSION}" "" "3"
 	WriteRegStr HKLM "SOFTWARE\MutantDesign\TestDriven.NET\TestRunners\NBehave ${VERSION}" "AssemblyPath" "$INSTDIR\NBehave.TestDriven.Plugin.dll"
-	WriteRegStr HKLM "SOFTWARE\MutantDesign\TestDriven.NET\TestRunners\NBehave ${VERSION}" "Application" "$INSTDIR\NBehave.TestDriven.Plugin.dll"
+	WriteRegStr HKLM "SOFTWARE\MutantDesign\TestDriven.NET\TestRunners\NBehave ${VERSION}" "Application" "$INSTDIR\NBehave-Console.exe"
 	WriteRegStr HKLM "SOFTWARE\MutantDesign\TestDriven.NET\TestRunners\NBehave ${VERSION}" "TypeName" "NBehave.TestDriven.Plugin.NBehaveStoryRunner"
+	WriteRegStr HKLM "SOFTWARE\MutantDesign\TestDriven.NET\TestRunners\NBehave ${VERSION}" "TargetFrameworkAssemblyName" "NBehave.Narrator.Framework"
 SectionEnd
 Section "MSbuild task"
 	File "${FILES}\NBehave.MSBuild.dll"

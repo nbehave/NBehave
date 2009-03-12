@@ -15,7 +15,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisibleAttribute(false)]
 [assembly: AssemblyVersionAttribute("0.4.0.0")]
 [assembly: AssemblyFileVersionAttribute("0.4.0.0")]
-[assembly: AssemblyCopyrightAttribute("Copyright © NBehave 2007-2008")]
+[assembly: AssemblyCopyrightAttribute("Copyright © NBehave 2007-2009")]
 [assembly: AssemblyProductAttribute("NBehave")]
 [assembly: AssemblyCompanyAttribute("NBehave")]
 [assembly: AssemblyConfigurationAttribute("release")]
