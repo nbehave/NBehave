@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace NBehave.Spec.NUnit
 {
@@ -50,6 +52,11 @@ namespace NBehave.Spec.NUnit
                 lst.Add(o);
             }
             ShouldContain(lst, expected);
+        }
+
+        public static void ShouldNotContain(this IEnumerable list, object expected)
+        {
+            Assert.That(list, Is.Not.Contains(expected));
         }
 
         public static void ShouldBeGreaterThan(this IComparable arg1, IComparable arg2)
