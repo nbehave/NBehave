@@ -10,14 +10,15 @@ namespace TestPlainTextAssembly
     {
         private GreetingSystem _greetingSystem;
         private string _greeting;
-        [Given("my name $name")]
+
+        [Given("my name is $name")]
         public void Given_my_name(string name)
         {
             _greetingSystem = new GreetingSystem();
             _greetingSystem.GiveName(name);
         }
 
-        [When("I ask to be greeted")]
+        [When("I'm greeted")]
         public void When_I_ask_to_be_greeted()
         {
             _greeting = _greetingSystem.Greeting();

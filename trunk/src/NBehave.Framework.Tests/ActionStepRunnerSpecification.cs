@@ -22,24 +22,22 @@ namespace NBehave.Narrator.Framework.Specifications
             [Test]
             public void Should_find_all_ActionSteps_in_assembly()
             {
-                Assert.That(_runner.ActionCatalog.ActionExists("Given my name Axel"), Is.True);
-                Assert.That(_runner.ActionCatalog.ActionExists("When I ask to be greeted"), Is.True);
+                Assert.That(_runner.ActionCatalog.ActionExists("Given my name is Axel"), Is.True);
+                Assert.That(_runner.ActionCatalog.ActionExists("When I'm greeted"), Is.True);
                 Assert.That(_runner.ActionCatalog.ActionExists("Then I should be greeted with “Hello, Axel!”"), Is.True);
             }
 
             [Test]
             public void Should_register_alias_And_for_Given()
             {
-                Assert.That(_runner.ActionCatalog.ActionExists("Given my name Axel"), Is.True);
-                Assert.That(_runner.ActionCatalog.ActionExists("And my name Axel"), Is.True);
+                Assert.That(_runner.ActionCatalog.ActionExists("Given my name is Axel"), Is.True);
+                Assert.That(_runner.ActionCatalog.ActionExists("And my name is Axel"), Is.True);
             }
-
-
 
             [Test]
             public void Should_invoke_action_given_a_token_string()
             {
-                _runner.InvokeTokenString("Given my name Morgan");
+                _runner.InvokeTokenString("Given my name is Morgan");
             }
 
             [Test, ExpectedException(typeof(ArgumentException))]
@@ -53,8 +51,8 @@ namespace NBehave.Narrator.Framework.Specifications
             {
                 var ms = new MemoryStream();
                 var sr = new StreamWriter(ms);
-                sr.WriteLine("Given my name Morgan");
-                sr.WriteLine("When I ask to be greeted");
+                sr.WriteLine("Given my name is Morgan");
+                sr.WriteLine("When I'm greeted");
                 sr.WriteLine("Then I should be greeted with “Hello, Morgan!”");
                 sr.Flush();
                 ms.Seek(0, SeekOrigin.Begin);
@@ -63,7 +61,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 var listener = new TextWriterEventListener(writer);
                 _runner.Run(listener);
                 var output = writer.ToString();
-                Assert.That(output.IndexOf("Given my name Morgan"), Is.GreaterThan(0));
+                Assert.That(output.IndexOf("Given my name is Morgan"), Is.GreaterThan(0));
             }
 
             [Test]
@@ -74,8 +72,8 @@ namespace NBehave.Narrator.Framework.Specifications
                 _runner.Load(new[] { @"GreetingSystem.txt" });
                 _runner.Run(listener);
                 var output = writer.ToString();
-                Assert.That(output.IndexOf("story message added: Given my name Morgan"), Is.GreaterThan(0));
-                Assert.That(output.IndexOf("story message added: When I ask to be greeted"), Is.GreaterThan(0));
+                Assert.That(output.IndexOf("story message added: Given my name is Morgan"), Is.GreaterThan(0));
+                Assert.That(output.IndexOf("story message added: When I'm greeted"), Is.GreaterThan(0));
                 Assert.That(output.IndexOf("story message added: Then I should be greeted with “Hello, Morgan!”"), Is.GreaterThan(0));
             }
 
@@ -100,7 +98,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 _runner.Load(new[] { @"GreetingSystemFailure.txt" });
                 StoryResults results = _runner.Run(listener);
                 Assert.That(results.NumberOfFailingScenarios, Is.EqualTo(1));
-                Assert.That(results.ScenarioResults[0].Message.StartsWith("NUnit.Framework.AssertionException :   String lengths are both 13. Strings differ at index 8."), Is.True);
+                Assert.That(results.ScenarioResults[0].Message.StartsWith("NUnit.Framework.AssertionException :"), Is.True);
             }
 
             [Test]
