@@ -1,27 +1,15 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using NBehave.Narrator.Framework;
 
 namespace NBehave.Narrator.Framework
 {
     public class StoryResults
     {
-        private int _numberOfThemes;
-        private int _numberOfStories;
-        private List<ScenarioResults> _scenarioResults = new List<ScenarioResults>();
+        private readonly List<ScenarioResults> _scenarioResults = new List<ScenarioResults>();
 
-        public int NumberOfThemes
-        {
-            get { return _numberOfThemes; }
-            set { _numberOfThemes = value; }
-        }
+        public int NumberOfThemes { get; set; }
 
-        public int NumberOfStories
-        {
-            get { return _numberOfStories; }
-            set { _numberOfStories = value; }
-        }
+        public int NumberOfStories { get; set; }
 
         public int NumberOfScenariosFound
         {
@@ -67,7 +55,7 @@ namespace NBehave.Narrator.Framework
 
         private Predicate<ScenarioResults> MatchByScenarioResult(ScenarioResult result)
         {
-            return delegate(ScenarioResults results) { return results.ScenarioResult == result; };
+            return results => results.ScenarioResult == result;
         }
     }
 }

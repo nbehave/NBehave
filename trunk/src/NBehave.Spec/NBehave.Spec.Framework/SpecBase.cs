@@ -1,35 +1,42 @@
-﻿using System;
-using Rhino.Mocks;
+﻿using Rhino.Mocks;
 
 namespace NBehave.Spec
 {
-	public abstract class SpecBase
-	{
-		public virtual void MainSetup()
-		{
-			Establish_context();
-			Because_of();
-		}
+    public abstract class SpecBase
+    {
+        public virtual void MainSetup()
+        {
+            Establish_context();
+            Because_of();
+        }
 
-		public virtual void MainTeardown()
-		{
-			Cleanup();
-		}
+        public virtual void MainTeardown()
+        {
+            Cleanup();
+        }
 
-		protected virtual void Establish_context() {}
-		protected virtual void Because_of() {}
-		protected virtual void Cleanup() {}
+        protected virtual void Establish_context()
+        {
+        }
 
-		protected TType CreateDependency<TType>()
-			where TType : class
-		{
-			return MockRepository.GenerateMock<TType>();
-		}
+        protected virtual void Because_of()
+        {
+        }
 
-		protected TType CreateStub<TType>()
-			where TType : class
-		{
-			return MockRepository.GenerateStub<TType>();
-		}
-	}
+        protected virtual void Cleanup()
+        {
+        }
+
+        protected TType CreateDependency<TType>()
+            where TType : class
+        {
+            return MockRepository.GenerateMock<TType>();
+        }
+
+        protected TType CreateStub<TType>()
+            where TType : class
+        {
+            return MockRepository.GenerateStub<TType>();
+        }
+    }
 }

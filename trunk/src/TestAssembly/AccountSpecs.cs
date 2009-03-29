@@ -1,8 +1,6 @@
 using System;
 using NBehave.Narrator.Framework;
 using NBehave.Spec.NUnit;
-using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
 
 namespace TestAssembly
 {
@@ -16,7 +14,7 @@ namespace TestAssembly
             Account savings = null;
             Account cash = null;
 
-            Story transferStory = new Story("Transfer to cash account");
+            var transferStory = new Story("Transfer to cash account");
 
             transferStory
                 .AsA("savings account holder")
@@ -60,7 +58,7 @@ namespace TestAssembly
         public void Withdraw_from_savings_account_pending()
         {
 
-            Story transferStory = new Story("Withdraw from savings account");
+            var transferStory = new Story("Withdraw from savings account");
 
             transferStory
                 .AsA("savings account holder")
@@ -81,7 +79,7 @@ namespace TestAssembly
         public void Deposit_not_implemented_properly()
         {
 
-            Story transferStory = new Story("Deposit to cash account");
+            var transferStory = new Story("Deposit to cash account");
 
             transferStory
                 .AsA("savings account holder")
@@ -103,22 +101,22 @@ namespace TestAssembly
 
     public class Account
     {
-        private int accountBalance;
+        private int _accountBalance;
 
         public Account(int accountBalance)
         {
-            this.accountBalance = accountBalance;
+            _accountBalance = accountBalance;
         }
 
         public int Balance
         {
-            get { return accountBalance; }
-            set { accountBalance = value; }
+            get { return _accountBalance; }
+            set { _accountBalance = value; }
         }
 
         public void TransferTo(Account account, int amount)
         {
-            if (accountBalance > 0)
+            if (_accountBalance > 0)
             {
                 account.Balance = account.Balance + amount;
                 Balance = Balance - amount;

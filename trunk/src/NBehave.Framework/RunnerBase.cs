@@ -66,11 +66,11 @@ namespace NBehave.Narrator.Framework
 
         private void StartWatchingMessageAdded(IEventListener listener)
         {
-            _messageAddedEventHandler = (sender, e) => SelectMessageType(listener, sender, e.EventData);
+            _messageAddedEventHandler = (sender, e) => SelectMessageType(listener, e.EventData);
             Story.MessageAdded += _messageAddedEventHandler;
         }
 
-        private void SelectMessageType(IEventListener listener, object sender, MessageEventData eventData)
+        private void SelectMessageType(IEventListener listener, MessageEventData eventData)
         {
             switch (eventData.Type)
             {

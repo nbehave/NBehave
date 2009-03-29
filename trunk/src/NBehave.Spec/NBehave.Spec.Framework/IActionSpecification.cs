@@ -1,6 +1,6 @@
 using System;
 
-namespace NBehave.Spec.Framework
+namespace NBehave.Spec
 {
     public interface IActionSpecification<T>
     {

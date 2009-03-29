@@ -7,7 +7,7 @@ namespace NBehave.Narrator.Framework
 {
     public static class ActionStepAliasConfiguration
     {
-        private static NameValueCollection _config = ConfigurationManager.GetSection("NBehave") as NameValueCollection;
+        private static readonly NameValueCollection _config = ConfigurationManager.GetSection("NBehave") as NameValueCollection;
 
         public static IEnumerable<string> GetAliasesForAttribute(Type actionStepAttribute)
         {
@@ -33,7 +33,6 @@ namespace NBehave.Narrator.Framework
         private IEnumerable<string> AddDefaultAlias(IEnumerable<string> aliasList, string magicWord)
         {
             var defaultAliasForGiven = new List<string> { "And" };
-            var defaultAliasForThen = new List<string> { "And" };
 
 
             if ((magicWord == TypeAsStringWithoutAttributeAtEnd(typeof(GivenAttribute)))
@@ -49,7 +48,7 @@ namespace NBehave.Narrator.Framework
 
         private static IEnumerable<string> JoinLists(IEnumerable<string> defaultAliasForGiven, IEnumerable<string> aliasForAttribute)
         {
-            List<string> list = new List<string>(aliasForAttribute);
+            var list = new List<string>(aliasForAttribute);
             list.AddRange(defaultAliasForGiven);
             return list;
         }

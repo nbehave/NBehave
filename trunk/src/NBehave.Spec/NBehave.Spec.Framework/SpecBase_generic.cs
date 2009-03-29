@@ -1,5 +1,4 @@
-﻿using System;
-using Rhino.Mocks;
+﻿using Rhino.Mocks;
 
 namespace NBehave.Spec
 {

@@ -12,64 +12,47 @@ namespace NBehave.NAnt
     [TaskName("nbehave")]
     public class NBehaveTask : Task
     {
-        private bool dryRun;
-        private bool failBuild;
-        private string storyOutputPath;
-        private FileSet testAssemblies = new FileSet();
+        public NBehaveTask()
+        {
+            TestAssemblies = new FileSet();
+        }
 
         [TaskAttribute("dryRun")]
-        public bool DryRun
-        {
-            get { return dryRun; }
-            set { dryRun = value; }
-        }
+        public bool DryRun { get; set; }
 
         [TaskAttribute("storyOutputPath")]
-        public string StoryOutputPath
-        {
-            get { return storyOutputPath; }
-            set { storyOutputPath = value; }
-        }
+        public string StoryOutputPath { get; set; }
 
         [BuildElement("assemblies", Required = true)]
-        public FileSet TestAssemblies
-        {
-            get { return testAssemblies; }
-            set { testAssemblies = value; }
-        }
+        public FileSet TestAssemblies { get; set; }
 
         [TaskAttribute("failBuild")]
-        public bool FailBuild
-        {
-            get { return failBuild; }
-            set { failBuild = value; }
-        }
+        public bool FailBuild { get; set; }
 
         protected override void ExecuteTask()
         {
             if (TestAssemblies.FileNames.Count == 0)
                 throw new BuildException("At least one test assembly is required");
 
-            LogWriter nantLogWriter = new LogWriter(this, Level.Info, CultureInfo.InvariantCulture);
-            PlainTextOutput output = new PlainTextOutput(nantLogWriter);
+            var nantLogWriter = new LogWriter(this, Level.Info, CultureInfo.InvariantCulture);
+            var output = new PlainTextOutput(nantLogWriter);
 
             WriteHeaderInto(output);
 
-            StoryRunner runner = new StoryRunner();
-            runner.IsDryRun = DryRun;
+            var runner = new StoryRunner {IsDryRun = DryRun};
 
-            foreach (string path in testAssemblies.FileNames)
+            foreach (string path in TestAssemblies.FileNames)
             {
                 runner.LoadAssembly(path);
             }
 
             StoryResults results = runner.Run(CreateEventListenerUsing(nantLogWriter));
 
-            if (dryRun) return;
+            if (DryRun) return;
 
             WriteResultsInto(output, results);
 
-            if (failBuild)
+            if (FailBuild)
                 FailBuildBasedOn(results);
         }
 
@@ -93,7 +76,7 @@ namespace NBehave.NAnt
         {
             if (results.NumberOfFailingScenarios == 0) return;
 
-            StringBuilder exceptionMessage = new StringBuilder();
+            var exceptionMessage = new StringBuilder();
             foreach (ScenarioResults result in results.ScenarioResults)
             {
                 exceptionMessage.AppendLine(result.Message);
@@ -106,9 +89,9 @@ namespace NBehave.NAnt
 
         private IEventListener CreateEventListenerUsing(TextWriter writer)
         {
-            return storyOutputPath.Blank()
+            return StoryOutputPath.Blank()
                        ? EventListeners.NullEventListener()
-                       : new MultiOutputEventListener(EventListeners.FileOutputEventListener(storyOutputPath),
+                       : new MultiOutputEventListener(EventListeners.FileOutputEventListener(StoryOutputPath),
                                                       EventListeners.TextWriterEventListener(writer));
         }
 

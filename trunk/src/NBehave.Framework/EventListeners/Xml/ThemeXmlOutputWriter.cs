@@ -7,7 +7,7 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
 {
     public class ThemeXmlOutputWriter : XmlOutputBase
     {
-        private Timer currentThemeTimer;
+        private Timer _currentThemeTimer;
         public int TotalStories { get; set; }
 
         public ThemeXmlOutputWriter(XmlWriter writer, Queue<Action> actions)
@@ -16,8 +16,8 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
 
         public void ThemeStarted(string name)
         {
-            currentThemeTimer = new Timer();
-            var themeTimer = currentThemeTimer; // so we have a reference to the correct theme when the code actually executes
+            _currentThemeTimer = new Timer();
+            var themeTimer = _currentThemeTimer; // so we have a reference to the correct theme when the code actually executes
             Actions.Enqueue(
                 () =>
                 {
@@ -29,7 +29,7 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
 
         public void ThemeFinished()
         {
-            currentThemeTimer.Stop();
+            _currentThemeTimer.Stop();
             Actions.Enqueue(
                () => Writer.WriteEndElement()); // </theme>
         }

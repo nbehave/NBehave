@@ -85,9 +85,9 @@ namespace NBehave.Spec.MbUnit
             Assert.IsAssignableFrom(expected, actual);
         }
 
-        public static void ShouldBeAssignableFrom<ExpectedType>(this Object actual)
+        public static void ShouldBeAssignableFrom<TExpectedType>(this Object actual)
         {
-            actual.ShouldBeAssignableFrom(typeof(ExpectedType));
+            actual.ShouldBeAssignableFrom(typeof(TExpectedType));
         }
 
         public static void ShouldNotBeAssignableFrom(this object actual, Type expected)
@@ -95,9 +95,9 @@ namespace NBehave.Spec.MbUnit
             Assert.IsNotAssignableFrom(expected, actual);
         }
 
-        public static void ShouldNotBeAssignableFrom<ExpectedType>(this object actual)
+        public static void ShouldNotBeAssignableFrom<TExpectedType>(this object actual)
         {
-            actual.ShouldNotBeAssignableFrom(typeof(ExpectedType));
+            actual.ShouldNotBeAssignableFrom(typeof(TExpectedType));
         }
 
         public static void ShouldBeEmpty(this string value)
@@ -125,9 +125,9 @@ namespace NBehave.Spec.MbUnit
             Assert.IsInstanceOfType(expected, actual);
         }
 
-        public static void ShouldBeInstanceOf<ExpectedType>(this object actual)
+        public static void ShouldBeInstanceOf<TExpectedType>(this object actual)
         {
-            actual.ShouldBeInstanceOfType(typeof(ExpectedType));
+            actual.ShouldBeInstanceOfType(typeof(TExpectedType));
         }
 
         public static void ShouldNotBeInstanceOfType(this object actual, Type expected)
@@ -135,9 +135,9 @@ namespace NBehave.Spec.MbUnit
             Assert.IsNotInstanceOfType(expected, actual);
         }
 
-        public static void ShouldNotBeInstanceOf<ExpectedType>(this object actual)
+        public static void ShouldNotBeInstanceOf<TExpectedType>(this object actual)
         {
-            actual.ShouldNotBeInstanceOfType(typeof(ExpectedType));
+            actual.ShouldNotBeInstanceOfType(typeof(TExpectedType));
         }
 
         public static void ShouldBeNaN(this double value)

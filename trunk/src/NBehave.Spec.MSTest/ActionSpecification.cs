@@ -1,5 +1,4 @@
 using System;
-using NBehave.Spec.Framework;
 
 namespace NBehave.Spec.MSTest
 {

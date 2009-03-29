@@ -1,10 +1,7 @@
 using System;
 using System.Collections;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NBehave.Spec.Framework;
 
 namespace NBehave.Spec.MSTest
 {

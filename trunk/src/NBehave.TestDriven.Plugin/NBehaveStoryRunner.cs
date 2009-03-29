@@ -29,15 +29,15 @@ namespace NBehave.TestDriven.Plugin
 
         private TestRunState Run(Assembly assembly, MemberInfo member, ITestListener tddNetListener)
         {
-            StoryRunnerEventListenerProxy listener = new StoryRunnerEventListenerProxy(tddNetListener);
+            var listener = new StoryRunnerEventListenerProxy(tddNetListener);
             StoryResults results = RunStories(assembly, member, listener);
 
             return GetTestRunState(results);
         }
 
-        private StoryResults RunStories(Assembly assembly, MemberInfo member, StoryRunnerEventListenerProxy listener)
+        private StoryResults RunStories(Assembly assembly, MemberInfo member, IEventListener listener)
         {
-            StoryRunner runner = new StoryRunner();
+            var runner = new StoryRunner();
             runner.StoryRunnerFilter = StoryRunnerFilter.GetFilter(member);
             runner.LoadAssembly(assembly);
 

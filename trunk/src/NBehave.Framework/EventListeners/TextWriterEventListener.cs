@@ -4,51 +4,51 @@ namespace NBehave.Narrator.Framework.EventListeners
 {
     public class TextWriterEventListener : IEventListener
     {
-        private readonly TextWriter writer;
+        private readonly TextWriter _writer;
 
         public TextWriterEventListener(TextWriter writer)
         {
-            this.writer = writer;
+            this._writer = writer;
         }
 
         void IEventListener.StoryCreated(string story)
         {
-            writer.WriteLine("story created: {0}", story);
+            _writer.WriteLine("story created: {0}", story);
         }
 
         void IEventListener.StoryMessageAdded(string message)
         {
-            writer.WriteLine("story message added: {0}", message);
+            _writer.WriteLine("story message added: {0}", message);
         }
 
         void IEventListener.ScenarioCreated(string scenarioTitle)
         {
-            writer.WriteLine("scenario created: {0}", scenarioTitle);            
+            _writer.WriteLine("scenario created: {0}", scenarioTitle);            
         }
 
         void IEventListener.ScenarioMessageAdded(string message)
         {
-            writer.WriteLine("scenario message added: {0}", message);
+            _writer.WriteLine("scenario message added: {0}", message);
         }
 
         void IEventListener.RunStarted()
         {
-            writer.WriteLine("run started");
+            _writer.WriteLine("run started");
         }
 
         void IEventListener.RunFinished()
         {
-            writer.WriteLine("run finished");
+            _writer.WriteLine("run finished");
         }
 
         void IEventListener.ThemeStarted(string name)
         {
-            writer.WriteLine("theme started: {0}", name);
+            _writer.WriteLine("theme started: {0}", name);
         }
 
         void IEventListener.ThemeFinished()
         {
-            writer.WriteLine("theme finished");
+            _writer.WriteLine("theme finished");
         }
 
         void IEventListener.StoryResults(StoryResults results)

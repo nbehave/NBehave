@@ -1,22 +1,21 @@
 using System;
 using System.IO;
 using System.Reflection;
-using NBehave.Narrator.Framework;
 
 namespace NBehave.Narrator.Framework
 {
     public class PlainTextOutput
     {
-        private readonly TextWriter writer;
+        private readonly TextWriter _writer;
 
         public PlainTextOutput(TextWriter writer)
         {
-            this.writer = writer;
+            _writer = writer;
         }
 
         public void WriteLine(string text)
         {
-            writer.WriteLine(text);
+            _writer.WriteLine(text);
         }
 
         public void WriteHeader()
@@ -24,19 +23,18 @@ namespace NBehave.Narrator.Framework
             Assembly executingAssembly = Assembly.GetExecutingAssembly();
             Version version = executingAssembly.GetName().Version;
 
-            AssemblyCopyrightAttribute[] copyrights =
-                (AssemblyCopyrightAttribute[])
+            var copyrights = (AssemblyCopyrightAttribute[])
                 Attribute.GetCustomAttributes(executingAssembly, typeof(AssemblyCopyrightAttribute));
 
-            writer.WriteLine("NBehave version {0}", version);
+            _writer.WriteLine("NBehave version {0}", version);
 
             foreach (AssemblyCopyrightAttribute copyrightAttribute in copyrights)
             {
-                writer.WriteLine(copyrightAttribute.Copyright);
+                _writer.WriteLine(copyrightAttribute.Copyright);
             }
 
             if (copyrights.Length > 0)
-                writer.WriteLine("All Rights Reserved.");
+                _writer.WriteLine("All Rights Reserved.");
         }
 
         public void WriteDotResults(StoryResults results)
@@ -59,14 +57,14 @@ namespace NBehave.Narrator.Framework
                         resultIndicator = '?';
                         break;
                 }
-                writer.Write(resultIndicator);
+                _writer.Write(resultIndicator);
             }
-            writer.WriteLine();
+            _writer.WriteLine();
         }
 
         public void WriteSummaryResults(StoryResults results)
         {
-            writer.WriteLine("Scenarios run: {0}, Failures: {1}, Pending: {2}", results.NumberOfScenariosFound,
+            _writer.WriteLine("Scenarios run: {0}, Failures: {1}, Pending: {2}", results.NumberOfScenariosFound,
                              results.NumberOfFailingScenarios, results.NumberOfPendingScenarios);
         }
 
@@ -75,17 +73,17 @@ namespace NBehave.Narrator.Framework
             if (results.NumberOfFailingScenarios > 0)
             {
                 WriteSeparator();
-                writer.WriteLine("Failures:");
+                _writer.WriteLine("Failures:");
                 int failureNumber = 1;
 
                 foreach (ScenarioResults result in results.ScenarioResults)
                 {
                     if (result.ScenarioResult == ScenarioResult.Failed)
                     {
-                        writer.WriteLine("{0}) {1} ({2}) FAILED", failureNumber, result.StoryTitle,
+                        _writer.WriteLine("{0}) {1} ({2}) FAILED", failureNumber, result.StoryTitle,
                                          result.ScenarioTitle);
-                        writer.WriteLine("  {0}", result.Message);
-                        writer.WriteLine("{0}", result.StackTrace);
+                        _writer.WriteLine("  {0}", result.Message);
+                        _writer.WriteLine("{0}", result.StackTrace);
                         failureNumber++;
                     }
                 }
@@ -94,7 +92,7 @@ namespace NBehave.Narrator.Framework
 
         public void WriteSeparator()
         {
-            writer.WriteLine("");
+            _writer.WriteLine("");
         }
 
         public void WritePending(StoryResults results)
@@ -102,14 +100,14 @@ namespace NBehave.Narrator.Framework
             if (results.NumberOfPendingScenarios > 0)
             {
                 WriteSeparator();
-                writer.WriteLine("Pending:");
+                _writer.WriteLine("Pending:");
                 int pendingNumber = 1;
 
                 foreach (ScenarioResults result in results.ScenarioResults)
                 {
                     if (result.ScenarioResult == ScenarioResult.Pending)
                     {
-                        writer.WriteLine("{0}) {1} ({2}): {3}", pendingNumber, result.StoryTitle,
+                        _writer.WriteLine("{0}) {1} ({2}): {3}", pendingNumber, result.StoryTitle,
                                          result.ScenarioTitle, result.Message);
                         pendingNumber++;
                     }
@@ -122,7 +120,7 @@ namespace NBehave.Narrator.Framework
             string runtimeEnv =
                 string.Format("Runtime Environment -\r\n   OS Version: {0}\r\n  CLR Version: {1}", Environment.OSVersion,
                               Environment.Version);
-            writer.WriteLine(runtimeEnv);
+            _writer.WriteLine(runtimeEnv);
         }
     }
 }

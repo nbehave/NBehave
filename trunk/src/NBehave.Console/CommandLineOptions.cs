@@ -43,26 +43,26 @@ namespace Codeblast
     [AttributeUsage(AttributeTargets.Field)]
     public class OptionAttribute : Attribute
     {
-        protected object optValue;
-        protected string optName;
-        protected string description;
+        protected object _optValue;
+        protected string _optName;
+        protected string _description;
 
         public string Short
         {
-            get { return optName; }
-            set { optName = value; }
+            get { return _optName; }
+            set { _optName = value; }
         }
 
         public object Value
         {
-            get { return optValue; }
-            set { optValue = value; }
+            get { return _optValue; }
+            set { _optValue = value; }
         }
 
         public string Description
         {
-            get { return description; }
-            set { description = value; }
+            get { return _description; }
+            set { _description = value; }
         }
     }
 
@@ -72,19 +72,19 @@ namespace Codeblast
 
     public abstract class CommandLineOptions
     {
-        protected ArrayList parameters;
-        private readonly int optionCount;
+        protected ArrayList _parameters;
+        private readonly int _optionCount;
 
         protected CommandLineOptions(string[] args)
         {
-            optionCount = Init(args);
+            _optionCount = Init(args);
         }
 
         public bool NoArgs
         {
             get
             {
-                return ParameterCount == 0 && optionCount == 0;
+                return ParameterCount == 0 && _optionCount == 0;
             }
         }
 
@@ -106,8 +106,8 @@ namespace Codeblast
                 else
                 {
                     // It's a parameter:
-                    if (parameters == null) parameters = new ArrayList();
-                    parameters.Add(args[n]);
+                    if (_parameters == null) _parameters = new ArrayList();
+                    _parameters.Add(args[n]);
                 }
                 n++;
             }
@@ -230,21 +230,21 @@ namespace Codeblast
         {
             get
             {
-                if (parameters != null) return (string)parameters[index];
+                if (_parameters != null) return (string)_parameters[index];
                 return null;
             }
         }
 
         public ArrayList Parameters
         {
-            get { return parameters; }
+            get { return _parameters; }
         }
 
         public int ParameterCount
         {
             get
             {
-                return parameters == null ? 0 : parameters.Count;
+                return _parameters == null ? 0 : _parameters.Count;
             }
         }
 

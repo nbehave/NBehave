@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace NBehave.Narrator.Framework
@@ -56,11 +53,10 @@ namespace NBehave.Narrator.Framework
             {
                 bool allEqual = true;
                 int messageWordPos = 0;
-                bool isMatch = false;
                 string[] actionWords = SplitWordsToArray(key);
                 for (int actionWordPos = 0; actionWordPos < actionWords.Length; actionWordPos++)
                 {
-                    isMatch = false;
+                    bool isMatch = false;
                     var word = actionWords[actionWordPos];
                     if (WordIsToken(word))
                     {
@@ -170,7 +166,7 @@ namespace NBehave.Narrator.Framework
 
         private string[] GetTokensInMessage(string message)
         {
-            List<string> tokens = new List<string>();
+            var tokens = new List<string>();
 
             var matches = Regex.Matches(message, @"\$[a-zA-Z]+");
             foreach (var match in matches)
@@ -182,8 +178,8 @@ namespace NBehave.Narrator.Framework
 
         private string[] SplitWordsToArray(string message)
         {
-            List<string> finalWordList = new List<string>();
-            string[] words = message.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            var finalWordList = new List<string>();
+            string[] words = message.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             string[] tokens = GetTokensInMessage(message);
             foreach (var word in words)
             {

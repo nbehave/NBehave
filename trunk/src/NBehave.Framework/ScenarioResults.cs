@@ -1,15 +1,13 @@
 using System;
 using System.Text;
-using NBehave.Narrator.Framework;
 
 namespace NBehave.Narrator.Framework
 {
     public class ScenarioResults
     {
         private readonly string _storyTitle;
-        private string _scenarioTitle;
         private ScenarioResult _scenarioResult;
-        private string _message = null;
+        private string _message;
         private string _stackTrace;
 
         public ScenarioResults(string storyTitle, string scenarioTitle) : this(storyTitle, scenarioTitle, ScenarioResult.Passed)
@@ -19,7 +17,7 @@ namespace NBehave.Narrator.Framework
         public ScenarioResults(string storyTitle, string scenarioTitle, ScenarioResult scenarioResult)
         {
             _storyTitle = storyTitle;
-            _scenarioTitle = scenarioTitle;
+            ScenarioTitle = scenarioTitle;
             _scenarioResult = scenarioResult;
         }
 
@@ -28,11 +26,7 @@ namespace NBehave.Narrator.Framework
             get { return _storyTitle; }
         }
 
-        public string ScenarioTitle
-        {
-            get { return _scenarioTitle; }
-            set { _scenarioTitle = value; }
-        }
+        public string ScenarioTitle { get; set; }
 
         public ScenarioResult ScenarioResult
         {
@@ -64,7 +58,7 @@ namespace NBehave.Narrator.Framework
 
         private string BuildMessage(Exception exception)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.AppendFormat("{0} : {1}", exception.GetType(), exception.Message);
 
             Exception inner = exception.InnerException;
@@ -80,7 +74,7 @@ namespace NBehave.Narrator.Framework
 
         private string BuildStackTrace(Exception exception)
         {
-            StringBuilder builder = new StringBuilder(exception.StackTrace);
+            var builder = new StringBuilder(exception.StackTrace);
 
             Exception inner = exception.InnerException;
             while (inner != null)

@@ -1,8 +1,6 @@
 using System;
 using NBehave.Narrator.Framework;
 using NBehave.Spec.NUnit;
-using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
 
 namespace NBehave.Examples
 {
@@ -16,7 +14,7 @@ namespace NBehave.Examples
             Account savings = null;
             Account cash = null;
 
-            Story transferStory = new Story("Transfer to cash account");
+            var transferStory = new Story("Transfer to cash account");
 
             transferStory
                 .AsA("savings account holder")
@@ -28,9 +26,9 @@ namespace NBehave.Examples
 
                     .Given("my savings account balance is $balance", 100, accountBalance => { savings = new Account(accountBalance); })
                         .And("my cash account balance is $balance", 10, accountBalance => { cash = new Account(accountBalance); })
-                    .When("I transfer $amount to cash account", 20, transferAmount => { savings.TransferTo(cash, transferAmount); })
-                    .Then("my savings account balance should be $balance", 80, expectedBalance => { savings.Balance.ShouldEqual(expectedBalance); })
-                        .And("my cash account balance should be $balance", 30, expectedBalance => { cash.Balance.ShouldEqual(expectedBalance); })
+                    .When("I transfer $amount to cash account", 20, transferAmount => savings.TransferTo(cash, transferAmount))
+                    .Then("my savings account balance should be $balance", 80, expectedBalance => savings.Balance.ShouldEqual(expectedBalance))
+                        .And("my cash account balance should be $balance", 30, expectedBalance => cash.Balance.ShouldEqual(expectedBalance))
 
                     .Given("my savings account balance is 400")
                         .And("my cash account balance is 100")
@@ -60,7 +58,7 @@ namespace NBehave.Examples
         public void Withdraw_from_savings_account_pending()
         {
 
-            Story transferStory = new Story("Withdraw from savings account");
+            var transferStory = new Story("Withdraw from savings account");
 
             transferStory
                 .AsA("savings account holder")
@@ -81,7 +79,7 @@ namespace NBehave.Examples
         public void Deposit_not_implemented_properly()
         {
 
-            Story transferStory = new Story("Deposit to cash account");
+            var transferStory = new Story("Deposit to cash account");
 
             transferStory
                 .AsA("savings account holder")
@@ -93,32 +91,32 @@ namespace NBehave.Examples
             transferStory
                 .WithScenario("Savings account is in credit")
                 .Given("my cash account balance is", 100,
-                       (accountBalance) => { cash = new Account(accountBalance); })
-                .When("I deposit into my cash account", 20, (depositAmount) => { cash.Deposit(depositAmount); })
+                       accountBalance => { cash = new Account(accountBalance); })
+                .When("I deposit into my cash account", 20, depositAmount => cash.Deposit(depositAmount))
                 .Then("my cash account balance should be", 120,
-                      (expectedBalance) => { cash.Balance.ShouldEqual(expectedBalance); });
+                      expectedBalance => cash.Balance.ShouldEqual(expectedBalance));
 
         }
     }
 
     public class Account
     {
-        private int accountBalance;
+        private int _accountBalance;
 
         public Account(int accountBalance)
         {
-            this.accountBalance = accountBalance;
+            _accountBalance = accountBalance;
         }
 
         public int Balance
         {
-            get { return accountBalance; }
-            set { accountBalance = value; }
+            get { return _accountBalance; }
+            set { _accountBalance = value; }
         }
 
         public void TransferTo(Account account, int amount)
         {
-            if (accountBalance > 0)
+            if (_accountBalance > 0)
             {
                 account.Balance = account.Balance + amount;
                 Balance = Balance - amount;

@@ -28,7 +28,7 @@ namespace NBehave.Narrator.Framework
 
         public override string ToString()
         {
-            StringBuilder builder = new StringBuilder();
+            var builder = new StringBuilder();
             builder.Append('[');
             if (First != null)
             {

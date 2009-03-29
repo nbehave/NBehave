@@ -74,7 +74,7 @@ namespace NBehave.Narrator.Framework
     public class ActionStepRunner : RunnerBase
     {
         private readonly List<string> _scenarios = new List<string>();
-        private ActionStepAlias _actionStepAlias = new ActionStepAlias();
+        private readonly ActionStepAlias _actionStepAlias = new ActionStepAlias();
 
         public ActionCatalog ActionCatalog { get; protected set; }
 
@@ -104,7 +104,7 @@ namespace NBehave.Narrator.Framework
         {
             foreach (var scenario in _scenarios)
             {
-                ScenarioTitle scenarioTitle = new ScenarioTitle();
+                var scenarioTitle = new ScenarioTitle();
                 var scenarioResult = new ScenarioResults(string.Empty, string.Empty);
                 foreach (var row in scenario.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries))
                 {
@@ -265,10 +265,10 @@ namespace NBehave.Narrator.Framework
                         if (isFirstRow)
                         {
                             isFirstRow = false;
-                            newScenarioShouldStartRowWith = row.Split(new char[] { ' ' }).First();
+                            newScenarioShouldStartRowWith = row.Split(new[] { ' ' }).First();
                         }
 
-                        var currentRowStartsWith = row.Split(new char[] { ' ' }).First();
+                        var currentRowStartsWith = row.Split(new[] { ' ' }).First();
                         if (currentRowStartsWith != newScenarioShouldStartRowWith)
                             notOnFirstRowType = true;
                         if (notOnFirstRowType && row.StartsWith(newScenarioShouldStartRowWith, true, CultureInfo.CurrentCulture))

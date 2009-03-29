@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using System.Reflection;
 
 
@@ -10,9 +6,9 @@ namespace NBehave.Narrator.Framework
 {
     public class StoryRunnerFilter
     {
-        private Regex _namespaceFilter;
-        private Regex _classNameFilter;
-        private Regex _methodNameFilter;
+        private readonly Regex _namespaceFilter;
+        private readonly Regex _classNameFilter;
+        private readonly Regex _methodNameFilter;
 
         public StoryRunnerFilter()
             : this(".", ".", ".")

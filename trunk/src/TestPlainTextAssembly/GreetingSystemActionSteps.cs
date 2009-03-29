@@ -1,7 +1,5 @@
-﻿using NUnit.Framework;
-using NBehave.Spec.NUnit;
+﻿using NBehave.Spec.NUnit;
 using NBehave.Narrator.Framework;
-using System;
 
 namespace TestPlainTextAssembly
 {
@@ -12,14 +10,14 @@ namespace TestPlainTextAssembly
         private string _greeting;
 
         [Given("my name is $name")]
-        public void Given_my_name(string name)
+        public void Given_my_name_is(string name)
         {
             _greetingSystem = new GreetingSystem();
             _greetingSystem.GiveName(name);
         }
 
         [When("I'm greeted")]
-        public void When_I_ask_to_be_greeted()
+        public void When_Im_greeted()
         {
             _greeting = _greetingSystem.Greeting();
         }

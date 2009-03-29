@@ -1,8 +1,5 @@
-using System;
 using NBehave.Narrator.Framework;
 using NBehave.Spec.NUnit;
-using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
 using TestAssembly;
 
 namespace TestPlainTextAssembly
@@ -16,7 +13,7 @@ namespace TestPlainTextAssembly
             Account savings = null;
             Account cash = null;
 
-            Story transferStory = new Story("Transfer to cash account");
+            var transferStory = new Story("Transfer to cash account");
 
             transferStory
                 .AsA("savings account holder")

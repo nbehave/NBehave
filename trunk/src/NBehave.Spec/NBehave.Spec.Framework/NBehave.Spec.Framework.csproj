@@ -7,7 +7,7 @@
     <ProjectGuid>{87B1B4CA-3EF7-44EB-BF48-5A472E26F1B0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NBehave.Spec.Framework</RootNamespace>
+    <RootNamespace>NBehave.Spec</RootNamespace>
     <AssemblyName>NBehave.Spec.Framework</AssemblyName>
     <SccProjectName>
     </SccProjectName>

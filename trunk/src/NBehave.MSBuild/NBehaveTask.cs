@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using Microsoft.Build.Utilities;
 using Microsoft.Build.Framework;
@@ -32,38 +30,38 @@ namespace NBehave.MSBuild
             FailBuild = true;
         }
 
-    	public NBehaveTask(IBuildEngine buildEngine) : this()
-    	{
-    		BuildEngine = buildEngine;
-    	}
+        public NBehaveTask(IBuildEngine buildEngine)
+            : this()
+        {
+            BuildEngine = buildEngine;
+        }
 
-    	public override bool Execute()
+        public override bool Execute()
         {
             if (TestAssemblies.Length == 0)
                 throw new ArgumentException("At least one test assembly is required");
 
-            StringBuilder logString = new StringBuilder();
+            var logString = new StringBuilder();
             TextWriter logWriter = new StringWriter(logString);
-            PlainTextOutput output = new PlainTextOutput(logWriter);
+            var output = new PlainTextOutput(logWriter);
 
             WriteHeaderInto(output);
 
-            StoryRunner runner = new StoryRunner();
-            runner.IsDryRun = DryRun;
+            var runner = new StoryRunner { IsDryRun = DryRun };
 
             foreach (string path in TestAssemblies)
             {
                 runner.LoadAssembly(path);
             }
 
-            StoryResults = runner.Run(CreateEventListenerUsing(logWriter));
+            StoryResults = runner.Run(CreateEventListenerUsing());
 
             if (DryRun)
                 return true;
 
             WriteResultsInto(output, StoryResults);
-        	string message = logString.ToString();
-        	Log.LogMessage(message);
+            string message = logString.ToString();
+            Log.LogMessage(message);
 
             if (FailBuild && FailBuildBasedOn(StoryResults))
                 return false;
@@ -71,10 +69,10 @@ namespace NBehave.MSBuild
             return true;
         }
 
-        private IEventListener CreateEventListenerUsing(TextWriter nantLogWriter)
+        private IEventListener CreateEventListenerUsing()
         {
-            XmlTextWriter writer = new XmlTextWriter(StoryOutputPath, Encoding.UTF8);
-            return new NBehave.Narrator.Framework.EventListeners.Xml.XmlOutputEventListener(writer);
+            var writer = new XmlTextWriter(StoryOutputPath, Encoding.UTF8);
+            return new Narrator.Framework.EventListeners.Xml.XmlOutputEventListener(writer);
         }
 
         private void WriteHeaderInto(PlainTextOutput output)
@@ -108,7 +106,7 @@ namespace NBehave.MSBuild
 
             Log.LogError(exceptionMessage.ToString());
             return true;
-        }       
+        }
     }
 
 

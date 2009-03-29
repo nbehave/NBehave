@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace NBehave.Narrator.Framework
 {
-    public enum ScenarioResult : int
+    public enum ScenarioResult
     {
         Passed,
         Failed,

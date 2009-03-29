@@ -117,7 +117,7 @@ namespace NBehave.Narrator.Framework
 
         internal void InvokeAction(string type, string message, Action action)
         {
-            InvokeActionBase(type, message, action, delegate { action(); });
+            InvokeActionBase(type, message, action, action);
         }
 
         private string BuildFormatString(string message, ICollection<object> args)

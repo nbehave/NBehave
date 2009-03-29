@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using NBehave.Narrator.Framework;
 
 namespace NBehave.Narrator.Framework
 {

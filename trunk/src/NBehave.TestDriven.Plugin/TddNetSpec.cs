@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using NBehave.Narrator.Framework;
+﻿using NBehave.Narrator.Framework;
 
 namespace NBehave.TestDriven.Plugin
 {
@@ -13,7 +8,7 @@ namespace NBehave.TestDriven.Plugin
         [Story]
         public void Implementing_NBehave_support_in_testdriven_dot_net()
         {
-            Story tddNetStory = new Story("Testdriven.NET Support");
+            var tddNetStory = new Story("Testdriven.NET Support");
 
             tddNetStory
                 .AsA("fan of NBehave")
@@ -42,7 +37,7 @@ namespace NBehave.TestDriven.Plugin
         [Story]
         public void SomeOtherStory()
         {
-            Story tddNetStory = new Story("Testdriven.NET Support second story");
+            var tddNetStory = new Story("Testdriven.NET Support second story");
 
             tddNetStory
                 .AsA("addict of NBehave")
