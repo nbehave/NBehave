@@ -1,6 +1,5 @@
 ﻿using Rhino.Mocks;
 using NBehave.Spec.Xunit;
-using XunitExt;
 using Specification = Xunit.FactAttribute;
 
 namespace Xunit.SpecBase_Specifications
@@ -19,7 +18,7 @@ namespace Xunit.SpecBase_Specifications
 		[Specification]
 		public void should_populate_the_SUT_before_starting_the_specification()
 		{
-			Sut.ShouldNotBeNull();
+            Assert.NotNull(Sut);
 		}
 	}
 
