@@ -1,4 +1,6 @@
-!define VERSION "0.4"
+!ifndef VERSION
+	!define VERSION "0.4"
+!endif
 !define FILES "..\..\Build\dist"
 !define EXAMPLEFILES "..\..\Build"
 ; The name of the installer
