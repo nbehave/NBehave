@@ -8,7 +8,7 @@ Name "NBehave"
 
 
 ; The files to write
-Outfile "..\..\Build\NBehave ${VERSION}.exe"
+Outfile "..\..\Build\NBehave_${VERSION}.exe"
 
 ; The default installation directory
 InstallDir $PROGRAMFILES\NBehave\${VERSION}

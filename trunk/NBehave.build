@@ -16,7 +16,9 @@
 	</target>
 
 	<target name="clean" depends="init" description="Delete automated build artifacts">
-    <delete dir="${build.dir}" if="${directory::exists(build.dir)}"/>
+    <delete dir="${build.dir}/Debug" if="${directory::exists(build.dir)}"/>
+    <delete dir="${build.dir}/dist" if="${directory::exists(build.dir)}"/>
+    <delete dir="${build.dir}/test-reports" if="${directory::exists(build.dir)}"/>
   </target>
 
   <target name="compile">
@@ -138,7 +140,7 @@
         <exclude name="**\*.pdb" />
       </fileset>
     </copy>
-		<zip zipfile="${build.dir}\NBehave.zip">
+		<zip zipfile="${build.dir}\NBehave_${project.fullversion}.zip">
 			<fileset basedir="${build.dir}\dist">
 				<include name="**\*" />
 			</fileset>
