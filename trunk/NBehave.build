@@ -2,11 +2,12 @@
 <project name="NBehave" default="test" xmlns="http://nant.sf.net/schemas/nant.xsd">
 	<property name="solution.dir" value="src" />
 	<property name="build.dir" value="build" />
+  <property name="test.dir" value ="${build.dir}\Debug\UnitTests" />
 	<property name="company.name" value="${project::get-name()}"/>
 	<property name="project.fullversion" value="0.4.0.0" dynamic="true" />
 	<property name="project.config" value="release" />
-
-	<!-- User targets -->
+  
+  <!-- User targets -->
 	<target name="init" description="Initializes build properties">
 		<tstamp>
 			<formatter property="datetime.buildtime" pattern="yyyy-MM-dd, HH:mm:ss" />
@@ -70,10 +71,10 @@
              Silent="true"/>
   </target>
 
-  <target name="run-unit-tests">
+  <target name="run-unit-tests" depends="teamcity-nunit-addin">
     <mkdir dir="${build.dir}\test-reports" />
 
-    <exec program="nunit-console.exe" basedir="tools\nunit" workingdir="${build.dir}\Debug\UnitTests">
+    <exec program="nunit-console.exe" basedir="tools\nunit" workingdir="${test.dir}">
       <arg value="NBehave.Narrator.Framework.Specifications.dll" />
       <arg value="NBehave.Console.Tests.dll" />
       <arg value="NBehave.Spec.NUnit.Specs.dll" />
@@ -81,11 +82,24 @@
       <arg value="NBehave.Spec.MSTest.Specs.dll" />
       <arg value="NBehave.Spec.Xunit.Specs.dll" />
       <arg value="NBehave.NAnt.Tests.dll" />
-	  <arg value="NBehave.MSBuild.Tests.dll" />
-	  <arg value="NBehave.TestDriven.Plugin.Specs.dll" />
+      <arg value="NBehave.MSBuild.Tests.dll" />
+      <arg value="NBehave.TestDriven.Plugin.Specs.dll" />
       <arg value="/xml:..\..\test-reports\UnitTests.xml" />
     </exec>
+  </target>
 
+  <target name="teamcity-nunit-addin" if="${property::exists('teamcity.dotnet.nunitaddin')}" >
+    <mkdir dir="tools/nunit/addins" />
+    <copy todir ="tools/nunit/addins">
+      <fileset>
+        <include name="${teamcity.dotnet.nunitaddin}-2.4.8.*" />
+      </fileset>
+    </copy>
+    <copy todir ="tools/nunit">
+      <fileset>
+        <include name="${teamcity.dotnet.nunitaddin}-2.4.8.*" />
+      </fileset>
+    </copy>
   </target>
 
   <target name="run-unit-tests-with-coverage">
