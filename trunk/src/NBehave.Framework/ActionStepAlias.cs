@@ -16,6 +16,8 @@ namespace NBehave.Narrator.Framework
 
         public static IEnumerable<string> GetAliasesForAttribute(string actionStep)
         {
+            if (_config == null || string.IsNullOrEmpty(actionStep))
+                return new List<string>();
             string value = _config[string.Format("Alias.{0}", actionStep)] ?? string.Empty;
             return value.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
         }
