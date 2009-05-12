@@ -9,14 +9,6 @@ namespace NBehave.Narrator.Framework.Specifications
 {
     public class ActionStepAliasSpec
     {
-        public class ErgoAttribute : ActionStepAttribute
-        {
-            //Ergo = Given in latin, from http://www.freedict.com/onldict/onldict.php
-            public ErgoAttribute(string tokenString)
-                : base("Ergo " + tokenString)
-            { }
-        }
-
         [Context]
         public class When_registering_alias_for_ActionStepAttribute
         {
@@ -31,7 +23,7 @@ namespace NBehave.Narrator.Framework.Specifications
             public void ShouldRegisterAndAsDefaultAliasForGiven()
             {
                 var actionStepAlias = new ActionStepAlias();
-                var aliases = actionStepAlias.GetAliasFor(typeof(GivenAttribute));
+                var aliases = actionStepAlias.GetAliasFor("Given");
                 Assert.That(aliases.Count(), Is.EqualTo(1));
                 Assert.That(aliases.First(), Is.EqualTo("And"));
             }
@@ -40,7 +32,7 @@ namespace NBehave.Narrator.Framework.Specifications
             public void ShouldRegisterAndAsDefaultAliasForThen()
             {
                 var actionStepAlias = new ActionStepAlias();
-                var aliases = actionStepAlias.GetAliasFor(typeof(ThenAttribute));
+                var aliases = actionStepAlias.GetAliasFor("Then");
                 Assert.That(aliases.Count(), Is.EqualTo(1));
                 Assert.That(aliases.First(), Is.EqualTo("And"));
             }
@@ -49,7 +41,7 @@ namespace NBehave.Narrator.Framework.Specifications
             public void ShouldRegisterAndAsDefaultAliasForErgo()
             {
                 var actionStepAlias = new ActionStepAlias();
-                IEnumerable<string> aliases = actionStepAlias.GetAliasFor(typeof(ErgoAttribute));
+                IEnumerable<string> aliases = actionStepAlias.GetAliasFor("Ergo");
                 Assert.That(aliases.Count(), Is.EqualTo(3));
                 Assert.That(aliases.First(), Is.EqualTo("Tunc"));
                 Assert.That(aliases.Skip(1).First(), Is.EqualTo("Deinde"));
@@ -89,7 +81,7 @@ namespace NBehave.Narrator.Framework.Specifications
             {
                 var actionStepAlias = new ActionStepAlias();
                 actionStepAlias.AddDefaultAlias(new[] { "Foo" }, "Given");
-                var aliases = actionStepAlias.GetAliasFor(typeof(GivenAttribute));
+                var aliases = actionStepAlias.GetAliasFor("Given");
                 Assert.That(aliases, Has.Member("Foo"));
             }
         }
@@ -103,7 +95,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 var actionStepAlias = new ActionStepAlias();
                 actionStepAlias.AddDefaultAlias(new[] { "Foo" }, "Given");
                 actionStepAlias.AddDefaultAlias(new[] { "Foo" }, "Given");
-                var aliases = actionStepAlias.GetAliasFor(typeof(GivenAttribute));
+                var aliases = actionStepAlias.GetAliasFor("Given");
                 Assert.That(aliases.Count(), Is.EqualTo(2));
             }
         }

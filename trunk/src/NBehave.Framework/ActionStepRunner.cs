@@ -7,71 +7,6 @@ using System.Globalization;
 
 namespace NBehave.Narrator.Framework
 {
-    [AttributeUsage(AttributeTargets.Class)]
-    public class ActionStepsAttribute : Attribute
-    { }
-
-    [AttributeUsage(AttributeTargets.Method)]
-    public class ActionStepAttribute : Attribute
-    {
-        public string TokenString { get; private set; }
-
-        protected ActionStepAttribute(string tokenString)
-        {
-            TokenString = tokenString;
-        }
-    }
-
-    public sealed class GivenAttribute : ActionStepAttribute
-    {
-        public GivenAttribute(string tokenString)
-            : base("Given " + tokenString)
-        { }
-    }
-
-    public sealed class WhenAttribute : ActionStepAttribute
-    {
-        public WhenAttribute(string tokenString)
-            : base("When " + tokenString)
-        { }
-    }
-
-    public sealed class ThenAttribute : ActionStepAttribute
-    {
-        public ThenAttribute(string tokenString)
-            : base("Then " + tokenString)
-        { }
-    }
-
-    public class ScenarioAttribute : ActionStepAttribute
-    {
-        public ScenarioAttribute()
-            :base("Scenario: Unnamed")
-        { }
-
-        public ScenarioAttribute(string tokenString) : base("Scenario: " + tokenString)
-        { }
-
-        public bool IsScenarioTitle(string text)
-        {
-            return (text.ToLower().StartsWith("scenario"));
-        }
-
-        public string GetTitleText(string text)
-        {
-            string title = string.Empty;
-            if (text.ToLower().StartsWith("scenario"))
-            {
-                int firstSpaceAt = text.IndexOf(' ');
-                if (firstSpaceAt > 0)
-                    title = text.Substring(firstSpaceAt + 1);
-                else
-                    title = string.Empty;
-            }
-            return title;
-        }
-    }
-
     public class ActionMethodInfo
     {
         public string TokenString { get; set; }
@@ -109,11 +44,11 @@ namespace NBehave.Narrator.Framework
 
         private void RunScenarios(StoryResults results, IEventListener listener)
         {
-            var textToTokenStringsParser = new TextToTokenStringsParser(new ActionStepAlias());
+            var textToTokenStringsParser = new TextToTokenStringsParser(_actionStepAlias);
 
             foreach (var scenario in _scenarios)
             {
-                var scenarioTitle = new ScenarioAttribute();
+                //How to handle Scenario, special treatment in config?
                 var scenarioResult = new ScenarioResults(string.Empty, string.Empty);
                 textToTokenStringsParser.ParseScenario(scenario);
                 foreach (var row in textToTokenStringsParser.TokenStrings)
@@ -121,9 +56,9 @@ namespace NBehave.Narrator.Framework
                     listener.StoryMessageAdded(row);
                     try
                     {
-                        if (scenarioTitle.IsScenarioTitle(row))
+                        if (Scenario.IsScenarioTitle(row))
                         {
-                            scenarioResult.ScenarioTitle = scenarioTitle.GetTitleText(row);
+                            scenarioResult.ScenarioTitle = Scenario.GetTitle(row);
                         }
                         else
                         {

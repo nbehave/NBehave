@@ -9,15 +9,23 @@ namespace NBehave.Narrator.Framework
     {
         private static readonly NameValueCollection _config = ConfigurationManager.GetSection("NBehave") as NameValueCollection;
 
-        public static IEnumerable<string> GetAliasesForAttribute(Type actionStepAttribute)
+        private static IEnumerable<string> GetValue(string configKey)
         {
-            return GetAliasesForAttribute(actionStepAttribute.Name.Replace("Attribute", ""));
+            string value = _config[configKey] ?? string.Empty;
+            return value.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
         }
 
-        public static IEnumerable<string> GetAliasesForAttribute(string actionStep)
+        public static IEnumerable<string> GetAliasesForActionStep(string actionStep)
         {
-            string value = _config[string.Format("Alias.{0}", actionStep)] ?? string.Empty;
-            return value.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            return GetValue(string.Format("Alias.{0}", actionStep));
+        }
+
+        public static IEnumerable<string> ActionSteps
+        {
+            get
+            {
+                return GetValue("ActionStep");
+            }
         }
     }
 }

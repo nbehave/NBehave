@@ -10,18 +10,18 @@ namespace NBehave.Narrator.Framework
 
         public ActionStepAlias()
         {
-            AddAliasFromNarratorAssembly();
+            AddDefaultAlias();
         }
 
-        private void AddAliasFromNarratorAssembly()
+        private void AddDefaultAlias()
         {
-            var types = GetType().Assembly.GetTypes();
-            var actionSteps = from t in types
-                              where t.IsSubclassOf(typeof(ActionStepAttribute))
-                              select t.Name.Replace("Attribute", "");
-            foreach (var alias in actionSteps)
+            var defaultActionSteps = new[] { "Given", "When", "Then", "Scenario" };
+            var actionSteps = ActionStepAliasConfiguration.ActionSteps;
+            if (actionSteps == null || actionSteps.Count() == 0)
+                actionSteps = defaultActionSteps;
+            foreach (var actionStep in actionSteps)
             {
-                AddDefaultAlias(new List<string>(), alias);
+                AddDefaultAlias(new List<string>(), actionStep);
             }
         }
 
@@ -38,21 +38,13 @@ namespace NBehave.Narrator.Framework
             get { return _aliases; }
         }
 
-        public IEnumerable<string> GetAliasFor(Type actionStepsAttribute)
-        {
-            IEnumerable<string> aliasForAttribute = ActionStepAliasConfiguration.GetAliasesForAttribute(actionStepsAttribute);
-            string actionStep = TypeAsStringWithoutAttributeAtEnd(actionStepsAttribute);
-            AddDefaultAlias(aliasForAttribute, actionStep);
-            return Aliases[actionStep];
-        }
-
         public void AddDefaultAlias(IEnumerable<string> aliasList, string actionWord)
         {
             var defaultAliasForGiven = new List<string> { "And" };
             var joinList = GetListFor(actionWord);
             JoinLists(joinList, aliasList);
-            if ((actionWord == TypeAsStringWithoutAttributeAtEnd(typeof(GivenAttribute)))
-                || (actionWord == TypeAsStringWithoutAttributeAtEnd(typeof(ThenAttribute))))
+            if ((actionWord.Equals("Given", StringComparison.CurrentCultureIgnoreCase))
+                || (actionWord.Equals("Then", StringComparison.CurrentCultureIgnoreCase)))
             {
                 JoinLists(joinList, defaultAliasForGiven);
             }
@@ -76,11 +68,6 @@ namespace NBehave.Narrator.Framework
             return list;
         }
 
-        private string TypeAsStringWithoutAttributeAtEnd(Type type)
-        {
-            return type.Name.Replace("Attribute", "");
-        }
-
         private IEnumerable<string> JoinListsToNewList(IEnumerable<string> firstList, IEnumerable<string> secondList)
         {
             var list = new List<string>(secondList);
@@ -93,7 +80,7 @@ namespace NBehave.Narrator.Framework
         {
             int startIndex = (tokenString.IndexOf(' ') != -1) ? tokenString.IndexOf(' ') : tokenString.Length;
             string firstWord = tokenString.Substring(0, startIndex);
-            AddDefaultAlias(ActionStepAliasConfiguration.GetAliasesForAttribute(firstWord), firstWord);
+            AddDefaultAlias(ActionStepAliasConfiguration.GetAliasesForActionStep(firstWord), firstWord);
 
             var tokenAliases = new List<string>();
             string restOfToken = tokenString.Substring(startIndex);
@@ -102,6 +89,13 @@ namespace NBehave.Narrator.Framework
                 tokenAliases.Add(tokenAlias + restOfToken);
             }
             return tokenAliases;
+        }
+
+        public IEnumerable<string> GetAliasFor(string actionStep)
+        {
+            IEnumerable<string> aliasForAttribute = ActionStepAliasConfiguration.GetAliasesForActionStep(actionStep);
+            AddDefaultAlias(aliasForAttribute, actionStep);
+            return Aliases[actionStep];
         }
     }
 }

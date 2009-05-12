@@ -70,7 +70,9 @@
     <Compile Include="ActionMissingException.cs" />
     <Compile Include="ActionStepAlias.cs" />
     <Compile Include="ActionStepAliasConfiguration.cs" />
+    <Compile Include="ActionStepAttribute.cs" />
     <Compile Include="ActionStepRunner.cs" />
+    <Compile Include="ActionStepsAttribute.cs" />
     <Compile Include="AsAFragment.cs" />
     <Compile Include="DisposableAction.cs" />
     <Compile Include="EventArgs.cs" />

@@ -9,20 +9,20 @@ namespace TestPlainTextAssembly
         private GreetingSystem _greetingSystem;
         private string _greeting;
 
-        [Given("my name is $name")]
+        [ActionStep("Given my name is $name")]
         public void Given_my_name_is(string name)
         {
             _greetingSystem = new GreetingSystem();
             _greetingSystem.GiveName(name);
         }
 
-        [When("I'm greeted")]
+        [ActionStep("When I'm greeted")]
         public void When_Im_greeted()
         {
             _greeting = _greetingSystem.Greeting();
         }
 
-        [Then("I should be greeted with “Hello, $name!”")]
+        [ActionStep("Then I should be greeted with “Hello, $name!”")]
         public void Then_I_should_be_greeted(string name)
         {
             _greeting.ShouldEqual(string.Format("“Hello, {0}!”", name));
