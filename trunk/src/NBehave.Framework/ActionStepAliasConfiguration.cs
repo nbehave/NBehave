@@ -11,12 +11,16 @@ namespace NBehave.Narrator.Framework
 
         private static IEnumerable<string> GetValue(string configKey)
         {
+            if (_config == null)
+                return new List<string>();
             string value = _config[configKey] ?? string.Empty;
             return value.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
         }
 
         public static IEnumerable<string> GetAliasesForActionStep(string actionStep)
         {
+            if (string.IsNullOrEmpty(actionStep))
+                return new List<string>();
             return GetValue(string.Format("Alias.{0}", actionStep));
         }
 
