@@ -51,7 +51,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.Spec.MSTest.Specs",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.TestDriven.Plugin", "NBehave.TestDriven.Plugin\NBehave.TestDriven.Plugin.csproj", "{E2F5DC64-F661-459E-AC9C-1435FE9DFAA7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.TestDriven.Plugin.Specs", "Nbehave.TestDriven.Plugin.Specs\NBehave.TestDriven.Plugin.Specs.csproj", "{DE09420A-3295-4EE3-8660-BB18BA5B878C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.TestDriven.Plugin.Specs", "Nbehave.TestDriven.Plugin.Specs\Nbehave.TestDriven.Plugin.Specs.csproj", "{DE09420A-3295-4EE3-8660-BB18BA5B878C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testdriven.net.plugin", "Testdriven.net.plugin", "{AE528F68-87F6-43E2-B272-8EF015B4AFEB}"
 EndProject
@@ -233,5 +233,9 @@ Global
 		{5CBAFACF-8BD9-46FB-A0BC-276EDE593186} = {78E62BFB-D059-42BB-B21D-F5A552557514}
 		{DE09420A-3295-4EE3-8660-BB18BA5B878C} = {AE528F68-87F6-43E2-B272-8EF015B4AFEB}
 		{E2F5DC64-F661-459E-AC9C-1435FE9DFAA7} = {AE528F68-87F6-43E2-B272-8EF015B4AFEB}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		CodeStyleEnforcer_RulesLocation = 
+		CodeStyleEnforcer_Active = 0
 	EndGlobalSection
 EndGlobal

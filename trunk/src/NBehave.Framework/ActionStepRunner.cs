@@ -16,7 +16,7 @@ namespace NBehave.Narrator.Framework
     {
         public string TokenString { get; private set; }
 
-        public ActionStepAttribute(string tokenString)
+        protected ActionStepAttribute(string tokenString)
         {
             TokenString = tokenString;
         }
@@ -43,8 +43,15 @@ namespace NBehave.Narrator.Framework
         { }
     }
 
-    public class ScenarioTitle
+    public class ScenarioAttribute : ActionStepAttribute
     {
+        public ScenarioAttribute()
+            :base("Scenario: Unnamed")
+        { }
+
+        public ScenarioAttribute(string tokenString) : base("Scenario: " + tokenString)
+        { }
+
         public bool IsScenarioTitle(string text)
         {
             return (text.ToLower().StartsWith("scenario"));
@@ -76,7 +83,7 @@ namespace NBehave.Narrator.Framework
         private readonly List<string> _scenarios = new List<string>();
         private readonly ActionStepAlias _actionStepAlias = new ActionStepAlias();
 
-        public ActionCatalog ActionCatalog { get; protected set; }
+        public ActionCatalog ActionCatalog { get; private set; }
 
         public ActionStepRunner()
         {
@@ -102,11 +109,14 @@ namespace NBehave.Narrator.Framework
 
         private void RunScenarios(StoryResults results, IEventListener listener)
         {
+            var textToTokenStringsParser = new TextToTokenStringsParser(new ActionStepAlias());
+
             foreach (var scenario in _scenarios)
             {
-                var scenarioTitle = new ScenarioTitle();
+                var scenarioTitle = new ScenarioAttribute();
                 var scenarioResult = new ScenarioResults(string.Empty, string.Empty);
-                foreach (var row in scenario.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries))
+                textToTokenStringsParser.ParseScenario(scenario);
+                foreach (var row in textToTokenStringsParser.TokenStrings)
                 {
                     listener.StoryMessageAdded(row);
                     try
@@ -250,12 +260,25 @@ namespace NBehave.Narrator.Framework
 
         public void Load(Stream stream)
         {
+            var scenarioTextParser = new TextToTokenStringsParser(_actionStepAlias);
+            using (var fs = new StreamReader(stream))
+                scenarioTextParser.ParseScenario(fs.ReadToEnd());
+            var tokenStringsToScenarioParser = new TokenStringsToScenarioParser();
+            tokenStringsToScenarioParser.ParseTokensToScenarios(scenarioTextParser.TokenStrings);
+            List<string> scenarios = tokenStringsToScenarioParser.Scenarios;
+            _scenarios.AddRange(scenarios);
+        }
+
+        public void Load_old(Stream stream)
+        {
             using (var fs = new StreamReader(stream))
             {
                 string scenario = string.Empty;
-                string newScenarioShouldStartRowWith = string.Empty;
                 bool isFirstRow = true;
                 bool notOnFirstRowType = false;
+                string newScenarioShouldStartRowWith = string.Empty;
+
+
                 while (fs.EndOfStream == false)
                 {
                     string row = fs.ReadLine() ?? string.Empty;

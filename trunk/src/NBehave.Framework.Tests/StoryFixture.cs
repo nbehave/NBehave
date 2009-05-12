@@ -2,6 +2,9 @@ using System;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 
+using Context = NUnit.Framework.TestFixtureAttribute;
+using Specification = NUnit.Framework.TestAttribute;
+
 namespace NBehave.Narrator.Framework.Specifications
 {
     [TestFixture]
@@ -485,6 +488,44 @@ namespace NBehave.Narrator.Framework.Specifications
                , actual);
         }
 
+        [Context]
+        public class When_using_tokenized_stories
+        {
+            [Specification]
+            public void should_replace_token_with_value()
+            {
+                string actual = string.Empty;
+                Story.MessageAdded += (sender, e) => actual += string.Format("{0}: {1}{2}", e.EventData.Type, e.EventData.Message, Environment.NewLine);
+
+                new Story("Transfer to cash account")
+                    .WithScenario("Account has sufficient funds")
+                    .Given("the account balance is $balance", 20, accountBalance => { });
+
+                Assert.AreEqual(
+                                   "Given: Given the account balance is 20" + Environment.NewLine
+                                   , actual);
+            }
+
+            [Specification]
+            public void should_not_add_value_to_reused_token()
+            {
+                string actual = string.Empty;
+                Story.MessageAdded += (sender, e) => actual += string.Format("{0}: {1}{2}", e.EventData.Type, e.EventData.Message, Environment.NewLine);
+
+                new Story("Transfer to cash account")
+                    .WithScenario("Account has sufficient funds")
+                    .Given("the account balance is $balance", 20, accountBalance => { })
+                    .And("the account balance is 30");
+
+                Assert.AreEqual(
+                           "Given: Given the account balance is 20" + Environment.NewLine +
+                           "And: And the account balance is 30" + Environment.NewLine
+                           , actual);
+
+            }
+
+          
+        }  
     }
 
     public class Account

@@ -8,7 +8,7 @@ namespace NBehave.Narrator.Framework.EventListeners
 
         public TextWriterEventListener(TextWriter writer)
         {
-            this._writer = writer;
+            _writer = writer;
         }
 
         void IEventListener.StoryCreated(string story)
@@ -23,7 +23,7 @@ namespace NBehave.Narrator.Framework.EventListeners
 
         void IEventListener.ScenarioCreated(string scenarioTitle)
         {
-            _writer.WriteLine("scenario created: {0}", scenarioTitle);            
+            _writer.WriteLine("scenario created: {0}", scenarioTitle);
         }
 
         void IEventListener.ScenarioMessageAdded(string message)
@@ -54,6 +54,5 @@ namespace NBehave.Narrator.Framework.EventListeners
         void IEventListener.StoryResults(StoryResults results)
         {
         }
-
     }
 }

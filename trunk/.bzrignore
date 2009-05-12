@@ -1,0 +1,13 @@
+**/bin/
+**/obj/
+*.suo
+build/debug/*.*
+build/debug/**/*.*
+**/*.user
+build/**/*.*
+build/*.*
+build/
+*.Cache
+**/_ReSharper.*
+.bzrignore
+*.cache

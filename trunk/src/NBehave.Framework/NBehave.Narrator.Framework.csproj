@@ -69,6 +69,7 @@
     <Compile Include="ActionCatalog.cs" />
     <Compile Include="ActionMissingException.cs" />
     <Compile Include="ActionStepAlias.cs" />
+    <Compile Include="ActionStepAliasConfiguration.cs" />
     <Compile Include="ActionStepRunner.cs" />
     <Compile Include="AsAFragment.cs" />
     <Compile Include="DisposableAction.cs" />
@@ -95,6 +96,7 @@
     <Compile Include="ScenarioResult.cs" />
     <Compile Include="ScenarioResultEventArgs.cs" />
     <Compile Include="ScenarioResults.cs" />
+    <Compile Include="TextToTokenStringsParser.cs" />
     <Compile Include="SoThatFragment.cs" />
     <Compile Include="Story.cs" />
     <Compile Include="StoryAttribute.cs" />
@@ -103,6 +105,7 @@
     <Compile Include="StoryRunnerFilter.cs" />
     <Compile Include="ThemeAttribute.cs" />
     <Compile Include="ThenFragment.cs" />
+    <Compile Include="TokenStringsToScenarioParser.cs" />
     <Compile Include="WhenFragment.cs" />
   </ItemGroup>
   <ItemGroup>

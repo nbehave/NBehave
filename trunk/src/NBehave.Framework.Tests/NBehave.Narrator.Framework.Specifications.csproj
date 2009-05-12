@@ -77,16 +77,17 @@
     <Compile Include="ActionStepAliasSpec.cs" />
     <Compile Include="EventListeners\MultiOutputEventListenerFixture.cs" />
     <Compile Include="EventListeners\TextWriterEventListenerFixture.cs" />
-    <Compile Include="ActionsWithTokensSpec.cs" />
     <Compile Include="EventListeners\XmlOutputEventListenerSpec.cs" />
-    <Compile Include="ActionStepRunnerSpecification.cs" />
+    <Compile Include="ActionStepRunnerSpec.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScenarioFixture.cs" />
     <Compile Include="ScenarioResultsFixture.cs" />
+    <Compile Include="TextToTokenStringsParserSpec.cs" />
     <Compile Include="StoryFixture.cs" />
     <Compile Include="StoryResultsFixture.cs" />
     <Compile Include="StoryRunnerFilterSpecs.cs" />
-    <Compile Include="StoryRunnerFixture.cs" />
+    <Compile Include="StoryRunnerSpec.cs" />
+    <Compile Include="TokenStringsToScenarioParserSpec.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NBehave.Framework\NBehave.Narrator.Framework.csproj">

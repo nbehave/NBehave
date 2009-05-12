@@ -179,7 +179,8 @@ namespace NBehave.Narrator.Framework
         private string[] SplitWordsToArray(string message)
         {
             var finalWordList = new List<string>();
-            string[] words = message.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+            string[] words = message.Split(new[] { ' ', '\n', '\r', '\t' }, StringSplitOptions.RemoveEmptyEntries);
             string[] tokens = GetTokensInMessage(message);
             foreach (var word in words)
             {

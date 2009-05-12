@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{5CBAFACF-8BD9-46FB-A0BC-276EDE593186}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -66,6 +66,8 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\CommonAssemblyInfo.cs">
@@ -73,6 +75,9 @@
     </Compile>
     <Compile Include="AccountSpecs.cs" />
     <Compile Include="AccountHolderSpecs.cs" />
+    <Compile Include="TheGameOfLife\Domain\GameOfLife.cs" />
+    <Compile Include="TheGameOfLife\Scenario\CanToggleACell.cs" />
+    <Compile Include="TheGameOfLife\Scenario\GameOfLifeSteps.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -97,12 +102,17 @@
     <None Include="..\NBehave.snk">
       <Link>NBehave.snk</Link>
     </None>
+    <None Include="TheGameOfLife\Scenario\can_toggle_a_cell.scenario" />
+    <None Include="TheGameOfLife\Scenario\the_grid_starts_empty.scenario" />
     <None Include="msbuildTask.msbuild">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="nantTask.build">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="TheGameOfLife\Behaviour\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
