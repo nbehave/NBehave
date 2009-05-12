@@ -10,7 +10,6 @@ namespace NBehave.Narrator.Framework
 
         public ActionStepAlias()
         {
-            //TODO: Parse assembly for all attributes inheriting ActionStepAttribute
             AddAliasFromNarratorAssembly();
         }
 

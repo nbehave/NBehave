@@ -1,3 +1,4 @@
+.bzrignore
 **/bin/
 **/obj/
 *.suo
