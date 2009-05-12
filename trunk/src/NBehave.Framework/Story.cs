@@ -39,13 +39,13 @@ namespace NBehave.Narrator.Framework
             OnStoryCreated(new EventArgs<Story>(this));
         }
 
-        protected void OnStoryCreated(EventArgs<Story> e)
+        private void OnStoryCreated(EventArgs<Story> e)
         {
             if (StoryCreated != null)
                 StoryCreated(null, e);
         }
 
-        protected void OnScenarioAdded(EventArgs<Scenario> e)
+        private void OnScenarioAdded(EventArgs<Scenario> e)
         {
             if (ScenarioCreated != null)
                 ScenarioCreated(null, e);
@@ -249,7 +249,8 @@ namespace NBehave.Narrator.Framework
             if (IsDryRun)
                 return null;
 
-            return _catalog.GetAction(message);
+            ActionValue actionValue = _catalog.GetAction(message) ?? new ActionValue();
+            return actionValue.Action;
         }
 
         private void AddScenario(Scenario scenario)

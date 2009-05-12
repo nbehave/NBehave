@@ -72,10 +72,23 @@ namespace NBehave.Narrator.Framework.Specifications
                                     "When I'm greeted\n" +
                                     "And I should be greeted with “Hello, Morgan!”";
 
-            _actionStepAlias.AddDefaultAlias(new[] {"And"}, "Given");
+            _actionStepAlias.AddDefaultAlias(new[] { "And" }, "Given");
             _tokenStringsParser.ParseScenario(scenario);
 
             Assert.That(_tokenStringsParser.TokenStrings[2], Is.EqualTo("And I should be greeted with “Hello, Morgan!”"));
+        }
+
+        [Test]
+        public void Should_parse_TokenString_on_multiple_lines()
+        {
+            const string scenario = "Given my name is\nMorgan\nPersson\n" +
+                                 "When I'm greeted\n" +
+                                 "Then I should be greeted with “Hello, Morgan Persson!”";
+
+            _tokenStringsParser.ParseScenario(scenario);
+
+            Assert.That(_tokenStringsParser.TokenStrings.Count, Is.EqualTo(3));
+            Assert.That(_tokenStringsParser.TokenStrings[0], Is.EqualTo("Given my name is\nMorgan\nPersson"));
         }
     }
 }

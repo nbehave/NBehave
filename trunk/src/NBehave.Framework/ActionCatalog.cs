@@ -1,9 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace NBehave.Narrator.Framework
 {
+    public class ActionValue
+    {
+        public object Action { get; set; }
+        public string Key { get; set; }
+    }
+
     public class ActionCatalog
     {
         public const char TokenPrefix = '$';
@@ -32,7 +39,7 @@ namespace NBehave.Narrator.Framework
             return (catalogedAction != null && catalogedAction.IndexOf(TokenPrefix) > -1);
         }
 
-        private object GetActionFromCatalog(string message)
+        private ActionValue GetActionFromCatalog(string message)
         {
             string keyToUse = message;
             bool actionExist = _actions.ContainsKey(keyToUse);
@@ -42,100 +49,58 @@ namespace NBehave.Narrator.Framework
                 actionExist = (keyToUse != null);
             }
             if (actionExist)
-                return _actions[keyToUse];
+                return new ActionValue { Key = keyToUse, Action = _actions[keyToUse] };
             return null;
         }
 
         private string FindMathingActionKey(string message)
         {
-            string[] messageWords = SplitWordsToArray(message);
             foreach (string key in _actions.Keys)
             {
-                bool allEqual = true;
-                int messageWordPos = 0;
-                string[] actionWords = SplitWordsToArray(key);
-                for (int actionWordPos = 0; actionWordPos < actionWords.Length; actionWordPos++)
-                {
-                    bool isMatch = false;
-                    var word = actionWords[actionWordPos];
-                    if (WordIsToken(word))
-                    {
-                        if (actionWordPos + 1 == actionWords.Length)
-                        {
-                            isMatch = true;
-                        }
-                        else
-                        {
-                            if (messageWords[messageWordPos].EndsWith(actionWords[actionWordPos + 1], StringComparison.InvariantCultureIgnoreCase))
-                            {
-                                isMatch = true;
-                                actionWordPos++;
-                            }
-                            else if (actionWords[actionWordPos + 1] == messageWords[messageWordPos + 1]) //Dont need to look ahead
-                            {
-                                isMatch = true;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        isMatch = word.Equals(messageWords[messageWordPos], StringComparison.CurrentCultureIgnoreCase);
-                    }
-                    allEqual &= isMatch;
-                    if (!allEqual)
-                        actionWordPos = actionWords.Length;
-                    messageWordPos++;
-                }
-                if (allEqual)
-                {
+                Regex regex = GetRegexForActionKey(key);
+                bool isMatch = regex.IsMatch(message);
+                if (isMatch)
                     return key;
+            }
+
+            return null;
+        }
+
+        private string GetActionKey(object action)
+        {
+            return (from r in _actions
+                    where r.Value.Equals(action)
+                    select r.Key).FirstOrDefault();
+        }
+
+        private List<string> GetParamTokens(ActionValue actionValue)
+        {
+            var tokenNames = new List<string>();
+            string actionKey = actionValue.Key;
+            string[] words = actionKey.Split(new[] { ' ', '\n', '\r', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var word in words)
+            {
+                if (WordIsToken(word))
+                {
+                    tokenNames.Add(GetValidRegexGroupName(word));
                 }
             }
-            return null;
+            return tokenNames;
         }
 
         public object[] GetParametersForMessage(string message)
         {
-            object action = GetAction(message);
-            Type[] args = action.GetType().GetGenericArguments();
-            object[] values = new object[args.Length];
-            int argNumber = 0;
+            ActionValue action = GetAction(message);
+            Regex actionRegex = GetRegexForAction(action.Action);
+            List<string> paramNames = GetParamTokens(action);
+            Type[] args = action.Action.GetType().GetGenericArguments();
+            var values = new object[args.Length];
 
-            string[] messageWords = SplitWordsToArray(message);
-            string[] actionWords = SplitWordsToArray(FindMathingActionKey(message));
-            int messageWordPos = 0;
-
-            for (int actionWordPos = 0; actionWordPos < actionWords.Length; actionWordPos++)
+            Match match = actionRegex.Match(message);
+            for (int argNumber = 0; argNumber < paramNames.Count(); argNumber++)
             {
-                var word = actionWords[actionWordPos];
-                if (WordIsToken(word))
-                {
-                    if (word != messageWords[messageWordPos] && actionWordPos + 1 < actionWords.Length)
-                    {
-                        if (messageWords[messageWordPos].EndsWith(actionWords[actionWordPos + 1], StringComparison.InvariantCultureIgnoreCase))
-                        {
-                            int charsToRemove = actionWords[actionWordPos + 1].Length;
-                            string strParam = messageWords[messageWordPos];
-                            strParam = strParam.Remove(strParam.Length - charsToRemove, charsToRemove);
-                            values[argNumber] = Convert.ChangeType(strParam, args[argNumber]); //converts string to an instance of args[argNumber]
-                            argNumber++;
-                            actionWordPos++;
-                        }
-                        else
-                        {
-                            string strParam = messageWords[messageWordPos];
-                            values[argNumber] = Convert.ChangeType(strParam, args[argNumber]); //converts string to an instance of args[argNumber]
-                            argNumber++;
-                        }
-                    }
-                    else
-                    {
-                        string strParam = messageWords[messageWordPos];
-                        values[argNumber] = Convert.ChangeType(strParam, args[argNumber]); //converts string to an instance of args[argNumber]
-                        argNumber++;
-                    }
-                }
-                messageWordPos++;
+                var strParam = match.Groups[paramNames[argNumber]].Value;
+                values[argNumber] = Convert.ChangeType(strParam, args[argNumber]); //converts string to an instance of args[argNumber]
             }
             return values;
         }
@@ -145,7 +110,7 @@ namespace NBehave.Narrator.Framework
             return word.StartsWith("$");
         }
 
-        public object GetAction(string message)
+        public ActionValue GetAction(string message)
         {
             return GetActionFromCatalog(message);
         }
@@ -176,31 +141,42 @@ namespace NBehave.Narrator.Framework
             return tokens.ToArray();
         }
 
-        private string[] SplitWordsToArray(string message)
+        private Regex GetRegexForAction(object action)
         {
-            var finalWordList = new List<string>();
+            string actionKey = GetActionKey(action);
+            return GetRegexForActionKey(actionKey);
+        }
 
-            string[] words = message.Split(new[] { ' ', '\n', '\r', '\t' }, StringSplitOptions.RemoveEmptyEntries);
-            string[] tokens = GetTokensInMessage(message);
+        private Regex GetRegexForActionKey(string actionKey)
+        {
+            string[] words = actionKey.Split(new[] { ' ', '\n', '\r', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+            string regex = "^";
             foreach (var word in words)
             {
-                if (tokens.Length == 0)
+                if (WordIsToken(word))
                 {
-                    finalWordList.Add(word);
-                    continue;
+                    var groupName = GetValidRegexGroupName(word);
+                    var stuffAtEnd = RemoveTokenPrefix(word).Replace(groupName, string.Empty);
+                    regex += string.Format(@"(?<{0}>(\w+\s*)+){1}\s+", groupName, stuffAtEnd);
                 }
-                foreach (var token in tokens)
-                {
-                    if (WordIsToken(word) && word != token)
-                    {
-                        finalWordList.Add(token);
-                        finalWordList.Add(word.Remove(0, token.Length));
-                    }
-                    else
-                        finalWordList.Add(word);
-                }
+                else
+                    regex += string.Format(@"{0}\s+", word);
             }
-            return finalWordList.ToArray();
+            if (regex.EndsWith(@"\s+"))
+                regex = regex.Substring(0, regex.Length - 1) + "*";
+            regex += "$";
+            return new Regex(regex, RegexOptions.Multiline | RegexOptions.IgnorePatternWhitespace);
+        }
+
+        private string GetValidRegexGroupName(string word)
+        {
+            var regex = new Regex(@"\w+");
+            return regex.Match(word).Value;
+        }
+
+        private string RemoveTokenPrefix(string word)
+        {
+            return word.Substring(TokenPrefix.ToString().Length);
         }
     }
 }

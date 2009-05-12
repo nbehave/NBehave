@@ -239,7 +239,7 @@ namespace NBehave.Narrator.Framework
             if (ActionCatalog.ActionExists(tokenString) == false)
                 throw new ArgumentException(string.Format("cannot find Token string '{0}'", tokenString));
 
-            object action = ActionCatalog.GetAction(tokenString);
+            object action = ActionCatalog.GetAction(tokenString).Action;
 
             Type actionType = action.GetType().IsGenericType ? action.GetType().GetGenericTypeDefinition() : action.GetType();
             MethodInfo methodInfo = actionType.GetMethod("DynamicInvoke");
@@ -267,46 +267,6 @@ namespace NBehave.Narrator.Framework
             tokenStringsToScenarioParser.ParseTokensToScenarios(scenarioTextParser.TokenStrings);
             List<string> scenarios = tokenStringsToScenarioParser.Scenarios;
             _scenarios.AddRange(scenarios);
-        }
-
-        public void Load_old(Stream stream)
-        {
-            using (var fs = new StreamReader(stream))
-            {
-                string scenario = string.Empty;
-                bool isFirstRow = true;
-                bool notOnFirstRowType = false;
-                string newScenarioShouldStartRowWith = string.Empty;
-
-
-                while (fs.EndOfStream == false)
-                {
-                    string row = fs.ReadLine() ?? string.Empty;
-                    row = TrimInput(row);
-                    if (string.IsNullOrEmpty(row) == false)
-                    {
-                        if (isFirstRow)
-                        {
-                            isFirstRow = false;
-                            newScenarioShouldStartRowWith = row.Split(new[] { ' ' }).First();
-                        }
-
-                        var currentRowStartsWith = row.Split(new[] { ' ' }).First();
-                        if (currentRowStartsWith != newScenarioShouldStartRowWith)
-                            notOnFirstRowType = true;
-                        if (notOnFirstRowType && row.StartsWith(newScenarioShouldStartRowWith, true, CultureInfo.CurrentCulture))
-                        {
-                            _scenarios.Add(scenario);
-                            scenario = string.Empty;
-                            notOnFirstRowType = false;
-                        }
-                        scenario += row + Environment.NewLine;
-                    }
-                    if (row.StartsWith(newScenarioShouldStartRowWith, true, CultureInfo.CurrentCulture) == false)
-                        notOnFirstRowType = true;
-                }
-                _scenarios.Add(scenario);
-            }
         }
 
         private string TrimInput(string row)

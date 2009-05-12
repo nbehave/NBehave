@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Text.RegularExpressions;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using Context = NUnit.Framework.TestFixtureAttribute;
@@ -37,7 +39,7 @@ namespace NBehave.Narrator.Framework.Specifications
             var catalog = new ActionCatalog();
 
             catalog.Add("my savings account balance is $balance", new object());
-            object action = catalog.GetAction("my savings account balance is 500");
+            ActionValue action = catalog.GetAction("my savings account balance is 500");
 
             Assert.That(action, Is.Not.Null);            
         }
@@ -47,10 +49,9 @@ namespace NBehave.Narrator.Framework.Specifications
         {
             // Add an else to fix this: "I transfer 20 to cash account"
             var catalog = new ActionCatalog();
-            Account cashAccount;
-            Action<int> action = accountBalance => { cashAccount = new Account(accountBalance); };
+            Action<int> action = accountBalance =>  { };
             catalog.Add("I have $amount euros on my cash account", action);
-            object actionFetched = catalog.GetAction("I have 20 euros on my cash account");
+            ActionValue actionFetched = catalog.GetAction("I have 20 euros on my cash account");
 
             Assert.That(actionFetched, Is.Not.Null);
         }
@@ -58,15 +59,25 @@ namespace NBehave.Narrator.Framework.Specifications
         [Specification]
         public void should_get_parameter_for_action_with_token_in_middle_of_string()
         {
-            // Add an else to fix this: "I transfer 20 to cash account"
             var catalog = new ActionCatalog();
-            Account cashAccount;
-            Action<int> action = accountBalance => { cashAccount = new Account(accountBalance); };
+            Action<int> action = accountBalance => { };
             catalog.Add("I have $amount euros on my cash account", action);
             object[] values = catalog.GetParametersForMessage("I have 20 euros on my cash account");
 
             Assert.That(values.Length, Is.EqualTo(1));
             Assert.That(values[0].GetType(), Is.EqualTo(typeof(int)));
+        }
+
+        [Specification]
+        public void should_get_parameter_for_action_if_token_has_newlines()
+        {
+            var catalog = new ActionCatalog();
+            Action<string> action = someAction => { };
+            catalog.Add("I have a board like this\n$board", action);
+            object[] values = catalog.GetParametersForMessage("I have a board like this\nxo \n x \no x");
+
+            Assert.That(values.Length, Is.EqualTo(1));
+            Assert.That(values[0], Is.EqualTo("xo \n x \no x"));
         }
     }
 }
