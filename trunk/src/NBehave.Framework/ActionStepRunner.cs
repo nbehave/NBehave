@@ -62,7 +62,10 @@ namespace NBehave.Narrator.Framework
                         }
                         else
                         {
-                            InvokeTokenString(row);
+                            if (ActionCatalog.ActionExists(row) == false)
+                                scenarioResult.Pend("No matching Action found");
+                            else
+                                InvokeTokenString(row);
                         }
                     }
                     catch (Exception e)
@@ -202,13 +205,6 @@ namespace NBehave.Narrator.Framework
             tokenStringsToScenarioParser.ParseTokensToScenarios(scenarioTextParser.TokenStrings);
             List<string> scenarios = tokenStringsToScenarioParser.Scenarios;
             _scenarios.AddRange(scenarios);
-        }
-
-        private string TrimInput(string row)
-        {
-            var newRow = row.Trim(new[] { '\t', ' ' });
-
-            return newRow;
         }
     }
 }

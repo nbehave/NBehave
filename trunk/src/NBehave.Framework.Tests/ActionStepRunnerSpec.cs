@@ -26,14 +26,14 @@ namespace NBehave.Narrator.Framework.Specifications
             public void Should_find_Given_ActionStep_in_assembly()
             {
                 Assert.That(_runner.ActionCatalog.ActionExists("Given my name is Axel"), Is.True);
-             }
-           
+            }
+
             [Specification]
             public void Should_find_When_ActionStep_in_assembly()
             {
                 Assert.That(_runner.ActionCatalog.ActionExists("When I'm greeted"), Is.True);
-             }
-            
+            }
+
             [Specification]
             public void Should_find_Then_ActionStep_in_assembly()
             {
@@ -83,7 +83,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 _runner.Load(new[] { @"GreetingSystem.txt" });
                 StoryResults result = _runner.Run(listener);
                 Assert.That(result.NumberOfPassingScenarios, Is.EqualTo(1));
-           }
+            }
 
             [Specification]
             public void Should_get_result_of_running_scenarios_in_text_file()
@@ -150,6 +150,19 @@ namespace NBehave.Narrator.Framework.Specifications
                 var listener = new TextWriterEventListener(writer);
                 StoryResults result = _runner.Run(listener);
                 Assert.That(result.NumberOfPassingScenarios, Is.EqualTo(1));
+            }
+
+            [Specification]
+            public void Should_set_scenario_pending_if_action_given_in_token_string_doesnt_exist()
+            {
+                var stream = new MemoryStream();
+                var sr = new StreamWriter(stream);
+                sr.WriteLine("Given something that has no ActionStep");
+                sr.Flush();
+                stream.Seek(0, SeekOrigin.Begin);
+                _runner.Load(stream);
+                StoryResults result = _runner.Run(new NullEventListener());
+                Assert.That(result.NumberOfPendingScenarios, Is.EqualTo(1));
             }
         }
     }
