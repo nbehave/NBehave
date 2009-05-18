@@ -5,13 +5,13 @@ namespace NBehave.Spec.MSTest
 	[TestClass]
 	public abstract class SpecBase<TContext> : Spec.SpecBase<TContext>
 	{
-		[ClassInitialize]
+        [TestInitialize]
 		public override void MainSetup()
 		{
 			base.MainSetup();
 		}
 
-		[ClassCleanup]
+        [TestCleanup]
 		public override void MainTeardown()
 		{
 			base.MainTeardown();
