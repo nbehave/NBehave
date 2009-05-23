@@ -164,6 +164,16 @@ namespace NBehave.Narrator.Framework.Specifications
                 StoryResults result = _runner.Run(new NullEventListener());
                 Assert.That(result.NumberOfPendingScenarios, Is.EqualTo(1));
             }
+
+            [Specification]
+            public void Should_use_wildcard_and_run_all_scenarios_in_all_matching_text_files()
+            {
+                var writer = new StringWriter();
+                var listener = new TextWriterEventListener(writer);
+                _runner.Load(new[] { @"GreetingSystem*.txt" });
+                StoryResults result = _runner.Run(listener);
+                Assert.That(result.NumberOfPassingScenarios, Is.EqualTo(4));
+            }
         }
     }
 }

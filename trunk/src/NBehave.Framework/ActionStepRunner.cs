@@ -191,8 +191,12 @@ namespace NBehave.Narrator.Framework
         {
             foreach (var location in scenarioLocations)
             {
-                Stream stream = File.OpenRead(location);
-                Load(stream);
+                string[] files = Directory.GetFiles(".", location);
+                foreach (var file in files)
+                {
+                    Stream stream = File.OpenRead(file);
+                    Load(stream);                    
+                }
             }
         }
 
