@@ -11,15 +11,13 @@ namespace NBehave.Narrator.Framework
 
         private StoryRunnerFilter _storyRunnerFilter = new StoryRunnerFilter();
         private readonly List<Pair<string, object>> _themes = new List<Pair<string, object>>();
-        private List<Story> _stories;
+        protected List<Story> Stories { get; private set; }
 
         private EventHandler<EventArgs<Story>> _storyCreatedEventHandler;
         private EventHandler<EventArgs<Scenario>> _scenarioCreatedEventHandler;
         private EventHandler<EventArgs<MessageEventData>> _messageAddedEventHandler;
 
         protected List<Pair<string, object>> Themes { get { return _themes; } }
-
-        protected List<Story> Stories { get { return _stories; } }
 
         public bool IsDryRun { get; set; }
 
@@ -57,7 +55,7 @@ namespace NBehave.Narrator.Framework
             set { _storyRunnerFilter = value; }
         }
 
-        protected void StartWatching(IEventListener listener)
+        private void StartWatching(IEventListener listener)
         {
             StartWatchingStoryCreated(listener);
             StartWatchingScenarioCreated(listener);
@@ -95,7 +93,7 @@ namespace NBehave.Narrator.Framework
         {
             _storyCreatedEventHandler = (sender, e) =>
             {
-                _stories.Add(e.EventData);
+                Stories.Add(e.EventData);
                 e.EventData.IsDryRun = IsDryRun;
                 listener.StoryCreated(e.EventData.Title);
             };
@@ -110,25 +108,25 @@ namespace NBehave.Narrator.Framework
             listener.RunFinished();
         }
 
-        protected void InitializeRun(StoryResults results, IEventListener listener)
+        private void InitializeRun(StoryResults results, IEventListener listener)
         {
             listener.RunStarted();
             results.NumberOfThemes = _themes.Count;
-            _stories = new List<Story>();
+            Stories = new List<Story>();
         }
 
         protected void ClearStoryList()
         {
-            _stories.Clear();
+            Stories.Clear();
         }
 
         protected void CompileStoryResults(StoryResults results)
         {
-            foreach (Story storyToProcess in _stories)
+            foreach (Story storyToProcess in Stories)
             {
                 storyToProcess.CompileResults(results);
             }
-            results.NumberOfStories += _stories.Count;
+            results.NumberOfStories += Stories.Count;
         }
     }
 }

@@ -22,14 +22,17 @@ namespace NBehave.Narrator.Framework
 
         public event EventHandler<EventArgs<ScenarioMessage>> ScenarioMessageAdded;
 
-        internal Scenario(string title, Story story)
+        internal Scenario(Story story)
         {
             Debug.Assert(story != null);
-            OnScenarioMessageAdded(new ScenarioMessage("Scenario Title", title));
-
-            Title = title;
             Story = story;
             IsPending = false;
+        }
+
+        internal Scenario(string title, Story story)
+            :this(story)
+        {
+            Title = title;
         }
 
 
@@ -42,14 +45,22 @@ namespace NBehave.Narrator.Framework
         public static string GetTitle(string text)
         {
             var match = _regex.Match(text);
-            return text.Substring(match.Value.Length).TrimStart(new char[] { ' ', '\t' });
+            return text.Substring(match.Value.Length).TrimStart(new[] { ' ', '\t' });
         }
 
 
+        private string _title;
+        public string Title
+        {
+            get { return _title; }
+            set
+            {
+                _title = value;
+                OnScenarioMessageAdded(new ScenarioMessage("Scenario Title", _title));
+            }
+        }
 
-        public string Title { get; private set; }
-
-        internal bool IsPending { get; private set; }
+        private bool IsPending { get; set; }
 
         internal Story Story { get; private set; }
 
@@ -58,7 +69,7 @@ namespace NBehave.Narrator.Framework
             get { return !IsPending || Story.IsDryRun; }
         }
 
-        protected void OnScenarioMessageAdded(ScenarioMessage scenarioMessageEventArgs)
+        private void OnScenarioMessageAdded(ScenarioMessage scenarioMessageEventArgs)
         {
             if (ScenarioMessageAdded == null)
                 return;

@@ -12,69 +12,66 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
     [TestFixture]
     public class When_Story_is_running_with_xml_listener
     {
-        private MemoryStream _memStream;
-        protected XmlWriter _xmlReader;
-        protected IEventListener _listener;
-        protected XmlDocument _xmlDoc;
+        private XmlDocument _xmlDoc;
 
-        protected void StoryRun(XmlWriter xr)
+        private void StoryRun(XmlWriter xr)
         {
-            _listener = new XmlOutputEventListener(xr);
-            _listener.RunStarted();
-            _listener.ThemeStarted("a theme");
-            _listener.StoryCreated("This seems brittle");
-            _listener.StoryMessageAdded("As a savings account holder");
-            _listener.StoryMessageAdded("I want to transfer money from my savings account");
-            _listener.StoryMessageAdded("So that I can get cash easily from an ATM");
+            IEventListener listener = new XmlOutputEventListener(xr);
+            listener.RunStarted();
+            listener.ThemeStarted("a theme");
+            listener.StoryCreated("This seems brittle");
+            listener.StoryMessageAdded("As a savings account holder");
+            listener.StoryMessageAdded("I want to transfer money from my savings account");
+            listener.StoryMessageAdded("So that I can get cash easily from an ATM");
 
-            _listener.ScenarioCreated("Savings account is in credit");
-            _listener.ScenarioMessageAdded("Given my savings account balance is: 100");
-            _listener.ScenarioMessageAdded("And my cash account balance is: 10");
-            _listener.ScenarioMessageAdded("When I transfer to cash account: 20");
-            _listener.ScenarioMessageAdded("Then my savings account balance should be: 80");
-            _listener.ScenarioMessageAdded("And my cash account balance should be: 30");
+            listener.ScenarioCreated("Savings account is in credit");
+            listener.ScenarioMessageAdded("Given my savings account balance is: 100");
+            listener.ScenarioMessageAdded("And my cash account balance is: 10");
+            listener.ScenarioMessageAdded("When I transfer to cash account: 20");
+            listener.ScenarioMessageAdded("Then my savings account balance should be: 80");
+            listener.ScenarioMessageAdded("And my cash account balance should be: 30");
 
             var results = new StoryResults();
             var scenarioResults = new ScenarioResults("This seems brittle", "Savings account is in credit", ScenarioResult.Passed);
             results.AddResult(scenarioResults);
 
 
-            _listener.ScenarioCreated("Savings account is in credit 2");
-            _listener.ScenarioMessageAdded("Given my savings account balance is: 200");
-            _listener.ScenarioMessageAdded("And my cash account balance is: 20");
-            _listener.ScenarioMessageAdded("When I transfer to cash account: 40");
-            _listener.ScenarioMessageAdded("Then my savings account balance should be: 180");
-            _listener.ScenarioMessageAdded("And my cash account balance should be: 60");
+            listener.ScenarioCreated("Savings account is in credit 2");
+            listener.ScenarioMessageAdded("Given my savings account balance is: 200");
+            listener.ScenarioMessageAdded("And my cash account balance is: 20");
+            listener.ScenarioMessageAdded("When I transfer to cash account: 40");
+            listener.ScenarioMessageAdded("Then my savings account balance should be: 180");
+            listener.ScenarioMessageAdded("And my cash account balance should be: 60");
             scenarioResults = new ScenarioResults("This seems brittle", "Savings account is in credit 2", ScenarioResult.Passed);
             results.AddResult(scenarioResults);
-            _listener.StoryResults(results);
+            listener.StoryResults(results);
 
-            _listener.StoryCreated("This seems brittle 2");
-            _listener.StoryMessageAdded("As a savings account holder");
-            _listener.StoryMessageAdded("I want to transfer money from my savings account");
-            _listener.StoryMessageAdded("So that I can get cash easily from an ATM");
+            listener.StoryCreated("This seems brittle 2");
+            listener.StoryMessageAdded("As a savings account holder");
+            listener.StoryMessageAdded("I want to transfer money from my savings account");
+            listener.StoryMessageAdded("So that I can get cash easily from an ATM");
 
-            _listener.ScenarioCreated("Savings account is in credit");
-            _listener.ScenarioMessageAdded("Given my savings account balance is: 300");
-            _listener.ScenarioMessageAdded("And my cash account balance is: 30");
-            _listener.ScenarioMessageAdded("When I transfer to cash account: 25");
-            _listener.ScenarioMessageAdded("Then my savings account balance should be: 275");
-            _listener.ScenarioMessageAdded("And my cash account balance should be: 55");
+            listener.ScenarioCreated("Savings account is in credit");
+            listener.ScenarioMessageAdded("Given my savings account balance is: 300");
+            listener.ScenarioMessageAdded("And my cash account balance is: 30");
+            listener.ScenarioMessageAdded("When I transfer to cash account: 25");
+            listener.ScenarioMessageAdded("Then my savings account balance should be: 275");
+            listener.ScenarioMessageAdded("And my cash account balance should be: 55");
             scenarioResults = new ScenarioResults("This seems brittle 2", "Savings account is in credit", ScenarioResult.Failed);
             results.AddResult(scenarioResults);
-            _listener.StoryResults(results);
-            _listener.ThemeFinished();
-            _listener.RunFinished();
+            listener.StoryResults(results);
+            listener.ThemeFinished();
+            listener.RunFinished();
         }
 
         [SetUp]
         public void Setup()
         {
-            _memStream = new MemoryStream();
-            StoryRun(new XmlTextWriter(_memStream, Encoding.UTF8));
+            var memStream = new MemoryStream();
+            StoryRun(new XmlTextWriter(memStream, Encoding.UTF8));
             _xmlDoc = new XmlDocument();
-            _memStream.Seek(0, 0);
-            _xmlDoc.Load(_memStream);
+            memStream.Seek(0, 0);
+            _xmlDoc.Load(memStream);
         }
 
 
@@ -156,4 +153,54 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
             Assert.AreEqual(3, node.Count);
         }
     }
+
+
+    [TestFixture]
+    public class When_story_is_running_scenarioFiles_with_xml_listener
+    {
+         
+        private IEventListener _listener;
+        private XmlDocument _xmlDoc;
+
+        private void StoryRun(XmlWriter xr)
+        {
+            _listener = new XmlOutputEventListener(xr);
+           
+            _listener.RunStarted();
+            _listener.ThemeStarted("");
+            _listener.StoryCreated("storyTitle");
+            _listener.ScenarioCreated("Savings account is in credit");
+            _listener.ScenarioMessageAdded("Given my savings account balance is 100");
+            _listener.ScenarioMessageAdded("And my cash account balance is 10");
+            _listener.ScenarioMessageAdded("When I transfer to cash account 20");
+            _listener.ScenarioMessageAdded("Then my savings account balance should be 80");
+            _listener.ScenarioMessageAdded("And my cash account balance should be 30");
+
+            var results = new StoryResults();
+            var scenarioResults = new ScenarioResults("storyTitle", "Savings account is in credit", ScenarioResult.Passed);
+            results.AddResult(scenarioResults);
+
+            _listener.StoryResults(results);
+            _listener.ThemeFinished();
+            _listener.RunFinished();
+        }
+
+        [SetUp]
+        public void Setup()
+        {
+            var memStream = new MemoryStream();
+            StoryRun(new XmlTextWriter(memStream, Encoding.UTF8));
+            _xmlDoc = new XmlDocument();
+            memStream.Seek(0, 0);
+            _xmlDoc.Load(memStream);
+        }
+
+        [Test]
+        public void Should_write_xml_to_specified_xml_writer()
+        {
+            Assert.IsNotNull(_xmlDoc.SelectSingleNode("results"));
+        }
+
+    }
+
 }

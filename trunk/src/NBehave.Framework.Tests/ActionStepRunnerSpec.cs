@@ -1,6 +1,9 @@
 ﻿using System;
 using System.IO;
+using System.Text;
+using System.Xml;
 using NBehave.Narrator.Framework.EventListeners;
+using NBehave.Narrator.Framework.EventListeners.Xml;
 using NUnit.Framework.SyntaxHelpers;
 using NUnit.Framework;
 using Context = NUnit.Framework.TestFixtureAttribute;
@@ -174,6 +177,28 @@ namespace NBehave.Narrator.Framework.Specifications
                 StoryResults result = _runner.Run(listener);
                 Assert.That(result.NumberOfPassingScenarios, Is.EqualTo(4));
             }
+        }
+    }
+
+    public class When_running_plain_text_scenarios_with_xml_listener : ActionStepRunnerSpec
+    {
+        private ActionStepRunner _runner;
+
+        [SetUp]
+        public void SetUp()
+        {
+            _runner = new ActionStepRunner();
+            _runner.LoadAssembly("TestPlainTextAssembly.dll");
+        }
+
+        [Specification]
+        public void Should_run_scenarios_in_text_file()
+        {
+            var writer = new XmlTextWriter(new MemoryStream(), Encoding.UTF8);
+            var listener = new XmlOutputEventListener(writer);
+            _runner.Load(new[] { @"GreetingSystem.txt" });
+            StoryResults result = _runner.Run(listener);
+            Assert.That(result.NumberOfPassingScenarios, Is.EqualTo(1));
         }
     }
 }

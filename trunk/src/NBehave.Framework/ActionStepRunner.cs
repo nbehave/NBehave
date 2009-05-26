@@ -34,47 +34,62 @@ namespace NBehave.Narrator.Framework
         protected override void RunStories(StoryResults results, IEventListener listener)
         {
             listener.ThemeStarted(string.Empty);
-            listener.StoryCreated(string.Empty);
             RunScenarios(results, listener);
-            CompileStoryResults(results);
             listener.StoryResults(results);
             listener.ThemeFinished();
             ClearStoryList();
         }
 
-        private void RunScenarios(StoryResults results, IEventListener listener)
+        private void RunScenarios(StoryResults storyResults, IEventListener listener)
+        {
+
+            var story = new Story(string.Empty) {IsDryRun = IsDryRun};
+            int scenarioCounter = 0;
+            foreach (string scenarioText in _scenarios)
+            {
+                scenarioCounter++;
+
+                RunScenario(story, scenarioText, storyResults, listener, scenarioCounter);
+            }
+        }
+
+        private void RunScenario(Story story, string scenarioText, StoryResults storyResults, IEventListener listener, int scenarioCounter)
         {
             var textToTokenStringsParser = new TextToTokenStringsParser(_actionStepAlias);
 
-            foreach (var scenario in _scenarios)
+            textToTokenStringsParser.ParseScenario(scenarioText);
+            string scenarioTitle = string.Format("Scenario {0}", scenarioCounter);
+            var scenarioResult = new ScenarioResults(string.Empty, scenarioTitle);
+            foreach (var row in textToTokenStringsParser.TokenStrings)
             {
-                //How to handle Scenario, special treatment in config?
-                var scenarioResult = new ScenarioResults(string.Empty, string.Empty);
-                textToTokenStringsParser.ParseScenario(scenario);
-                foreach (var row in textToTokenStringsParser.TokenStrings)
+                RunScenario(row, scenarioResult);
+            }
+            var scenario = new Scenario(scenarioResult.ScenarioTitle, story);
+            story.AddScenario(scenario);
+            listener.ScenarioMessageAdded(scenarioText);
+            storyResults.AddResult(scenarioResult);
+        }
+
+        private void RunScenario(string row, ScenarioResults scenarioResult)
+        {
+            try
+            {
+                if (Scenario.IsScenarioTitle(row))
                 {
-                    listener.StoryMessageAdded(row);
-                    try
-                    {
-                        if (Scenario.IsScenarioTitle(row))
-                        {
-                            scenarioResult.ScenarioTitle = Scenario.GetTitle(row);
-                        }
-                        else
-                        {
-                            if (ActionCatalog.ActionExists(row) == false)
-                                scenarioResult.Pend("No matching Action found");
-                            else
-                                InvokeTokenString(row);
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        Exception realException = FindUsefulException(e);
-                        scenarioResult.Fail(realException);
-                    }
+                    scenarioResult.ScenarioTitle = Scenario.GetTitle(row);
                 }
-                results.AddResult(scenarioResult);
+                else
+                {
+                    if (ActionCatalog.ActionExists(row) == false)
+                        scenarioResult.Pend("No matching Action found");
+                    else
+                        InvokeTokenString(row);
+                }
+            }
+            catch (Exception e)
+            {
+                Exception realException = FindUsefulException(e);
+                scenarioResult.Fail(realException);
             }
         }
 
@@ -195,7 +210,7 @@ namespace NBehave.Narrator.Framework
                 foreach (var file in files)
                 {
                     Stream stream = File.OpenRead(file);
-                    Load(stream);                    
+                    Load(stream);
                 }
             }
         }

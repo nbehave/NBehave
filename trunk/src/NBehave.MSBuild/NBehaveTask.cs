@@ -20,6 +20,8 @@ namespace NBehave.MSBuild
 
         public bool FailBuild { get; set; }
 
+        public string[] ScenarioFiles { get; set; }
+
 
         public StoryResults StoryResults { get; private set; }
 
@@ -47,12 +49,21 @@ namespace NBehave.MSBuild
 
             WriteHeaderInto(output);
 
-            var runner = new StoryRunner { IsDryRun = DryRun };
+            RunnerBase runner;
+
+            if (ScenarioFiles == null || ScenarioFiles.Length == 0)
+                runner = new StoryRunner { IsDryRun = DryRun };
+            else
+            {
+                runner = new ActionStepRunner();
+                ((ActionStepRunner)runner).Load(ScenarioFiles);
+            }
 
             foreach (string path in TestAssemblies)
             {
                 runner.LoadAssembly(path);
             }
+
 
             StoryResults = runner.Run(CreateEventListenerUsing());
 

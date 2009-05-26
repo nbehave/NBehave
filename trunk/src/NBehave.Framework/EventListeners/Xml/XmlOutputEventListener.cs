@@ -111,6 +111,11 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
 
         private void HandleScenarioResults(StoryResults results)
         {
+            //if (_scenarioWriters.Count == 0 && results.ScenarioResults.Length>0)
+            //{
+            //    var wr = new ScenarioXmlOutputWriter(Writer, Actions, results.ScenarioResults.First().StoryTitle);
+            //    wr.DoResults(results);
+            //}
             foreach (var scenarioWriter in _scenarioWriters)
             {
                 scenarioWriter.DoResults(results);

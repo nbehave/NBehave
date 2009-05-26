@@ -253,7 +253,7 @@ namespace NBehave.Narrator.Framework
             return actionValue.Action;
         }
 
-        private void AddScenario(Scenario scenario)
+        internal void AddScenario(Scenario scenario)
         {
             _scenarios.Add(scenario);
             OnScenarioAdded(new EventArgs<Scenario>(scenario));

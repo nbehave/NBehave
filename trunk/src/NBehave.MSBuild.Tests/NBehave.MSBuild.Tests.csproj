@@ -75,8 +75,18 @@
       <Project>{8FF0E10C-FC63-4630-89AF-B039D341FA7D}</Project>
       <Name>NBehave.MSBuild</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TestPlainTextAssembly\TestPlainTextAssembly.csproj">
+      <Project>{B734DE3F-E1EC-42B4-8AB1-A55A934584CF}</Project>
+      <Name>TestPlainTextAssembly</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="GreetingSystem.scenario">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="NBehaveTaskWithScenarioFilesTestScript.msbuild">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="NBehaveTaskTestScript.msbuild">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
