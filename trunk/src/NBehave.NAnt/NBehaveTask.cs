@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text;
@@ -26,6 +27,9 @@ namespace NBehave.NAnt
         [BuildElement("assemblies", Required = true)]
         public FileSet TestAssemblies { get; set; }
 
+        [BuildElement("scenarioFiles", Required = false)]
+        public FileSet ScenarioFiles { get; set; }
+
         [TaskAttribute("failBuild")]
         public bool FailBuild { get; set; }
 
@@ -39,7 +43,14 @@ namespace NBehave.NAnt
 
             WriteHeaderInto(output);
 
-            var runner = new StoryRunner {IsDryRun = DryRun};
+            RunnerBase runner;
+            if (ScenarioFiles == null || ScenarioFiles.FileNames.Count == 0)
+                runner = new StoryRunner { IsDryRun = DryRun };
+            else
+            {
+                runner = new ActionStepRunner();
+                ((ActionStepRunner)runner).Load(GetFileNames(ScenarioFiles));
+            }
 
             foreach (string path in TestAssemblies.FileNames)
             {
@@ -54,6 +65,14 @@ namespace NBehave.NAnt
 
             if (FailBuild)
                 FailBuildBasedOn(results);
+        }
+
+        private IEnumerable<string> GetFileNames(FileSet files)
+        {
+            foreach (var fileName in files.FileNames)
+            {
+                yield return fileName;
+            }
         }
 
         private void WriteHeaderInto(PlainTextOutput output)

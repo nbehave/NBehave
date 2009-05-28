@@ -206,7 +206,11 @@ namespace NBehave.Narrator.Framework
         {
             foreach (var location in scenarioLocations)
             {
-                string[] files = Directory.GetFiles(".", location);
+                string[] files;
+                if (Path.IsPathRooted(location))
+                    files = Directory.GetFiles(Path.GetDirectoryName(location),Path.GetFileName(location));
+                else
+                files = Directory.GetFiles(".", location);
                 foreach (var file in files)
                 {
                     Stream stream = File.OpenRead(file);
