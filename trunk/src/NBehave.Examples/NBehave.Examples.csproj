@@ -101,6 +101,9 @@
     <None Include="..\NBehave.snk">
       <Link>NBehave.snk</Link>
     </None>
+    <None Include="Bowling Game\BowlingGame.nant.build">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Bowling Game\Specs\Bowling score calculation\All once.scenario">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
