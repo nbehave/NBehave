@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="BowlingGame" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <UsingTask AssemblyFile="..\NBehave.MSBuild.dll" TaskName="NBehave.MSBuild.NBehaveTask" />
+
+  <PropertyGroup>
+  </PropertyGroup>
+
+  <Target Name="BowlingGame">
+
+    <NBehaveTask
+      DryRun="false"
+      FailBuild="false"
+      StoryOutputPath="BowlingGame_msbuild_output.xml"
+      TestAssemblies="..\NBehave.Examples.dll"
+      ScenarioFiles="Specs\Bowling score calculation\*.scenario"/>
+
+  </Target>
+
+</Project>
