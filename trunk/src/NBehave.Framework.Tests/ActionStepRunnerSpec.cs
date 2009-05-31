@@ -178,6 +178,65 @@ namespace NBehave.Narrator.Framework.Specifications
                 Assert.That(result.NumberOfPassingScenarios, Is.EqualTo(4));
             }
         }
+    
+        
+        public class When_running_plain_text_scenarios_with_non_string_parameters : ActionStepRunnerSpec
+        {
+            [ActionSteps]
+            public class ActionStepsParameterTypes
+            {
+                [ActionStep("Given a parameter of type Int32 with value $value")]
+                public void param_is_int(int param)
+                {
+                    Assert.AreEqual(42, param);
+                }
+
+                [ActionStep("Given a parameter of type decimal with value $value")]
+                public void param_is_decimal(decimal param)
+                {
+                    const decimal expected = 42;
+                    Assert.AreEqual(expected, param);
+                }
+            }
+
+            private ActionStepRunner _runner;
+            [SetUp]
+            public void SetUp()
+            {
+                _runner = new ActionStepRunner();
+                string path = GetType().Assembly.Location;
+                _runner.LoadAssembly(path);
+            }
+
+            private StoryResults RunAction(string actionStep)
+            {
+                var ms = new MemoryStream();
+                var sr = new StreamWriter(ms);
+                sr.WriteLine(actionStep);
+                sr.Flush();
+                ms.Seek(0, SeekOrigin.Begin);
+                _runner.Load(ms);
+                var writer = new StringWriter();
+                var listener = new TextWriterEventListener(writer);
+                return _runner.Run(listener);
+            }
+
+            [Specification]
+            public void Should_run_scenario_with_int_parameter()
+            {
+                StoryResults result = RunAction("Given a parameter of type Int32 with value 42");
+                Assert.That(result.NumberOfPassingScenarios, Is.EqualTo(1));
+            }
+
+            [Specification]
+            public void Should_run_scenario_with_decimal_parameter()
+            {
+                StoryResults result = RunAction("Given a parameter of type decimal with value 42");
+                Assert.That(result.NumberOfPassingScenarios, Is.EqualTo(1));
+            }
+
+           
+        }
     }
 
     public class When_running_plain_text_scenarios_with_xml_listener : ActionStepRunnerSpec

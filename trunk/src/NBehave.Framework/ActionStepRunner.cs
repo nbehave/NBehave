@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Linq;
-using System.IO;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 
 namespace NBehave.Narrator.Framework
 {
@@ -42,8 +42,7 @@ namespace NBehave.Narrator.Framework
 
         private void RunScenarios(StoryResults storyResults, IEventListener listener)
         {
-
-            var story = new Story(string.Empty) {IsDryRun = IsDryRun};
+            var story = new Story(string.Empty) { IsDryRun = IsDryRun };
             int scenarioCounter = 0;
             foreach (string scenarioText in _scenarios)
             {
@@ -53,7 +52,8 @@ namespace NBehave.Narrator.Framework
             }
         }
 
-        private void RunScenario(Story story, string scenarioText, StoryResults storyResults, IEventListener listener, int scenarioCounter)
+        private void RunScenario(Story story, string scenarioText, StoryResults storyResults, IEventListener listener,
+                                 int scenarioCounter)
         {
             var textToTokenStringsParser = new TextToTokenStringsParser(_actionStepAlias);
 
@@ -81,7 +81,7 @@ namespace NBehave.Narrator.Framework
                 else
                 {
                     if (ActionCatalog.ActionExists(row) == false)
-                        scenarioResult.Pend("No matching Action found");
+                        scenarioResult.Pend(string.Format("No matching Action found for \"{0}\"", row));
                     else
                         InvokeTokenString(row);
                 }
@@ -93,7 +93,7 @@ namespace NBehave.Narrator.Framework
             }
         }
 
-        private static Exception FindUsefulException(Exception e)
+        private Exception FindUsefulException(Exception e)
         {
             Exception realException = e;
             while (realException != null && realException.GetType() == typeof(TargetInvocationException))
@@ -144,40 +144,102 @@ namespace NBehave.Narrator.Framework
         private object CreateAction(object instance, ActionMethodInfo method)
         {
             object action = null;
+            MethodInfo methodInfo = method.MethodInfo;
             switch (CountTokensInTokenString(method.TokenString))
             {
-                case 0: Action a0 = () => method.MethodInfo.Invoke(instance, null);
-                    action = a0;
+                case 0:
+                    action = GetActionWithNoParameters(method, instance);
                     break;
-                case 1: Action<object> a1 = a => method.MethodInfo.Invoke(instance, new[] { a });
-                    action = a1;
+                case 1:
+                    action = GetActionForOneParameter(instance, methodInfo);
                     break;
-                case 2: Action<object, object> a2 = (a, b) => method.MethodInfo.Invoke(instance, new[] { a, b });
-                    action = a2;
+                case 2:
+                    action = GetActionForTwoParameters(instance, methodInfo);
                     break;
-                case 3: Action<object, object, object> a3 = (a, b, c) => method.MethodInfo.Invoke(instance, new[] { a, b, c });
-                    action = a3;
+                case 3:
+                    action = GetActionForThreeParameters(instance, methodInfo);
                     break;
-                case 4: Action<object, object, object, object> a4 = (a, b, c, d) => method.MethodInfo.Invoke(instance, new[] { a, b, c, d });
-                    action = a4;
+                case 4:
+                    action = GetActionForFourParameters(instance, methodInfo);
                     break;
             }
             return action;
         }
 
+        private object GetActionWithNoParameters(ActionMethodInfo method, object instance)
+        {
+            Action action = () => method.MethodInfo.Invoke(instance, null);
+            return action;
+        }
+
+        private object GetActionForOneParameter(object instance, MethodInfo methodInfo)
+        {
+            Action<object> action = a =>
+                                methodInfo.Invoke(instance, new[]
+                                                                {
+                                                                    ChangeType(methodInfo, a, 0),
+                                                                });
+            return action;
+        }
+
+        private object GetActionForTwoParameters(object instance, MethodInfo methodInfo)
+        {
+            Action<object, object> action = (a, b) =>
+                                        methodInfo.Invoke(instance, new[]
+                                                                        {
+                                                                            ChangeType(methodInfo,a,0),
+                                                                            ChangeType(methodInfo,b,1),
+                                                                        });
+            return action;
+        }
+
+        private object GetActionForThreeParameters(object instance, MethodInfo methodInfo)
+        {
+            Action<object, object, object> action = (a, b, c) =>
+                                                methodInfo.Invoke(instance, new[]
+                                                                                {
+                                                                                    ChangeType(methodInfo,a,0),
+                                                                                    ChangeType(methodInfo,b,1),
+                                                                                    ChangeType(methodInfo,c,2),
+                                                                                });
+            return action;
+        }
+
+        private object GetActionForFourParameters(object instance, MethodInfo methodInfo)
+        {
+            Action<object, object, object, object> action = (a, b, c, d) =>
+                                                        methodInfo.Invoke(instance, new[]
+                                                                                        {
+                                                                                            ChangeType(methodInfo,a,0),
+                                                                                            ChangeType(methodInfo,b,1),
+                                                                                            ChangeType(methodInfo,c,2),
+                                                                                            ChangeType(methodInfo,d,3)
+                                                                                        });
+            return action;
+        }
+
+        private object ChangeType(MethodInfo methodInfo, object parameter, int parameterIndex)
+        {
+            return Convert.ChangeType(parameter, methodInfo.GetParameters()[parameterIndex].ParameterType);
+        }
+
         private IEnumerable<ActionMethodInfo> GetMethodsWithActionStepAttribute(Type actionSteps)
         {
-            var methods = from method in actionSteps.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-                          where
-                                    method.GetCustomAttributes(typeof(ActionStepAttribute), true)
-                                    .Length > 0
-                                &&
-                                    StoryRunnerFilter.MethodNameFiler.IsMatch(method.Name)
-                          select new ActionMethodInfo
-                          {
-                              MethodInfo = method,
-                              TokenString = ((ActionStepAttribute)method.GetCustomAttributes(typeof(ActionStepAttribute), true).First()).TokenString
-                          };
+            var methods =
+                from method in
+                    actionSteps.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                where
+                    method.GetCustomAttributes(typeof(ActionStepAttribute), true)
+                        .Length > 0
+                    &&
+                    StoryRunnerFilter.MethodNameFiler.IsMatch(method.Name)
+                select new ActionMethodInfo
+                           {
+                               MethodInfo = method,
+                               TokenString =
+                                   ((ActionStepAttribute)
+                                    method.GetCustomAttributes(typeof(ActionStepAttribute), true).First()).TokenString
+                           };
             return methods;
         }
 
@@ -194,12 +256,14 @@ namespace NBehave.Narrator.Framework
 
             object action = ActionCatalog.GetAction(tokenString).Action;
 
-            Type actionType = action.GetType().IsGenericType ? action.GetType().GetGenericTypeDefinition() : action.GetType();
+            Type actionType = action.GetType().IsGenericType
+                                  ? action.GetType().GetGenericTypeDefinition()
+                                  : action.GetType();
             MethodInfo methodInfo = actionType.GetMethod("DynamicInvoke");
             object[] actionParamValues = ActionCatalog.GetParametersForMessage(tokenString);
 
             methodInfo.Invoke(action, BindingFlags.InvokeMethod, null,
-                        new object[] { actionParamValues }, CultureInfo.CurrentCulture);
+                              new object[] { actionParamValues }, CultureInfo.CurrentCulture);
         }
 
         public void Load(IEnumerable<string> scenarioLocations)
@@ -208,9 +272,9 @@ namespace NBehave.Narrator.Framework
             {
                 string[] files;
                 if (Path.IsPathRooted(location))
-                    files = Directory.GetFiles(Path.GetDirectoryName(location),Path.GetFileName(location));
+                    files = Directory.GetFiles(Path.GetDirectoryName(location), Path.GetFileName(location));
                 else
-                files = Directory.GetFiles(".", location);
+                    files = Directory.GetFiles(".", location);
                 foreach (var file in files)
                 {
                     Stream stream = File.OpenRead(file);

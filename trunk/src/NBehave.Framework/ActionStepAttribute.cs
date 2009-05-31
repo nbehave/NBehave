@@ -1,9 +1,8 @@
 using System;
-using System.Text.RegularExpressions;
 
 namespace NBehave.Narrator.Framework
 {
-    [AttributeUsage(AttributeTargets.Method)]
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public class ActionStepAttribute : Attribute
     {
         public string TokenString { get; private set; }
