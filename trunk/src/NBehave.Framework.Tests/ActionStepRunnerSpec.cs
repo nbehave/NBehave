@@ -15,6 +15,19 @@ namespace NBehave.Narrator.Framework.Specifications
     [Context]
     public class ActionStepRunnerSpec
     {
+        private StoryResults RunAction(string actionStep, ActionStepRunner runner)
+        {
+            var ms = new MemoryStream();
+            var sr = new StreamWriter(ms);
+            sr.WriteLine(actionStep);
+            sr.Flush();
+            ms.Seek(0, SeekOrigin.Begin);
+            runner.Load(ms);
+            var writer = new StringWriter();
+            var listener = new TextWriterEventListener(writer);
+            return runner.Run(listener);
+        }
+
         public class When_running_plain_text_scenarios : ActionStepRunnerSpec
         {
             private ActionStepRunner _runner;
@@ -178,8 +191,8 @@ namespace NBehave.Narrator.Framework.Specifications
                 Assert.That(result.NumberOfPassingScenarios, Is.EqualTo(4));
             }
         }
-    
-        
+
+
         public class When_running_plain_text_scenarios_with_non_string_parameters : ActionStepRunnerSpec
         {
             [ActionSteps]
@@ -208,34 +221,56 @@ namespace NBehave.Narrator.Framework.Specifications
                 _runner.LoadAssembly(path);
             }
 
-            private StoryResults RunAction(string actionStep)
-            {
-                var ms = new MemoryStream();
-                var sr = new StreamWriter(ms);
-                sr.WriteLine(actionStep);
-                sr.Flush();
-                ms.Seek(0, SeekOrigin.Begin);
-                _runner.Load(ms);
-                var writer = new StringWriter();
-                var listener = new TextWriterEventListener(writer);
-                return _runner.Run(listener);
-            }
 
             [Specification]
             public void Should_run_scenario_with_int_parameter()
             {
-                StoryResults result = RunAction("Given a parameter of type Int32 with value 42");
+                StoryResults result = RunAction("Given a parameter of type Int32 with value 42", _runner);
                 Assert.That(result.NumberOfPassingScenarios, Is.EqualTo(1));
             }
 
             [Specification]
             public void Should_run_scenario_with_decimal_parameter()
             {
-                StoryResults result = RunAction("Given a parameter of type decimal with value 42");
+                StoryResults result = RunAction("Given a parameter of type decimal with value 42", _runner);
+                Assert.That(result.NumberOfPassingScenarios, Is.EqualTo(1));
+            }
+        }
+
+        [ActionSteps]
+        public class When_having_ActionStepAttribute_multiple_times_on_same_method : ActionStepRunnerSpec
+        {
+            [ActionStep("Given one")]
+            [ActionStep("Given two")]
+            public void Multiple()
+            {
+                Assert.IsTrue(true);
+            }
+
+            private ActionStepRunner _runner;
+            [SetUp]
+            public void SetUp()
+            {
+                _runner = new ActionStepRunner();
+                string path = GetType().Assembly.Location;
+                _runner.LoadAssembly(path);
+            }
+
+            [Specification]
+            public void Should_run_scenario_using_first_ActionStep_registration()
+            {
+                StoryResults result = RunAction("Given one", _runner);
                 Assert.That(result.NumberOfPassingScenarios, Is.EqualTo(1));
             }
 
-           
+            [Specification]
+            public void Should_run_scenario_using_second_ActionStep_registration()
+            {
+                //Fix this in ActionStepRunner.GetMethodsWithActionStepAttribute
+                StoryResults result = RunAction("Given two", _runner);
+                Assert.That(result.NumberOfPassingScenarios, Is.EqualTo(1));
+            }
+
         }
     }
 

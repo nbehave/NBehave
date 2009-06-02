@@ -16,6 +16,7 @@ namespace NBehave.Examples.Bowling_Game.Specs
         }
 
         [ActionStep("When all my $rolls rolls are $pins")]
+        [ActionStep("Given the rest of my $rolls roles are $pins")]
         public void RollMany(int rolls, int pins)
         {
             for (int i = 0; i < rolls; i++)
@@ -24,25 +25,15 @@ namespace NBehave.Examples.Bowling_Game.Specs
             }
         }
 
-        [ActionStep("And the rest of my $rolls roles are $pins")]
-        public void RollMany_again(int rolls, int pins)
-        {
-            RollMany(rolls, pins);
-        }
-
         [ActionStep("Then my score should be $score")]
         public void Then_my_score_should_be(int score)
         {
             _game.Score().ShouldEqual(score);
         }
 
-        [ActionStep("When I role one strike")]
-        public void RollStrike()
-        {
-            _game.Roll(10);
-        }
-
-        [ActionStep("And the first preceding role is $pins")]
+        [ActionStep("Given the first preceding role is $pins")]
+        [ActionStep("Given the first preceding role is $pins")] 
+        [ActionStep("Given the second preceding role is $pins")]
         public void Roll(int pins)
         {
             _game.Roll(pins);
@@ -55,16 +46,10 @@ namespace NBehave.Examples.Bowling_Game.Specs
             _game.Roll(5);
         }
 
-        [ActionStep("Given the first preceding role is 3")]
-        public void RollOne(int pins)
+        [ActionStep("When I role one strike")]
+        public void RollStrike()
         {
-            _game.Roll(3);
-        }
-
-        [ActionStep("And the second preceding role is $pins")]
-        public void RollSecondOne(int pins)
-        {
-            _game.Roll(pins);
+            _game.Roll(10);
         }
     }
 }

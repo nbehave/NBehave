@@ -66,11 +66,11 @@ namespace NBehave.Narrator.Framework
             return null;
         }
 
-        private string GetActionKey(object action)
+        private IEnumerable<string> GetActionKeys(object action)
         {
-            return (from r in _actions
-                    where r.Value.Equals(action)
-                    select r.Key).FirstOrDefault();
+            return from r in _actions
+                   where r.Value.Equals(action)
+                   select r.Key;
         }
 
         private List<string> GetParamTokens(ActionValue actionValue)
@@ -91,18 +91,29 @@ namespace NBehave.Narrator.Framework
         public object[] GetParametersForMessage(string message)
         {
             ActionValue action = GetAction(message);
-            Regex actionRegex = GetRegexForAction(action.Action);
+            IEnumerable<Regex> actionRegex = GetRegexForAction(action.Action);
             List<string> paramNames = GetParamTokens(action);
             Type[] args = action.Action.GetType().GetGenericArguments();
             var values = new object[args.Length];
 
-            Match match = actionRegex.Match(message);
+            Match match = GetOneMatch(actionRegex, message);
             for (int argNumber = 0; argNumber < paramNames.Count(); argNumber++)
             {
                 var strParam = match.Groups[paramNames[argNumber]].Value;
                 values[argNumber] = Convert.ChangeType(strParam, args[argNumber]); //converts string to an instance of args[argNumber]
             }
             return values;
+        }
+
+        private Match GetOneMatch(IEnumerable<Regex> actionRegexes, string message)
+        {
+            foreach (var actionRegex in actionRegexes)
+            {
+                Match match = actionRegex.Match(message);
+                if (match.Success)
+                    return match;
+            }
+            return null;
         }
 
         private bool WordIsToken(string word)
@@ -141,10 +152,13 @@ namespace NBehave.Narrator.Framework
             return tokens.ToArray();
         }
 
-        private Regex GetRegexForAction(object action)
+        private IEnumerable<Regex> GetRegexForAction(object action)
         {
-            string actionKey = GetActionKey(action);
-            return GetRegexForActionKey(actionKey);
+            IEnumerable<string> actionKeys = GetActionKeys(action);
+            var regexes = new List<Regex>();
+            foreach (var actionKey in actionKeys)
+                regexes.Add(GetRegexForActionKey(actionKey));
+            return regexes;
         }
 
         private Regex GetRegexForActionKey(string actionKey)

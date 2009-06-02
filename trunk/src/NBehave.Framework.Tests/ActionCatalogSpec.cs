@@ -47,7 +47,6 @@ namespace NBehave.Narrator.Framework.Specifications
         [Specification]
         public void should_get_action_with_token_in_middle_of_string()
         {
-            // Add an else to fix this: "I transfer 20 to cash account"
             var catalog = new ActionCatalog();
             Action<int> action = accountBalance =>  { };
             catalog.Add("I have $amount euros on my cash account", action);
@@ -78,6 +77,20 @@ namespace NBehave.Narrator.Framework.Specifications
 
             Assert.That(values.Length, Is.EqualTo(1));
             Assert.That(values[0], Is.EqualTo("xo \n x \no x"));
+        }
+
+        [Specification]
+        public void should_get_parameters_for_message_with_action_registered_twice()
+        {
+            var catalog = new ActionCatalog();
+            Action<string> action = someAction => { };
+            catalog.Add("Given $value something", action);
+            catalog.Add("And $value something", action);
+            object[] givenValue = catalog.GetParametersForMessage("Given 20 something");
+            object[] andValue = catalog.GetParametersForMessage("And 20 something");
+
+            Assert.That(givenValue.Length, Is.EqualTo(1));
+            Assert.That(andValue.Length, Is.EqualTo(1));
         }
     }
 }

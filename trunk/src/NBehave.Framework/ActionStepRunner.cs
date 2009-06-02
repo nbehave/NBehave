@@ -225,22 +225,34 @@ namespace NBehave.Narrator.Framework
 
         private IEnumerable<ActionMethodInfo> GetMethodsWithActionStepAttribute(Type actionSteps)
         {
-            var methods =
-                from method in
-                    actionSteps.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-                where
-                    method.GetCustomAttributes(typeof(ActionStepAttribute), true)
-                        .Length > 0
-                    &&
-                    StoryRunnerFilter.MethodNameFiler.IsMatch(method.Name)
-                select new ActionMethodInfo
-                           {
-                               MethodInfo = method,
-                               TokenString =
-                                   ((ActionStepAttribute)
-                                    method.GetCustomAttributes(typeof(ActionStepAttribute), true).First()).TokenString
-                           };
-            return methods;
+            IEnumerable<MethodInfo> methodsWithActionStepAttribute = GetAllMethodsWithActionStepAttribute(actionSteps);
+            List<ActionMethodInfo> allMethods = GetAllMethodsWithActionStepAttribute(methodsWithActionStepAttribute);
+            return allMethods;
+        }
+
+        private List<ActionMethodInfo> GetAllMethodsWithActionStepAttribute(IEnumerable<MethodInfo> methodsWithActionStepAttribute)
+        {
+            var allMethods = new List<ActionMethodInfo>();
+            foreach (var method in methodsWithActionStepAttribute)
+            {
+                foreach (ActionStepAttribute actionStep in method.GetCustomAttributes(typeof(ActionStepAttribute), true))
+                {
+                    allMethods.Add(new ActionMethodInfo{MethodInfo=method, TokenString = actionStep.TokenString});
+                }   
+            }
+            return allMethods;
+        }
+
+        private IEnumerable<MethodInfo> GetAllMethodsWithActionStepAttribute(Type actionSteps)
+        {
+            return from method in
+                       actionSteps.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                   where
+                       method.GetCustomAttributes(typeof (ActionStepAttribute), true)
+                           .Length > 0
+                       &&
+                       StoryRunnerFilter.MethodNameFiler.IsMatch(method.Name)
+                   select method;
         }
 
         private int CountTokensInTokenString(string tokenString)
