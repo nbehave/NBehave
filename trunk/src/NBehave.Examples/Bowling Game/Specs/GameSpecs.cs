@@ -25,29 +25,28 @@ namespace NBehave.Examples.Bowling_Game.Specs
             }
         }
 
-        [ActionStep("Then my score should be $score")]
-        public void Then_my_score_should_be(int score)
+        [ActionStep]
+        public void Then_my_score_should_be_theScore(int theScore)
         {
-            _game.Score().ShouldEqual(score);
+            _game.Score().ShouldEqual(theScore);
         }
 
         [ActionStep("Given the first preceding role is $pins")]
-        [ActionStep("Given the first preceding role is $pins")] 
         [ActionStep("Given the second preceding role is $pins")]
         public void Roll(int pins)
         {
             _game.Roll(pins);
         }
 
-        [ActionStep("When I role one spare")]
-        public void RollSpare()
+        [ActionStep]
+        public void When_I_role_one_spare()
         {
             _game.Roll(5);
             _game.Roll(5);
         }
 
-        [ActionStep("When I role one strike")]
-        public void RollStrike()
+        [ActionStep]
+        public void When_I_role_one_strike()
         {
             _game.Roll(10);
         }

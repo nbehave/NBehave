@@ -248,8 +248,20 @@ namespace NBehave.Narrator.Framework
 		{
 			if (string.IsNullOrEmpty(actionStep.TokenString))
 			{
-				string methodName = method.Name;
-				return methodName.Replace('_', ' ');
+				Console.WriteLine("Method: " + method.Name);
+				
+				string methodName = method.Name.Replace('_', ' ');
+				ParameterInfo[] parameters = method.GetParameters();
+				
+				foreach(var param in parameters)
+				{
+					var paramName = param.Name;
+					int pos = methodName.IndexOf(paramName);
+					if (pos>0)
+						methodName = methodName.Substring(0, pos) + "$" + methodName.Substring(pos);
+				}
+				Console.WriteLine("Token: " + methodName);
+				return methodName;
 			}
 			return actionStep.TokenString;
 		}

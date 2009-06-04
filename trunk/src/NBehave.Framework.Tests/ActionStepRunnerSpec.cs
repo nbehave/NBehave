@@ -281,7 +281,29 @@ namespace NBehave.Narrator.Framework.Specifications
 			{
 				Assert.IsTrue(true);
 			}
+			
+			private int _intParam;
+			private string _stringParam;
+			
+			[ActionStep()]
+			public void Given_a_method_with_a_value_intParam_plus_text_stringParam(int intParam, string stringParam)
+			{
+				_intParam = intParam;
+				_stringParam = stringParam;
+			}
+			
+			[ActionStep()]
+			public void Then_value_should_equal_expected(int expected)
+			{
+				Assert.AreEqual(expected, _intParam);
+			}
 
+			[ActionStep()]
+			public void Then_text_should_equal_expected(string expected)
+			{
+				Assert.AreEqual(expected, _stringParam);
+			}
+			
 			private ActionStepRunner _runner;
 			[SetUp]
 			public void SetUp()
@@ -295,6 +317,13 @@ namespace NBehave.Narrator.Framework.Specifications
 			public void Should_use_method_name_as_tokenString()
 			{
 				StoryResults result = RunAction("Given a method with no parameters", _runner);
+				Assert.That(result.NumberOfPassingScenarios, Is.EqualTo(1));
+			}
+			
+			[Specification]
+			public void Should_use_infer_parameters_in_tokenString_from_parameterNames_in_method()
+			{
+				StoryResults result = RunAction("Given a method with a value 3 plus text HELLO\nThen value should equal 3\nAnd text should equal HELLO", _runner);
 				Assert.That(result.NumberOfPassingScenarios, Is.EqualTo(1));
 			}
 		}
