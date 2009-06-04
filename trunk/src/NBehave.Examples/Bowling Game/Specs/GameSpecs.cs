@@ -9,7 +9,7 @@ namespace NBehave.Examples.Bowling_Game.Specs
     {
         private Game _game;
 
-        [ActionStep("Given a game of bowling")]
+        [ActionStep()]
         public void Given_a_game_of_bowling()
         {
             _game = new Game();
