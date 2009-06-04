@@ -7,6 +7,9 @@ namespace NBehave.Narrator.Framework
     {
         public string TokenString { get; private set; }
 
+        public ActionStepAttribute()
+        {}
+        
         public ActionStepAttribute(string tokenString)
         {
             TokenString = tokenString;
