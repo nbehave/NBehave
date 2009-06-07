@@ -11,7 +11,8 @@
     <NBehaveTask
       DryRun="false"
       FailBuild="false"
-      StoryOutputPath="BowlingGame_msbuild_output.xml"
+      XmlOutputFile="BowlingGame_msbuild_output.xml"
+      TextOutputFile="BowlingGame_msbuild_output.txt"
       TestAssemblies="..\NBehave.Examples.dll"
       ScenarioFiles="Specs\Bowling score calculation\*.scenario"/>
 

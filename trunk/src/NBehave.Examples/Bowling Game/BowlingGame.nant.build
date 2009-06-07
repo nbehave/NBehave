@@ -3,11 +3,13 @@
   <loadtasks assembly="..\NAnt.Contrib.Tasks.dll" />
   <loadtasks assembly="..\NBehave.NAnt.dll" />
 
-  <property name="storyOutputFile" value="NANT_BowlingGame.txt"/>
+  <property name="textOutputFile" value="NANT_BowlingGame.txt"/>
+  <property name="xmlOutputFile" value="NANT_BowlingGame.xml"/>
 
   <target name="BowlingGame">
-    <delete file="${storyOutputFile}" if="${file::exists(storyOutputFile)}" />
-    <nbehave storyOutputPath="${storyOutputFile}" >
+    <delete file="${textOutputFile}" if="${file::exists(textOutputFile)}" />
+    <delete file="${xmlOutputFile}" if="${file::exists(xmlOutputFile)}" />
+    <nbehave TextOutputFile="${textOutputFile}" XmlOutputFile="${xmlOutputFile}" >
       <assemblies>
         <include name="..\NBehave.Examples.dll" />
       </assemblies>

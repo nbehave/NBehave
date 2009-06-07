@@ -17,14 +17,15 @@
     </SccAuxPath>
     <SccProvider>
     </SccProvider>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\NBehave.snk</AssemblyOriginatorKeyFile>
+    <SignAssembly>false</SignAssembly>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>2.0</OldToolsVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <SourceAnalysisOverrideSettingsFile>C:\Documents and Settings\Morgan\Application Data\ICSharpCode/SharpDevelop3.0\Settings.SourceAnalysis</SourceAnalysisOverrideSettingsFile>
+    <DelaySign>False</DelaySign>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -54,9 +55,11 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NAnt.Contrib.Tasks, Version=0.85.2479.0, Culture=neutral">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\tools\nant\tasks\net\NAnt.Contrib.Tasks.dll</HintPath>
+    <Reference Include="NBehave.Narrator.Framework">
+      <HintPath>..\..\build\Debug\NBehave\NBehave.Narrator.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="NBehave.Spec.NUnit">
+      <HintPath>..\..\build\Debug\NBehave\NBehave.Spec.NUnit.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -70,37 +73,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\CommonAssemblyInfo.cs">
-      <Link>CommonAssemblyInfo.cs</Link>
-    </Compile>
     <Compile Include="AccountSpecs.cs" />
     <Compile Include="AccountHolderSpecs.cs" />
     <Compile Include="Bowling Game\Specs\GameSpecs.cs" />
+    <Compile Include="CommonAssemblyInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Bowling Game\Game.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NBehave.Framework\NBehave.Narrator.Framework.csproj">
-      <Project>{9C2E9E17-2A2C-4F6C-8072-D160A7EA9A51}</Project>
-      <Name>NBehave.Narrator.Framework</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NBehave.MSBuild\NBehave.MSBuild.csproj">
-      <Project>{8FF0E10C-FC63-4630-89AF-B039D341FA7D}</Project>
-      <Name>NBehave.MSBuild</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NBehave.NAnt\NBehave.NAnt.csproj">
-      <Project>{3CF07281-565F-412E-9710-E8104E0391D9}</Project>
-      <Name>NBehave.NAnt</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NBehave.Spec.NUnit\NBehave.Spec.NUnit.csproj">
-      <Project>{7BDFA147-A451-4FB0-8536-94EC1C52926E}</Project>
-      <Name>NBehave.Spec.NUnit</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\NBehave.snk">
-      <Link>NBehave.snk</Link>
-    </None>
     <None Include="Bowling Game\BowlingGame.msbuild">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

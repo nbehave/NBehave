@@ -3,7 +3,8 @@
   <loadtasks assembly="NAnt.Contrib.Tasks.dll" />
   <loadtasks assembly="NBehave.NAnt.dll" />
 
-  <property name="storyOutputFile" value="nantOutput.txt"/>
+  <property name="textOutputFile" value="nantOutput.txt"/>
+  <property name="xmlOutputFile" value="nantOutput.xml"/>
 
   <target name="all" description="runs all build targets">
     <call target="should_not_execute_unless_at_least_one_assembly_is_specified" />
@@ -14,15 +15,16 @@
 
 
   <target name="example">
-    <delete file="${storyOutputFile}" if="${file::exists(storyOutputFile)}" />
+    <delete file="${textOutputFile}" if="${file::exists(textOutputFile)}" />
+    <delete file="${xmlOutputFile}" if="${file::exists(xmlOutputFile)}" />
 
-    <nbehave storyOutputPath="${storyOutputFile}" dryRun="false" failBuild="false">
+    <nbehave storyOutputPath="${textOutputFile}" XmlOutputFile="${xmlOutputFile}" dryRun="false" failBuild="false">
       <assemblies>
         <include name="NBehave.Examples.dll" />
       </assemblies>
     </nbehave>
 
-    <fail unless="${file::exists(storyOutputFile)}" />
+    <fail unless="${file::exists(textOutputFile)}" />
   </target>
 
 </project>
