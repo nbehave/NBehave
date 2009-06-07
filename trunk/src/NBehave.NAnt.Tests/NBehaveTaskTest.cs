@@ -13,8 +13,6 @@ namespace NBehave.NAnt.Tests
         public void Execute_tests_in_test_build_script()
         {
             var project = new Project("NBehaveTestScript.build", Level.Debug, 1);
-            project.MessageLogged += (sender, e) => Console.Out.WriteLine(e.Message);
-
             Assert.IsTrue(project.Run(), "Something went wrong executing the test script.  Check log.");
         }
 
@@ -22,7 +20,6 @@ namespace NBehave.NAnt.Tests
         public void Should_execute_scenariotext_scenario()
         {
             var project = new Project("GreetingSystem.build", Level.Debug, 1);
-            project.MessageLogged += (sender, e) => Console.Out.WriteLine(e.Message);
             Assert.IsTrue(project.Run(), "Something went wrong executing the test script.  Check log.");
         }
 }

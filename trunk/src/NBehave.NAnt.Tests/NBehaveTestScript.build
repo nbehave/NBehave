@@ -3,7 +3,7 @@
   <loadtasks assembly="NAnt.Contrib.Tasks.dll" />
   <loadtasks assembly="NBehave.NAnt.dll" />
 
-  <property name="storyOutputFile" value="stories.txt" />
+  <property name="textOutputFile" value="stories.txt" />
   <property name="exception_thrown" value="foo" />
   
   
@@ -34,15 +34,15 @@
   
   
   <target name="should_execute_specifications_and_output_story_log_to_the_specified_file">
-    <delete file="${storyOutputFile}" if="${file::exists(storyOutputFile)}" />
+    <delete file="${textOutputFile}" if="${file::exists(textOutputFile)}" />
 
-    <nbehave storyOutputPath="${storyOutputFile}">
+    <nbehave textOutputFile="${textOutputFile}">
       <assemblies>
         <include name="TestAssembly.dll" />
       </assemblies>
     </nbehave>
 
-    <fail unless="${file::exists(storyOutputFile)}" />
+    <fail unless="${file::exists(textOutputFile)}" />
   </target>
 
   

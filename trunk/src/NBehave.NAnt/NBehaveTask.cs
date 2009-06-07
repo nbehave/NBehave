@@ -1,14 +1,11 @@
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Text;
-using System.Xml;
 using NAnt.Core;
 using NAnt.Core.Attributes;
 using NAnt.Core.Types;
 using NBehave.Narrator.Framework;
 using NBehave.Narrator.Framework.EventListeners;
-using NBehave.Narrator.Framework.EventListeners.Xml;
 
 namespace NBehave.NAnt
 {
@@ -23,10 +20,10 @@ namespace NBehave.NAnt
 		[TaskAttribute("dryRun")]
 		public bool DryRun { get; set; }
 
-		[TaskAttribute("TextOutputFile")]
+		[TaskAttribute("textOutputFile")]
 		public string TextOutputFile { get; set; }
 		
-		[TaskAttribute("XmlOutputFile")]
+		[TaskAttribute("xmlOutputFile")]
 		public string XmlOutputFile { get; set; }
 
 		[BuildElement("assemblies", Required = true)]

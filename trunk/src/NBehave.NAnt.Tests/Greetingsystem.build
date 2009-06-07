@@ -3,7 +3,7 @@
   <loadtasks assembly="NAnt.Contrib.Tasks.dll" />
   <loadtasks assembly="NBehave.NAnt.dll" />
 
-  <property name="storyOutputFile" value="NANT_GreetingSystemStory.txt"/>
+  <property name="textOutputFile" value="NANT_GreetingSystemStory.txt"/>
   <property name="exception_thrown" value="foo" />
 
   <target name="all" description="runs all build targets">
@@ -13,8 +13,8 @@
   </target>
 
   <target name="should_execute_specifications_and_output_story_log_to_the_specified_file">
-    <delete file="${storyOutputFile}" if="${file::exists(storyOutputFile)}" />
-    <nbehave storyOutputPath="${storyOutputFile}" >
+    <delete file="${textOutputFile}" if="${file::exists(textOutputFile)}" />
+    <nbehave textOutputFile="${textOutputFile}" >
       <assemblies>
         <include name="TestPlainTextAssembly.dll" />
       </assemblies>
@@ -23,7 +23,7 @@
       </scenarioFiles>
     </nbehave>
 
-    <fail unless="${file::exists(storyOutputFile)}" />
+    <fail unless="${file::exists(textOutputFile)}" />
   </target>
 
   <target name="should_not_fail_build_during_a_dry_run">
