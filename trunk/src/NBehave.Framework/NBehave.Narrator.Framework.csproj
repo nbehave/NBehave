@@ -76,6 +76,7 @@
     <Compile Include="AsAFragment.cs" />
     <Compile Include="DisposableAction.cs" />
     <Compile Include="EventArgs.cs" />
+    <Compile Include="EventListeners\EventListeners.cs" />
     <Compile Include="EventListeners\FileOutputEventListener.cs" />
     <Compile Include="EventListeners\MultiOutputEventListener.cs" />
     <Compile Include="EventListeners\NullEventListener.cs" />

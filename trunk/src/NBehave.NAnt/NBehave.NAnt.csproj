@@ -49,12 +49,12 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Extensions.cs" />
     <Compile Include="NBehaveTask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -40,7 +40,7 @@ namespace NBehave.MSBuild.Tests
             var outputPath = Path.Combine(Path.GetDirectoryName(storyAssemblies[0]), "result.xml");
             var buildEngine = MockRepository.GenerateStub<IBuildEngine2>();
 
-            var task = new NBehaveTask(buildEngine) { DryRun = false, FailBuild = true, StoryOutputPath = outputPath, TestAssemblies = storyAssemblies };
+            var task = new NBehaveTask(buildEngine) { DryRun = false, FailBuild = true, TextOutputFile = outputPath, TestAssemblies = storyAssemblies };
 
             task.Execute();
             Assert.AreEqual(1, task.StoryResults.NumberOfPassingScenarios);
@@ -84,7 +84,7 @@ namespace NBehave.MSBuild.Tests
             {
                 DryRun = false,
                 FailBuild = true,
-                StoryOutputPath = outputPath,
+                TextOutputFile = outputPath,
                 TestAssemblies = storyAssemblies,
                 ScenarioFiles = new[] { "GreetingSystem.scenario" }
             };

@@ -11,7 +11,7 @@
     <NBehaveTask
       DryRun="false"
       FailBuild="false"
-      StoryOutputPath="output.xml"
+      XmlOutputFile="output.xml"
       TestAssemblies="NBehave.MSBuild.Tests.dll"
       />
 
