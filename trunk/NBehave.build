@@ -1,47 +1,47 @@
-<?xml version="1.0" ?>
+﻿<?xml version="1.0" ?>
 <project name="NBehave" default="test" xmlns="http://nant.sf.net/schemas/nant.xsd">
 	<property name="solution.dir" value="src" />
 	<property name="build.dir" value="build" />
-  <property name="test.dir" value ="${build.dir}\Debug\UnitTests" />
+	<property name="test.dir" value ="${build.dir}\Debug\UnitTests" />
 	<property name="company.name" value="${project::get-name()}"/>
 	<property name="project.fullversion" value="0.4.0.0" dynamic="true" />
 	<property name="project.config" value="release" />
-  
-  <!-- User targets -->
+	
+	<!-- User targets -->
 	<target name="init" description="Initializes build properties">
 		<tstamp>
 			<formatter property="datetime.buildtime" pattern="yyyy-MM-dd, HH:mm:ss" />
 		</tstamp>
 		<echo message="Current Directory: ${project::get-base-directory()}"/>
 	</target>
-
+	
 	<target name="clean" depends="init" description="Delete automated build artifacts">
-    <delete dir="${build.dir}/Debug" if="${directory::exists(build.dir)}"/>
-    <delete dir="${build.dir}/dist" if="${directory::exists(build.dir)}"/>
-    <delete dir="${build.dir}/test-reports" if="${directory::exists(build.dir)}"/>
-  </target>
-
-  <target name="compile">
-    <exec program="${environment::get-folder-path('System')}\..\Microsoft.NET\Framework\v3.5\msbuild.exe"
-          commandline="/property:Configuration=AutomatedDebug /v:m src\NBehave.sln" />
-  </target>
-
-  <target name="test" depends="compile, run-unit-tests"
-		description="Compile and run tests" />
-
-  <target name="test-with-coverage" depends="compile, run-unit-tests-with-coverage"
-    description="Compile and run tests with coverage" />
-
-  <target name="full" depends="clean, commonassemblyinfo, test, dist"
-          description="Compiles, tests, and produces distributions" />
-
+		<delete dir="${build.dir}/Debug" if="${directory::exists(build.dir)}"/>
+		<delete dir="${build.dir}/dist" if="${directory::exists(build.dir)}"/>
+		<delete dir="${build.dir}/test-reports" if="${directory::exists(build.dir)}"/>
+	</target>
+	
+	<target name="compile">
+		<exec program="${environment::get-folder-path('System')}\..\Microsoft.NET\Framework\v3.5\msbuild.exe"
+		      commandline="/property:Configuration=AutomatedDebug /v:m src\NBehave.sln" />
+	</target>
+	
+	<target name="test" depends="compile, run-unit-tests"
+	        description="Compile and run tests" />
+	
+	<target name="test-with-coverage" depends="compile, run-unit-tests-with-coverage"
+	        description="Compile and run tests with coverage" />
+	
+	<target name="full" depends="clean, commonassemblyinfo, test, dist"
+	        description="Compiles, tests, and produces distributions" />
+	
 	<target name="version" description="mark AssemblyInfo builds with the build number">
 		<if test="${property::exists('build.number')}">
 			<property name="project.fullversion" value="${build.number}" />
 		</if>
 		<echo message="MARKING THIS BUILD AS VERSION ${project.fullversion}" />
 	</target>
-
+	
 	<target name="commonassemblyinfo" depends="version, init">
 		<delete file="${solution.dir}/CommonAssemblyInfo.cs" failonerror="false"/>
 		<asminfo output="${solution.dir}/CommonAssemblyInfo.cs" language="CSharp">
@@ -64,105 +64,162 @@
 				<include name="System.dll" />
 			</references>
 		</asminfo>
+		<copy file="${solution.dir}/CommonAssemblyInfo.cs" todir="${solution.dir}\NBehave.Examples" />
 	</target>
-
+	
 	<!-- Internal targets -->
-  <target name="run-code-metrics">
-    <NDepend NDependConsoleExePath="tools\NDepend\"
-                 ProjectFilePath="tools\NDepend\NBehave.NDependProject.xml"
-             Silent="true"/>
-  </target>
-
-  <target name="run-unit-tests" depends="teamcity-nunit-addin">
-    <mkdir dir="${build.dir}\test-reports" />
-
-    <exec program="nunit-console.exe" basedir="tools\nunit" workingdir="${test.dir}">
-      <arg value="NBehave.Narrator.Framework.Specifications.dll" />
-      <arg value="NBehave.Console.Tests.dll" />
-      <arg value="NBehave.Spec.NUnit.Specs.dll" />
-      <arg value="NBehave.Spec.MbUnit.Specs.dll" />
-      <arg value="NBehave.Spec.MSTest.Specs.dll" />
-      <arg value="NBehave.Spec.Xunit.Specs.dll" />
-      <arg value="NBehave.NAnt.Tests.dll" />
-      <arg value="NBehave.MSBuild.Tests.dll" />
-      <arg value="NBehave.TestDriven.Plugin.Specs.dll" />
-      <arg value="/xml:..\..\test-reports\UnitTests.xml" />
-    </exec>
-  </target>
-
-  <target name="teamcity-nunit-addin" if="${property::exists('teamcity.dotnet.nunitaddin')}" >
-    <mkdir dir="tools/nunit/addins" />
-    <copy todir ="tools/nunit/addins">
-      <fileset>
-        <include name="${teamcity.dotnet.nunitaddin}-2.4.8.*" />
-      </fileset>
-    </copy>
-    <copy todir ="tools/nunit">
-      <fileset>
-        <include name="${teamcity.dotnet.nunitaddin}-2.4.8.*" />
-      </fileset>
-    </copy>
-  </target>
-
-  <target name="run-unit-tests-with-coverage">
-    <mkdir dir="${build.dir}\test-reports" />
-
-    <!-- This runs NUnit through NCover.org version 1.3, giving coverage results.--> 
-    <exec program="regsvr32" workingdir="tools\NCover" commandline="/s CoverLib.dll" />
-			<!--If you don't want to use NCover, delete this 'exec' instance, and use the plain NUnit one below -->
-    <exec
+	<target name="run-code-metrics">
+		<NDepend NDependConsoleExePath="tools\NDepend\"
+		         ProjectFilePath="tools\NDepend\NBehave.NDependProject.xml"
+		         Silent="true"/>
+	</target>
+	
+	<target name="run-unit-tests" depends="teamcity-nunit-addin">
+		<mkdir dir="${build.dir}\test-reports" />
+		
+		<exec program="nunit-console.exe" basedir="tools\nunit" workingdir="${test.dir}">
+			<arg value="NBehave.Narrator.Framework.Specifications.dll" />
+			<arg value="NBehave.Console.Tests.dll" />
+			<arg value="NBehave.Spec.NUnit.Specs.dll" />
+			<arg value="NBehave.Spec.MbUnit.Specs.dll" />
+			<arg value="NBehave.Spec.MSTest.Specs.dll" />
+			<arg value="NBehave.Spec.Xunit.Specs.dll" />
+			<arg value="NBehave.NAnt.Tests.dll" />
+			<arg value="NBehave.MSBuild.Tests.dll" />
+			<arg value="NBehave.TestDriven.Plugin.Specs.dll" />
+			<arg value="/xml:..\..\test-reports\UnitTests.xml" />
+		</exec>
+	</target>
+	
+	<target name="teamcity-nunit-addin" if="${property::exists('teamcity.dotnet.nunitaddin')}" >
+		<mkdir dir="tools/nunit/addins" />
+		<copy todir ="tools/nunit/addins">
+			<fileset>
+				<include name="${teamcity.dotnet.nunitaddin}-2.4.8.*" />
+			</fileset>
+		</copy>
+		<copy todir ="tools/nunit">
+			<fileset>
+				<include name="${teamcity.dotnet.nunitaddin}-2.4.8.*" />
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="run-unit-tests-with-coverage">
+		<mkdir dir="${build.dir}\test-reports" />
+		
+		<!-- This runs NUnit through NCover.org version 1.3, giving coverage results.-->
+		<exec program="regsvr32" workingdir="tools\NCover" commandline="/s CoverLib.dll" />
+		<!--If you don't want to use NCover, delete this 'exec' instance, and use the plain NUnit one below -->
+		<exec
 			program="tools\NCover\NCover.Console.exe"
 			workingdir="${build.dir}\Debug\UnitTests">
-      <arg value="..\..\..\tools\nunit\nunit-console.exe" />
-      <arg value="NBehave.Narrator.Framework.Specifications.dll" />
-      <arg value="NBehave.Console.Tests.dll" />
-      <arg value="NBehave.Spec.NUnit.Specs.dll" />
-      <arg value="NBehave.Spec.MbUnit.Specs.dll" />
-      <arg value="NBehave.Spec.MSTest.Specs.dll" />
-      <arg value="NBehave.Spec.Xunit.Specs.dll" />
-      <arg value="NBehave.NAnt.Tests.dll" />
-      <arg value="NBehave.MSBuild.Tests.dll" />
-      <arg value="NBehave.TestDriven.Plugin.Specs.dll" />
-      <arg value="/xml:..\..\test-reports\UnitTests.xml" />
-      <arg value="/nologo" />
-      <arg value="//w" />
-      <arg value="." />
-      <arg value="//x" />
-      <arg value="..\..\test-reports\Coverage.xml" />
-    </exec>
-  
-  </target>
-
-  <target name="dist">
-    <copy todir="${build.dir}\dist">
-      <fileset basedir="${build.dir}\Debug\NBehave">
-        <include name="**\NBehave*"/>
-        <exclude name="**\*.pdb" />
-      </fileset>
-    </copy>
+			<arg value="..\..\..\tools\nunit\nunit-console.exe" />
+			<arg value="NBehave.Narrator.Framework.Specifications.dll" />
+			<arg value="NBehave.Console.Tests.dll" />
+			<arg value="NBehave.Spec.NUnit.Specs.dll" />
+			<arg value="NBehave.Spec.MbUnit.Specs.dll" />
+			<arg value="NBehave.Spec.MSTest.Specs.dll" />
+			<arg value="NBehave.Spec.Xunit.Specs.dll" />
+			<arg value="NBehave.NAnt.Tests.dll" />
+			<arg value="NBehave.MSBuild.Tests.dll" />
+			<arg value="NBehave.TestDriven.Plugin.Specs.dll" />
+			<arg value="/xml:..\..\test-reports\UnitTests.xml" />
+			<arg value="/nologo" />
+			<arg value="//w" />
+			<arg value="." />
+			<arg value="//x" />
+			<arg value="..\..\test-reports\Coverage.xml" />
+		</exec>
+	
+	</target>
+	
+	<target name="dist" depends="dist.examples">
+		<copy todir="${build.dir}\dist">
+			<fileset basedir="${build.dir}\Debug\NBehave">
+				<include name="**\NBehave*"/>
+				<exclude name="**\*.pdb" />
+			</fileset>
+		</copy>
 		<zip zipfile="${build.dir}\NBehave_${project.fullversion}.zip">
 			<fileset basedir="${build.dir}\dist">
 				<include name="**\*" />
 			</fileset>
 		</zip>
-    <property name="exampleFiles" value="${build.dir}\NBehave.Examples.zip" />
-    <zip zipfile="${exampleFiles}">
-      <fileset basedir="${solution.dir}\NBehave.Examples">
-        <exclude name="**\bin\**\*.*" />
-        <include name="**\*.cs" />
-        <include name="**\*.csproj" />
-        <include name="**\*.msbuild" />
-        <include name="**\*.build" />
-      </fileset>
-    </zip>
+		
 		<exec
-      program="tools\nsis\makensis.exe"
-      workingdir="src\Installer">
-      <arg value="/DVERSION=${project.fullversion}" />
-      <arg value="NBehave.nsi" />
-    </exec>
-    <delete file="${exampleFiles}" if="${file::exists(exampleFiles)}" />
-  </target>
+			program="tools\nsis\makensis.exe"
+			workingdir="src\Installer">
+			<arg value="/DVERSION=${project.fullversion}" />
+			<arg value="NBehave.nsi" />
+		</exec>
+		<delete file="${exampleFiles}" if="${file::exists(exampleFiles)}" />
+	</target>
+	
+	<target name="dist.examples">
+		<property name="examplesdest.dir" value="${build.dir}\Examples" />
+		<property name="examplesource.dir" value="${solution.dir}\NBehave.Examples" />
+		<property name="references" value="foo;bar" />
+		
+		<delete dir="${examplesdest.dir}" if="${directory::exists(examplesdest.dir)}"/>
+		<mkdir dir="${examplesdest.dir}" />
+		<copy todir="${examplesdest.dir}">
+			<fileset basedir="${examplesource.dir}">
+				<include name="**\*.*"/>
+				<exclude name="**\bin\**\*.*" />
+				<exclude name="**\obj\**\*.*" />
+				<exclude name="**\_svn\**\*.*" />
+				<exclude name="**\.svn\**\*.*" />
+			</fileset>
+		</copy>
+		<copy todir="${examplesdest.dir}\lib">
+			<fileset basedir="${build.dir}\Debug\NBehave">
+				<include name="**\NBehave*.dll" />
+				<include name="**/nunit.framework.dll" />
+			</fileset>
+		</copy>
+		
+		<xmllist file="${examplesdest.dir}\NBehave.Examples.csproj"
+		         property="references" delim=";"
+		         xpath="//xsi:Reference/xsi:HintPath/../@Include">
+			<namespaces>
+				<namespace prefix="xsi" uri="http://schemas.microsoft.com/developer/msbuild/2003" />
+			</namespaces>
+		</xmllist>
+		
+		<foreach item="String" in="${references}" delim=";" property="reference">
+			<xmlpeek
+				file="${examplesdest.dir}\NBehave.Examples.csproj"
+				property="pathtoreference"
+				xpath="//xsi:Reference[@Include='${reference}']/xsi:HintPath">
+				<namespaces>
+					<namespace prefix="xsi" uri="http://schemas.microsoft.com/developer/msbuild/2003" />
+				</namespaces>
+			</xmlpeek>
+			<regex input="${pathtoreference}" pattern="(?'dllfile'(\w+\.)+dll$)" />
+			<xmlpoke
+				file="${examplesdest.dir}\NBehave.Examples.csproj"
+				value="lib\${dllfile}"
+				xpath="//xsi:Reference[@Include='${reference}']/xsi:HintPath">
+				<namespaces>
+					<namespace prefix="xsi" uri="http://schemas.microsoft.com/developer/msbuild/2003" />
+				</namespaces>
+			</xmlpoke>
+		</foreach>
+		
+		<property name="exampleFiles" value="${build.dir}\NBehave.Examples.zip" />
+		<zip zipfile="${exampleFiles}">
+			<fileset basedir="${examplesdest.dir}">
+				<exclude name="**\bin\**\*.*" />
+				<exclude name="**\obj\**\*.*" />
+				<include name="**\*.cs" />
+				<include name="**\*.csproj" />
+				<include name="**\*.msbuild" />
+				<include name="**\*.build" />
+				<include name="lib\**\*.*"/>
+			</fileset>
+		</zip>
+	</target>
 
 </project>
 
