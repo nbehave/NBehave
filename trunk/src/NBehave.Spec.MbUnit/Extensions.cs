@@ -155,7 +155,7 @@ namespace NBehave.Spec.MbUnit
             Assert.IsNotNull(value);
         }
 
-        public static void ShouldBeThrownBy(this Type exceptionType, Action action)
+        public static void ShouldBeThrownBy(this Type exceptionType, ThrowingAction action)
         {
             Assert.Throws(exceptionType, new Gallio.Action(action));
         }

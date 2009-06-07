@@ -152,13 +152,13 @@ namespace NBehave.Spec.NUnit
             Assert.That(value, Is.Not.Null);
         }
 
-        public static void ShouldBeThrownBy(this Type exceptionType, Action action)
+        public static void ShouldBeThrownBy(this Type exceptionType, ThrowingAction action)
         {
             Exception e = null;
 
             try
             {
-                action();
+                action.Invoke();
             }
             catch (Exception ex)
             {
@@ -167,6 +167,7 @@ namespace NBehave.Spec.NUnit
 
             e.ShouldNotBeNull();
             e.ShouldBeInstanceOfType(exceptionType);
+       
         }
 
     }

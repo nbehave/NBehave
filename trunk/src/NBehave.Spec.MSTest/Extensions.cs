@@ -68,7 +68,7 @@ namespace NBehave.Spec.MSTest
             Assert.IsNotNull(value);
         }
 
-        public static void ShouldBeThrownBy(this Type exceptionType, Action expressionThatThrows)
+        public static void ShouldBeThrownBy(this Type exceptionType, ThrowingAction expressionThatThrows)
         {
             Exception e = null;
 

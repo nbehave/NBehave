@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using NUnit.Framework;
+using NBehave.Spec;
 using Context = NUnit.Framework.TestFixtureAttribute;
 using Specification = NUnit.Framework.TestAttribute;
 
@@ -74,13 +75,13 @@ namespace NBehave.Spec.NUnit.Specs
 			vals.ShouldContain(6);
 		}
 
-        [Specification]
-        public void Should_allow_substitution_for_ShouldNotContain_on_collections()
-        {
-            int[] vals = { 5, 6, 7, 8 };
+		[Specification]
+		public void Should_allow_substitution_for_ShouldNotContain_on_collections()
+		{
+			int[] vals = { 5, 6, 7, 8 };
 
-            vals.ShouldNotContain(1);
-        }
+			vals.ShouldNotContain(1);
+		}
 
 		[Specification]
 		public void Should_allow_substitution_for_IsEmpty_for_collections()
@@ -240,8 +241,8 @@ namespace NBehave.Spec.NUnit.Specs
 				{
 					throw new ApplicationException();
 				}
-		)
-			;
+			)
+				;
 		}
 
 		[Specification]
@@ -256,11 +257,22 @@ namespace NBehave.Spec.NUnit.Specs
 		{
 			(typeof (ApplicationException)).ShouldBeThrownBy(
 				() =>
-					{
-						throw new ApplicationException();
-					}
-				);
+				{
+					throw new ApplicationException();
+				}
+			);
 		}
 
+		[Specification]
+		public void Should_pass_when_exception_is_thrown_using_delegate()
+		{
+			ThrowingAction d = delegate { throw new ApplicationException(); };
+			(typeof (ApplicationException)).ShouldBeThrownBy(
+				() =>
+				{
+					d();
+				}
+			);
+		}
 	}
 }
