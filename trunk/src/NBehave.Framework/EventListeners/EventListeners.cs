@@ -13,7 +13,7 @@ namespace NBehave.Narrator.Framework.EventListeners
 			bool useTextWriter = textWriterFile.NotBlank();
 			bool useXmlWriter = xmlWriterFile.NotBlank();
 			
-			if (useTextWriter && useTextWriter)
+			if (useTextWriter && useXmlWriter)
 				return  new MultiOutputEventListener(EventListeners.FileOutputEventListener(textWriterFile),
 				                                     EventListeners.XmlWriterEventListener(new XmlTextWriter(xmlWriterFile, Encoding.UTF8)),
 				                                     EventListeners.TextWriterEventListener(writer));
