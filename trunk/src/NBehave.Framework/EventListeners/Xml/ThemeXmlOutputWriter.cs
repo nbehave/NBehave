@@ -10,8 +10,8 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
         private Timer _currentThemeTimer;
         public int TotalStories { get; set; }
 
-        public ThemeXmlOutputWriter(XmlWriter writer, Queue<Action> actions)
-            : base(writer, actions)
+        public ThemeXmlOutputWriter(XmlWriter writer, Queue<Action> actions, StoryResults resultsAlreadyDone)
+            : base(writer, actions, resultsAlreadyDone)
         { }
 
         public void ThemeStarted(string name)

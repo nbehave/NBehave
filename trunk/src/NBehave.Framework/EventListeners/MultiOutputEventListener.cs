@@ -69,7 +69,8 @@ namespace NBehave.Narrator.Framework.EventListeners
         {
             foreach (IEventListener listener in Listeners)
             {
-                typeof (IEventListener).GetMethod(methodName).Invoke(listener, args);
+            	var method = typeof (IEventListener).GetMethod(methodName);
+                method.Invoke(listener, args);
             }
         }
     }

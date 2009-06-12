@@ -44,7 +44,7 @@ namespace NBehave.Narrator.Framework
         {
             get
             {
-                return _scenarioResults.ToArray();
+            	return _scenarioResults.ToArray();
             }
         }
 
