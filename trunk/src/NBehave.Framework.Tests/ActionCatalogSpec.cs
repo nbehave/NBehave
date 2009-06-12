@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
@@ -91,6 +92,18 @@ namespace NBehave.Narrator.Framework.Specifications
 
             Assert.That(givenValue.Length, Is.EqualTo(1));
             Assert.That(andValue.Length, Is.EqualTo(1));
+        }
+
+        [Specification]
+        public void should_get_parameters_for_message_with_a_negative_parameter()
+        {
+            var catalog = new ActionCatalog();
+            Action<string> action = someAction => { };
+            catalog.Add("Given $value something", action);
+            object[] givenValue = catalog.GetParametersForMessage("Given -20 something");
+
+            Assert.That(givenValue.Length, Is.EqualTo(1));
+            Assert.That(givenValue.First(), Is.EqualTo("-20"));
         }
     }
 }

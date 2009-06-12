@@ -171,7 +171,7 @@ namespace NBehave.Narrator.Framework
                 {
                     var groupName = GetValidRegexGroupName(word);
                     var stuffAtEnd = RemoveTokenPrefix(word).Replace(groupName, string.Empty);
-                    regex += string.Format(@"(?<{0}>(\w+\s*)+){1}\s+", groupName, stuffAtEnd);
+                    regex += string.Format(@"(?<{0}>(\-?\w+\s*)+){1}\s+", groupName, stuffAtEnd);
                 }
                 else
                     regex += string.Format(@"{0}\s+", word);
