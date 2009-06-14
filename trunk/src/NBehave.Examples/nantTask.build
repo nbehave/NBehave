@@ -18,7 +18,7 @@
     <delete file="${textOutputFile}" if="${file::exists(textOutputFile)}" />
     <delete file="${xmlOutputFile}" if="${file::exists(xmlOutputFile)}" />
 
-    <nbehave storyOutputPath="${textOutputFile}" XmlOutputFile="${xmlOutputFile}" dryRun="false" failBuild="false">
+    <nbehave textOutputFile="${textOutputFile}" xmlOutputFile="${xmlOutputFile}" dryRun="false" failBuild="false">
       <assemblies>
         <include name="NBehave.Examples.dll" />
       </assemblies>

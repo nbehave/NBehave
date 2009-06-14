@@ -9,7 +9,8 @@
   <target name="BowlingGame">
     <delete file="${textOutputFile}" if="${file::exists(textOutputFile)}" />
     <delete file="${xmlOutputFile}" if="${file::exists(xmlOutputFile)}" />
-    <nbehave TextOutputFile="${textOutputFile}" XmlOutputFile="${xmlOutputFile}" >
+    <nbehave textOutputFile="${textOutputFile}" 
+  	         xmlOutputFile="${xmlOutputFile}" >
       <assemblies>
         <include name="..\NBehave.Examples.dll" />
       </assemblies>

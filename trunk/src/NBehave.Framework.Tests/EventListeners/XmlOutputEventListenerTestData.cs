@@ -26,6 +26,12 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
 					.Given("something two",()=>{})
 					.When("some event #2 occurs",()=>{})
 					.Then("there is some outcome #2",()=>{ });
+
+				story.WithScenario("PendingScenario")
+					.Pending("Im not done yet")
+					.Given("something pending")
+					.When("some pending event occurs")
+					.Then("this text should still show up in xml output");
 			}
 		}
 

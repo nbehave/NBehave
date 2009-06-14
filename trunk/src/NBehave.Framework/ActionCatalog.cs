@@ -192,5 +192,23 @@ namespace NBehave.Narrator.Framework
         {
             return word.Substring(TokenPrefix.ToString().Length);
         }
+    
+    public string BuildFormatString(string message, ICollection<object> args)
+		{
+			if ((message.IndexOf(ActionCatalog.TokenPrefix) == -1)
+			    && (!(ActionExists(message) && CatalogedActionIsTokenized(message))))
+			{
+				if (args.Count == 0)
+					return "{0} {1}";
+				if (args.Count == 1)
+					return "{0} {1}: {2}";
+				string formatString = "{0} {1}: (";
+				for (int i = 0; i < args.Count; i++)
+					formatString += "{" + (i + 2) + "}, ";
+				return formatString.Remove(formatString.Length - 2) + ")";
+			}
+			return "{0} {1}";
+		}
+
     }
 }

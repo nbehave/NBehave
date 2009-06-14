@@ -62,17 +62,17 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
 		}
 
 		[Test]
-		public void Should_have_three_scenarios_in_results_node()
+		public void Should_have_four_scenarios_in_results_node()
 		{
 			var outcome = _xmlDoc.SelectSingleNode("results").Attributes["scenarios"].Value;
-			Assert.That(int.Parse(outcome), Is.EqualTo(3));
+			Assert.That(int.Parse(outcome), Is.EqualTo(4));
 		}
 
 		[Test]
-		public void Theme_T1_should_have_two_scenarios()
+		public void Theme_T1_should_have_three_scenarios()
 		{
 			var outcome = _xmlDoc.SelectSingleNode("results/theme[@name='T1']").Attributes["scenarios"].Value;
-			Assert.That(int.Parse(outcome), Is.EqualTo(2));
+			Assert.That(int.Parse(outcome), Is.EqualTo(3));
 		}
 		
 		[Test]
@@ -89,9 +89,9 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
 		}
 
 		[Test]
-		public void Theme_node_should_have_zero_pending_scenarios()
+		public void Theme_node_should_have_one_pending_scenarios()
 		{
-			Assert.AreEqual("0", _xmlDoc.SelectSingleNode(@"results/theme[@name='T1']").Attributes["scenariosPending"].Value);
+			Assert.AreEqual("1", _xmlDoc.SelectSingleNode(@"results/theme[@name='T1']").Attributes["scenariosPending"].Value);
 		}
 		
 		[Test]
@@ -119,9 +119,9 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
 		[Test]
 		public void Story_node_should_have_summary()
 		{
-			Assert.AreEqual("2", _xmlDoc.SelectSingleNode(@"results/theme[@name='T1']/stories/story").Attributes["scenarios"].Value);
+			Assert.AreEqual("3", _xmlDoc.SelectSingleNode(@"results/theme[@name='T1']/stories/story").Attributes["scenarios"].Value);
 			Assert.AreEqual("0", _xmlDoc.SelectSingleNode(@"results/theme[@name='T1']/stories/story").Attributes["scenariosFailed"].Value);
-			Assert.AreEqual("0", _xmlDoc.SelectSingleNode(@"results/theme[@name='T1']/stories/story").Attributes["scenariosPending"].Value);
+			Assert.AreEqual("1", _xmlDoc.SelectSingleNode(@"results/theme[@name='T1']/stories/story").Attributes["scenariosPending"].Value);
 		}
 	
 		[Test]
@@ -129,7 +129,7 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
 		{
 			var node = _xmlDoc.SelectNodes(@"//stories/story[@name='S1']/scenarios/scenario");
 			Assert.IsNotNull(node);
-			Assert.AreEqual(2, node.Count);
+			Assert.AreEqual(3, node.Count);
 		}
 		
 		[Test]
@@ -138,6 +138,14 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
 			var node = _xmlDoc.SelectSingleNode(@"//scenario[@name='SC1']/text");
 			Assert.IsNotNull(node);
 			Assert.IsNotNull(node.InnerText);
+		}
+	
+		[Test]
+		public void Scenarios_child_node_text_should_Not_be_empty_on_pending_scenario()
+		{
+			var node = _xmlDoc.SelectSingleNode(@"//scenario[@name='PendingScenario']/text");
+			Assert.IsNotNull(node.InnerText);
+			Assert.IsTrue(node.InnerText.Contains("something pending"));
 		}
 	}
 }
