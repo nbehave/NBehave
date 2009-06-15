@@ -7,18 +7,27 @@ namespace NBehave.Narrator.Framework
 	{
 		private const string AndType = "And";
 		private readonly Scenario _scenario;
+		private readonly ScenarioBuilder _scenarioBuilder;
 
-		protected ScenarioFragment(Scenario scenario)
+		protected ScenarioFragment(Scenario scenario, ScenarioBuilder scenarioBuilder)
 		{
 			if (scenario == null)
 				throw new ArgumentNullException("scenario");
-
 			_scenario = scenario;
+
+			if (scenarioBuilder == null)
+				throw new ArgumentNullException("scenarioBuilder");
+			_scenarioBuilder = scenarioBuilder;
 		}
 
 		protected Scenario Scenario
 		{
 			get { return _scenario; }
+		}
+
+		protected ScenarioBuilder ScenarioBuilder
+		{
+			get { return _scenarioBuilder; }
 		}
 
 		public T And(string context, Action action)

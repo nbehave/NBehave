@@ -13,7 +13,7 @@ namespace NBehave.Narrator.Framework
             _story.OnMessageAdded(this, new EventArgs<MessageEventData>(new MessageEventData("Narrative", "So that " + benefit)));
         }
 
-        public Scenario WithScenario(string title)
+        public ScenarioBuilder WithScenario(string title)
         {
             return _story.WithScenario(title);
         }

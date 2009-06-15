@@ -95,6 +95,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RunnerBase.cs" />
     <Compile Include="Scenario.cs" />
+    <Compile Include="ScenarioBuilder.cs" />
     <Compile Include="ScenarioFragment.cs" />
     <Compile Include="ScenarioResult.cs" />
     <Compile Include="ScenarioResultEventArgs.cs" />

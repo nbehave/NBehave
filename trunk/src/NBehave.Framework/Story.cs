@@ -69,13 +69,15 @@ namespace NBehave.Narrator.Framework
 			return new AsAFragment(role, this);
 		}
 
-		public Scenario WithScenario(string title)
+		//[Obsolete("Use ActionStep attribute instead, see ")]
+		public ScenarioBuilder WithScenario(string title)
 		{
 			var scenario = new Scenario(title, this);
 			scenario.ScenarioMessageAdded += OnScenarioMessageAdded;
 			AddScenario(scenario);
 			_currentScenario = scenario;
-			return scenario;
+			var scenarioBuilder = new ScenarioBuilder(scenario, this);
+			return scenarioBuilder;
 		}
 
 		public void CompileResults(StoryResults results)

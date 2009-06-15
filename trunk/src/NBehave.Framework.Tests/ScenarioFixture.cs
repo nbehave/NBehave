@@ -9,7 +9,7 @@ namespace NBehave.Narrator.Framework.Specifications
         [Test]
         public void Should_set_the_title_when_created()
         {
-            Scenario scenario = new Story("Title").WithScenario("Scenario title");
+            Scenario scenario = new Story("Title").WithScenario("Scenario title").Scenario;
 
             Assert.That(scenario.Title, Is.EqualTo("Scenario title"));
         }

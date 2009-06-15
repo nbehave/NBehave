@@ -133,7 +133,7 @@ namespace NBehave.Narrator.Framework.Specifications
 			string actual = string.Empty;
 			Story.MessageAdded += (sender, e) => actual += string.Format("{0}: {1}{2}", e.EventData.Type, e.EventData.Message, Environment.NewLine);
 
-			Scenario scenario = new Story("Transfer to cash account")
+			ScenarioBuilder scenario = new Story("Transfer to cash account")
 				.WithScenario("Account has sufficient funds");
 
 			scenario.Given("the account balance is", 20, accountBalance => { });

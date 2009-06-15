@@ -18,7 +18,7 @@ namespace NBehave.Narrator.Framework
             return new SoThatFragment(benefit, _story);
         }
 
-        public Scenario WithScenario(string title)
+        public ScenarioBuilder WithScenario(string title)
         {
             return _story.WithScenario(title);
         }
