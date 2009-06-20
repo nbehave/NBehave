@@ -12,9 +12,9 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
 		protected XmlWriter Writer { get; private set; }
 		protected Queue<Action> Actions { get; private set; }
 
-		public int TotalScenarios { get; set; }
-		public int TotalScenariosPending { get; set; }
-		public int TotalScenariosFailed { get; set; }
+	    private int TotalScenarios { get; set; }
+	    private int TotalScenariosPending { get; set; }
+	    private int TotalScenariosFailed { get; set; }
 
 		protected XmlOutputBase(XmlWriter writer, Queue<Action> actions)
 			: this(writer, actions, new StoryResults())
@@ -49,12 +49,12 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
 			Writer.WriteAttributeString("scenariosPending", TotalScenariosPending.ToString());
 		}
 
-		protected void UpdateSummary(XmlOutputBase output, StoryResults results)
+	    private void UpdateSummary(XmlOutputBase output, StoryResults results)
 		{
 			var newResults = GetNewStoryResults(results);
-			output.TotalScenarios += newResults.NumberOfScenariosFound;
-			output.TotalScenariosFailed += (newResults.NumberOfScenariosFound - results.NumberOfPassingScenarios - results.NumberOfPendingScenarios);
-			output.TotalScenariosPending += newResults.NumberOfPendingScenarios;
+			output.TotalScenarios = newResults.NumberOfScenariosFound;
+            output.TotalScenariosFailed = (newResults.NumberOfScenariosFound - newResults.NumberOfPassingScenarios - newResults.NumberOfPendingScenarios);
+			output.TotalScenariosPending = newResults.NumberOfPendingScenarios;
 			//_resultsBeforeLastThemeStarted = results;
 		}
 		

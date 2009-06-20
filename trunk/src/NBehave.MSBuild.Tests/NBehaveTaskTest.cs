@@ -37,7 +37,7 @@ namespace NBehave.MSBuild.Tests
         public void ShouldExecuteTheOneStory()
         {
             var storyAssemblies = new[] { GetType().Assembly.Location };
-            var outputPath = Path.Combine(Path.GetDirectoryName(storyAssemblies[0]), "result.xml");
+            var outputPath = Path.Combine(Path.GetDirectoryName(storyAssemblies[0]), "result.txt");
             var buildEngine = MockRepository.GenerateStub<IBuildEngine2>();
 
             var task = new NBehaveTask(buildEngine) { DryRun = false, FailBuild = true, TextOutputFile = outputPath, TestAssemblies = storyAssemblies };
@@ -84,7 +84,7 @@ namespace NBehave.MSBuild.Tests
             {
                 DryRun = false,
                 FailBuild = true,
-                TextOutputFile = outputPath,
+                XmlOutputFile = outputPath,
                 TestAssemblies = storyAssemblies,
                 ScenarioFiles = new[] { "GreetingSystem.scenario" }
             };

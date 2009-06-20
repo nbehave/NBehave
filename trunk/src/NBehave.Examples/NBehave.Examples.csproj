@@ -106,6 +106,16 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NBehave.MSBuild\NBehave.MSBuild.csproj">
+      <Project>{8FF0E10C-FC63-4630-89AF-B039D341FA7D}</Project>
+      <Name>NBehave.MSBuild</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NBehave.NAnt\NBehave.NAnt.csproj">
+      <Project>{3CF07281-565F-412E-9710-E8104E0391D9}</Project>
+      <Name>NBehave.NAnt</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

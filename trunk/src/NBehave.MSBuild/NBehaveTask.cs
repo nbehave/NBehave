@@ -4,7 +4,6 @@ using Microsoft.Build.Utilities;
 using Microsoft.Build.Framework;
 using NBehave.Narrator.Framework;
 using System.IO;
-using System.Xml;
 using NBehave.Narrator.Framework.EventListeners;
 
 
@@ -117,8 +116,4 @@ namespace NBehave.MSBuild
 			return true;
 		}
 	}
-
-
-
-
 }
