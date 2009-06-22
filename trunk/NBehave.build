@@ -166,7 +166,7 @@
 		<copy todir="${examplesdest.dir}">
 			<fileset basedir="${examplesource.dir}">
 				<include name="**\*.*"/>
-				<exclude name="**\bin\**\*.*" />
+        <exclude name="**\bin\**\*.*" />
 				<exclude name="**\obj\**\*.*" />
 				<exclude name="**\_svn\**\*.*" />
 				<exclude name="**\.svn\**\*.*" />
@@ -212,7 +212,8 @@
 			<fileset basedir="${examplesdest.dir}">
 				<exclude name="**\bin\**\*.*" />
 				<exclude name="**\obj\**\*.*" />
-				<include name="**\*.cs" />
+        <include name="**\*.scenario" />
+        <include name="**\*.cs" />
 				<include name="**\*.csproj" />
 				<include name="**\*.msbuild" />
 				<include name="**\*.build" />
