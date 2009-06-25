@@ -1,9 +1,6 @@
-﻿using System.Diagnostics;
-using NBehave.Spec.NUnit;
-using NUnit.Framework;
+﻿using NBehave.Spec.NUnit;
 using Rhino.Mocks;
 using Context = NUnit.Framework.TestFixtureAttribute;
-using Specification = NUnit.Framework.TestAttribute;
 
 namespace NUnit.SpecBase_Specifications
 {

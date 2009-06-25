@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections;
 using NUnit.Framework;
-using NBehave.Spec;
 using Context = NUnit.Framework.TestFixtureAttribute;
-using Specification = NUnit.Framework.TestAttribute;
 
 namespace NBehave.Spec.NUnit.Specs
 {

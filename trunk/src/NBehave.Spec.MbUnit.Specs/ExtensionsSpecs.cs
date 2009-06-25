@@ -2,7 +2,6 @@
 using Gallio.Framework.Assertions;
 using ExpectedExceptionNUnit = NUnit.Framework.ExpectedExceptionAttribute;
 using Context = NUnit.Framework.TestFixtureAttribute;
-using Specification = NUnit.Framework.TestAttribute;
 
 namespace NBehave.Spec.MbUnit.Specs
 {

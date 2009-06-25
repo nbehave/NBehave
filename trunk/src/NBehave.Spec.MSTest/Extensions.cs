@@ -5,7 +5,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace NBehave.Spec.MSTest
 {
-
     public static class Extensions
     {
         public static void ShouldBeTrue(this bool condition)

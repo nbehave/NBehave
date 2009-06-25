@@ -1,29 +1,24 @@
-﻿using System.Reflection;
-using NBehave.Narrator.Framework;
+﻿using NBehave.Narrator.Framework;
 using NBehave.Spec.NUnit;
-using NBehave.TestDriven.Plugin;
-using TestDriven.Framework;
 using Rhino.Mocks;
-
+using TestDriven.Framework;
 using Context = NUnit.Framework.TestFixtureAttribute;
-using Specification = NUnit.Framework.TestAttribute;
-using Rhino.Mocks.Constraints;
-
 
 namespace NBehave.TestDriven.Plugin.Specs
 {
-    [Context()]
+    [Context]
     public class When_running_stories_from_testdriven_net
     {
         private delegate bool VerifyTestResult(TestResult result);
-        MockRepository mocks = new MockRepository();
 
-        [Specification()]
+        private readonly MockRepository mocks = new MockRepository();
+
+        [Specification]
         public void Should_send_testresult_to_ITestListener()
         {
             const string myStory = "My story";
             const string myScenario = "My scenario";
-            ITestListener tddNetListener = mocks.StrictMock<ITestListener>();
+            var tddNetListener = mocks.StrictMock<ITestListener>();
             StoryResults result = null;
             IEventListener storyRunner = null;
 
