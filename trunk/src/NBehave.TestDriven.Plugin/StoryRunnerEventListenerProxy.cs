@@ -38,7 +38,6 @@ namespace NBehave.TestDriven.Plugin
 
         void IEventListener.ScenarioCreated(string scenarioTitle)
         {
-            _listener.WriteLine("\t\tScenario: " + scenarioTitle, Category.Output);
         }
 
         void IEventListener.ScenarioMessageAdded(string message)
