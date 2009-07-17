@@ -1,5 +1,5 @@
 ﻿using Rhino.Mocks;
-using Context = NUnit.Framework.TestFixtureAttribute;
+using Context = MbUnit.Framework.TestFixtureAttribute;
 
 namespace NBehave.Spec.MbUnit.Specs
 {
