@@ -1,16 +1,16 @@
 using System;
 
-namespace NBehave.Spec.MSTest
+namespace NBehave.Spec
 {
     public class ActionSpecification<T> : IActionSpecification<T>
     {
         private readonly T _value;
-        private readonly Type _exceptionType;
+        private readonly Action<Exception> _assert;
 
-        public ActionSpecification(T value, Type exceptionType)
+        public ActionSpecification(T value, Action<Exception> assert)
         {
             _value = value;
-            _exceptionType = exceptionType;
+            _assert = assert;
         }
 
         public void WhenCalling(Action<T> action)
@@ -26,8 +26,7 @@ namespace NBehave.Spec.MSTest
                 e = ex;
             }
 
-            e.ShouldNotBeNull();
-            e.ShouldBeInstanceOf(_exceptionType);
+            _assert.Invoke(e);
         }
     }
 }

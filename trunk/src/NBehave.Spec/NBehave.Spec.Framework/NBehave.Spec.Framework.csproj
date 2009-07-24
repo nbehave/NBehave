@@ -67,6 +67,7 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="ActionSpecification.cs" />
     <Compile Include="SpecBase.cs" />
     <Compile Include="IActionSpecification.cs">
       <SubType>Code</SubType>

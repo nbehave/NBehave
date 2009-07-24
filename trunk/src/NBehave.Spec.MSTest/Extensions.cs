@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -7,9 +8,50 @@ namespace NBehave.Spec.MSTest
 {
     public static class Extensions
     {
-        public static void ShouldBeTrue(this bool condition)
+        public static Exception GetException(this Action action)
         {
-            Assert.IsTrue(condition);
+            Exception e = null;
+            try
+            {
+                action();
+            }
+            catch (Exception exc)
+            {
+                e = exc;
+            }
+            return e;
+        }
+
+        public static void ShouldBeAssignableFrom<TExpectedType>(this Object actual)
+        {
+            Assert.IsTrue(actual.GetType().IsAssignableFrom(typeof(TExpectedType)),
+                string.Format("{0} is not assignable from {1}", actual.GetType().Name, typeof(TExpectedType).Name));
+        }
+
+        public static void ShouldBeAssignableFrom(this object actual, Type expected)
+        {
+            Assert.IsTrue(actual.GetType().IsAssignableFrom(expected),
+                string.Format("{0} is not assignable from {1}", actual.GetType().Name, expected.GetType().Name));
+        }
+
+        public static void ShouldBeEmpty(this string value)
+        {
+            Assert.IsTrue(string.IsNullOrEmpty(value), "string should be empty");
+        }
+
+        public static void ShouldBeEmpty(this ICollection collection)
+        {
+            Assert.AreEqual(0, collection.Count, "collection should be empty");
+        }
+
+        public static void ShouldBeEqualTo(this ICollection actual, ICollection expected)
+        {
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        public static void ShouldBeEquivalentTo(this ICollection actual, ICollection expected)
+        {
+            CollectionAssert.AreEquivalent(expected, actual);
         }
 
         public static void ShouldBeFalse(this bool condition)
@@ -17,29 +59,14 @@ namespace NBehave.Spec.MSTest
             Assert.IsFalse(condition);
         }
 
-        public static void ShouldEqual<T>(this T actual, T expected)
+        public static void ShouldBeGreaterThan(this IComparable arg1, IComparable arg2)
         {
-            Assert.AreEqual(expected, actual);
+            Assert.IsTrue(arg1.CompareTo(arg2) == 1, string.Format("{0} should be larger than {1}", arg1, arg2));
         }
 
-        public static void ShouldNotEqual<T>(this T actual, T notExpected)
+        public static void ShouldBeGreaterThanOrEqualTo(this IComparable arg1, IComparable arg2)
         {
-            Assert.AreNotEqual(notExpected, actual);
-        }
-
-        public static void ShouldBeTheSameAs(this object actual, object expected)
-        {
-            Assert.AreSame(expected, actual);
-        }
-
-        public static void ShouldNotBeTheSameAs(this object actual, object notExpected)
-        {
-            Assert.AreNotSame(notExpected, actual);
-        }
-
-        public static void ShouldBeInstanceOf(this object value, Type expectedType)
-        {
-            Assert.IsInstanceOfType(value, expectedType);
+            Assert.IsTrue(arg1.CompareTo(arg2) >= 0, string.Format("{0} should be larger than or equal to {1}", arg1, arg2));
         }
 
         public static void ShouldBeInstanceOf<T>(this object value)
@@ -47,14 +74,24 @@ namespace NBehave.Spec.MSTest
             value.ShouldBeInstanceOf(typeof(T));
         }
 
-        public static void ShouldNotBeInstanceOf(this object value, Type wrongType)
+        public static void ShouldBeInstanceOf(this object value, Type expectedType)
         {
-            Assert.IsNotInstanceOfType(value, wrongType);
+            Assert.IsInstanceOfType(value, expectedType);
         }
 
-        public static void ShouldNotBeInstanceOf<T>(this object value)
+        public static void ShouldBeLessThan(this IComparable arg1, IComparable arg2)
         {
-            value.ShouldNotBeInstanceOf(typeof(T));
+            Assert.IsTrue(arg1.CompareTo(arg2) == -1, string.Format("{0} should be less than {1}", arg1, arg2));
+        }
+
+        public static void ShouldBeLessThanOrEqualTo(this IComparable arg1, IComparable arg2)
+        {
+            Assert.IsTrue(arg1.CompareTo(arg2) <= 0, string.Format("{0} should be less than or equal to {1}", arg1, arg2));
+        }
+
+        public static void ShouldBeNaN(this double value)
+        {
+            Assert.IsTrue(double.IsNaN(value), "value should be NaN");
         }
 
         public static void ShouldBeNull(this object value)
@@ -62,9 +99,9 @@ namespace NBehave.Spec.MSTest
             Assert.IsNull(value);
         }
 
-        public static void ShouldNotBeNull(this object value)
+        public static void ShouldBeTheSameAs(this object actual, object expected)
         {
-            Assert.IsNotNull(value);
+            Assert.AreSame(expected, actual);
         }
 
         public static void ShouldBeThrownBy(this Type exceptionType, ThrowingAction expressionThatThrows)
@@ -84,23 +121,9 @@ namespace NBehave.Spec.MSTest
             e.ShouldBeInstanceOf(exceptionType);
         }
 
-        public static IActionSpecification<T> ShouldThrow<T>(this T value, Type exception)
+        public static void ShouldBeTrue(this bool condition)
         {
-            return new ActionSpecification<T>(value, exception);
-        }
-
-        public static Exception GetException(this Action action)
-        {
-            Exception e = null;
-            try
-            {
-                action();
-            }
-            catch (Exception exc)
-            {
-                e = exc;
-            }
-            return e;
+            Assert.IsTrue(condition);
         }
 
         public static void ShouldContain(this string value, string substring)
@@ -108,9 +131,9 @@ namespace NBehave.Spec.MSTest
             StringAssert.Contains(value, substring);
         }
 
-        public static void ShouldStartWith(this string value, string substring)
+        public static void ShouldContain(this ICollection collection, object element)
         {
-            StringAssert.StartsWith(value, substring);
+            CollectionAssert.Contains(collection, element);
         }
 
         public static void ShouldEndWith(this string value, string substring)
@@ -118,29 +141,41 @@ namespace NBehave.Spec.MSTest
             StringAssert.EndsWith(value, substring);
         }
 
+        public static void ShouldEqual<T>(this T actual, T expected)
+        {
+            Assert.AreEqual(expected, actual);
+        }
+
         public static void ShouldMatch(this string value, Regex pattern)
         {
             StringAssert.Matches(value, pattern);
         }
 
-        public static void ShouldNotMatch(this string value, Regex pattern)
+        public static void ShouldNotBeAssignableFrom<TExpectedType>(this Object actual)
         {
-            StringAssert.DoesNotMatch(value, pattern);
+            Assert.IsFalse(actual.GetType().IsAssignableFrom(typeof(TExpectedType)),
+                string.Format("{0} is assignable from {1}", actual.GetType().Name, typeof(TExpectedType).Name));
         }
 
-        public static void ShouldContain(this ICollection collection, object element)
+        public static void ShouldNotBeAssignableFrom(this object actual, Type expected)
         {
-            CollectionAssert.Contains(collection, element);
+            Assert.IsFalse(actual.GetType().IsAssignableFrom(expected),
+                string.Format("{0} is assignable from {1}", actual.GetType().Name, expected.GetType().Name));
         }
 
-        public static void ShouldNotContain(this ICollection collection, object element)
+        public static void ShouldNotBeEmpty(this string value)
         {
-            CollectionAssert.DoesNotContain(collection, element);
+            Assert.IsFalse(string.IsNullOrEmpty(value), "string should not be empty");
         }
 
-        public static void ShouldBeEquivalentTo(this ICollection actual, ICollection expected)
+        public static void ShouldNotBeEmpty(this ICollection collection)
         {
-            CollectionAssert.AreEquivalent(expected, actual);
+            Assert.AreNotEqual(0, collection.Count, "collection should not be empty");
+        }
+
+        public static void ShouldNotBeEqualTo(this ICollection actual, ICollection expected)
+        {
+            CollectionAssert.AreNotEqual(expected, actual);
         }
 
         public static void ShouldNotBeEquivalentTo(this ICollection actual, ICollection expected)
@@ -148,14 +183,53 @@ namespace NBehave.Spec.MSTest
             CollectionAssert.AreNotEquivalent(expected, actual);
         }
 
-        public static void ShouldBeEqualTo(this ICollection actual, ICollection expected)
+        public static void ShouldNotBeInstanceOf<T>(this object value)
         {
-            CollectionAssert.AreEqual(expected, actual);
+            value.ShouldNotBeInstanceOf(typeof(T));
         }
 
-        public static void ShouldNotBeEqualTo(this ICollection actual, ICollection expected)
+        public static void ShouldNotBeInstanceOf(this object value, Type wrongType)
         {
-            CollectionAssert.AreNotEqual(expected, actual);
+            Assert.IsNotInstanceOfType(value, wrongType);
+        }
+
+        public static void ShouldNotBeNull(this object value)
+        {
+            Assert.IsNotNull(value);
+        }
+
+        public static void ShouldNotBeTheSameAs(this object actual, object notExpected)
+        {
+            Assert.AreNotSame(notExpected, actual);
+        }
+
+        public static void ShouldNotContain(this ICollection collection, object element)
+        {
+            CollectionAssert.DoesNotContain(collection, element);
+        }
+
+        public static void ShouldNotEqual<T>(this T actual, T notExpected)
+        {
+            Assert.AreNotEqual(notExpected, actual);
+        }
+
+        public static void ShouldNotMatch(this string value, Regex pattern)
+        {
+            StringAssert.DoesNotMatch(value, pattern);
+        }
+
+        public static void ShouldStartWith(this string value, string substring)
+        {
+            StringAssert.StartsWith(value, substring);
+        }
+
+        public static IActionSpecification<T> ShouldThrow<T>(this T value, Type exception)
+        {
+            return new ActionSpecification<T>(value, e =>
+            {
+                e.ShouldNotBeNull();
+                e.ShouldBeInstanceOf(exception);
+            });
         }
     }
 }
