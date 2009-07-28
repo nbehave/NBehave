@@ -194,19 +194,26 @@ namespace NBehave.Narrator.Framework
 					return;
 				}
 				
-				ValidateActionExists(message);
 				if (IsDryRun)
 				{
-					InvokeActionBase(type, message, null, null, _catalog.GetParametersForMessage(message));
+					var parameters = new object[0];
+					if (_catalog.ActionExists(message))
+						parameters = _catalog.GetParametersForMessage(message);
+					InvokeActionBase(type, message, null, null, parameters);
 				}
 				else
 				{
+
+					if (_catalog.ActionExists(message) == false)
+						SendMessageEvent(type, message + " - FAILED");
+					ValidateActionExists(message);
+					
 					object action = GetActionFromCatalog(message);
+					object[] actionParamValues = _catalog.GetParametersForMessage(message);
 					Type actionType = action.GetType().IsGenericType
 						? action.GetType().GetGenericTypeDefinition()
 						: action.GetType();
 					MethodInfo methodInfo = actionType.GetMethod("DynamicInvoke");
-					object[] actionParamValues = _catalog.GetParametersForMessage(message);
 					InvokeActionBase(type, message, action,
 					                 () => methodInfo.Invoke(action, BindingFlags.InvokeMethod, null,
 					                                         new object[] { actionParamValues },

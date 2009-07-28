@@ -521,8 +521,26 @@ namespace NBehave.Narrator.Framework.Specifications
 					, actual);
 
 			}
+		}
 
-			
+		[Context]
+		public class When_using_given_with_no_parameters
+		{
+			[Specification]
+			public void should_have_given_in_storys_MessageAdded_event()
+			{
+				string actual = string.Empty;
+				Story.MessageAdded += (sender, e) => actual += string.Format("{0}: {1}{2}", e.EventData.Type, e.EventData.Message, Environment.NewLine);
+
+				new Story("No parameters in given")
+					.WithScenario("Given not registered")
+					.Given("something");
+
+				Assert.AreEqual(
+					"Given: Given something - FAILED" + Environment.NewLine
+					, actual);
+				
+			}
 		}
 	}
 
