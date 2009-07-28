@@ -84,25 +84,25 @@ namespace NBehave.Spec.MSTest.Specs
         [Specification]
         public void Should_allow_substitution_for_IsInstanceOfType()
         {
-            "blarg".ShouldBeInstanceOf(typeof(string));
+            "blarg".ShouldBeInstanceOfType(typeof(string));
         }
 
         [Specification]
         public void Should_allow_generic_substitution_for_IsInstanceOfType()
         {
-            "blarg".ShouldBeInstanceOf<string>();
+            "blarg".ShouldBeInstanceOfType<string>();
         }
 
         [Specification]
         public void Should_allow_substitution_for_IsNotInstanceOfType()
         {
-            "blarg".ShouldNotBeInstanceOf(typeof(int));
+            "blarg".ShouldNotBeInstanceOfType(typeof(int));
         }
 
         [Specification]
         public void Should_allow_generic_substitution_for_IsNotInstanceOfType()
         {
-            "blarg".ShouldNotBeInstanceOf<int>();
+            "blarg".ShouldNotBeInstanceOfType<int>();
         }
     }
 
@@ -163,7 +163,7 @@ namespace NBehave.Spec.MSTest.Specs
         {
             Exception exception = new Action(() => { throw new ArgumentException(); }).GetException();
 
-            exception.ShouldBeInstanceOf<ArgumentException>();
+            exception.ShouldBeInstanceOfType<ArgumentException>();
         }
     }
 
@@ -315,5 +315,51 @@ namespace NBehave.Spec.MSTest.Specs
 
             vals.ShouldNotBeEmpty();
         }
+    }
+
+    [Context]
+    public class When_using_BDD_style_language_for_double_assertions
+    {
+        [Specification]
+        public void Should_allow_substitution_for_Greater()
+        {
+            5.1.ShouldBeGreaterThan(4.5);
+        }
+
+        [Specification]
+        public void Should_allow_substitution_for_GreaterOrEqual()
+        {
+            5.1.ShouldBeGreaterThanOrEqualTo(5.1);
+        }
+
+        [Specification]
+        public void Should_allow_substitution_for_IsNaN()
+        {
+            double.NaN.ShouldBeNaN();
+        }
+
+        [Specification]
+        public void Should_allow_substitution_for_Less()
+        {
+            5.1.ShouldBeLessThan(5.2);
+        }
+
+        [Specification]
+        public void Should_allow_substitution_for_LessOrEqualTo()
+        {
+            5.1.ShouldBeLessThanOrEqualTo(6.2);
+        }
+
+        [Specification]
+        public void Should_allow_substitiution_for_AreApproximatelyEqual()
+        {
+            5.1.ShouldApproximatelyEqual(5.2, 0.11);
+        }
+
+        //[Specification]
+        //public void Should_allow_substitiution_for_AreNotApproximatelyEqual()
+        //{
+        //    5.1.ShouldNotApproximatelyEqual(5.3, 0.1);
+        //}
     }
 }

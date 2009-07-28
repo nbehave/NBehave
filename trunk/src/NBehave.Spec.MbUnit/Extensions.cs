@@ -8,6 +8,20 @@ namespace NBehave.Spec.MbUnit
 {
     public static class Extensions
     {
+        public static Exception GetException(this Action action)
+        {
+            Exception e = null;
+            try
+            {
+                action();
+            }
+            catch (Exception exc)
+            {
+                e = exc;
+            }
+            return e;
+        }
+
         public static void ShouldApproximatelyEqual<T>(this T actual, T expected, T delta)
         {
             Assert.AreApproximatelyEqual(expected, actual, delta);
@@ -33,6 +47,16 @@ namespace NBehave.Spec.MbUnit
             Assert.IsEmpty(collection);
         }
 
+        public static void ShouldBeEqualTo<T>(this IEnumerable<T> actual, IEnumerable<T> expected)
+        {
+            Assert.AreEqual(expected, actual);
+        }
+
+        public static void ShouldBeEquivalentTo<T>(this IEnumerable<T> actual, IEnumerable<T> expected)
+        {
+            Assert.AreElementsEqualIgnoringOrder(expected, actual);
+        }
+
         public static void ShouldBeFalse(this bool condition)
         {
             Assert.IsFalse(condition);
@@ -48,7 +72,13 @@ namespace NBehave.Spec.MbUnit
             Assert.GreaterThanOrEqualTo(arg1, arg2);
         }
 
+        [Obsolete("Use ShouldBeInstanceOfType")]
         public static void ShouldBeInstanceOf<TExpectedType>(this object actual)
+        {
+            actual.ShouldBeInstanceOfType(typeof(TExpectedType));
+        }
+
+        public static void ShouldBeInstanceOfType<TExpectedType>(this object actual)
         {
             actual.ShouldBeInstanceOfType(typeof(TExpectedType));
         }
@@ -158,7 +188,23 @@ namespace NBehave.Spec.MbUnit
             Assert.IsNotEmpty(collection);
         }
 
+        public static void ShouldNotBeEqualTo<T>(this IEnumerable<T> actual, IEnumerable<T> expected)
+        {
+            Assert.AreNotEqual(expected, actual);
+        }
+
+        public static void ShouldNotBeEquivalentTo<T>(this IEnumerable<T> actual, IEnumerable<T> expected)
+        {
+            Assert.AreElementsNotEqual(expected, actual);
+        }
+
+        [Obsolete("Use ShouldNotBeInstanceOfType")]
         public static void ShouldNotBeInstanceOf<TExpectedType>(this object actual)
+        {
+            actual.ShouldNotBeInstanceOfType(typeof(TExpectedType));
+        }
+
+        public static void ShouldNotBeInstanceOfType<TExpectedType>(this object actual)
         {
             actual.ShouldNotBeInstanceOfType(typeof(TExpectedType));
         }
@@ -193,9 +239,23 @@ namespace NBehave.Spec.MbUnit
             Assert.AreNotEqual(actual, expected);
         }
 
+        public static void ShouldNotMatch(this string value, Regex pattern)
+        {
+            Assert.IsTrue(pattern.IsMatch(value) == false, string.Format("string \"{0}\" should not match pattern {1}", value, pattern));
+        }
+
         public static void ShouldStartWith(this string actual, string expected)
         {
             Assert.StartsWith(actual, expected);
+        }
+
+        public static IActionSpecification<T> ShouldThrow<T>(this T value, Type exception)
+        {
+            return new ActionSpecification<T>(value, e =>
+            {
+                e.ShouldNotBeNull();
+                e.ShouldBeInstanceOfType(exception);
+            });
         }
     }
 }

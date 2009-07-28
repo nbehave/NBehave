@@ -22,6 +22,21 @@ namespace NBehave.Spec.NUnit
             return e;
         }
 
+        public static void ShouldApproximatelyEqual<T>(this T actual, T expected, T delta)
+        {
+            if (typeof(T) != typeof(decimal) && typeof(T) != typeof(double) && typeof(T) != typeof(float))
+                Assert.Fail("type (T) must be float, double or decimal");
+
+            if (typeof(T) == typeof(decimal))
+                Assert.AreEqual(Decimal.ToDouble(Convert.ToDecimal(expected)),
+                                Decimal.ToDouble(Convert.ToDecimal(actual)),
+                                Decimal.ToDouble(Convert.ToDecimal(delta)));
+            if (typeof(T) == typeof(double))
+                Assert.AreEqual(Convert.ToDouble(expected), Convert.ToDouble(actual), Convert.ToDouble(delta));
+            if (typeof(T) == typeof(float))
+                Assert.AreEqual(Convert.ToSingle(expected), Convert.ToSingle(actual), Convert.ToSingle(delta));
+        }
+
         public static void ShouldBeAssignableFrom<TExpectedType>(this Object actual)
         {
             Assert.IsAssignableFrom(typeof(TExpectedType), actual);
@@ -67,17 +82,17 @@ namespace NBehave.Spec.NUnit
             Assert.That(arg1, Is.GreaterThanOrEqualTo(arg2));
         }
 
+        [Obsolete("Use ShouldBeInstanceOfType")]
         public static void ShouldBeInstanceOf<TExpectedType>(this object actual)
         {
-            actual.ShouldBeInstanceOf(typeof(TExpectedType));
+            actual.ShouldBeInstanceOfType(typeof(TExpectedType));
         }
 
-        public static void ShouldBeInstanceOf(this object actual, Type expected)
+        public static void ShouldBeInstanceOfType<TExpectedType>(this object actual)
         {
-            Assert.That(actual, Is.InstanceOfType(expected));
+            actual.ShouldBeInstanceOfType(typeof(TExpectedType));
         }
 
-        [Obsolete("Use ShouldBeInstanceOf")]
         public static void ShouldBeInstanceOfType(this object actual, Type expected)
         {
             Assert.That(actual, Is.InstanceOfType(expected));
@@ -103,7 +118,7 @@ namespace NBehave.Spec.NUnit
             Assert.That(value, Is.Null);
         }
 
-        public static void ShouldBeTheSameAs(this object actual, object expected)
+        public static void ShouldBeTheSameAs<T>(this T actual, T expected) where T : class
         {
             Assert.That(actual, Is.SameAs(expected));
         }
@@ -122,7 +137,7 @@ namespace NBehave.Spec.NUnit
             }
 
             e.ShouldNotBeNull();
-            e.ShouldBeInstanceOf(exceptionType);
+            e.ShouldBeInstanceOfType(exceptionType);
 
         }
 
@@ -161,6 +176,12 @@ namespace NBehave.Spec.NUnit
             Assert.IsTrue(pattern.IsMatch(value), string.Format("string \"{0}\" does not match pattern {1}", value, pattern));
         }
 
+        public static void ShouldMatch(this string actual, string regexPattern, RegexOptions regexOptions)
+        {
+            Regex r = new Regex(regexPattern, regexOptions);
+            ShouldMatch(actual, r);
+        }
+
         public static void ShouldNotBeAssignableFrom<TExpectedType>(this object actual)
         {
             actual.ShouldNotBeAssignableFrom(typeof(TExpectedType));
@@ -191,17 +212,17 @@ namespace NBehave.Spec.NUnit
             CollectionAssert.AreNotEquivalent(expected, actual);
         }
 
+        [Obsolete("Use ShouldNotBeInstanceOfType")]
         public static void ShouldNotBeInstanceOf<TExpectedType>(this object actual)
         {
-            actual.ShouldNotBeInstanceOf(typeof(TExpectedType));
+            actual.ShouldNotBeInstanceOfType(typeof(TExpectedType));
         }
 
-        public static void ShouldNotBeInstanceOf(this object actual, Type expected)
+        public static void ShouldNotBeInstanceOfType<TExpectedType>(this object actual)
         {
-            Assert.That(actual, Is.Not.InstanceOfType(expected));
+            actual.ShouldNotBeInstanceOfType(typeof(TExpectedType));
         }
 
-        [Obsolete("Use ShouldNotBeInstanceOf")]
         public static void ShouldNotBeInstanceOfType(this object actual, Type expected)
         {
             Assert.That(actual, Is.Not.InstanceOfType(expected));
@@ -222,11 +243,15 @@ namespace NBehave.Spec.NUnit
             Assert.That(list, Is.Not.Contains(expected));
         }
 
+        public static void ShouldNotContain(this string actual, string expected)
+        {
+            Assert.IsTrue(actual.IndexOf(expected) == -1, string.Format("{0} should not contain {1}", actual, expected));
+        }
+
         public static void ShouldNotEqual<T>(this T actual, T notExpected)
         {
             Assert.That(actual, Is.Not.EqualTo(notExpected));
         }
-
 
         public static void ShouldNotMatch(this string value, Regex pattern)
         {
@@ -243,7 +268,7 @@ namespace NBehave.Spec.NUnit
             return new ActionSpecification<T>(value, e =>
             {
                 e.ShouldNotBeNull();
-                e.ShouldBeInstanceOf(exception);
+                e.ShouldBeInstanceOfType(exception);
             });
         }
     }

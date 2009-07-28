@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using Gallio.Framework.Assertions;
 using ExpectedExceptionNUnit = NUnit.Framework.ExpectedExceptionAttribute;
 using Context = NUnit.Framework.TestFixtureAttribute;
@@ -99,6 +100,41 @@ namespace NBehave.Spec.MbUnit.Specs
             vals.ShouldNotBeEmpty();
         }
 
+        [@Specification]
+        public void Should_allow_substitutions_for_AreEqual()
+        {
+            int[] values1 = { 4, 5, 6 };
+            int[] values2 = { 4, 5, 6 };
+
+            values1.ShouldBeEqualTo(values2);
+        }
+
+        [@Specification]
+        public void Should_allow_substitutions_for_AreNotEqual()
+        {
+            int[] values1 = { 4, 5, 6 };
+            int[] values2 = { 5, 6, 4 };
+
+            values1.ShouldNotBeEqualTo(values2);
+        }
+
+        [@Specification]
+        public void Should_allow_substitutions_for_AreEquivalent()
+        {
+            int[] values1 = { 4, 5, 6 };
+            int[] values2 = { 6, 4, 5 };
+
+            values1.ShouldBeEquivalentTo(values2);
+        }
+
+        [@Specification]
+        public void Should_allow_substitutions_for_AreNotEquivalent()
+        {
+            int[] values1 = { 4, 5, 6 };
+            int[] values2 = { 6, 4, 7 };
+
+            values1.ShouldNotBeEquivalentTo(values2);
+        }
     }
 
     [Context]
@@ -185,6 +221,12 @@ namespace NBehave.Spec.MbUnit.Specs
         {
             "I have 5 euros in my pocket".ShouldMatch(@"\d+ euros");
         }
+
+        [@Specification]
+        public void Should_allow_substitutions_for_DoesNotMatch()
+        {
+            "blarg".ShouldNotMatch(new Regex("asdf"));
+        }
     }
 
     [Context]
@@ -243,7 +285,7 @@ namespace NBehave.Spec.MbUnit.Specs
         [@Specification]
         public void Should_allow_substitution_for_IsInstanceOfType()
         {
-            5.ShouldBeInstanceOf<int>();
+            5.ShouldBeInstanceOfType<int>();
         }
 
         [@Specification]
@@ -255,7 +297,7 @@ namespace NBehave.Spec.MbUnit.Specs
         [@Specification]
         public void Should_allow_substitution_for_IsNotInstanceOfType()
         {
-            5.ShouldNotBeInstanceOf<double>();
+            5.ShouldNotBeInstanceOfType<double>();
         }
     }
 
@@ -284,8 +326,15 @@ namespace NBehave.Spec.MbUnit.Specs
                 delegate { throw new ApplicationException(); });
 
         }
-    }
 
+        [@Specification]
+        public void Should_return_exception_thrown_from_action()
+        {
+            Exception exception = new Action(() => { throw new ArgumentException(); }).GetException();
+
+            exception.ShouldBeInstanceOfType<ArgumentException>();
+        }
+    }
 
     [Context]
     public class When_using_BDD_style_language_for_double_assertions
