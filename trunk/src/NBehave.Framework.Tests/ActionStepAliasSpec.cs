@@ -13,10 +13,10 @@ namespace NBehave.Narrator.Framework.Specifications
         public class When_registering_alias_for_ActionStepAttribute
         {
             [Specification]
-            public void ShouldFindAttributesInAssembly()
+            public void ShouldAddDefaultWords()
             {
                 var actionStepAlias = new ActionStepAlias();
-                Assert.AreEqual(4, actionStepAlias.Aliases.Count);
+                Assert.AreEqual(8, actionStepAlias.Aliases.Count);
             }
 
             [Specification]
@@ -53,9 +53,10 @@ namespace NBehave.Narrator.Framework.Specifications
             public void ShouldGetAliasForTokenString()
             {
                 const string tokenStringTemplate = "{0} err, I dont know latin!";
-                string tokenString = string.Format(tokenStringTemplate, "Ergo");
+                const string actionType = "Ergo";
+                string tokenString = string.Format(tokenStringTemplate, actionType);
                 var actionStepAlias = new ActionStepAlias();
-                IEnumerable<string> aliases = actionStepAlias.GetAliasForTokenString(tokenString);
+                IEnumerable<string> aliases = actionStepAlias.GetAliasesForActionType(actionType, tokenString);
                 Assert.That(aliases.Count(), Is.EqualTo(3));
                 Assert.That(aliases.First(), Is.EqualTo(string.Format(tokenStringTemplate, "Tunc")));
                 Assert.That(aliases.Skip(1).First(), Is.EqualTo(string.Format(tokenStringTemplate, "Deinde")));
@@ -65,9 +66,10 @@ namespace NBehave.Narrator.Framework.Specifications
             [Specification]
             public void ShouldGetDefaultAliasForGiven()
             {
+                const string actionType = "Given";
                 const string tokenString = "Given something";
                 var actionStepAlias = new ActionStepAlias();
-                IEnumerable<string> aliases = actionStepAlias.GetAliasForTokenString(tokenString);
+                IEnumerable<string> aliases = actionStepAlias.GetAliasesForActionType(actionType, tokenString);
                 Assert.That(aliases.Count(), Is.EqualTo(1));
                 Assert.That(aliases.First(), Is.EqualTo("And something"));
             }
@@ -100,5 +102,4 @@ namespace NBehave.Narrator.Framework.Specifications
             }
         }
     }
-
 }

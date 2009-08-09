@@ -22,5 +22,5 @@ namespace NBehave.NAnt.Tests
             var project = new Project("GreetingSystem.build", Level.Debug, 1);
             Assert.IsTrue(project.Run(), "Something went wrong executing the test script.  Check log.");
         }
-}
+    }
 }

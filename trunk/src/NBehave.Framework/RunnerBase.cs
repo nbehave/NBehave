@@ -77,6 +77,8 @@ namespace NBehave.Narrator.Framework
                 case "Then":
                 case "And": listener.ScenarioMessageAdded(eventData.Message);
                     break;
+                case "Pending": listener.ScenarioMessageAdded(string.Format("Pending: {0}", eventData.Message));
+                    break;
                 default:
                     listener.StoryMessageAdded(eventData.Message);
                     break;
@@ -120,13 +122,5 @@ namespace NBehave.Narrator.Framework
             Stories.Clear();
         }
 
-        protected void CompileStoryResults(StoryResults results)
-        {
-            foreach (Story storyToProcess in Stories)
-            {
-                storyToProcess.CompileResults(results);
-            }
-            results.NumberOfStories += Stories.Count;
-        }
     }
 }

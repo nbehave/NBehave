@@ -13,12 +13,22 @@ namespace NBehave.Narrator.Framework
             AddDefaultAlias();
         }
 
+        private IEnumerable<string> DefaultActionSteps
+        {
+            get
+            {
+                var defaultActionSteps = new List<string>();
+                defaultActionSteps.AddRange(ActionStep.StorySteps);
+                defaultActionSteps.AddRange(ActionStep.ScenarioSteps);
+                return defaultActionSteps;
+            }
+        }
+
         private void AddDefaultAlias()
         {
-            var defaultActionSteps = new[] { "Given", "When", "Then", "Scenario" };
             var actionSteps = ActionStepAliasConfiguration.ActionSteps;
             if (actionSteps == null || actionSteps.Count() == 0)
-                actionSteps = defaultActionSteps;
+                actionSteps = DefaultActionSteps;
             foreach (var actionStep in actionSteps)
             {
                 AddDefaultAlias(new List<string>(), actionStep);
@@ -76,26 +86,25 @@ namespace NBehave.Narrator.Framework
             return list;
         }
 
-        public IEnumerable<string> GetAliasForTokenString(string tokenString)
+        public IEnumerable<string> GetAliasesForActionType(string actionType, string tokenString)
         {
-            int startIndex = (tokenString.IndexOf(' ') != -1) ? tokenString.IndexOf(' ') : tokenString.Length;
-            string firstWord = tokenString.Substring(0, startIndex);
-            AddDefaultAlias(ActionStepAliasConfiguration.GetAliasesForActionStep(firstWord), firstWord);
+            AddDefaultAlias(ActionStepAliasConfiguration.GetAliasesForActionType(actionType), actionType);
 
             var tokenAliases = new List<string>();
-            string restOfToken = tokenString.Substring(startIndex);
-            foreach (var tokenAlias in Aliases[firstWord])
+            foreach (var tokenAlias in Aliases[actionType])
             {
-                tokenAliases.Add(tokenAlias + restOfToken);
+                string newTokenString = tokenString.ReplaceFirst(actionType, tokenAlias);
+                tokenAliases.Add(newTokenString);
             }
             return tokenAliases;
         }
 
-        public IEnumerable<string> GetAliasFor(string actionStep)
+        public IEnumerable<string> GetAliasFor(string actionType)
         {
-            IEnumerable<string> aliasForAttribute = ActionStepAliasConfiguration.GetAliasesForActionStep(actionStep);
-            AddDefaultAlias(aliasForAttribute, actionStep);
-            return Aliases[actionStep];
+            IEnumerable<string> aliasForAttribute = ActionStepAliasConfiguration.GetAliasesForActionType(actionType);
+            AddDefaultAlias(aliasForAttribute, actionType);
+            return Aliases[actionType];
         }
+
     }
 }

@@ -73,5 +73,14 @@ namespace NBehave.Narrator.Framework
             Type themeType = theme.GetType();
             return themeType.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
         }
+
+        private void CompileStoryResults(StoryResults results)
+        {
+            foreach (Story storyToProcess in Stories)
+            {
+                storyToProcess.CompileResults(results);
+            }
+            results.NumberOfStories += Stories.Count;
+        }
     }
 }

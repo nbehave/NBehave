@@ -10,7 +10,8 @@ namespace NBehave.Narrator.Framework
         {
             Debug.Assert(story != null);
             _story = story;
-            _story.OnMessageAdded(this, new EventArgs<MessageEventData>(new MessageEventData("Narrative", "As a " + role)));
+            _story.Narrative = "As a " + role;
+            _story.OnMessageAdded(this, new EventArgs<MessageEventData>(new MessageEventData("Narrative", _story.Narrative)));
         }
 
         public IWantFragment IWant(string feature)

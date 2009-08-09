@@ -17,11 +17,11 @@ namespace NBehave.Narrator.Framework
             return value.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
         }
 
-        public static IEnumerable<string> GetAliasesForActionStep(string actionStep)
+        public static IEnumerable<string> GetAliasesForActionType(string actionType)
         {
-            if (string.IsNullOrEmpty(actionStep))
+            if (string.IsNullOrEmpty(actionType))
                 return new List<string>();
-            return GetValue(string.Format("Alias.{0}", actionStep));
+            return GetValue(string.Format("Alias.{0}", actionType));
         }
 
         public static IEnumerable<string> ActionSteps

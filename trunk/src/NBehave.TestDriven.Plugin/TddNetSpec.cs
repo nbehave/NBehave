@@ -17,6 +17,7 @@ namespace NBehave.TestDriven.Plugin
 
             tddNetStory
                 .WithScenario("VS integration - right click method")
+                .Pending("Pending test")
                 .Given("A story in a C# source file", () => { })
                 .And("User have right clicked on a method in code window", () => { })
                 .And("Left clicked 'Run Test(s)'", () => { })

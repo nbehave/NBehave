@@ -55,7 +55,6 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
 			output.TotalScenarios = newResults.NumberOfScenariosFound;
             output.TotalScenariosFailed = (newResults.NumberOfScenariosFound - newResults.NumberOfPassingScenarios - newResults.NumberOfPendingScenarios);
 			output.TotalScenariosPending = newResults.NumberOfPendingScenarios;
-			//_resultsBeforeLastThemeStarted = results;
 		}
 		
 		StoryResults GetNewStoryResults(StoryResults results)

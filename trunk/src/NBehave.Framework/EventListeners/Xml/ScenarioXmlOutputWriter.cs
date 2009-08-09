@@ -29,7 +29,6 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
             refToScenarioExecutionTime.Stop(); //Right now I dont know how to measure the execution time for a scenario /Morgan
             Actions.Enqueue(() =>
             {
-                //WriteScenarioResult();
                 WriteStartElement("scenario", title, refToScenarioExecutionTime);
                 Writer.WriteAttributeString("executed", (ScenarioResults[title].ScenarioResult != ScenarioResult.Pending).ToString().ToLower());
                 Writer.WriteAttributeString("passed", (ScenarioResults[title].ScenarioResult == ScenarioResult.Passed).ToString().ToLower());

@@ -29,7 +29,7 @@ namespace NBehave.Narrator.Framework.Specifications
             Assert.That(results.NumberOfThemes, Is.EqualTo(1));
         }
 
-        [Test]
+        [Specification]
         public void Should_find_the_stories_in_the_example_assembly()
         {
             var runner = new StoryRunner();
@@ -40,7 +40,7 @@ namespace NBehave.Narrator.Framework.Specifications
             Assert.That(results.NumberOfStories, Is.EqualTo(3));
         }
 
-        [Test]
+        [Specification]
         public void Should_report_the_number_of_scenarios_for_each_story()
         {
             var runner = new StoryRunner();
@@ -51,7 +51,7 @@ namespace NBehave.Narrator.Framework.Specifications
             Assert.That(results.NumberOfScenariosFound, Is.EqualTo(4));
         }
 
-        [Test]
+        [Specification]
         public void Should_report_the_number_of_failed_scenarios()
         {
             var runner = new StoryRunner();
@@ -62,7 +62,7 @@ namespace NBehave.Narrator.Framework.Specifications
             Assert.That(results.NumberOfFailingScenarios, Is.EqualTo(1));
         }
 
-        [Test]
+        [Specification]
         public void Should_report_the_number_of_pending_scenarios()
         {
             var runner = new StoryRunner();
@@ -73,7 +73,7 @@ namespace NBehave.Narrator.Framework.Specifications
             Assert.That(results.NumberOfPendingScenarios, Is.EqualTo(1));
         }
 
-        [Test]
+        [Specification]
         public void Should_report_the_number_of_passing_scenarios()
         {
             var runner = new StoryRunner();
@@ -84,7 +84,7 @@ namespace NBehave.Narrator.Framework.Specifications
             Assert.That(results.NumberOfPassingScenarios, Is.EqualTo(2));
         }
 
-        [Test]
+        [Specification]
         public void Should_raise_events_for_messages_written()
         {
             var repo = new MockRepository();
@@ -121,7 +121,7 @@ namespace NBehave.Narrator.Framework.Specifications
             }
         }
 
-        [Test]
+        [Specification]
         public void Should_output_full_story_for_dry_run()
         {
             var repo = new MockRepository();
@@ -159,7 +159,7 @@ namespace NBehave.Narrator.Framework.Specifications
             }
         }
 
-        [Test]
+        [Specification]
         public void Should_only_add_themes_within_given_namespace_that_matches_namespacefilter()
         {
             var runner = new StoryRunner();
@@ -171,9 +171,8 @@ namespace NBehave.Narrator.Framework.Specifications
             Assert.That(results.NumberOfThemes, Is.EqualTo(1));
         }
 
-        [Test]
-        public void
-            Should_not_find_any_themes_within_given_namespace_given_the_namespacefilter_TestAssemblyThatDoesntExists()
+        [Specification]
+        public void Should_not_find_any_themes_within_given_namespace_given_the_namespacefilter_TestAssemblyThatDoesntExists()
         {
             var runner = new StoryRunner();
 
@@ -184,7 +183,7 @@ namespace NBehave.Narrator.Framework.Specifications
             Assert.That(results.NumberOfThemes, Is.EqualTo(0));
         }
 
-        [Test]
+        [Specification]
         public void Should_only_match_stories_within_given_methodFilter()
         {
             var runner = new StoryRunner();
@@ -213,13 +212,13 @@ namespace NBehave.Narrator.Framework.Specifications
                 _results = runner.Run(evt);
             }
 
-            [Test]
+            [Specification]
             public void should_find_tokenized_scenario_in_assembly()
             {
                 Assert.That(_results.NumberOfScenariosFound, Is.EqualTo(2));
             }
 
-            [Test]
+            [Specification]
             public void Should_report_the_number_of_passing_scenarios()
             {
                 Assert.That(_results.NumberOfPassingScenarios, Is.EqualTo(2));
@@ -275,7 +274,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 Assert.IsTrue(_output.Contains("run finished"));
             }
 
-            [Test]
+            [Specification]
             public void Should_have_given_after_first_scenario()
             {
                 int posOfFirstScenario = _output.IndexOf("scenario created: Savings account is in credit");
@@ -287,17 +286,16 @@ namespace NBehave.Narrator.Framework.Specifications
                 Assert.IsTrue(given.EndsWith("Given my savings account balance is 100"));
             }
 
-            [Test]
+            [Specification]
             public void Should_have_given_after_second_scenario()
             {
                 int posOfFirstScenario = _output.IndexOf("scenario created: Savings account is in credit with text");
-                int posOfFirstGiven = _output.IndexOf(Environment.NewLine, posOfFirstScenario) +
-                                      Environment.NewLine.Length;
+                int posOfFirstGiven = _output.IndexOf(Environment.NewLine, posOfFirstScenario) + Environment.NewLine.Length;
                 int endOfLinePos = _output.IndexOf(Environment.NewLine, posOfFirstGiven);
                 string given = _output.Substring(posOfFirstGiven, +endOfLinePos - posOfFirstGiven);
 
-                Assert.IsTrue(given.EndsWith("Given my savings account balance is 50"));
-            }          
+                StringAssert.EndsWith("Given my savings account balance is 50", given);
+            }
         }
     }
 }

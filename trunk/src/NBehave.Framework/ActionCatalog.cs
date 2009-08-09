@@ -5,98 +5,81 @@ using System.Text.RegularExpressions;
 
 namespace NBehave.Narrator.Framework
 {
-    public class ActionValue
+    public class ActionValue : ActionMatch
     {
         public object Action { get; set; }
-        public string Key { get; set; }
+    }
+
+    public class ActionMatch
+    {
+        public Regex ActionStepMatcher { get; set; }
+
+        public List<string> GetParameterNames()
+        {
+            var names = new List<string>();
+            int index = 0;
+            string name = ".";
+            Regex regex = ActionStepMatcher;
+            while (string.IsNullOrEmpty(name) == false)
+            {
+                name = regex.GroupNameFromNumber(index);
+                if (string.IsNullOrEmpty(name) == false && name != index.ToString())
+                    names.Add(name);
+                index++;
+            }
+            return names;
+        }
     }
 
     public class ActionCatalog
     {
         public const char TokenPrefix = '$';
 
-        private readonly Dictionary<string, object> _actions = new Dictionary<string, object>();
+        private readonly List<ActionValue> _actions = new List<ActionValue>();
 
-        public void Add(string message, object action)
+        [Obsolete("Use Add(Regex actionMatch, object action)")]
+        public void Add(string tokenString, object action)
         {
-            if (ActionExists(message))
+            if (ActionExists(tokenString))
                 return;
+            var regex = GetRegexForActionKey(tokenString);
+            Add(regex, action);
+        }
 
-            _actions.Add(message, action);
+        public void Add(Regex actionMatch, object action)
+        {
+            _actions.Add(new ActionValue { ActionStepMatcher = actionMatch, Action = action });
         }
 
         public bool ActionExists(string message)
         {
-            bool actionExist = _actions.ContainsKey(message);
-            if (actionExist == false)
-                actionExist = (FindMathingActionKey(message) != null);
-            return actionExist;
+            return (FindMathingAction(message) != null);
         }
 
-        public bool CatalogedActionIsTokenized(string message)
+        public string BuildFormatString(string message, ICollection<object> args)
         {
-            string catalogedAction = FindMathingActionKey(message);
-            return (catalogedAction != null && catalogedAction.IndexOf(TokenPrefix) > -1);
-        }
-
-        private ActionValue GetActionFromCatalog(string message)
-        {
-            string keyToUse = message;
-            bool actionExist = _actions.ContainsKey(keyToUse);
-            if (actionExist == false)
+            if ((message.IndexOf(ActionCatalog.TokenPrefix) == -1))
             {
-                keyToUse = FindMathingActionKey(message);
-                actionExist = (keyToUse != null);
+                if (args.Count == 0)
+                    return "{0} {1}";
+                if (args.Count == 1)
+                    return "{0} {1}: {2}";
+                string formatString = "{0} {1}: (";
+                for (int i = 0; i < args.Count; i++)
+                    formatString += "{" + (i + 2) + "}, ";
+                return formatString.Remove(formatString.Length - 2) + ")";
             }
-            if (actionExist)
-                return new ActionValue { Key = keyToUse, Action = _actions[keyToUse] };
-            return null;
-        }
-
-        private string FindMathingActionKey(string message)
-        {
-            foreach (string key in _actions.Keys)
-            {
-                Regex regex = GetRegexForActionKey(key);
-                bool isMatch = regex.IsMatch(message);
-                if (isMatch)
-                    return key;
-            }
-
-            return null;
-        }
-
-        private IEnumerable<string> GetActionKeys(object action)
-        {
-            return from r in _actions
-                   where r.Value.Equals(action)
-                   select r.Key;
-        }
-
-        private List<string> GetParamTokens(ActionValue actionValue)
-        {
-            var tokenNames = new List<string>();
-            string actionKey = actionValue.Key;
-            string[] words = actionKey.Split(new[] { ' ', '\n', '\r', '\t' }, StringSplitOptions.RemoveEmptyEntries);
-            foreach (var word in words)
-            {
-                if (WordIsToken(word))
-                {
-                    tokenNames.Add(GetValidRegexGroupName(word));
-                }
-            }
-            return tokenNames;
+            return "{0} {1}";
         }
 
         public object[] GetParametersForMessage(string message)
         {
             ActionValue action = GetAction(message);
-            IEnumerable<Regex> actionRegex = GetRegexForAction(action.Action);
-            List<string> paramNames = GetParamTokens(action);
+            List<string> paramNames = GetParameterNames(action);
             Type[] args = action.Action.GetType().GetGenericArguments();
             var values = new object[args.Length];
 
-            Match match = GetOneMatch(actionRegex, message);
+            Match match = action.ActionStepMatcher.Match(message);
             for (int argNumber = 0; argNumber < paramNames.Count(); argNumber++)
             {
                 var strParam = match.Groups[paramNames[argNumber]].Value;
@@ -105,25 +88,9 @@ namespace NBehave.Narrator.Framework
             return values;
         }
 
-        private Match GetOneMatch(IEnumerable<Regex> actionRegexes, string message)
-        {
-            foreach (var actionRegex in actionRegexes)
-            {
-                Match match = actionRegex.Match(message);
-                if (match.Success)
-                    return match;
-            }
-            return null;
-        }
-
-        private bool WordIsToken(string word)
-        {
-            return word.StartsWith("$");
-        }
-
         public ActionValue GetAction(string message)
         {
-            return GetActionFromCatalog(message);
+            return FindMathingAction(message);
         }
 
         public string BuildMessage(string message, object[] parameters)
@@ -140,6 +107,23 @@ namespace NBehave.Narrator.Framework
             return resultString;
         }
 
+        private ActionValue FindMathingAction(string message)
+        {
+            foreach (var action in _actions)
+            {
+                Regex regex = action.ActionStepMatcher;
+                bool isMatch = regex.IsMatch(message);
+                if (isMatch)
+                    return action;
+            }
+            return null;
+        }
+
+        private List<string> GetParameterNames(ActionValue actionValue)
+        {
+            return actionValue.GetParameterNames();
+        }
+
         private string[] GetTokensInMessage(string message)
         {
             var tokens = new List<string>();
@@ -154,61 +138,14 @@ namespace NBehave.Narrator.Framework
 
         private IEnumerable<Regex> GetRegexForAction(object action)
         {
-            IEnumerable<string> actionKeys = GetActionKeys(action);
-            var regexes = new List<Regex>();
-            foreach (var actionKey in actionKeys)
-                regexes.Add(GetRegexForActionKey(actionKey));
-            return regexes;
+            return from r in _actions
+                   where r.Action.Equals(action)
+                   select r.ActionStepMatcher;
         }
 
         private Regex GetRegexForActionKey(string actionKey)
         {
-            string[] words = actionKey.Split(new[] { ' ', '\n', '\r', '\t' }, StringSplitOptions.RemoveEmptyEntries);
-            string regex = "^";
-            foreach (var word in words)
-            {
-                if (WordIsToken(word))
-                {
-                    var groupName = GetValidRegexGroupName(word);
-                    var stuffAtEnd = RemoveTokenPrefix(word).Replace(groupName, string.Empty);
-                    regex += string.Format(@"(?<{0}>(\-?\w+\s*)+){1}\s+", groupName, stuffAtEnd);
-                }
-                else
-                    regex += string.Format(@"{0}\s+", word);
-            }
-            if (regex.EndsWith(@"\s+"))
-                regex = regex.Substring(0, regex.Length - 1) + "*";
-            regex += "$";
-            return new Regex(regex, RegexOptions.Multiline | RegexOptions.IgnorePatternWhitespace);
+            return actionKey.AsRegex();
         }
-
-        private string GetValidRegexGroupName(string word)
-        {
-            var regex = new Regex(@"\w+");
-            return regex.Match(word).Value;
-        }
-
-        private string RemoveTokenPrefix(string word)
-        {
-            return word.Substring(TokenPrefix.ToString().Length);
-        }
-    
-    public string BuildFormatString(string message, ICollection<object> args)
-		{
-			if ((message.IndexOf(ActionCatalog.TokenPrefix) == -1)
-			    && (!(ActionExists(message) && CatalogedActionIsTokenized(message))))
-			{
-				if (args.Count == 0)
-					return "{0} {1}";
-				if (args.Count == 1)
-					return "{0} {1}: {2}";
-				string formatString = "{0} {1}: (";
-				for (int i = 0; i < args.Count; i++)
-					formatString += "{" + (i + 2) + "}, ";
-				return formatString.Remove(formatString.Length - 2) + ")";
-			}
-			return "{0} {1}";
-		}
-
     }
 }

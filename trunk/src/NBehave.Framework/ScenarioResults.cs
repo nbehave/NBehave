@@ -5,26 +5,23 @@ namespace NBehave.Narrator.Framework
 {
     public class ScenarioResults
     {
-        private readonly string _storyTitle;
         private ScenarioResult _scenarioResult;
         private string _message;
         private string _stackTrace;
 
-        public ScenarioResults(string storyTitle, string scenarioTitle) : this(storyTitle, scenarioTitle, ScenarioResult.Passed)
+        public ScenarioResults(string storyTitle, string scenarioTitle)
+            : this(storyTitle, scenarioTitle, ScenarioResult.Passed)
         {
         }
 
         public ScenarioResults(string storyTitle, string scenarioTitle, ScenarioResult scenarioResult)
         {
-            _storyTitle = storyTitle;
+            StoryTitle = storyTitle;
             ScenarioTitle = scenarioTitle;
             _scenarioResult = scenarioResult;
         }
 
-        public string StoryTitle
-        {
-            get { return _storyTitle; }
-        }
+        public string StoryTitle { get; set; }
 
         public string ScenarioTitle { get; set; }
 
