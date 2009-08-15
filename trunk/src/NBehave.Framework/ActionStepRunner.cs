@@ -65,6 +65,8 @@ namespace NBehave.Narrator.Framework
             textToTokenStringsParser.ParseScenario(scenarioText);
             string scenarioTitle = string.Format("Scenario {0}", scenarioCounter);
             var scenarioResult = new ScenarioResults(string.Empty, scenarioTitle);
+
+            string scenarioMessageToAdd = string.Empty;
             foreach (var row in textToTokenStringsParser.TokenStrings)
             {
                 if (_actionStep.IsStoryTitle(row))
@@ -77,30 +79,41 @@ namespace NBehave.Narrator.Framework
                 else if (Scenario.IsScenarioTitle(row))
                     scenarioResult.ScenarioTitle = Scenario.GetTitle(row);
                 else
-                    RunScenario(row, scenarioResult);
-
+                {
+                    ScenarioResult result = RunActionStepRow(row, scenarioResult);
+                    if (result == ScenarioResult.Passed)
+                        scenarioMessageToAdd += row + Environment.NewLine;
+                    else
+                        scenarioMessageToAdd += row + " - " + result.ToString().ToUpper() + Environment.NewLine;
+                }
             }
             var scenario = new Scenario(scenarioResult.ScenarioTitle, story);
             story.AddScenario(scenario);
-            listener.ScenarioMessageAdded(textToTokenStringsParser.ScenarioMessage());
+            listener.ScenarioMessageAdded(scenarioMessageToAdd); //textToTokenStringsParser.ScenarioMessage());
             storyResults.AddResult(scenarioResult);
         }
 
-        private void RunScenario(string row, ScenarioResults scenarioResult)
+        private ScenarioResult RunActionStepRow(string row, ScenarioResults scenarioResult)
         {
+            ScenarioResult result = ScenarioResult.Passed;
             try
             {
                 string rowWithoutActionType = row.RemoveFirstWord();
                 if (ActionCatalog.ActionExists(rowWithoutActionType) == false)
+                {
                     scenarioResult.Pend(string.Format("No matching Action found for \"{0}\"", row));
+                    result = ScenarioResult.Pending;
+                }
                 else
                     InvokeTokenString(rowWithoutActionType);
             }
             catch (Exception e)
             {
+                result = ScenarioResult.Failed;
                 Exception realException = FindUsefulException(e);
                 scenarioResult.Fail(realException);
             }
+            return result;
         }
 
         private Exception FindUsefulException(Exception e)

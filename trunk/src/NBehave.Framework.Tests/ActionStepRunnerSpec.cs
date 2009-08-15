@@ -121,6 +121,16 @@ namespace NBehave.Narrator.Framework.Specifications
             }
 
             [Specification]
+            public void Should_mark_failing_step_as_failed_in_output()
+            {
+                var writer = new StringWriter();
+                var listener = new TextWriterEventListener(writer);
+                _runner.Load(new[] { @"GreetingSystemFailure.txt" });
+                StoryResults results = _runner.Run(listener);
+                StringAssert.Contains("Then I should be greeted with “Hello, Scott!” - FAILED", writer.ToString());
+            }
+
+            [Specification]
             public void Should_execute_more_than_one_scenario_in_text_file()
             {
                 var writer = new StringWriter();
