@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
@@ -72,8 +73,8 @@ namespace NBehave.Narrator.Framework
             int row = startAtRow;
             while (row < rows.Length && regex.IsMatch(rows[row]) == false)
                 row++;
-            if (row >= rows.Length)
-                row = rows.Length - 1;
+            if (row == rows.Length && regex.IsMatch(rows[row - 1]))
+                row--;
             return row;
         }
 
@@ -86,7 +87,12 @@ namespace NBehave.Narrator.Framework
 
         private string[] Split(string text)
         {
-            return text.Replace(Environment.NewLine, "\n").Split(new char[] { '\n' });
+            string[] rows = text.Replace(Environment.NewLine, "\n").Split(new char[] { '\n' });
+            if (string.IsNullOrEmpty(rows[rows.Length - 1]))
+            {
+                return rows.Take(rows.Length - 1).ToArray();
+            }
+            return rows;
         }
 
         private int GetIndexOfNewLine(string scenario, int first)

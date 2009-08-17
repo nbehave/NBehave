@@ -187,6 +187,21 @@ namespace NBehave.Narrator.Framework.Specifications
             }
 
             [Specification]
+            public void Should_list_all_pending_actionSteps()
+            {
+                var stream = new MemoryStream();
+                var sr = new StreamWriter(stream);
+                sr.WriteLine("Given something that has no ActionStep");
+                sr.WriteLine("And something else that has no ActionStep");
+                sr.Flush();
+                stream.Seek(0, SeekOrigin.Begin);
+                _runner.Load(stream);
+                StoryResults result = _runner.Run(new NullEventListener());
+                StringAssert.Contains("No matching Action found for \"Given something that has no ActionStep\"", result.ScenarioResults[0].Message);
+                StringAssert.Contains("No matching Action found for \"And something else that has no ActionStep\"", result.ScenarioResults[0].Message);
+            }
+
+            [Specification]
             public void Should_use_wildcard_and_run_all_scenarios_in_all_matching_text_files()
             {
                 var writer = new StringWriter();

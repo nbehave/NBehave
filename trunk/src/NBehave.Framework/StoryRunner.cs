@@ -10,7 +10,7 @@ namespace NBehave.Narrator.Framework
         {
             foreach (Type t in assembly.GetExportedTypes())
             {
-                if (t.GetCustomAttributes(typeof(ThemeAttribute), false).Length > 0)
+                if (t.GetCustomAttributes(typeof(ThemeAttribute), false).Length > 0 && t.IsAbstract == false)
                 {
                     var themeAttribute = (ThemeAttribute)t.GetCustomAttributes(typeof(ThemeAttribute), false)[0];
                     object themeInstance = Activator.CreateInstance(t);

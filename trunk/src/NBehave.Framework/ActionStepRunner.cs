@@ -89,7 +89,7 @@ namespace NBehave.Narrator.Framework
             }
             var scenario = new Scenario(scenarioResult.ScenarioTitle, story);
             story.AddScenario(scenario);
-            listener.ScenarioMessageAdded(scenarioMessageToAdd); //textToTokenStringsParser.ScenarioMessage());
+            listener.ScenarioMessageAdded(scenarioMessageToAdd);
             storyResults.AddResult(scenarioResult);
         }
 

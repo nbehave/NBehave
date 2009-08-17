@@ -118,5 +118,17 @@ namespace NBehave.Narrator.Framework.Specifications
 
             Assert.That(_tokenStringsParser.TokenStrings[0], Is.EqualTo("Story: story title"));
         }
+
+        [Test]
+        public void Should_not_hang_with_multiline_actionStep()
+        {
+            string scenario = "Given a new game: 2 by 2" + Environment.NewLine +
+                                "Then the grid should be" + Environment.NewLine +
+                                ".." + Environment.NewLine +
+                                "..";
+
+            _tokenStringsParser.ParseScenario(scenario);
+            StringAssert.Contains(".." + Environment.NewLine + "..", _tokenStringsParser.TokenStrings[1]);
+        }
     }
 }

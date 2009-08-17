@@ -50,7 +50,10 @@ namespace NBehave.Narrator.Framework
         public void Pend(string reason)
         {
             _scenarioResult = ScenarioResult.Pending;
-            _message = reason;
+            if (string.IsNullOrEmpty(_message))
+                _message = reason;
+            else
+                _message += Environment.NewLine + reason;
         }
 
         private string BuildMessage(Exception exception)
