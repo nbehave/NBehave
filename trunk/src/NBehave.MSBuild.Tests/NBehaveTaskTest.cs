@@ -67,7 +67,7 @@ namespace NBehave.MSBuild.Tests
 
                     string result = sr.ReadToEnd();
                     string[] results = result.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
-                    Assert.Contains("Build succeeded.", results);
+                    // Fails if language on computer isnt english: Assert.Contains("Build succeeded.", results);
                     Assert.Contains("  Scenarios run: 1, Failures: 0, Pending: 0", results);
                 }
             }
