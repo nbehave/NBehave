@@ -48,18 +48,18 @@ namespace NBehave.Narrator.Framework
 
         private void RunScenarios(StoryResults storyResults, IEventListener listener)
         {
-            var story = new Story(string.Empty) { IsDryRun = IsDryRun };
             int scenarioCounter = 0;
             foreach (string scenarioText in _scenarios)
             {
                 scenarioCounter++;
-                RunScenario(story, scenarioText, storyResults, listener, scenarioCounter);
+                RunScenario(scenarioText, storyResults, listener, scenarioCounter);
             }
         }
 
-        private void RunScenario(Story story, string scenarioText, StoryResults storyResults, IEventListener listener,
+        private void RunScenario(string scenarioText, StoryResults storyResults, IEventListener listener,
                                  int scenarioCounter)
         {
+            Story story = null;
             var textToTokenStringsParser = new TextToTokenStringsParser(_actionStepAlias);
 
             textToTokenStringsParser.ParseScenario(scenarioText);
@@ -71,11 +71,16 @@ namespace NBehave.Narrator.Framework
             {
                 if (_actionStep.IsStoryTitle(row))
                 {
-                    story.Title = _actionStep.GetTitle(row);
+                    if (story == null)
+                        story = new Story(_actionStep.GetTitle(row));
                     scenarioResult.StoryTitle = story.Title;
                 }
                 else if (_actionStep.IsNarrative(row))
+                {
+                    if (story == null)
+                        story = new Story(string.Empty);
                     story.Narrative += row;
+                }
                 else if (Scenario.IsScenarioTitle(row))
                     scenarioResult.ScenarioTitle = Scenario.GetTitle(row);
                 else
@@ -87,6 +92,8 @@ namespace NBehave.Narrator.Framework
                         scenarioMessageToAdd += row + " - " + result.ToString().ToUpper() + Environment.NewLine;
                 }
             }
+            if (story == null)
+                story = new Story(string.Empty);
             var scenario = new Scenario(scenarioResult.ScenarioTitle, story);
             story.AddScenario(scenario);
             listener.ScenarioMessageAdded(scenarioMessageToAdd);

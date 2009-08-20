@@ -367,6 +367,27 @@ namespace NBehave.Narrator.Framework.Specifications
                 StoryResults result = _runner.Run(listener);
                 Assert.That(result.NumberOfPassingScenarios, Is.EqualTo(1));
             }
+
+            [Specification]
+            public void Should_set_correct_story_title_in_result_xml()
+            {
+                var writer = new XmlTextWriter(new MemoryStream(), Encoding.UTF8);
+                var listener = new XmlOutputEventListener(writer);
+
+                var ms = new MemoryStream();
+                var sr = new StreamWriter(ms);
+                sr.WriteLine("Story: A fancy greeting system");
+                sr.WriteLine("Scenario: A greeting");
+                sr.WriteLine("Given my name is Morgan");
+                sr.WriteLine("When I'm greeted");
+                sr.WriteLine("Then I should be greeted with “Hello, Morgan!”");
+                sr.Flush();
+                ms.Seek(0, SeekOrigin.Begin);
+                _runner.Load(ms);
+
+                StoryResults result = _runner.Run(listener);
+                Assert.That(result.ScenarioResults[0].StoryTitle, Is.EqualTo("A fancy greeting system"));
+            }
         }
 
         [Context]
