@@ -1,5 +1,5 @@
 !ifndef VERSION
-	!define VERSION "0.4"
+	!define VERSION "0.4.2"
 !endif
 !define FILES "..\..\Build\dist"
 !define EXAMPLEFILES "..\..\Build"
