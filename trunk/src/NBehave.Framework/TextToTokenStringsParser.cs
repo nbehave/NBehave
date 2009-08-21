@@ -10,10 +10,12 @@ namespace NBehave.Narrator.Framework
         public IList<string> TokenStrings { get; private set; }
 
         private readonly ActionStepAlias _actionStepAlias;
+        private readonly ActionStep _actionStep;
 
-        public TextToTokenStringsParser(ActionStepAlias actionStepAlias)
+        public TextToTokenStringsParser(ActionStepAlias actionStepAlias, ActionStep actionStep)
         {
             _actionStepAlias = actionStepAlias;
+            _actionStep = actionStep;
         }
 
         public void ParseScenario(string scenario)
@@ -133,7 +135,7 @@ namespace NBehave.Narrator.Framework
 
             foreach (var row in TokenStrings)
             {
-                if (Scenario.IsScenarioTitle(row) == false)
+                if (_actionStep.IsScenarioTitle(row) == false)
                     scenarioMessageToAdd += row + Environment.NewLine;
             }
             return scenarioMessageToAdd;

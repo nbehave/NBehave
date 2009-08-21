@@ -7,15 +7,21 @@ namespace NBehave.Narrator.Framework.Specifications
     [TestFixture]
     public class TokenStringsToScenarioParserSpec
     {
-        public class WhenListOfTokenStringContainsOneStory : TokenStringsToScenarioParserSpec
-        {
             private TokenStringsToScenarioParser _parser;
 
+            private void CreateParser()
+            {
+                var actionStepAlias = new ActionStepAlias();
+                var actionStep = new ActionStep(actionStepAlias);
+                _parser = new TokenStringsToScenarioParser(actionStep);
+            }
+
+        public class WhenListOfTokenStringContainsOneScenario : TokenStringsToScenarioParserSpec
+        {
             [SetUp]
             public void GivenTheseConditions()
             {
-                _parser = new TokenStringsToScenarioParser();
-
+                CreateParser();
                 var tokens = new List<string>
                                  {
                                      "Given my name is Morgan",
@@ -32,20 +38,48 @@ namespace NBehave.Narrator.Framework.Specifications
             }
         }
 
-        public class WhenListOfTokenStringContainsTwoStories : TokenStringsToScenarioParserSpec
+        public class WhenListOfTokenStringContainsTwoScenarios : TokenStringsToScenarioParserSpec
         {
-            private TokenStringsToScenarioParser _parser;
-
             [SetUp]
             public void GivenTheseConditions()
             {
-                _parser = new TokenStringsToScenarioParser();
-
+                CreateParser();
+                
                 var tokens = new List<string>
                                  {
                                      "Given my name is Morgan",
                                      "When I'm greeted",
                                      "Then I should be greeted with “Hello, Morgan!”",
+                                     "Given my name is Axel",
+                                     "When I'm greeted",
+                                     "Then I should be greeted with “Hello, Axel!”"
+                                 };
+                _parser.ParseTokensToScenarios(tokens);
+            }
+
+            [Test]
+            public void ShouldParseTokensToScenario()
+            {
+                Assert.That(_parser.Scenarios.Count, Is.EqualTo(2));
+            }
+        }
+
+        public class WhenListOfTokenStringContainsTwoScenariosAndStory : TokenStringsToScenarioParserSpec
+        {
+            [SetUp]
+            public void GivenTheseConditions()
+            {
+                CreateParser();
+
+                var tokens = new List<string>
+                                 {
+                                     "Story: Greeting story",
+                                     "Scenario: Hello Morgan",
+                                     "Given my name is Morgan",
+                                     "When I'm greeted",
+                                     "Then I should be greeted with “Hello, Morgan!”",
+
+                                     "Scenario: Hello Axel",
                                      "Given my name is Axel",
                                      "When I'm greeted",
                                      "Then I should be greeted with “Hello, Axel!”"

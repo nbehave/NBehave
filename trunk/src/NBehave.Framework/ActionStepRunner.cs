@@ -27,8 +27,8 @@ namespace NBehave.Narrator.Framework
         {
             ActionCatalog = new ActionCatalog();
             StoryRunnerFilter = new StoryRunnerFilter();
-            _actionStepFileLoader = new ActionStepFileLoader(_actionStepAlias);
             _actionStep = new ActionStep(_actionStepAlias);
+            _actionStepFileLoader = new ActionStepFileLoader(_actionStepAlias, _actionStep);
         }
 
         protected override void ParseAssembly(Assembly assembly)
@@ -60,7 +60,7 @@ namespace NBehave.Narrator.Framework
                                  int scenarioCounter)
         {
             Story story = null;
-            var textToTokenStringsParser = new TextToTokenStringsParser(_actionStepAlias);
+            var textToTokenStringsParser = new TextToTokenStringsParser(_actionStepAlias, _actionStep);
 
             textToTokenStringsParser.ParseScenario(scenarioText);
             string scenarioTitle = string.Format("Scenario {0}", scenarioCounter);
@@ -81,8 +81,8 @@ namespace NBehave.Narrator.Framework
                         story = new Story(string.Empty);
                     story.Narrative += row;
                 }
-                else if (Scenario.IsScenarioTitle(row))
-                    scenarioResult.ScenarioTitle = Scenario.GetTitle(row);
+                else if (_actionStep.IsScenarioTitle(row))
+                    scenarioResult.ScenarioTitle = _actionStep.GetTitle(row);
                 else
                 {
                     ScenarioResult result = RunActionStepRow(row, scenarioResult);

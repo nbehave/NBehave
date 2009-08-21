@@ -7,10 +7,12 @@ namespace NBehave.Narrator.Framework
     public class ActionStepFileLoader
     {
         private readonly ActionStepAlias _actionStepAlias;
+        private readonly ActionStep _actionStep;
 
-        public ActionStepFileLoader(ActionStepAlias actionStepAlias)
+        public ActionStepFileLoader(ActionStepAlias actionStepAlias, ActionStep actionStep)
         {
             _actionStepAlias = actionStepAlias;
+            _actionStep = actionStep;
         }
 
         public List<string> Load(IEnumerable<string> scenarioLocations)
@@ -35,10 +37,10 @@ namespace NBehave.Narrator.Framework
 
         public List<string> Load(Stream stream)
         {
-            var scenarioTextParser = new TextToTokenStringsParser(_actionStepAlias);
+            var scenarioTextParser = new TextToTokenStringsParser(_actionStepAlias, _actionStep);
             using (var fs = new StreamReader(stream))
                 scenarioTextParser.ParseScenario(fs.ReadToEnd());
-            var tokenStringsToScenarioParser = new TokenStringsToScenarioParser();
+            var tokenStringsToScenarioParser = new TokenStringsToScenarioParser(_actionStep);
             tokenStringsToScenarioParser.ParseTokensToScenarios(scenarioTextParser.TokenStrings);
             List<string> scenarios = tokenStringsToScenarioParser.Scenarios;
 

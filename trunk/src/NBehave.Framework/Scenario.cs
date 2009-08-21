@@ -34,18 +34,6 @@ namespace NBehave.Narrator.Framework
 			Title = title;
 		}
 
-		private static readonly Regex _regex = new Regex(@"^\s*Scenario(:?)");
-		public static bool IsScenarioTitle(string text)
-		{
-			return _regex.IsMatch(text);
-		}
-
-		public static string GetTitle(string text)
-		{
-			var match = _regex.Match(text);
-			return text.Substring(match.Value.Length).TrimStart(new[] { ' ', '\t' });
-		}
-
 		private string _title;
 		public string Title
 		{

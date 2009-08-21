@@ -45,5 +45,24 @@ namespace NBehave.Narrator.Framework
             string title = m.Groups["title"].Value;
             return title;
         }
+
+        private readonly Regex _isScenarioTitle = new Regex(string.Format(@"\s*{0}:?\s+", ScenarioTitle), RegexOptions.Compiled);
+        public bool IsScenarioTitle(string text)
+        {
+            return _isScenarioTitle.IsMatch(text);
+        }
+
+        private readonly Regex _isScenarioStep = new Regex(string.Format(@"\s*{0}:?\s+", "Given"), RegexOptions.Compiled);
+        public bool IsScenarioStep(string text)
+        {
+            foreach (var step in ScenarioSteps)
+            {
+                Regex isScenarioStep = new Regex(string.Format(@"\s*{0}\s+", step));
+                if (isScenarioStep.IsMatch(text))
+                    return true;
+            }
+
+            return IsScenarioTitle(text);
+        }
     }
 }
