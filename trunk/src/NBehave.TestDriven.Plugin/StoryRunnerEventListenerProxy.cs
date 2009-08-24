@@ -58,10 +58,10 @@ namespace NBehave.TestDriven.Plugin
                                    where r.StoryTitle == _story
                                    select new
                                    {
-                                       Message = r.ScenarioResult.ToString(),
+                                       Message = r.Result.ToString(),
                                        Name = r.ScenarioTitle,
                                        StackTrace = r.StackTrace,
-                                       State = r.ScenarioResult,
+                                       State = r.Result,
                                    };
 
             foreach (var result in resultsFromStory)
@@ -79,19 +79,15 @@ namespace NBehave.TestDriven.Plugin
             }
         }
 
-        private TestState GetTestResultState(ScenarioResult result)
+        private TestState GetTestResultState(Result result)
         {
-            switch (result)
-            {
-                case ScenarioResult.Passed:
-                    return TestState.Passed;
-                case ScenarioResult.Failed:
-                    return TestState.Failed;
-                case ScenarioResult.Pending:
-                    return TestState.Ignored;
-                default:
-                    throw new NotSupportedException(string.Format("ScenarioResult {0} isn't supported.", result));
-            }
+            if (result.GetType() == typeof (Passed))
+                return TestState.Passed;
+            if (result.GetType() == typeof (Failed))
+                return TestState.Failed;
+            if (result.GetType() == typeof (Pending))
+                return TestState.Ignored;
+            throw new NotSupportedException(string.Format("Result {0} isn't supported.", result));
         }
 
         #endregion

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
@@ -9,6 +8,7 @@ using Specification = NUnit.Framework.TestAttribute;
 
 namespace NBehave.Narrator.Framework.Specifications
 {
+    [Context]
     public class ActionCatalogSpec
     {
         [Context]
@@ -56,6 +56,18 @@ namespace NBehave.Narrator.Framework.Specifications
                 ActionValue actionFetched = catalog.GetAction("I have 20 euros on my cash account");
 
                 Assert.That(actionFetched, Is.Not.Null);
+            }
+        }
+
+        [Context]
+        public class When_fetching_parameters_for_actionStep : TextRunnerSpec
+        {
+            ActionCatalog _actionCatalog;
+
+            [SetUp]
+            public void Establish_context()
+            {
+                _actionCatalog = new ActionCatalog();
             }
 
             [Specification]
@@ -106,6 +118,60 @@ namespace NBehave.Narrator.Framework.Specifications
 
                 Assert.That(givenValue.Length, Is.EqualTo(1));
                 Assert.That(givenValue.First(), Is.EqualTo("-20"));
+            }
+            
+            [Specification]
+            public void Should_get_int_parameter()
+            {
+                Action<int> action = value => { };
+                _actionCatalog.Add(new Regex(@"an int (?<value>\d+)"), action);
+                object[] values = _actionCatalog.GetParametersForMessage("an int 42");
+                Assert.That(values[0], Is.TypeOf(typeof(int)));
+
+            }
+
+            [Specification]
+            public void Should_get_decimal_parameter()
+            {
+                Action<decimal> action = value => { };
+                _actionCatalog.Add(new Regex(@"a decimal (?<value>\d+)"), action);
+                object[] values = _actionCatalog.GetParametersForMessage("a decimal 42");
+                Assert.That(values[0], Is.TypeOf(typeof(decimal)));
+            }
+
+            [Specification]
+            public void Should_get_multiline_value_as_string()
+            {
+                Action<string> action = value => { };
+                _actionCatalog.Add(new Regex(@"a string\s+(?<value>(\w+\s+)*)"), action);
+                string multiLineValue = "one" + Environment.NewLine + "two";
+                string actionString = "a string " + multiLineValue;
+                object[] values = _actionCatalog.GetParametersForMessage(actionString);
+                Assert.That(values[0], Is.TypeOf(typeof(string)));
+            }
+
+            [Specification]
+            public void Should_get_multiline_value_as_array_of_strings()
+            {
+                Action<string[]> action = value => { };
+
+                _actionCatalog.Add(new Regex(@"a string\s+(?<value>(\w+\s+)+)"), action);
+                string multiLineValue = "one" + Environment.NewLine + "two";
+                string actionString = "a string " + Environment.NewLine + multiLineValue;
+                object[] values = _actionCatalog.GetParametersForMessage(actionString);
+                Assert.That(values[0], Is.TypeOf(typeof(string[])));
+            }
+
+            [Specification]
+            public void Should_remove_empty_entries_at_end_of_array_values()
+            {
+                Action<string[]> action = value => { };
+
+                _actionCatalog.Add(new Regex(@"a string\s+(?<value>(\w+\s*)+)"), action);
+                string multiLineValue = "one" + Environment.NewLine + "two" + Environment.NewLine;
+                string actionString = "a string " + Environment.NewLine + multiLineValue;
+                object[] values = _actionCatalog.GetParametersForMessage(actionString);
+                Assert.That((values[0] as string[]), Is.EqualTo(new string[] { "one", "two" }));
             }
         }
     }

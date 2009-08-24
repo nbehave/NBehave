@@ -14,7 +14,7 @@ namespace NBehave.Narrator.Framework.Specifications
         public void Setup()
         {
             _actionStepAlias = new ActionStepAlias();
-            var actionStep = new ActionStep(_actionStepAlias);
+            var actionStep = new ActionStep();
             _tokenStringsParser = new TextToTokenStringsParser(_actionStepAlias, actionStep);
         }
 

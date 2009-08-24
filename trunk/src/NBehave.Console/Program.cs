@@ -43,8 +43,8 @@ namespace NBehave.Console
                 runner = new StoryRunner();
             else
             {
-                runner = new ActionStepRunner();
-                ((ActionStepRunner)runner).Load(options.scenarioFiles.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
+                runner = new TextRunner();
+                ((TextRunner)runner).Load(options.scenarioFiles.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
             }
             runner.IsDryRun = options.dryRun;
 

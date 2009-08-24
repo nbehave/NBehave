@@ -1,5 +1,4 @@
 using System;
-using NBehave.Narrator.Framework;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 
@@ -11,24 +10,24 @@ namespace NBehave.Narrator.Framework.Specifications
         [Test]
         public void Should_set_message_with_failure_when_failed()
         {
-            ScenarioResults results = new ScenarioResults("Story Title", "Scenario Title", ScenarioResult.Passed);
+            var results = new ScenarioResult("Story Title", "Scenario Title");
 
             results.Fail(new Exception("Error"));
 
-            Assert.That(results.ScenarioResult, Is.EqualTo(ScenarioResult.Failed));
+            Assert.That(results.Result, Is.TypeOf(typeof(Failed)));
             Assert.That(results.Message, Is.EqualTo("System.Exception : Error"));
         }
 
         [Test]
         public void Should_set_message_with_inner_exception_information_when_failed()
         {
-            ScenarioResults results = new ScenarioResults("Story Title", "Scenario Title", ScenarioResult.Passed);
+            var results = new ScenarioResult("Story Title", "Scenario Title");
 
-            ApplicationException inner = new ApplicationException("Inner");
-            Exception outer = new Exception("Outer", inner);
+            var inner = new ApplicationException("Inner");
+            var outer = new Exception("Outer", inner);
             results.Fail(outer);
 
-            Assert.That(results.ScenarioResult, Is.EqualTo(ScenarioResult.Failed));
+            Assert.That(results.Result, Is.TypeOf(typeof(Failed)));
             Assert.That(results.Message,
                         Is.EqualTo("System.Exception : Outer\r\n  ----> System.ApplicationException : Inner"));
         }
@@ -36,18 +35,18 @@ namespace NBehave.Narrator.Framework.Specifications
         [Test]
         public void Should_set_message_with_pending_reason_when_pending()
         {
-            ScenarioResults results = new ScenarioResults("Story Title", "Scenario Title", ScenarioResult.Passed);
+            var results = new ScenarioResult("Story Title", "Scenario Title");
 
             results.Pend("reason");
 
-            Assert.That(results.ScenarioResult, Is.EqualTo(ScenarioResult.Pending));
+            Assert.That(results.Result, Is.TypeOf(typeof(Pending)));
             Assert.That(results.Message, Is.EqualTo("reason"));
         }
 
         [Test]
         public void Should_set_stack_trace_of_exception_when_failed()
         {
-            ScenarioResults results = new ScenarioResults("Story Title", "Scenario Title", ScenarioResult.Passed);
+            var results = new ScenarioResult("Story Title", "Scenario Title");
 
             Exception ex;
 
@@ -68,8 +67,7 @@ namespace NBehave.Narrator.Framework.Specifications
         [Test]
         public void Should_set_stack_trace_with_inner_exception_details_when_failed()
         {
-            ScenarioResults results = new ScenarioResults("Story Title", "Scenario Title", ScenarioResult.Passed);
-
+            var results = new ScenarioResult("Story Title", "Scenario Title");
             Exception ex = null;
 
             try

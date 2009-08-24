@@ -56,11 +56,11 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
         public override void DoResults(StoryResults results)
         {
             _currentStoryExecutionTime.Stop();
-            IEnumerable<ScenarioResults> resultsForStory = GetScenarioResultsForCurrentStory(results);           
+            IEnumerable<ScenarioResult> resultsForStory = GetScenarioResultsForCurrentStory(results);           
             DoSummaryResult(resultsForStory);
         }
 
-        private IEnumerable<ScenarioResults> GetScenarioResultsForCurrentStory(StoryResults results)
+        private IEnumerable<ScenarioResult> GetScenarioResultsForCurrentStory(StoryResults results)
         {
             var resultsForStory = from res in results.ScenarioResults
                                   where res.StoryTitle == _currentStory
@@ -68,7 +68,7 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
             return resultsForStory;
         }
 
-        private void DoSummaryResult(IEnumerable<ScenarioResults> resultsForStory)
+        private void DoSummaryResult(IEnumerable<ScenarioResult> resultsForStory)
         {
             Actions.Enqueue(()=> Writer.WriteEndElement());
             var storyResults = new StoryResults();

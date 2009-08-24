@@ -39,23 +39,24 @@ namespace NBehave.Narrator.Framework
 
         public void WriteDotResults(StoryResults results)
         {
-            foreach (ScenarioResults result in results.ScenarioResults)
+            foreach (ScenarioResult result in results.ScenarioResults)
             {
                 char resultIndicator;
-                switch (result.ScenarioResult)
+                if (result.Result.GetType() == typeof(Passed))
                 {
-                    case ScenarioResult.Passed:
-                        resultIndicator = '.';
-                        break;
-                    case ScenarioResult.Failed:
-                        resultIndicator = 'F';
-                        break;
-                    case ScenarioResult.Pending:
-                        resultIndicator = 'P';
-                        break;
-                    default:
-                        resultIndicator = '?';
-                        break;
+                    resultIndicator = '.';
+                }
+                else if (result.Result.GetType()== typeof(Failed))
+                {
+                    resultIndicator = 'F';
+                }
+                else if (result.Result.GetType() == typeof(Pending))
+                {
+                    resultIndicator = 'P';
+                }
+                else
+                {
+                    resultIndicator = '?';
                 }
                 _writer.Write(resultIndicator);
             }
@@ -76,9 +77,9 @@ namespace NBehave.Narrator.Framework
                 _writer.WriteLine("Failures:");
                 int failureNumber = 1;
 
-                foreach (ScenarioResults result in results.ScenarioResults)
+                foreach (ScenarioResult result in results.ScenarioResults)
                 {
-                    if (result.ScenarioResult == ScenarioResult.Failed)
+                    if (result.Result.GetType() == typeof(Failed))
                     {
                         _writer.WriteLine("{0}) {1} ({2}) FAILED", failureNumber, result.StoryTitle,
                                          result.ScenarioTitle);
@@ -103,9 +104,9 @@ namespace NBehave.Narrator.Framework
                 _writer.WriteLine("Pending:");
                 int pendingNumber = 1;
 
-                foreach (ScenarioResults result in results.ScenarioResults)
+                foreach (ScenarioResult result in results.ScenarioResults)
                 {
-                    if (result.ScenarioResult == ScenarioResult.Pending)
+                    if (result.Result.GetType() == typeof(Pending))
                     {
                         _writer.WriteLine("{0}) {1} ({2}): {3}", pendingNumber, result.StoryTitle,
                                          result.ScenarioTitle, result.Message);

@@ -20,7 +20,7 @@ namespace NBehave.Narrator.Framework
     public class Story
     {
         private readonly ActionCatalog _catalog = new ActionCatalog();
-        private readonly LinkedList<ScenarioResults> _scenarioResults;
+        private readonly LinkedList<ScenarioResult> _scenarioResults;
         private readonly List<Scenario> _scenarios;
 
         public static event EventHandler<EventArgs<Story>> StoryCreated;
@@ -38,7 +38,7 @@ namespace NBehave.Narrator.Framework
             Title = title;
             Narrative = string.Empty;
             _scenarios = new List<Scenario>();
-            _scenarioResults = new LinkedList<ScenarioResults>();
+            _scenarioResults = new LinkedList<ScenarioResult>();
 
             OnStoryCreated(new EventArgs<Story>(this));
         }
@@ -83,7 +83,7 @@ namespace NBehave.Narrator.Framework
 
         public void CompileResults(StoryResults results)
         {
-            foreach (ScenarioResults result in _scenarioResults)
+            foreach (ScenarioResult result in _scenarioResults)
             {
                 results.AddResult(result);
             }
@@ -224,7 +224,7 @@ namespace NBehave.Narrator.Framework
             }
             catch (Exception e)
             {
-                ScenarioResults result = _scenarioResults.Last.Value;
+                ScenarioResult result = _scenarioResults.Last.Value;
                 result.Fail(e);
             }
         }
@@ -307,7 +307,7 @@ namespace NBehave.Narrator.Framework
         {
             _scenarios.Add(scenario);
             OnScenarioAdded(new EventArgs<Scenario>(scenario));
-            _scenarioResults.AddLast(new ScenarioResults(Title, scenario.Title));
+            _scenarioResults.AddLast(new ScenarioResult(Title, scenario.Title));
         }
     }
 }

@@ -11,12 +11,12 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
         private string _currentScenarioTitle;
         private readonly string _belongsToStoryWithTitle;
 
-        public Dictionary<string, ScenarioResults> ScenarioResults { get; private set; }
+        public Dictionary<string, ScenarioResult> ScenarioResults { get; private set; }
 
         public ScenarioXmlOutputWriter(XmlWriter writer, Queue<Action> actions, string belongsToStoryWithTitle)
             : base(writer, actions)
         {
-            ScenarioResults = new Dictionary<string, ScenarioResults>();
+            ScenarioResults = new Dictionary<string, ScenarioResult>();
             _belongsToStoryWithTitle = belongsToStoryWithTitle;
         }
 
@@ -30,8 +30,8 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
             Actions.Enqueue(() =>
             {
                 WriteStartElement("scenario", title, refToScenarioExecutionTime);
-                Writer.WriteAttributeString("executed", (ScenarioResults[title].ScenarioResult != ScenarioResult.Pending).ToString().ToLower());
-                Writer.WriteAttributeString("passed", (ScenarioResults[title].ScenarioResult == ScenarioResult.Passed).ToString().ToLower());
+                Writer.WriteAttributeString("executed", (ScenarioResults[title].Result.GetType() != typeof(Pending)).ToString().ToLower());
+                Writer.WriteAttributeString("passed", (ScenarioResults[title].Result.GetType() == typeof(Passed)).ToString().ToLower());
                 Writer.WriteStartElement("text");
                 while (_messages.Count > 0)
                 {
@@ -57,7 +57,7 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
 
         private StoryResults ExtractResultsForScenario(StoryResults results)
         {
-            IEnumerable<ScenarioResults> scenarioResults = from r in results.ScenarioResults
+            IEnumerable<ScenarioResult> scenarioResults = from r in results.ScenarioResults
                                                            where r.StoryTitle == _belongsToStoryWithTitle
                                                                  && r.ScenarioTitle == _currentScenarioTitle
                                                            select r;

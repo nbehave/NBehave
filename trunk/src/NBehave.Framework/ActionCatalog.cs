@@ -5,32 +5,6 @@ using System.Text.RegularExpressions;
 
 namespace NBehave.Narrator.Framework
 {
-    public class ActionValue : ActionMatch
-    {
-        public object Action { get; set; }
-    }
-
-    public class ActionMatch
-    {
-        public Regex ActionStepMatcher { get; set; }
-
-        public List<string> GetParameterNames()
-        {
-            var names = new List<string>();
-            int index = 0;
-            string name = ".";
-            Regex regex = ActionStepMatcher;
-            while (string.IsNullOrEmpty(name) == false)
-            {
-                name = regex.GroupNameFromNumber(index);
-                if (string.IsNullOrEmpty(name) == false && name != index.ToString())
-                    names.Add(name);
-                index++;
-            }
-            return names;
-        }
-    }
-
     public class ActionCatalog
     {
         public const char TokenPrefix = '$';
@@ -58,7 +32,7 @@ namespace NBehave.Narrator.Framework
 
         public string BuildFormatString(string message, ICollection<object> args)
         {
-            if ((message.IndexOf(ActionCatalog.TokenPrefix) == -1))
+            if ((message.IndexOf(TokenPrefix) == -1))
             {
                 if (args.Count == 0)
                     return "{0} {1}";
@@ -83,7 +57,16 @@ namespace NBehave.Narrator.Framework
             for (int argNumber = 0; argNumber < paramNames.Count(); argNumber++)
             {
                 var strParam = match.Groups[paramNames[argNumber]].Value;
-                values[argNumber] = Convert.ChangeType(strParam, args[argNumber]); //converts string to an instance of args[argNumber]
+                if (args[argNumber].IsArray)
+                {
+                    var strParamAsArray = strParam.Replace(Environment.NewLine, "\n")
+                        .Split(new[] { '\n' });
+                    while (string.IsNullOrEmpty(strParamAsArray.Last()))
+                        strParamAsArray = strParamAsArray.Take(strParamAsArray.Length - 1).ToArray();
+                    values[argNumber] = Convert.ChangeType(strParamAsArray, args[argNumber]); //converts string to an instance of args[argNumber]
+                }
+                else
+                    values[argNumber] = Convert.ChangeType(strParam, args[argNumber]); //converts string to an instance of args[argNumber]
             }
             return values;
         }
@@ -119,7 +102,7 @@ namespace NBehave.Narrator.Framework
             return null;
         }
 
-        private List<string> GetParameterNames(ActionValue actionValue)
+        private List<string> GetParameterNames(ActionMatch actionValue)
         {
             return actionValue.GetParameterNames();
         }
@@ -134,13 +117,6 @@ namespace NBehave.Narrator.Framework
                 tokens.Add(match.ToString());
             }
             return tokens.ToArray();
-        }
-
-        private IEnumerable<Regex> GetRegexForAction(object action)
-        {
-            return from r in _actions
-                   where r.Action.Equals(action)
-                   select r.ActionStepMatcher;
         }
 
         private Regex GetRegexForActionKey(string actionKey)

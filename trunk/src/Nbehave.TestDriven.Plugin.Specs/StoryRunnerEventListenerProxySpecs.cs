@@ -31,7 +31,7 @@ namespace NBehave.TestDriven.Plugin.Specs
                 LastCall.Callback(new VerifyTestResult(r => r.TotalTests == 1 && r.Name == myScenario));
 
                 result = new StoryResults();
-                result.AddResult(new ScenarioResults(myStory, myScenario));
+                result.AddResult(new ScenarioResult(myStory, myScenario));
                 storyRunner = new StoryRunnerEventListenerProxy(tddNetListener);
             }
 

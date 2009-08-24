@@ -7,6 +7,7 @@ using Specification = NUnit.Framework.TestAttribute;
 
 namespace NBehave.Narrator.Framework.Specifications
 {
+    [Context]
     public class ActionStepAliasSpec
     {
         [Context]
@@ -16,7 +17,7 @@ namespace NBehave.Narrator.Framework.Specifications
             public void ShouldAddDefaultWords()
             {
                 var actionStepAlias = new ActionStepAlias();
-                Assert.AreEqual(8, actionStepAlias.Aliases.Count);
+                Assert.AreEqual(9, actionStepAlias.Aliases.Count);
             }
 
             [Specification]

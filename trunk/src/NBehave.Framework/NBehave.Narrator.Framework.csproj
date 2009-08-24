@@ -67,19 +67,22 @@
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="ActionCatalog.cs" />
+    <Compile Include="Text\ActionMatch.cs" />
+    <Compile Include="Text\ActionMethodInfo.cs" />
     <Compile Include="ActionMissingException.cs" />
-    <Compile Include="ActionStep.cs" />
-    <Compile Include="ActionStepAlias.cs" />
-    <Compile Include="ActionStepAliasConfiguration.cs" />
-    <Compile Include="ActionStepAttribute.cs" />
-    <Compile Include="ActionStepConverterExtensions.cs" />
-    <Compile Include="ActionStepFileLoader.cs" />
-    <Compile Include="ActionStepRunner.cs" />
-    <Compile Include="ActionStepsAttribute.cs" />
+    <Compile Include="Text\ActionStep.cs" />
+    <Compile Include="Text\ActionStepAlias.cs" />
+    <Compile Include="Text\ActionStepAliasConfiguration.cs" />
+    <Compile Include="Text\ActionStepAttribute.cs" />
+    <Compile Include="Text\ActionStepConverterExtensions.cs" />
+    <Compile Include="Text\ActionStepFileLoader.cs" />
+    <Compile Include="Text\ActionStepRunner.cs" />
+    <Compile Include="Text\ActionStepsAttribute.cs" />
+    <Compile Include="Text\ActionValue.cs" />
     <Compile Include="AsAFragment.cs" />
     <Compile Include="DisposableAction.cs" />
     <Compile Include="EventArgs.cs" />
-    <Compile Include="ActionStepParser.cs" />
+    <Compile Include="Text\ActionStepParser.cs" />
     <Compile Include="EventListeners\EventListeners.cs" />
     <Compile Include="EventListeners\FileOutputEventListener.cs" />
     <Compile Include="EventListeners\MultiOutputEventListener.cs" />
@@ -101,12 +104,14 @@
     <Compile Include="Scenario.cs" />
     <Compile Include="ScenarioBuilder.cs" />
     <Compile Include="ScenarioFragment.cs" />
-    <Compile Include="ScenarioResult.cs" />
+    <Compile Include="Result.cs" />
     <Compile Include="ScenarioResultEventArgs.cs" />
-    <Compile Include="ScenarioResults.cs" />
+    <Compile Include="ScenarioResult.cs" />
+    <Compile Include="Text\ScenarioStepRunner.cs" />
     <Compile Include="SoThatFragment.cs" />
     <Compile Include="StringExtensions.cs" />
-    <Compile Include="TextToTokenStringsParser.cs" />
+    <Compile Include="Text\TextRunner.cs" />
+    <Compile Include="Text\TextToTokenStringsParser.cs" />
     <Compile Include="Story.cs" />
     <Compile Include="StoryAttribute.cs" />
     <Compile Include="StoryResults.cs" />
@@ -114,7 +119,7 @@
     <Compile Include="StoryRunnerFilter.cs" />
     <Compile Include="ThemeAttribute.cs" />
     <Compile Include="ThenFragment.cs" />
-    <Compile Include="TokenStringsToScenarioParser.cs" />
+    <Compile Include="Text\TokenStringsToScenarioParser.cs" />
     <Compile Include="WhenFragment.cs" />
   </ItemGroup>
   <ItemGroup>

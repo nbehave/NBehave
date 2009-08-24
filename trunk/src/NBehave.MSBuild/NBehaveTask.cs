@@ -57,8 +57,8 @@ namespace NBehave.MSBuild
 				runner = new StoryRunner { IsDryRun = DryRun };
 			else
 			{
-				runner = new ActionStepRunner();
-				((ActionStepRunner)runner).Load(ScenarioFiles);
+				runner = new TextRunner();
+				((TextRunner)runner).Load(ScenarioFiles);
 			}
 
 			foreach (string path in TestAssemblies)
@@ -105,7 +105,7 @@ namespace NBehave.MSBuild
 				return false;
 
 			var exceptionMessage = new StringBuilder();
-			foreach (ScenarioResults result in results.ScenarioResults)
+			foreach (ScenarioResult result in results.ScenarioResults)
 			{
 				exceptionMessage.AppendLine(result.Message);
 				exceptionMessage.AppendLine(result.StackTrace);

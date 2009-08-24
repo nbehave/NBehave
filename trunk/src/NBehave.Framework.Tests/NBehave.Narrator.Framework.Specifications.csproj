@@ -75,6 +75,7 @@
     </Compile>
     <Compile Include="ActionCatalogSpec.cs" />
     <Compile Include="ActionStepAliasSpec.cs" />
+    <Compile Include="ActionStepParserSpec.cs" />
     <Compile Include="ActionStepSpec.cs" />
     <Compile Include="EventListeners\MultiOutputEventListenerFixture.cs" />
     <Compile Include="EventListeners\TextWriterEventListenerFixture.cs" />
@@ -84,6 +85,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScenarioFixture.cs" />
     <Compile Include="ScenarioResultsFixture.cs" />
+    <Compile Include="ScenarioStepRunnerSpec.cs" />
+    <Compile Include="TextRunnerSpec.cs" />
     <Compile Include="TextToTokenStringsParserSpec.cs" />
     <Compile Include="StoryFixture.cs" />
     <Compile Include="StoryResultsFixture.cs" />

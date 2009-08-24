@@ -5,7 +5,7 @@ namespace NBehave.Narrator.Framework
 {
     public class StoryResults
     {
-        private readonly List<ScenarioResults> _scenarioResults = new List<ScenarioResults>();
+        private readonly List<ScenarioResult> _scenarioResults = new List<ScenarioResult>();
 
         public int NumberOfThemes { get; set; }
 
@@ -20,7 +20,7 @@ namespace NBehave.Narrator.Framework
         {
             get
             {
-                return _scenarioResults.FindAll(MatchByScenarioResult(ScenarioResult.Failed)).Count;
+                return _scenarioResults.FindAll(MatchByScenarioResult(typeof(Failed))).Count;
             }
         }
 
@@ -28,7 +28,7 @@ namespace NBehave.Narrator.Framework
         {
             get
             {
-                return _scenarioResults.FindAll(MatchByScenarioResult(ScenarioResult.Pending)).Count;
+                return _scenarioResults.FindAll(MatchByScenarioResult(typeof(Pending))).Count;
             }
         }
 
@@ -36,11 +36,11 @@ namespace NBehave.Narrator.Framework
         {
             get
             {
-                return _scenarioResults.FindAll(MatchByScenarioResult(ScenarioResult.Passed)).Count;
+                return _scenarioResults.FindAll(MatchByScenarioResult(typeof(Passed))).Count;
             }
         }
 
-        public ScenarioResults[] ScenarioResults
+        public ScenarioResult[] ScenarioResults
         {
             get
             {
@@ -48,14 +48,14 @@ namespace NBehave.Narrator.Framework
             }
         }
 
-        public void AddResult(ScenarioResults scenarioResults)
+        public void AddResult(ScenarioResult scenarioResult)
         {
-            _scenarioResults.Add(scenarioResults);
+            _scenarioResults.Add(scenarioResult);
         }
 
-        private Predicate<ScenarioResults> MatchByScenarioResult(ScenarioResult result)
+        private Predicate<ScenarioResult> MatchByScenarioResult(Type result)
         {
-            return results => results.ScenarioResult == result;
+            return results => results.Result.GetType() == result;
         }
     }
 }

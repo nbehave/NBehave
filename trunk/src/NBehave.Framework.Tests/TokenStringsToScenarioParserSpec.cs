@@ -11,8 +11,7 @@ namespace NBehave.Narrator.Framework.Specifications
 
             private void CreateParser()
             {
-                var actionStepAlias = new ActionStepAlias();
-                var actionStep = new ActionStep(actionStepAlias);
+                var actionStep = new ActionStep();
                 _parser = new TokenStringsToScenarioParser(actionStep);
             }
 

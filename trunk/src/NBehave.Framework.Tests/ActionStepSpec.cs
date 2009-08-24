@@ -1,5 +1,4 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 
 namespace NBehave.Narrator.Framework.Specifications
@@ -12,7 +11,7 @@ namespace NBehave.Narrator.Framework.Specifications
         [SetUp]
         public void Establish_context()
         {
-            _actionStep = new ActionStep(new ActionStepAlias());
+            _actionStep = new ActionStep();
         }
 
         [Test]

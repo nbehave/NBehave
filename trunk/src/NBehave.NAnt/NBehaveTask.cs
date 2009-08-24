@@ -50,8 +50,8 @@ namespace NBehave.NAnt
 				runner = new StoryRunner { IsDryRun = DryRun };
 			else
 			{
-				runner = new ActionStepRunner();
-				((ActionStepRunner)runner).Load(GetFileNames(ScenarioFiles));
+				runner = new TextRunner();
+				((TextRunner)runner).Load(GetFileNames(ScenarioFiles));
 			}
 
 			foreach (string path in TestAssemblies.FileNames)
@@ -100,7 +100,7 @@ namespace NBehave.NAnt
 			if (results.NumberOfFailingScenarios == 0) return;
 
 			var exceptionMessage = new StringBuilder();
-			foreach (ScenarioResults result in results.ScenarioResults)
+			foreach (ScenarioResult result in results.ScenarioResults)
 			{
 				exceptionMessage.AppendLine(result.Message);
 				exceptionMessage.AppendLine(result.StackTrace);
