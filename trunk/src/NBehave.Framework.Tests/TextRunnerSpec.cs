@@ -4,7 +4,6 @@ using System.Text;
 using System.Xml;
 using NBehave.Narrator.Framework.EventListeners;
 using NBehave.Narrator.Framework.EventListeners.Xml;
-using NUnit.Framework.SyntaxHelpers;
 using NUnit.Framework;
 using Context = NUnit.Framework.TestFixtureAttribute;
 using Specification = NUnit.Framework.TestAttribute;

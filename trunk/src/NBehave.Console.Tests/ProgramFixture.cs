@@ -3,7 +3,6 @@ using System.Linq;
 using System.Text;
 using NBehave.Narrator.Framework;
 using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
 using gen = System.Collections.Generic;
 using NBehave.Narrator.Framework.EventListeners;
 using NBehave.Narrator.Framework.EventListeners.Xml;

@@ -2,7 +2,7 @@ using System.IO;
 using NBehave.Narrator.Framework.EventListeners;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Rhino.Mocks.Constraints;
+using IsIt = Rhino.Mocks.Constraints.Is;
 
 namespace NBehave.Narrator.Framework.Specifications.EventListeners
 {
@@ -20,7 +20,7 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
 
             using (mockery.Record())
             {
-                Expect.Call(() => mockTextWriter.WriteLine(string.Empty)).IgnoreArguments().Constraints(Is.TypeOf<string>());
+                Expect.Call(() => mockTextWriter.WriteLine(string.Empty)).IgnoreArguments().Constraints(IsIt.TypeOf<string>());
             }
 
             IEventListener listener = new TextWriterEventListener(mockTextWriter);

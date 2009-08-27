@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Text.RegularExpressions;
-using NUnit.Framework.SyntaxHelpers;
 using NUnit.Framework;
 using Context = NUnit.Framework.TestFixtureAttribute;
 using Specification = NUnit.Framework.TestAttribute;
