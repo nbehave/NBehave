@@ -54,19 +54,24 @@ namespace NBehave.Narrator.Framework
 
         public void Fail(Exception exception)
         {
-            _message = BuildMessage(exception);
+            AddToCurrentMessage(BuildMessage(exception));
             _stackTrace = BuildStackTrace(exception);
             _result = new Failed(exception);
         }
 
         public void Pend(string reason)
         {
-            if (string.IsNullOrEmpty(_message))
-                _message = reason;
-            else
-                _message += Environment.NewLine + reason;
+            AddToCurrentMessage(reason);
 
             _result = new Pending(_message);
+        }
+
+        private void AddToCurrentMessage(string messageToAdd)
+        {
+            if (string.IsNullOrEmpty(_message))
+                _message = messageToAdd;
+            else
+                _message += Environment.NewLine + messageToAdd;
         }
 
         private string BuildMessage(Exception exception)
