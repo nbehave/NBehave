@@ -15,8 +15,7 @@ namespace NBehave.Narrator.Framework.EventListeners
 
             if (useTextWriter && useXmlWriter)
                 return new MultiOutputEventListener(FileOutputEventListener(textWriterFile),
-                                                    XmlWriterEventListener(new XmlTextWriter(xmlWriterFile,
-                                                                                             Encoding.UTF8)),
+                                                    XmlWriterEventListener(xmlWriterFile),
                                                     TextWriterEventListener(writer));
             if (useTextWriter)
                 return new MultiOutputEventListener(FileOutputEventListener(textWriterFile),
@@ -25,7 +24,7 @@ namespace NBehave.Narrator.Framework.EventListeners
             if (useXmlWriter)
                 return
                     new MultiOutputEventListener(
-                        XmlWriterEventListener(new XmlTextWriter(xmlWriterFile, Encoding.UTF8)),
+                        XmlWriterEventListener(xmlWriterFile),
                         TextWriterEventListener(writer));
 
             return NullEventListener();
@@ -46,8 +45,17 @@ namespace NBehave.Narrator.Framework.EventListeners
             return new TextWriterEventListener(writer);
         }
 
-        public static IEventListener XmlWriterEventListener(XmlWriter writer)
+        public static IEventListener XmlWriterEventListener(string xmlWriterFile)
         {
+            return XmlWriterEventListener(new FileStream(xmlWriterFile, FileMode.Create));
+        }
+
+        public static IEventListener XmlWriterEventListener(Stream stream)
+        {
+            var settings = new XmlWriterSettings();
+            settings.Encoding = Encoding.UTF8;
+            settings.Indent = true;
+            XmlWriter writer = XmlWriter.Create(stream, settings);
             return new XmlOutputEventListener(writer);
         }
 

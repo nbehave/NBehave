@@ -1,10 +1,9 @@
 ﻿using System;
+using System.IO;
 using System.Text;
+using System.Xml;
 using NBehave.Narrator.Framework.EventListeners.Xml;
 using NUnit.Framework;
-using System.Xml;
-using System.IO;
-
 
 namespace NBehave.Narrator.Framework.Specifications.EventListeners
 {
@@ -37,7 +36,8 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
             [Test]
             public void Results_node_should_have_date_and_time_attributes()
             {
-                Assert.AreEqual(DateTime.Today.ToShortDateString(), _xmlDoc.SelectSingleNode("results").Attributes["date"].Value);
+                Assert.AreEqual(DateTime.Today.ToShortDateString(),
+                                _xmlDoc.SelectSingleNode("results").Attributes["date"].Value);
                 Assert.IsNotNull(_xmlDoc.SelectSingleNode("results").Attributes["time"].Value);
             }
 
@@ -90,13 +90,17 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
             [Test]
             public void Theme_node_should_have_one_pending_scenarios()
             {
-                Assert.AreEqual("1", _xmlDoc.SelectSingleNode(@"results/theme[@name='T1']").Attributes["scenariosPending"].Value);
+                Assert.AreEqual("1",
+                                _xmlDoc.SelectSingleNode(@"results/theme[@name='T1']").Attributes["scenariosPending"].
+                                    Value);
             }
 
             [Test]
             public void Theme_node_should_have_zero_failed_scenarios()
             {
-                Assert.AreEqual("0", _xmlDoc.SelectSingleNode(@"results/theme[@name='T1']").Attributes["scenariosFailed"].Value);
+                Assert.AreEqual("0",
+                                _xmlDoc.SelectSingleNode(@"results/theme[@name='T1']").Attributes["scenariosFailed"].
+                                    Value);
             }
 
             [Test]
@@ -108,7 +112,8 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
             [Test]
             public void Story_should_have_a_narrative_child_element()
             {
-                Assert.IsNotNull(_xmlDoc.SelectSingleNode("results/theme[@name='T1']/stories/story[@name='S1']/narrative"));
+                Assert.IsNotNull(
+                    _xmlDoc.SelectSingleNode("results/theme[@name='T1']/stories/story[@name='S1']/narrative"));
                 Assert.AreEqual("As a X1" + Environment.NewLine +
                                 "I want Y1" + Environment.NewLine +
                                 "So that Z1" + Environment.NewLine,
@@ -118,9 +123,15 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
             [Test]
             public void Story_node_should_have_summary()
             {
-                Assert.AreEqual("3", _xmlDoc.SelectSingleNode(@"results/theme[@name='T1']/stories/story").Attributes["scenarios"].Value);
-                Assert.AreEqual("0", _xmlDoc.SelectSingleNode(@"results/theme[@name='T1']/stories/story").Attributes["scenariosFailed"].Value);
-                Assert.AreEqual("1", _xmlDoc.SelectSingleNode(@"results/theme[@name='T1']/stories/story").Attributes["scenariosPending"].Value);
+                Assert.AreEqual("3",
+                                _xmlDoc.SelectSingleNode(@"results/theme[@name='T1']/stories/story").Attributes[
+                                    "scenarios"].Value);
+                Assert.AreEqual("0",
+                                _xmlDoc.SelectSingleNode(@"results/theme[@name='T1']/stories/story").Attributes[
+                                    "scenariosFailed"].Value);
+                Assert.AreEqual("1",
+                                _xmlDoc.SelectSingleNode(@"results/theme[@name='T1']/stories/story").Attributes[
+                                    "scenariosPending"].Value);
             }
 
             [Test]
@@ -145,6 +156,20 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
                 var node = _xmlDoc.SelectSingleNode(@"//scenario[@name='PendingScenario']/text");
                 Assert.IsNotNull(node.InnerText);
                 Assert.IsTrue(node.InnerText.Contains("something pending"));
+            }
+
+            [Test]
+            public void Should_have_linebreaks_between_nodes()
+            {
+                RunnerBase runner = new StoryRunner();
+                runner.LoadAssembly(GetType().Assembly);
+                var memStream = new MemoryStream();
+                var listener = Framework.EventListeners.EventListeners.XmlWriterEventListener(memStream);
+                runner.Run(listener);
+                memStream.Seek(0, 0);
+                var xmlAsText = new StreamReader(memStream);
+                string xml = xmlAsText.ReadToEnd();
+                StringAssert.Contains(">" + Environment.NewLine + "<", xml);
             }
         }
     }

@@ -82,10 +82,7 @@ namespace NBehave.Console
             if (options.HasStoryOutput)
                 eventListeners.Add(new FileOutputEventListener(options.storyOutput));
             if (options.HasStoryXmlOutput)
-            {
-                var writer = new XmlTextWriter(options.xml, Encoding.UTF8);
-                eventListeners.Add(new XmlOutputEventListener(writer));
-            }
+                eventListeners.Add(EventListeners.XmlWriterEventListener(options.xml));
             if (eventListeners.Count == 0)
                 eventListeners.Add(new NullEventListener());
 
