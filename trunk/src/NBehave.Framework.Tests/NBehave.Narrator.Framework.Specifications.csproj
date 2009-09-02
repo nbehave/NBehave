@@ -75,6 +75,7 @@
     </Compile>
     <Compile Include="ActionCatalogSpec.cs" />
     <Compile Include="ActionStepAliasSpec.cs" />
+    <Compile Include="ActionStepFileLoaderSpec.cs" />
     <Compile Include="ActionStepParserSpec.cs" />
     <Compile Include="ActionStepSpec.cs" />
     <Compile Include="EventListeners\MultiOutputEventListenerFixture.cs" />

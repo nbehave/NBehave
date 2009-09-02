@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
 using Context = NUnit.Framework.TestFixtureAttribute;
@@ -10,15 +11,20 @@ namespace NBehave.Narrator.Framework.Specifications
     [Context]
     public class ActionCatalogSpec
     {
+        private ParameterInfo[] GetDummyParameterInfo()
+        {
+            Action<int> a = p => { };
+            return a.Method.GetParameters();
+        }
+
         [Context]
-        public class when_adding_an_action_to_the_catalog
+        public class when_adding_an_action_to_the_catalog:ActionCatalogSpec
         {
             [Specification]
             public void should_consider_the_2_actions_as_equal()
             {
                 var catalog = new ActionCatalog();
-
-                catalog.Add("my savings account balance is $balance", new object());
+                catalog.Add("my savings account balance is $balance", new object(), GetDummyParameterInfo());
                 bool actionExists = catalog.ActionExists("my savings account balance is 500");
 
                 Assert.That(actionExists, Is.True);
@@ -29,7 +35,7 @@ namespace NBehave.Narrator.Framework.Specifications
             {
                 var catalog = new ActionCatalog();
 
-                catalog.Add("my savings account\nbalance is $balance", new object());
+                catalog.Add("my savings account\nbalance is $balance", new object(), GetDummyParameterInfo());
                 bool actionExists = catalog.ActionExists("my\tsavings account balance is 500");
 
                 Assert.That(actionExists, Is.True);
@@ -40,7 +46,7 @@ namespace NBehave.Narrator.Framework.Specifications
             {
                 var catalog = new ActionCatalog();
 
-                catalog.Add("my savings account balance is $balance", new object());
+                catalog.Add("my savings account balance is $balance", new object(), GetDummyParameterInfo());
                 ActionValue action = catalog.GetAction("my savings account balance is 500");
 
                 Assert.That(action, Is.Not.Null);
@@ -51,7 +57,7 @@ namespace NBehave.Narrator.Framework.Specifications
             {
                 var catalog = new ActionCatalog();
                 Action<int> action = accountBalance => { };
-                catalog.Add("I have $amount euros on my cash account", action);
+                catalog.Add("I have $amount euros on my cash account", action, GetDummyParameterInfo());
                 ActionValue actionFetched = catalog.GetAction("I have 20 euros on my cash account");
 
                 Assert.That(actionFetched, Is.Not.Null);
@@ -74,7 +80,7 @@ namespace NBehave.Narrator.Framework.Specifications
             {
                 var catalog = new ActionCatalog();
                 Action<int> action = accountBalance => { };
-                catalog.Add("I have $amount euros on my cash account", action);
+                catalog.Add("I have $amount euros on my cash account", action, action.Method.GetParameters());
                 object[] values = catalog.GetParametersForMessage("I have 20 euros on my cash account");
 
                 Assert.That(values.Length, Is.EqualTo(1));
@@ -86,7 +92,7 @@ namespace NBehave.Narrator.Framework.Specifications
             {
                 var catalog = new ActionCatalog();
                 Action<string> action = someAction => { };
-                catalog.Add("I have a board like this\n$board", action);
+                catalog.Add("I have a board like this\n$board", action, action.Method.GetParameters());
                 object[] values = catalog.GetParametersForMessage("I have a board like this\nxo \n x \no x");
 
                 Assert.That(values.Length, Is.EqualTo(1));
@@ -98,8 +104,8 @@ namespace NBehave.Narrator.Framework.Specifications
             {
                 var catalog = new ActionCatalog();
                 Action<string> action = someAction => { };
-                catalog.Add("Given $value something", action);
-                catalog.Add("And $value something", action);
+                catalog.Add("Given $value something", action, action.Method.GetParameters());
+                catalog.Add("And $value something", action, action.Method.GetParameters());
                 object[] givenValue = catalog.GetParametersForMessage("Given 20 something");
                 object[] andValue = catalog.GetParametersForMessage("And 20 something");
 
@@ -112,18 +118,18 @@ namespace NBehave.Narrator.Framework.Specifications
             {
                 var catalog = new ActionCatalog();
                 Action<string> action = someAction => { };
-                catalog.Add("Given $value something", action);
+                catalog.Add("Given $value something", action, action.Method.GetParameters());
                 object[] givenValue = catalog.GetParametersForMessage("Given -20 something");
 
                 Assert.That(givenValue.Length, Is.EqualTo(1));
                 Assert.That(givenValue.First(), Is.EqualTo("-20"));
             }
-            
+
             [Specification]
             public void Should_get_int_parameter()
             {
                 Action<int> action = value => { };
-                _actionCatalog.Add(new Regex(@"an int (?<value>\d+)"), action);
+                _actionCatalog.Add( new ActionValue(new Regex(@"an int (?<value>\d+)"), action, action.Method.GetParameters()));
                 object[] values = _actionCatalog.GetParametersForMessage("an int 42");
                 Assert.That(values[0], Is.TypeOf(typeof(int)));
 
@@ -133,7 +139,7 @@ namespace NBehave.Narrator.Framework.Specifications
             public void Should_get_decimal_parameter()
             {
                 Action<decimal> action = value => { };
-                _actionCatalog.Add(new Regex(@"a decimal (?<value>\d+)"), action);
+                _actionCatalog.Add(new ActionValue(new Regex(@"a decimal (?<value>\d+)"), action, action.Method.GetParameters()));
                 object[] values = _actionCatalog.GetParametersForMessage("a decimal 42");
                 Assert.That(values[0], Is.TypeOf(typeof(decimal)));
             }
@@ -141,8 +147,8 @@ namespace NBehave.Narrator.Framework.Specifications
             [Specification]
             public void Should_get_multiline_value_as_string()
             {
-                Action<string> action = value => { };
-                _actionCatalog.Add(new Regex(@"a string\s+(?<value>(\w+\s+)*)"), action);
+                Action<object> action = value => { };
+                _actionCatalog.Add(new ActionValue(new Regex(@"a string\s+(?<value>(\w+\s+)*)"), action, action.Method.GetParameters()));
                 string multiLineValue = "one" + Environment.NewLine + "two";
                 string actionString = "a string " + multiLineValue;
                 object[] values = _actionCatalog.GetParametersForMessage(actionString);
@@ -152,9 +158,11 @@ namespace NBehave.Narrator.Framework.Specifications
             [Specification]
             public void Should_get_multiline_value_as_array_of_strings()
             {
-                Action<string[]> action = value => { };
-
-                _actionCatalog.Add(new Regex(@"a string\s+(?<value>(\w+\s+)+)"), action);
+                // problem is, Action is Action<object> => o=> { MethodCall(o as string[]); }
+                object paramReceived = null;
+                Action<string[]> actionStep = p => { };
+                Action<object> action = value => { paramReceived = value; };
+                _actionCatalog.Add(new ActionValue(new Regex(@"a string\s+(?<value>(\w+\s+)+)"), action, actionStep.Method.GetParameters()));
                 string multiLineValue = "one" + Environment.NewLine + "two";
                 string actionString = "a string " + Environment.NewLine + multiLineValue;
                 object[] values = _actionCatalog.GetParametersForMessage(actionString);
@@ -166,7 +174,7 @@ namespace NBehave.Narrator.Framework.Specifications
             {
                 Action<string[]> action = value => { };
 
-                _actionCatalog.Add(new Regex(@"a string\s+(?<value>(\w+\s*)+)"), action);
+                _actionCatalog.Add(new ActionValue(new Regex(@"a string\s+(?<value>(\w+\s*)+)"), action, action.Method.GetParameters()));
                 string multiLineValue = "one" + Environment.NewLine + "two" + Environment.NewLine;
                 string actionString = "a string " + Environment.NewLine + multiLineValue;
                 object[] values = _actionCatalog.GetParametersForMessage(actionString);

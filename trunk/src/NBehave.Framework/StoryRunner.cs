@@ -45,13 +45,13 @@ namespace NBehave.Narrator.Framework
             }
         }
 
-        private static void InvokeStoryMethod(MethodInfo storyMethod, object theme)
+        private void InvokeStoryMethod(MethodInfo storyMethod, object theme)
         {
             try
             {
                 storyMethod.Invoke(theme, null);
             }
-            catch { }
+            catch(Exception e) { }
         }
 
         private IEnumerable<MethodInfo> GetStoryMethods(IEnumerable<MethodInfo> themeMethods)

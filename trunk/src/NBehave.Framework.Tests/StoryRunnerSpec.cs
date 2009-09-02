@@ -3,7 +3,6 @@ using System.IO;
 using NBehave.Narrator.Framework.EventListeners;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Rhino.Mocks.Impl;
 using Context = NUnit.Framework.TestFixtureAttribute;
 using Specification = NUnit.Framework.TestAttribute;
 

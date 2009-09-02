@@ -12,9 +12,9 @@ namespace NBehave.Narrator.Framework
         private readonly List<Result> _actionStepResults;
 
 
-        public ScenarioResult(string storyTitle, string scenarioTitle)
+        public ScenarioResult(Story story, string scenarioTitle)
         {
-            StoryTitle = storyTitle;
+            StoryTitle = story.Title;
             ScenarioTitle = scenarioTitle;
             _actionStepResults = new List<Result>();
         }

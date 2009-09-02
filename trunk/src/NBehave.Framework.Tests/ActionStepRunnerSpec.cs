@@ -28,7 +28,7 @@ namespace NBehave.Narrator.Framework.Specifications
             {
                 bool wasCalled = false;
                 Action<string> action = name => { wasCalled = true; };
-                _actionCatalog.Add(new Regex(@"my name is (?<name>\w+)"), action);
+                _actionCatalog.Add(new ActionValue(new Regex(@"my name is (?<name>\w+)"), action, action.Method.GetParameters()));
                 _runner.InvokeTokenString("my name is Morgan");
                 Assert.IsTrue(wasCalled, "Action was not called");
             }
@@ -38,7 +38,7 @@ namespace NBehave.Narrator.Framework.Specifications
             {
                 string actual = string.Empty;
                 Action<string> action = name => { actual = name; };
-                _actionCatalog.Add(new Regex(@"my name is (?<name>\w+)"), action);
+                _actionCatalog.Add(new ActionValue(new Regex(@"my name is (?<name>\w+)"), action, action.Method.GetParameters()));
                 _runner.InvokeTokenString("my name is Morgan");
                 Assert.That(actual, Is.EqualTo("Morgan"));
             }

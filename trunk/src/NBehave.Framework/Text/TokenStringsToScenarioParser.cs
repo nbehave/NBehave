@@ -1,20 +1,19 @@
 using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 
 namespace NBehave.Narrator.Framework
 {
     public class TokenStringsToScenarioParser
     {
-        private ActionStep _actionStep;
+        private readonly ActionStep _actionStep;
 
         public TokenStringsToScenarioParser(ActionStep actionStep)
         {
             _actionStep = actionStep;
-            Scenarios = new List<string>();
+            Scenarios = new List<ScenarioSteps>();
         }
 
-        public List<string> Scenarios { get; private set; }
+        public List<ScenarioSteps> Scenarios { get; private set; }
 
         public void ParseTokensToScenarios(IList<string> actionSteps)
         {
@@ -44,7 +43,8 @@ namespace NBehave.Narrator.Framework
                     if ( isScenarioTitle ||
                         (firstWord.Equals(actionStep.GetFirstWord(), StringComparison.CurrentCultureIgnoreCase) && isFirstTokenWordOfScenario == false))
                     {
-                        Scenarios.Add(RowsToString(tokensInScenario));
+                        var scenarioSteps = new ScenarioSteps { Steps = RowsToString(tokensInScenario) };
+                        Scenarios.Add(scenarioSteps);
                         tokensInScenario = new List<string> { actionStep };
                         isFirstTokenWordOfScenario = true;
                     }
@@ -57,32 +57,10 @@ namespace NBehave.Narrator.Framework
 
             }
             if (tokensInScenario.Count > 0)
-                Scenarios.Add(RowsToString(tokensInScenario));
-        }
-
-        public void OldParseTokensToScenarios(IList<string> tokens)
-        {
-            var firstToken = tokens[0];
-            var firstWord = firstToken.GetFirstWord();
-            var tokensInScenario = new List<string> { firstToken };
-            var same = false;
-            for (int i = 1; i < tokens.Count; i++)
             {
-                if (firstWord.Equals(tokens[i].GetFirstWord(), StringComparison.CurrentCultureIgnoreCase)
-                    && same == false)
-                {
-                    Scenarios.Add(RowsToString(tokensInScenario));
-                    tokensInScenario = new List<string> { tokens[i] };
-                    same = true;
-                }
-                else
-                {
-                    same = false;
-                    tokensInScenario.Add(tokens[i]);
-                }
+                var scenarioSteps = new ScenarioSteps { Steps = RowsToString(tokensInScenario) };
+                Scenarios.Add(scenarioSteps);
             }
-            if (tokensInScenario.Count > 0)
-                Scenarios.Add(RowsToString(tokensInScenario));
         }
 
         private string RowsToString(IEnumerable<string> rows)

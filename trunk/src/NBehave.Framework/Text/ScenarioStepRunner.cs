@@ -1,9 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using NBehave.Narrator.Framework.EventListeners;
 
 namespace NBehave.Narrator.Framework
 {
+    public class ScenarioSteps
+    {
+        public string FileName { get; set; }
+        public string Steps { get; set; }
+    }
+
     public class ScenarioStepRunner
     {
         private readonly ActionStep _actionStep;
@@ -24,43 +31,53 @@ namespace NBehave.Narrator.Framework
             EventListener = new NullEventListener();
         }
 
-        public void RunScenario(string scenarioText, StoryResults storyResults, int scenarioCounter)
+        public void RunScenarios(IEnumerable<ScenarioSteps> scenarios, StoryResults storyResults)
         {
-            var scenarioResult = RunScenario(scenarioText, scenarioCounter);
-            storyResults.AddResult(scenarioResult);
+            int scenarioCounter = 1;
+            foreach (var scenario in scenarios)
+            {
+                var scenarioResult = RunScenario(scenario, scenarioCounter);
+                storyResults.AddResult(scenarioResult);
+                scenarioCounter++;
+            }
         }
 
         private string _storyTitle = string.Empty;
         private string _storyNarrative = string.Empty;
 
-        public ScenarioResult RunScenario(string scenarioText, int scenarioCounter)
+        private ScenarioResult _scenarioResult;
+        private ScenarioSteps _scenarioSteps;
+        public ScenarioResult RunScenario(ScenarioSteps scenarioSteps, int scenarioCounter)
         {
-            _scenarioEventsToRaise.Clear();
-            var scenarioResult = GetScenarioResultInstance(scenarioCounter);
-            _textToTokenStringsParser.ParseScenario(scenarioText);
+            _scenarioSteps = scenarioSteps;
+            _textToTokenStringsParser.ParseScenario(scenarioSteps.Steps);
 
             foreach (var row in _textToTokenStringsParser.TokenStrings)
             {
-                HandleStoryTitle(scenarioResult, row);
+                HandleStoryTitle(row);
                 HandleStoryNarrative(row);
-                HandleScenarioTitle(scenarioResult, row);
-                Result stepResult = HandleScenarioStep(row);
-                if (stepResult != null)
-                {
-                    scenarioResult.AddActionStepResult(stepResult);
-                    RaiseScenarioMessage(row, stepResult);
-                    scenarioResult = UpdateScenarioResult(scenarioResult, stepResult);
-                }
+                HandleScenarioTitle(row);
+                HandleScenarioStep(row, scenarioCounter);
+
             }
-            CreateStory();
-            var scenario = new Scenario(scenarioResult.ScenarioTitle, Story);
+            CreateStoryIfStoryNull();
+            var scenario = new Scenario(_scenarioResult.ScenarioTitle, Story);
             Story.AddScenario(scenario);
             foreach (var action in _scenarioEventsToRaise)
                 action.Invoke();
-            return scenarioResult;
+            return _scenarioResult;
         }
 
-        private void CreateStory()
+        private void SetStoryNarrative()
+        {
+            if (string.IsNullOrEmpty(Story.Narrative) && string.IsNullOrEmpty(_storyNarrative) == false)
+            {
+                Story.Narrative = _storyNarrative;
+                Story.OnMessageAdded(this, new EventArgs<MessageEventData>(new MessageEventData("Narrative", _storyNarrative)));
+            }
+        }
+
+        private void CreateStoryIfStoryNull()
         {
             if (Story == null)
             {
@@ -88,27 +105,37 @@ namespace NBehave.Narrator.Framework
 
         private ScenarioResult GetScenarioResultInstance(int scenarioCounter)
         {
-            string scenarioTitle = string.Format("Scenario {0}", scenarioCounter);
-            var scenarioResult = new ScenarioResult(_storyTitle, scenarioTitle);
+            var scenarioTitle = string.Format("{0}.{1}", scenarioCounter, Path.GetFileNameWithoutExtension(_scenarioSteps.FileName));
+            var scenarioResult = new ScenarioResult(Story, scenarioTitle);
             return scenarioResult;
         }
 
-        private Result HandleScenarioStep(string row)
+        private void HandleScenarioStep(string row, int scenarioCounter)
         {
             Result result = null;
+
             if (_actionStep.IsScenarioStep(row) && _actionStep.IsScenarioTitle(row) == false)
             {
+                CreateStoryIfStoryNull();
+                if (_scenarioResult == null)
+                    _scenarioResult = GetScenarioResultInstance(scenarioCounter);
                 result = _actionStepRunner.RunActionStepRow(row);
             }
-            return result;
+            if (result != null)
+            {
+                SetStoryNarrative();
+                _scenarioResult.AddActionStepResult(result);
+                RaiseScenarioMessage(row, result);
+                _scenarioResult = UpdateScenarioResult(_scenarioResult, result);
+            }
         }
 
-        private void HandleScenarioTitle(ScenarioResult scenarioResult, string row)
+        private void HandleScenarioTitle(string row)
         {
             if (_actionStep.IsScenarioTitle(row))
             {
-                scenarioResult.ScenarioTitle = _actionStep.GetTitle(row);
-                _scenarioEventsToRaise.Enqueue(() => EventListener.ScenarioMessageAdded(row));
+                CreateStoryIfStoryNull();
+                _scenarioResult = new ScenarioResult(Story, _actionStep.GetTitle(row));
             }
         }
 
@@ -118,15 +145,13 @@ namespace NBehave.Narrator.Framework
                 _storyNarrative += row;
         }
 
-        private void HandleStoryTitle(ScenarioResult scenarioResult, string row)
+        private void HandleStoryTitle(string row)
         {
             if (_actionStep.IsStoryTitle(row))
             {
                 _storyTitle = _actionStep.GetTitle(row);
-                scenarioResult.StoryTitle = _storyTitle;
                 _storyNarrative = string.Empty;
-                if (Story != null)
-                    Story = null;
+                Story = null;
             }
         }
     }

@@ -67,6 +67,8 @@
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="ActionCatalog.cs" />
+    <Compile Include="MessageEventData.cs" />
+    <Compile Include="ScenarioMessage.cs" />
     <Compile Include="Text\ActionMatch.cs" />
     <Compile Include="Text\ActionMethodInfo.cs" />
     <Compile Include="ActionMissingException.cs" />

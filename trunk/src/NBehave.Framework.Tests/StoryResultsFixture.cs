@@ -37,8 +37,8 @@
 //            var scenarioResults = new List<ScenarioResult>(results.ScenarioResults);
 
 //            Assert.That(scenarioResults.Count, Is.EqualTo(2));
-//            Assert.That(scenarioResults[0].StoryTitle, Is.EqualTo("Passed"));
-//            Assert.That(scenarioResults[1].StoryTitle, Is.EqualTo("Failed"));
+//            Assert.That(scenarioResults[0].Story, Is.EqualTo("Passed"));
+//            Assert.That(scenarioResults[1].Story, Is.EqualTo("Failed"));
 //        }
 //    }
 //}

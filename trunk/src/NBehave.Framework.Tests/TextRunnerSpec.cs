@@ -91,7 +91,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 _runner.Load(new[] { @"GreetingSystem.txt" });
                 StoryResults results = _runner.Run(listener);
                 Assert.That(results.NumberOfThemes, Is.EqualTo(0));
-                Assert.That(results.NumberOfStories, Is.EqualTo(0));
+                Assert.That(results.NumberOfStories, Is.EqualTo(1));
                 Assert.That(results.NumberOfScenariosFound, Is.EqualTo(1));
                 Assert.That(results.NumberOfPassingScenarios, Is.EqualTo(1));
             }
@@ -195,7 +195,6 @@ namespace NBehave.Narrator.Framework.Specifications
                 StoryResults result = _runner.Run(listener);
                 Assert.That(result.NumberOfPassingScenarios, Is.EqualTo(4));
             }
-
         }
 
         [Context]

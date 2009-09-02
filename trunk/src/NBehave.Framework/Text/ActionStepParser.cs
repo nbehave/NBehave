@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -9,15 +8,13 @@ namespace NBehave.Narrator.Framework
 {
     public class ActionStepParser
     {
-        private StoryRunnerFilter _storyRunnerFilter;
-        public ActionCatalog _actionCatalog;
-        private readonly ActionStepAlias _actionStepAlias;
+        private readonly StoryRunnerFilter _storyRunnerFilter;
+        private readonly ActionCatalog _actionCatalog;
 
-        public ActionStepParser(StoryRunnerFilter storyRunnerFilter, ActionCatalog actionCatalog, ActionStepAlias actionStepAlias)
+        public ActionStepParser(StoryRunnerFilter storyRunnerFilter, ActionCatalog actionCatalog)
         {
             _storyRunnerFilter = storyRunnerFilter;
             _actionCatalog = actionCatalog;
-            _actionStepAlias = actionStepAlias;
         }
 
         public void FindActionSteps(Assembly assembly)
@@ -39,10 +36,10 @@ namespace NBehave.Narrator.Framework
         {
             var instance = Activator.CreateInstance(actionSteps);
             var methods = GetMethodsWithActionStepAttribute(actionSteps);
-            foreach (var method in methods)
+            foreach (ActionMethodInfo method in methods)
             {
                 object action = CreateAction(instance, method);
-                _actionCatalog.Add(method.ActionStepMatcher, action);
+                _actionCatalog.Add(new ActionValue( method.ActionStepMatcher, action, method.MethodInfo.GetParameters()));
             }
         }
 
@@ -50,6 +47,7 @@ namespace NBehave.Narrator.Framework
         {
             object action = null;
             MethodInfo methodInfo = method.MethodInfo;
+            
             switch (CountTokensInTokenString(method))
             {
                 case 0:

@@ -10,24 +10,13 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
         [Test]
         public void Should_invoke_method_on_all_specified_listeners()
         {
-            MockRepository mockery = new MockRepository();
-
-            IEventListener mockFirstEventListener = mockery.StrictMock<IEventListener>();
-            IEventListener mockSecondEventListener = mockery.StrictMock<IEventListener>();
-
-            using (mockery.Record())
-            {
-                Expect.Call(delegate{mockFirstEventListener.RunStarted();});
-                Expect.Call(delegate{mockSecondEventListener.RunStarted();});
-            }
+            var mockFirstEventListener = MockRepository.GenerateMock<IEventListener>();
+            var mockSecondEventListener = MockRepository.GenerateMock<IEventListener>();
 
             IEventListener listener = new MultiOutputEventListener(mockFirstEventListener, mockSecondEventListener);
-            using (mockery.Playback())
-            {
-                listener.RunStarted();
-            }
-
-            mockery.VerifyAll();
+            listener.RunStarted();
+            mockFirstEventListener.AssertWasCalled(l => l.RunStarted());
+            mockSecondEventListener.AssertWasCalled(l => l.RunStarted());
         }
     }
 }

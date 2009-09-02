@@ -16,7 +16,7 @@ namespace NBehave.Narrator.Framework.Specifications
             var storyRunnerFilter = new StoryRunnerFilter(".", ".", ".");
             _actionCatalog = new ActionCatalog();
             var actionStepAlias = new ActionStepAlias();
-            _runner = new ActionStepParser(storyRunnerFilter, _actionCatalog, actionStepAlias);
+            _runner = new ActionStepParser(storyRunnerFilter, _actionCatalog);
             _runner.FindActionSteps(GetType().Assembly);
         }
 
@@ -62,7 +62,7 @@ namespace NBehave.Narrator.Framework.Specifications
             public void Should_infer_parameters_in_tokenString_from_parameterNames_in_method()
             {
                 var parameters = _actionCatalog.GetParametersForMessage("a method with a value 42 plus text stringParam");
-                Assert.That(parameters[0], Is.EqualTo("42"));
+                Assert.That(parameters[0], Is.EqualTo(42));
                 Assert.That(parameters[1], Is.EqualTo("stringParam"));
             }
         }

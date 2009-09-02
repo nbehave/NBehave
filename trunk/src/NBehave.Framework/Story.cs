@@ -5,18 +5,6 @@ using System.Reflection;
 
 namespace NBehave.Narrator.Framework
 {
-    public class MessageEventData
-    {
-        public MessageEventData(string type, string message)
-        {
-            Type = type;
-            Message = message;
-        }
-
-        public string Type { get; private set; }
-        public string Message { get; private set; }
-    }
-
     public class Story
     {
         private readonly ActionCatalog _catalog = new ActionCatalog();
@@ -27,8 +15,9 @@ namespace NBehave.Narrator.Framework
         public static event EventHandler<EventArgs<Scenario>> ScenarioCreated;
         public static event EventHandler<EventArgs<MessageEventData>> MessageAdded;
 
-        public string Title { get; set; }
+        public string Title { get; private set; }
         public string Narrative { get; set; }
+
         public bool IsDryRun { get; set; }
 
         private Scenario _currentScenario;
@@ -94,7 +83,7 @@ namespace NBehave.Narrator.Framework
             _scenarioResults.Last.Value.Pend(reason);
         }
 
-        internal bool CanAddMessage
+        private bool CanAddMessage
         {
             get { return !_currentScenario.IsPending || IsDryRun; }
         }
@@ -131,7 +120,7 @@ namespace NBehave.Narrator.Framework
             return fullMessageParameters;
         }
 
-        private void InvokeActionBase(string type, string message, object originalAction, Action actionCallback,
+        private void InvokeActionBase(string type, string message, object originalAction, Action actionCallback, ParameterInfo[] parameterInfo,
                                       params object[] messageParameters)
         {
             if (CanAddMessage)
@@ -149,32 +138,39 @@ namespace NBehave.Narrator.Framework
                         throw;
                     }
                 }
-                CatalogAction(message, originalAction);
+                CatalogAction(message, originalAction, parameterInfo);
             }
             SendMessageEvent(type, message, messageParameters);
         }
 
         internal void InvokeAction(string type, string message, Action action)
         {
-            InvokeActionBase(type, message, action, action);
+            InvokeActionBase(type, message, action, action, action.Method.GetParameters());
         }
 
 
         internal void InvokeAction<TArg0>(string type, string message, Action<TArg0> action, TArg0 arg0)
         {
-            InvokeActionBase(type, message, action, () => action(arg0), new object[] { arg0 });
+            try
+            {
+                InvokeActionBase(type, message, action, () => action(arg0), action.Method.GetParameters(), new object[] { arg0 });
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
         }
 
         internal void InvokeAction<TArg0, TArg1>(string type, string message, Action<TArg0, TArg1> action, TArg0 arg0,
                                                  TArg1 arg1)
         {
-            InvokeActionBase(type, message, action, () => action(arg0, arg1), new object[] { arg0, arg1 });
+            InvokeActionBase(type, message, action, () => action(arg0, arg1), action.Method.GetParameters(), new object[] { arg0, arg1 });
         }
 
         internal void InvokeAction<TArg0, TArg1, TArg2>(string type, string message, Action<TArg0, TArg1, TArg2> action,
                                                         TArg0 arg0, TArg1 arg1, TArg2 arg2)
         {
-            InvokeActionBase(type, message, action, () => action(arg0, arg1, arg2),
+            InvokeActionBase(type, message, action, () => action(arg0, arg1, arg2), action.Method.GetParameters(),
                              new object[] { arg0, arg1, arg2 });
         }
 
@@ -182,7 +178,7 @@ namespace NBehave.Narrator.Framework
                                                                Action<TArg0, TArg1, TArg2, TArg3> action, TArg0 arg0,
                                                                TArg1 arg1, TArg2 arg2, TArg3 arg3)
         {
-            InvokeActionBase(type, message, action, () => action(arg0, arg1, arg2, arg3),
+            InvokeActionBase(type, message, action, () => action(arg0, arg1, arg2, arg3), action.Method.GetParameters(),
                              new object[] { arg0, arg1, arg2, arg3 });
         }
 
@@ -198,10 +194,10 @@ namespace NBehave.Narrator.Framework
 
                 if (IsDryRun)
                 {
-                    var parameters = new object[0];
+                    var parameters = new ParameterInfo[0];
                     if (_catalog.ActionExists(message))
-                        parameters = _catalog.GetParametersForMessage(message);
-                    InvokeActionBase(type, message, null, null, new object[0]);
+                        parameters = _catalog.GetAction(message).ParameterInfo;
+                    InvokeActionBase(type, message, null, null, parameters, new object[0]);
                 }
                 else
                 {
@@ -212,6 +208,7 @@ namespace NBehave.Narrator.Framework
 
                     object action = GetActionFromCatalog(message);
                     object[] actionParamValues = _catalog.GetParametersForMessage(message);
+                    var parameterInfo = _catalog.GetAction(message).ParameterInfo;
                     Type actionType = action.GetType().IsGenericType
                         ? action.GetType().GetGenericTypeDefinition()
                         : action.GetType();
@@ -219,7 +216,7 @@ namespace NBehave.Narrator.Framework
                     InvokeActionBase(type, message, action,
                                      () => methodInfo.Invoke(action, BindingFlags.InvokeMethod, null,
                                                              new object[] { actionParamValues },
-                                                             CultureInfo.CurrentCulture), new object[0]); 
+                                                             CultureInfo.CurrentCulture), parameterInfo, new object[0]);
                 }
             }
             catch (Exception e)
@@ -237,7 +234,7 @@ namespace NBehave.Narrator.Framework
                 return;
             }
             ValidateActionExists(message);
-            var action = (Action<TArg0>)GetActionFromCatalog(message);
+            var action = (Action<TArg0>)GetActionFromCatalog(message) ?? (t => { });
             InvokeAction(type, message, action, arg0);
         }
 
@@ -250,7 +247,7 @@ namespace NBehave.Narrator.Framework
             }
 
             ValidateActionExists(message);
-            var action = (Action<TArg0, TArg1>)GetActionFromCatalog(message);
+            var action = (Action<TArg0, TArg1>)GetActionFromCatalog(message) ?? ((t0, t1) => { });
             InvokeAction(type, message, action, arg0, arg1);
         }
 
@@ -263,7 +260,7 @@ namespace NBehave.Narrator.Framework
                 return;
             }
             ValidateActionExists(message);
-            var action = (Action<TArg0, TArg1, TArg2>)GetActionFromCatalog(message);
+            var action = (Action<TArg0, TArg1, TArg2>)GetActionFromCatalog(message) ?? ((t0, t1, t2) => { });
             InvokeAction(type, message, action, arg0, arg1, arg2);
         }
 
@@ -277,15 +274,15 @@ namespace NBehave.Narrator.Framework
             }
 
             ValidateActionExists(message);
-            var action = (Action<TArg0, TArg1, TArg2, TArg3>)GetActionFromCatalog(message);
+            var action = (Action<TArg0, TArg1, TArg2, TArg3>)GetActionFromCatalog(message) ?? ((t0, t1, t2, t3) => { });
             InvokeAction(type, message, action, arg0, arg1, arg2, arg3);
         }
 
-        private void CatalogAction(string message, object action)
+        private void CatalogAction(string message, object action, ParameterInfo[] parameterInfo)
         {
             if (_catalog.ActionExists(message))
                 return;
-            _catalog.Add(message, action);
+            _catalog.Add(message, action, parameterInfo);
         }
 
         private void ValidateActionExists(string message)
@@ -299,7 +296,8 @@ namespace NBehave.Narrator.Framework
             if (IsDryRun)
                 return null;
 
-            ActionValue actionValue = _catalog.GetAction(message) ?? new ActionValue();
+            Action noAction = () => { };
+            var actionValue = _catalog.GetAction(message) ?? new ActionValue(null, noAction, null);
             return actionValue.Action;
         }
 
@@ -307,7 +305,7 @@ namespace NBehave.Narrator.Framework
         {
             _scenarios.Add(scenario);
             OnScenarioAdded(new EventArgs<Scenario>(scenario));
-            _scenarioResults.AddLast(new ScenarioResult(Title, scenario.Title));
+            _scenarioResults.AddLast(new ScenarioResult(this, scenario.Title));
         }
     }
 }

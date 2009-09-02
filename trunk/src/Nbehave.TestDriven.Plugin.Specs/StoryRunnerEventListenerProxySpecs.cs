@@ -16,7 +16,7 @@ namespace NBehave.TestDriven.Plugin.Specs
         [Specification]
         public void Should_send_testresult_to_ITestListener()
         {
-            const string myStory = "My story";
+            var myStory = new Story("My story");
             const string myScenario = "My scenario";
             var tddNetListener = mocks.StrictMock<ITestListener>();
             StoryResults result = null;
@@ -37,7 +37,7 @@ namespace NBehave.TestDriven.Plugin.Specs
 
             using (mocks.Playback())
             {
-                storyRunner.StoryCreated(myStory);
+                storyRunner.StoryCreated(myStory.Title);
                 storyRunner.StoryResults(result);
             }
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 
 namespace NBehave.Narrator.Framework
@@ -12,17 +13,17 @@ namespace NBehave.Narrator.Framework
         private readonly List<ActionValue> _actions = new List<ActionValue>();
 
         [Obsolete("Use Add(Regex actionMatch, object action)")]
-        public void Add(string tokenString, object action)
+        public void Add(string tokenString, object action, ParameterInfo[] parameters)
         {
             if (ActionExists(tokenString))
                 return;
             var regex = GetRegexForActionKey(tokenString);
-            Add(regex, action);
+            Add(new ActionValue(regex, action, parameters));
         }
 
-        public void Add(Regex actionMatch, object action)
+        public void Add(ActionValue actionValue)
         {
-            _actions.Add(new ActionValue { ActionStepMatcher = actionMatch, Action = action });
+            _actions.Add(actionValue);
         }
 
         public bool ActionExists(string message)
@@ -50,23 +51,24 @@ namespace NBehave.Narrator.Framework
         {
             ActionValue action = GetAction(message);
             List<string> paramNames = GetParameterNames(action);
-            Type[] args = action.Action.GetType().GetGenericArguments();
+            //Type[] args = action.Action.GetType().GetGenericArguments();
+            ParameterInfo[] args = action.ParameterInfo;
             var values = new object[args.Length];
 
             Match match = action.ActionStepMatcher.Match(message);
             for (int argNumber = 0; argNumber < paramNames.Count(); argNumber++)
             {
                 var strParam = match.Groups[paramNames[argNumber]].Value;
-                if (args[argNumber].IsArray)
+                if (args[argNumber].ParameterType.IsArray)
                 {
                     var strParamAsArray = strParam.Replace(Environment.NewLine, "\n")
                         .Split(new[] { '\n' });
                     while (string.IsNullOrEmpty(strParamAsArray.Last()))
                         strParamAsArray = strParamAsArray.Take(strParamAsArray.Length - 1).ToArray();
-                    values[argNumber] = Convert.ChangeType(strParamAsArray, args[argNumber]); //converts string to an instance of args[argNumber]
+                    values[argNumber] = Convert.ChangeType(strParamAsArray, args[argNumber].ParameterType); //converts string to an instance of args[argNumber]
                 }
                 else
-                    values[argNumber] = Convert.ChangeType(strParam, args[argNumber]); //converts string to an instance of args[argNumber]
+                    values[argNumber] = Convert.ChangeType(strParam, args[argNumber].ParameterType); //converts string to an instance of args[argNumber]
             }
             return values;
         }
