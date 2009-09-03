@@ -15,14 +15,20 @@ namespace NBehave.Narrator.Framework.Specifications
     {
         private StoryResults RunAction(string actionStep, TextRunner runner)
         {
+            var writer = new StringWriter();
+            var listener = new TextWriterEventListener(writer);
+            return RunAction(actionStep, runner, listener);
+        }
+
+        private StoryResults RunAction(string actionStep, TextRunner runner, IEventListener listener)
+        {
             var ms = new MemoryStream();
             var sr = new StreamWriter(ms);
             sr.WriteLine(actionStep);
             sr.Flush();
             ms.Seek(0, SeekOrigin.Begin);
             runner.Load(ms);
-            var writer = new StringWriter();
-            var listener = new TextWriterEventListener(writer);
+
             return runner.Run(listener);
         }
 
@@ -269,6 +275,7 @@ namespace NBehave.Narrator.Framework.Specifications
         public class When_running_plain_text_scenarios_with_story : TextRunnerSpec
         {
             private StoryResults _result;
+            private StringWriter _messages;
 
             [SetUp]
             public void SetUp()
@@ -285,13 +292,25 @@ namespace NBehave.Narrator.Framework.Specifications
                                         "When I'm greeted" + Environment.NewLine +
                                         "Then I should be greeted with “Hello, Morgan!”";
 
-                _result = RunAction(actionSteps, _runner);
+
+                _messages = new StringWriter();
+                var listener = new TextWriterEventListener(_messages);
+                _result = RunAction(actionSteps, _runner, listener);
             }
 
             [Specification]
             public void Should_set_story_title_on_result()
             {
                 Assert.That(_result.ScenarioResults[0].StoryTitle, Is.EqualTo("Greeting system"));
+            }
+
+            [Specification]
+            public void Should_set_narrative_on_result()
+            {
+                string messages = _messages.ToString();
+                StringAssert.Contains("As a project member", messages);
+                StringAssert.Contains("I want", messages);
+                StringAssert.Contains("So that", messages);
             }
 
             [Specification]

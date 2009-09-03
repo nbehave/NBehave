@@ -83,6 +83,8 @@ namespace NBehave.Narrator.Framework
             {
                 Story = new Story(_storyTitle);
                 Story.Narrative = _storyNarrative;
+                foreach (var narrativeRow in _storyNarrative.Replace(Environment.NewLine, '\n'.ToString()).Split(new[] { '\n' }))
+                    EventListener.StoryMessageAdded(narrativeRow);
             }
         }
 
@@ -142,7 +144,12 @@ namespace NBehave.Narrator.Framework
         private void HandleStoryNarrative(string row)
         {
             if (_actionStep.IsNarrative(row))
-                _storyNarrative += row;
+            {
+                if (string.IsNullOrEmpty(_storyNarrative))
+                    _storyNarrative += row;
+                else
+                    _storyNarrative += Environment.NewLine + row;
+            }
         }
 
         private void HandleStoryTitle(string row)
