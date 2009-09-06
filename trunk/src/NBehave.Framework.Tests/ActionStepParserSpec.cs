@@ -33,15 +33,15 @@ namespace NBehave.Narrator.Framework.Specifications
             [Specification]
             public void Should_find_action_using_first_actionStep_attribute_match()
             {
-                ActionValue actionValue = _actionCatalog.GetAction("one");
-                Assert.That(actionValue, Is.Not.Null);
+                ActionMethodInfo action = _actionCatalog.GetAction("one");
+                Assert.That(action, Is.Not.Null);
             }
 
             [Specification]
             public void Should_find_action_using_second_actionStep_attribute_match()
             {
-                ActionValue actionValue = _actionCatalog.GetAction("two");
-                Assert.That(actionValue, Is.Not.Null);
+                ActionMethodInfo action = _actionCatalog.GetAction("two");
+                Assert.That(action, Is.Not.Null);
             }
         }
 

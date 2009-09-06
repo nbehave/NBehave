@@ -69,7 +69,6 @@
     <Compile Include="ActionCatalog.cs" />
     <Compile Include="MessageEventData.cs" />
     <Compile Include="ScenarioMessage.cs" />
-    <Compile Include="Text\ActionMatch.cs" />
     <Compile Include="Text\ActionMethodInfo.cs" />
     <Compile Include="ActionMissingException.cs" />
     <Compile Include="Text\ActionStep.cs" />
@@ -80,7 +79,6 @@
     <Compile Include="Text\ActionStepFileLoader.cs" />
     <Compile Include="Text\ActionStepRunner.cs" />
     <Compile Include="Text\ActionStepsAttribute.cs" />
-    <Compile Include="Text\ActionValue.cs" />
     <Compile Include="AsAFragment.cs" />
     <Compile Include="DisposableAction.cs" />
     <Compile Include="EventArgs.cs" />

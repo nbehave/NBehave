@@ -26,7 +26,7 @@ namespace NBehave.Narrator.Framework.Specifications
         public void Should_have_result_for_each_step()
         {
             Action<string> action = name => Assert.AreEqual("Morgan", name);
-            _actionCatalog.Add(new ActionValue(new Regex(@"my name is (?<name>\w+)"), action, action.Method.GetParameters()));
+            _actionCatalog.Add(new ActionMethodInfo(new Regex(@"my name is (?<name>\w+)"), action, action.Method));
 
             ScenarioResult scenarioResult = _runner.RunScenario(
                 new ScenarioSteps

@@ -10,18 +10,18 @@ namespace NBehave.Narrator.Framework
     {
         public const char TokenPrefix = '$';
 
-        private readonly List<ActionValue> _actions = new List<ActionValue>();
+        private readonly List<ActionMethodInfo> _actions = new List<ActionMethodInfo>();
 
         [Obsolete("Use Add(Regex actionMatch, object action)")]
-        public void Add(string tokenString, object action, ParameterInfo[] parameters)
+        public void Add(string tokenString, object action, MethodInfo methodInfo)
         {
             if (ActionExists(tokenString))
                 return;
             var regex = GetRegexForActionKey(tokenString);
-            Add(new ActionValue(regex, action, parameters));
+            Add(new ActionMethodInfo(regex, action, methodInfo));
         }
 
-        public void Add(ActionValue actionValue)
+        public void Add(ActionMethodInfo actionValue)
         {
             _actions.Add(actionValue);
         }
@@ -49,7 +49,7 @@ namespace NBehave.Narrator.Framework
 
         public object[] GetParametersForMessage(string message)
         {
-            ActionValue action = GetAction(message);
+            ActionMethodInfo action = GetAction(message);
             List<string> paramNames = GetParameterNames(action);
             //Type[] args = action.Action.GetType().GetGenericArguments();
             ParameterInfo[] args = action.ParameterInfo;
@@ -73,7 +73,7 @@ namespace NBehave.Narrator.Framework
             return values;
         }
 
-        public ActionValue GetAction(string message)
+        public ActionMethodInfo GetAction(string message)
         {
             return FindMathingAction(message);
         }
@@ -92,7 +92,7 @@ namespace NBehave.Narrator.Framework
             return resultString;
         }
 
-        private ActionValue FindMathingAction(string message)
+        private ActionMethodInfo FindMathingAction(string message)
         {
             foreach (var action in _actions)
             {
@@ -104,7 +104,7 @@ namespace NBehave.Narrator.Framework
             return null;
         }
 
-        private List<string> GetParameterNames(ActionMatch actionValue)
+        private List<string> GetParameterNames(ActionMethodInfo actionValue)
         {
             return actionValue.GetParameterNames();
         }
