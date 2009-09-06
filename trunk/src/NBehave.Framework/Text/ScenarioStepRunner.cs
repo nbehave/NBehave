@@ -36,6 +36,7 @@ namespace NBehave.Narrator.Framework
             int scenarioCounter = 1;
             foreach (var scenario in scenarios)
             {
+            	_scenarioEventsToRaise.Clear();
                 var scenarioResult = RunScenario(scenario, scenarioCounter);
                 storyResults.AddResult(scenarioResult);
                 scenarioCounter++;
