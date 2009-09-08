@@ -45,6 +45,27 @@ namespace NBehave.Narrator.Framework.Specifications
 
 				Assert.AreEqual(2, scenarioResult.ActionStepResults.Count());
 			}
+
+			
+			[Test]
+			public void Should_have_different_result_for_each_step()
+			{
+				Action<string> action = name => Assert.AreEqual("Morgan", name);
+				_actionCatalog.Add(new ActionMethodInfo(new Regex(@"my name is (?<name>\w+)"), action, action.Method));
+
+				ScenarioResult scenarioResult = _runner.RunScenario(
+					new ScenarioSteps
+					{
+						Steps =
+							"Given my name is Morgan" + Environment.NewLine +
+							"Given my name is Axel"
+					}, 1);
+
+				Assert.That(scenarioResult.ActionStepResults.First().Result,
+				            Is.TypeOf(typeof(Passed)));
+				Assert.That(scenarioResult.ActionStepResults.Last().Result,
+				            Is.TypeOf(typeof(Failed)));
+			}
 		}
 		
 		

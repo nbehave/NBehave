@@ -2,16 +2,29 @@ using System;
 
 namespace NBehave.Narrator.Framework
 {
+	public class ActionStepResult : Result
+	{
+		public string ActionStep { get; private set; }
+		public Result Result { get; private set; }
+		
+		public ActionStepResult(string actionStep, Result resultForActionStep)
+			: base(resultForActionStep.Message)
+		{
+			ActionStep = actionStep;
+			Result = resultForActionStep;
+		}
+		
+		public override string ToString()
+		{
+			return Result.ToString();
+		}
+	}
+	
     public class Passed : Result
     {
         public Passed()
             : base(string.Empty)
         {
-        }
-
-        public override string ResultIndicator
-        {
-            get { return "."; }
         }
     }
 
@@ -23,11 +36,6 @@ namespace NBehave.Narrator.Framework
         {
             Exception = exception;
         }
-
-        public override string ResultIndicator
-        {
-            get { return "F"; }
-        }
     }
 
     public class Pending : Result
@@ -36,17 +44,11 @@ namespace NBehave.Narrator.Framework
             : base(pendingReason)
         {
         }
-
-        public override string ResultIndicator
-        {
-            get { return "P"; }
-        }
     }
 
     public abstract class Result
     {
         public string Message { get; protected set; }
-        public abstract string ResultIndicator { get; }
 
         protected Result(string message)
         {

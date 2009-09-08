@@ -115,7 +115,7 @@ namespace NBehave.Narrator.Framework
 
         private void HandleScenarioStep(string row, int scenarioCounter)
         {
-            Result result = null;
+            ActionStepResult result = null;
 
             if (_actionStep.IsScenarioStep(row) && _actionStep.IsScenarioTitle(row) == false)
             {
@@ -128,8 +128,8 @@ namespace NBehave.Narrator.Framework
             {
                 SetStoryNarrative();
                 _scenarioResult.AddActionStepResult(result);
-                RaiseScenarioMessage(row, result);
-                _scenarioResult = UpdateScenarioResult(_scenarioResult, result);
+                RaiseScenarioMessage(row, result.Result);
+                _scenarioResult = UpdateScenarioResult(_scenarioResult, result.Result);
             }
         }
 

@@ -38,7 +38,7 @@ namespace NBehave.Console.Tests
         {
             Program.Main(new[] { "TestAssembly.dll" });
 
-            Assert.That(_output.ToString(), Text.Contains("Scenarios"));
+            Assert.That(_output.ToString(), Is.StringContaining("Scenarios"));
         }
 
         [Test]
@@ -46,7 +46,7 @@ namespace NBehave.Console.Tests
         {
             Program.Main(new[] { "TestAssembly.dll", "/nologo" });
 
-            Assert.That(_output.ToString(), Text.DoesNotContain("Copyright"));
+            Assert.That(_output.ToString(), Is.Not.StringContaining("Copyright"));
         }
 
         [Test]

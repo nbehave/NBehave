@@ -143,19 +143,19 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
             }
 
             [Test]
-            public void Scenario_node_should_have_text_subnode()
+            public void Scenario_node_should_have_actionStep_subnodes()
             {
-                var node = _xmlDoc.SelectSingleNode(@"//scenario[@name='SC1']/text");
-                Assert.IsNotNull(node);
-                Assert.IsNotNull(node.InnerText);
+                var nodes = _xmlDoc.SelectNodes(@"//story[@name='S1']/scenarios/scenario[@name='SC1']/actionStep");
+                Assert.IsNotNull(nodes);
+                Assert.AreEqual(3, nodes.Count);
             }
 
             [Test]
-            public void Scenarios_child_node_text_should_Not_be_empty_on_pending_scenario()
+            public void Scenarios_child_node_actionStep_should_Not_be_empty_on_pending_scenario()
             {
-                var node = _xmlDoc.SelectSingleNode(@"//scenario[@name='PendingScenario']/text");
-                Assert.IsNotNull(node.InnerText);
-                Assert.IsTrue(node.InnerText.Contains("something pending"));
+                var nodes = _xmlDoc.SelectNodes(@"//scenario[@name='PendingScenario']/actionStep");
+                Assert.IsNotNull(nodes[0].InnerText);
+                StringAssert.AreEqualIgnoringCase("Pending: Im not done yet", nodes[0].InnerText);
             }
 
             [Test]

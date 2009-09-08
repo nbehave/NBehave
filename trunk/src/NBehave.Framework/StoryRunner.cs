@@ -51,7 +51,7 @@ namespace NBehave.Narrator.Framework
             {
                 storyMethod.Invoke(theme, null);
             }
-            catch(Exception e) { }
+            catch(Exception) { }
         }
 
         private IEnumerable<MethodInfo> GetStoryMethods(IEnumerable<MethodInfo> themeMethods)

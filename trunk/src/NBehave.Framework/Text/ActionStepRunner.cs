@@ -28,16 +28,16 @@ namespace NBehave.Narrator.Framework
                               new object[] { actionParamValues }, CultureInfo.CurrentCulture);
         }
 
-        public Result RunActionStepRow(string row)
+        public ActionStepResult RunActionStepRow(string row)
         {
-            Result result = new Passed();
+        	ActionStepResult result = new ActionStepResult(row, new Passed());
             try
             {
                 string rowWithoutActionType = row.RemoveFirstWord();
                 if (_actionCatalog.ActionExists(rowWithoutActionType) == false)
                 {
                     string pendReason = string.Format("No matching Action found for \"{0}\"", row);
-                    result = new Pending(pendReason);
+                    result = new ActionStepResult(row, new Pending(pendReason));
                 }
                 else
                     InvokeTokenString(rowWithoutActionType);
@@ -45,7 +45,7 @@ namespace NBehave.Narrator.Framework
             catch (Exception e)
             {
                 Exception realException = FindUsefulException(e);
-                result = new Failed(realException);
+                result = new ActionStepResult(row, new Failed(realException));
             }
             return result;
         }
