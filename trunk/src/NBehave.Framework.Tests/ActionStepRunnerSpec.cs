@@ -29,7 +29,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 bool wasCalled = false;
                 Action<string> action = name => { wasCalled = true; };
                 _actionCatalog.Add(new ActionMethodInfo(new Regex(@"my name is (?<name>\w+)"), action, action.Method));
-                _runner.InvokeTokenString("my name is Morgan");
+                _runner.InvokeTokenString(new ActionStepText("my name is Morgan",""));
                 Assert.IsTrue(wasCalled, "Action was not called");
             }
 
@@ -39,14 +39,14 @@ namespace NBehave.Narrator.Framework.Specifications
                 string actual = string.Empty;
                 Action<string> action = name => { actual = name; };
                 _actionCatalog.Add(new ActionMethodInfo(new Regex(@"my name is (?<name>\w+)"), action, action.Method));
-                _runner.InvokeTokenString("my name is Morgan");
+                _runner.InvokeTokenString(new ActionStepText("my name is Morgan",""));
                 Assert.That(actual, Is.EqualTo("Morgan"));
             }
 
             [Specification, ExpectedException(typeof(ArgumentException))]
             public void Should_throw_ArgumentException_if_action_given_in_token_string_doesnt_exist()
             {
-                _runner.InvokeTokenString("This doesnt exist");
+            	_runner.InvokeTokenString(new ActionStepText("This doesnt exist",""));
             }
         }
     }

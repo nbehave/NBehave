@@ -11,15 +11,19 @@ namespace NBehave.Narrator.Framework
 		public MethodInfo MethodInfo { get; private set; }
 		public Regex ActionStepMatcher { get; private set; }
 		public object Action { get; private set; }
+		public IFileMatcher FileMatcher { get; set; }
 		
 		public ActionMethodInfo()
-		{ }
+		{
+			FileMatcher = new MatchAllFiles();
+		}
 		
 		public ActionMethodInfo(Regex actionStepMatcher, object action, MethodInfo methodInfo)
 			:this(actionStepMatcher, action, methodInfo, string.Empty)
-		{ } 
+		{ }
 
 		public ActionMethodInfo(Regex actionStepMatcher, object action, MethodInfo methodInfo, string actionType)
+			:this()
 		{
 			ActionStepMatcher = actionStepMatcher;
 			Action = action;
@@ -48,6 +52,11 @@ namespace NBehave.Narrator.Framework
 				index++;
 			}
 			return names;
+		}
+		
+		public bool MatchesFileName(string fileName)
+		{
+			return FileMatcher.IsMatch(fileName);
 		}
 	}
 }

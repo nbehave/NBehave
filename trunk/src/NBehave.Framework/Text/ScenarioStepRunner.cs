@@ -55,11 +55,11 @@ namespace NBehave.Narrator.Framework
 
             foreach (var row in _textToTokenStringsParser.TokenStrings)
             {
-                HandleStoryTitle(row);
-                HandleStoryNarrative(row);
-                HandleScenarioTitle(row);
-                HandleScenarioStep(row, scenarioCounter);
-
+            	ActionStepText actionStepText = new ActionStepText(row, _scenarioSteps.FileName);
+                HandleStoryTitle(actionStepText);
+                HandleStoryNarrative(actionStepText);
+                HandleScenarioTitle(actionStepText);
+                HandleScenarioStep(actionStepText, scenarioCounter);
             }
             CreateStoryIfStoryNull();
             var scenario = new Scenario(_scenarioResult.ScenarioTitle, Story);
@@ -113,11 +113,12 @@ namespace NBehave.Narrator.Framework
             return scenarioResult;
         }
 
-        private void HandleScenarioStep(string row, int scenarioCounter)
+        private void HandleScenarioStep(ActionStepText row, int scenarioCounter)
         {
             ActionStepResult result = null;
 
-            if (_actionStep.IsScenarioStep(row) && _actionStep.IsScenarioTitle(row) == false)
+            if (_actionStep.IsScenarioStep(row.Text) 
+                && _actionStep.IsScenarioTitle(row.Text) == false)
             {
                 CreateStoryIfStoryNull();
                 if (_scenarioResult == null)
@@ -128,36 +129,36 @@ namespace NBehave.Narrator.Framework
             {
                 SetStoryNarrative();
                 _scenarioResult.AddActionStepResult(result);
-                RaiseScenarioMessage(row, result.Result);
+                RaiseScenarioMessage(row.Text, result.Result);
                 _scenarioResult = UpdateScenarioResult(_scenarioResult, result.Result);
             }
         }
 
-        private void HandleScenarioTitle(string row)
+        private void HandleScenarioTitle(ActionStepText row)
         {
-            if (_actionStep.IsScenarioTitle(row))
+            if (_actionStep.IsScenarioTitle(row.Text))
             {
                 CreateStoryIfStoryNull();
-                _scenarioResult = new ScenarioResult(Story, _actionStep.GetTitle(row));
+                _scenarioResult = new ScenarioResult(Story, _actionStep.GetTitle(row.Text));
             }
         }
 
-        private void HandleStoryNarrative(string row)
+        private void HandleStoryNarrative(ActionStepText  row)
         {
-            if (_actionStep.IsNarrative(row))
+            if (_actionStep.IsNarrative(row.Text))
             {
                 if (string.IsNullOrEmpty(_storyNarrative))
-                    _storyNarrative += row;
+                    _storyNarrative += row.Text;
                 else
-                    _storyNarrative += Environment.NewLine + row;
+                    _storyNarrative += Environment.NewLine + row.Text;
             }
         }
 
-        private void HandleStoryTitle(string row)
+        private void HandleStoryTitle(ActionStepText  row)
         {
-            if (_actionStep.IsStoryTitle(row))
+            if (_actionStep.IsStoryTitle(row.Text))
             {
-                _storyTitle = _actionStep.GetTitle(row);
+                _storyTitle = _actionStep.GetTitle(row.Text);
                 _storyNarrative = string.Empty;
                 Story = null;
             }

@@ -37,18 +37,17 @@ namespace NBehave.Narrator.Framework
             _listener = listener;
             _listener.ThemeStarted(string.Empty);
             RunStories(results);
-            //_listener.StoryResults(results);
             _listener.ThemeFinished();
             ClearStoryList();
         }
 
         private void RunStories(StoryResults storyResults)
         {
-            foreach (var storyText in _stories)
+            foreach (List<ScenarioSteps> scenarioSteps in _stories)
             {
                 ScenarioStepRunner scenarioStepRunner = CreateScenarioStepRunner();
 
-                scenarioStepRunner.RunScenarios(storyText, storyResults);
+                scenarioStepRunner.RunScenarios(scenarioSteps, storyResults);
                 storyResults.NumberOfStories++;
                 _listener.StoryResults(storyResults);
             }

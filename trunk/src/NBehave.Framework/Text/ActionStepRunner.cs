@@ -13,39 +13,39 @@ namespace NBehave.Narrator.Framework
             _actionCatalog = actionCatalog;
         }
 
-        public void InvokeTokenString(string tokenString)
+        public void InvokeTokenString(ActionStepText actionStep)
         {
-            if (_actionCatalog.ActionExists(tokenString) == false)
-                throw new ArgumentException(string.Format("cannot find Token string '{0}'", tokenString));
+            if (_actionCatalog.ActionExists(actionStep) == false)
+                throw new ArgumentException(string.Format("cannot find Token string '{0}'", actionStep));
 
-            object action = _actionCatalog.GetAction(tokenString).Action;
+            object action = _actionCatalog.GetAction(actionStep).Action;
 
             Type actionType = GetActionType(action);
             MethodInfo methodInfo = actionType.GetMethod("DynamicInvoke");
-            object[] actionParamValues = _actionCatalog.GetParametersForMessage(tokenString);
+            object[] actionParamValues = _actionCatalog.GetParametersForActionStepText(actionStep);
 
             methodInfo.Invoke(action, BindingFlags.InvokeMethod, null,
                               new object[] { actionParamValues }, CultureInfo.CurrentCulture);
         }
 
-        public ActionStepResult RunActionStepRow(string row)
+        public ActionStepResult RunActionStepRow(ActionStepText actionStep)
         {
-        	ActionStepResult result = new ActionStepResult(row, new Passed());
+        	var actionStepToUse = new ActionStepText(actionStep.Text.RemoveFirstWord(),actionStep.FromFile);
+        	ActionStepResult result = new ActionStepResult(actionStep.Text, new Passed());
             try
             {
-                string rowWithoutActionType = row.RemoveFirstWord();
-                if (_actionCatalog.ActionExists(rowWithoutActionType) == false)
+                if (_actionCatalog.ActionExists(actionStepToUse) == false)
                 {
-                    string pendReason = string.Format("No matching Action found for \"{0}\"", row);
-                    result = new ActionStepResult(row, new Pending(pendReason));
+                    string pendReason = string.Format("No matching Action found for \"{0}\"", actionStep);
+                    result = new ActionStepResult(actionStep.Text, new Pending(pendReason));
                 }
                 else
-                    InvokeTokenString(rowWithoutActionType);
+                    InvokeTokenString(actionStepToUse);
             }
             catch (Exception e)
             {
                 Exception realException = FindUsefulException(e);
-                result = new ActionStepResult(row, new Failed(realException));
+                result = new ActionStepResult(actionStep.Text, new Failed(realException));
             }
             return result;
         }

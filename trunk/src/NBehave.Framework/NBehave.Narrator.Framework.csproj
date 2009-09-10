@@ -107,6 +107,8 @@
     <Compile Include="Result.cs" />
     <Compile Include="ScenarioResultEventArgs.cs" />
     <Compile Include="ScenarioResult.cs" />
+    <Compile Include="Text\ActionStepText.cs" />
+    <Compile Include="Text\IMatchFiles.cs" />
     <Compile Include="Text\ScenarioStepRunner.cs" />
     <Compile Include="SoThatFragment.cs" />
     <Compile Include="StringExtensions.cs" />

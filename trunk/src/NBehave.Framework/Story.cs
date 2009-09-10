@@ -188,29 +188,30 @@ namespace NBehave.Narrator.Framework
 		{
 			try
 			{
+				ActionStepText actionStepText = new ActionStepText(message, Title);
 				if (_currentScenario.IsPending)
 				{
-					SendMessageEvent(type, message);
+					SendMessageEvent(type, actionStepText.Text);
 					return;
 				}
 
 				if (IsDryRun)
 				{
 					ActionMethodInfo actionMethodInfo = new ActionMethodInfo();
-					if (_catalog.ActionExists(message))
-						actionMethodInfo = _catalog.GetAction(message);
-					InvokeActionBase(type, message, null, null, actionMethodInfo.MethodInfo, new object[0]);
+					if (_catalog.ActionExists(actionStepText))
+						actionMethodInfo = _catalog.GetAction(actionStepText);
+					InvokeActionBase(type, actionStepText.Text, null, null, actionMethodInfo.MethodInfo, new object[0]);
 				}
 				else
 				{
 
-					if (_catalog.ActionExists(message) == false)
-						SendMessageEvent(type, message + " - FAILED");
+					if (_catalog.ActionExists(actionStepText) == false)
+						SendMessageEvent(type, actionStepText.Text + " - FAILED");
 					ValidateActionExists(message);
 
 					object action = GetActionFromCatalog(message);
-					object[] actionParamValues = _catalog.GetParametersForMessage(message);
-					var methodInfo = _catalog.GetAction(message);
+					object[] actionParamValues = _catalog.GetParametersForActionStepText(actionStepText);
+					var methodInfo = _catalog.GetAction(actionStepText);
 					Type actionType = action.GetType().IsGenericType
 						? action.GetType().GetGenericTypeDefinition()
 						: action.GetType();
@@ -282,14 +283,16 @@ namespace NBehave.Narrator.Framework
 
 		private void CatalogAction(string message, object action, MethodInfo methodInfo)
 		{
-			if (_catalog.ActionExists(message))
+			ActionStepText actionStepText = new ActionStepText(message, Title);
+			if (_catalog.ActionExists(actionStepText))
 				return;
-			_catalog.Add(message, action, methodInfo);
+			_catalog.Add(actionStepText.Text, action, methodInfo);
 		}
 
 		private void ValidateActionExists(string message)
 		{
-			if (!_catalog.ActionExists(message) && !IsDryRun)
+			ActionStepText actionStepText = new ActionStepText(message, Title);
+			if (!_catalog.ActionExists(actionStepText) && !IsDryRun)
 				throw new ActionMissingException(string.Format("Action missing for action '{0}'.", message));
 		}
 
@@ -299,7 +302,8 @@ namespace NBehave.Narrator.Framework
 				return null;
 
 			Action noAction = () => { };
-			var actionValue = _catalog.GetAction(message) ?? new ActionMethodInfo(null, noAction, null);
+			ActionStepText actionStepText = new ActionStepText(message, Title);
+			var actionValue = _catalog.GetAction(actionStepText) ?? new ActionMethodInfo(null, noAction, null);
 			return actionValue.Action;
 		}
 

@@ -244,12 +244,11 @@ namespace NBehave.Narrator.Framework.Specifications
 			}
 
 			[Specification]
-			public void Should_find_one_passed_actionStep()
+			public void Should_find_two_passed_actionStep()
 			{
 				var storyNodes = _xmlOut.SelectNodes("//actionStep[@outcome='passed']");
 				Assert.That(storyNodes.Count, Is.EqualTo(2));
 			}
-
 		}
 		
 		[Context]

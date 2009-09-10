@@ -45,7 +45,7 @@ namespace NBehave.Narrator.Framework
 		}
 
 		public WhenFragment When(string context)
-		{
+		{			
 			Scenario.Story.InvokeActionFromCatalog(WhenType, context);
 			return NewWhenFragment();
 		}
