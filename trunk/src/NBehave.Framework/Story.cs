@@ -303,7 +303,7 @@ namespace NBehave.Narrator.Framework
 
 			Action noAction = () => { };
 			ActionStepText actionStepText = new ActionStepText(message, Title);
-			var actionValue = _catalog.GetAction(actionStepText) ?? new ActionMethodInfo(null, noAction, null);
+			var actionValue = _catalog.GetAction(actionStepText) ?? new ActionMethodInfo(null, noAction, null, null);
 			return actionValue.Action;
 		}
 

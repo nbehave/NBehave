@@ -1,11 +1,9 @@
 using System;
 using System.Linq;
-using System.IO;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
 using Rhino.Mocks;
-using NBehave.Narrator.Framework.EventListeners;
 
 namespace NBehave.Narrator.Framework.Specifications
 {

@@ -62,4 +62,23 @@ namespace NBehave.Narrator.Framework
             Type = actionMatch.ToString().GetFirstWord();
         }
     }
+
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+    public class NotificationMethodAttribute : Attribute { }
+
+    public class BeforeStepAttribute : NotificationMethodAttribute
+    {
+    }
+    
+    public class AfterStepAttribute : NotificationMethodAttribute
+    {
+    }
+    
+    public class BeforeScenarioAttribute : NotificationMethodAttribute
+    {
+    }
+
+    public class AfterScenarioAttribute : NotificationMethodAttribute
+    {
+    }
 }
