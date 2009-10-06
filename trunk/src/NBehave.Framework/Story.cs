@@ -120,7 +120,6 @@ namespace NBehave.Narrator.Framework
 			return fullMessageParameters;
 		}
 
-		//private void InvokeActionBase(string type, string message, object originalAction, Action actionCallback, ParameterInfo[] parameterInfo,
 		private void InvokeActionBase(string type, string message, object originalAction, Action actionCallback, MethodInfo methodInfo,
 		                              params object[] messageParameters)
 		{
@@ -128,15 +127,24 @@ namespace NBehave.Narrator.Framework
 			{
 				if (!IsDryRun)
 				{
+					ActionStepResult result = null;
+					var fullMessageParameters = GetFullMessageParameters(type, message, messageParameters);
+					string fullMessage = string.Format(GetFormatStringForParameters(message, messageParameters), fullMessageParameters.ToArray());
 					try
 					{
 						actionCallback();
+						result = new ActionStepResult(fullMessage, new Passed());
 					}
 					catch (Exception ex)
 					{
+						result = new ActionStepResult(fullMessage, new Failed(ex));
 						_scenarioResults.Last.Value.Fail(ex);
 						SendFailedMessageEvent(type, message, messageParameters);
 						throw;
+					}
+					finally
+					{
+						_scenarioResults.Last.Value.AddActionStepResult(result);
 					}
 				}
 				CatalogAction(message, originalAction, methodInfo);

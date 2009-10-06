@@ -1,3 +1,5 @@
+using System;
+
 namespace NBehave.Narrator.Framework.Specifications.EventListeners
 {
     public class XmlOutputEventListenerTestData
@@ -66,7 +68,12 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
                     .Given("something", () => { })
                     .When("some event occurs", () => { })
                     .Then("there is some outcome", () => { });
-            }
+
+               story.WithScenario("FailingScenario")
+                    .Given("something x", () => { })
+                    .When("some event y occurs", () => { })
+               	.Then("there is some failing outcome", () => { throw new Exception("outcome failed"); });
+}
         }
     }
 }

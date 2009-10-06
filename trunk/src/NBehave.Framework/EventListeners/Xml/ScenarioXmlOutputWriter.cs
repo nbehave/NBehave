@@ -57,9 +57,13 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
 			                  where message.StartsWith(r.ActionStep, StringComparison.CurrentCulture)
 			                  select r).FirstOrDefault();
 			
+			Writer.WriteAttributeString("name", message);
 			if (stepResult != null)
+			{
 				Writer.WriteAttributeString("outcome", stepResult.Result.ToString().ToLower());
-			Writer.WriteString(message);
+				if (stepResult.Result.GetType()==typeof(Failed))
+					Writer.WriteElementString("failure",stepResult.Message);
+			}
 			Writer.WriteEndElement();
 		}
 

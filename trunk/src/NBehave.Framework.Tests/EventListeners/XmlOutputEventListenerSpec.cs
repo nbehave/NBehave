@@ -64,7 +64,7 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
             public void Should_have_scenarios_in_results_node()
             {
                 var outcome = _xmlDoc.SelectSingleNode("results").Attributes["scenarios"].Value;
-                Assert.That(int.Parse(outcome), Is.EqualTo(5));
+                Assert.That(int.Parse(outcome), Is.EqualTo(6));
             }
 
             [Test]
@@ -75,10 +75,10 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
             }
 
             [Test]
-            public void Theme_T2_should_have_one_scenario()
+            public void Theme_T2_should_have_two_scenarios()
             {
                 var outcome = _xmlDoc.SelectSingleNode("results/theme[@name='T2']").Attributes["scenarios"].Value;
-                Assert.That(int.Parse(outcome), Is.EqualTo(1));
+                Assert.That(int.Parse(outcome), Is.EqualTo(2));
             }
 
             [Test]
@@ -155,7 +155,7 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
             {
                 var nodes = _xmlDoc.SelectNodes(@"//scenario[@name='PendingScenario']/actionStep");
                 Assert.IsNotNull(nodes[0].InnerText);
-                StringAssert.AreEqualIgnoringCase("Pending: Im not done yet", nodes[0].InnerText);
+                StringAssert.AreEqualIgnoringCase("Pending: Im not done yet", nodes[0].Attributes["name"].Value);
             }
 
             [Test]
@@ -170,6 +170,14 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
                 var xmlAsText = new StreamReader(memStream);
                 string xml = xmlAsText.ReadToEnd();
                 StringAssert.Contains(">" + Environment.NewLine + "<", xml);
+            }
+        
+            [Test]
+            public void Should_have_failure_child_node_in_failed_actionStep()
+            {
+            	var node = _xmlDoc.SelectSingleNode(@"//scenario[@name='FailingScenario']/actionStep[@outcome='failed']/failure");
+                Assert.IsNotNull(node);
+                StringAssert.Contains("outcome failed", node.InnerText);
             }
         }
     }

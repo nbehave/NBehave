@@ -50,7 +50,7 @@ namespace NBehave.Console.Tests
         }
 
         [Test]
-        public void Should_create_empty_listener_when_no_story_output_argument_passed_in()
+        public void Should_create_colorful_listener_when_no_story_output_argument_passed_in()
         {
             var options = new ConsoleOptions(new[] { "TestAssembly.dll" });
 
@@ -59,7 +59,7 @@ namespace NBehave.Console.Tests
             {
                 listener = Program.CreateEventListener(options);
                 var multiOutputEventListener = (MultiOutputEventListener)listener;
-                Assert.That(multiOutputEventListener.Listeners[0], Is.TypeOf(typeof(NullEventListener)));
+                Assert.That(multiOutputEventListener.Listeners[0], Is.TypeOf(typeof(ColorfulOutputEventListener)));
             }
             finally
             {

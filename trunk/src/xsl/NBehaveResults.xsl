@@ -95,7 +95,6 @@
 						margin-left: 50px;
 						margin-bottom: 30px;
 					}
-					
 					.scenarioTitlePassed {
 						font-size: 12pt;
 						font-weight: bold;
@@ -103,6 +102,7 @@
 						border-bottom: 1px solid lightgray;
 						margin-bottom: 5px;
 					}
+					
 					.scenarioTitlePending {
 						font-size: 12pt;
 						font-weight: bold;
@@ -110,6 +110,7 @@
 						border-bottom: 1px solid lightgray;
 						margin-bottom: 5px;
 					}
+
 					.scenarioTitleFailed {
 						font-size: 12pt;
 						font-weight: bold;
@@ -117,6 +118,7 @@
 						border-bottom: 1px solid lightgray;
 						margin-bottom: 5px;
 					}
+					
 					.scenarioInfos {
 						margin-left: 50px;
 						background-color: lightyellow;
@@ -125,6 +127,28 @@
 						margin-bottom: 10px;
 						line-height: 98%;
 					}
+
+					.actionStepPassed {
+						font-size: 8pt;
+						font-weight: normal;
+						color: green;
+						line-height: 98%;
+					}
+					
+					.actionStepPending {
+						font-size: 8pt;
+						font-weight: normal;
+						color: gray;
+						line-height: 98%;
+					}
+
+					.actionStepFailed {
+						font-size: 8pt;
+						font-weight: normal;
+						color: red;
+						line-height: 98%;
+					}
+		
 					.scenarioInfoLabel{
 						font-weight: bold;
 					}
@@ -138,25 +162,7 @@
 						font-family: "Courier new";
 						margin-left: 20px;
 					}
-					.scenarioStepPassed {
-						font-size: 8pt;
-						font-weight: normal;
-						color: green;
-						line-height: 98%;
-					}
-					.scenarioStepPending {
-						font-size: 8pt;
-						font-weight: normal;
-						color: gray;
-						line-height: 98%;
-					}
-					.scenarioStepFailed {
-						font-size: 8pt;
-						font-weight: normal;
-						color: red;
-						line-height: 98%;
-					}				
-					</style>
+				</style>
 				<div class="pageBox">
 					<div class="nbehaveTitle">NBehave tests results</div>
 					<xsl:for-each select=".">
@@ -221,8 +227,8 @@
 								<!-- <div class="scenarioFailedTitle"> -->
 								<div>
 									<xsl:attribute name="class">
-										<xsl:if test="@outcome='passed'">scenarioTitlePassed</xsl:if>
 										<xsl:if test="@outcome='pending'">scenarioTitlePending</xsl:if>
+										<xsl:if test="@outcome='passed'">scenarioTitlePassed</xsl:if>
 										<xsl:if test="@outcome='failed'">scenarioTitleFailed</xsl:if>
 									</xsl:attribute>
 									Scenario <xsl:value-of select="@name"/>
@@ -236,15 +242,19 @@
 								-->
 								<div class="scenarioNarration">
 									<xsl:for-each select="actionStep">
-										<span>
+										<div>
 											<xsl:attribute name="class">
-												<xsl:if test="@outcome='passed'">scenarioStepPassed</xsl:if>
-												<xsl:if test="@outcome='pending'">scenarioStepPending</xsl:if>
-												<xsl:if test="@outcome='failed'">scenarioStepFailed</xsl:if>
+												<xsl:if test="@outcome='pending'">actionStepPending</xsl:if>
+												<xsl:if test="@outcome='passed'">actionStepPassed</xsl:if>
+												<xsl:if test="@outcome='failed'">actionStepFailed</xsl:if>
 											</xsl:attribute>
-											<xsl:value-of select="."/>
-										</span>
-										<br />										
+											<xsl:value-of select="@name"/><br />
+											<xsl:if test="@outcome='failed'">
+												<div class="scenarioNarration">
+													<xsl:value-of select="failure" />
+												</div>
+											</xsl:if>
+										</div>
 									</xsl:for-each>
 								</div>
 							</div>
