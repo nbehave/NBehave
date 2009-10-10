@@ -115,7 +115,7 @@ namespace NBehave.Spec.MbUnit
 
         public static void ShouldBeThrownBy(this Type exceptionType, ThrowingAction action)
         {
-            Assert.Throws(exceptionType, new Gallio.Action(action));
+        	Assert.Throws(exceptionType, action.Invoke);
         }
 
         public static void ShouldBeTrue(this bool condition)
