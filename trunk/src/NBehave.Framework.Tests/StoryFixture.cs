@@ -535,7 +535,7 @@ namespace NBehave.Narrator.Framework.Specifications
 					.Given("something");
 
 				Assert.AreEqual(
-					"Given: Given something - FAILED" + Environment.NewLine
+					"Given: Given something - PENDING" + Environment.NewLine
 					, actual);
 				
 			}

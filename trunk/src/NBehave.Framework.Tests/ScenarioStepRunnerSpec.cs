@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Specification = NUnit.Framework.TestAttribute;
+
 
 namespace NBehave.Narrator.Framework.Specifications
 {
@@ -98,6 +100,90 @@ namespace NBehave.Narrator.Framework.Specifications
 				evtListener.AssertWasCalled(f=>f.ScenarioMessageAdded("Given bar - PENDING"));
 				
 				StringAssert.DoesNotContain("foo", storyResults.ScenarioResults[1].Message);
+			}
+		}
+
+		
+		[ActionSteps, TestFixture]
+		public class When_running_many_scenarios_and_class_with_actionSteps_implements_notification_attributes : ScenarioStepRunnerSpec
+		{
+			private int _timesBeforeScenarioWasCalled;
+			private int _timesBeforeStepWasCalled;
+			private int _timesAfterStepWasCalled;
+			private int _timesAfterScenarioWasCalled;
+
+			[Given(@"something")]
+			public void Given_something()
+			{ }
+
+			[BeforeScenario]
+			public void OnBeforeScenario()
+			{
+				_timesBeforeScenarioWasCalled++;
+			}
+
+			[BeforeStep]
+			public void OnBeforeStep()
+			{
+				_timesBeforeStepWasCalled++;
+			}
+
+			[AfterStep]
+			public void OnAfterStep()
+			{
+				_timesAfterStepWasCalled++;
+			}
+
+			[AfterScenario]
+			public void OnAfterScenario()
+			{
+				_timesAfterScenarioWasCalled++;
+			}
+			
+			[TestFixtureSetUpAttribute]
+			public void Setup()
+			{
+				base.SetUp();
+				Action action = Given_something;
+				_actionCatalog.Add(new ActionMethodInfo(new Regex(@"something to count$"), action, action.Method, this));
+				
+				ScenarioSteps firstScenario = new ScenarioSteps {
+					Steps =
+						"Scenario: One" + Environment.NewLine +
+						"Given something to count"};
+				ScenarioSteps secondScenario = new ScenarioSteps {
+					Steps =
+						"Scenario: Two" + Environment.NewLine +
+						"Given something to count" + Environment.NewLine +
+						"Given something to count"};
+
+				_runner.EventListener = MockRepository.GenerateStub<IEventListener>();
+				var storyResults = new StoryResults();
+				_runner.RunScenarios(new List<ScenarioSteps> { firstScenario, secondScenario}, storyResults);
+			}
+
+			[Specification]
+			public void should_Call_before_Scenario_once_per_scenario()
+			{
+				Assert.That(_timesBeforeScenarioWasCalled, Is.EqualTo(2));
+			}
+
+			[Specification]
+			public void should_Call_after_Scenario_once_per_scenario()
+			{
+				Assert.That(_timesAfterScenarioWasCalled, Is.EqualTo(2));
+			}
+			
+			[Specification]
+			public void should_Call_before_step_once_per_step()
+			{
+				Assert.That(_timesBeforeStepWasCalled, Is.EqualTo(3));
+			}
+
+			[Specification]
+			public void should_call_after_step_once_per_step()
+			{
+				Assert.That(_timesAfterStepWasCalled, Is.EqualTo(3));
 			}
 		}
 	}

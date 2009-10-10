@@ -5,170 +5,170 @@ using NBehave.Narrator.Framework.EventListeners;
 
 namespace NBehave.Narrator.Framework
 {
-    public class ScenarioSteps
-    {
-        public string FileName { get; set; }
-        public string Steps { get; set; }
-    }
+	public class ScenarioSteps
+	{
+		public string FileName { get; set; }
+		public string Steps { get; set; }
+	}
 
-    public class ScenarioStepRunner
-    {
-        private readonly ActionStep _actionStep;
-        private readonly TextToTokenStringsParser _textToTokenStringsParser;
-        private readonly ActionStepRunner _actionStepRunner;
+	public class ScenarioStepRunner
+	{
+		private readonly ActionStep _actionStep;
+		private readonly TextToTokenStringsParser _textToTokenStringsParser;
+		private readonly ActionStepRunner _actionStepRunner;
 
-        public IEventListener EventListener { get; set; }
-        private Story Story { get; set; }
-        private readonly Queue<Action> _scenarioEventsToRaise = new Queue<Action>();
+		public IEventListener EventListener { get; set; }
+		private Story Story { get; set; }
+		private readonly Queue<Action> _scenarioEventsToRaise = new Queue<Action>();
 
-        public ScenarioStepRunner(TextToTokenStringsParser textToTokenStringsParser,
-                                    ActionStepRunner actionStepRunner,
-                                    ActionStep actionStep)
-        {
-            _textToTokenStringsParser = textToTokenStringsParser;
-            _actionStepRunner = actionStepRunner;
-            _actionStep = actionStep;
-            EventListener = new NullEventListener();
-        }
+		public ScenarioStepRunner(TextToTokenStringsParser textToTokenStringsParser,
+		                          ActionStepRunner actionStepRunner,
+		                          ActionStep actionStep)
+		{
+			_textToTokenStringsParser = textToTokenStringsParser;
+			_actionStepRunner = actionStepRunner;
+			_actionStep = actionStep;
+			EventListener = new NullEventListener();
+		}
 
-        public void RunScenarios(IEnumerable<ScenarioSteps> scenarios, StoryResults storyResults)
-        {
-            int scenarioCounter = 1;
-            foreach (var scenario in scenarios)
-            {
-            	_scenarioEventsToRaise.Clear();
-                var scenarioResult = RunScenario(scenario, scenarioCounter);
-                storyResults.AddResult(scenarioResult);
-                scenarioCounter++;
-            }
-        }
+		public void RunScenarios(IEnumerable<ScenarioSteps> scenarios, StoryResults storyResults)
+		{
+			int scenarioCounter = 1;
+			foreach (var scenario in scenarios)
+			{
+				_scenarioEventsToRaise.Clear();
+				var scenarioResult = RunScenario(scenario, scenarioCounter);
+				storyResults.AddResult(scenarioResult);
+				scenarioCounter++;
+			}
+		}
 
-        private string _storyTitle = string.Empty;
-        private string _storyNarrative = string.Empty;
+		private string _storyTitle = string.Empty;
+		private string _storyNarrative = string.Empty;
 
-        private ScenarioResult _scenarioResult;
-        private ScenarioSteps _scenarioSteps;
-        public ScenarioResult RunScenario(ScenarioSteps scenarioSteps, int scenarioCounter)
-        {
-            _scenarioSteps = scenarioSteps;
-            _textToTokenStringsParser.ParseScenario(scenarioSteps.Steps);
+		private ScenarioResult _scenarioResult;
+		private ScenarioSteps _scenarioSteps;
+		public ScenarioResult RunScenario(ScenarioSteps scenarioSteps, int scenarioCounter)
+		{
+			_scenarioSteps = scenarioSteps;
+			_textToTokenStringsParser.ParseScenario(scenarioSteps.Steps);
+			_actionStepRunner.IsFirstStepInScenario = true;
+			foreach (var row in _textToTokenStringsParser.TokenStrings)
+			{
+				var actionStepText = new ActionStepText(row, _scenarioSteps.FileName);
+				HandleStoryTitle(actionStepText);
+				HandleStoryNarrative(actionStepText);
+				HandleScenarioTitle(actionStepText);
+				HandleScenarioStep(actionStepText, scenarioCounter);
+			}
+			HandleScenarioEnd();
 
-            foreach (var row in _textToTokenStringsParser.TokenStrings)
-            {
-            	var actionStepText = new ActionStepText(row, _scenarioSteps.FileName);
-                HandleStoryTitle(actionStepText);
-                HandleStoryNarrative(actionStepText);
-                HandleScenarioTitle(actionStepText);
-                HandleScenarioStep(actionStepText, scenarioCounter);
-            }
-            HandleScenarioEnd();
+			CreateStoryIfStoryNull();
+			var scenario = new Scenario(_scenarioResult.ScenarioTitle, Story);
+			Story.AddScenario(scenario);
+			foreach (var action in _scenarioEventsToRaise)
+				action.Invoke();
+			return _scenarioResult;
+		}
 
-            CreateStoryIfStoryNull();
-            var scenario = new Scenario(_scenarioResult.ScenarioTitle, Story);
-            Story.AddScenario(scenario);
-            foreach (var action in _scenarioEventsToRaise)
-                action.Invoke();
-            return _scenarioResult;
-        }
+		private void HandleScenarioEnd()
+		{
+			_actionStepRunner.OnCloseScenario();
+		}
 
-        private void HandleScenarioEnd()
-        {
-            _actionStepRunner.OnCloseScenario();
-        }
+		private void SetStoryNarrative()
+		{
+			if (string.IsNullOrEmpty(Story.Narrative) && string.IsNullOrEmpty(_storyNarrative) == false)
+			{
+				Story.Narrative = _storyNarrative;
+				Story.OnMessageAdded(this, new EventArgs<MessageEventData>(new MessageEventData("Narrative", _storyNarrative)));
+			}
+		}
 
-        private void SetStoryNarrative()
-        {
-            if (string.IsNullOrEmpty(Story.Narrative) && string.IsNullOrEmpty(_storyNarrative) == false)
-            {
-                Story.Narrative = _storyNarrative;
-                Story.OnMessageAdded(this, new EventArgs<MessageEventData>(new MessageEventData("Narrative", _storyNarrative)));
-            }
-        }
+		private void CreateStoryIfStoryNull()
+		{
+			if (Story == null)
+			{
+				Story = new Story(_storyTitle);
+				Story.Narrative = _storyNarrative;
+				foreach (var narrativeRow in _storyNarrative.Replace(Environment.NewLine, '\n'.ToString()).Split(new[] { '\n' }))
+					EventListener.StoryMessageAdded(narrativeRow);
+			}
+		}
 
-        private void CreateStoryIfStoryNull()
-        {
-            if (Story == null)
-            {
-                Story = new Story(_storyTitle);
-                Story.Narrative = _storyNarrative;
-                foreach (var narrativeRow in _storyNarrative.Replace(Environment.NewLine, '\n'.ToString()).Split(new[] { '\n' }))
-                    EventListener.StoryMessageAdded(narrativeRow);
-            }
-        }
+		private ScenarioResult UpdateScenarioResult(ScenarioResult scenarioResult, Result stepResult)
+		{
+			if (stepResult.GetType() == typeof(Pending))
+				scenarioResult.Pend(stepResult.Message);
+			if (stepResult.GetType() == typeof(Failed))
+				scenarioResult.Fail((stepResult as Failed).Exception);
+			return scenarioResult;
+		}
 
-        private ScenarioResult UpdateScenarioResult(ScenarioResult scenarioResult, Result stepResult)
-        {
-            if (stepResult.GetType() == typeof(Pending))
-                scenarioResult.Pend(stepResult.Message);
-            if (stepResult.GetType() == typeof(Failed))
-                scenarioResult.Fail((stepResult as Failed).Exception);
-            return scenarioResult;
-        }
+		private void RaiseScenarioMessage(string row, Result result)
+		{
+			if (result.GetType() == typeof(Passed))
+				_scenarioEventsToRaise.Enqueue(() => EventListener.ScenarioMessageAdded(row));
+			else
+				_scenarioEventsToRaise.Enqueue(() => EventListener.ScenarioMessageAdded(row + " - " + result.ToString().ToUpper()));
+		}
 
-        private void RaiseScenarioMessage(string row, Result result)
-        {
-            if (result.GetType() == typeof(Passed))
-                _scenarioEventsToRaise.Enqueue(() => EventListener.ScenarioMessageAdded(row));
-            else
-                _scenarioEventsToRaise.Enqueue(() => EventListener.ScenarioMessageAdded(row + " - " + result.ToString().ToUpper()));
-        }
+		private ScenarioResult GetScenarioResultInstance(int scenarioCounter)
+		{
+			var scenarioTitle = string.Format("{0}.{1}", scenarioCounter, Path.GetFileNameWithoutExtension(_scenarioSteps.FileName));
+			var scenarioResult = new ScenarioResult(Story, scenarioTitle);
+			return scenarioResult;
+		}
 
-        private ScenarioResult GetScenarioResultInstance(int scenarioCounter)
-        {
-            var scenarioTitle = string.Format("{0}.{1}", scenarioCounter, Path.GetFileNameWithoutExtension(_scenarioSteps.FileName));
-            var scenarioResult = new ScenarioResult(Story, scenarioTitle);
-            return scenarioResult;
-        }
+		private void HandleScenarioStep(ActionStepText row, int scenarioCounter)
+		{
+			ActionStepResult result = null;
 
-        private void HandleScenarioStep(ActionStepText row, int scenarioCounter)
-        {
-            ActionStepResult result = null;
+			if (_actionStep.IsScenarioStep(row.Text)
+			    && _actionStep.IsScenarioTitle(row.Text) == false)
+			{
+				CreateStoryIfStoryNull();
+				if (_scenarioResult == null)
+					_scenarioResult = GetScenarioResultInstance(scenarioCounter);
+				result = _actionStepRunner.RunActionStepRow(row);
+			}
+			if (result != null)
+			{
+				SetStoryNarrative();
+				_scenarioResult.AddActionStepResult(result);
+				RaiseScenarioMessage(row.Text, result.Result);
+				_scenarioResult = UpdateScenarioResult(_scenarioResult, result.Result);
+			}
+		}
 
-            if (_actionStep.IsScenarioStep(row.Text) 
-                && _actionStep.IsScenarioTitle(row.Text) == false)
-            {
-                CreateStoryIfStoryNull();
-                if (_scenarioResult == null)
-                    _scenarioResult = GetScenarioResultInstance(scenarioCounter);
-                result = _actionStepRunner.RunActionStepRow(row);
-            }
-            if (result != null)
-            {
-                SetStoryNarrative();
-                _scenarioResult.AddActionStepResult(result);
-                RaiseScenarioMessage(row.Text, result.Result);
-                _scenarioResult = UpdateScenarioResult(_scenarioResult, result.Result);
-            }
-        }
+		private void HandleScenarioTitle(ActionStepText row)
+		{
+			if (_actionStep.IsScenarioTitle(row.Text))
+			{
+				CreateStoryIfStoryNull();
+				_scenarioResult = new ScenarioResult(Story, _actionStep.GetTitle(row.Text));
+			}
+		}
 
-        private void HandleScenarioTitle(ActionStepText row)
-        {
-            if (_actionStep.IsScenarioTitle(row.Text))
-            {
-                CreateStoryIfStoryNull();
-                _scenarioResult = new ScenarioResult(Story, _actionStep.GetTitle(row.Text));
-            }
-        }
+		private void HandleStoryNarrative(ActionStepText  row)
+		{
+			if (_actionStep.IsNarrative(row.Text))
+			{
+				if (string.IsNullOrEmpty(_storyNarrative))
+					_storyNarrative += row.Text;
+				else
+					_storyNarrative += Environment.NewLine + row.Text;
+			}
+		}
 
-        private void HandleStoryNarrative(ActionStepText  row)
-        {
-            if (_actionStep.IsNarrative(row.Text))
-            {
-                if (string.IsNullOrEmpty(_storyNarrative))
-                    _storyNarrative += row.Text;
-                else
-                    _storyNarrative += Environment.NewLine + row.Text;
-            }
-        }
-
-        private void HandleStoryTitle(ActionStepText  row)
-        {
-            if (_actionStep.IsStoryTitle(row.Text))
-            {
-                _storyTitle = _actionStep.GetTitle(row.Text);
-                _storyNarrative = string.Empty;
-                Story = null;
-            }
-        }
-    }
+		private void HandleStoryTitle(ActionStepText  row)
+		{
+			if (_actionStep.IsStoryTitle(row.Text))
+			{
+				_storyTitle = _actionStep.GetTitle(row.Text);
+				_storyNarrative = string.Empty;
+				Story = null;
+			}
+		}
+	}
 }

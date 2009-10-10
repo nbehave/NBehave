@@ -100,17 +100,23 @@ namespace NBehave.Narrator.Framework
 		private ActionMethodInfo FindMatchingAction(ActionStepText actionStepText)
 		{
 		    string message = actionStepText.Text;
-			foreach (ActionMethodInfo action in _actions)
+			ActionMethodInfo matchedAction = null;
+			int lengthOfMatch = -1;
+		    foreach (ActionMethodInfo action in _actions)
 			{
 				Regex regex = action.ActionStepMatcher;
-				bool isMatch = regex.IsMatch(message);
-				if (isMatch)
+				var match = regex.Match(message);
+				if (match.Success)
 				{
-					if (MatchesFileName(action, actionStepText))
-						return action;
+					if (MatchesFileName(action, actionStepText)
+					   && match.Value.Length > lengthOfMatch)
+					{
+						lengthOfMatch = match.Value.Length;
+						matchedAction = action;
+					}
 				}
 			}
-			return null;
+			return matchedAction;
 		}
 		
 		private bool MatchesFileName(ActionMethodInfo action, ActionStepText actionStepText)

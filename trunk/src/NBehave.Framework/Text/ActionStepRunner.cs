@@ -7,11 +7,12 @@ namespace NBehave.Narrator.Framework
     public class ActionStepRunner
     {
         private readonly ActionCatalog _actionCatalog;
-        private bool _isFirstStep = true;
+        public bool IsFirstStepInScenario {get; set; }
         private ActionMethodInfo _lastAction;
 
         public ActionStepRunner(ActionCatalog actionCatalog)
         {
+        	IsFirstStepInScenario = true;
             _actionCatalog = actionCatalog;
         }
 
@@ -26,9 +27,9 @@ namespace NBehave.Narrator.Framework
             MethodInfo methodInfo = actionType.GetMethod("DynamicInvoke");
             object[] actionParamValues = _actionCatalog.GetParametersForActionStepText(actionStep);
 
-            if(_isFirstStep)
+            if(IsFirstStepInScenario)
             {
-                _isFirstStep = false;
+                IsFirstStepInScenario = false;
                 info.ExecuteNotificationMethod(typeof (BeforeScenarioAttribute));
             }
 

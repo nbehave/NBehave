@@ -181,5 +181,41 @@ namespace NBehave.Narrator.Framework.Specifications
 				Assert.That((values[0] as string[]), Is.EqualTo(new string[] { "one", "two" }));
 			}
 		}
+		
+		[Context]
+		public class When_two_actions_match_the_same_text_step : ActionCatalogSpec
+		{
+			private ActionCatalog _actionCatalog;
+			private bool _wasCalled;
+			
+			[SetUp]
+			public void Establish_context()
+			{
+				_wasCalled = false;
+				_actionCatalog = new ActionCatalog();
+				Action firstAction = ()=> { Assert.Fail("This action shouldnt be called"); };
+				ActionMethodInfo actionMethod = new ActionMethodInfo(
+					new Regex("def$"), firstAction,firstAction.Method ,this);
+				_actionCatalog.Add(actionMethod);
+
+				Action secondAction = ()=> { _wasCalled = true; };
+				ActionMethodInfo secondActionMethod = new ActionMethodInfo(
+					new Regex("abc def$"), secondAction,secondAction.Method ,this);
+				_actionCatalog.Add(secondActionMethod);
+			}
+
+			private void Because_of()
+			{
+				ActionStepText actionText = new ActionStepText("abc def","somestory.story");
+				ActionMethodInfo action = _actionCatalog.GetAction(actionText);
+				(action.Action as Action).Invoke();
+			}
+			[Specification]
+			public void Should_call_greediest_matching_action()
+			{
+				Because_of();
+				Assert.That(_wasCalled, Is.True);
+			}
+		}
 	}
 }

@@ -212,9 +212,12 @@ namespace NBehave.Narrator.Framework
 				}
 				else
 				{
-
 					if (_catalog.ActionExists(actionStepText) == false)
-						SendMessageEvent(type, actionStepText.Text + " - FAILED");
+					{
+						var result = new ActionStepResult(actionStepText.Text, new Pending("action for given is missing"));
+						_scenarioResults.Last.Value.AddActionStepResult(result);
+						SendMessageEvent(type, actionStepText.Text + " - PENDING");
+					}
 					ValidateActionExists(message);
 
 					object action = GetActionFromCatalog(message);
