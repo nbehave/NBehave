@@ -5,6 +5,7 @@ namespace NBehave.Narrator.Framework
 {
     internal static class ActionStepConverterExtensions
     {
+
         public static Regex AsRegex(this string actionStep)
         {
             string[] words = actionStep.Split(new[] { ' ', '\n', '\r', '\t' }, StringSplitOptions.RemoveEmptyEntries);
@@ -15,7 +16,7 @@ namespace NBehave.Narrator.Framework
                 {
                     var groupName = GetValidRegexGroupName(word);
                     var stuffAtEnd = RemoveTokenPrefix(word).Replace(groupName, string.Empty);
-                    regex += string.Format(@"(?<{0}>(\-?\w+\s*)+){1}\s+", groupName, stuffAtEnd);
+                    regex += string.Format(@"(?<{0}>.+){1}\s+", groupName, stuffAtEnd);
                 }
                 else
                     regex += string.Format(@"{0}\s+", word);
@@ -23,7 +24,7 @@ namespace NBehave.Narrator.Framework
             if (regex.EndsWith(@"\s+"))
                 regex = regex.Substring(0, regex.Length - 1) + "*";
             regex += "$";
-            return new Regex(regex, RegexOptions.Multiline | RegexOptions.IgnorePatternWhitespace);
+            return new Regex(regex, RegexOptions.Singleline | RegexOptions.IgnorePatternWhitespace);
         }
 
         private static bool WordIsToken(string word)
