@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Reflection;
 
@@ -36,7 +37,7 @@ namespace NBehave.Narrator.Framework
 
                 foreach (MethodInfo storyMethod in storyMethods)
                 {
-                    InvokeStoryMethod(storyMethod, themeClass);
+                    InvokeStoryMethod(storyMethod, themeClass, results);
                     CompileStoryResults(results);
                     listener.StoryResults(results);
                     ClearStoryList();
@@ -45,13 +46,25 @@ namespace NBehave.Narrator.Framework
             }
         }
 
-        private void InvokeStoryMethod(MethodInfo storyMethod, object theme)
+        private void InvokeStoryMethod(MethodInfo storyMethod, object theme, StoryResults results)
         {
             try
             {
                 storyMethod.Invoke(theme, null);
             }
-            catch(Exception) { }
+            catch (Exception e)
+            {
+                var ex = e.InnerException ?? e;
+                if (ex.GetType() == typeof(ActionMissingException))
+                {
+                    Story story = Stories.Last();
+                    var thisResult = story.ScenarioResults.Last();
+                    if (thisResult.Result.GetType() != typeof(Failed))
+                    {
+                        thisResult.Pend(ex.Message);
+                    }
+                }
+            }
         }
 
         private IEnumerable<MethodInfo> GetStoryMethods(IEnumerable<MethodInfo> themeMethods)

@@ -8,8 +8,8 @@ namespace NBehave.Narrator.Framework
 	public class Story
 	{
 		private readonly ActionCatalog _catalog = new ActionCatalog();
-		private readonly LinkedList<ScenarioResult> _scenarioResults;
-		private readonly List<Scenario> _scenarios;
+	    internal LinkedList<ScenarioResult> ScenarioResults { get; private set; }
+	    private readonly List<Scenario> _scenarios;
 
 		public static event EventHandler<EventArgs<Story>> StoryCreated;
 		public static event EventHandler<EventArgs<Scenario>> ScenarioCreated;
@@ -27,7 +27,7 @@ namespace NBehave.Narrator.Framework
 			Title = title;
 			Narrative = string.Empty;
 			_scenarios = new List<Scenario>();
-			_scenarioResults = new LinkedList<ScenarioResult>();
+			ScenarioResults = new LinkedList<ScenarioResult>();
 
 			OnStoryCreated(new EventArgs<Story>(this));
 		}
@@ -72,7 +72,7 @@ namespace NBehave.Narrator.Framework
 
 		public void CompileResults(StoryResults results)
 		{
-			foreach (ScenarioResult result in _scenarioResults)
+			foreach (ScenarioResult result in ScenarioResults)
 			{
 				results.AddResult(result);
 			}
@@ -80,7 +80,7 @@ namespace NBehave.Narrator.Framework
 
 		internal void PendLastScenarioResults(string reason)
 		{
-			_scenarioResults.Last.Value.Pend(reason);
+			ScenarioResults.Last.Value.Pend(reason);
 		}
 
 		private bool CanAddMessage
@@ -138,13 +138,13 @@ namespace NBehave.Narrator.Framework
 					catch (Exception ex)
 					{
 						result = new ActionStepResult(fullMessage, new Failed(ex));
-						_scenarioResults.Last.Value.Fail(ex);
+						ScenarioResults.Last.Value.Fail(ex);
 						SendFailedMessageEvent(type, message, messageParameters);
 						throw;
 					}
 					finally
 					{
-						_scenarioResults.Last.Value.AddActionStepResult(result);
+						ScenarioResults.Last.Value.AddActionStepResult(result);
 					}
 				}
 				CatalogAction(message, originalAction, methodInfo);
@@ -215,7 +215,7 @@ namespace NBehave.Narrator.Framework
 					if (_catalog.ActionExists(actionStepText) == false)
 					{
 						var result = new ActionStepResult(actionStepText.Text, new Pending("action for given is missing"));
-						_scenarioResults.Last.Value.AddActionStepResult(result);
+						ScenarioResults.Last.Value.AddActionStepResult(result);
 						SendMessageEvent(type, actionStepText.Text + " - PENDING");
 					}
 					ValidateActionExists(message);
@@ -235,7 +235,7 @@ namespace NBehave.Narrator.Framework
 			}
 			catch (Exception e)
 			{
-				ScenarioResult result = _scenarioResults.Last.Value;
+				ScenarioResult result = ScenarioResults.Last.Value;
 				result.Fail(e);
 			}
 		}
@@ -322,7 +322,7 @@ namespace NBehave.Narrator.Framework
 		{
 			_scenarios.Add(scenario);
 			OnScenarioAdded(new EventArgs<Scenario>(scenario));
-			_scenarioResults.AddLast(new ScenarioResult(this, scenario.Title));
+			ScenarioResults.AddLast(new ScenarioResult(this, scenario.Title));
 		}
 	}
 }

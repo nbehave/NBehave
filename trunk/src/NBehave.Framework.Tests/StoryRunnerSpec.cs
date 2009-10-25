@@ -24,7 +24,7 @@ namespace NBehave.Narrator.Framework.Specifications
             runner.LoadAssembly("TestAssembly.dll");
             StoryResults results = runner.Run(GetStubbedListener());
 
-            Assert.That(results.NumberOfThemes, Is.EqualTo(1));
+            Assert.That(results.NumberOfThemes, Is.EqualTo(2));
         }
 
         [Specification]
@@ -35,7 +35,7 @@ namespace NBehave.Narrator.Framework.Specifications
             runner.LoadAssembly("TestAssembly.dll");
             StoryResults results = runner.Run(GetStubbedListener());
 
-            Assert.That(results.NumberOfStories, Is.EqualTo(3));
+            Assert.That(results.NumberOfStories, Is.EqualTo(4));
         }
 
         [Specification]
@@ -46,7 +46,7 @@ namespace NBehave.Narrator.Framework.Specifications
             runner.LoadAssembly("TestAssembly.dll");
             StoryResults results = runner.Run(GetStubbedListener());
 
-            Assert.That(results.NumberOfScenariosFound, Is.EqualTo(4));
+            Assert.That(results.NumberOfScenariosFound, Is.EqualTo(5));
         }
 
         [Specification]
@@ -68,7 +68,7 @@ namespace NBehave.Narrator.Framework.Specifications
             runner.LoadAssembly("TestAssembly.dll");
             StoryResults results = runner.Run(GetStubbedListener());
 
-            Assert.That(results.NumberOfPendingScenarios, Is.EqualTo(1));
+            Assert.That(results.NumberOfPendingScenarios, Is.EqualTo(2));
         }
 
         [Specification]
@@ -93,11 +93,11 @@ namespace NBehave.Narrator.Framework.Specifications
                 listener.RunStarted();
                 LastCall.Repeat.Once();
                 listener.ThemeStarted("");
-                LastCall.IgnoreArguments().Repeat.Once();
+                LastCall.IgnoreArguments().Repeat.Twice();
                 listener.StoryCreated("");
-                LastCall.IgnoreArguments().Repeat.Times(3);
+                LastCall.IgnoreArguments().Repeat.Times(4);
                 listener.StoryResults(null);
-                LastCall.IgnoreArguments().Repeat.Times(3);
+                LastCall.IgnoreArguments().Repeat.Times(4);
                 listener.StoryMessageAdded("");
                 LastCall.IgnoreArguments().Repeat.AtLeastOnce();
                 listener.ScenarioCreated(null);
@@ -105,7 +105,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 listener.ScenarioMessageAdded(null);
                 LastCall.IgnoreArguments().Repeat.AtLeastOnce();
                 listener.ThemeFinished();
-                LastCall.Repeat.Once();
+                LastCall.Repeat.Twice();
                 listener.RunFinished();
                 LastCall.Repeat.Once();
             }
@@ -130,19 +130,19 @@ namespace NBehave.Narrator.Framework.Specifications
                 listener.RunStarted();
                 LastCall.Repeat.Once();
                 listener.ThemeStarted("");
-                LastCall.IgnoreArguments().Repeat.Once();
+                LastCall.IgnoreArguments().Repeat.Twice();
                 listener.StoryCreated("");
-                LastCall.IgnoreArguments().Repeat.Times(3);
+                LastCall.IgnoreArguments().Repeat.Times(4);
                 listener.StoryResults(null);
-                LastCall.IgnoreArguments().Repeat.Times(3);
+                LastCall.IgnoreArguments().Repeat.Times(4);
                 listener.StoryMessageAdded("");
                 LastCall.IgnoreArguments().Repeat.Times(9);
                 listener.ScenarioCreated(null);
-                LastCall.IgnoreArguments().Repeat.Times(4);
+                LastCall.IgnoreArguments().Repeat.Times(5);
                 listener.ScenarioMessageAdded(null);
-                LastCall.IgnoreArguments().Repeat.Times(26);
+                LastCall.IgnoreArguments().Repeat.Times(27);
                 listener.ThemeFinished();
-                LastCall.Repeat.Once();
+                LastCall.Repeat.Twice();
                 listener.RunFinished();
                 LastCall.Repeat.Once();
             }
@@ -166,7 +166,7 @@ namespace NBehave.Narrator.Framework.Specifications
             runner.LoadAssembly("TestAssembly.dll");
             StoryResults results = runner.Run(GetStubbedListener());
 
-            Assert.That(results.NumberOfThemes, Is.EqualTo(1));
+            Assert.That(results.NumberOfThemes, Is.EqualTo(2));
         }
 
         [Specification]
@@ -192,7 +192,6 @@ namespace NBehave.Narrator.Framework.Specifications
 
             Assert.That(results.NumberOfStories, Is.EqualTo(1));
         }
-
 
         [TestFixture]
         public class When_running_assembly_with_tokenized_scenario
@@ -222,7 +221,6 @@ namespace NBehave.Narrator.Framework.Specifications
                 Assert.That(_results.NumberOfPassingScenarios, Is.EqualTo(2));
             }
         }
-
 
         [TestFixture]
         public class When_dry_running_asembly_with_tokenized_scenario
@@ -294,6 +292,19 @@ namespace NBehave.Narrator.Framework.Specifications
 
                 StringAssert.EndsWith("Given my savings account balance is 50", given);
             }
+        }
+
+        [Specification]
+        public void Should_report_invalid_step_in_result()
+        {
+            var runner = new StoryRunner();
+
+            runner.StoryRunnerFilter = new StoryRunnerFilter("TestAssembly", "InvalidActionSpecs", "Invalid_action");
+            runner.LoadAssembly("TestAssembly.dll");
+            StoryResults results = runner.Run(GetStubbedListener());
+
+            Assert.That(results.NumberOfPendingScenarios, Is.EqualTo(1));
+            Assert.That(results.ScenarioResults[0].Message, Is.EqualTo("Action missing for action 'An invalid action'."));
         }
     }
 }
