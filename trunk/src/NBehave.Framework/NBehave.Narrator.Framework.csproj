@@ -108,7 +108,13 @@
     <Compile Include="ScenarioResultEventArgs.cs" />
     <Compile Include="ScenarioResult.cs" />
     <Compile Include="Text\ActionStepText.cs" />
+    <Compile Include="Text\AfterScenarioAttribute.cs" />
+    <Compile Include="Text\AfterStepAttribute.cs" />
+    <Compile Include="Text\BeforeScenarioAttribute.cs" />
+    <Compile Include="Text\BeforeStepAttribute.cs" />
+    <Compile Include="Text\GivenAttribute.cs" />
     <Compile Include="Text\IMatchFiles.cs" />
+    <Compile Include="Text\NotificationMethodAttribute.cs" />
     <Compile Include="Text\ScenarioStepRunner.cs" />
     <Compile Include="SoThatFragment.cs" />
     <Compile Include="StringExtensions.cs" />
@@ -119,6 +125,8 @@
     <Compile Include="StoryResults.cs" />
     <Compile Include="StoryRunner.cs" />
     <Compile Include="StoryRunnerFilter.cs" />
+    <Compile Include="Text\ThenAttribute.cs" />
+    <Compile Include="Text\WhenAttribute.cs" />
     <Compile Include="ThemeAttribute.cs" />
     <Compile Include="ThenFragment.cs" />
     <Compile Include="Text\TokenStringsToScenarioParser.cs" />

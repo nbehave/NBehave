@@ -1,5 +1,4 @@
 using NUnit.Framework;
-using Rhino.Mocks;
 using Context = NUnit.Framework.TestFixtureAttribute;
 using Specification = NUnit.Framework.TestAttribute;
 
@@ -16,7 +15,6 @@ namespace NBehave.Narrator.Framework.Specifications
 		{
 			var storyRunnerFilter = new StoryRunnerFilter(".", ".", ".");
 			_actionCatalog = new ActionCatalog();
-			var actionStepAlias = new ActionStepAlias();
 			_actionStepParser = new ActionStepParser(storyRunnerFilter, _actionCatalog);
 			_actionStepParser.FindActionSteps(GetType().Assembly);
 		}
@@ -59,6 +57,20 @@ namespace NBehave.Narrator.Framework.Specifications
 			public void Given_a_method_with_a_value_intParam_plus_text_stringParam(int intParam, string stringParam)
 			{ }
 
+            [Given]
+            public void Given_using_GivenAttribute_with_no_regex()
+            { }
+
+
+            [When]
+            public void When_using_WhenAttribute_with_no_regex()
+            { }
+
+
+            [Then]
+            public void Then_using_ThenAttribute_with_no_regex()
+            { }
+
 			[Specification]
 			public void Should_infer_parameters_in_tokenString_from_parameterNames_in_method()
 			{
@@ -66,6 +78,33 @@ namespace NBehave.Narrator.Framework.Specifications
 				Assert.That(parameters[0], Is.EqualTo(42));
 				Assert.That(parameters[1], Is.EqualTo("stringParam"));
 			}
+
+            [Specification]
+            public void Should_find_given_step_with_GivenAttribute()
+            {
+                var actionStepToFind = new ActionStepText("using GivenAttribute with no regex", "file");
+                var action = _actionCatalog.GetAction(actionStepToFind);
+                Assert.That(action.ActionType, Is.EqualTo("Given"));
+                Assert.That(action.ActionStepMatcher.ToString(), Is.EqualTo(@"^using\s+GivenAttribute\s+with\s+no\s+regex\s*$"));
+            }
+
+            [Specification]
+            public void Should_find_when_step_with_WhenAttribute()
+            {
+                var actionStepToFind = new ActionStepText("using WhenAttribute with no regex", "file");
+                var action = _actionCatalog.GetAction(actionStepToFind);
+                Assert.That(action.ActionType, Is.EqualTo("When"));
+                Assert.That(action.ActionStepMatcher.ToString(), Is.EqualTo(@"^using\s+WhenAttribute\s+with\s+no\s+regex\s*$"));
+            }
+
+            [Specification]
+            public void Should_find_then_step_with_ThenAttribute()
+            {
+                var actionStepToFind = new ActionStepText("using ThenAttribute with no regex", "file");
+                var action = _actionCatalog.GetAction(actionStepToFind);
+                Assert.That(action.ActionType, Is.EqualTo("Then"));
+                Assert.That(action.ActionStepMatcher.ToString(), Is.EqualTo(@"^using\s+ThenAttribute\s+with\s+no\s+regex\s*$"));
+            }
 		}
 		
 		[Context, ActionSteps]
