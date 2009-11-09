@@ -131,6 +131,9 @@
     <Compile Include="ThenFragment.cs" />
     <Compile Include="Text\TokenStringsToScenarioParser.cs" />
     <Compile Include="WhenFragment.cs" />
+    <None Include="Languages.yml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\NBehave.snk">

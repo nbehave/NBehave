@@ -158,7 +158,6 @@ namespace NBehave.Narrator.Framework.Specifications
 			[Specification]
 			public void Should_get_multiline_value_as_array_of_strings()
 			{
-				// problem is, Action is Action<object> => o=> { MethodCall(o as string[]); }
 				object paramReceived = null;
 				Action<string[]> actionStep = p => { };
 				Action<object> action = value => { paramReceived = value; };

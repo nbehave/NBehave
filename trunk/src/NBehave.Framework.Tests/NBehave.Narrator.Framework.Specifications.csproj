@@ -95,6 +95,7 @@
     <Compile Include="StoryResultsFixture.cs" />
     <Compile Include="StoryRunnerFilterSpecs.cs" />
     <Compile Include="StoryRunnerSpec.cs" />
+    <Compile Include="Text\IgnoreSpaceAndUnderScoreMatcherSpec.cs" />
     <Compile Include="TokenStringsToScenarioParserSpec.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -114,6 +115,7 @@
       <Project>{B734DE3F-E1EC-42B4-8AB1-A55A934584CF}</Project>
       <Name>TestPlainTextAssembly</Name>
     </ProjectReference>
+    <Folder Include="Text" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="GreetingSystemWithScenarioTitle.txt">
