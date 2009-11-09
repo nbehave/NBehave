@@ -217,9 +217,29 @@ namespace NBehave.Spec.NUnit.Specs
         }
 
         [Specification]
-        public void Should_allow_substitution_for_ShouldNotContain()
+        public void Should_allow_substitution_for_ShouldNotContain_for_string()
         {
             "Lorem ipsum dolor sit amet.".ShouldNotContain("foo");
+        }
+
+        [Specification, ExpectedException(typeof(AssertionException))]
+        public void Should_allow_substitution_for_ShouldNotContain__for_string_failing()
+        {
+            "Lorem ipsum dolor sit amet.".ShouldNotContain("ipsum");
+        }
+
+        [Specification]
+        public void Should_allow_substitution_for_ShouldContain_for_string()
+        {
+            string str = "Hello";
+            str.ShouldContain("Hell");
+        }
+
+        [Specification, ExpectedException(typeof(AssertionException))]
+        public void Should_allow_substitution_for_ShouldContain_for_string_failing()
+        {
+            string str = "Hello";
+            str.ShouldContain("Foo");
         }
     }
 

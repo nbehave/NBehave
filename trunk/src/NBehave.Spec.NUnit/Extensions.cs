@@ -150,8 +150,14 @@ namespace NBehave.Spec.NUnit
             Assert.Contains(expected, actual);
         }
 
+        public static void ShouldContain(this string actual, string expected)
+        {
+            StringAssert.Contains(expected, actual);
+        }
+
         public static void ShouldContain(this IEnumerable actual, object expected)
         {
+
             var lst = new ArrayList();
             foreach (var o in actual)
             {
