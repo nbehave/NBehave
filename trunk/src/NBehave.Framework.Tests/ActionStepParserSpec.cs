@@ -22,8 +22,8 @@ namespace NBehave.Narrator.Framework.Specifications
 		[Context, ActionSteps]
 		public class When_having_ActionStepAttribute_multiple_times_on_same_method : ActionStepParserSpec
 		{
-			[ActionStep("Given one")]
-			[ActionStep("Given two")]
+			[Given("one")]
+			[Given("two")]
 			public void Multiple()
 			{
 				Assert.IsTrue(true);
@@ -47,13 +47,13 @@ namespace NBehave.Narrator.Framework.Specifications
 		[Context, ActionSteps]
 		public class When_having_ActionStepAttribute_without_tokenString : ActionStepParserSpec
 		{
-			[ActionStep]
+			[Given]
 			public void Given_a_method_with_no_parameters()
 			{
 				Assert.IsTrue(true);
 			}
 
-			[ActionStep]
+			[Given]
 			public void Given_a_method_with_a_value_intParam_plus_text_stringParam(int intParam, string stringParam)
 			{ }
 

@@ -3,6 +3,8 @@ using System.Diagnostics;
 
 namespace NBehave.Narrator.Framework
 {
+	//Not all is obsolete, only the fluent interface parts
+	[Obsolete("You should switch to text scenarios, read more here http://nbehave.codeplex.com/wikipage?title=With%20textfiles%20and%20ActionSteps&referringTitle=Examples")]
     public class Scenario
 	{
 		public event EventHandler<EventArgs<ScenarioMessage>> ScenarioMessageAdded;
