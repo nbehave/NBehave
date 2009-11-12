@@ -9,14 +9,10 @@ namespace NBehave.Narrator.Framework
             Type = "Given";            
         }
 
-        private GivenAttribute(Regex actionMatch)
-            : base(actionMatch)
+        public GivenAttribute(string regexOrTokenString)
+            : base(regexOrTokenString)
         {
-            Type = "Given";
+            Type = "Given";            
         }
-      
-        public GivenAttribute(string regex)
-            : this(new Regex(regex))
-        { }
     }
 }

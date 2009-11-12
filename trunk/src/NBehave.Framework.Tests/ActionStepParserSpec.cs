@@ -61,11 +61,9 @@ namespace NBehave.Narrator.Framework.Specifications
             public void Given_using_GivenAttribute_with_no_regex()
             { }
 
-
             [When]
             public void When_using_WhenAttribute_with_no_regex()
             { }
-
 
             [Then]
             public void Then_using_ThenAttribute_with_no_regex()
@@ -106,7 +104,32 @@ namespace NBehave.Narrator.Framework.Specifications
                 Assert.That(action.ActionStepMatcher.ToString(), Is.EqualTo(@"^using\s+ThenAttribute\s+with\s+no\s+regex\s*$"));
             }
 		}
-		
+
+        [Context, ActionSteps]
+        public class When_having_ActionStepAttribute_with_tokenString : ActionStepParserSpec
+        {
+            [Given("a method with tokenstring and two parameters, one int value $intParam plus text $stringParam")]
+            public void Given_a_method_with_a_value_intParam_plus_text_stringParam(int intParam, string stringParam)
+            { }
+
+            [Specification]
+            public void Should_match_parameters_in_tokenString_to_methood_parameters()
+            {
+                var parameters = _actionCatalog.GetParametersForActionStepText(new ActionStepText("a method with tokenstring and two parameters, one int value 42 plus text thistext", ""));
+                Assert.That(parameters[0], Is.EqualTo(42));
+                Assert.That(parameters[1], Is.EqualTo("thistext"));
+            }
+
+            [Specification]
+            public void Should_find_given_step_with_GivenAttribute()
+            {
+                var actionStepToFind = new ActionStepText("a method with tokenstring and two parameters, one int value 42 plus text thistext", "file");
+                var action = _actionCatalog.GetAction(actionStepToFind);
+                Assert.That(action.ActionType, Is.EqualTo("Given"));
+                Assert.That(action.ActionStepMatcher.ToString(), Is.EqualTo(@"^a\s+method\s+with\s+tokenstring\s+and\s+two\s+parameters,\s+one\s+int\s+value\s+(?<intParam>.+)\s+plus\s+text\s+(?<stringParam>.+)\s*$"));
+            }
+        }
+
 		[Context, ActionSteps]
 		public class When_class_with_actionSteps_attribute_implements_IMatchFiles : ActionStepParserSpec, IMatchFiles, IFileMatcher
 		{
