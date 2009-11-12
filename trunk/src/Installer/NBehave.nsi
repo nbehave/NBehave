@@ -1,5 +1,5 @@
 !ifndef VERSION
-	!define VERSION "0.4.2"
+	!define VERSION "0.0.0"
 !endif
 !define FILES "..\..\Build\dist"
 !define EXAMPLEFILES "..\..\Build"
@@ -51,6 +51,11 @@ Section "Framework Files (required)" ;No components page, name is not important
 	File "${FILES}\NBehave.Spec.NUnit.dll"
 	File "${FILES}\NBehave.Spec.Xunit.dll"
 	File "${FILES}\NBehave.TestDriven.Plugin.dll"
+	File "${FILES}\Gallio.dll"
+	File "${FILES}\MbUnit.dll"
+	File "${FILES}\nunit.framework.dll"
+	File "${FILES}\Rhino.Mocks.dll"
+	File "${FILES}\xunit.dll"
 
 	; Write the installation path into the registry
 	WriteRegStr HKLM SOFTWARE\NBehave\${VERSION} "Install_Dir" "$INSTDIR"

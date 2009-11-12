@@ -135,15 +135,11 @@
 	</target>
 	
 	<target name="dist" depends="dist.examples">
-		<copy todir="${build.dir}\dist">
-			<fileset basedir="${build.dir}\Debug\NBehave">
-				<include name="**\NBehave*"/>
-				<exclude name="**\*.pdb" />
-			</fileset>
-		</copy>
+		
 		<zip zipfile="${build.dir}\NBehave_${project.fullversion}.zip">
 			<fileset basedir="${build.dir}\dist">
 				<include name="**\*" />
+				<include name="..\NBehave.Examples.zip" />
 			</fileset>
 		</zip>
 		
@@ -156,7 +152,7 @@
 		<delete file="${exampleFiles}" if="${file::exists(exampleFiles)}" />
 	</target>
 	
-	<target name="dist.examples">
+	<target name="dist.examples" depends="dist.binaries">
 		<property name="examplesdest.dir" value="${build.dir}\Examples" />
 		<property name="examplesource.dir" value="${solution.dir}\NBehave.Examples" />
 		<property name="references" value="foo;bar" />
@@ -165,20 +161,21 @@
 		<mkdir dir="${examplesdest.dir}" />
 		<copy todir="${examplesdest.dir}">
 			<fileset basedir="${examplesource.dir}">
-				<include name="**\*.*"/>
-        <exclude name="**\bin\**\*.*" />
+        <include name="**\*.*"/>        
+				<exclude name="**\bin\**\*.*" />
 				<exclude name="**\obj\**\*.*" />
 				<exclude name="**\_svn\**\*.*" />
 				<exclude name="**\.svn\**\*.*" />
 			</fileset>
 		</copy>
 		<copy todir="${examplesdest.dir}\lib">
-			<fileset basedir="${build.dir}\Debug\NBehave">
-				<include name="**\NBehave*.dll" />
-				<include name="**/nunit.framework.dll" />
+			<fileset basedir="${build.dir}\dist">
+				<include name="NBehave*.dll" />
+				<include name="nunit.framework.dll" />
 			</fileset>
 		</copy>
-		
+		<copy todir="${examplesdest.dir}\lib" flatten="true" file="tools\nant\tasks\net\NAnt.Contrib.Tasks.dll" />
+      
 		<xmllist file="${examplesdest.dir}\NBehave.Examples.csproj"
 		         property="references" delim=";"
 		         xpath="//xsi:Reference/xsi:HintPath/../@Include">
@@ -221,7 +218,22 @@
 			</fileset>
 		</zip>
 	</target>
-
+	
+	<target name="dist.binaries">
+		<copy todir="${build.dir}\dist">
+			<fileset basedir="${build.dir}\Debug\NBehave">
+				<include name="**\NBehave*"/>
+				<exclude name="**\*.pdb" />
+				<include name="nunit.framework.dll" />
+				<include name="Gallio.dll" />
+				<include name="MbUnit.dll" />
+				<include name="nunit.framework.dll" />
+				<include name="Rhino.Mocks.dll" />
+				<include name="xunit.dll" />
+			</fileset>
+		</copy>
+	</target>
+	
 </project>
 
 

@@ -61,7 +61,7 @@
     <Reference Include="NBehave.Spec.NUnit">
       <HintPath>..\..\build\Debug\NBehave\NBehave.Spec.NUnit.dll</HintPath>
     </Reference>
-    <Reference Include="nunit.framework, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+    <Reference Include="nunit.framework">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\nunit.framework.dll</HintPath>
     </Reference>
@@ -69,12 +69,8 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccountSpecs.cs" />
-    <Compile Include="AccountHolderSpecs.cs" />
     <Compile Include="Bowling Game\Specs\GameSpecs.cs" />
     <Compile Include="CommonAssemblyInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -96,25 +92,9 @@
     <None Include="Bowling Game\Specs\Bowling score calculation\One strike.scenario">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="msbuildTask.msbuild">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="nantTask.build">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Bowling Game\Specs\Bowling score calculation\Gutter game.scenario">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\NBehave.MSBuild\NBehave.MSBuild.csproj">
-      <Project>{8FF0E10C-FC63-4630-89AF-B039D341FA7D}</Project>
-      <Name>NBehave.MSBuild</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NBehave.NAnt\NBehave.NAnt.csproj">
-      <Project>{3CF07281-565F-412E-9710-E8104E0391D9}</Project>
-      <Name>NBehave.NAnt</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

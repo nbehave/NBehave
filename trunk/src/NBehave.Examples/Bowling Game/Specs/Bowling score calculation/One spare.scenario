@@ -1,7 +1,7 @@
 ﻿Scenario One Spare
 
-Given a game of bowling
-When I role one spare
-And the first preceding role is 3
-And the rest of my 17 roles are 0
-Then my score should be 16
+	Given a game of bowling
+	When I role one spare
+		And the first preceding role is 3
+		And the rest of my 17 roles are 0
+	Then my score should be 16

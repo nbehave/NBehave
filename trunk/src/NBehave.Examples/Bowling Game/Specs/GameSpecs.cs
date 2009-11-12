@@ -31,7 +31,7 @@ namespace NBehave.Examples.Bowling_Game.Specs
             _game.Score().ShouldEqual(theScore);
         }
 
-        [Given(@"the first preceding role is (?<pins>\d+)$")]
+        [Given(@"the first preceding role is $pins")]
         [Given(@"the second preceding role is (?<pins>\d+)$")]
         public void Roll(int pins)
         {
