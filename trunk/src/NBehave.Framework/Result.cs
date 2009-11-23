@@ -57,7 +57,7 @@ namespace NBehave.Narrator.Framework
 
         public override string ToString()
         {
-            return GetType().Name.Replace(typeof(Result).Name, "");
+        	return GetType().Name.Replace(typeof(Result).Name, "").ToLower();
         }
     }
 }

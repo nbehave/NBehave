@@ -67,6 +67,10 @@
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="ActionCatalog.cs" />
+    <Compile Include="EventListeners\Xml\EventReceived.cs" />
+    <Compile Include="EventListeners\Xml\EventType.cs" />
+    <Compile Include="EventListeners\Xml\StoryResultsEventReceived.cs" />
+    <Compile Include="EventListeners\Xml\XmlOutputWriter.cs" />
     <Compile Include="MessageEventData.cs" />
     <Compile Include="ScenarioMessage.cs" />
     <Compile Include="Text\ActionMethodInfo.cs" />
@@ -88,11 +92,7 @@
     <Compile Include="EventListeners\MultiOutputEventListener.cs" />
     <Compile Include="EventListeners\NullEventListener.cs" />
     <Compile Include="EventListeners\TextWriterEventListener.cs" />
-    <Compile Include="EventListeners\Xml\ScenarioXmlOutputWriter.cs" />
     <Compile Include="EventListeners\Xml\Timer.cs" />
-    <Compile Include="EventListeners\Xml\StoryXmlOutputWriter.cs" />
-    <Compile Include="EventListeners\Xml\ThemeXmlOutputWriter.cs" />
-    <Compile Include="EventListeners\Xml\XmlOutputBase.cs" />
     <Compile Include="EventListeners\Xml\XmlOutputEventListener.cs" />
     <Compile Include="GivenFragment.cs" />
     <Compile Include="IEventListener.cs" />

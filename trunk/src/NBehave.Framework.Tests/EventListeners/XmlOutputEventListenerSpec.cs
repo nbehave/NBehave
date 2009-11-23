@@ -88,7 +88,7 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
             }
 
             [Test]
-            public void Theme_node_should_have_one_pending_scenarios()
+            public void Theme_node_T1_should_have_one_pending_scenarios()
             {
                 Assert.AreEqual("1",
                                 _xmlDoc.SelectSingleNode(@"results/theme[@name='T1']").Attributes["scenariosPending"].
@@ -96,7 +96,23 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
             }
 
             [Test]
-            public void Theme_node_should_have_zero_failed_scenarios()
+            public void Theme_node_T1_should_have_zero_failed_scenarios()
+            {
+                Assert.AreEqual("0",
+                                _xmlDoc.SelectSingleNode(@"results/theme[@name='T1']").Attributes["scenariosFailed"].
+                                    Value);
+            }
+
+            [Test]
+            public void Theme_node_T2_should_have_zero_pending_scenarios()
+            {
+                Assert.AreEqual("1",
+                                _xmlDoc.SelectSingleNode(@"results/theme[@name='T1']").Attributes["scenariosPending"].
+                                    Value);
+            }
+
+            [Test]
+            public void Theme_node_T2_should_have_one_failed_scenarios()
             {
                 Assert.AreEqual("0",
                                 _xmlDoc.SelectSingleNode(@"results/theme[@name='T1']").Attributes["scenariosFailed"].
