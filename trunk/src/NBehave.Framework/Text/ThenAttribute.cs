@@ -15,8 +15,10 @@ namespace NBehave.Narrator.Framework
             Type = "Then";
         }
 
-        public ThenAttribute(string regex)
-            : this(new Regex(regex))
-        { }
+        public ThenAttribute(string regexOrTokenString)
+            : base(regexOrTokenString)
+        {
+            Type = "Then";            
+        }
     }
 }

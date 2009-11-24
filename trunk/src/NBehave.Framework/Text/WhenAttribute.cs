@@ -15,8 +15,10 @@ namespace NBehave.Narrator.Framework
             Type = "When";
         }
 
-        public WhenAttribute(string regex)
-            : this(new Regex(regex))
-        { }
+        public WhenAttribute(string regexOrTokenString)
+            : base(regexOrTokenString)
+        {
+            Type = "When";            
+        }
     }
 }
