@@ -67,7 +67,12 @@ namespace NBehave.Narrator.Framework
 				if (args[argNumber].ParameterType.IsArray)
 				{
 					var strParamAsArray = strParam.Replace(Environment.NewLine, "\n")
-						.Split(new[] { '\n' });
+						.Split(new[] { ',' });
+					for (int i =0; i < strParamAsArray.Length; i++)
+					{
+						if (string.IsNullOrEmpty(strParamAsArray[i]) == false)
+							strParamAsArray[i] = strParamAsArray[i].Trim();
+					}
 					while (string.IsNullOrEmpty(strParamAsArray.Last()))
 						strParamAsArray = strParamAsArray.Take(strParamAsArray.Length - 1).ToArray();
 					values[argNumber] = Convert.ChangeType(strParamAsArray, args[argNumber].ParameterType); //converts string to an instance of args[argNumber]
@@ -99,17 +104,17 @@ namespace NBehave.Narrator.Framework
 
 		private ActionMethodInfo FindMatchingAction(ActionStepText actionStepText)
 		{
-		    string message = actionStepText.Text;
+			string message = actionStepText.Text;
 			ActionMethodInfo matchedAction = null;
 			int lengthOfMatch = -1;
-		    foreach (ActionMethodInfo action in _actions)
+			foreach (ActionMethodInfo action in _actions)
 			{
 				Regex regex = action.ActionStepMatcher;
 				var match = regex.Match(message);
 				if (match.Success)
 				{
 					if (MatchesFileName(action, actionStepText)
-					   && match.Value.Length > lengthOfMatch)
+					    && match.Value.Length > lengthOfMatch)
 					{
 						lengthOfMatch = match.Value.Length;
 						matchedAction = action;
@@ -133,7 +138,7 @@ namespace NBehave.Narrator.Framework
 		{
 			var tokens = new List<string>();
 
-			var matches = Regex.Matches(message, @"\$[a-zA-Z]+");
+			var matches = Regex.Matches(message, @"(\$[a-zA-Z]\w+)|(\[[a-zA-Z]\w+\])");
 			foreach (var match in matches)
 			{
 				tokens.Add(match.ToString());

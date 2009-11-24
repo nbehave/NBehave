@@ -18,6 +18,54 @@ namespace NBehave.Narrator.Framework.Specifications
 		}
 
 		[Context]
+		public class Valid_parameter_names : ActionCatalogSpec
+		{
+			ActionCatalog _actionCatalog = new ActionCatalog();
+			
+			[Specification]
+			public void Should_consider_any_character_in_english_alphabet_as_valid()
+			{
+				string message = _actionCatalog.BuildMessage("valid $parameterName" ,new[] { "parameter" });
+				Assert.AreEqual("valid parameter", message);
+			}
+
+			[Specification]
+			public void Should_consider_any_character_in_english_alphabet_mixed_with_numbers_as_valid()
+			{
+				string message = _actionCatalog.BuildMessage("valid $parameter1Name2" ,new[] { "parameter" });
+				Assert.AreEqual("valid parameter", message);
+			}
+
+			[Specification]
+			public void Should_consider_any_character_in_english_alphabet_mixed_with_underscore_valid()
+			{
+				string message = _actionCatalog.BuildMessage("valid $parameter_Name" ,new[] { "parameter" });
+				Assert.AreEqual("valid parameter", message);
+			}
+
+			[Specification]
+			public void Should_not_consider_parameter_name_as_valid_if_it_starts_with_a_number()
+			{
+				string message = _actionCatalog.BuildMessage("valid $1parameter1Name2" ,new[] { "parameter" });
+				Assert.AreEqual("valid $1parameter1Name2", message);
+			}
+
+			[Specification]
+			public void Should_not_consider_space_as_part_of_parameter_name()
+			{
+				string message = _actionCatalog.BuildMessage("valid $parameterName it is" ,new[] { "parameter" });
+				Assert.AreEqual("valid parameter it is", message);
+			}
+
+			[Specification]
+			public void Should_consider_parameter_name_enclosed_in_square_brackets_as_valid()
+			{
+				string message = _actionCatalog.BuildMessage("valid [parameter1Name2]" ,new[] { "parameter" });
+				Assert.AreEqual("valid parameter", message);
+			}
+		}
+		
+		[Context]
 		public class when_adding_an_action_to_the_catalog:ActionCatalogSpec
 		{
 			[Specification]
@@ -65,7 +113,7 @@ namespace NBehave.Narrator.Framework.Specifications
 		}
 
 		[Context]
-		public class When_fetching_parameters_for_actionStep : TextRunnerSpec
+		public class When_fetching_parameters_for_actionStep : ActionCatalogSpec
 		{
 			ActionCatalog _actionCatalog;
 
@@ -161,11 +209,14 @@ namespace NBehave.Narrator.Framework.Specifications
 				object paramReceived = null;
 				Action<string[]> actionStep = p => { };
 				Action<object> action = value => { paramReceived = value; };
-				_actionCatalog.Add(new ActionMethodInfo(new Regex(@"a string\s+(?<value>(\w+\s+)+)"), action, actionStep.Method));
-				string multiLineValue = "one" + Environment.NewLine + "two";
+				_actionCatalog.Add(new ActionMethodInfo(new Regex(@"a string\s+(?<value>(\w+,?\s*)+)"), action, actionStep.Method));
+				string multiLineValue = "one, two";
 				string actionString = "a string " + Environment.NewLine + multiLineValue;
 				object[] values = _actionCatalog.GetParametersForActionStepText(new ActionStepText(actionString,""));
 				Assert.That(values[0], Is.TypeOf(typeof(string[])));
+				var arr = (string[])values[0];
+				Assert.AreEqual("one", arr[0]);
+				Assert.AreEqual("two", arr[1]);
 			}
 
 			[Specification]
@@ -173,8 +224,8 @@ namespace NBehave.Narrator.Framework.Specifications
 			{
 				Action<string[]> action = value => { };
 
-				_actionCatalog.Add(new ActionMethodInfo(new Regex(@"a string\s+(?<value>(\w+\s*)+)"), action, action.Method));
-				string multiLineValue = "one" + Environment.NewLine + "two" + Environment.NewLine;
+				_actionCatalog.Add(new ActionMethodInfo(new Regex(@"a string\s+(?<value>(\w+,?\s*)+)"), action, action.Method));
+				string multiLineValue = "one,two," + Environment.NewLine;
 				string actionString = "a string " + Environment.NewLine + multiLineValue;
 				object[] values = _actionCatalog.GetParametersForActionStepText(new ActionStepText(actionString,""));
 				Assert.That((values[0] as string[]), Is.EqualTo(new string[] { "one", "two" }));
