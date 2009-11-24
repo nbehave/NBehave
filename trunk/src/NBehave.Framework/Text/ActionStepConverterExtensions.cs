@@ -5,6 +5,9 @@ namespace NBehave.Narrator.Framework
 {
     internal static class ActionStepConverterExtensions
     {
+        public const string TokenRegexPattern = @"(\$[a-zA-Z]\w+)|(\[[a-zA-Z]\w+\])";
+        private static readonly Regex _tokenPattern = new Regex(TokenRegexPattern);
+        private static readonly Regex _validRegexGroupName = new Regex(@"[a-zA-Z]\w+");
 
         public static Regex AsRegex(this string actionStep)
         {
@@ -15,8 +18,9 @@ namespace NBehave.Narrator.Framework
                 if (WordIsToken(word))
                 {
                     var groupName = GetValidRegexGroupName(word);
-                    var stuffAtEnd = RemoveTokenPrefix(word).Replace(groupName, string.Empty);
-                    regex += string.Format(@"(?<{0}>.+){1}\s+", groupName, stuffAtEnd);
+                    var stuffAtStart = word.Substring(0, word.IndexOf(groupName) - 1);
+                    var stuffAtEnd = word.Substring(word.IndexOf(groupName) + groupName.Length);
+                    regex += string.Format(@"{1}(?<{0}>.+){2}\s+", groupName, stuffAtStart, stuffAtEnd);
                 }
                 else
                     regex += string.Format(@"{0}\s+", word);
@@ -29,13 +33,12 @@ namespace NBehave.Narrator.Framework
 
         private static bool WordIsToken(string word)
         {
-            return word.StartsWith(ActionCatalog.TokenPrefix.ToString());
+            return _tokenPattern.IsMatch(word);
         }
 
         private static string GetValidRegexGroupName(string word)
         {
-            var regex = new Regex(@"\w+");
-            return regex.Match(word).Value;
+            return _validRegexGroupName.Match(word).Value;
         }
 
         private static string RemoveTokenPrefix(string word)

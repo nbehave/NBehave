@@ -112,8 +112,14 @@ namespace NBehave.Narrator.Framework.Specifications
             public void Given_a_method_with_a_value_intParam_plus_text_stringParam(int intParam, string stringParam)
             { }
 
+            [Given("a method with \"embedded\" parameter like \"$param\" should work")]
+            public void EmbeddedParam(string param)
+            {
+                
+            }
+
             [Specification]
-            public void Should_match_parameters_in_tokenString_to_methood_parameters()
+            public void Should_match_parameters_in_tokenString_to_method_parameters()
             {
                 var parameters = _actionCatalog.GetParametersForActionStepText(new ActionStepText("a method with tokenstring and two parameters, one int value 42 plus text thistext", ""));
                 Assert.That(parameters[0], Is.EqualTo(42));
@@ -127,6 +133,14 @@ namespace NBehave.Narrator.Framework.Specifications
                 var action = _actionCatalog.GetAction(actionStepToFind);
                 Assert.That(action.ActionType, Is.EqualTo("Given"));
                 Assert.That(action.ActionStepMatcher.ToString(), Is.EqualTo(@"^a\s+method\s+with\s+tokenstring\s+and\s+two\s+parameters,\s+one\s+int\s+value\s+(?<intParam>.+)\s+plus\s+text\s+(?<stringParam>.+)\s*$"));
+            }
+
+            [Specification]
+            public void Should_find_given_with_embedded_param()
+            {
+                var actionStepToFind = new ActionStepText("a method with \"embedded\" parameter like \"this\" should work", "file");
+                var action = _actionCatalog.GetAction(actionStepToFind);
+                Assert.That(action, Is.Not.Null);
             }
         }
 

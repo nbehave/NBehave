@@ -63,6 +63,13 @@ namespace NBehave.Narrator.Framework.Specifications
 				string message = _actionCatalog.BuildMessage("valid [parameter1Name2]" ,new[] { "parameter" });
 				Assert.AreEqual("valid parameter", message);
 			}
+
+            [Specification]
+            public void Should_be_able_to_embedd_a_parameter_inside_non_alphabetic_characters()
+            {
+                string message = _actionCatalog.BuildMessage("I should see a message, \"$message\"", new[] { "Hello, Morgan" });
+                Assert.AreEqual("I should see a message, \"Hello, Morgan\"", message);
+            }
 		}
 		
 		[Context]

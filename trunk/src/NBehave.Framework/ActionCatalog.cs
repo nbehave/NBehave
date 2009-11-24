@@ -56,7 +56,6 @@ namespace NBehave.Narrator.Framework
 		{
 			ActionMethodInfo action = GetAction(actionStepText);
 			List<string> paramNames = GetParameterNames(action);
-			//Type[] args = action.Action.GetType().GetGenericArguments();
 			ParameterInfo[] args = action.ParameterInfo;
 			var values = new object[args.Length];
 
@@ -138,7 +137,7 @@ namespace NBehave.Narrator.Framework
 		{
 			var tokens = new List<string>();
 
-			var matches = Regex.Matches(message, @"(\$[a-zA-Z]\w+)|(\[[a-zA-Z]\w+\])");
+		    var matches = Regex.Matches(message, ActionStepConverterExtensions.TokenRegexPattern);
 			foreach (var match in matches)
 			{
 				tokens.Add(match.ToString());
