@@ -64,24 +64,40 @@ namespace NBehave.Narrator.Framework
 			{
 				var strParam = match.Groups[paramNames[argNumber]].Value;
 				if (args[argNumber].ParameterType.IsArray)
-				{
-					var strParamAsArray = strParam.Replace(Environment.NewLine, "\n")
-						.Split(new[] { ',' });
-					for (int i =0; i < strParamAsArray.Length; i++)
-					{
-						if (string.IsNullOrEmpty(strParamAsArray[i]) == false)
-							strParamAsArray[i] = strParamAsArray[i].Trim();
-					}
-					while (string.IsNullOrEmpty(strParamAsArray.Last()))
-						strParamAsArray = strParamAsArray.Take(strParamAsArray.Length - 1).ToArray();
-					values[argNumber] = Convert.ChangeType(strParamAsArray, args[argNumber].ParameterType); //converts string to an instance of args[argNumber]
-				}
+					values[argNumber] = CreateArray(strParam, args[argNumber].ParameterType);
 				else
 					values[argNumber] = Convert.ChangeType(strParam, args[argNumber].ParameterType); //converts string to an instance of args[argNumber]
 			}
 			return values;
 		}
 
+		private object CreateArray(string strParam, Type arrayOfType)
+		{
+			var strParamAsArray = strParam.Replace(Environment.NewLine, "\n").Split(new[] { ',' });
+			for (int i = 0; i < strParamAsArray.Length; i++) {
+				if (string.IsNullOrEmpty(strParamAsArray[i]) == false)
+					strParamAsArray[i] = strParamAsArray[i].Trim();
+			}
+			while (string.IsNullOrEmpty(strParamAsArray.Last()))
+				strParamAsArray = strParamAsArray.Take(strParamAsArray.Length - 1).ToArray();
+			var typedArray = Activator.CreateInstance(arrayOfType, strParamAsArray.Length);
+			var typeInList = arrayOfType.GetElementType();
+			var method = this.GetType().GetMethod("SetValue", BindingFlags.NonPublic | BindingFlags.Instance);
+			Type[] types = new[] { typeInList };
+			var genMethod = method.MakeGenericMethod(types);
+			for (int i = 0; i < strParamAsArray.Length; i++) 
+			{
+				object value = Convert.ChangeType(strParamAsArray[i], typeInList);
+				genMethod.Invoke(this, new object[] { typedArray, i, value });
+			}
+			return typedArray;
+		}
+
+		private void SetValue<T>(T[] array, int index, T value)
+		{
+			array[index] = value;
+		}
+	
 		public ActionMethodInfo GetAction(ActionStepText message)
 		{
 			return FindMatchingAction(message);
@@ -137,7 +153,7 @@ namespace NBehave.Narrator.Framework
 		{
 			var tokens = new List<string>();
 
-		    var matches = Regex.Matches(message, ActionStepConverterExtensions.TokenRegexPattern);
+			var matches = Regex.Matches(message, ActionStepConverterExtensions.TokenRegexPattern);
 			foreach (var match in matches)
 			{
 				tokens.Add(match.ToString());

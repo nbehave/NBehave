@@ -237,6 +237,23 @@ namespace NBehave.Narrator.Framework.Specifications
 				object[] values = _actionCatalog.GetParametersForActionStepText(new ActionStepText(actionString,""));
 				Assert.That((values[0] as string[]), Is.EqualTo(new string[] { "one", "two" }));
 			}
+
+			[Specification]
+			public void Should_get_multiline_value_as_array_of_integers()
+			{
+				object paramReceived = null;
+				Action<int[]> actionStep = p => { };
+				Action<object> action = value => { paramReceived = value; };
+				_actionCatalog.Add(new ActionMethodInfo(new Regex(@"a list of integers (?<value>(\d+,?\s*)+)"), action, actionStep.Method));
+				string multiLineValue = "1, 2, 5";
+				string actionString = "a list of integers " + multiLineValue;
+				object[] values = _actionCatalog.GetParametersForActionStepText(new ActionStepText(actionString,""));
+				Assert.That(values[0], Is.TypeOf(typeof(int[])));
+				var arr = (int[])values[0];
+				Assert.AreEqual(1, arr[0]);
+				Assert.AreEqual(2, arr[1]);
+				Assert.AreEqual(5, arr[2]);
+			}
 		}
 		
 		[Context]
