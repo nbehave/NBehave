@@ -55,7 +55,8 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NBehave.Narrator.Framework">
+    <Reference Include="NBehave.Narrator.Framework, Version=0.4.2.0, Culture=neutral, PublicKeyToken=d421feca0f4a05f6, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\Debug\NBehave\NBehave.Narrator.Framework.dll</HintPath>
     </Reference>
     <Reference Include="NBehave.Spec.NUnit">
@@ -73,6 +74,8 @@
   <ItemGroup>
     <Compile Include="Bowling Game\Specs\GameSpecs.cs" />
     <Compile Include="CommonAssemblyInfo.cs" />
+    <Compile Include="Game of life\Game.cs" />
+    <Compile Include="Game of life\Specs\GameSpecs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Bowling Game\Game.cs" />
   </ItemGroup>
@@ -90,6 +93,15 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Bowling Game\Specs\Bowling score calculation\One strike.scenario">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Game of life\GameOfLife.nant.build">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Game of life\Specs\I_can_toggle_a_cell.scenario">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Game of life\Specs\The_grid_starts_empty.scenario">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Bowling Game\Specs\Bowling score calculation\Gutter game.scenario">
