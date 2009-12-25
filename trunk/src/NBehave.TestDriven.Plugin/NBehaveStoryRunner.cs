@@ -37,11 +37,11 @@ namespace NBehave.TestDriven.Plugin
 
         private StoryResults RunStories(Assembly assembly, MemberInfo member, IEventListener listener)
         {
-            var runner = new StoryRunner();
+            var runner = new StoryRunner(listener);
             runner.StoryRunnerFilter = StoryRunnerFilter.GetFilter(member);
             runner.LoadAssembly(assembly);
 
-            StoryResults results = runner.Run(listener);
+            StoryResults results = runner.Run();
 
             return results;
         }

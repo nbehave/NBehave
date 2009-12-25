@@ -51,13 +51,15 @@ namespace NBehave.MSBuild
 
 			WriteHeaderInto(output);
 
-			RunnerBase runner;
+            IEventListener listener = EventListeners.CreateEventListenerUsing(msbuildLogWriter,
+                                                                              TextOutputFile,
+                                                                              XmlOutputFile); RunnerBase runner;
 
 			if (ScenarioFiles == null || ScenarioFiles.Length == 0)
-				runner = new StoryRunner { IsDryRun = DryRun };
+				runner = new StoryRunner(listener) { IsDryRun = DryRun };
 			else
 			{
-				runner = new TextRunner();
+				runner = new TextRunner(listener);
 				((TextRunner)runner).Load(ScenarioFiles);
 			}
 
@@ -66,9 +68,8 @@ namespace NBehave.MSBuild
 				runner.LoadAssembly(path);
 			}
 
- 			StoryResults = runner.Run(EventListeners.CreateEventListenerUsing(msbuildLogWriter,
-			                                                                  TextOutputFile,
-			                                                                  XmlOutputFile));
+
+		    StoryResults = runner.Run();
 
 			if (DryRun)
 				return true;

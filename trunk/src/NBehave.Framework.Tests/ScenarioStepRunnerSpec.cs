@@ -9,182 +9,178 @@ using Specification = NUnit.Framework.TestAttribute;
 
 namespace NBehave.Narrator.Framework.Specifications
 {
-	[TestFixture]
-	public class ScenarioStepRunnerSpec
-	{
-		private ScenarioStepRunner _runner;
-		private ActionCatalog _actionCatalog;
+    [TestFixture]
+    public class ScenarioStepRunnerSpec
+    {
+        private ScenarioStepRunner _runner;
+        private ActionCatalog _actionCatalog;
+        private StringStepRunner _stringStepRunner;
 
-		[SetUp]
-		public void SetUp()
-		{
-			var actionStep = new ActionStep();
-			var actionStepAlias = new ActionStepAlias();
-			var textToTokenStringParser = new TextToTokenStringsParser(actionStepAlias, actionStep);
-			_actionCatalog = new ActionCatalog();
-			var actionSteprunner = new ActionStepRunner(_actionCatalog);
-			_runner = new ScenarioStepRunner(textToTokenStringParser, actionSteprunner, actionStep);
-		}
+        private ScenarioWithSteps CreateScenarioWithSteps()
+        {
+            return CreateScenarioWithSteps(MockRepository.GenerateStub<IEventListener>());
+        }
 
-		
-		public class When_running_a_scenario : ScenarioStepRunnerSpec
-		{
-			[Test]
-			public void Should_have_result_for_each_step()
-			{
-				Action<string> action = name => Assert.AreEqual("Morgan", name);
-				_actionCatalog.Add(new ActionMethodInfo(new Regex(@"my name is (?<name>\w+)"), action, action.Method));
+        private ScenarioWithSteps CreateScenarioWithSteps(IEventListener listener)
+        {
+            var scenario = new ScenarioWithSteps(_stringStepRunner, listener);
+            return scenario;
+        }
 
-				ScenarioResult scenarioResult = _runner.RunScenario(
-					new ScenarioSteps
-					{
-						Steps =
-							"Given my name is Axel" + Environment.NewLine +
-							"And my name is Morgan"
-					}, 1);
+        [SetUp]
+        public void SetUp()
+        {
+            _actionCatalog = new ActionCatalog();
+            _stringStepRunner = new StringStepRunner(_actionCatalog);
+            _runner = new ScenarioStepRunner();
+        }
 
-				Assert.AreEqual(2, scenarioResult.ActionStepResults.Count());
-			}
+        public class When_running_a_scenario : ScenarioStepRunnerSpec
+        {
+            [Test]
+            public void Should_have_result_for_each_step()
+            {
+                Action<string> action = name => Assert.AreEqual("Morgan", name);
+                _actionCatalog.Add(new ActionMethodInfo(new Regex(@"my name is (?<name>\w+)"), action, action.Method, "Given"));
 
-			
-			[Test]
-			public void Should_have_different_result_for_each_step()
-			{
-				Action<string> action = name => Assert.AreEqual("Morgan", name);
-				_actionCatalog.Add(new ActionMethodInfo(new Regex(@"my name is (?<name>\w+)"), action, action.Method));
+                var scenario = CreateScenarioWithSteps();
+                scenario.AddStep("Given my name is Axel");
+                scenario.AddStep("And my name is Morgan");
+                var scenarioResult = _runner.RunScenarios(new[] { scenario }).First();
 
-				ScenarioResult scenarioResult = _runner.RunScenario(
-					new ScenarioSteps
-					{
-						Steps =
-							"Given my name is Morgan" + Environment.NewLine +
-							"Given my name is Axel"
-					}, 1);
+                Assert.AreEqual(2, scenarioResult.ActionStepResults.Count());
+            }
 
-				Assert.That(scenarioResult.ActionStepResults.First().Result,
-				            Is.TypeOf(typeof(Passed)));
-				Assert.That(scenarioResult.ActionStepResults.Last().Result,
-				            Is.TypeOf(typeof(Failed)));
-			}
-		}
-		
-		
-		public class When_Running_scenario_stream_with_multiple_scenarios : ScenarioStepRunnerSpec
-		{
-			[Test]
-			public void Should_only_call_eventlistener_once_for_each_given()
-			{
-				Action<string> action = name => Assert.AreEqual("Morgan", name);
-				_actionCatalog.Add(new ActionMethodInfo(new Regex(@"my name is (?<name>\w+)"), action, action.Method));
+            [Test]
+            public void Should_have_different_result_for_each_step()
+            {
+                Action<string> action = name => Assert.AreEqual("Morgan", name);
+                _actionCatalog.Add(new ActionMethodInfo(new Regex(@"my name is (?<name>\w+)"), action, action.Method, "Given"));
 
-				ScenarioSteps fooScenario = new ScenarioSteps {
-					Steps =
-						"Scenario: foo" + Environment.NewLine +
-						"Given foo" + Environment.NewLine +
-						"When foo" + Environment.NewLine +
-						"Then foo"};
-				ScenarioSteps barScenario = new ScenarioSteps {
-					Steps =
-						"Scenario: bar" + Environment.NewLine +
-						"Given bar" + Environment.NewLine +
-						"When bar" + Environment.NewLine +
-						"Then bar"};
+                var scenario = CreateScenarioWithSteps();
+                scenario.AddStep("Given my name is Morgan");
+                scenario.AddStep("Given my name is Axel");
+                var scenarioResult = _runner.RunScenarios(new[] { scenario }).First();
 
-				StoryResults storyResults = new StoryResults();
 
-				IEventListener evtListener = MockRepository.GenerateMock<IEventListener>();
-				_runner.EventListener = evtListener;
-				_runner.RunScenarios(new List<ScenarioSteps> { fooScenario, barScenario}, storyResults);
+                Assert.That(scenarioResult.ActionStepResults.First().Result, Is.TypeOf(typeof(Passed)));
+                Assert.That(scenarioResult.ActionStepResults.Last().Result, Is.TypeOf(typeof(Failed)));
+            }
+        }
 
-				evtListener.AssertWasCalled(f=>f.ScenarioMessageAdded("Given foo - PENDING"));
-				evtListener.AssertWasCalled(f=>f.ScenarioMessageAdded("Given bar - PENDING"));
-				
-				StringAssert.DoesNotContain("foo", storyResults.ScenarioResults[1].Message);
-			}
-		}
 
-		
-		[ActionSteps, TestFixture]
-		public class When_running_many_scenarios_and_class_with_actionSteps_implements_notification_attributes : ScenarioStepRunnerSpec
-		{
-			private int _timesBeforeScenarioWasCalled;
-			private int _timesBeforeStepWasCalled;
-			private int _timesAfterStepWasCalled;
-			private int _timesAfterScenarioWasCalled;
+        public class When_Running_scenario_stream_with_multiple_scenarios : ScenarioStepRunnerSpec
+        {
+            [Test]
+            public void Should_only_call_eventlistener_once_for_each_given()
+            {
+                Action<string> action = name => Assert.AreEqual("Morgan", name);
+                _actionCatalog.Add(new ActionMethodInfo(new Regex(@"my name is (?<name>\w+)"), action, action.Method, "Given"));
 
-			[Given(@"something")]
-			public void Given_something()
-			{ }
+                var evtListener = MockRepository.GenerateMock<IEventListener>();
 
-			[BeforeScenario]
-			public void OnBeforeScenario()
-			{
-				_timesBeforeScenarioWasCalled++;
-			}
+                var fooScenario = CreateScenarioWithSteps(evtListener);
+                fooScenario.Title = "foo";
+                fooScenario.AddStep("Given foo");
+                fooScenario.AddStep("When foo");
+                fooScenario.AddStep("Then foo");
 
-			[BeforeStep]
-			public void OnBeforeStep()
-			{
-				_timesBeforeStepWasCalled++;
-			}
+                var barScenario = CreateScenarioWithSteps(evtListener);
+                barScenario.Title = "bar";
+                barScenario.AddStep("Given bar");
+                barScenario.AddStep("When bar");
+                barScenario.AddStep("Then bar");
 
-			[AfterStep]
-			public void OnAfterStep()
-			{
-				_timesAfterStepWasCalled++;
-			}
+                _runner.EventListener = evtListener;
+                var scenarioResults = _runner.RunScenarios(new List<ScenarioWithSteps> { fooScenario, barScenario });
 
-			[AfterScenario]
-			public void OnAfterScenario()
-			{
-				_timesAfterScenarioWasCalled++;
-			}
-			
-			[TestFixtureSetUpAttribute]
-			public void Setup()
-			{
-				base.SetUp();
-				Action action = Given_something;
-				_actionCatalog.Add(new ActionMethodInfo(new Regex(@"something to count$"), action, action.Method, this));
-				
-				ScenarioSteps firstScenario = new ScenarioSteps {
-					Steps =
-						"Scenario: One" + Environment.NewLine +
-						"Given something to count"};
-				ScenarioSteps secondScenario = new ScenarioSteps {
-					Steps =
-						"Scenario: Two" + Environment.NewLine +
-						"Given something to count" + Environment.NewLine +
-						"Given something to count"};
+                evtListener.AssertWasCalled(f => f.ScenarioMessageAdded("Given foo - PENDING"));
+                evtListener.AssertWasCalled(f => f.ScenarioMessageAdded("Given bar - PENDING"));
 
-				_runner.EventListener = MockRepository.GenerateStub<IEventListener>();
-				var storyResults = new StoryResults();
-				_runner.RunScenarios(new List<ScenarioSteps> { firstScenario, secondScenario}, storyResults);
-			}
+                StringAssert.DoesNotContain("foo", scenarioResults.Skip(1).First().Message);
+            }
+        }
 
-			[Specification]
-			public void should_Call_before_Scenario_once_per_scenario()
-			{
-				Assert.That(_timesBeforeScenarioWasCalled, Is.EqualTo(2));
-			}
 
-			[Specification]
-			public void should_Call_after_Scenario_once_per_scenario()
-			{
-				Assert.That(_timesAfterScenarioWasCalled, Is.EqualTo(2));
-			}
-			
-			[Specification]
-			public void should_Call_before_step_once_per_step()
-			{
-				Assert.That(_timesBeforeStepWasCalled, Is.EqualTo(3));
-			}
+        [ActionSteps, TestFixture]
+        public class When_running_many_scenarios_and_class_with_actionSteps_implements_notification_attributes : ScenarioStepRunnerSpec
+        {
+            private int _timesBeforeScenarioWasCalled;
+            private int _timesBeforeStepWasCalled;
+            private int _timesAfterStepWasCalled;
+            private int _timesAfterScenarioWasCalled;
 
-			[Specification]
-			public void should_call_after_step_once_per_step()
-			{
-				Assert.That(_timesAfterStepWasCalled, Is.EqualTo(3));
-			}
-		}
-	}
+            [Given(@"something")]
+            public void Given_something()
+            { }
+
+            [BeforeScenario]
+            public void OnBeforeScenario()
+            {
+                _timesBeforeScenarioWasCalled++;
+            }
+
+            [BeforeStep]
+            public void OnBeforeStep()
+            {
+                _timesBeforeStepWasCalled++;
+            }
+
+            [AfterStep]
+            public void OnAfterStep()
+            {
+                _timesAfterStepWasCalled++;
+            }
+
+            [AfterScenario]
+            public void OnAfterScenario()
+            {
+                _timesAfterScenarioWasCalled++;
+            }
+
+            [TestFixtureSetUp]
+            public void Setup()
+            {
+                base.SetUp();
+                Action action = Given_something;
+                _actionCatalog.Add(new ActionMethodInfo(new Regex(@"something to count$"), action, action.Method, "Given", this));
+
+                var firstScenario = CreateScenarioWithSteps();
+
+                firstScenario.AddStep("Scenario: One");
+                firstScenario.AddStep("Given something to count");
+                var secondScenario = CreateScenarioWithSteps();
+                secondScenario.AddStep("Scenario: Two");
+                secondScenario.AddStep("Given something to count");
+                secondScenario.AddStep("Given something to count");
+
+                _runner.EventListener = MockRepository.GenerateStub<IEventListener>();
+                _runner.RunScenarios(new List<ScenarioWithSteps> { firstScenario, secondScenario });
+            }
+
+            [Specification]
+            public void should_Call_before_Scenario_once_per_scenario()
+            {
+                Assert.That(_timesBeforeScenarioWasCalled, Is.EqualTo(2));
+            }
+
+            [Specification]
+            public void should_Call_after_Scenario_once_per_scenario()
+            {
+                Assert.That(_timesAfterScenarioWasCalled, Is.EqualTo(2));
+            }
+
+            [Specification]
+            public void should_Call_before_step_once_per_step()
+            {
+                Assert.That(_timesBeforeStepWasCalled, Is.EqualTo(3));
+            }
+
+            [Specification]
+            public void should_call_after_step_once_per_step()
+            {
+                Assert.That(_timesAfterStepWasCalled, Is.EqualTo(3));
+            }
+        }
+    }
 }

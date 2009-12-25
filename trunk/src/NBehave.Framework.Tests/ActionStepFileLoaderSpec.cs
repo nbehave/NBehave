@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using Rhino.Mocks;
 using Context = NUnit.Framework.TestFixtureAttribute;
 using Specification = NUnit.Framework.TestAttribute;
 
@@ -12,7 +13,7 @@ namespace NBehave.Narrator.Framework.Specifications
         [SetUp]
         public void Establish_context()
         {
-            _actionStepFileLoader = new ActionStepFileLoader(new ActionStepAlias(), new ActionStep());
+            _actionStepFileLoader = new ActionStepFileLoader(new StringStepRunner(new ActionCatalog()), MockRepository.GenerateStub<IEventListener>());
         }
 
 

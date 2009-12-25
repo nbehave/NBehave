@@ -142,7 +142,7 @@ namespace NBehave.Narrator.Framework
 					catch (Exception ex)
 					{
 						result = new ActionStepResult(fullMessage, new Failed(ex));
-						ScenarioResults.Last.Value.Fail(ex);
+						//ScenarioResults.Last.Value.Fail(ex);
 						SendFailedMessageEvent(type, message, messageParameters);
 						throw;
 					}
@@ -203,7 +203,7 @@ namespace NBehave.Narrator.Framework
 				ActionStepText actionStepText = new ActionStepText(message, Title);
 				if (_currentScenario.IsPending)
 				{
-					SendMessageEvent(type, actionStepText.Text);
+					SendMessageEvent(type, actionStepText.Step);
 					return;
 				}
 
@@ -212,15 +212,15 @@ namespace NBehave.Narrator.Framework
 					ActionMethodInfo actionMethodInfo = new ActionMethodInfo();
 					if (_catalog.ActionExists(actionStepText))
 						actionMethodInfo = _catalog.GetAction(actionStepText);
-					InvokeActionBase(type, actionStepText.Text, null, null, actionMethodInfo.MethodInfo, new object[0]);
+					InvokeActionBase(type, actionStepText.Step, null, null, actionMethodInfo.MethodInfo, new object[0]);
 				}
 				else
 				{
 					if (_catalog.ActionExists(actionStepText) == false)
 					{
-						var result = new ActionStepResult(actionStepText.Text, new Pending("action for given is missing"));
+						var result = new ActionStepResult(actionStepText.Step, new Pending("action for given is missing"));
 						ScenarioResults.Last.Value.AddActionStepResult(result);
-						SendMessageEvent(type, actionStepText.Text + " - PENDING");
+						SendMessageEvent(type, actionStepText.Step + " - PENDING");
 					}
 					ValidateActionExists(message);
 
@@ -301,7 +301,7 @@ namespace NBehave.Narrator.Framework
 			ActionStepText actionStepText = new ActionStepText(message, Title);
 			if (_catalog.ActionExists(actionStepText))
 				return;
-			_catalog.Add(actionStepText.Text, action, methodInfo);
+			_catalog.Add(actionStepText.Step, action, methodInfo);
 		}
 
 		private void ValidateActionExists(string message)

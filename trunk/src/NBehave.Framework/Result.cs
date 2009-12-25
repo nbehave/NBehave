@@ -2,24 +2,37 @@ using System;
 
 namespace NBehave.Narrator.Framework
 {
-	public class ActionStepResult : Result
-	{
-		public string ActionStep { get; private set; }
-		public Result Result { get; private set; }
-		
-		public ActionStepResult(string actionStep, Result resultForActionStep)
-			: base(resultForActionStep.Message)
-		{
-			ActionStep = actionStep;
-			Result = resultForActionStep;
-		}
-		
-		public override string ToString()
-		{
-			return Result.ToString();
-		}
-	}
-	
+    public class ActionStepResult : Result
+    {
+        public string ActionStep { get; private set; }
+        public Result Result { get; private set; }
+
+        public ActionStepResult(string actionStep, Result resultForActionStep)
+            : base(resultForActionStep.Message)
+        {
+            ActionStep = actionStep;
+            Result = resultForActionStep;
+        }
+
+
+        public void MergeResult(Result stepResult)
+        {
+            if (stepResult is Passed)
+                return;
+            if (stepResult is Pending && Result is Passed)
+                Result = stepResult;
+            if (stepResult is Failed && (Result is Passed || Result is Pending))
+                Result = stepResult;
+            if (Result == null)
+                Result = stepResult;
+        }
+
+        public override string ToString()
+        {
+            return Result.ToString();
+        }
+    }
+
     public class Passed : Result
     {
         public Passed()
@@ -57,7 +70,7 @@ namespace NBehave.Narrator.Framework
 
         public override string ToString()
         {
-        	return GetType().Name.Replace(typeof(Result).Name, "").ToLower();
+            return GetType().Name.Replace(typeof(Result).Name, "").ToLower();
         }
     }
 }

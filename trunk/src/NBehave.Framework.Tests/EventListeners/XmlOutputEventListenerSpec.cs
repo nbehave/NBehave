@@ -17,11 +17,11 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
             [SetUp]
             public void Setup()
             {
-                RunnerBase runner = new StoryRunner();
-                runner.LoadAssembly(GetType().Assembly);
                 var memStream = new MemoryStream();
                 var listener = new XmlOutputEventListener(new XmlTextWriter(memStream, Encoding.UTF8));
-                runner.Run(listener);
+                RunnerBase runner = new StoryRunner(listener);
+                runner.LoadAssembly(GetType().Assembly);
+                runner.Run();
                 _xmlDoc = new XmlDocument();
                 memStream.Seek(0, 0);
                 _xmlDoc.Load(memStream);
@@ -177,11 +177,11 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
             [Test]
             public void Should_have_linebreaks_between_nodes()
             {
-                RunnerBase runner = new StoryRunner();
-                runner.LoadAssembly(GetType().Assembly);
                 var memStream = new MemoryStream();
                 var listener = Framework.EventListeners.EventListeners.XmlWriterEventListener(memStream);
-                runner.Run(listener);
+                RunnerBase runner = new StoryRunner(listener);
+                runner.LoadAssembly(GetType().Assembly);
+                runner.Run();
                 memStream.Seek(0, 0);
                 var xmlAsText = new StreamReader(memStream);
                 string xml = xmlAsText.ReadToEnd();

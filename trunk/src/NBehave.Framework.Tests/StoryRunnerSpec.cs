@@ -16,13 +16,24 @@ namespace NBehave.Narrator.Framework.Specifications
             return MockRepository.GenerateStub<IEventListener>();
         }
 
+        private StoryRunner CreateRunner()
+        {
+            return CreateRunner(GetStubbedListener());
+        }
+
+        private StoryRunner CreateRunner(IEventListener listener)
+        {
+            return new StoryRunner(listener);
+
+        }
+
         [Specification]
         public void Should_find_the_themes_in_the_example_assembly()
         {
-            var runner = new StoryRunner();
+            StoryRunner runner = CreateRunner();
 
             runner.LoadAssembly("TestAssembly.dll");
-            StoryResults results = runner.Run(GetStubbedListener());
+            StoryResults results = runner.Run();
 
             Assert.That(results.NumberOfThemes, Is.EqualTo(2));
         }
@@ -30,10 +41,10 @@ namespace NBehave.Narrator.Framework.Specifications
         [Specification]
         public void Should_find_the_stories_in_the_example_assembly()
         {
-            var runner = new StoryRunner();
+            var runner = CreateRunner();
 
             runner.LoadAssembly("TestAssembly.dll");
-            StoryResults results = runner.Run(GetStubbedListener());
+            StoryResults results = runner.Run();
 
             Assert.That(results.NumberOfStories, Is.EqualTo(4));
         }
@@ -41,10 +52,10 @@ namespace NBehave.Narrator.Framework.Specifications
         [Specification]
         public void Should_report_the_number_of_scenarios_for_each_story()
         {
-            var runner = new StoryRunner();
+            var runner = CreateRunner();
 
             runner.LoadAssembly("TestAssembly.dll");
-            StoryResults results = runner.Run(GetStubbedListener());
+            StoryResults results = runner.Run();
 
             Assert.That(results.NumberOfScenariosFound, Is.EqualTo(5));
         }
@@ -52,10 +63,10 @@ namespace NBehave.Narrator.Framework.Specifications
         [Specification]
         public void Should_report_the_number_of_failed_scenarios()
         {
-            var runner = new StoryRunner();
+            var runner = CreateRunner();
 
             runner.LoadAssembly("TestAssembly.dll");
-            StoryResults results = runner.Run(GetStubbedListener());
+            StoryResults results = runner.Run();
 
             Assert.That(results.NumberOfFailingScenarios, Is.EqualTo(1));
         }
@@ -63,10 +74,10 @@ namespace NBehave.Narrator.Framework.Specifications
         [Specification]
         public void Should_report_the_number_of_pending_scenarios()
         {
-            var runner = new StoryRunner();
+            var runner = CreateRunner();
 
             runner.LoadAssembly("TestAssembly.dll");
-            StoryResults results = runner.Run(GetStubbedListener());
+            StoryResults results = runner.Run();
 
             Assert.That(results.NumberOfPendingScenarios, Is.EqualTo(2));
         }
@@ -74,10 +85,10 @@ namespace NBehave.Narrator.Framework.Specifications
         [Specification]
         public void Should_report_the_number_of_passing_scenarios()
         {
-            var runner = new StoryRunner();
+            var runner = CreateRunner();
 
             runner.LoadAssembly("TestAssembly.dll");
-            StoryResults results = runner.Run(GetStubbedListener());
+            StoryResults results = runner.Run();
 
             Assert.That(results.NumberOfPassingScenarios, Is.EqualTo(2));
         }
@@ -112,10 +123,10 @@ namespace NBehave.Narrator.Framework.Specifications
 
             using (repo.Playback())
             {
-                var runner = new StoryRunner();
+                var runner = CreateRunner(listener);
 
                 runner.LoadAssembly("TestAssembly.dll");
-                runner.Run(listener);
+                runner.Run();
             }
         }
 
@@ -149,22 +160,22 @@ namespace NBehave.Narrator.Framework.Specifications
 
             using (repo.Playback())
             {
-                var runner = new StoryRunner();
+                var runner = CreateRunner(listener);
 
                 runner.IsDryRun = true;
                 runner.LoadAssembly("TestAssembly.dll");
-                runner.Run(listener);
+                runner.Run();
             }
         }
 
         [Specification]
         public void Should_only_add_themes_within_given_namespace_that_matches_namespacefilter()
         {
-            var runner = new StoryRunner();
+            var runner = CreateRunner();
 
             runner.StoryRunnerFilter = new StoryRunnerFilter("TestAssembly", ".", ".");
             runner.LoadAssembly("TestAssembly.dll");
-            StoryResults results = runner.Run(GetStubbedListener());
+            StoryResults results = runner.Run();
 
             Assert.That(results.NumberOfThemes, Is.EqualTo(2));
         }
@@ -172,11 +183,11 @@ namespace NBehave.Narrator.Framework.Specifications
         [Specification]
         public void Should_not_find_any_themes_within_given_namespace_given_the_namespacefilter_TestAssemblyThatDoesntExists()
         {
-            var runner = new StoryRunner();
+            var runner = CreateRunner();
 
             runner.StoryRunnerFilter = new StoryRunnerFilter("TestAssemblyThatDoesntExists", ".", ".");
             runner.LoadAssembly("TestAssembly.dll");
-            StoryResults results = runner.Run(GetStubbedListener());
+            StoryResults results = runner.Run();
 
             Assert.That(results.NumberOfThemes, Is.EqualTo(0));
         }
@@ -184,17 +195,17 @@ namespace NBehave.Narrator.Framework.Specifications
         [Specification]
         public void Should_only_match_stories_within_given_methodFilter()
         {
-            var runner = new StoryRunner();
+            var runner = CreateRunner();
 
             runner.StoryRunnerFilter = new StoryRunnerFilter(".", ".", "Transfer_to_cash_account");
             runner.LoadAssembly("TestAssembly.dll");
-            StoryResults results = runner.Run(GetStubbedListener());
+            StoryResults results = runner.Run();
 
             Assert.That(results.NumberOfStories, Is.EqualTo(1));
         }
 
         [TestFixture]
-        public class When_running_assembly_with_tokenized_scenario
+        public class When_running_assembly_with_tokenized_scenario : StoryRunnerSpec
         {
             private StoryResults _results;
 
@@ -203,10 +214,10 @@ namespace NBehave.Narrator.Framework.Specifications
             {
                 var mocks = new MockRepository();
                 var evt = mocks.Stub<IEventListener>();
-                var runner = new StoryRunner();
+                var runner = CreateRunner(evt);
 
                 runner.LoadAssembly("TestPlainTextAssembly.dll");
-                _results = runner.Run(evt);
+                _results = runner.Run();
             }
 
             [Specification]
@@ -223,7 +234,7 @@ namespace NBehave.Narrator.Framework.Specifications
         }
 
         [TestFixture]
-        public class When_dry_running_asembly_with_tokenized_scenario
+        public class When_dry_running_asembly_with_tokenized_scenario : StoryRunnerSpec
         {
             private string _output;
 
@@ -232,10 +243,10 @@ namespace NBehave.Narrator.Framework.Specifications
             {
                 TextWriter writer = new StringWriter();
                 IEventListener evt = new TextWriterEventListener(writer);
-                var runner = new StoryRunner();
+                var runner = CreateRunner(evt);
                 runner.LoadAssembly("TestPlainTextAssembly.dll");
                 runner.IsDryRun = true;
-                runner.Run(evt);
+                runner.Run();
                 writer.Flush();
                 _output = writer.ToString();
             }
@@ -297,11 +308,11 @@ namespace NBehave.Narrator.Framework.Specifications
         [Specification]
         public void Should_report_invalid_step_in_result()
         {
-            var runner = new StoryRunner();
+            var runner = CreateRunner();
 
             runner.StoryRunnerFilter = new StoryRunnerFilter("TestAssembly", "InvalidActionSpecs", "Invalid_action");
             runner.LoadAssembly("TestAssembly.dll");
-            StoryResults results = runner.Run(GetStubbedListener());
+            StoryResults results = runner.Run();
 
             Assert.That(results.NumberOfPendingScenarios, Is.EqualTo(1));
             Assert.That(results.ScenarioResults[0].Message, Is.EqualTo("Action missing for action 'An invalid action'."));

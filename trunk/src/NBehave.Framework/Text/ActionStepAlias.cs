@@ -105,6 +105,5 @@ namespace NBehave.Narrator.Framework
             AddDefaultAlias(aliasForAttribute, actionType);
             return Aliases[actionType];
         }
-
     }
 }

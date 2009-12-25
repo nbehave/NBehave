@@ -26,10 +26,7 @@ namespace NBehave.Narrator.Framework
 
         public static IEnumerable<string> ActionSteps
         {
-            get
-            {
-                return GetValue("ActionStep");
-            }
+            get { return GetValue("ActionStep"); }
         }
     }
 }

@@ -41,10 +41,16 @@ namespace NBehave.Narrator.Framework
 		public void AddActionStepResult(ActionStepResult actionStepResult)
 		{
 			_actionStepResults.Add(actionStepResult);
-			if (actionStepResult.GetType() == typeof(Failed))
-				_result = actionStepResult;
-			if (actionStepResult.GetType() == typeof(Pending) && _result.GetType() != typeof(Failed))
-				_result = actionStepResult;
+			if (actionStepResult.Result.GetType() == typeof(Failed))
+			{
+			    _result = actionStepResult.Result;
+                Fail(((Failed)actionStepResult.Result).Exception);
+			}
+			if (actionStepResult.Result.GetType() == typeof(Pending) && _result.GetType() != typeof(Failed))
+			{
+			    _result = actionStepResult.Result;
+			    Pend(actionStepResult.Result.Message);
+			}
 		}
 
 		public IEnumerable<ActionStepResult> ActionStepResults

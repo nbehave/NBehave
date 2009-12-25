@@ -40,10 +40,5 @@ namespace NBehave.Narrator.Framework
         {
             return _validRegexGroupName.Match(word).Value;
         }
-
-        private static string RemoveTokenPrefix(string word)
-        {
-            return word.Substring(ActionCatalog.TokenPrefix.ToString().Length);
-        }
     }
 }

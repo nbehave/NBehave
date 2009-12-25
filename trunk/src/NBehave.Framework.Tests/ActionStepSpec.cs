@@ -40,19 +40,19 @@ namespace NBehave.Narrator.Framework.Specifications
         [Test]
         public void Should_pass_as_a_story_title()
         {
-            Assert.That(_actionStep.IsStoryTitle("Story A story"), Is.True);
+            Assert.That(_actionStep.IsFeatureTitle("Story A story"), Is.True);
         }
 
         [Test]
         public void Should_not_be_a_story_title()
         {
-            Assert.That(_actionStep.IsStoryTitle("Foo: A story"), Is.False);
+            Assert.That(_actionStep.IsFeatureTitle("Foo: A story"), Is.False);
         }
 
         [Test]
         public void Colon_should_be_allow_after_story()
         {
-            Assert.That(_actionStep.IsStoryTitle("Story: A story"), Is.True);
+            Assert.That(_actionStep.IsFeatureTitle("Story: A story"), Is.True);
         }
 
         [Test]
@@ -61,15 +61,15 @@ namespace NBehave.Narrator.Framework.Specifications
             Assert.That(_actionStep.GetTitle("Story: A story"), Is.EqualTo("A story"));
         }
 
-        [Test]
-        public void Should_pass_as_narrative()
-        {
-            foreach (var narrative in ActionStep.StoryNarrative)
-            {
-                Assert.That(_actionStep.IsNarrative(narrative+ " X"), Is.True, 
-                    string.Format("'{0}' should be a narrative step", narrative));
-            }
-        }
+        //[Test]
+        //public void Should_pass_as_narrative()
+        //{
+        //    foreach (var narrative in ActionStep.StoryNarrative)
+        //    {
+        //        Assert.That(_actionStep.IsNarrative(narrative+ " X"), Is.True, 
+        //            string.Format("'{0}' should be a narrative step", narrative));
+        //    }
+        //}
 
         [Test]
         public void Should_pass_as_scenario_step()

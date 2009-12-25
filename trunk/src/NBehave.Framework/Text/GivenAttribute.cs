@@ -1,5 +1,3 @@
-using System.Text.RegularExpressions;
-
 namespace NBehave.Narrator.Framework
 {
     public class GivenAttribute : ActionStepAttribute

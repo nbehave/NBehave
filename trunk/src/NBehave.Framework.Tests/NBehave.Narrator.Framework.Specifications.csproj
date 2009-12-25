@@ -81,7 +81,7 @@
     <Compile Include="EventListeners\MultiOutputEventListenerFixture.cs" />
     <Compile Include="EventListeners\TextWriterEventListenerFixture.cs" />
     <Compile Include="EventListeners\XmlOutputEventListenerSpec.cs" />
-    <Compile Include="ActionStepRunnerSpec.cs" />
+    <Compile Include="StringStepRunnerSpec.cs" />
     <Compile Include="EventListeners\XmlOutputEventListenerTestData.cs" />
     <Compile Include="EventListeners\XmlOutputWriterSpec.cs" />
     <Compile Include="PlainTextOutputSpec.cs" />
@@ -96,7 +96,10 @@
     <Compile Include="StoryRunnerFilterSpecs.cs" />
     <Compile Include="StoryRunnerSpec.cs" />
     <Compile Include="Text\IgnoreSpaceAndUnderScoreMatcherSpec.cs" />
-    <Compile Include="TokenStringsToScenarioParserSpec.cs" />
+    <Compile Include="Text\ScenarioParserSpec.cs" />
+    <Compile Include="Text\ScenarioWithStepsSpec.cs" />
+    <Compile Include="Text\StringStepSpec.cs" />
+    <Compile Include="Text\StringTableStepSpec.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NBehave.Framework\NBehave.Narrator.Framework.csproj">
@@ -115,7 +118,6 @@
       <Project>{B734DE3F-E1EC-42B4-8AB1-A55A934584CF}</Project>
       <Name>TestPlainTextAssembly</Name>
     </ProjectReference>
-    <Folder Include="Text" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="GreetingSystemWithScenarioTitle.txt">

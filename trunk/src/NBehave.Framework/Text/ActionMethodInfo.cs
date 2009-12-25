@@ -19,13 +19,13 @@ namespace NBehave.Narrator.Framework
             FileMatcher = new MatchAllFiles();
         }
 
-        public ActionMethodInfo(Regex actionStepMatcher, object action, MethodInfo methodInfo)
-            : this(actionStepMatcher, action, methodInfo, string.Empty, null)
-        { }
+        //public ActionMethodInfo(Regex actionStepMatcher, object action, MethodInfo methodInfo)
+        //    : this(actionStepMatcher, action, methodInfo, string.Empty, null)
+        //{ }
 
-        public ActionMethodInfo(Regex actionStepMatcher, object action, MethodInfo methodInfo, object instance)
-            : this(actionStepMatcher, action, methodInfo, string.Empty, instance)
-        { }
+        //public ActionMethodInfo(Regex actionStepMatcher, object action, MethodInfo methodInfo, object instance)
+        //    : this(actionStepMatcher, action, methodInfo, string.Empty, instance)
+        //{ }
 
         public ActionMethodInfo(Regex actionStepMatcher, object action, MethodInfo methodInfo, string actionType)
             : this(actionStepMatcher, action, methodInfo, actionType, null)

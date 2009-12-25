@@ -5,18 +5,18 @@ namespace NBehave.Narrator.Framework
 {
     public class ActionStepFileLoader
     {
-        private readonly ActionStepAlias _actionStepAlias;
-        private readonly ActionStep _actionStep;
+        private readonly StringStepRunner _stringStepRunner;
+        private readonly IEventListener _listener;
 
-        public ActionStepFileLoader(ActionStepAlias actionStepAlias, ActionStep actionStep)
+        public ActionStepFileLoader(StringStepRunner stringStepRunner, IEventListener listener)
         {
-            _actionStepAlias = actionStepAlias;
-            _actionStep = actionStep;
+            _stringStepRunner = stringStepRunner;
+            _listener = listener;
         }
 
-        public List<List<ScenarioSteps>> Load(IEnumerable<string> scenarioLocations)
+        public List<List<ScenarioWithSteps>> Load(IEnumerable<string> scenarioLocations)
         {
-            var stories = new List<List<ScenarioSteps>>();
+            var stories = new List<List<ScenarioWithSteps>>();
 
             foreach (var location in scenarioLocations)
             {
@@ -36,20 +36,20 @@ namespace NBehave.Narrator.Framework
             return files;
         }
 
-        private List<List<ScenarioSteps>> LoadFiles(IEnumerable<string> files)
+        private List<List<ScenarioWithSteps>> LoadFiles(IEnumerable<string> files)
         {
-            var stories = new List<List<ScenarioSteps>>();
+            var stories = new List<List<ScenarioWithSteps>>();
             foreach (var file in files)
             {
-                List<ScenarioSteps> scenarios = GetScenarios(file);
+                List<ScenarioWithSteps> scenarios = GetScenarios(file);
                 stories.Add(scenarios);
             }
             return stories;
         }
 
-        private List<ScenarioSteps> GetScenarios(string file)
+        private List<ScenarioWithSteps> GetScenarios(string file)
         {
-            var scenarios = new List<ScenarioSteps>();
+            List<ScenarioWithSteps> scenarios;
             using (Stream stream = File.OpenRead(file))
             {
                 scenarios = Load(stream);
@@ -59,16 +59,11 @@ namespace NBehave.Narrator.Framework
             return scenarios;
         }
 
-        public List<ScenarioSteps> Load(Stream stream)
+        public List<ScenarioWithSteps> Load(Stream stream)
         {
-            var scenarioTextParser = new TextToTokenStringsParser(_actionStepAlias, _actionStep);
-            using (var fs = new StreamReader(stream))
-                scenarioTextParser.ParseScenario(fs.ReadToEnd());
-            var tokenStringsToScenarioParser = new TokenStringsToScenarioParser(_actionStep);
-            tokenStringsToScenarioParser.ParseTokensToScenarios(scenarioTextParser.TokenStrings);
-            List<ScenarioSteps> scenarios = tokenStringsToScenarioParser.Scenarios;
-
-            return scenarios;
+            var scenarioTextParser = new ScenarioParser(_stringStepRunner, _listener);
+            List<ScenarioWithSteps> steps = scenarioTextParser.Parse(stream);
+            return steps;
         }
     }
 }

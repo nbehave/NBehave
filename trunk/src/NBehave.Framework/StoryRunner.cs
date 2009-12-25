@@ -7,6 +7,9 @@ namespace NBehave.Narrator.Framework
 {
     public class StoryRunner : RunnerBase
     {
+        public StoryRunner(IEventListener listener) : base(listener)
+        { }
+
         protected override void ParseAssembly(Assembly assembly)
         {
             foreach (Type t in assembly.GetExportedTypes())
@@ -23,14 +26,14 @@ namespace NBehave.Narrator.Framework
             }
         }
 
-        protected override void RunStories(StoryResults results, IEventListener listener)
+        protected override void RunStories(StoryResults results)
         {
             foreach (Pair<string, object> theme in Themes)
             {
                 string themeName = theme.First;
                 object themeClass = theme.Second;
 
-                listener.ThemeStarted(themeName);
+                EventListener.ThemeStarted(themeName);
 
                 IEnumerable<MethodInfo> themeMethods = GetThemeMethods(themeClass);
                 IEnumerable<MethodInfo> storyMethods = GetStoryMethods(themeMethods);
@@ -39,10 +42,10 @@ namespace NBehave.Narrator.Framework
                 {
                     InvokeStoryMethod(storyMethod, themeClass, results);
                     CompileStoryResults(results);
-                    listener.StoryResults(results);
+                    EventListener.StoryResults(results);
                     ClearStoryList();
                 }
-                listener.ThemeFinished();
+                EventListener.ThemeFinished();
             }
         }
 

@@ -5,28 +5,26 @@ namespace NBehave.Narrator.Framework
 {
     public class ActionStep
     {
-        public const string StoryTitle = "Story";
-        public static readonly IEnumerable<string> StoryNarrative = new[] { "As a", "I want", "So that" };
-        public static readonly IEnumerable<string> StorySteps = new[] { StoryTitle, "As a", "I want", "So that" };
+        public static readonly IEnumerable<string> StoryTitle = new[] { "Feature", "Story" };
+        public static readonly IEnumerable<string> StorySteps = new[] { "Story", "Feature"};
         public const string ScenarioTitle = "Scenario";
-        public static readonly IEnumerable<string> ScenarioSteps = new[] { ScenarioTitle, "Given", "When", "Then", "And" };
+        public static readonly IEnumerable<string> ScenarioSteps = new[] { ScenarioTitle, Examples, "Given", "When", "Then", "And" };
+        public const string Examples = "Examples";
 
 
-        private readonly Regex _isStoryTitle = new Regex(string.Format(@"\s*{0}:?\s+", StoryTitle), RegexOptions.Compiled);
-        public bool IsStoryTitle(string actionStep)
+        public bool IsFeatureTitle(string actionStep)
         {
-            return _isStoryTitle.IsMatch(actionStep);
+            return (IsStepWithMoreThanOneKeyWord(actionStep, StoryTitle));
         }
 
-        public bool IsNarrative(string actionStep)
+        private bool IsStepWithMoreThanOneKeyWord(string actionStep, IEnumerable<string> keyWords)
         {
-            foreach (var action in StoryNarrative)
+            foreach (var action in keyWords)
             {
                 var isNarrative = new Regex(string.Format(@"\s*{0}:?\s+", action));
                 if (isNarrative.IsMatch(actionStep))
                     return true;
             }
-
             return false;
         }
 
@@ -54,6 +52,13 @@ namespace NBehave.Narrator.Framework
             }
 
             return IsScenarioTitle(text);
+        }
+
+        private readonly Regex _isExample = new Regex(string.Format(@"\s*{0}:?\s+", Examples), RegexOptions.Compiled);
+        public bool IsExample(string text)
+        {
+            return _isExample.IsMatch(text);
+            
         }
     }
 }

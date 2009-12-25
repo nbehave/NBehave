@@ -45,12 +45,15 @@ namespace NBehave.NAnt
 
 			WriteHeaderInto(output);
 
-			RunnerBase runner;
+
+            IEventListener listener = EventListeners.CreateEventListenerUsing(nantLogWriter,
+                                                                              TextOutputFile,
+                                                                              XmlOutputFile); RunnerBase runner;
 			if (ScenarioFiles == null || ScenarioFiles.FileNames.Count == 0)
-				runner = new StoryRunner { IsDryRun = DryRun };
+                runner = new StoryRunner(listener) { IsDryRun = DryRun };
 			else
 			{
-				runner = new TextRunner();
+                runner = new TextRunner(listener);
 				((TextRunner)runner).Load(GetFileNames(ScenarioFiles));
 			}
 
@@ -59,9 +62,7 @@ namespace NBehave.NAnt
 				runner.LoadAssembly(path);
 			}
 
-			StoryResults results = runner.Run(EventListeners.CreateEventListenerUsing(nantLogWriter, 
-			                                                                          TextOutputFile,
-			                                                                          XmlOutputFile));
+		    StoryResults results = runner.Run();
 
 			if (DryRun) return;
 

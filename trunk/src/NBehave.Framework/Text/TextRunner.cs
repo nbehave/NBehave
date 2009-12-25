@@ -2,28 +2,23 @@
 using System.IO;
 using System.Reflection;
 
-
 namespace NBehave.Narrator.Framework
 {
     public class TextRunner : RunnerBase
     {
-        private readonly List<List<ScenarioSteps>> _stories = new List<List<ScenarioSteps>>();
-        private readonly ActionStepAlias _actionStepAlias = new ActionStepAlias();
-        private readonly ActionStep _actionStep = new ActionStep();
+        private readonly List<List<ScenarioWithSteps>> _stories = new List<List<ScenarioWithSteps>>();
         private readonly ActionStepFileLoader _actionStepFileLoader;
-        private readonly ActionStepRunner _actionStepRunner;
-        private readonly TextToTokenStringsParser _textToTokenStringsParser;
-        private IEventListener _listener;
-
+        private readonly StringStepRunner _stringStepRunner;
+        
         public ActionCatalog ActionCatalog { get; private set; }
 
-        public TextRunner()
+        public TextRunner(IEventListener eventListener) 
+            : base(eventListener)
         {
             ActionCatalog = new ActionCatalog();
             StoryRunnerFilter = new StoryRunnerFilter();
-            _actionStepFileLoader = new ActionStepFileLoader(_actionStepAlias, _actionStep);
-            _actionStepRunner = new ActionStepRunner(ActionCatalog);
-            _textToTokenStringsParser = new TextToTokenStringsParser(_actionStepAlias, _actionStep);
+            _stringStepRunner = new StringStepRunner(ActionCatalog);
+            _actionStepFileLoader = new ActionStepFileLoader(_stringStepRunner, EventListener);
         }
 
         protected override void ParseAssembly(Assembly assembly)
@@ -32,31 +27,37 @@ namespace NBehave.Narrator.Framework
             parser.FindActionSteps(assembly);
         }
 
-        protected override void RunStories(StoryResults results, IEventListener listener)
+        protected override void RunStories(StoryResults results)
         {
-            _listener = listener;
-            _listener.ThemeStarted(string.Empty);
-            RunStories(results);
-            _listener.ThemeFinished();
+            EventListener.ThemeStarted(string.Empty);
+            RunEachStory(results);
+            EventListener.ThemeFinished();
             ClearStoryList();
         }
 
-        private void RunStories(StoryResults storyResults)
+        private void RunEachStory(StoryResults storyResults)
         {
-            foreach (List<ScenarioSteps> scenarioSteps in _stories)
+            foreach (List<ScenarioWithSteps> scenarioSteps in _stories)
             {
                 ScenarioStepRunner scenarioStepRunner = CreateScenarioStepRunner();
 
-                scenarioStepRunner.RunScenarios(scenarioSteps, storyResults);
+                IEnumerable<ScenarioResult> scenarioResults = scenarioStepRunner.RunScenarios(scenarioSteps);
+                AddScenarioResultsToStoryResults(scenarioResults, storyResults);
                 storyResults.NumberOfStories++;
-                _listener.StoryResults(storyResults);
+                EventListener.StoryResults(storyResults);
             }
+        }
+
+        private void AddScenarioResultsToStoryResults(IEnumerable<ScenarioResult> scenarioResults, StoryResults storyResults)
+        {
+            foreach (var result in scenarioResults)
+                storyResults.AddResult(result);
         }
 
         private ScenarioStepRunner CreateScenarioStepRunner()
         {
-            var scenarioStepRunner = new ScenarioStepRunner(_textToTokenStringsParser, _actionStepRunner, _actionStep);
-            scenarioStepRunner.EventListener = _listener;
+            var scenarioStepRunner = new ScenarioStepRunner();
+            scenarioStepRunner.EventListener = EventListener;
             return scenarioStepRunner;
         }
 
@@ -67,7 +68,7 @@ namespace NBehave.Narrator.Framework
 
         public void Load(Stream stream)
         {
-            List<ScenarioSteps> scenarios = _actionStepFileLoader.Load(stream);
+            List<ScenarioWithSteps> scenarios = _actionStepFileLoader.Load(stream);
             _stories.Add(scenarios);
         }
     }

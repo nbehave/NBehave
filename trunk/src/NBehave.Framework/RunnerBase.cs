@@ -6,7 +6,7 @@ namespace NBehave.Narrator.Framework
 {
     public abstract class RunnerBase
     {
-        protected abstract void RunStories(StoryResults results, IEventListener listener);
+        protected abstract void RunStories(StoryResults results);
         protected abstract void ParseAssembly(Assembly assembly);
 
         private StoryRunnerFilter _storyRunnerFilter = new StoryRunnerFilter();
@@ -21,19 +21,26 @@ namespace NBehave.Narrator.Framework
 
         public bool IsDryRun { get; set; }
 
-        public StoryResults Run(IEventListener listener)
+        protected IEventListener EventListener { get; set; }
+
+        protected RunnerBase(IEventListener listener)
+        {
+            EventListener = listener;
+        }
+
+        public StoryResults Run()
         {
             var results = new StoryResults();
 
             try
             {
-                InitializeRun(results, listener);
-                StartWatching(listener);
-                RunStories(results, listener);
+                InitializeRun(results, EventListener);
+                StartWatching(EventListener);
+                RunStories(results);
             }
             finally
             {
-                StopWatching(listener);
+                StopWatching(EventListener);
             }
 
             return results;
