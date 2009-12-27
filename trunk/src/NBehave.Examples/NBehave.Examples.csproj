@@ -55,7 +55,7 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NBehave.Narrator.Framework, Version=0.4.2.0, Culture=neutral, PublicKeyToken=d421feca0f4a05f6, processorArchitecture=MSIL">
+    <Reference Include="NBehave.Narrator.Framework">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\Debug\NBehave\NBehave.Narrator.Framework.dll</HintPath>
     </Reference>

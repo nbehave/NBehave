@@ -45,7 +45,7 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="TestDriven.Framework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=50ecb853f8c6b8d2">
+    <Reference Include="TestDriven.Framework">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\TestDriven.Framework.dll</HintPath>
     </Reference>

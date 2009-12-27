@@ -41,7 +41,7 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NAnt.Core, Version=0.85.2478.0, Culture=neutral">
+    <Reference Include="NAnt.Core">
       <HintPath>..\..\tools\nant\NAnt.Core.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
     </Reference>

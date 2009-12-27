@@ -94,7 +94,7 @@ namespace NBehave.Spec.NUnit
 
         public static void ShouldBeInstanceOfType(this object actual, Type expected)
         {
-            Assert.That(actual, Is.InstanceOfType(expected));
+            Assert.That(actual, Is.InstanceOf(expected));
         }
 
         public static void ShouldBeLessThan(this IComparable arg1, IComparable arg2)
@@ -230,7 +230,7 @@ namespace NBehave.Spec.NUnit
 
         public static void ShouldNotBeInstanceOfType(this object actual, Type expected)
         {
-            Assert.That(actual, Is.Not.InstanceOfType(expected));
+            Assert.That(actual, Is.Not.InstanceOf(expected));
         }
 
         public static void ShouldNotBeNull(this object value)
