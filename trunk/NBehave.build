@@ -4,7 +4,7 @@
 	<property name="build.dir" value="build" />
 	<property name="test.dir" value ="${build.dir}\Debug\UnitTests" />
 	<property name="company.name" value="${project::get-name()}"/>
-	<property name="project.fullversion" value="0.4.5.0" dynamic="true" />
+	<property name="project.fullversion" value="0.5.0.0" dynamic="true" />
 	<property name="project.config" value="release" />
 	
 	<!-- User targets -->
