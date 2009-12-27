@@ -9,112 +9,107 @@ using NBehave.Narrator.Framework.EventListeners;
 
 namespace NBehave.MSBuild
 {
-	public class NBehaveTask : Task
-	{
-		public bool DryRun { get; set; }
+    public class NBehaveTask : Task
+    {
+        public bool DryRun { get; set; }
 
-		public string TextOutputFile { get; set; }
+        public string TextOutputFile { get; set; }
 
-		public string XmlOutputFile { get; set; }
-		
-		[Required]
-		public string[] TestAssemblies { get; set; }
+        public string XmlOutputFile { get; set; }
 
-		public bool FailBuild { get; set; }
+        [Required]
+        public string[] TestAssemblies { get; set; }
 
-		public string[] ScenarioFiles { get; set; }
+        public bool FailBuild { get; set; }
 
-
-		public StoryResults StoryResults { get; private set; }
+        [Required]
+        public string[] ScenarioFiles { get; set; }
 
 
-		public NBehaveTask()
-		{
-			DryRun = false;
-			FailBuild = true;
-		}
+        public FeatureResults FeatureResults { get; private set; }
 
-		public NBehaveTask(IBuildEngine buildEngine)
-			: this()
-		{
-			BuildEngine = buildEngine;
-		}
 
-		public override bool Execute()
-		{
-			if (TestAssemblies.Length == 0)
-				throw new ArgumentException("At least one test assembly is required");
+        public NBehaveTask()
+        {
+            DryRun = false;
+            FailBuild = true;
+        }
 
-			var logString = new StringBuilder();
-			TextWriter msbuildLogWriter = new StringWriter(logString);
-			var output = new PlainTextOutput(msbuildLogWriter);
+        public NBehaveTask(IBuildEngine buildEngine)
+            : this()
+        {
+            BuildEngine = buildEngine;
+        }
 
-			WriteHeaderInto(output);
+        public override bool Execute()
+        {
+            if (TestAssemblies.Length == 0)
+                throw new ArgumentException("At least one test assembly is required");
+
+            var logString = new StringBuilder();
+            TextWriter msbuildLogWriter = new StringWriter(logString);
+            var output = new PlainTextOutput(msbuildLogWriter);
+
+            WriteHeaderInto(output);
 
             IEventListener listener = EventListeners.CreateEventListenerUsing(msbuildLogWriter,
                                                                               TextOutputFile,
-                                                                              XmlOutputFile); RunnerBase runner;
+                                                                              XmlOutputFile);
+            var runner = new TextRunner(listener) { IsDryRun = DryRun };
+            runner.Load(ScenarioFiles);
+            LoadAssemblies(runner);
+            FeatureResults = runner.Run();
 
-			if (ScenarioFiles == null || ScenarioFiles.Length == 0)
-				runner = new StoryRunner(listener) { IsDryRun = DryRun };
-			else
-			{
-				runner = new TextRunner(listener);
-				((TextRunner)runner).Load(ScenarioFiles);
-			}
+            if (DryRun)
+                return true;
 
-			foreach (string path in TestAssemblies)
-			{
-				runner.LoadAssembly(path);
-			}
+            WriteResultsInto(output, FeatureResults);
+            string message = logString.ToString();
+            Log.LogMessage(message);
 
+            if (FailBuild && FailBuildBasedOn(FeatureResults))
+                return false;
 
-		    StoryResults = runner.Run();
+            return true;
+        }
 
-			if (DryRun)
-				return true;
+        private void LoadAssemblies(RunnerBase runner)
+        {
+            foreach (string path in TestAssemblies)
+                runner.LoadAssembly(path);
+        }
 
-			WriteResultsInto(output, StoryResults);
-			string message = logString.ToString();
-			Log.LogMessage(message);
+        private void WriteHeaderInto(PlainTextOutput output)
+        {
+            output.WriteHeader();
+            output.WriteSeparator();
+            output.WriteRuntimeEnvironment();
+            output.WriteSeparator();
+        }
 
-			if (FailBuild && FailBuildBasedOn(StoryResults))
-				return false;
+        private void WriteResultsInto(PlainTextOutput output, FeatureResults results)
+        {
+            output.WriteDotResults(results);
+            output.WriteSummaryResults(results);
+            output.WriteFailures(results);
+            output.WritePending(results);
+        }
 
-			return true;
-		}
+        private bool FailBuildBasedOn(FeatureResults results)
+        {
+            if (results.NumberOfFailingScenarios == 0)
+                return false;
 
-		private void WriteHeaderInto(PlainTextOutput output)
-		{
-			output.WriteHeader();
-			output.WriteSeparator();
-			output.WriteRuntimeEnvironment();
-			output.WriteSeparator();
-		}
+            var exceptionMessage = new StringBuilder();
+            foreach (ScenarioResult result in results.ScenarioResults)
+            {
+                exceptionMessage.AppendLine(result.Message);
+                exceptionMessage.AppendLine(result.StackTrace);
+                exceptionMessage.AppendLine();
+            }
 
-		private void WriteResultsInto(PlainTextOutput output, StoryResults results)
-		{
-			output.WriteDotResults(results);
-			output.WriteSummaryResults(results);
-			output.WriteFailures(results);
-			output.WritePending(results);
-		}
-
-		private bool FailBuildBasedOn(StoryResults results)
-		{
-			if (results.NumberOfFailingScenarios == 0)
-				return false;
-
-			var exceptionMessage = new StringBuilder();
-			foreach (ScenarioResult result in results.ScenarioResults)
-			{
-				exceptionMessage.AppendLine(result.Message);
-				exceptionMessage.AppendLine(result.StackTrace);
-				exceptionMessage.AppendLine();
-			}
-
-			Log.LogError(exceptionMessage.ToString());
-			return true;
-		}
-	}
+            Log.LogError(exceptionMessage.ToString());
+            return true;
+        }
+    }
 }

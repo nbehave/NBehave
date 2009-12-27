@@ -36,7 +36,7 @@ namespace NBehave.Console.Tests
         [Test]
         public void Should_run_example_framework_correctly()
         {
-            Program.Main(new[] { "TestAssembly.dll" });
+            Program.Main(new[] { "TestPlainTextAssembly.dll", "/sf=*.scenario" });
 
             Assert.That(_output.ToString(), Is.StringContaining("Scenarios"));
         }
@@ -44,7 +44,7 @@ namespace NBehave.Console.Tests
         [Test]
         public void Should_not_display_header_when_nologo_argument_set()
         {
-            Program.Main(new[] { "TestAssembly.dll", "/nologo" });
+            Program.Main(new[] { "TestAssembly.dll", "/nologo", "/sf=*.scenario" });
 
             Assert.That(_output.ToString(), Is.Not.StringContaining("Copyright"));
         }
@@ -134,7 +134,7 @@ namespace NBehave.Console.Tests
         [Test]
         public void Should_display_errormessage_if_assembly_doesnt_exist()
         {
-            Program.Main(new[] { "IDontExist.dll" });
+            Program.Main(new[] { "IDontExist.dll", "/sf=*.scenario" });
             Assert.IsTrue(_output.ToString().Contains("File not found: IDontExist.dll"));
         }
     }

@@ -8,8 +8,6 @@ namespace NBehave.Narrator.Framework
 {
     public class ActionCatalog
     {
-        public const char TokenPrefix = '$';
-
         private readonly List<ActionMethodInfo> _actions = new List<ActionMethodInfo>();
 
         [Obsolete("Use Add(Regex actionMatch, object action)")]
@@ -36,29 +34,13 @@ namespace NBehave.Narrator.Framework
             return (FindMatchingAction(actionStepText) != null);
         }
 
-        public string BuildFormatString(string message, ICollection<object> args)
-        {
-            if ((message.IndexOf(TokenPrefix) == -1))
-            {
-                if (args.Count == 0)
-                    return "{0} {1}";
-                if (args.Count == 1)
-                    return "{0} {1}: {2}";
-                string formatString = "{0} {1}: (";
-                for (int i = 0; i < args.Count; i++)
-                    formatString += "{" + (i + 2) + "}, ";
-                return formatString.Remove(formatString.Length - 2) + ")";
-            }
-            return "{0} {1}";
-        }
-
         public object[] GetParametersForActionStepText(ActionStepText actionStepText)
         {
             ActionMethodInfo action = GetAction(actionStepText);
             List<string> paramNames = GetParameterNames(action);
             Match match = action.ActionStepMatcher.Match(actionStepText.Step);
             Func<int, string> getValues = i => match.Groups[paramNames[i]].Value;
-            
+
             return GetParametersForActionStepText(action, paramNames, getValues);
         }
 
@@ -104,21 +86,23 @@ namespace NBehave.Narrator.Framework
                 strParamAsArray = strParamAsArray.Take(strParamAsArray.Length - 1).ToArray();
             var typedArray = Activator.CreateInstance(arrayOfType, strParamAsArray.Length);
             var typeInList = arrayOfType.GetElementType();
-            var method = this.GetType().GetMethod("SetValue", BindingFlags.NonPublic | BindingFlags.Instance);
-            Type[] types = new[] { typeInList };
+            var method = GetType().GetMethod("SetValue", BindingFlags.NonPublic | BindingFlags.Instance);
+            var types = new[] { typeInList };
             var genMethod = method.MakeGenericMethod(types);
             for (int i = 0; i < strParamAsArray.Length; i++)
             {
                 object value = Convert.ChangeType(strParamAsArray[i], typeInList);
-                genMethod.Invoke(this, new object[] { typedArray, i, value });
+                genMethod.Invoke(this, new[] { typedArray, i, value });
             }
             return typedArray;
         }
 
+        //This method is called with reflection by the CreateArray method
         private void SetValue<T>(T[] array, int index, T value)
         {
             array[index] = value;
         }
+
 
         public ActionMethodInfo GetAction(ActionStepText message)
         {
@@ -130,7 +114,8 @@ namespace NBehave.Narrator.Framework
             string resultString = message;
             string[] tokens = GetTokensInMessage(message);
             if (tokens.Length > 0 && tokens.Length != parameters.Length)
-                throw new ArgumentException(string.Format("message has {0} tokens and there are {1} parameters", tokens.Length, parameters.Length));
+                throw new ArgumentException(string.Format("message has {0} tokens and there are {1} parameters", tokens.Length,
+                                                          parameters.Length));
             for (int i = 0; i < tokens.Length; i++)
             {
                 resultString = resultString.Replace(tokens[i], parameters[i].ToString());

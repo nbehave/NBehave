@@ -59,10 +59,10 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
 
         public void DoStory(string theme, EventReceived evt)
         {
-            var events = EventsOf(evt, EventType.StoryResult);
+            var events = EventsOf(evt, EventType.StoryCreated);
             string storyTitle = evt.Message;
             WriteStartElement("story", storyTitle, events.Last().Time.Subtract(events.First().Time));
-            IEnumerable<ScenarioResult> scenarioResultsForStory = GetScenarioResultsForStory(storyTitle, events);
+            IEnumerable<ScenarioResult> scenarioResultsForStory = GetScenarioResultsForFeature(storyTitle, events);
 
             WriteStoryDataAttributes(scenarioResultsForStory);
             WriteStoryNarrative(events);
@@ -72,10 +72,10 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
                 var scenarioTitle = e.Message;
                 var scenarioResult = (from r in scenarioResultsForStory
                                       where r.ScenarioTitle == scenarioTitle
-                                            && r.StoryTitle == storyTitle
+                                            && r.FeatureTitle == storyTitle
                                       select r).FirstOrDefault();
-
-                DoScenario(e, scenarioResult);
+                if (scenarioResult != null)
+                    DoScenario(e, scenarioResult);
             }
             Writer.WriteEndElement();
             Writer.WriteEndElement();
@@ -108,14 +108,14 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
             Writer.WriteAttributeString("scenariosPending", totalScenariosPending.ToString());
         }
 
-        IEnumerable<ScenarioResult> GetScenarioResultsForStory(string storyTitle, IEnumerable<EventReceived> eventsReceived)
+        IEnumerable<ScenarioResult> GetScenarioResultsForFeature(string featureTitle, IEnumerable<EventReceived> eventsReceived)
         {
             var storyResults = (from e in eventsReceived
-                                where e.EventType == EventType.StoryResult
-                                select e as StoryResultsEventReceived).FirstOrDefault();
-            var scenarioResultsForStory = from e in storyResults.StoryResults.ScenarioResults
-                                          where e.StoryTitle == storyTitle
-                                          select e;
+                                where e.EventType == EventType.ScenarioResult
+                                select e as ScenarioResultEventReceived);
+            var scenarioResultsForStory = from e in storyResults
+                                          where e.ScenarioResult.FeatureTitle == featureTitle
+                                          select e.ScenarioResult;
             return scenarioResultsForStory;
         }
 
@@ -141,7 +141,7 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
 
         private void CreatePendingSteps(EventReceived evt, ScenarioResult scenarioResult)
         {
-            var actionSteps = from e in EventsOf(evt, EventType.StoryResult)
+            var actionSteps = from e in EventsOf(evt, EventType.ScenarioResult)
                               where e.EventType == EventType.ScenarioMessage
                               select e;
             foreach (var step in actionSteps)
@@ -245,18 +245,14 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
         private IEnumerable<ScenarioResult> GetScenarioResults(IEnumerable<EventReceived> events, Predicate<Result> scenarioResult)
         {
             var storyResults = (from e in events
-                                where e.EventType == EventType.StoryResult
-                                select e as StoryResultsEventReceived).FirstOrDefault();
-            if (storyResults != null)
-            {
-                var eventsToUse = events.Where(e => e.EventType == EventType.ScenarioCreated);
-                IEnumerable<ScenarioResult> sr = from s in storyResults.StoryResults.ScenarioResults
-                                                 where HasScenario(eventsToUse, s.ScenarioTitle)
-                                                 && scenarioResult(s.Result)
-                                                 select s;
-                return sr;
-            }
-            return new List<ScenarioResult>();
+                                where e.EventType == EventType.ScenarioResult
+                                select e as ScenarioResultEventReceived);
+            var eventsToUse = events.Where(e => e.EventType == EventType.ScenarioCreated);
+            IEnumerable<ScenarioResult> sr = from s in storyResults
+                                             where HasScenario(eventsToUse, s.ScenarioResult.ScenarioTitle)
+                                             && scenarioResult(s.ScenarioResult.Result)
+                                             select s.ScenarioResult;
+            return sr;
         }
     }
 }

@@ -51,8 +51,9 @@ namespace NBehave.Narrator.Framework.EventListeners
             _writer.WriteLine("theme finished");
         }
 
-        void IEventListener.StoryResults(StoryResults results)
+        void IEventListener.ScenarioResult(ScenarioResult result)
         {
+            _writer.WriteLine("Scenario result: {0}", result.Result);
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -6,17 +7,17 @@ namespace NBehave.Narrator.Framework
 {
     public class ScenarioWithSteps
     {
+        public static event EventHandler<EventArgs<ScenarioWithSteps>> ScenarioCreated;
+
         private readonly List<StringStep> _steps = new List<StringStep>();
         private readonly List<Example> _examples = new List<Example>();
         private readonly StringStepRunner _stringStepRunner;
-        private readonly IEventListener _listener;
 
-        public ScenarioWithSteps(StringStepRunner stringStepRunner, IEventListener listener)
+        public ScenarioWithSteps(StringStepRunner stringStepRunner)
         {
             Feature = new Feature();
             Title = string.Empty;
             _stringStepRunner = stringStepRunner;
-            _listener = listener;
         }
 
         public IEnumerable<StringStep> Steps
@@ -32,7 +33,7 @@ namespace NBehave.Narrator.Framework
 
         public void AddStep(string step)
         {
-            var stringStringStep = new StringStep(step, FileName, _stringStepRunner, _listener);
+            var stringStringStep = new StringStep(step, FileName, _stringStepRunner);
             AddStep(stringStringStep);
         }
 
@@ -48,19 +49,26 @@ namespace NBehave.Narrator.Framework
 
         public virtual IEnumerable<ScenarioResult> Run()
         {
-            Story story = Feature.AsStory();
-            _listener.StoryMessageAdded(Feature.Narrative);
+            OnScenarioCreated();
             if (Examples.Any())
-                return RunExamples(story);
+                return RunExamples(Feature);
 
-            return RunScenario(story, _steps);
+            return RunScenario(Feature, _steps);
         }
 
-        private IEnumerable<ScenarioResult> RunScenario(Story story, IEnumerable<StringStep> stepsToRun)
+        private void OnScenarioCreated()
         {
-            var scenarioResult = new ScenarioResult(story, Title);
+            if (ScenarioCreated != null)
+            {
+                var e = new EventArgs<ScenarioWithSteps>(this);
+                ScenarioCreated.Invoke(this, e);
+            }
+        }
+
+        private IEnumerable<ScenarioResult> RunScenario(Feature feature, IEnumerable<StringStep> stepsToRun)
+        {
+            var scenarioResult = new ScenarioResult(feature, Title);
             _stringStepRunner.BeforeScenario();
-            _listener.ScenarioCreated(Title);
             foreach (var step in stepsToRun)
             {
                 ActionStepResult stepResult = step.Run();
@@ -71,14 +79,14 @@ namespace NBehave.Narrator.Framework
             return new List<ScenarioResult> { scenarioResult };
         }
 
-        private IEnumerable<ScenarioResult> RunExamples(Story story)
+        private IEnumerable<ScenarioResult> RunExamples(Feature feature)
         {
             var results = new List<ScenarioResult>();
             foreach (var example in Examples)
             {
                 var steps = CloneSteps();
                 InsertColumnValues(steps, example);
-                var tmp = RunScenario(story, steps);
+                var tmp = RunScenario(feature, steps);
                 results.AddRange(tmp);
             }
             return results;
@@ -102,7 +110,7 @@ namespace NBehave.Narrator.Framework
             var clones = new List<StringStep>();
             foreach (var step in Steps)
             {
-                var s = new StringStep(step.Step, step.FromFile, _stringStepRunner, _listener);
+                var s = new StringStep(step.Step, step.FromFile, _stringStepRunner);
                 clones.Add(s);
             }
             return clones;

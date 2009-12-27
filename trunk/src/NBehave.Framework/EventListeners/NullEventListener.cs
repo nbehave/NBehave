@@ -34,8 +34,9 @@
         {
         }
 
-        void IEventListener.StoryResults(StoryResults results)
-        {
+        public void ScenarioResult(ScenarioResult result)
+        {            
         }
+
     }
 }

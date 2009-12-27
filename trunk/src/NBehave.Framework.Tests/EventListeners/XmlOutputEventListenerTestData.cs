@@ -2,78 +2,70 @@ using System;
 
 namespace NBehave.Narrator.Framework.Specifications.EventListeners
 {
+    [ActionSteps]
     public class XmlOutputEventListenerTestData
     {
-        [Theme("T1")]
-        public class ThemeClass1
+        public static string Feature = "Feature: S1" + Environment.NewLine +
+                                "  As a X1" + Environment.NewLine +
+                                "  I want Y1" + Environment.NewLine +
+                                "  So that Z1" + Environment.NewLine +
+                                "Scenario: SC1" + Environment.NewLine +
+                                "  Given something" + Environment.NewLine +
+                                "  When some event occurs" + Environment.NewLine +
+                                "  Then there is some outcome" + Environment.NewLine +
+                                "Scenario: SC2" + Environment.NewLine +
+                                "  Given something two" + Environment.NewLine +
+                                "  When some event #2 occurs" + Environment.NewLine +
+                                "  Then there is some outcome #2" + Environment.NewLine +
+                                "Scenario: Pending scenario" + Environment.NewLine +
+                                "  Given something pending" + Environment.NewLine +
+                                "  When some pending event occurs" + Environment.NewLine +
+                                "  Then this text should still show up in xml output" +
+                                "  " + Environment.NewLine +
+                                "Feature: S2" + Environment.NewLine +
+                                "  As a X2" + Environment.NewLine +
+                                "  I want Y2" + Environment.NewLine +
+                                "  So that Z2" + Environment.NewLine +
+                                "Scenario: SC1" + Environment.NewLine +
+                                "  Given something" + Environment.NewLine +
+                                "  When some event occurs" + Environment.NewLine +
+                                "  Then there is some outcome" + Environment.NewLine +
+                                "  " + Environment.NewLine +
+                                "Feature: S3" + Environment.NewLine +
+                                "  As a X3" + Environment.NewLine +
+                                "  I want Y3" + Environment.NewLine +
+                                "  So that Z3" + Environment.NewLine +
+                                "Scenario: SC3" + Environment.NewLine +
+                                "  Given something" + Environment.NewLine +
+                                "  When some event occurs" + Environment.NewLine +
+                                "  Then there is some outcome" + Environment.NewLine +
+                                "Scenario: FailingScenario" + Environment.NewLine +
+                                "  Given something x" + Environment.NewLine +
+                                "  When some event y occurs" + Environment.NewLine +
+                                "  Then there is some failing outcome";
+
+
+        [Given(@"something$")]
+        [Given(@"something x$")]
+        [Given(@"something two$")]
+        public void A_given()
+        { }
+
+        [When(@"some event occurs$")]
+        [When(@"some event y occurs$")]
+        [When(@"some event #2 occurs$")]
+        public void a_when()
+        { }
+
+        [Then(@"there is some outcome$")]
+        [Then(@"there is some outcome #2$")]
+        public void a_then()
+        { }
+
+        [Then(@"there is some failing outcome$")]
+        public void a_then_failing()
         {
-            [Story]
-            public void Story1()
-            {
-                Story story = new Story("S1");
-
-                story
-                    .AsA("X1")
-                    .IWant("Y1")
-                    .SoThat("Z1");
-
-                story.WithScenario("SC1")
-                    .Given("something", () => { })
-                    .When("some event occurs", () => { })
-                    .Then("there is some outcome", () => { });
-
-                story.WithScenario("SC2")
-                    .Given("something two", () => { })
-                    .When("some event #2 occurs", () => { })
-                    .Then("there is some outcome #2", () => { });
-
-                story.WithScenario("PendingScenario")
-                    .Pending("Im not done yet")
-                    .Given("something pending")
-                    .When("some pending event occurs")
-                    .Then("this text should still show up in xml output");
-            }
-
-            [Story]
-            public void Story2()
-            {
-                Story story = new Story("S2");
-
-                story
-                    .AsA("X2")
-                    .IWant("Y2")
-                    .SoThat("Z2");
-
-                story.WithScenario("SC1")
-                    .Given("something", () => { })
-                    .When("some event occurs", () => { })
-                    .Then("there is some outcome", () => { });
-            }
-        }
-
-        [Theme("T2")]
-        public class ThemeClass2
-        {
-            [Story]
-            public void Story1()
-            {
-                Story story = new Story("S3");
-
-                story
-                    .AsA("X3")
-                    .IWant("Y3")
-                    .SoThat("Z3");
-
-                story.WithScenario("SC3")
-                    .Given("something", () => { })
-                    .When("some event occurs", () => { })
-                    .Then("there is some outcome", () => { });
-
-               story.WithScenario("FailingScenario")
-                    .Given("something x", () => { })
-                    .When("some event y occurs", () => { })
-               	.Then("there is some failing outcome", () => { throw new Exception("outcome failed"); });
-}
+            throw new Exception("outcome failed");
         }
     }
 }

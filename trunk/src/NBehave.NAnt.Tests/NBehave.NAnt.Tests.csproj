@@ -160,10 +160,6 @@
       <Project>{3CF07281-565F-412E-9710-E8104E0391D9}</Project>
       <Name>NBehave.NAnt</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TestAssembly\TestAssembly.csproj">
-      <Project>{E0CCE2D9-9720-4119-98D5-CDE44E283847}</Project>
-      <Name>TestAssembly</Name>
-    </ProjectReference>
     <ProjectReference Include="..\TestPlainTextAssembly\TestPlainTextAssembly.csproj">
       <Project>{B734DE3F-E1EC-42B4-8AB1-A55A934584CF}</Project>
       <Name>TestPlainTextAssembly</Name>
@@ -171,9 +167,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="Greetingsystem.build">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="GreetingSystem.scenario">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

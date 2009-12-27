@@ -9,14 +9,14 @@ namespace NBehave.Narrator.Framework
 	{
 		public event EventHandler<EventArgs<ScenarioMessage>> ScenarioMessageAdded;
 
-		internal Scenario(Story story)
+		internal Scenario(Feature story)
 		{
 			Debug.Assert(story != null);
-			Story = story;
+			Feature = story;
 			IsPending = false;
 		}
 
-		internal Scenario(string title, Story story)
+        internal Scenario(string title, Feature story)
 			:this(story)
 		{
 			Title = title;
@@ -35,7 +35,7 @@ namespace NBehave.Narrator.Framework
 
 		internal bool IsPending { get; set; }
 
-		internal Story Story { get; private set; }
+        internal Feature Feature { get; private set; }
 
 		private void OnScenarioMessageAdded(ScenarioMessage scenarioMessageEventArgs)
 		{
@@ -46,15 +46,15 @@ namespace NBehave.Narrator.Framework
 			ScenarioMessageAdded(this, e);
 		}
 
-		public Scenario Pending(string reason)
-		{
-			if (Story.IsDryRun == false)
-				OnScenarioMessageAdded(new ScenarioMessage("Pending", reason));
-			Story.PendLastScenarioResults(reason);
+        //public Scenario Pending(string reason)
+        //{
+        //    if (Feature.IsDryRun == false)
+        //        OnScenarioMessageAdded(new ScenarioMessage("Pending", reason));
+        //    Feature.PendLastScenarioResults(reason);
 
-			IsPending = true;
+        //    IsPending = true;
 
-			return this;
-		}
+        //    return this;
+        //}
 	}
 }

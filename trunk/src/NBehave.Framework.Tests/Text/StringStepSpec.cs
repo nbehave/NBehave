@@ -27,7 +27,9 @@ namespace NBehave.Narrator.Framework.Specifications.Text
 
         private StringStep CreateInstance(string step, IEventListener listener)
         {
-            return new StringStep(step, "fileName", _stringStepRunner, listener);
+            var stringStep = new StringStep(step, "fileName", _stringStepRunner);
+            StringStep.MessageAdded += (s, e) => listener.ScenarioMessageAdded(e.EventData.Message);
+            return stringStep;
         }
 
         public class When_comparing_StringSteps : StringStepSpec

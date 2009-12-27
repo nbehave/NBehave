@@ -6,8 +6,8 @@ namespace NBehave.Narrator.Framework.EventListeners
     public class FileOutputEventListener : IEventListener, IDisposable
     {
         private readonly string _path;
-        private bool _disposed = false;
-        private bool _insideNamedTheme = false;
+        private bool _disposed;
+        private bool _insideNamedTheme;
         private StreamWriter _writer;
 
         public FileOutputEventListener(string path)
@@ -24,14 +24,12 @@ namespace NBehave.Narrator.Framework.EventListeners
 
         #endregion
 
-        #region IEventListener Members
-
         void IEventListener.StoryCreated(string story)
         {
             _writer.WriteLine();
             if (_insideNamedTheme)
                 _writer.Write('\t');
-            _writer.WriteLine("Story: " + story);
+            _writer.WriteLine("Feature: " + story);
         }
 
         void IEventListener.StoryMessageAdded(string message)
@@ -86,11 +84,8 @@ namespace NBehave.Narrator.Framework.EventListeners
             _writer.WriteLine();
         }
 
-        void IEventListener.StoryResults(StoryResults results)
-        {
-        }
-
-        #endregion
+        public void ScenarioResult(ScenarioResult result)
+        { }
 
         protected virtual void Dispose(bool disposing)
         {

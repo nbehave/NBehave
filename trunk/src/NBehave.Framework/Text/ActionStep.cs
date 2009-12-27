@@ -5,8 +5,7 @@ namespace NBehave.Narrator.Framework
 {
     public class ActionStep
     {
-        public static readonly IEnumerable<string> StoryTitle = new[] { "Feature", "Story" };
-        public static readonly IEnumerable<string> StorySteps = new[] { "Story", "Feature"};
+        public static readonly IEnumerable<string> FeatureSteps = new[] { "Story", "Feature" };
         public const string ScenarioTitle = "Scenario";
         public static readonly IEnumerable<string> ScenarioSteps = new[] { ScenarioTitle, Examples, "Given", "When", "Then", "And" };
         public const string Examples = "Examples";
@@ -14,7 +13,7 @@ namespace NBehave.Narrator.Framework
 
         public bool IsFeatureTitle(string actionStep)
         {
-            return (IsStepWithMoreThanOneKeyWord(actionStep, StoryTitle));
+            return (IsStepWithMoreThanOneKeyWord(actionStep, FeatureSteps));
         }
 
         private bool IsStepWithMoreThanOneKeyWord(string actionStep, IEnumerable<string> keyWords)

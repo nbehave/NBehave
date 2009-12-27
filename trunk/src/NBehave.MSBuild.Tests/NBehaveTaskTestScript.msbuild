@@ -3,16 +3,14 @@
 
   <UsingTask AssemblyFile="NBehave.MSBuild.dll" TaskName="NBehave.MSBuild.NBehaveTask" />
 
-  <PropertyGroup>
-  </PropertyGroup>
-
   <Target Name="Test">
 
     <NBehaveTask
       DryRun="false"
       FailBuild="false"
       XmlOutputFile="output.xml"
-      TestAssemblies="NBehave.MSBuild.Tests.dll"
+      TestAssemblies="TestPlainTextAssembly.dll"
+      ScenarioFiles="GreetingSystem.scenario"
       />
 
   </Target>

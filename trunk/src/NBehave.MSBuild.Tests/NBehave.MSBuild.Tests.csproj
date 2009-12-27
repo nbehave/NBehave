@@ -84,9 +84,6 @@
     <None Include="GreetingSystem.scenario">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="NBehaveTaskWithScenarioFilesTestScript.msbuild">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="NBehaveTaskTestScript.msbuild">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

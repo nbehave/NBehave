@@ -11,6 +11,7 @@ namespace NBehave.Narrator.Framework
         void ThemeStarted(string name);
         void ThemeFinished();
 
-        void StoryResults(StoryResults results);
+        //void StoryResults(FeatureResults results);
+        void ScenarioResult(ScenarioResult result);
     }
 }

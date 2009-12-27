@@ -1,19 +1,27 @@
+using System;
 using System.Collections.Generic;
 
 namespace NBehave.Narrator.Framework
 {
     public class Feature
     {
+        public static event EventHandler<EventArgs<Feature>> FeatureCreated;
+
         private readonly List<ScenarioWithSteps> _scenarios = new List<ScenarioWithSteps>();
 
         public Feature()
+            : this(string.Empty)
+        { }
+
+        public Feature(string title)
         {
-            Title = string.Empty;
+            Title = title;
             Narrative = string.Empty;
         }
 
         public string Title { get; set; }
         public string Narrative { get; set; }
+        public bool IsDryRun { get; set; }
         public IEnumerable<ScenarioWithSteps> Scenarios { get { return _scenarios; } }
 
         public void AddScenario(ScenarioWithSteps scenario)
@@ -21,17 +29,13 @@ namespace NBehave.Narrator.Framework
             _scenarios.Add(scenario);
         }
 
-
-        private Story _story;
-
-        public Story AsStory()
+        public void RaiseFeatureCreated()
         {
-            if (_story == null)
-            {
-                _story = new Story(Title) { Narrative = Narrative };
+            if (FeatureCreated == null)
+                return;
 
-            }
-            return _story;
+            var e = new EventArgs<Feature>(this);
+            FeatureCreated(null, e);
         }
     }
 }

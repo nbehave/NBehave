@@ -27,7 +27,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
                 _actionCatalog.Add(stringStep, action, action.Method);
 
                 _stringStepRunner = new StringStepRunner(_actionCatalog);
-                var tableStep = new StringTableStep("Given " + stringStep, "file", _stringStepRunner, MockRepository.GenerateStub<IEventListener>());
+                var tableStep = new StringTableStep("Given " + stringStep, "file", _stringStepRunner);
                 var columnNames=new ExampleColumns(new [] {"name", "country"});
 
                 tableStep.AddTableStep(new Row(columnNames, new Dictionary<string, string> { {"name", "Morgan Persson"}, {"country", "Sweden"}}));

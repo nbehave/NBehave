@@ -1,29 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
-using NBehave.Narrator.Framework.EventListeners;
 
 namespace NBehave.Narrator.Framework
 {
     public class ScenarioStepRunner
     {
-        public IEventListener EventListener { get; set; }
-        private readonly Queue<Action> _scenarioEventsToRaise = new Queue<Action>();
+        private Feature _lastFeature;
 
-        public ScenarioStepRunner()
-        {
-            EventListener = new NullEventListener();
-        }
+        public static event EventHandler<EventArgs<ScenarioResult>> ScenarioResultCreated;
 
-        public IEnumerable<ScenarioResult> RunScenarios(IEnumerable<ScenarioWithSteps> scenarios)
+        public IEnumerable<ScenarioResult> Run(IEnumerable<ScenarioWithSteps> scenarios)
         {
             var allResults = new List<ScenarioResult>();
+
             foreach (var scenario in scenarios)
             {
-                _scenarioEventsToRaise.Clear();
+                if (scenario.Feature != _lastFeature)
+                    NewFeature(scenario);
                 IEnumerable<ScenarioResult> scenarioResults = scenario.Run();
+                RaiseFeatureResultsEvent(scenarioResults);
                 allResults.AddRange(scenarioResults);
             }
             return allResults;
+        }
+
+        private void NewFeature(ScenarioWithSteps scenario)
+        {
+            _lastFeature = scenario.Feature;
+            _lastFeature.RaiseFeatureCreated();
+        }
+
+        private void RaiseFeatureResultsEvent(IEnumerable<ScenarioResult> results)
+        {
+            if (ScenarioResultCreated == null)
+                return;
+
+            foreach (var result in results)
+            {
+                var e = new EventArgs<ScenarioResult>(result);
+                ScenarioResultCreated.Invoke(this, e);
+            }
+
         }
     }
 }

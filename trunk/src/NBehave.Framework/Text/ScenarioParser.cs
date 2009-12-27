@@ -13,12 +13,10 @@ namespace NBehave.Narrator.Framework
         private readonly ActionStepAlias _actionStepAlias = new ActionStepAlias();
         private readonly ActionStep _actionStep = new ActionStep();
         private readonly StringStepRunner _stringStepRunner;
-        private readonly IEventListener _listener;
 
-        public ScenarioParser(StringStepRunner stringStepRunner, IEventListener listener)
+        public ScenarioParser(StringStepRunner stringStepRunner)
         {
             _stringStepRunner = stringStepRunner;
-            _listener = listener;
         }
 
         public List<ScenarioWithSteps> Parse(Stream stream)
@@ -31,9 +29,7 @@ namespace NBehave.Narrator.Framework
         private List<ScenarioWithSteps> ParseScenario(string scenarioText)
         {
             var scenarios = new List<ScenarioWithSteps>();
-            var scenario = new ScenarioWithSteps(_stringStepRunner, _listener);
-            scenarios.Add(scenario);
-            bool isFirstScenario = true;
+            ScenarioWithSteps scenario = null;
             var feature = new Feature();
 
             while (scenarioText.Length > 0 && scenarioText.Trim().Length > 0)
@@ -42,27 +38,40 @@ namespace NBehave.Narrator.Framework
                 if (step.Length > 0)
                 {
                     if (_actionStep.IsFeatureTitle(step))
-                        feature = SetFeature(scenario, step);
+                        feature = CreateFeature(step);
                     else if (_actionStep.IsScenarioTitle(step))
                     {
-                        if (isFirstScenario == false || scenario.Steps.Any())
-                        {
-                            scenario = new ScenarioWithSteps(_stringStepRunner, _listener);
-                            scenarios.Add(scenario);
-                            scenario.Feature = feature;
-                            feature.AddScenario(scenario);
-                        }
-                        scenario.Title = _actionStep.GetTitle(step);
-                        isFirstScenario = false;
+                        scenario = CreateNewScenario(scenarios, feature);
+                        if (_actionStep.IsScenarioTitle(step))
+                            scenario.Title = _actionStep.GetTitle(step);
                     }
                     else if (_actionStep.IsExample(step))
+                    {
+                        if (scenario == null)
+                            scenario = CreateNewScenario(scenarios, feature);
                         AddExample(scenario, step);
+                    }
                     else
+                    {
+                        if (scenario == null)
+                            scenario = CreateNewScenario(scenarios, feature);
+
                         AddScenarioStep(scenario, step);
+                    }
                 }
                 scenarioText = RemoveStep(scenarioText, step);
             }
             return scenarios;
+        }
+
+        private ScenarioWithSteps CreateNewScenario(List<ScenarioWithSteps> scenarios, Feature feature)
+        {
+            ScenarioWithSteps scenario;
+            scenario = new ScenarioWithSteps(_stringStepRunner);
+            scenarios.Add(scenario);
+            scenario.Feature = feature;
+            feature.AddScenario(scenario);
+            return scenario;
         }
 
         private void AddExample(ScenarioWithSteps scenario, string step)
@@ -78,7 +87,7 @@ namespace NBehave.Narrator.Framework
                 List<Example> table = ParseTable(step);
                 var endOfStep = step.IndexOf('|');
                 string stepToMatch = step.Substring(0, endOfStep - 1).TrimEnd(_whiteSpaceChars);
-                var theStep = new StringTableStep(stepToMatch, scenario.FileName, _stringStepRunner, _listener);
+                var theStep = new StringTableStep(stepToMatch, scenario.FileName, _stringStepRunner);
                 foreach (Example row in table)
                 {
                     theStep.AddTableStep(new Row(row.ColumnNames, row.ColumnValues));
@@ -167,13 +176,13 @@ namespace NBehave.Narrator.Framework
             return table.Substring(newLineIdx).Trim(_whiteSpaceChars);
         }
 
-        private Feature SetFeature(ScenarioWithSteps scenario, string step)
+        private Feature CreateFeature(string step)
         {
             string[] rows = Split(step);
-            scenario.Feature.Title = _actionStep.GetTitle(rows.First());
-            scenario.Feature.Narrative = RemoveStep(step, rows[0]).TrimStart(Environment.NewLine.ToCharArray());
-            scenario.Feature.AddScenario(scenario);
-            return scenario.Feature;
+            var feature = new Feature();
+            feature.Title = _actionStep.GetTitle(rows.First());
+            feature.Narrative = RemoveStep(step, rows[0]).TrimStart(Environment.NewLine.ToCharArray());
+            return feature;
         }
 
         private string RemoveStep(string scenarioText, string step)

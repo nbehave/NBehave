@@ -61,7 +61,7 @@ namespace NBehave.Narrator.Framework
 
         public List<ScenarioWithSteps> Load(Stream stream)
         {
-            var scenarioTextParser = new ScenarioParser(_stringStepRunner, _listener);
+            var scenarioTextParser = new ScenarioParser(_stringStepRunner);
             List<ScenarioWithSteps> steps = scenarioTextParser.Parse(stream);
             return steps;
         }

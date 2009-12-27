@@ -4,7 +4,7 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
     {
         RunStart, RunFinished,
         ThemeStarted, ThemeFinished,
-        StoryCreated, StoryMessage, StoryResult,
-        ScenarioCreated , ScenarioMessage,
+        StoryCreated, StoryMessage,
+        ScenarioCreated, ScenarioResult, ScenarioMessage,
     }
 }

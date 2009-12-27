@@ -6,8 +6,8 @@ namespace NBehave.Narrator.Framework
     {
         private readonly List<Row> _tableSteps = new List<Row>();
 
-        public StringTableStep(string step, string fromFile, StringStepRunner stringStepRunner, IEventListener listener)
-            : base(step, fromFile, stringStepRunner, listener)
+        public StringTableStep(string step, string fromFile, StringStepRunner stringStepRunner)
+            : base(step, fromFile, stringStepRunner)
         { }
 
 
@@ -29,7 +29,8 @@ namespace NBehave.Narrator.Framework
             var actionStepResult = new ActionStepResult(Step, new Passed());
             foreach (var tableStep in _tableSteps)
             {
-                ActionStepResult result = StringStepRunner.RunStringStep(this, tableStep);
+                ActionStepResult result = StringStepRunner.Run(this, tableStep);
+                RaiseScenarioMessage(result);
                 actionStepResult.MergeResult(result);
             }
             return actionStepResult;

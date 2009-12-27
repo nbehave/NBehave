@@ -11,7 +11,7 @@ namespace NBehave.Narrator.Framework.Specifications
         [SetUp]
         public void Establish_context()
         {
-            _results = new ScenarioResult(new Story("Story Title"), "Scenario Title");
+            _results = new ScenarioResult(new Feature("Feature Title"), "Scenario Title");
         }
 
         [Test]

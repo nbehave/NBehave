@@ -68,12 +68,12 @@ namespace NBehave.Narrator.Framework
                 _lastAction.ExecuteNotificationMethod(typeof(AfterScenarioAttribute));
         }
 
-        public ActionStepResult RunStringStep(ActionStepText actionStep)
+        public ActionStepResult Run(ActionStepText actionStep)
         {
-            return RunStringStep(actionStep, null);
+            return Run(actionStep, null);
         }
 
-        public ActionStepResult RunStringStep(ActionStepText actionStep, Row row)
+        public ActionStepResult Run(ActionStepText actionStep, Row row)
         {
             var actionStepToUse = new ActionStepText(actionStep.Step.RemoveFirstWord(), actionStep.FromFile);
             var result = new ActionStepResult(actionStep.Step, new Passed());

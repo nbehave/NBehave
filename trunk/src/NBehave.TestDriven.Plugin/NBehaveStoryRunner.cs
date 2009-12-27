@@ -8,8 +8,6 @@ namespace NBehave.TestDriven.Plugin
 {
     public class NBehaveStoryRunner : ITestRunner
     {
-        #region ITestRunner Members
-
         TestRunState ITestRunner.RunAssembly(ITestListener tddNetListener, Assembly assembly)
         {
             return Run(assembly, null, tddNetListener);
@@ -30,23 +28,23 @@ namespace NBehave.TestDriven.Plugin
         private TestRunState Run(Assembly assembly, MemberInfo member, ITestListener tddNetListener)
         {
             var listener = new StoryRunnerEventListenerProxy(tddNetListener);
-            StoryResults results = RunStories(assembly, member, listener);
+            FeatureResults results = RunStories(assembly, member, listener);
 
             return GetTestRunState(results);
         }
 
-        private StoryResults RunStories(Assembly assembly, MemberInfo member, IEventListener listener)
+        private FeatureResults RunStories(Assembly assembly, MemberInfo member, IEventListener listener)
         {
-            var runner = new StoryRunner(listener);
+            RunnerBase runner = new TextRunner(listener);
             runner.StoryRunnerFilter = StoryRunnerFilter.GetFilter(member);
             runner.LoadAssembly(assembly);
 
-            StoryResults results = runner.Run();
+            FeatureResults results = runner.Run();
 
             return results;
         }
 
-        private TestRunState GetTestRunState(StoryResults results)
+        private TestRunState GetTestRunState(FeatureResults results)
         {
             TestRunState state = TestRunState.Success;
             if (results.NumberOfFailingScenarios > 0)
@@ -55,9 +53,5 @@ namespace NBehave.TestDriven.Plugin
                 state = TestRunState.NoTests;
             return state;
         }
-
-    
-        
-        #endregion
     }
 }

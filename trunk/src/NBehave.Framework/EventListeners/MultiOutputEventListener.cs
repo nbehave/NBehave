@@ -16,8 +16,6 @@ namespace NBehave.Narrator.Framework.EventListeners
             get { return _listeners; }
         }
 
-        #region IEventListener Members
-
         public void StoryCreated(string story)
         {
             Invoke(MethodBase.GetCurrentMethod().Name, story);
@@ -58,12 +56,10 @@ namespace NBehave.Narrator.Framework.EventListeners
             Invoke(MethodBase.GetCurrentMethod().Name);
         }
 
-        public void StoryResults(StoryResults results)
+        public void ScenarioResult(ScenarioResult result)
         {
-            Invoke(MethodBase.GetCurrentMethod().Name, results);
+            Invoke(MethodBase.GetCurrentMethod().Name, result);
         }
-
-        #endregion
 
         private void Invoke(string methodName, params object[] args)
         {

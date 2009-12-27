@@ -2,13 +2,21 @@ namespace NBehave.Narrator.Framework
 {
     public class MessageEventData
     {
-        public MessageEventData(string type, string message)
+        public MessageEventData(MessageEventType type, string message)
         {
             Type = type;
             Message = message;
         }
 
-        public string Type { get; private set; }
+        public MessageEventType Type { get; private set; }
         public string Message { get; private set; }
+    }
+
+    public enum MessageEventType
+    {
+        Uknown,
+        StringStep, Pending,
+        Scenario,
+        Feature
     }
 }

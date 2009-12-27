@@ -58,7 +58,7 @@ namespace NBehave.Narrator.Framework.Specifications
 			private bool _afterStepWasCalled;
 			private bool _afterScenarioWasCalled;
 
-			[Given(@"something")]
+			[Given(@"something$")]
 			public void Given_something()
 			{ }
 
@@ -104,7 +104,7 @@ namespace NBehave.Narrator.Framework.Specifications
 			public void Running_a_step_should_call_most_attributed_methods()
 			{
 				var actionStepText = new ActionStepText("something", "");
-				_runner.RunStringStep(actionStepText);
+				_runner.Run(actionStepText);
 				
 				Assert.That(_beforeScenarioWasCalled);
 				Assert.That(_beforeStepWasCalled);
@@ -116,7 +116,7 @@ namespace NBehave.Narrator.Framework.Specifications
 			public void Completing_a_scenario_should_call_all_attributed_methods()
 			{
 				var actionStepText = new ActionStepText("something", "");
-				_runner.RunStringStep(actionStepText);
+				_runner.Run(actionStepText);
 				_runner.OnCloseScenario();
 
 				Assert.That(_beforeScenarioWasCalled);

@@ -1,15 +1,17 @@
+using System;
+
 namespace NBehave.Narrator.Framework
 {
     public class StringStep : ActionStepText
     {
-        private readonly IEventListener _listener;
+        public static event EventHandler<EventArgs<MessageEventData>> MessageAdded;
+
         protected StringStepRunner StringStepRunner { get; private set; }
 
-        public StringStep(string step, string fromFile, StringStepRunner stringStepRunner, IEventListener listener)
+        public StringStep(string step, string fromFile, StringStepRunner stringStepRunner)
             : base(step, fromFile)
         {
             StringStepRunner = stringStepRunner;
-            _listener = listener;
         }
 
         public override string ToString()
@@ -27,19 +29,26 @@ namespace NBehave.Narrator.Framework
 
         public virtual ActionStepResult Run()
         {
-            ActionStepResult actionStepResult = StringStepRunner.RunStringStep(this);
+            ActionStepResult actionStepResult = StringStepRunner.Run(this);
             RaiseScenarioMessage(actionStepResult.Result);
             return actionStepResult;
         }
 
-        private void RaiseScenarioMessage(Result result)
+        protected void RaiseScenarioMessage(Result result)
         {
-            if (_listener == null)
+            if (MessageAdded == null)
                 return;
+
+            EventArgs<MessageEventData> e;
+            MessageEventType stepType = MessageEventType.StringStep;
+            if (result is Pending)
+                stepType = MessageEventType.Pending;
             if (result.GetType() == typeof(Passed))
-                _listener.ScenarioMessageAdded(Step);
+                e = new EventArgs<MessageEventData>(new MessageEventData(stepType, Step));
             else
-                _listener.ScenarioMessageAdded(Step + " - " + result.ToString().ToUpper());
+                e = new EventArgs<MessageEventData>(new MessageEventData(stepType, Step + " - " + result.ToString().ToUpper()));
+
+            MessageAdded.Invoke(this, e);
         }
     }
 }

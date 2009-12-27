@@ -1,13 +1,13 @@
 namespace NBehave.Narrator.Framework.EventListeners.Xml
 {
-    public class StoryResultsEventReceived : EventReceived
+    public class ScenarioResultEventReceived : EventReceived
     {
-        public StoryResults StoryResults {get; private set; }
-		
-        public StoryResultsEventReceived(StoryResults results)
-            : base("", EventType.StoryResult)
+        public ScenarioResult ScenarioResult {get; private set; }
+
+        public ScenarioResultEventReceived(ScenarioResult results)
+            : base("", EventType.ScenarioResult)
         {
-            StoryResults = results;
+            ScenarioResult = results;
         }
     }
 }

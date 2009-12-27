@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using NBehave.Narrator.Framework.EventListeners;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Specification = NUnit.Framework.TestAttribute;
@@ -18,20 +19,14 @@ namespace NBehave.Narrator.Framework.Specifications
 
         private ScenarioWithSteps CreateScenarioWithSteps()
         {
-            return CreateScenarioWithSteps(MockRepository.GenerateStub<IEventListener>());
-        }
-
-        private ScenarioWithSteps CreateScenarioWithSteps(IEventListener listener)
-        {
-            var scenario = new ScenarioWithSteps(_stringStepRunner, listener);
-            return scenario;
+            return new ScenarioWithSteps(_stringStepRunner);
         }
 
         [SetUp]
         public void SetUp()
         {
             _actionCatalog = new ActionCatalog();
-            _stringStepRunner = new StringStepRunner(_actionCatalog);
+            _stringStepRunner = new StringStepRunner(_actionCatalog); 
             _runner = new ScenarioStepRunner();
         }
 
@@ -46,7 +41,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 var scenario = CreateScenarioWithSteps();
                 scenario.AddStep("Given my name is Axel");
                 scenario.AddStep("And my name is Morgan");
-                var scenarioResult = _runner.RunScenarios(new[] { scenario }).First();
+                var scenarioResult = _runner.Run(new[] { scenario }).First();
 
                 Assert.AreEqual(2, scenarioResult.ActionStepResults.Count());
             }
@@ -60,47 +55,13 @@ namespace NBehave.Narrator.Framework.Specifications
                 var scenario = CreateScenarioWithSteps();
                 scenario.AddStep("Given my name is Morgan");
                 scenario.AddStep("Given my name is Axel");
-                var scenarioResult = _runner.RunScenarios(new[] { scenario }).First();
+                var scenarioResult = _runner.Run(new[] { scenario }).First();
 
 
                 Assert.That(scenarioResult.ActionStepResults.First().Result, Is.TypeOf(typeof(Passed)));
                 Assert.That(scenarioResult.ActionStepResults.Last().Result, Is.TypeOf(typeof(Failed)));
             }
         }
-
-
-        public class When_Running_scenario_stream_with_multiple_scenarios : ScenarioStepRunnerSpec
-        {
-            [Test]
-            public void Should_only_call_eventlistener_once_for_each_given()
-            {
-                Action<string> action = name => Assert.AreEqual("Morgan", name);
-                _actionCatalog.Add(new ActionMethodInfo(new Regex(@"my name is (?<name>\w+)"), action, action.Method, "Given"));
-
-                var evtListener = MockRepository.GenerateMock<IEventListener>();
-
-                var fooScenario = CreateScenarioWithSteps(evtListener);
-                fooScenario.Title = "foo";
-                fooScenario.AddStep("Given foo");
-                fooScenario.AddStep("When foo");
-                fooScenario.AddStep("Then foo");
-
-                var barScenario = CreateScenarioWithSteps(evtListener);
-                barScenario.Title = "bar";
-                barScenario.AddStep("Given bar");
-                barScenario.AddStep("When bar");
-                barScenario.AddStep("Then bar");
-
-                _runner.EventListener = evtListener;
-                var scenarioResults = _runner.RunScenarios(new List<ScenarioWithSteps> { fooScenario, barScenario });
-
-                evtListener.AssertWasCalled(f => f.ScenarioMessageAdded("Given foo - PENDING"));
-                evtListener.AssertWasCalled(f => f.ScenarioMessageAdded("Given bar - PENDING"));
-
-                StringAssert.DoesNotContain("foo", scenarioResults.Skip(1).First().Message);
-            }
-        }
-
 
         [ActionSteps, TestFixture]
         public class When_running_many_scenarios_and_class_with_actionSteps_implements_notification_attributes : ScenarioStepRunnerSpec
@@ -110,7 +71,7 @@ namespace NBehave.Narrator.Framework.Specifications
             private int _timesAfterStepWasCalled;
             private int _timesAfterScenarioWasCalled;
 
-            [Given(@"something")]
+            [Given(@"something$")]
             public void Given_something()
             { }
 
@@ -154,8 +115,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 secondScenario.AddStep("Given something to count");
                 secondScenario.AddStep("Given something to count");
 
-                _runner.EventListener = MockRepository.GenerateStub<IEventListener>();
-                _runner.RunScenarios(new List<ScenarioWithSteps> { firstScenario, secondScenario });
+                _runner.Run(new List<ScenarioWithSteps> { firstScenario, secondScenario });
             }
 
             [Specification]

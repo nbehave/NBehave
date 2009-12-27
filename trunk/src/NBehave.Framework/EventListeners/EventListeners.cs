@@ -7,8 +7,7 @@ namespace NBehave.Narrator.Framework.EventListeners
 {
     public static class EventListeners
     {
-        public static IEventListener CreateEventListenerUsing(TextWriter writer, string textWriterFile,
-                                                              string xmlWriterFile)
+        public static IEventListener CreateEventListenerUsing(TextWriter writer, string textWriterFile, string xmlWriterFile)
         {
             bool useTextWriter = textWriterFile.NotBlank();
             bool useXmlWriter = xmlWriterFile.NotBlank();

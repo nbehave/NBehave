@@ -51,8 +51,6 @@ namespace NBehave.Console
             get { return _isInvalid; }
         }
 
-
-
         public override void Help()
         {
 
@@ -86,7 +84,5 @@ namespace NBehave.Console
         {
             _isInvalid = true;
         }
-
-
     }
 }

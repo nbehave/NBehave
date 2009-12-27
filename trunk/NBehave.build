@@ -54,7 +54,7 @@
 				<attribute type="ComVisibleAttribute" value="false" />
 				<attribute type="AssemblyVersionAttribute" value="${project.fullversion}" />
 				<attribute type="AssemblyFileVersionAttribute" value="${project.fullversion}" />
-				<attribute type="AssemblyCopyrightAttribute" value="Copyright Â© ${company.name} 2007-${datetime::get-year(datetime::now())}" />
+				<attribute type="AssemblyCopyrightAttribute" value="Copyright © ${company.name} 2007-${datetime::get-year(datetime::now())}" />
 				<attribute type="AssemblyProductAttribute" value="${project::get-name()}" />
 				<attribute type="AssemblyCompanyAttribute" value="${company.name}" />
 				<attribute type="AssemblyConfigurationAttribute" value="${project.config}" />
@@ -86,7 +86,6 @@
 			<arg value="NBehave.Spec.Xunit.Specs.dll" />
 			<arg value="NBehave.NAnt.Tests.dll" />
 			<arg value="NBehave.MSBuild.Tests.dll" />
-			<arg value="NBehave.TestDriven.Plugin.Specs.dll" />
 			<arg value="/xml:..\..\test-reports\UnitTests.xml" />
 		</exec>
 	</target>

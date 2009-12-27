@@ -147,7 +147,7 @@ namespace NBehave.Narrator.Framework.Specifications
 		[Context, ActionSteps]
 		public class When_class_with_actionSteps_attribute_implements_IMatchFiles : ActionStepParserSpec, IMatchFiles, IFileMatcher
 		{
-			[Given(@"something")]
+			[Given(@"something$")]
 			public void Given_something()
 			{ }
 			

@@ -12,7 +12,7 @@
 //        [Test]
 //        public void Should_report_scenario_totals_based_on_results_added()
 //        {
-//            var results = new StoryResults();
+//            var results = new FeatureResults();
 
 //            results.AddResult(new ScenarioResult("Title", "Title", Result.Passed));
 //            results.AddResult(new ScenarioResult("Title", "Title", Result.Failed));
@@ -29,7 +29,7 @@
 //        [Test]
 //        public void Should_return_scenario_results_added()
 //        {
-//            var results = new StoryResults();
+//            var results = new FeatureResults();
 
 //            results.AddResult(new ScenarioResult("Passed", "Passed", Result.Passed));
 //            results.AddResult(new ScenarioResult("Failed", "Failed", Result.Failed));

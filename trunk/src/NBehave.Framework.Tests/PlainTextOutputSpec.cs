@@ -14,9 +14,9 @@ namespace NBehave.Narrator.Framework.Specifications
 		{
 			writer = new StringWriter();
 			output = new PlainTextOutput(writer);
-			var results = new StoryResults();
-			var story = new Story("story title");
-			var scenarioResult = new ScenarioResult(story, "scenario title");
+			var results = new FeatureResults();
+			var feature = new Feature("feature title");
+			var scenarioResult = new ScenarioResult(feature, "scenario title");
 			scenarioResult.AddActionStepResult(new ActionStepResult("a", new Passed()));
 			scenarioResult.AddActionStepResult(new ActionStepResult("b", new Passed()));
 			scenarioResult.AddActionStepResult(new ActionStepResult("c", new Pending("pending reason")));

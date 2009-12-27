@@ -15,15 +15,9 @@ namespace NBehave.Narrator.Framework.Specifications
 	[Context]
 	public class TextRunnerSpec
 	{
-		private StoryResults RunAction(string actionStep, TextRunner runner)
+		private FeatureResults RunAction(string actionStep, TextRunner runner)
 		{
-            var ms = new MemoryStream();
-            var sr = new StreamWriter(ms);
-            sr.WriteLine(actionStep);
-            sr.Flush();
-            ms.Seek(0, SeekOrigin.Begin);
-            runner.Load(ms);
-
+            runner.Load(actionStep.ToStream());
             return runner.Run();
         }
 
@@ -85,7 +79,7 @@ namespace NBehave.Narrator.Framework.Specifications
 				sr.Flush();
 				ms.Seek(0, SeekOrigin.Begin);
 				_runner.Load(ms);
-				StoryResults result = _runner.Run();
+				FeatureResults result = _runner.Run();
 				Assert.That(result.NumberOfPassingScenarios, Is.EqualTo(1));
 			}
 
@@ -93,7 +87,7 @@ namespace NBehave.Narrator.Framework.Specifications
 			public void Should_run_scenarios_in_text_file()
 			{
 				_runner.Load(new[] { @"GreetingSystem.txt" });
-				StoryResults result = _runner.Run();
+				FeatureResults result = _runner.Run();
 				Assert.That(result.NumberOfPassingScenarios, Is.EqualTo(1));
 			}
 
@@ -101,7 +95,7 @@ namespace NBehave.Narrator.Framework.Specifications
 			public void Should_get_result_of_running_scenarios_in_text_file()
 			{
 				_runner.Load(new[] { @"GreetingSystem.txt" });
-				StoryResults results = _runner.Run();
+				FeatureResults results = _runner.Run();
 				Assert.That(results.NumberOfThemes, Is.EqualTo(0));
 				Assert.That(results.NumberOfStories, Is.EqualTo(1));
 				Assert.That(results.NumberOfScenariosFound, Is.EqualTo(1));
@@ -112,7 +106,7 @@ namespace NBehave.Narrator.Framework.Specifications
 			public void Should_get_correct_errormessage_from_failed_scenario()
 			{
 				_runner.Load(new[] { @"GreetingSystemFailure.txt" });
-				StoryResults results = _runner.Run();
+				FeatureResults results = _runner.Run();
 				Assert.That(results.NumberOfFailingScenarios, Is.EqualTo(1));
 				Assert.That(results.ScenarioResults[0].Message.StartsWith("NUnit.Framework.AssertionException :"), Is.True);
 			}
@@ -125,7 +119,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 _runner = CreateTextRunner(listener);
 			    LoadAssembly();
                 _runner.Load(new[] { @"GreetingSystemFailure.txt" });
-				StoryResults results = _runner.Run();
+				FeatureResults results = _runner.Run();
 				StringAssert.Contains("Then I should be greeted with “Hello, Scott!” - FAILED", writer.ToString());
 			}
 
@@ -137,7 +131,7 @@ namespace NBehave.Narrator.Framework.Specifications
 			    _runner = CreateTextRunner(listener);
                 _runner.LoadAssembly("TestPlainTextAssembly.dll");
 				_runner.Load(new[] { @"GreetingSystem_ManyGreetings.txt" });
-				StoryResults results = _runner.Run();
+				FeatureResults results = _runner.Run();
 				Assert.That(results.NumberOfScenariosFound, Is.EqualTo(2));
 				Assert.That(results.NumberOfPassingScenarios, Is.EqualTo(2));
 			}
@@ -164,7 +158,7 @@ namespace NBehave.Narrator.Framework.Specifications
 				sr.Flush();
 				ms.Seek(0, SeekOrigin.Begin);
 				_runner.Load(ms);
-				StoryResults result = _runner.Run();
+				FeatureResults result = _runner.Run();
 				Assert.That(result.NumberOfPassingScenarios, Is.EqualTo(1));
 			}
 
@@ -177,7 +171,7 @@ namespace NBehave.Narrator.Framework.Specifications
 				sr.Flush();
 				stream.Seek(0, SeekOrigin.Begin);
 				_runner.Load(stream);
-				StoryResults result = _runner.Run();
+				FeatureResults result = _runner.Run();
 				Assert.That(result.NumberOfPendingScenarios, Is.EqualTo(1));
 			}
 
@@ -191,7 +185,7 @@ namespace NBehave.Narrator.Framework.Specifications
 				sr.Flush();
 				stream.Seek(0, SeekOrigin.Begin);
 				_runner.Load(stream);
-				StoryResults result = _runner.Run();
+				FeatureResults result = _runner.Run();
 				StringAssert.Contains("No matching Action found for \"Given something that has no ActionStep\"", result.ScenarioResults[0].Message);
 				StringAssert.Contains("No matching Action found for \"And something else that has no ActionStep\"", result.ScenarioResults[0].Message);
 			}
@@ -200,7 +194,7 @@ namespace NBehave.Narrator.Framework.Specifications
 			public void Should_use_wildcard_and_run_all_scenarios_in_all_matching_text_files()
 			{
 				_runner.Load(new[] { @"GreetingSystem*.txt" });
-				StoryResults result = _runner.Run();
+				FeatureResults result = _runner.Run();
 				Assert.That(result.NumberOfPassingScenarios, Is.EqualTo(4));
 			}
 		}
@@ -325,7 +319,7 @@ namespace NBehave.Narrator.Framework.Specifications
 		[Context]
 		public class When_running_plain_text_scenarios_with_story : TextRunnerSpec
 		{
-			private StoryResults _result;
+			private FeatureResults _result;
 			private StringWriter _messages;
 
 			[SetUp]
@@ -351,7 +345,7 @@ namespace NBehave.Narrator.Framework.Specifications
 			[Specification]
 			public void Should_set_story_title_on_result()
 			{
-				Assert.That(_result.ScenarioResults[0].StoryTitle, Is.EqualTo("Greeting system"));
+				Assert.That(_result.ScenarioResults[0].FeatureTitle, Is.EqualTo("Greeting system"));
 			}
 
 			[Specification]

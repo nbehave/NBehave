@@ -3,34 +3,28 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Context = NUnit.Framework.TestFixtureAttribute;
 
 namespace NBehave.Narrator.Framework.Specifications.Text
 {
-    [TestFixture]
+    [Context]
     public abstract class ScenarioParserSpec
     {
         private Stream WriteTextToStream(string text)
         {
-            var ms = new MemoryStream();
-            var sr = new StreamWriter(ms);
-            sr.Write(text);
-            sr.Flush();
-            ms.Seek(0, SeekOrigin.Begin);
-            return ms;
+            return text.ToStream();
         }
 
-        private StringStepRunner _stringStepRunner = new StringStepRunner(new ActionCatalog());
+        private readonly StringStepRunner _stringStepRunner = new StringStepRunner(new ActionCatalog());
 
         private ScenarioParser CreateScenarioParser()
         {
-            return new ScenarioParser(_stringStepRunner, MockRepository.GenerateStub<IEventListener>());
+            return new ScenarioParser(_stringStepRunner);
         }
 
         private StringStep NewStringStep(string step)
         {
-            return new StringStep(step, "filename", _stringStepRunner, MockRepository.GenerateStub<IEventListener>());
+            return new StringStep(step, "filename", _stringStepRunner);
         }
 
         private List<ScenarioWithSteps> _scenarios;
@@ -193,7 +187,6 @@ namespace NBehave.Narrator.Framework.Specifications.Text
                 Assert.That(_scenarios[0].Feature.Narrative, Is.EqualTo(
                                                                  "  This is the narrative" + Environment.NewLine +
                                                                  "  This is second row of narrative"));
-
             }
 
             [Test]
@@ -246,7 +239,6 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             {
                 Assert.That(_scenarios[0].Title, Is.EqualTo("Adding numbers"));
             }
-
 
             [Test]
             public override void Should_have_given_step()
@@ -309,7 +301,41 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             {
                 CollectionAssert.Contains(_scenarios[0].Steps, NewStringStep("  Then I should get:"));
             }
+        }
 
+        public class Scenario_Multiple_features : ScenarioParserSpec
+        {
+            [SetUp]
+            public void Scenario()
+            {
+                string scenario = "Feature: Calculator 1" + Environment.NewLine +
+                                  "Scenario: Adding numbers 1" + Environment.NewLine +
+                                  "  Given numbers 1 and 2" + Environment.NewLine +
+                                  "  When I add the numbers" + Environment.NewLine +
+                                  "  Then the sum is 3" + Environment.NewLine +
+                                  "" + Environment.NewLine +
+                                  "Feature: Calculator 2" + Environment.NewLine +
+                                  "Scenario: Adding numbers 2" + Environment.NewLine +
+                                  "  Given numbers 1 and 2" + Environment.NewLine +
+                                  "  When I add the numbers" + Environment.NewLine +
+                                  "  Then the sum is 3";
+
+                var parser = CreateScenarioParser();
+                Stream stream = WriteTextToStream(scenario);
+                _scenarios = parser.Parse(stream);
+            }
+
+            [Test]
+            public void feature_1_should_be_referenced_by_scenario_2()
+            {
+                Assert.That(_scenarios[0].Feature.Title, Is.EqualTo("Calculator 1"));
+            }
+
+            [Test]
+            public void feature_2_should_be_referenced_by_scenario_2()
+            {
+                Assert.That(_scenarios[1].Feature.Title, Is.EqualTo("Calculator 2"));
+            }
         }
     }
 }

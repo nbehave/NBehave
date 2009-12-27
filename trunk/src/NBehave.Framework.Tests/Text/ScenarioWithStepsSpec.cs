@@ -80,11 +80,12 @@ namespace NBehave.Narrator.Framework.Specifications.Text
         public class When_running_a_scenario : ScenarioWithStepsSpec
         {
             private ScenarioResult _scenarioResult;
-            private IEventListener _listener = MockRepository.GenerateMock<IEventListener>();
+            private bool _scenarioCreatedCalled;
 
             protected override void Establish_context()
             {
-                var scenarioWithSteps = new ScenarioWithSteps(_stringStepRunner, _listener);
+                ScenarioWithSteps.ScenarioCreated += (o, e) => { _scenarioCreatedCalled = true; };
+                var scenarioWithSteps = new ScenarioWithSteps(_stringStepRunner);
                 scenarioWithSteps.Title = "scenario title";
                 scenarioWithSteps.AddStep("Given numbers 1 and 2");
                 scenarioWithSteps.AddStep("When I add the numbers");
@@ -130,9 +131,9 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             }
 
             [Test]
-            public void Should_raise_()
+            public void Should_raise_scenario_created_event()
             {
-                _listener.AssertWasCalled(l=>l.ScenarioCreated("scenario title"));
+                Assert.That(_scenarioCreatedCalled, Is.True, "Event was not called");
             }
         }
 
@@ -142,7 +143,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
 
             protected override void Establish_context()
             {
-                var scenarioWithSteps = new ScenarioWithSteps(_stringStepRunner, MockRepository.GenerateStub<IEventListener>());
+                var scenarioWithSteps = new ScenarioWithSteps(_stringStepRunner);
                 scenarioWithSteps.AddStep("Given numbers [left] and [right]");
                 scenarioWithSteps.AddStep("When I add the numbers");
                 scenarioWithSteps.AddStep("Then the sum is [sum]");

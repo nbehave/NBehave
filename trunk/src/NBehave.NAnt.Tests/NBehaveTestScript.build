@@ -1,26 +1,23 @@
 <?xml version="1.0"?>
-<project name="NBehaveTest" default="all" xmlns="http://nant.sf.net/release/0.85/nant.xsd">  
+<project name="NBehaveTest" default="all" xmlns="http://nant.sf.net/release/0.85/nant.xsd">
   <loadtasks assembly="NAnt.Contrib.Tasks.dll" />
   <loadtasks assembly="NBehave.NAnt.dll" />
 
-  <property name="textOutputFile" value="stories.txt" />
+  <property name="textOutputFile" value="NANT_GreetingSystemStory.txt"/>
   <property name="exception_thrown" value="foo" />
-  
-  
+
   <target name="all" description="runs all build targets">
     <call target="should_not_execute_unless_at_least_one_assembly_is_specified" />
     <call target="should_execute_specifications_and_output_story_log_to_the_specified_file" />
     <call target="should_not_fail_build_during_a_dry_run" />
     <call target="should_fail_build_when_specified_and_at_least_one_scenario_has_failed" />
   </target>
-  
-  
-  
-  <target name="should_not_execute_unless_at_least_one_assembly_is_specified">    
+
+  <target name="should_not_execute_unless_at_least_one_assembly_is_specified">
     <trycatch>
       <try>
         <nbehave>
-          <assemblies />        
+          <assemblies />
         </nbehave>
       </try>
       <catch>
@@ -31,48 +28,50 @@
     <fail unless="${property::get-value('exception_thrown') == target::get-current-target()}" />
   </target>
 
-  
-  
   <target name="should_execute_specifications_and_output_story_log_to_the_specified_file">
     <delete file="${textOutputFile}" if="${file::exists(textOutputFile)}" />
-
-    <nbehave textOutputFile="${textOutputFile}">
+    <nbehave textOutputFile="${textOutputFile}" >
       <assemblies>
-        <include name="TestAssembly.dll" />
+        <include name="TestPlainTextAssembly.dll" />
       </assemblies>
+      <scenarioFiles>
+        <include name="GreetingSystem.scenario" />
+      </scenarioFiles>
     </nbehave>
 
     <fail unless="${file::exists(textOutputFile)}" />
   </target>
 
-  
-  
   <target name="should_not_fail_build_during_a_dry_run">
     <trycatch>
       <try>
         <nbehave dryRun="true">
           <assemblies>
-            <include name="TestAssembly.dll" />
+            <include name="TestPlainTextAssembly.dll" />
           </assemblies>
+          <scenarioFiles>
+            <include name="*.scenario" />
+          </scenarioFiles>
         </nbehave>
       </try>
       <catch>
         <property name="exception_thrown" value="${target::get-current-target()}" />
       </catch>
     </trycatch>
-    
+
     <fail if="${property::get-value('exception_thrown') == target::get-current-target()}" />
   </target>
-
-  
 
   <target name="should_fail_build_when_specified_and_at_least_one_scenario_has_failed">
     <trycatch>
       <try>
         <nbehave failBuild="true">
           <assemblies>
-            <include name="TestAssembly.dll" />
+            <include name="TestPlainTextAssembly.dll" />
           </assemblies>
+          <scenarioFiles>
+            <include name="GreetingSystemFailure.scenario" />
+          </scenarioFiles>
         </nbehave>
       </try>
       <catch>
@@ -82,5 +81,5 @@
 
     <fail unless="${property::get-value('exception_thrown') == target::get-current-target()}" />
   </target>
-  
+
 </project>

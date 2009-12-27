@@ -38,7 +38,7 @@ namespace NBehave.Narrator.Framework
 				_writer.WriteLine("All Rights Reserved.");
 		}
 
-		public void WriteDotResults(StoryResults results)
+		public void WriteDotResults(FeatureResults results)
 		{
 			foreach (ScenarioResult result in results.ScenarioResults)
 			{
@@ -64,7 +64,7 @@ namespace NBehave.Narrator.Framework
 			_writer.WriteLine();
 		}
 
-		public void WriteSummaryResults(StoryResults results)
+		public void WriteSummaryResults(FeatureResults results)
 		{
 			_writer.WriteLine("Scenarios run: {0}, Failures: {1}, Pending: {2}", results.NumberOfScenariosFound,
 			                  results.NumberOfFailingScenarios, results.NumberOfPendingScenarios);
@@ -74,31 +74,31 @@ namespace NBehave.Narrator.Framework
 			_writer.WriteLine("Steps {0}, failed {1}, pending {2}", actionSteps, failedSteps, pendingSteps);
 		}
 		
-		private int CountActionSteps(StoryResults storyResults)
+		private int CountActionSteps(FeatureResults featureResults)
 		{
-			return CountPassedActionSteps(storyResults) +
-				CountPendingActionSteps(storyResults) +
-				CountFailedActionSteps(storyResults);
+			return CountPassedActionSteps(featureResults) +
+				CountPendingActionSteps(featureResults) +
+				CountFailedActionSteps(featureResults);
 		}
 		
-		private int CountPassedActionSteps(StoryResults storyResults)
+		private int CountPassedActionSteps(FeatureResults featureResults)
 		{
-			return CountActionStepsOfType(storyResults, typeof(Passed));
+			return CountActionStepsOfType(featureResults, typeof(Passed));
 		}
 		
-		private int CountFailedActionSteps(StoryResults storyResults)
+		private int CountFailedActionSteps(FeatureResults featureResults)
 		{
-			return CountActionStepsOfType(storyResults, typeof(Failed));
+			return CountActionStepsOfType(featureResults, typeof(Failed));
 		}
 		
-		private int CountPendingActionSteps(StoryResults storyResults)
+		private int CountPendingActionSteps(FeatureResults featureResults)
 		{
-			return CountActionStepsOfType(storyResults, typeof(Pending));
+			return CountActionStepsOfType(featureResults, typeof(Pending));
 		}
-		private int CountActionStepsOfType(StoryResults storyResults, Type typeOfStep)
+		private int CountActionStepsOfType(FeatureResults featureResults, Type typeOfStep)
 		{
 			int sum=0;
-			foreach	(var result in storyResults.ScenarioResults)
+			foreach	(var result in featureResults.ScenarioResults)
 			{
 				var toCount = from r in result.ActionStepResults
 					where r.Result.GetType()==typeOfStep
@@ -108,7 +108,7 @@ namespace NBehave.Narrator.Framework
 			return sum;
 		}
 		
-		public void WriteFailures(StoryResults results)
+		public void WriteFailures(FeatureResults results)
 		{
 			if (results.NumberOfFailingScenarios > 0)
 			{
@@ -120,7 +120,7 @@ namespace NBehave.Narrator.Framework
 				{
 					if (result.Result.GetType() == typeof(Failed))
 					{
-						_writer.WriteLine("{0}) {1} ({2}) FAILED", failureNumber, result.StoryTitle,
+						_writer.WriteLine("{0}) {1} ({2}) FAILED", failureNumber, result.FeatureTitle,
 						                  result.ScenarioTitle);
 						_writer.WriteLine("  {0}", result.Message);
 						_writer.WriteLine("{0}", result.StackTrace);
@@ -135,7 +135,7 @@ namespace NBehave.Narrator.Framework
 			_writer.WriteLine("");
 		}
 
-		public void WritePending(StoryResults results)
+		public void WritePending(FeatureResults results)
 		{
 			if (results.NumberOfPendingScenarios > 0)
 			{
@@ -147,7 +147,7 @@ namespace NBehave.Narrator.Framework
 				{
 					if (result.Result.GetType() == typeof(Pending))
 					{
-						_writer.WriteLine("{0}) {1} ({2}): {3}", pendingNumber, result.StoryTitle,
+						_writer.WriteLine("{0}) {1} ({2}): {3}", pendingNumber, result.FeatureTitle,
 						                  result.ScenarioTitle, result.Message);
 						pendingNumber++;
 					}

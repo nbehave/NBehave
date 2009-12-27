@@ -18,7 +18,7 @@ namespace NBehave.Narrator.Framework
             get
             {
                 var defaultActionSteps = new List<string>();
-                defaultActionSteps.AddRange(ActionStep.StorySteps);
+                defaultActionSteps.AddRange(ActionStep.FeatureSteps);
                 defaultActionSteps.AddRange(ActionStep.ScenarioSteps);
                 return defaultActionSteps;
             }

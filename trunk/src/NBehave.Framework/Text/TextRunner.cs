@@ -6,7 +6,7 @@ namespace NBehave.Narrator.Framework
 {
     public class TextRunner : RunnerBase
     {
-        private readonly List<List<ScenarioWithSteps>> _stories = new List<List<ScenarioWithSteps>>();
+        private readonly List<List<ScenarioWithSteps>> _scenarios = new List<List<ScenarioWithSteps>>();
         private readonly ActionStepFileLoader _actionStepFileLoader;
         private readonly StringStepRunner _stringStepRunner;
         
@@ -27,49 +27,47 @@ namespace NBehave.Narrator.Framework
             parser.FindActionSteps(assembly);
         }
 
-        protected override void RunStories(StoryResults results)
+        protected override void RunFeatures(FeatureResults results)
         {
             EventListener.ThemeStarted(string.Empty);
-            RunEachStory(results);
+            RunEachFeature(results);
             EventListener.ThemeFinished();
-            ClearStoryList();
         }
 
-        private void RunEachStory(StoryResults storyResults)
+        private void RunEachFeature(FeatureResults featureResults)
         {
-            foreach (List<ScenarioWithSteps> scenarioSteps in _stories)
+            foreach (List<ScenarioWithSteps> scenarioSteps in _scenarios)
             {
                 ScenarioStepRunner scenarioStepRunner = CreateScenarioStepRunner();
 
-                IEnumerable<ScenarioResult> scenarioResults = scenarioStepRunner.RunScenarios(scenarioSteps);
-                AddScenarioResultsToStoryResults(scenarioResults, storyResults);
-                storyResults.NumberOfStories++;
-                EventListener.StoryResults(storyResults);
+                IEnumerable<ScenarioResult> scenarioResults = scenarioStepRunner.Run(scenarioSteps);
+                AddScenarioResultsToStoryResults(scenarioResults, featureResults);
+                featureResults.NumberOfStories++;
+                //EventListener.StoryResults(featureResults);
             }
         }
 
-        private void AddScenarioResultsToStoryResults(IEnumerable<ScenarioResult> scenarioResults, StoryResults storyResults)
+        private void AddScenarioResultsToStoryResults(IEnumerable<ScenarioResult> scenarioResults, FeatureResults featureResults)
         {
             foreach (var result in scenarioResults)
-                storyResults.AddResult(result);
+                featureResults.AddResult(result);
         }
 
         private ScenarioStepRunner CreateScenarioStepRunner()
         {
             var scenarioStepRunner = new ScenarioStepRunner();
-            scenarioStepRunner.EventListener = EventListener;
             return scenarioStepRunner;
         }
 
         public void Load(IEnumerable<string> fileLocations)
         {
-            _stories.AddRange(_actionStepFileLoader.Load(fileLocations));
+            _scenarios.AddRange(_actionStepFileLoader.Load(fileLocations));
         }
 
         public void Load(Stream stream)
         {
             List<ScenarioWithSteps> scenarios = _actionStepFileLoader.Load(stream);
-            _stories.Add(scenarios);
+            _scenarios.Add(scenarios);
         }
     }
 }

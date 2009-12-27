@@ -1,57 +1,38 @@
-﻿using NBehave.Narrator.Framework;
+﻿using System;
 
 namespace NBehave.TestDriven.Plugin
 {
-    [Theme("TDD.Net integration")]
     public class TddNetSpec
     {
-        [Story]
-        public void Implementing_NBehave_support_in_testdriven_dot_net()
-        {
-            var tddNetStory = new Story("Testdriven.NET Support");
+        public static string Story = "Story: Testdriven.NET Support" + Environment.NewLine +
+                                     "  As a fan of NBehave" + Environment.NewLine +
+                                     "  I Want NBehave to work with Testdriven.NET" + Environment.NewLine +
+                                     "  So that I get less friction developing code using NBehave" + Environment.NewLine +
+                                     "Scenario: VS integration - right click method" + Environment.NewLine +
+                                     //.Pending("Pending test")
+                                     "  Given A story in a C# source file" + Environment.NewLine +
+                                     "    And User have right clicked on a method in code window" + Environment.NewLine +
+                                     "    And Left clicked 'Run Test(s)'" + Environment.NewLine +
+                                     "  When Testdriven.Net runs story" + Environment.NewLine +
+                                     "  Then NBehave framework should be invoked" + Environment.NewLine +
+                                     "    And Testdriven.Net should be notified of the result" + Environment.NewLine +
+                                     //
+                                     "Scenario VS integration - right click .cs file" + Environment.NewLine +
+                                     "  Given A story in a C# source file" + Environment.NewLine +
+                                     "    And User have right clicked on file" + Environment.NewLine +
+                                     "    And Left clicked 'Run Test(s)'" + Environment.NewLine +
+                                     "  When Testdriven.Net runs story" + Environment.NewLine +
+                                     "  Then NBehave framework should be invoked" + Environment.NewLine +
+                                     "    And Testdriven.Net should be notified of the result";
 
-            tddNetStory
-                .AsA("fan of NBehave")
-                .IWant("NBehave to work with Testdriven.NET")
-                .SoThat("I get less friction developing code using NBehave");
-
-            tddNetStory
-                .WithScenario("VS integration - right click method")
-                .Pending("Pending test")
-                .Given("A story in a C# source file", () => { })
-                .And("User have right clicked on a method in code window", () => { })
-                .And("Left clicked 'Run Test(s)'", () => { })
-                .When("Testdriven.Net runs story", () => { })
-                .Then("NBehave framework should be invoked", () => { })
-                .And("Testdriven.Net should be notified of the result", () => { });
-
-            tddNetStory
-                .WithScenario("VS integration - right click .cs file")
-                .Given("A story in a C# source file", () => { })
-                .And("User have right clicked on file", () => { })
-                .And("Left clicked 'Run Test(s)'", () => { })
-                .When("Testdriven.Net runs story", () => { })
-                .Then("NBehave framework should be invoked", () => { })
-                .And("Testdriven.Net should be notified of the result", () => { });
-        }
-
-        [Story]
-        public void SomeOtherStory()
-        {
-            var tddNetStory = new Story("Testdriven.NET Support second story");
-
-            tddNetStory
-                .AsA("addict of NBehave")
-                .IWant("NBehave to work with Testdriven.NET")
-                .SoThat("I get my fix");
-
-            tddNetStory
-                .WithScenario("VS integration - something")
-                .Given("A story in a C# source file", () => { })
-                .When("Testdriven.Net runs story", () => { })
-                .Then("NBehave framework should be invoked", () => { })
-                .And("Testdriven.Net should be notified of the result", () => { });
-        }
-
+        public static string SomeOtherStory = "Story: Testdriven.NET Support second story" + Environment.NewLine +
+                                              "  As an addict of NBehave" + Environment.NewLine +
+                                              "  I want NBehave to work with Testdriven.NET" + Environment.NewLine +
+                                              "  So that I get my fix" + Environment.NewLine +
+                                              "Scenario: VS integration - something" + Environment.NewLine +
+                                              "  Given A story in a C# source file" + Environment.NewLine +
+                                              "  When Testdriven.Net runs story" + Environment.NewLine +
+                                              "  Then NBehave framework should be invoked" + Environment.NewLine +
+                                              "    And Testdriven.Net should be notified of the result";
     }
 }

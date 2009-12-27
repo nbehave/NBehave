@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using Microsoft.Build.Framework;
 using Microsoft.Win32;
-using NBehave.Narrator.Framework;
 using NUnit.Framework;
 using System.IO;
 using Rhino.Mocks;
@@ -11,41 +10,9 @@ using TestPlainTextAssembly;
 
 namespace NBehave.MSBuild.Tests
 {
-    [Theme("A theme to use to test the MSBuildTask")]
-    public class AThemeClass
-    {
-        [Story]
-        public void AStory()
-        {
-            var story = new Story("Test NBehave's MSBuild Task");
-
-            story.AsA("NBehave committer").
-                IWant("To test the MSBuild task for NBehave").
-                SoThat("I know it works");
-
-            story.WithScenario("A scenario that doesnt do anything").
-                Given("a given", 0, a => { }).
-                When("event occurs", 0, a => { }).
-                Then("there's an outcome", 0, a => { });
-        }
-    }
-
     [TestFixture]
     public class NBehaveTaskTest
     {
-        [Test]
-        public void ShouldExecuteTheOneStory()
-        {
-            var storyAssemblies = new[] { GetType().Assembly.Location };
-            var outputPath = Path.Combine(Path.GetDirectoryName(storyAssemblies[0]), "result.txt");
-            var buildEngine = MockRepository.GenerateStub<IBuildEngine2>();
-
-            var task = new NBehaveTask(buildEngine) { DryRun = false, FailBuild = true, TextOutputFile = outputPath, TestAssemblies = storyAssemblies };
-
-            task.Execute();
-            Assert.AreEqual(1, task.StoryResults.NumberOfPassingScenarios);
-        }
-
         [Test]
         public void ShouldExecuteStorySuccessfullyViaMsbuildEXE()
         {
@@ -90,7 +57,7 @@ namespace NBehave.MSBuild.Tests
             };
 
             task.Execute();
-            Assert.AreEqual(1, task.StoryResults.NumberOfPassingScenarios);
+            Assert.AreEqual(1, task.FeatureResults.NumberOfPassingScenarios);
         }
     }
 }
