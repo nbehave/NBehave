@@ -1,4 +1,4 @@
-using System.Reflection;
+using System;
 
 namespace NBehave.Narrator.Framework.EventListeners
 {
@@ -16,57 +16,56 @@ namespace NBehave.Narrator.Framework.EventListeners
             get { return _listeners; }
         }
 
-        public void StoryCreated(string story)
+        public void FeatureCreated(string feature)
         {
-            Invoke(MethodBase.GetCurrentMethod().Name, story);
+            Invoke(l => l.FeatureCreated(feature));
         }
 
-        public void StoryMessageAdded(string message)
+        public void FeatureNarrative(string message)
         {
-            Invoke(MethodBase.GetCurrentMethod().Name, message);
+            Invoke(l => l.FeatureNarrative(message));
         }
 
         public void ScenarioCreated(string scenarioTitle)
         {
-            Invoke(MethodBase.GetCurrentMethod().Name, scenarioTitle);            
+            Invoke(l => l.ScenarioCreated(scenarioTitle));
         }
 
         public void ScenarioMessageAdded(string message)
         {
-            Invoke(MethodBase.GetCurrentMethod().Name, message);
+            Invoke(l => l.ScenarioMessageAdded(message));
         }
 
         public void RunStarted()
         {
-            Invoke(MethodBase.GetCurrentMethod().Name);
+            Invoke(l => l.RunStarted());
         }
 
         public void RunFinished()
         {
-            Invoke(MethodBase.GetCurrentMethod().Name);
+            Invoke(l => l.RunFinished());
         }
 
         public void ThemeStarted(string name)
         {
-            Invoke(MethodBase.GetCurrentMethod().Name, name);
+            Invoke(l => l.ThemeStarted(name));
         }
 
         public void ThemeFinished()
         {
-            Invoke(MethodBase.GetCurrentMethod().Name);
+            Invoke(l => l.ThemeFinished());
         }
 
         public void ScenarioResult(ScenarioResult result)
         {
-            Invoke(MethodBase.GetCurrentMethod().Name, result);
+            Invoke(l => l.ScenarioResult(result));
         }
 
-        private void Invoke(string methodName, params object[] args)
+        private void Invoke(Action<IEventListener> f)
         {
-            foreach (IEventListener listener in Listeners)
+            foreach (var listener in _listeners)
             {
-            	var method = typeof (IEventListener).GetMethod(methodName);
-                method.Invoke(listener, args);
+                f(listener);
             }
         }
     }

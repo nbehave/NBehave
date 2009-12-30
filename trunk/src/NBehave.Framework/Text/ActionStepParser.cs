@@ -21,10 +21,11 @@ namespace NBehave.Narrator.Framework
         {
             foreach (Type t in assembly.GetExportedTypes())
             {
-                if (t.GetCustomAttributes(typeof(ActionStepsAttribute), false).Length > 0)
+                if (t.GetCustomAttributes(typeof(ActionStepsAttribute), true).Length > 0)
                 {
-                    if (_storyRunnerFilter.NamespaceFilter.IsMatch(t.Namespace ?? "") &&
-                        _storyRunnerFilter.ClassNameFilter.IsMatch(t.Name))
+                    if (t.IsAbstract == false
+                        && _storyRunnerFilter.NamespaceFilter.IsMatch(t.Namespace ?? "")
+                        && _storyRunnerFilter.ClassNameFilter.IsMatch(t.Name))
                     {
                         FindActionStepMethods(t);
                     }

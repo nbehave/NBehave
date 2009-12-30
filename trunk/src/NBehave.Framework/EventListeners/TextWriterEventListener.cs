@@ -11,14 +11,19 @@ namespace NBehave.Narrator.Framework.EventListeners
             _writer = writer;
         }
 
-        void IEventListener.StoryCreated(string story)
+        void IEventListener.RunStarted()
         {
-            _writer.WriteLine("story created: {0}", story);
+            _writer.WriteLine("run started");
         }
 
-        void IEventListener.StoryMessageAdded(string message)
+        void IEventListener.FeatureCreated(string feature)
         {
-            _writer.WriteLine("story message added: {0}", message);
+            _writer.WriteLine("Feature: {0}", feature);
+        }
+
+        void IEventListener.FeatureNarrative(string message)
+        {
+            _writer.WriteLine(message);
         }
 
         void IEventListener.ScenarioCreated(string scenarioTitle)
@@ -29,11 +34,6 @@ namespace NBehave.Narrator.Framework.EventListeners
         void IEventListener.ScenarioMessageAdded(string message)
         {
             _writer.WriteLine("scenario message added: {0}", message);
-        }
-
-        void IEventListener.RunStarted()
-        {
-            _writer.WriteLine("run started");
         }
 
         void IEventListener.RunFinished()

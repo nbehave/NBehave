@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace NBehave.Narrator.Framework
 {
@@ -22,14 +21,15 @@ namespace NBehave.Narrator.Framework
             return regex.Match(str).Value;
         }
 
-        private static Regex _whiteSpace = new Regex(@"\s", RegexOptions.Compiled);
+        private static readonly Regex _whiteSpace = new Regex(@"\s", RegexOptions.Compiled);
         public static string RemoveFirstWord(this string tokenString)
         {
-            Match firstWhiteSpace = _whiteSpace.Match(tokenString);
+            var tokenStringToMatch = tokenString.TrimStart();
+            Match firstWhiteSpace = _whiteSpace.Match(tokenStringToMatch);
             if (firstWhiteSpace.Success)
             {
                 int posOfFirstSpace = firstWhiteSpace.Index;
-                return tokenString.Substring(posOfFirstSpace + 1).TrimStart(new char[] { ' ', '\n', '\r' });
+                return tokenStringToMatch.Substring(posOfFirstSpace + 1).TrimStart(new[] { ' ', '\n', '\r', '\t' });
             }
             return tokenString;
         }

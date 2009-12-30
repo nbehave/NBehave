@@ -5,13 +5,11 @@ namespace NBehave.Narrator.Framework
 {
     public class ActionStepFileLoader
     {
-        private readonly StringStepRunner _stringStepRunner;
-        private readonly IEventListener _listener;
+        private readonly IStringStepRunner _stringStepRunner;
 
-        public ActionStepFileLoader(StringStepRunner stringStepRunner, IEventListener listener)
+        public ActionStepFileLoader(IStringStepRunner stringStepRunner)
         {
             _stringStepRunner = stringStepRunner;
-            _listener = listener;
         }
 
         public List<List<ScenarioWithSteps>> Load(IEnumerable<string> scenarioLocations)

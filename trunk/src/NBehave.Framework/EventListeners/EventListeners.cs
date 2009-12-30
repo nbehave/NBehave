@@ -29,17 +29,17 @@ namespace NBehave.Narrator.Framework.EventListeners
             return NullEventListener();
         }
 
-        public static IEventListener NullEventListener()
+        private static IEventListener NullEventListener()
         {
             return new NullEventListener();
         }
 
-        public static IEventListener FileOutputEventListener(string storyOutputPath)
+        private static IEventListener FileOutputEventListener(string outputPath)
         {
-            return new FileOutputEventListener(storyOutputPath);
+            return new FileOutputEventListener(outputPath);
         }
 
-        public static IEventListener TextWriterEventListener(TextWriter writer)
+        private static IEventListener TextWriterEventListener(TextWriter writer)
         {
             return new TextWriterEventListener(writer);
         }

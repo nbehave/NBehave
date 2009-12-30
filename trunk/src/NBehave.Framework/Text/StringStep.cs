@@ -6,9 +6,9 @@ namespace NBehave.Narrator.Framework
     {
         public static event EventHandler<EventArgs<MessageEventData>> MessageAdded;
 
-        protected StringStepRunner StringStepRunner { get; private set; }
+        protected IStringStepRunner StringStepRunner { get; private set; }
 
-        public StringStep(string step, string fromFile, StringStepRunner stringStepRunner)
+        public StringStep(string step, string fromFile, IStringStepRunner stringStepRunner)
             : base(step, fromFile)
         {
             StringStepRunner = stringStepRunner;

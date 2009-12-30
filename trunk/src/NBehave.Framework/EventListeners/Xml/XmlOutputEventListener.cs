@@ -36,14 +36,14 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
 			_eventsReceived.Add(new EventReceived("", EventType.ThemeFinished));
 		}
 
-        void IEventListener.StoryCreated(string story)
+        void IEventListener.FeatureCreated(string feature)
 		{
-			_eventsReceived.Add(new EventReceived(story, EventType.StoryCreated));
+			_eventsReceived.Add(new EventReceived(feature, EventType.FeatureCreated));
 		}
 
-		void IEventListener.StoryMessageAdded(string message)
+		void IEventListener.FeatureNarrative(string message)
 		{
-			_eventsReceived.Add(new EventReceived(message, EventType.StoryMessage));
+			_eventsReceived.Add(new EventReceived(message, EventType.FeatureNarrative));
 		}
 
 		void IEventListener.ScenarioCreated(string scenario)

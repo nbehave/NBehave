@@ -2,11 +2,11 @@
 {
     public class NullEventListener : IEventListener
     {
-         void IEventListener.StoryCreated(string story)
+         void IEventListener.FeatureCreated(string feature)
         {
         }
 
-        void IEventListener.StoryMessageAdded(string message)
+        void IEventListener.FeatureNarrative(string message)
         {
         }
 

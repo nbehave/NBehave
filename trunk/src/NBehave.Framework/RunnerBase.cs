@@ -12,7 +12,7 @@ namespace NBehave.Narrator.Framework
         private StoryRunnerFilter _storyRunnerFilter = new StoryRunnerFilter();
         private readonly List<Pair<string, object>> _themes = new List<Pair<string, object>>();
 
-        private EventHandler<EventArgs<Feature>> _storyCreatedEventHandler;
+        private EventHandler<EventArgs<Feature>> _featureCreatedEventHandler;
         private EventHandler<EventArgs<ScenarioWithSteps>> _scenarioCreatedEventHandler;
         private EventHandler<EventArgs<MessageEventData>> _messageAddedEventHandler;
         private EventHandler<EventArgs<ScenarioResult>> _scenarioResultAddedEventHandler;
@@ -75,7 +75,7 @@ namespace NBehave.Narrator.Framework
 
         private void StartWatchingMessageAdded(IEventListener listener)
         {
-            _messageAddedEventHandler = (sender, e) => SelectMessageType(listener, e.EventData);
+            _messageAddedEventHandler = (sender, e) => listener.ScenarioMessageAdded(e.EventData.Message);
             StringStep.MessageAdded += _messageAddedEventHandler;
         }
 
@@ -87,36 +87,22 @@ namespace NBehave.Narrator.Framework
 
         private void StartWatchingFeatureCreated(IEventListener listener)
         {
-            _storyCreatedEventHandler = (sender, e) =>
+            _featureCreatedEventHandler = (sender, e) =>
             {
                 e.EventData.IsDryRun = IsDryRun;
-                listener.StoryCreated(e.EventData.Title);
-                listener.StoryMessageAdded(e.EventData.Narrative);
+                listener.FeatureCreated(e.EventData.Title);
+                listener.FeatureNarrative(e.EventData.Narrative);
             };
-            Feature.FeatureCreated += _storyCreatedEventHandler;
+            Feature.FeatureCreated += _featureCreatedEventHandler;
         }
 
         private void StopWatching(IEventListener listener)
         {
-            Feature.FeatureCreated -= _storyCreatedEventHandler;
+            Feature.FeatureCreated -= _featureCreatedEventHandler;
             ScenarioWithSteps.ScenarioCreated -= _scenarioCreatedEventHandler;
             StringStep.MessageAdded -= _messageAddedEventHandler;
             ScenarioStepRunner.ScenarioResultCreated -= _scenarioResultAddedEventHandler;
             listener.RunFinished();
-        }
-
-        private void SelectMessageType(IEventListener listener, MessageEventData eventData)
-        {
-            switch (eventData.Type)
-            {
-                case MessageEventType.StringStep: listener.ScenarioMessageAdded(eventData.Message);
-                    break;
-                case MessageEventType.Pending: listener.ScenarioMessageAdded(string.Format("Pending: {0}", eventData.Message));
-                    break;
-                default:
-                    listener.StoryMessageAdded(eventData.Message);
-                    break;
-            }
         }
 
         private void InitializeRun(FeatureResults results, IEventListener listener)

@@ -12,9 +12,9 @@ namespace NBehave.Narrator.Framework
 
         private readonly ActionStepAlias _actionStepAlias = new ActionStepAlias();
         private readonly ActionStep _actionStep = new ActionStep();
-        private readonly StringStepRunner _stringStepRunner;
+        private readonly IStringStepRunner _stringStepRunner;
 
-        public ScenarioParser(StringStepRunner stringStepRunner)
+        public ScenarioParser(IStringStepRunner stringStepRunner)
         {
             _stringStepRunner = stringStepRunner;
         }
@@ -64,10 +64,9 @@ namespace NBehave.Narrator.Framework
             return scenarios;
         }
 
-        private ScenarioWithSteps CreateNewScenario(List<ScenarioWithSteps> scenarios, Feature feature)
+        private ScenarioWithSteps CreateNewScenario(ICollection<ScenarioWithSteps> scenarios, Feature feature)
         {
-            ScenarioWithSteps scenario;
-            scenario = new ScenarioWithSteps(_stringStepRunner);
+            var scenario = new ScenarioWithSteps(_stringStepRunner);
             scenarios.Add(scenario);
             scenario.Feature = feature;
             feature.AddScenario(scenario);

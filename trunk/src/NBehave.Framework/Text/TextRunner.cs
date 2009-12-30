@@ -8,7 +8,7 @@ namespace NBehave.Narrator.Framework
     {
         private readonly List<List<ScenarioWithSteps>> _scenarios = new List<List<ScenarioWithSteps>>();
         private readonly ActionStepFileLoader _actionStepFileLoader;
-        private readonly StringStepRunner _stringStepRunner;
+        private readonly IStringStepRunner _stringStepRunner;
         
         public ActionCatalog ActionCatalog { get; private set; }
 
@@ -18,7 +18,7 @@ namespace NBehave.Narrator.Framework
             ActionCatalog = new ActionCatalog();
             StoryRunnerFilter = new StoryRunnerFilter();
             _stringStepRunner = new StringStepRunner(ActionCatalog);
-            _actionStepFileLoader = new ActionStepFileLoader(_stringStepRunner, EventListener);
+            _actionStepFileLoader = new ActionStepFileLoader(_stringStepRunner);
         }
 
         protected override void ParseAssembly(Assembly assembly)

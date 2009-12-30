@@ -11,9 +11,9 @@ namespace NBehave.Narrator.Framework
 
         private readonly List<StringStep> _steps = new List<StringStep>();
         private readonly List<Example> _examples = new List<Example>();
-        private readonly StringStepRunner _stringStepRunner;
+        private readonly IStringStepRunner _stringStepRunner;
 
-        public ScenarioWithSteps(StringStepRunner stringStepRunner)
+        public ScenarioWithSteps(IStringStepRunner stringStepRunner)
         {
             Feature = new Feature();
             Title = string.Empty;

@@ -6,6 +6,7 @@ using NAnt.Core.Attributes;
 using NAnt.Core.Types;
 using NBehave.Narrator.Framework;
 using NBehave.Narrator.Framework.EventListeners;
+using NAntCore = NAnt.Core;
 
 namespace NBehave.NAnt
 {
@@ -44,7 +45,6 @@ namespace NBehave.NAnt
             var output = new PlainTextOutput(nantLogWriter);
 
             WriteHeaderInto(output);
-
 
             IEventListener listener = EventListeners.CreateEventListenerUsing(nantLogWriter,
                                                                               TextOutputFile,

@@ -35,8 +35,8 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
 			var eventsReceived = new List<EventReceived>();
 			eventsReceived.Add(new EventReceived("", EventType.RunStart));
 			eventsReceived.Add(new EventReceived("", EventType.ThemeStarted));
-			eventsReceived.Add(new EventReceived("StoryTitle", EventType.StoryCreated));
-			eventsReceived.Add(new EventReceived("As a x\nI want y\nSo That z", EventType.StoryMessage));
+			eventsReceived.Add(new EventReceived("StoryTitle", EventType.FeatureCreated));
+			eventsReceived.Add(new EventReceived("As a x\nI want y\nSo That z", EventType.FeatureNarrative));
 			eventsReceived.Add(new EventReceived("ScenarioTitle", EventType.ScenarioCreated));
 			eventsReceived.Add(new EventReceived("Given Foo", EventType.ScenarioMessage));
 			eventsReceived.Add(new ScenarioResultEventReceived(scenarioResult));
@@ -169,8 +169,8 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
 				scenarioResult.AddActionStepResult(actionStepResult3);
 
 				var eventsReceived = new List<EventReceived>();
-                eventsReceived.Add(new EventReceived("FeatureTitle", EventType.StoryCreated));
-				eventsReceived.Add(new EventReceived("As a x\nI want y\nSo That z", EventType.StoryMessage));
+                eventsReceived.Add(new EventReceived("FeatureTitle", EventType.FeatureCreated));
+				eventsReceived.Add(new EventReceived("As a x\nI want y\nSo That z", EventType.FeatureNarrative));
 				eventsReceived.Add(new EventReceived("ScenarioTitle", EventType.ScenarioCreated));
 				eventsReceived.Add(new EventReceived("Given a", EventType.ScenarioMessage));
 				eventsReceived.Add(new EventReceived("When b", EventType.ScenarioMessage));
@@ -243,8 +243,8 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
 
 				var eventsReceived = new List<EventReceived>();
 				eventsReceived.Add(new EventReceived("", EventType.ThemeStarted));
-                eventsReceived.Add(new EventReceived("FeatureTitle", EventType.StoryCreated));
-				eventsReceived.Add(new EventReceived("As a x\nI want y\nSo That z", EventType.StoryMessage));
+                eventsReceived.Add(new EventReceived("FeatureTitle", EventType.FeatureCreated));
+				eventsReceived.Add(new EventReceived("As a x\nI want y\nSo That z", EventType.FeatureNarrative));
 				eventsReceived.Add(new EventReceived("ScenarioTitle", EventType.ScenarioCreated));
 				eventsReceived.Add(new EventReceived("Given a", EventType.ScenarioMessage));
 				eventsReceived.Add(new EventReceived("When b", EventType.ScenarioMessage));
@@ -336,8 +336,8 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
 				scenarioResult.AddActionStepResult(actionStepResult3);
 
 				var eventsReceived = new List<EventReceived>();
-				eventsReceived.Add(new EventReceived(feature.Title, EventType.StoryCreated));
-				eventsReceived.Add(new EventReceived("As a x\nI want y\nSo That z", EventType.StoryMessage));
+				eventsReceived.Add(new EventReceived(feature.Title, EventType.FeatureCreated));
+				eventsReceived.Add(new EventReceived("As a x\nI want y\nSo That z", EventType.FeatureNarrative));
 				eventsReceived.Add(new EventReceived("ScenarioTitle", EventType.ScenarioCreated));
 				eventsReceived.Add(new EventReceived("Given a", EventType.ScenarioMessage));
 				eventsReceived.Add(new EventReceived("When b", EventType.ScenarioMessage));
@@ -358,8 +358,8 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
 				scenarioResult.AddActionStepResult(actionStepResult3);
 
 				var eventsReceived = new List<EventReceived>();
-				eventsReceived.Add(new EventReceived(feature.Title, EventType.StoryCreated));
-				eventsReceived.Add(new EventReceived("As a x\nI want y\nSo That z", EventType.StoryMessage));
+				eventsReceived.Add(new EventReceived(feature.Title, EventType.FeatureCreated));
+				eventsReceived.Add(new EventReceived("As a x\nI want y\nSo That z", EventType.FeatureNarrative));
 				eventsReceived.Add(new EventReceived("ScenarioTitle", EventType.ScenarioCreated));
 				eventsReceived.Add(new EventReceived("Given a", EventType.ScenarioMessage));
 				eventsReceived.Add(new EventReceived("When b", EventType.ScenarioMessage));

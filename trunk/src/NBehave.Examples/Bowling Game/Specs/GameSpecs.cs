@@ -16,7 +16,7 @@ namespace NBehave.Examples.Bowling_Game.Specs
         }
 
         [Given(@"all my (?<rolls>\d+) rolls are (?<pins>\d+)$")]
-        [Given(@"the rest of my (?<rolls>\d+) rolls are (?<pins>\d+)$")]
+        [When(@"the rest of my $rolls rolls are $pins")]
         public void RollMany(int rolls, int pins)
         {
             for (int i = 0; i < rolls; i++)
@@ -31,22 +31,22 @@ namespace NBehave.Examples.Bowling_Game.Specs
             _game.Score().ShouldEqual(theScore);
         }
 
-        [Given(@"the first preceding role is $pins")]
-        [Given(@"the second preceding role is (?<pins>\d+)$")]
+        [Given(@"the first preceding roll is $pins")]
+        [Given(@"the second preceding roll is (?<pins>\d+)$")]
         public void Roll(int pins)
         {
             _game.Roll(pins);
         }
 
         [When]
-        public void When_I_role_one_spare()
+        public void When_I_roll_one_spare()
         {
             _game.Roll(5);
             _game.Roll(5);
         }
 
         [When]
-        public void When_I_role_one_strike()
+        public void When_I_roll_one_strike()
         {
             _game.Roll(10);
         }

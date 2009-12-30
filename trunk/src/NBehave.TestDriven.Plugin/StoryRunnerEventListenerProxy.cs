@@ -25,12 +25,12 @@ namespace NBehave.TestDriven.Plugin
             _listener.WriteLine(string.Format("Theme : {0}", name), Category.Output);
         }
 
-        void IEventListener.StoryCreated(string story)
+        void IEventListener.FeatureCreated(string feature)
         {
-            _listener.WriteLine("\tStory: " + story, Category.Output);
+            _listener.WriteLine("\tFeature: " + feature, Category.Output);
         }
 
-        void IEventListener.StoryMessageAdded(string message)
+        void IEventListener.FeatureNarrative(string message)
         {
         }
 

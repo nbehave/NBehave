@@ -46,12 +46,12 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
             var events = EventsOf(evt, EventType.ThemeFinished);
             string themeTitle = evt.Message;
             WriteStartElement("theme", themeTitle, events.Last().Time.Subtract(events.First().Time));
-            Writer.WriteAttributeString("stories", events.Where(e => e.EventType == EventType.StoryCreated).Count().ToString());
+            Writer.WriteAttributeString("stories", events.Where(e => e.EventType == EventType.FeatureCreated).Count().ToString());
             Writer.WriteAttributeString("scenarios", events.Where(e => e.EventType == EventType.ScenarioCreated).Count().ToString());
             Writer.WriteAttributeString("scenariosFailed", CountFailingScenarios(events).ToString());
             Writer.WriteAttributeString("scenariosPending", CountPendingScenarios(events).ToString());
             Writer.WriteStartElement("stories");
-            foreach (var e in events.Where(x => x.EventType == EventType.StoryCreated))
+            foreach (var e in events.Where(x => x.EventType == EventType.FeatureCreated))
                 DoStory(themeTitle, e);
             Writer.WriteEndElement();
             Writer.WriteEndElement();
@@ -59,20 +59,20 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
 
         public void DoStory(string theme, EventReceived evt)
         {
-            var events = EventsOf(evt, EventType.StoryCreated);
-            string storyTitle = evt.Message;
-            WriteStartElement("story", storyTitle, events.Last().Time.Subtract(events.First().Time));
-            IEnumerable<ScenarioResult> scenarioResultsForStory = GetScenarioResultsForFeature(storyTitle, events);
+            var events = EventsOf(evt, EventType.FeatureCreated);
+            string featureTitle = evt.Message;
+            WriteStartElement("story", featureTitle, events.Last().Time.Subtract(events.First().Time));
+            IEnumerable<ScenarioResult> scenarioResultsForFeature = GetScenarioResultsForFeature(featureTitle, events);
 
-            WriteStoryDataAttributes(scenarioResultsForStory);
+            WriteStoryDataAttributes(scenarioResultsForFeature);
             WriteStoryNarrative(events);
             Writer.WriteStartElement("scenarios");
             foreach (var e in events.Where(evts => evts.EventType == EventType.ScenarioCreated))
             {
                 var scenarioTitle = e.Message;
-                var scenarioResult = (from r in scenarioResultsForStory
+                var scenarioResult = (from r in scenarioResultsForFeature
                                       where r.ScenarioTitle == scenarioTitle
-                                            && r.FeatureTitle == storyTitle
+                                            && r.FeatureTitle == featureTitle
                                       select r).FirstOrDefault();
                 if (scenarioResult != null)
                     DoScenario(e, scenarioResult);
@@ -83,40 +83,40 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
 
         void WriteStoryNarrative(IEnumerable<EventReceived> events)
         {
-            var storyMessages = from m in events
-                                where m.EventType == EventType.StoryMessage
+            var featureMessages = from m in events
+                                where m.EventType == EventType.FeatureNarrative
                                 select m.Message;
-            if (storyMessages.Count() > 0)
+            if (featureMessages.Count() > 0)
             {
                 Writer.WriteStartElement("narrative");
-                foreach (var row in storyMessages)
+                foreach (var row in featureMessages)
                     Writer.WriteString(row + Environment.NewLine);
                 Writer.WriteEndElement();
             }
         }
 
-        void WriteStoryDataAttributes(IEnumerable<ScenarioResult> scenarioResultsForStory)
+        void WriteStoryDataAttributes(IEnumerable<ScenarioResult> scenarioResultsForFeature)
         {
-            int totalScenariosFailed = (from f in scenarioResultsForStory
+            int totalScenariosFailed = (from f in scenarioResultsForFeature
                                         where f.Result.GetType() == typeof(Failed)
                                         select f).Count();
-            int totalScenariosPending = (from f in scenarioResultsForStory
+            int totalScenariosPending = (from f in scenarioResultsForFeature
                                          where f.Result.GetType() == typeof(Pending)
                                          select f).Count();
-            Writer.WriteAttributeString("scenarios", scenarioResultsForStory.Count().ToString());
+            Writer.WriteAttributeString("scenarios", scenarioResultsForFeature.Count().ToString());
             Writer.WriteAttributeString("scenariosFailed", totalScenariosFailed.ToString());
             Writer.WriteAttributeString("scenariosPending", totalScenariosPending.ToString());
         }
 
         IEnumerable<ScenarioResult> GetScenarioResultsForFeature(string featureTitle, IEnumerable<EventReceived> eventsReceived)
         {
-            var storyResults = (from e in eventsReceived
+            var featureResults = (from e in eventsReceived
                                 where e.EventType == EventType.ScenarioResult
                                 select e as ScenarioResultEventReceived);
-            var scenarioResultsForStory = from e in storyResults
+            var scenarioResultsForFeature = from e in featureResults
                                           where e.ScenarioResult.FeatureTitle == featureTitle
                                           select e.ScenarioResult;
-            return scenarioResultsForStory;
+            return scenarioResultsForFeature;
         }
 
         public void DoScenario(EventReceived evt, ScenarioResult scenarioResult)
@@ -171,7 +171,7 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
 
         private int CountStories()
         {
-            return CountEventsOfType(EventType.StoryCreated);
+            return CountEventsOfType(EventType.FeatureCreated);
         }
 
         private int CountScenarios()

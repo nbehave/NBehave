@@ -23,7 +23,7 @@ namespace NBehave.Narrator.Framework.Specifications
 
         private TextRunner CreateTextRunner()
         {
-            var writer = new StringWriter();
+            var writer = new StreamWriter(new MemoryStream());
             var listener = new TextWriterEventListener(writer);
             return CreateTextRunner(listener);
         }
@@ -114,19 +114,19 @@ namespace NBehave.Narrator.Framework.Specifications
 			[Specification]
 			public void Should_mark_failing_step_as_failed_in_output()
 			{
-				var writer = new StringWriter();
+                var writer = new StringWriter();
 				var listener = new TextWriterEventListener(writer);
                 _runner = CreateTextRunner(listener);
 			    LoadAssembly();
                 _runner.Load(new[] { @"GreetingSystemFailure.txt" });
-				FeatureResults results = _runner.Run();
+				_runner.Run();
 				StringAssert.Contains("Then I should be greeted with “Hello, Scott!” - FAILED", writer.ToString());
 			}
 
 			[Specification]
 			public void Should_execute_more_than_one_scenario_in_text_file()
 			{
-				var writer = new StringWriter();
+                var writer = new StreamWriter(new MemoryStream());
 				var listener = new TextWriterEventListener(writer);
 			    _runner = CreateTextRunner(listener);
                 _runner.LoadAssembly("TestPlainTextAssembly.dll");
@@ -320,7 +320,7 @@ namespace NBehave.Narrator.Framework.Specifications
 		public class When_running_plain_text_scenarios_with_story : TextRunnerSpec
 		{
 			private FeatureResults _result;
-			private StringWriter _messages;
+            private StringWriter _messages;
 
 			[SetUp]
 			public void SetUp()
@@ -391,13 +391,13 @@ namespace NBehave.Narrator.Framework.Specifications
 			[Specification]
 			public void Should_get_story_created_event_with_title()
 			{
-                _listener.AssertWasCalled(l=>l.StoryCreated("Greeting system"));
+                _listener.AssertWasCalled(l=>l.FeatureCreated("Greeting system"));
 			}
 
 			[Specification]
 			public void Should_get_story_narrative()
 			{
-			    IList<object[]> args = _listener.GetArgumentsForCallsMadeOn(l => l.StoryMessageAdded(null), opt=>opt.IgnoreArguments());
+			    IList<object[]> args = _listener.GetArgumentsForCallsMadeOn(l => l.FeatureNarrative(null), opt=>opt.IgnoreArguments());
 			    var arg = args[0][0] as string;
 				StringAssert.Contains("As a", arg);
 				StringAssert.Contains("I want",arg);

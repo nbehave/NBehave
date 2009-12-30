@@ -4,35 +4,96 @@ using System.Reflection;
 
 namespace NBehave.Narrator.Framework
 {
-    public class StringStepRunner
+    public class StringStepRunner : IStringStepRunner
     {
-        private readonly ActionCatalog _actionCatalog;
+        private ActionCatalog ActionCatalog { get; set; }
+        private ParameterConverter ParameterConverter { get; set; }
         private ActionMethodInfo _lastAction;
         private bool _isFirstStepInScenario = true;
 
         public StringStepRunner(ActionCatalog actionCatalog)
         {
-            _actionCatalog = actionCatalog;
+            ActionCatalog = actionCatalog;
+            ParameterConverter = new ParameterConverter(ActionCatalog);
         }
 
-        public void InvokeStringStep(ActionStepText actionStep)
+        ActionStepResult IStringStepRunner.Run(ActionStepText actionStep)
         {
-            Func<object[]> getParameters = () => _actionCatalog.GetParametersForActionStepText(actionStep);
-            InvokeStringStep(actionStep, getParameters);
+            return (this as IStringStepRunner).Run(actionStep, null);
         }
 
-        private void InvokeStringStep(ActionStepText actionStep, Row row)
+
+        ActionStepResult IStringStepRunner.Run(ActionStepText actionStep, Row row)
         {
-            Func<object[]> getParameters = () => _actionCatalog.GetParametersForActionStepText(actionStep, row);
-            InvokeStringStep(actionStep, getParameters);
+            var actionStepToUse = new ActionStepText(actionStep.Step.RemoveFirstWord(), actionStep.FromFile);
+            var result = new ActionStepResult(actionStep.Step, new Passed());
+            try
+            {
+                if (ActionCatalog.ActionExists(actionStepToUse) == false)
+                {
+                    string pendReason = string.Format("No matching Action found for \"{0}\"", actionStep);
+                    result = new ActionStepResult(actionStep.Step, new Pending(pendReason));
+                }
+                else
+                {
+                    if (row == null)
+                        RunStep(actionStepToUse);
+                    else
+                        RunStep(actionStepToUse, row);
+                }
+            }
+            catch (Exception e)
+            {
+                Exception realException = FindUsefulException(e);
+                result = new ActionStepResult(actionStep.Step, new Failed(realException));
+            }
+            return result;
         }
 
-        private void InvokeStringStep(ActionStepText actionStep, Func<object[]> getParametersForActionStepText)
+
+        void IStringStepRunner.OnCloseScenario()
         {
-            if (_actionCatalog.ActionExists(actionStep) == false)
+            if (_lastAction != null)
+                _lastAction.ExecuteNotificationMethod(typeof(AfterScenarioAttribute));
+        }
+
+        void IStringStepRunner.BeforeScenario()
+        {
+            _isFirstStepInScenario = true;
+        }
+
+        void IStringStepRunner.AfterScenario()
+        {
+            if (_lastAction != null)
+                _lastAction.ExecuteNotificationMethod(typeof(AfterScenarioAttribute));
+        }
+
+        private Type GetActionType(object action)
+        {
+            Type actionType = action.GetType().IsGenericType
+                ? action.GetType().GetGenericTypeDefinition()
+                : action.GetType();
+            return actionType;
+        }
+
+        private void RunStep(ActionStepText actionStepToUse)
+        {
+            Func<object[]> getParameters = () => ParameterConverter.GetParametersForActionStepText(actionStepToUse);
+            RunStep(actionStepToUse, getParameters);
+        }
+
+        private void RunStep(ActionStepText actionStep, Row row)
+        {
+            Func<object[]> getParameters = () => ParameterConverter.GetParametersForActionStepText(actionStep, row);
+            RunStep(actionStep, getParameters);
+        }
+
+        private void RunStep(ActionStepText actionStep, Func<object[]> getParametersForActionStepText)
+        {
+            if (ActionCatalog.ActionExists(actionStep) == false)
                 throw new ArgumentException(string.Format("cannot find Token string '{0}'", actionStep));
 
-            var info = _actionCatalog.GetAction(actionStep);
+            var info = ActionCatalog.GetAction(actionStep);
 
             Type actionType = GetActionType(info.Action);
             MethodInfo methodInfo = actionType.GetMethod("DynamicInvoke");
@@ -62,52 +123,6 @@ namespace NBehave.Narrator.Framework
             }
         }
 
-        public void OnCloseScenario()
-        {
-            if (_lastAction != null)
-                _lastAction.ExecuteNotificationMethod(typeof(AfterScenarioAttribute));
-        }
-
-        public ActionStepResult Run(ActionStepText actionStep)
-        {
-            return Run(actionStep, null);
-        }
-
-        public ActionStepResult Run(ActionStepText actionStep, Row row)
-        {
-            var actionStepToUse = new ActionStepText(actionStep.Step.RemoveFirstWord(), actionStep.FromFile);
-            var result = new ActionStepResult(actionStep.Step, new Passed());
-            try
-            {
-                if (_actionCatalog.ActionExists(actionStepToUse) == false)
-                {
-                    string pendReason = string.Format("No matching Action found for \"{0}\"", actionStep);
-                    result = new ActionStepResult(actionStep.Step, new Pending(pendReason));
-                }
-                else
-                {
-                    if (row == null)
-                        InvokeStringStep(actionStepToUse);
-                    else
-                        InvokeStringStep(actionStepToUse, row);
-                }
-            }
-            catch (Exception e)
-            {
-                Exception realException = FindUsefulException(e);
-                result = new ActionStepResult(actionStep.Step, new Failed(realException));
-            }
-            return result;
-        }
-
-        private Type GetActionType(object action)
-        {
-            Type actionType = action.GetType().IsGenericType
-                ? action.GetType().GetGenericTypeDefinition()
-                : action.GetType();
-            return actionType;
-        }
-
         private Exception FindUsefulException(Exception e)
         {
             Exception realException = e;
@@ -118,17 +133,6 @@ namespace NBehave.Narrator.Framework
             if (realException == null)
                 return e;
             return realException;
-        }
-
-        public void BeforeScenario()
-        {
-            _isFirstStepInScenario = true;
-        }
-
-        public void AfterScenario()
-        {
-            if (_lastAction != null)
-                _lastAction.ExecuteNotificationMethod(typeof(AfterScenarioAttribute));
         }
     }
 }

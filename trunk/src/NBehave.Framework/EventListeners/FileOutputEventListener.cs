@@ -24,15 +24,15 @@ namespace NBehave.Narrator.Framework.EventListeners
 
         #endregion
 
-        void IEventListener.StoryCreated(string story)
+        void IEventListener.FeatureCreated(string feature)
         {
             _writer.WriteLine();
             if (_insideNamedTheme)
                 _writer.Write('\t');
-            _writer.WriteLine("Feature: " + story);
+            _writer.WriteLine("Feature: " + feature);
         }
 
-        void IEventListener.StoryMessageAdded(string message)
+        void IEventListener.FeatureNarrative(string message)
         {
             if (_insideNamedTheme)
                 _writer.Write('\t');

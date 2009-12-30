@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using Rhino.Mocks;
 
 namespace NBehave.Narrator.Framework.Specifications.Text
 {
@@ -11,11 +10,10 @@ namespace NBehave.Narrator.Framework.Specifications.Text
         public class When_running_step_with_table : StringTableStepSpec
         {
             private ActionStepResult _actionStepResult;
-            private StringStepRunner _stringStepRunner;
+            private IStringStepRunner _stringStepRunner;
             private ActionCatalog _actionCatalog;
 
             private List<string> _names;
-
 
             [SetUp]
             public void SetUp()
@@ -54,6 +52,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             {
                 CollectionAssert.Contains(_names, "Jimmy Nilsson");
             }
+        
         }
     }
 }
