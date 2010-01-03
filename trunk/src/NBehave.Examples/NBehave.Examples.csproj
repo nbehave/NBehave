@@ -70,12 +70,16 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bowling Game\Specs\GameSpecs.cs" />
+    <Compile Include="Bowling Game\Steps\GameSteps.cs" />
+    <Compile Include="Calculator table\Calculator.cs" />
+    <Compile Include="Calculator table\Steps\AddNumbers.cs" />
     <Compile Include="CommonAssemblyInfo.cs" />
     <Compile Include="Game of life\Game.cs" />
-    <Compile Include="Game of life\Specs\GameSpecs.cs" />
+    <Compile Include="Game of life\Steps\GameSteps.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Bowling Game\Game.cs" />
   </ItemGroup>
@@ -86,25 +90,28 @@
     <None Include="Bowling Game\BowlingGame.nant.build">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Bowling Game\Specs\Bowling score calculation\All once.scenario">
+    <None Include="Bowling Game\features\Bowling score calculation\All once.feature">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Bowling Game\Specs\Bowling score calculation\One spare.scenario">
+    <None Include="Bowling Game\features\Bowling score calculation\One spare.feature">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Bowling Game\Specs\Bowling score calculation\One strike.scenario">
+    <None Include="Bowling Game\features\Bowling score calculation\One strike.feature">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Calculator table\features\AddNumbers.feature">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Game of life\GameOfLife.nant.build">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Game of life\Specs\I_can_toggle_a_cell.scenario">
+    <None Include="Game of life\features\I_can_toggle_a_cell.feature">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Game of life\Specs\The_grid_starts_empty.scenario">
+    <None Include="Game of life\features\The_grid_starts_empty.feature">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Bowling Game\Specs\Bowling score calculation\Gutter game.scenario">
+    <None Include="Bowling Game\features\Bowling score calculation\Gutter game.feature">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

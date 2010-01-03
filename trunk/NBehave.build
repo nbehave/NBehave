@@ -209,6 +209,8 @@
 				<exclude name="**\bin\**\*.*" />
 				<exclude name="**\obj\**\*.*" />
         <include name="**\*.scenario" />
+        <include name="**\*.feature" />
+        <include name="**\*.story" />
         <include name="**\*.cs" />
 				<include name="**\*.csproj" />
 				<include name="**\*.msbuild" />

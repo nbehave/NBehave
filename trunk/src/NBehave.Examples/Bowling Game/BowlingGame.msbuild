@@ -14,7 +14,7 @@
       XmlOutputFile="BowlingGame_msbuild_output.xml"
       TextOutputFile="BowlingGame_msbuild_output.txt"
       TestAssemblies="..\bin\debug\NBehave.Examples.dll"
-      ScenarioFiles="Specs\Bowling score calculation\*.scenario"/>
+      ScenarioFiles="Specs\Bowling score calculation\*.feature"/>
   </Target>
 
   <Target Name="build">
