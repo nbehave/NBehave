@@ -47,7 +47,7 @@ namespace NBehave.Narrator.Framework
             _examples.AddRange(examples);
         }
 
-        public virtual IEnumerable<ScenarioResult> Run()
+        public virtual ScenarioResult Run()
         {
             OnScenarioCreated();
             if (Examples.Any())
@@ -65,7 +65,7 @@ namespace NBehave.Narrator.Framework
             }
         }
 
-        private IEnumerable<ScenarioResult> RunScenario(Feature feature, IEnumerable<StringStep> stepsToRun)
+        private ScenarioResult RunScenario(Feature feature, IEnumerable<StringStep> stepsToRun)
         {
             var scenarioResult = new ScenarioResult(feature, Title);
             _stringStepRunner.BeforeScenario();
@@ -76,20 +76,21 @@ namespace NBehave.Narrator.Framework
             }
             if (stepsToRun.Any())
                 _stringStepRunner.AfterScenario();
-            return new List<ScenarioResult> { scenarioResult };
+            return scenarioResult;
         }
 
-        private IEnumerable<ScenarioResult> RunExamples(Feature feature)
+        private ScenarioResult RunExamples(Feature feature)
         {
-            var results = new List<ScenarioResult>();
+            var exampleResults = new ScenarioExampleResult(feature, Title, Steps, Examples);
+
             foreach (var example in Examples)
             {
                 var steps = CloneSteps();
                 InsertColumnValues(steps, example);
-                var tmp = RunScenario(feature, steps);
-                results.AddRange(tmp);
+                var exampleResult = RunScenario(feature, steps);
+                exampleResults.AddResult(exampleResult);
             }
-            return results;
+            return exampleResults;
         }
 
         private void InsertColumnValues(IEnumerable<StringStep> steps, Row example)
@@ -98,8 +99,8 @@ namespace NBehave.Narrator.Framework
             {
                 foreach (var columnName in example.ColumnNames)
                 {
-                    var columnValue = example.ColumnValues[columnName];
-                    Regex replace = new Regex(string.Format(@"(\${0})|(\[{0}\])", columnName), RegexOptions.IgnoreCase);
+                    var columnValue = example.ColumnValues[columnName].Trim();
+                    var replace = new Regex(string.Format(@"(\${0})|(\[{0}\])", columnName), RegexOptions.IgnoreCase);
                     step.Step = replace.Replace(step.Step, columnValue);
                 }
             }

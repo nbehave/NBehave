@@ -51,11 +51,6 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
 			_eventsReceived.Add(new EventReceived(scenario, EventType.ScenarioCreated));
 		}
 
-		void IEventListener.ScenarioMessageAdded(string message)
-		{
-			_eventsReceived.Add(new EventReceived(message, EventType.ScenarioMessage));
-		}
-
         void IEventListener.ScenarioResult(ScenarioResult result)
         {
             _eventsReceived.Add(new ScenarioResultEventReceived(result));

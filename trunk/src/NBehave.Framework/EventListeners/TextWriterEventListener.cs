@@ -1,59 +1,93 @@
+using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace NBehave.Narrator.Framework.EventListeners
 {
-    public class TextWriterEventListener : IEventListener
+    public class TextWriterEventListener : IEventListener, IDisposable
     {
         private readonly TextWriter _writer;
+        private bool _disposed;
+        private readonly List<ScenarioResult> _allResults = new List<ScenarioResult>();
 
         public TextWriterEventListener(TextWriter writer)
         {
             _writer = writer;
         }
 
-        void IEventListener.RunStarted()
+        #region IDisposable Members
+
+        void IDisposable.Dispose()
         {
-            _writer.WriteLine("run started");
+            Dispose(true);
         }
 
-        void IEventListener.FeatureCreated(string feature)
+        #endregion
+
+        public void RunStarted()
+        { }
+
+        public void FeatureCreated(string feature)
         {
             _writer.WriteLine("Feature: {0}", feature);
         }
 
-        void IEventListener.FeatureNarrative(string message)
+        public void FeatureNarrative(string message)
         {
             _writer.WriteLine(message);
         }
 
-        void IEventListener.ScenarioCreated(string scenarioTitle)
+        public void ScenarioCreated(string scenarioTitle)
         {
-            _writer.WriteLine("scenario created: {0}", scenarioTitle);
+            _writer.WriteLine("Scenario: {0}", scenarioTitle);
         }
 
-        void IEventListener.ScenarioMessageAdded(string message)
+        public void RunFinished()
         {
-            _writer.WriteLine("scenario message added: {0}", message);
+            WriteSummary();
+            _writer.Flush();
         }
 
-        void IEventListener.RunFinished()
+        public void ThemeStarted(string name)
         {
-            _writer.WriteLine("run finished");
+            if (string.IsNullOrEmpty(name) == false)
+                _writer.WriteLine("Theme: {0}", name);
         }
 
-        void IEventListener.ThemeStarted(string name)
+        public void ThemeFinished()
+        { }
+
+        public void ScenarioResult(ScenarioResult result)
         {
-            _writer.WriteLine("theme started: {0}", name);
+            _allResults.Add(result);
+            foreach (var actionStepResult in result.ActionStepResults)
+            {
+                string msg = (actionStepResult.Result is Passed) ? "" : " - " + actionStepResult.Result.ToString().ToUpper();
+                _writer.WriteLine(actionStepResult.StringStep + msg);
+            }
         }
 
-        void IEventListener.ThemeFinished()
+        protected virtual void Dispose(bool disposing)
         {
-            _writer.WriteLine("theme finished");
+            if (_disposed)
+                return;
+
+            if (disposing)
+            {
+                if (_writer != null)
+                {
+                    _writer.Flush();
+                    _writer.Close();
+                }
+            }
+
+            _disposed = true;
         }
 
-        void IEventListener.ScenarioResult(ScenarioResult result)
+        private void WriteSummary()
         {
-            _writer.WriteLine("Scenario result: {0}", result.Result);
+            var summaryWriter = new SummaryWriter(Console.Out);
+            summaryWriter.WriteCompleteSummary(_allResults);
         }
     }
 }

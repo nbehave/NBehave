@@ -63,7 +63,6 @@ namespace NBehave.MSBuild
             if (DryRun)
                 return true;
 
-            WriteResultsInto(output, FeatureResults);
             string message = logString.ToString();
             Log.LogMessage(message);
 
@@ -85,14 +84,6 @@ namespace NBehave.MSBuild
             output.WriteSeparator();
             output.WriteRuntimeEnvironment();
             output.WriteSeparator();
-        }
-
-        private void WriteResultsInto(PlainTextOutput output, FeatureResults results)
-        {
-            output.WriteDotResults(results);
-            output.WriteSummaryResults(results);
-            output.WriteFailures(results);
-            output.WritePending(results);
         }
 
         private bool FailBuildBasedOn(FeatureResults results)

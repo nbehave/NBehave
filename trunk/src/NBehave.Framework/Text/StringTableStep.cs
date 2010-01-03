@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
@@ -36,7 +35,6 @@ namespace NBehave.Narrator.Framework
                 if (hasParamsInStep)
                     step = InsertParametersToStep(row);
                 ActionStepResult result = StringStepRunner.Run(step, row);
-                RaiseScenarioMessage(result);
                 actionStepResult.MergeResult(result);
             }
             return actionStepResult;

@@ -38,7 +38,6 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
 			eventsReceived.Add(new EventReceived("StoryTitle", EventType.FeatureCreated));
 			eventsReceived.Add(new EventReceived("As a x\nI want y\nSo That z", EventType.FeatureNarrative));
 			eventsReceived.Add(new EventReceived("ScenarioTitle", EventType.ScenarioCreated));
-			eventsReceived.Add(new EventReceived("Given Foo", EventType.ScenarioMessage));
 			eventsReceived.Add(new ScenarioResultEventReceived(scenarioResult));
 			eventsReceived.Add(new EventReceived("", EventType.ThemeFinished));
 			eventsReceived.Add(new EventReceived("", EventType.RunFinished));
@@ -107,9 +106,6 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
 
 				var eventsReceived = new List<EventReceived>();
 				eventsReceived.Add(new EventReceived("ScenarioTitle", EventType.ScenarioCreated));
-				eventsReceived.Add(new EventReceived("Given a", EventType.ScenarioMessage));
-				eventsReceived.Add(new EventReceived("When b", EventType.ScenarioMessage));
-				eventsReceived.Add(new EventReceived("Then c", EventType.ScenarioMessage));
 				eventsReceived.Add(new ScenarioResultEventReceived(scenarioResult));
 
 				_xmlOutputWriter = new XmlOutputWriter(xmlWriter, eventsReceived);
@@ -172,9 +168,6 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
                 eventsReceived.Add(new EventReceived("FeatureTitle", EventType.FeatureCreated));
 				eventsReceived.Add(new EventReceived("As a x\nI want y\nSo That z", EventType.FeatureNarrative));
 				eventsReceived.Add(new EventReceived("ScenarioTitle", EventType.ScenarioCreated));
-				eventsReceived.Add(new EventReceived("Given a", EventType.ScenarioMessage));
-				eventsReceived.Add(new EventReceived("When b", EventType.ScenarioMessage));
-				eventsReceived.Add(new EventReceived("Then c", EventType.ScenarioMessage));
                 eventsReceived.Add(new ScenarioResultEventReceived(scenarioResult));
 				_xmlOutputWriter = new XmlOutputWriter(xmlWriter, eventsReceived);
 				_xmlOutputWriter.DoStory("StoryTitle", eventsReceived[0]);
@@ -246,9 +239,6 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
                 eventsReceived.Add(new EventReceived("FeatureTitle", EventType.FeatureCreated));
 				eventsReceived.Add(new EventReceived("As a x\nI want y\nSo That z", EventType.FeatureNarrative));
 				eventsReceived.Add(new EventReceived("ScenarioTitle", EventType.ScenarioCreated));
-				eventsReceived.Add(new EventReceived("Given a", EventType.ScenarioMessage));
-				eventsReceived.Add(new EventReceived("When b", EventType.ScenarioMessage));
-				eventsReceived.Add(new EventReceived("Then c", EventType.ScenarioMessage));
                 eventsReceived.Add(new ScenarioResultEventReceived(scenarioResult));
 				_xmlOutputWriter = new XmlOutputWriter(xmlWriter, eventsReceived);
 				eventsReceived.Add(new EventReceived("", EventType.ThemeFinished));
@@ -339,9 +329,6 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
 				eventsReceived.Add(new EventReceived(feature.Title, EventType.FeatureCreated));
 				eventsReceived.Add(new EventReceived("As a x\nI want y\nSo That z", EventType.FeatureNarrative));
 				eventsReceived.Add(new EventReceived("ScenarioTitle", EventType.ScenarioCreated));
-				eventsReceived.Add(new EventReceived("Given a", EventType.ScenarioMessage));
-				eventsReceived.Add(new EventReceived("When b", EventType.ScenarioMessage));
-				eventsReceived.Add(new EventReceived("Then c", EventType.ScenarioMessage));
                 eventsReceived.Add(new ScenarioResultEventReceived(scenarioResult));
 				return eventsReceived;
 			}
@@ -361,9 +348,6 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
 				eventsReceived.Add(new EventReceived(feature.Title, EventType.FeatureCreated));
 				eventsReceived.Add(new EventReceived("As a x\nI want y\nSo That z", EventType.FeatureNarrative));
 				eventsReceived.Add(new EventReceived("ScenarioTitle", EventType.ScenarioCreated));
-				eventsReceived.Add(new EventReceived("Given a", EventType.ScenarioMessage));
-				eventsReceived.Add(new EventReceived("When b", EventType.ScenarioMessage));
-				eventsReceived.Add(new EventReceived("Then c", EventType.ScenarioMessage));
                 eventsReceived.Add(new ScenarioResultEventReceived(scenarioResult));
 				return eventsReceived;
 			}

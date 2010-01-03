@@ -74,7 +74,9 @@
     <Compile Include="EventListeners\Xml\XmlOutputWriter.cs" />
     <Compile Include="MessageEventData.cs" />
     <Compile Include="ParameterConverter.cs" />
+    <Compile Include="ScenarioExampleResult.cs" />
     <Compile Include="ScenarioMessage.cs" />
+    <Compile Include="EventListeners\SummaryWriter.cs" />
     <Compile Include="Text\ActionMethodInfo.cs" />
     <Compile Include="ActionMissingException.cs" />
     <Compile Include="Text\ActionStep.cs" />
@@ -92,7 +94,6 @@
     <Compile Include="EventArgs.cs" />
     <Compile Include="Text\ActionStepParser.cs" />
     <Compile Include="EventListeners\EventListeners.cs" />
-    <Compile Include="EventListeners\FileOutputEventListener.cs" />
     <Compile Include="EventListeners\MultiOutputEventListener.cs" />
     <Compile Include="EventListeners\NullEventListener.cs" />
     <Compile Include="EventListeners\TextWriterEventListener.cs" />

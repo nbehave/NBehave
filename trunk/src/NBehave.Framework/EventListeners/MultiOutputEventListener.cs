@@ -31,11 +31,6 @@ namespace NBehave.Narrator.Framework.EventListeners
             Invoke(l => l.ScenarioCreated(scenarioTitle));
         }
 
-        public void ScenarioMessageAdded(string message)
-        {
-            Invoke(l => l.ScenarioMessageAdded(message));
-        }
-
         public void RunStarted()
         {
             Invoke(l => l.RunStarted());

@@ -5,7 +5,6 @@ namespace NBehave.Narrator.Framework
         void FeatureCreated(string feature);
         void FeatureNarrative(string message);
         void ScenarioCreated(string scenarioTitle);
-        void ScenarioMessageAdded(string message);
         void RunStarted();
         void RunFinished();
         void ThemeStarted(string name);

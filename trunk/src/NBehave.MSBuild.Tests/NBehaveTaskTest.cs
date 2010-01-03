@@ -33,9 +33,7 @@ namespace NBehave.MSBuild.Tests
                     process.WaitForExit();
 
                     string result = sr.ReadToEnd();
-                    string[] results = result.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
-                    // Fails if language on computer isnt english: Assert.Contains("Build succeeded.", results);
-                    Assert.Contains("  Scenarios run: 1, Failures: 0, Pending: 0", results);
+                    StringAssert.Contains("Scenarios run: 1, Failures: 0, Pending: 0", result);
                 }
             }
         }

@@ -1,9 +1,4 @@
-using System;
-using System.Reflection;
-using System.Text.RegularExpressions;
-using System.Threading;
 using NUnit.Framework;
-using Rhino.Mocks;
 
 namespace NBehave.Narrator.Framework.Specifications.Text
 {
@@ -22,14 +17,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
 
         private StringStep CreateInstance(string step)
         {
-            return CreateInstance(step, MockRepository.GenerateStub<IEventListener>());
-        }
-
-        private StringStep CreateInstance(string step, IEventListener listener)
-        {
-            var stringStep = new StringStep(step, "fileName", _stringStepRunner);
-            StringStep.MessageAdded += (s, e) => listener.ScenarioMessageAdded(e.EventData.Message);
-            return stringStep;
+            return new StringStep(step, "fileName", _stringStepRunner);
         }
 
         public class When_comparing_StringSteps : StringStepSpec
@@ -69,46 +57,6 @@ namespace NBehave.Narrator.Framework.Specifications.Text
                 var s1 = CreateInstance("Foo");
                 var s2 = CreateInstance("Bar");
                 Assert.That(s1.Equals(s2), Is.False);
-            }
-        }
-
-        public class When_running_step : StringStepSpec
-        {
-            [Test]
-            public void Should_raise_event_for_passed_step()
-            {
-                Action action = () => { };
-                MethodInfo methodInfo = action.Method;
-                var actionMethodInfo = new ActionMethodInfo(new Regex("Foo"), action, methodInfo, "Given");
-                _catalog.Add(actionMethodInfo);
-
-                var listener = MockRepository.GenerateMock<IEventListener>();
-                var step = CreateInstance("Foo", listener);
-                step.Run();
-                listener.AssertWasCalled(l => l.ScenarioMessageAdded("Foo"));
-            }
-
-            [Test]
-            public void Should_raise_event_for_pending_step()
-            {
-                var listener = MockRepository.GenerateMock<IEventListener>();
-                var step = CreateInstance("Foo", listener);
-                step.Run();
-                listener.AssertWasCalled(l => l.ScenarioMessageAdded("Foo - PENDING"));
-            }
-
-            [Test]
-            public void Should_raise_event_for_failed_step()
-            {
-                Action action = () => { throw new AbandonedMutexException("fail"); };
-                MethodInfo methodInfo = action.Method;
-                var actionMethodInfo = new ActionMethodInfo(new Regex("Foo"), action, methodInfo, "Given");
-                _catalog.Add(actionMethodInfo);
-
-                var listener = MockRepository.GenerateMock<IEventListener>();
-                var step = CreateInstance("Foo", listener);
-                step.Run();
-                listener.AssertWasCalled(l => l.ScenarioMessageAdded("Foo - FAILED"));
             }
         }
     }

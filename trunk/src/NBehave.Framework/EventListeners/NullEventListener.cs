@@ -14,10 +14,6 @@
         {            
         }
 
-        void IEventListener.ScenarioMessageAdded(string message)
-        {
-        }
-
         void IEventListener.RunStarted()
         {
         }

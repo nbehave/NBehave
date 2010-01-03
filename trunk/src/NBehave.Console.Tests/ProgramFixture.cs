@@ -7,7 +7,6 @@ using gen = System.Collections.Generic;
 using NBehave.Narrator.Framework.EventListeners;
 using NBehave.Narrator.Framework.EventListeners.Xml;
 
-
 namespace NBehave.Console.Tests
 {
     [TestFixture]
@@ -78,7 +77,7 @@ namespace NBehave.Console.Tests
             {
                 listener = Program.CreateEventListener(options);
                 var multiOutputEventListener = (MultiOutputEventListener)listener;
-                Assert.That(multiOutputEventListener.Listeners[0], Is.TypeOf(typeof(FileOutputEventListener)));
+                Assert.That(multiOutputEventListener.Listeners[0], Is.TypeOf(typeof(TextWriterEventListener)));
             }
             finally
             {

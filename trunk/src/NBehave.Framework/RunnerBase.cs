@@ -14,7 +14,6 @@ namespace NBehave.Narrator.Framework
 
         private EventHandler<EventArgs<Feature>> _featureCreatedEventHandler;
         private EventHandler<EventArgs<ScenarioWithSteps>> _scenarioCreatedEventHandler;
-        private EventHandler<EventArgs<MessageEventData>> _messageAddedEventHandler;
         private EventHandler<EventArgs<ScenarioResult>> _scenarioResultAddedEventHandler;
 
         public bool IsDryRun { get; set; }
@@ -64,19 +63,12 @@ namespace NBehave.Narrator.Framework
             StartWatchingFeatureCreated(listener);
             StartWatchingFeatureResults(listener);
             StartWatchingScenarioCreated(listener);
-            StartWatchingMessageAdded(listener);
         }
 
         private void StartWatchingFeatureResults(IEventListener listener)
         {
             _scenarioResultAddedEventHandler = (sender, e) => listener.ScenarioResult(e.EventData);
             ScenarioStepRunner.ScenarioResultCreated += _scenarioResultAddedEventHandler;
-        }
-
-        private void StartWatchingMessageAdded(IEventListener listener)
-        {
-            _messageAddedEventHandler = (sender, e) => listener.ScenarioMessageAdded(e.EventData.Message);
-            StringStep.MessageAdded += _messageAddedEventHandler;
         }
 
         private void StartWatchingScenarioCreated(IEventListener listener)
@@ -100,7 +92,6 @@ namespace NBehave.Narrator.Framework
         {
             Feature.FeatureCreated -= _featureCreatedEventHandler;
             ScenarioWithSteps.ScenarioCreated -= _scenarioCreatedEventHandler;
-            StringStep.MessageAdded -= _messageAddedEventHandler;
             ScenarioStepRunner.ScenarioResultCreated -= _scenarioResultAddedEventHandler;
             listener.RunFinished();
         }

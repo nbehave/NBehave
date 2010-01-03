@@ -38,10 +38,6 @@ namespace NBehave.TestDriven.Plugin
         {
         }
 
-        void IEventListener.ScenarioMessageAdded(string message)
-        {
-        }
-
         void IEventListener.ThemeFinished()
         {
         }

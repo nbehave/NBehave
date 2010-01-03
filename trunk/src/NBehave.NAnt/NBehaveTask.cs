@@ -58,8 +58,6 @@ namespace NBehave.NAnt
             if (DryRun)
                 return;
 
-            WriteResultsInto(output, results);
-
             if (FailBuild)
                 FailBuildBasedOn(results);
         }
@@ -84,14 +82,6 @@ namespace NBehave.NAnt
             output.WriteSeparator();
             output.WriteRuntimeEnvironment();
             output.WriteSeparator();
-        }
-
-        private void WriteResultsInto(PlainTextOutput output, FeatureResults results)
-        {
-            output.WriteDotResults(results);
-            output.WriteSummaryResults(results);
-            output.WriteFailures(results);
-            output.WritePending(results);
         }
 
         private void FailBuildBasedOn(FeatureResults results)

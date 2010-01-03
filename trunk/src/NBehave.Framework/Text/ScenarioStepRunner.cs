@@ -17,9 +17,9 @@ namespace NBehave.Narrator.Framework
             {
                 if (scenario.Feature != _lastFeature)
                     NewFeature(scenario);
-                IEnumerable<ScenarioResult> scenarioResults = scenario.Run();
+                var scenarioResults = scenario.Run();
                 RaiseFeatureResultsEvent(scenarioResults);
-                allResults.AddRange(scenarioResults);
+                allResults.Add(scenarioResults);
             }
             return allResults;
         }
@@ -30,17 +30,12 @@ namespace NBehave.Narrator.Framework
             _lastFeature.RaiseFeatureCreated();
         }
 
-        private void RaiseFeatureResultsEvent(IEnumerable<ScenarioResult> results)
+        private void RaiseFeatureResultsEvent(ScenarioResult scenarioResult)
         {
             if (ScenarioResultCreated == null)
                 return;
-
-            foreach (var result in results)
-            {
-                var e = new EventArgs<ScenarioResult>(result);
-                ScenarioResultCreated.Invoke(this, e);
-            }
-
+            var e = new EventArgs<ScenarioResult>(scenarioResult);
+            ScenarioResultCreated.Invoke(this, e);
         }
     }
 }

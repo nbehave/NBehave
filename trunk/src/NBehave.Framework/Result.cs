@@ -4,13 +4,13 @@ namespace NBehave.Narrator.Framework
 {
     public class ActionStepResult : Result
     {
-        public string ActionStep { get; private set; }
+        public string StringStep { get; private set; }
         public Result Result { get; private set; }
 
-        public ActionStepResult(string actionStep, Result resultForActionStep)
+        public ActionStepResult(string stringStep, Result resultForActionStep)
             : base(resultForActionStep.Message)
         {
-            ActionStep = actionStep;
+            StringStep = stringStep;
             Result = resultForActionStep;
         }
 
@@ -20,11 +20,20 @@ namespace NBehave.Narrator.Framework
             if (stepResult is Passed)
                 return;
             if (stepResult is Pending && Result is Passed)
+            {
                 Result = stepResult;
+                Message = stepResult.Message;
+            }
             if (stepResult is Failed && (Result is Passed || Result is Pending))
+            {
                 Result = stepResult;
+                Message = stepResult.Message;
+            }
             if (Result == null)
+            {
                 Result = stepResult;
+                Message = stepResult.Message;
+            }
         }
 
         public override string ToString()

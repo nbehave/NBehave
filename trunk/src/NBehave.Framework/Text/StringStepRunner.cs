@@ -22,7 +22,6 @@ namespace NBehave.Narrator.Framework
             return (this as IStringStepRunner).Run(actionStep, null);
         }
 
-
         ActionStepResult IStringStepRunner.Run(ActionStepText actionStep, Row row)
         {
             var actionStepToUse = new ActionStepText(actionStep.Step.RemoveFirstWord(), actionStep.FromFile);
@@ -91,27 +90,35 @@ namespace NBehave.Narrator.Framework
         private void RunStep(ActionStepText actionStep, Func<object[]> getParametersForActionStepText)
         {
             if (ActionCatalog.ActionExists(actionStep) == false)
-                throw new ArgumentException(string.Format("cannot find Token string '{0}'", actionStep));
+                throw new ArgumentException(string.Format("cannot find step string '{0}'", actionStep));
 
             var info = ActionCatalog.GetAction(actionStep);
 
+            BeforeEachScenario(info);
+            BeforeEachStep(info);
+            RunStep(info, getParametersForActionStepText);
+            AfterEachStep(info);
+
+            _lastAction = info;
+        }
+
+        private void RunStep(ActionMethodInfo info, Func<object[]> getParametersForActionStepText)
+        {
             Type actionType = GetActionType(info.Action);
             MethodInfo methodInfo = actionType.GetMethod("DynamicInvoke");
             object[] actionParamValues = getParametersForActionStepText();
-
-            BeforeEachScenario(info);
-            BeforeEachStep(info);
-
             methodInfo.Invoke(info.Action, BindingFlags.InvokeMethod, null,
                               new object[] { actionParamValues }, CultureInfo.CurrentCulture);
-
-            info.ExecuteNotificationMethod(typeof(AfterStepAttribute));
-            _lastAction = info;
         }
 
         private void BeforeEachStep(ActionMethodInfo info)
         {
             info.ExecuteNotificationMethod(typeof(BeforeStepAttribute));
+        }
+
+        private void AfterEachStep(ActionMethodInfo info)
+        {
+            info.ExecuteNotificationMethod(typeof(AfterStepAttribute));
         }
 
         private void BeforeEachScenario(ActionMethodInfo info)

@@ -34,9 +34,9 @@ namespace NBehave.Narrator.Framework.EventListeners
             return new NullEventListener();
         }
 
-        private static IEventListener FileOutputEventListener(string outputPath)
+        public static IEventListener FileOutputEventListener(string outputPath)
         {
-            return new FileOutputEventListener(outputPath);
+            return new TextWriterEventListener(File.CreateText(outputPath));
         }
 
         private static IEventListener TextWriterEventListener(TextWriter writer)

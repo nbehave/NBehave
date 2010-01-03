@@ -5,15 +5,15 @@ using NUnit.Framework;
 namespace NBehave.Narrator.Framework.Specifications
 {
 	[TestFixture]
-	public class PlainTextOutputSpec
+	public class SummaryWriterSpec
 	{
-		private PlainTextOutput output;
+        private SummaryWriter output;
 		private TextWriter writer;
 		[SetUp]
 		public void Establish_context()
 		{
 			writer = new StringWriter();
-			output = new PlainTextOutput(writer);
+            output = new SummaryWriter(writer);
 			var results = new FeatureResults();
 			var feature = new Feature("feature title");
 			var scenarioResult = new ScenarioResult(feature, "scenario title");

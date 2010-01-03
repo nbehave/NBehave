@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using NUnit.Framework;
 
 namespace NBehave.Narrator.Framework.Specifications.Text
@@ -16,21 +17,22 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             private List<string> _names;
 
             [SetUp]
-            public void SetUp()
+            public virtual void SetUp()
             {
                 _names = new List<string>();
                 _actionCatalog = new ActionCatalog();
                 Action<string> action = name => { _names.Add(name); }; //Depending on the parametername of the action
-                const string stringStep = "I have a  list of names:";
-                _actionCatalog.Add(stringStep, action, action.Method);
+                var stringStep = new Regex("I have a  list of names:");
+                var actionMethodInfo = new ActionMethodInfo(stringStep, action, action.Method, "Given");
+                _actionCatalog.Add(actionMethodInfo);
 
                 _stringStepRunner = new StringStepRunner(_actionCatalog);
                 var tableStep = new StringTableStep("Given " + stringStep, "file", _stringStepRunner);
-                var columnNames=new ExampleColumns(new [] {"name", "country"});
+                var columnNames = new ExampleColumns(new[] { "name", "country" });
 
-                tableStep.AddTableStep(new Row(columnNames, new Dictionary<string, string> { {"name", "Morgan Persson"}, {"country", "Sweden"}}));
-                tableStep.AddTableStep(new Row(columnNames, new Dictionary<string, string> { {"name", "Jimmy Nilsson"}, {"country", "Sweden"}}));
-                tableStep.AddTableStep(new Row(columnNames, new Dictionary<string, string> { {"name", "Jimmy Bogard"}, {"country", "USA"}}));
+                tableStep.AddTableStep(new Row(columnNames, new Dictionary<string, string> { { "name", "Morgan Persson" }, { "country", "Sweden" } }));
+                tableStep.AddTableStep(new Row(columnNames, new Dictionary<string, string> { { "name", "Jimmy Nilsson" }, { "country", "Sweden" } }));
+                tableStep.AddTableStep(new Row(columnNames, new Dictionary<string, string> { { "name", "Jimmy Bogard" }, { "country", "USA" } }));
 
                 _actionStepResult = tableStep.Run();
             }
@@ -52,7 +54,6 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             {
                 CollectionAssert.Contains(_names, "Jimmy Nilsson");
             }
-        
         }
     }
 }

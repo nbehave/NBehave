@@ -84,8 +84,8 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
         void WriteStoryNarrative(IEnumerable<EventReceived> events)
         {
             var featureMessages = from m in events
-                                where m.EventType == EventType.FeatureNarrative
-                                select m.Message;
+                                  where m.EventType == EventType.FeatureNarrative
+                                  select m.Message;
             if (featureMessages.Count() > 0)
             {
                 Writer.WriteStartElement("narrative");
@@ -111,18 +111,18 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
         IEnumerable<ScenarioResult> GetScenarioResultsForFeature(string featureTitle, IEnumerable<EventReceived> eventsReceived)
         {
             var featureResults = (from e in eventsReceived
-                                where e.EventType == EventType.ScenarioResult
-                                select e as ScenarioResultEventReceived);
+                                  where e.EventType == EventType.ScenarioResult
+                                  select e as ScenarioResultEventReceived);
             var scenarioResultsForFeature = from e in featureResults
-                                          where e.ScenarioResult.FeatureTitle == featureTitle
-                                          select e.ScenarioResult;
+                                            where e.ScenarioResult.FeatureTitle == featureTitle
+                                            select e.ScenarioResult;
             return scenarioResultsForFeature;
         }
 
         public void DoScenario(EventReceived evt, ScenarioResult scenarioResult)
         {
             var events = from e in EventsOf(evt, EventType.ScenarioCreated)
-                         where e.EventType == EventType.ScenarioMessage
+                         where e.EventType == EventType.ScenarioCreated
                          select e;
             WriteStartElement("scenario", evt.Message, events.Last().Time.Subtract(events.First().Time));
 
@@ -131,6 +131,46 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
                 CreatePendingSteps(evt, scenarioResult);
             foreach (var step in scenarioResult.ActionStepResults)
                 DoActionStep(step);
+            DoExamplesInScenario(scenarioResult as ScenarioExampleResult);
+            Writer.WriteEndElement();
+        }
+
+        private void DoExamplesInScenario(ScenarioExampleResult scenarioExampleResult)
+        {
+            if (scenarioExampleResult == null)
+                return;
+
+            Writer.WriteStartElement("examples");
+            Writer.WriteStartElement("columnNames");
+
+            foreach (var columnName in scenarioExampleResult.Examples.First().ColumnNames)
+            {
+                Writer.WriteStartElement("columnName");
+                Writer.WriteString(columnName);
+                Writer.WriteEndElement();
+            }
+            Writer.WriteEndElement();
+
+            var scenarioResults = scenarioExampleResult.ExampleResults.ToArray();
+            int idx = 0;
+            foreach (var example in scenarioExampleResult.Examples)
+            {
+                Writer.WriteStartElement("example");
+                Writer.WriteStartAttribute("outcome");
+                Writer.WriteString(scenarioResults[idx++].Result.ToString());
+                Writer.WriteEndAttribute();
+                foreach (var columnName in example.ColumnNames)
+                {
+                    Writer.WriteStartElement("column");
+                    Writer.WriteStartAttribute("columnName");
+                    Writer.WriteString(columnName);
+                    Writer.WriteEndAttribute();
+                    Writer.WriteString(example.ColumnValues[columnName]);
+                    Writer.WriteEndElement();
+
+                }
+                Writer.WriteEndElement();
+            }
             Writer.WriteEndElement();
         }
 
@@ -142,7 +182,7 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
         private void CreatePendingSteps(EventReceived evt, ScenarioResult scenarioResult)
         {
             var actionSteps = from e in EventsOf(evt, EventType.ScenarioResult)
-                              where e.EventType == EventType.ScenarioMessage
+                              where e.EventType == EventType.ScenarioCreated
                               select e;
             foreach (var step in actionSteps)
                 scenarioResult.AddActionStepResult(new ActionStepResult(step.Message, new Pending(scenarioResult.Message)));
@@ -151,7 +191,7 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
         public void DoActionStep(ActionStepResult result)
         {
             Writer.WriteStartElement("actionStep");
-            Writer.WriteAttributeString("name", result.ActionStep);
+            Writer.WriteAttributeString("name", result.StringStep);
             Writer.WriteAttributeString("outcome", result.Result.ToString());
             if (result.Result.GetType() == typeof(Failed))
                 Writer.WriteElementString("failure", result.Message);

@@ -5,6 +5,6 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
         RunStart, RunFinished,
         ThemeStarted, ThemeFinished,
         FeatureCreated, FeatureNarrative,
-        ScenarioCreated, ScenarioResult, ScenarioMessage,
+        ScenarioCreated, ScenarioResult
     }
 }

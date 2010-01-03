@@ -12,20 +12,12 @@ namespace NBehave.Narrator.Framework
         public Regex ActionStepMatcher { get; private set; }
         public object Action { get; private set; }
         public IFileMatcher FileMatcher { get; set; }
-        protected object Instance { get; private set; }
+        private object Instance { get; set; }
 
-        public ActionMethodInfo()
+        private ActionMethodInfo()
         {
             FileMatcher = new MatchAllFiles();
         }
-
-        //public ActionMethodInfo(Regex actionStepMatcher, object action, MethodInfo methodInfo)
-        //    : this(actionStepMatcher, action, methodInfo, string.Empty, null)
-        //{ }
-
-        //public ActionMethodInfo(Regex actionStepMatcher, object action, MethodInfo methodInfo, object instance)
-        //    : this(actionStepMatcher, action, methodInfo, string.Empty, instance)
-        //{ }
 
         public ActionMethodInfo(Regex actionStepMatcher, object action, MethodInfo methodInfo, string actionType)
             : this(actionStepMatcher, action, methodInfo, actionType, null)

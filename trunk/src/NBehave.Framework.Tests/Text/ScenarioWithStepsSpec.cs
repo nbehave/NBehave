@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 
 namespace NBehave.Narrator.Framework.Specifications.Text
 {
@@ -91,7 +90,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
                 scenarioWithSteps.AddStep("When I add the numbers");
                 scenarioWithSteps.AddStep("Then the sum is 3");
 
-                _scenarioResult = scenarioWithSteps.Run().FirstOrDefault();
+                _scenarioResult = scenarioWithSteps.Run();
             }
 
             [Test]
@@ -139,7 +138,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
 
         public class When_running_a_example_scenario : ScenarioWithStepsSpec
         {
-            private IEnumerable<ScenarioResult> _scenarioResult;
+            private ScenarioResult _scenarioResult;
 
             protected override void Establish_context()
             {
@@ -159,10 +158,16 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             }
 
             [Test]
+            public void Should_get_Result_of_type_ScenarioExampleResult()
+            {
+                Assert.That(_scenarioResult, Is.TypeOf(typeof(ScenarioExampleResult)));
+            }
+
+            [Test]
             public void Should_pass_both_examples()
             {
-                Assert.That(_scenarioResult.Count(), Is.EqualTo(2));
-                foreach (var scenarioResult in _scenarioResult)
+                Assert.That((_scenarioResult as ScenarioExampleResult).ExampleResults.Count(), Is.EqualTo(2));
+                foreach (var scenarioResult in (_scenarioResult as ScenarioExampleResult).ExampleResults)
                     Assert.That(scenarioResult.Result, Is.TypeOf(typeof(Passed)));
             }
         }

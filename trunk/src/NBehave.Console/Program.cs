@@ -46,7 +46,7 @@ namespace NBehave.Console
                 {
                     runner.LoadAssembly(path);
                 }
-                catch (FileNotFoundException)
+                catch (FileNotFoundException e)
                 {
                     output.WriteLine(string.Format("File not found: {0}", path));
                 }
@@ -57,11 +57,6 @@ namespace NBehave.Console
             if (options.dryRun)
                 return 0;
 
-            output.WriteDotResults(results);
-            output.WriteSummaryResults(results);
-            output.WriteFailures(results);
-            output.WritePending(results);
-
             int result = results.NumberOfFailingScenarios > 0 ? 2 : 0;
 
             return result;
@@ -71,7 +66,7 @@ namespace NBehave.Console
         {
             var eventListeners = new List<IEventListener>();
             if (options.HasStoryOutput)
-                eventListeners.Add(new FileOutputEventListener(options.storyOutput));
+                eventListeners.Add(EventListeners.FileOutputEventListener(options.storyOutput));
             if (options.HasStoryXmlOutput)
                 eventListeners.Add(EventListeners.XmlWriterEventListener(options.xml));
             if (eventListeners.Count == 0)
