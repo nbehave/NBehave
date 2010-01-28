@@ -358,6 +358,34 @@ namespace NBehave.Spec.NUnit.Specs
 
             exception.ShouldBeInstanceOfType<ArgumentException>();
         }
+
+        [Specification]
+        public void Should_pass_when_exception_is_correct_type()
+        {
+            Action action = () => { throw new ArgumentException("blerg"); };
+            action.ShouldThrow<ArgumentException>();
+        }
+
+        [Specification, ExpectedException(typeof(AssertionException), ExpectedMessage = "Exception of type <System.ArgumentException> expected but no exception occurred")]
+        public void Should_fail_when_no_exception_occurs()
+        {
+            Action action = () => {  };
+            action.ShouldThrow<ArgumentException>();
+        }
+
+        [Specification, ExpectedException(typeof(AssertionException))]
+        public void Should_pass_fail_when_exception_is_not_correct_type()
+        {
+            Action action = () => { throw new ApplicationException("blerg"); };
+            action.ShouldThrow<ArgumentException>();
+        }
+
+        [Specification]
+        public void Should_pass_when_exception_is_correct_type_and_message_is_correct_type()
+        {
+            Action action = () => { throw new ArgumentException("blerg"); };
+            action.ShouldThrow<ArgumentException>().WithExceptionMessage("blerg");
+        }
     }
 
     [Context]

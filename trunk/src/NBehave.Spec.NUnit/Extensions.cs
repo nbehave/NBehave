@@ -276,5 +276,29 @@ namespace NBehave.Spec.NUnit
                 e.ShouldBeInstanceOfType(exception);
             });
         }
+
+        public static Exception ShouldThrow<T>(this Action action)
+        {
+            bool failed = false;
+            var ex = new Exception("");
+            try
+            {
+                action();
+                failed = true;
+            }
+            catch (Exception e)
+            {
+                e.ShouldBeInstanceOfType(typeof(T));
+                ex = e;
+            }
+            if (failed)
+                Assert.Fail(string.Format("Exception of type <{0}> expected but no exception occurred", typeof(T)));
+            return ex;
+        }
+
+        public static void WithExceptionMessage(this Exception e, string exceptionMessage)
+        {
+            exceptionMessage.ShouldEqual(e.Message);
+        }
     }
 }
