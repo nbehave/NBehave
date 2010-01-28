@@ -24,7 +24,7 @@ namespace NBehave.Narrator.Framework
 
         ActionStepResult IStringStepRunner.Run(ActionStepText actionStep, Row row)
         {
-            var actionStepToUse = new ActionStepText(actionStep.Step.RemoveFirstWord(), actionStep.FromFile);
+            var actionStepToUse = new ActionStepText(actionStep.Step.RemoveFirstWord(), actionStep.Source);
             var result = new ActionStepResult(actionStep.Step, new Passed());
             try
             {

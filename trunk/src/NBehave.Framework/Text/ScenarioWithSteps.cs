@@ -27,13 +27,24 @@ namespace NBehave.Narrator.Framework
 
         public string Title { get; set; }
         public Feature Feature { get; set; }
-        public string FileName { get; set; }
-
+        
+        private string _source;
+        public string Source 
+        { 
+        	get { return _source; }
+        	set 
+        	{
+        		_source = value;
+        		foreach(var step in Steps)
+        			step.Source = _source;
+        	}
+        }
+        		
         public IEnumerable<Example> Examples { get { return _examples; } }
 
         public void AddStep(string step)
         {
-            var stringStringStep = new StringStep(step, FileName, _stringStepRunner);
+            var stringStringStep = new StringStep(step, Source, _stringStepRunner);
             AddStep(stringStringStep);
         }
 
@@ -111,7 +122,7 @@ namespace NBehave.Narrator.Framework
             var clones = new List<StringStep>();
             foreach (var step in Steps)
             {
-                var s = new StringStep(step.Step, step.FromFile, _stringStepRunner);
+                var s = new StringStep(step.Step, step.Source, _stringStepRunner);
                 clones.Add(s);
             }
             return clones;

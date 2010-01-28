@@ -10,11 +10,6 @@ namespace NBehave.Narrator.Framework.Specifications.Text
     [Context]
     public abstract class ScenarioParserSpec
     {
-        private Stream WriteTextToStream(string text)
-        {
-            return text.ToStream();
-        }
-
         private readonly StringStepRunner _stringStepRunner = new StringStepRunner(new ActionCatalog());
 
         private ScenarioParser CreateScenarioParser()
@@ -47,6 +42,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             CollectionAssert.Contains(_scenarios[0].Steps, NewStringStep("  Then the sum is 3"));
         }
 
+        [TestFixture]
         public class Scenario_simple_scenario_without_title : ScenarioParserSpec
         {
             [SetUp]
@@ -57,8 +53,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
                                   "  Then the sum is 3";
 
                 var parser = CreateScenarioParser();
-                Stream stream = WriteTextToStream(scenario);
-                _scenarios = parser.Parse(stream);
+                _scenarios = parser.Parse(scenario.ToStream());
             }
         }
 
@@ -73,8 +68,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
                                   "  Then the sum is 3";
 
                 var parser = CreateScenarioParser();
-                Stream stream = WriteTextToStream(scenario);
-                _scenarios = parser.Parse(stream);
+                _scenarios = parser.Parse(scenario.ToStream());
             }
 
             [Test]
@@ -106,8 +100,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
                                   "  Then the sum is 8";
 
                 var parser = CreateScenarioParser();
-                Stream stream = WriteTextToStream(scenario);
-                _scenarios = parser.Parse(stream);
+                _scenarios = parser.Parse(scenario.ToStream());
             }
 
             [Test]
@@ -141,8 +134,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
                                   "  Then the sum is 8";
 
                 var parser = CreateScenarioParser();
-                Stream stream = WriteTextToStream(scenario);
-                _scenarios = parser.Parse(stream);
+                _scenarios = parser.Parse(scenario.ToStream());
             }
 
             [Test]
@@ -177,8 +169,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
                                   "  Then the sum is 8";
 
                 var parser = CreateScenarioParser();
-                Stream stream = WriteTextToStream(scenario);
-                _scenarios = parser.Parse(stream);
+                _scenarios = parser.Parse(scenario.ToStream());
             }
 
             [Test]
@@ -218,8 +209,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
                                   "|2|3|5";
 
                 var parser = CreateScenarioParser();
-                Stream stream = WriteTextToStream(scenario);
-                _scenarios = parser.Parse(stream);
+                _scenarios = parser.Parse(scenario.ToStream());
             }
 
             [Test]
@@ -272,8 +262,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
                                   "  |Jimmy Nilsson |";
 
                 var parser = CreateScenarioParser();
-                Stream stream = WriteTextToStream(scenario);
-                _scenarios = parser.Parse(stream);
+                _scenarios = parser.Parse(scenario.ToStream());
                 _step = _scenarios[0].Steps.First() as StringTableStep;
             }
 
@@ -321,8 +310,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
                                   "  Then the sum is 3";
 
                 var parser = CreateScenarioParser();
-                Stream stream = WriteTextToStream(scenario);
-                _scenarios = parser.Parse(stream);
+                _scenarios = parser.Parse(scenario.ToStream());
             }
 
             [Test]

@@ -48,7 +48,7 @@ namespace NBehave.Narrator.Framework
                     else if (_actionStep.IsExample(step))
                     {
                         if (scenario == null)
-                            scenario = CreateNewScenario(scenarios, feature);
+                        	scenario = CreateNewScenario(scenarios, feature);
                         AddExample(scenario, step);
                     }
                     else
@@ -67,7 +67,7 @@ namespace NBehave.Narrator.Framework
         private ScenarioWithSteps CreateNewScenario(ICollection<ScenarioWithSteps> scenarios, Feature feature)
         {
             var scenario = new ScenarioWithSteps(_stringStepRunner);
-            scenarios.Add(scenario);
+		    scenarios.Add(scenario);
             scenario.Feature = feature;
             feature.AddScenario(scenario);
             return scenario;
@@ -86,7 +86,7 @@ namespace NBehave.Narrator.Framework
                 List<Example> table = ParseTable(step);
                 var endOfStep = step.IndexOf('|');
                 string stepToMatch = step.Substring(0, endOfStep - 1).TrimEnd(_whiteSpaceChars);
-                var theStep = new StringTableStep(stepToMatch, scenario.FileName, _stringStepRunner);
+                var theStep = new StringTableStep(stepToMatch, scenario.Source, _stringStepRunner);
                 foreach (Example row in table)
                 {
                     theStep.AddTableStep(new Row(row.ColumnNames, row.ColumnValues));

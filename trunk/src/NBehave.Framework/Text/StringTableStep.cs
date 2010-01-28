@@ -35,7 +35,7 @@ namespace NBehave.Narrator.Framework
                 if (hasParamsInStep)
                     step = InsertParametersToStep(row);
                 ActionStepResult result = StringStepRunner.Run(step, row);
-                actionStepResult.MergeResult(result);
+                actionStepResult.MergeResult(result.Result);
             }
             return actionStepResult;
         }
@@ -55,7 +55,7 @@ namespace NBehave.Narrator.Framework
                 var replceWithValue = new Regex(string.Format(@"\[{0}\]", column.Key), RegexOptions.IgnoreCase);
                 stringStep = replceWithValue.Replace(stringStep, column.Value);
             }
-            return new StringStep(stringStep, FromFile, StringStepRunner);
+            return new StringStep(stringStep, Source, StringStepRunner);
         }
     }
 }

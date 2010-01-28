@@ -52,7 +52,7 @@ namespace NBehave.Narrator.Framework
             {
                 scenarios = Load(stream);
                 foreach (var scenario in scenarios)
-                    scenario.FileName = file;
+                    scenario.Source = file;
             }
             return scenarios;
         }

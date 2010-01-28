@@ -77,7 +77,7 @@ namespace NBehave.Narrator.Framework
 
         private bool MatchesFileName(ActionMethodInfo action, ActionStepText actionStepText)
         {
-            return action.MatchesFileName(actionStepText.FromFile);
+            return action.MatchesFileName(actionStepText.Source);
         }
 
         private string[] GetTokensInMessage(string message)

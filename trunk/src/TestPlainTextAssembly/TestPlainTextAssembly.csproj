@@ -40,6 +40,10 @@
     <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <StartAction>Program</StartAction>
+    <StartProgram>..\NBehave.Console\bin\Debug\NBehave-Console.exe</StartProgram>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="nunit.framework">
       <SpecificVersion>False</SpecificVersion>

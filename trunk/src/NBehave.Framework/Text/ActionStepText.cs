@@ -3,12 +3,12 @@ namespace NBehave.Narrator.Framework
 	public class ActionStepText
 	{
 		public string Step {get; set;}
-		public string FromFile {get; private set;}
+		public string Source {get; set;}
 		
-		public ActionStepText(string text, string fromFile)
+		public ActionStepText(string text, string source)
 		{
 			Step = text;
-			FromFile = fromFile;
+			Source = source;
 		}
 		
 		public override string ToString()
