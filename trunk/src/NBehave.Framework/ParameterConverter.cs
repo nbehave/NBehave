@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -52,26 +53,55 @@ namespace NBehave.Narrator.Framework
         {
             return actionValue.GetParameterNames();
         }
+      
         private object ChangeParameterType(string strParam, ParameterInfo paramType)
         {
             if (paramType.ParameterType.IsArray)
                 return CreateArray(strParam, paramType.ParameterType);
+            if (IsGenericIEnumerable(paramType))
+                return CreateList(strParam, paramType.ParameterType);
             return Convert.ChangeType(strParam, paramType.ParameterType);
         }
 
         private object CreateArray(string strParam, Type arrayOfType)
         {
-            var strParamAsArray = strParam.Replace(Environment.NewLine, "\n").Split(new[] { ',' });
-            for (int i = 0; i < strParamAsArray.Length; i++)
-            {
-                if (string.IsNullOrEmpty(strParamAsArray[i]) == false)
-                    strParamAsArray[i] = strParamAsArray[i].Trim();
-            }
-            while (string.IsNullOrEmpty(strParamAsArray.Last()))
-                strParamAsArray = strParamAsArray.Take(strParamAsArray.Length - 1).ToArray();
+            string[] strParamAsArray = GetParamAsArray(strParam);
             var typedArray = Activator.CreateInstance(arrayOfType, strParamAsArray.Length);
             var typeInList = arrayOfType.GetElementType();
-            var method = GetType().GetMethod("SetValue", BindingFlags.NonPublic | BindingFlags.Instance);
+            SetValues(strParamAsArray, typeInList, typedArray, "SetValue");
+            return typedArray;
+        }
+
+        private object CreateList(string param, Type parameterType)
+        {
+            Type innerType = parameterType.GetGenericArguments()[0];
+            var genericList = CreateGeneric(typeof (List<>), innerType);
+            var strParamAsArray = GetParamAsArray(param);
+            SetValues(strParamAsArray, innerType, genericList, "AddValue");
+            return genericList;
+        }
+
+        private bool IsGenericIEnumerable(ParameterInfo paramType)
+        {
+            if (paramType.ParameterType.IsGenericType == false)
+                return false;
+
+            var genericArgs = paramType.ParameterType.GetGenericArguments();
+            if (genericArgs.Length > 1)
+                throw new NotSupportedException("Sorry, nbehave only supports one generic parameter");
+            object ien = CreateGeneric(typeof(List<>), genericArgs[0]);
+            return paramType.ParameterType.IsAssignableFrom(ien.GetType());
+        }
+
+        public object CreateGeneric(Type generic, Type innerType)
+        {
+            Type specificType = generic.MakeGenericType(new[] { innerType });
+            return Activator.CreateInstance(specificType, null);
+        }
+
+        private void SetValues(string[] strParamAsArray, Type typeInList, object typedArray, string function)
+        {
+            var method = GetType().GetMethod(function, BindingFlags.NonPublic | BindingFlags.Instance);
             var types = new[] { typeInList };
             var genMethod = method.MakeGenericMethod(types);
             for (int i = 0; i < strParamAsArray.Length; i++)
@@ -79,7 +109,30 @@ namespace NBehave.Narrator.Framework
                 object value = Convert.ChangeType(strParamAsArray[i], typeInList);
                 genMethod.Invoke(this, new[] { typedArray, i, value });
             }
-            return typedArray;
+        }
+
+        private string[] GetParamAsArray(string strParam)
+        {
+            var strParamAsArray = strParam.Replace(Environment.NewLine, "\n").Split(new[] { ',' });
+            TrimValues(strParamAsArray);
+            var trimmedArray = TrimEnd(strParamAsArray);
+            return trimmedArray;
+        }
+
+        private void TrimValues(string[] strParamAsArray)
+        {
+            for (int i = 0; i < strParamAsArray.Length; i++)
+            {
+                if (string.IsNullOrEmpty(strParamAsArray[i]) == false)
+                    strParamAsArray[i] = strParamAsArray[i].Trim();
+            }
+        }
+
+        private string[] TrimEnd(string[] strParamAsArray)
+        {
+            while (string.IsNullOrEmpty(strParamAsArray.Last()))
+                strParamAsArray = strParamAsArray.Take(strParamAsArray.Length - 1).ToArray();
+            return strParamAsArray;
         }
 
         //This method is called with reflection by the CreateArray method
@@ -88,5 +141,10 @@ namespace NBehave.Narrator.Framework
             array[index] = value;
         }
 
+        //This method is called with reflection by the CreateArray method
+        private void AddValue<T>(ICollection<T> array, int index, T value)
+        {
+            array.Add(value);
+        }
     }
 }

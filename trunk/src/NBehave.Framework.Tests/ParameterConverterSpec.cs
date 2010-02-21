@@ -128,18 +128,47 @@ namespace NBehave.Narrator.Framework.Specifications
             [Test]
             public void Should_get_multiline_value_as_array_of_integers()
             {
+                Should_get_multiline_value_as_generic_collection_of_integers<int[]>();
+            }
+
+            [Test]
+            public void Should_get_multiline_value_as_generic_IEnumerable_of_integers()
+            {
+                Should_get_multiline_value_as_generic_collection_of_integers<IEnumerable<int>>();
+            }
+
+            [Test]
+            public void Should_get_multiline_value_as_generic_ICollection_of_integers()
+            {
+                Should_get_multiline_value_as_generic_collection_of_integers<ICollection<int>>();
+            }
+
+            [Test]
+            public void Should_get_multiline_value_as_generic_IList_of_integers()
+            {
+                Should_get_multiline_value_as_generic_collection_of_integers<IList<int>>();
+            }
+
+            [Test]
+            public void Should_get_multiline_value_as_generic_List_of_integers()
+            {
+                Should_get_multiline_value_as_generic_collection_of_integers<List<int>>();
+            }
+
+            public void Should_get_multiline_value_as_generic_collection_of_integers<T>() where T : IEnumerable<int>
+            {
                 object paramReceived = null;
-                Action<int[]> actionStep = p => { };
+                Action<T> actionStep = p => { };
                 Action<object> action = value => { paramReceived = value; };
                 _actionCatalog.Add(new ActionMethodInfo(new Regex(@"a list of integers (?<value>(\d+,?\s*)+)"), action, actionStep.Method, "Given"));
                 string multiLineValue = "1, 2, 5";
                 string actionString = "a list of integers " + multiLineValue;
                 object[] values = _parameterConverter.GetParametersForActionStepText(new ActionStepText(actionString, ""));
-                Assert.That(values[0], Is.TypeOf(typeof(int[])));
-                var arr = (int[])values[0];
-                Assert.AreEqual(1, arr[0]);
-                Assert.AreEqual(2, arr[1]);
-                Assert.AreEqual(5, arr[2]);
+                Assert.That(values[0], Is.AssignableTo(typeof(T)));
+                var arr = (T)values[0];
+                Assert.AreEqual(1, arr.First());
+                Assert.AreEqual(2, arr.Skip(1).First());
+                Assert.AreEqual(5, arr.Last());
             }
         }
 
