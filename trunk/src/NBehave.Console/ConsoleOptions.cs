@@ -74,6 +74,9 @@ namespace NBehave.Console
             if (_isInvalid)
                 return false;
 
+            if (scenarioFiles == null)
+                return false;
+
             if (dryRun && !HasStoryOutput)
                 return false;
 

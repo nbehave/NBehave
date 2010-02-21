@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace NBehave.Narrator.Framework
@@ -30,8 +31,22 @@ namespace NBehave.Narrator.Framework
             if (Path.IsPathRooted(location))
                 files = Directory.GetFiles(Path.GetDirectoryName(location), Path.GetFileName(location));
             else
-                files = Directory.GetFiles(".", location);
+            {
+                var absoluteLocation = GetAbsolutePath(location);
+                string path = Path.GetFileName(absoluteLocation);
+                string pattern = Path.GetDirectoryName(absoluteLocation);
+                files = Directory.GetFiles(pattern, path);
+            }
             return files;
+        }
+
+        private string GetAbsolutePath(string location)
+        {
+            var directory = Path.GetDirectoryName(location);
+            var fileName = Path.GetFileName(location);
+            var fullPath = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, directory));
+            var fullLocation = Path.Combine(fullPath, fileName);
+            return fullLocation;
         }
 
         private List<List<ScenarioWithSteps>> LoadFiles(IEnumerable<string> files)
