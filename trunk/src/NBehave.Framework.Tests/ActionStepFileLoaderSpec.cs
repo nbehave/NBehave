@@ -30,8 +30,8 @@ namespace NBehave.Narrator.Framework.Specifications
             Assert.That(stories.Count, Is.EqualTo(2));
         }
 
-        [Test]
-        public void Should_have_FromFile_set_on_step()
+        [Specification]
+        public void Should_have_Source_set_on_step()
         {
             var files = new[]
 			{
@@ -43,7 +43,7 @@ namespace NBehave.Narrator.Framework.Specifications
             Assert.That(stories[0][0].Steps.First().Source, Is.Not.EqualTo(string.Empty));
         }
 
-        [Test]
+        [Specification]
         public void Should_be_able_to_use_relative_paths_with_dots()
         {
             IEnumerable<string> locations = new[] { @"..\*.*" };
