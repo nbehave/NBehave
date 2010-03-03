@@ -251,13 +251,13 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             public void Scenario()
             {
                 string scenario = "  Given the following people exists:" + Environment.NewLine +
-                                  "  |name          |country|" + Environment.NewLine +
+                                  "  |Name          |Country|" + Environment.NewLine +
                                   "  |Morgan Persson|Sweden |" + Environment.NewLine +
                                   "  |Jimmy Nilsson |Sweden |" + Environment.NewLine +
                                   "  |Jimmy bogard  |USA    |" + Environment.NewLine +
                                   "  When I search for people in sweden" + Environment.NewLine +
                                   "  Then I should get:" + Environment.NewLine +
-                                  "  |name          |" + Environment.NewLine +
+                                  "  |Name          |" + Environment.NewLine +
                                   "  |Morgan Persson|" + Environment.NewLine +
                                   "  |Jimmy Nilsson |";
 
@@ -271,6 +271,14 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             {
                 Assert.That(_step, Is.Not.Null);
                 Assert.That(_step.TableSteps.Count(), Is.EqualTo(3));
+            }
+
+            [Test]
+            public void table_step_column_names_should_be_stored_in_lower_case()
+            {
+                var step = _step.TableSteps.First();
+                CollectionAssert.Contains(step.ColumnNames, "name");
+                Assert.That(step.ColumnValues["name"], Is.Not.Null); 
             }
 
             [Test]

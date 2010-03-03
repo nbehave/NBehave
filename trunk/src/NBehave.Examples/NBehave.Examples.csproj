@@ -82,6 +82,7 @@
     <Compile Include="Game of life\Steps\GameSteps.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Bowling Game\Game.cs" />
+    <Compile Include="Tables\Table.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Bowling Game\BowlingGame.msbuild">
@@ -112,6 +113,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Bowling Game\features\Bowling score calculation\Gutter game.feature">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Tables\Table.feature">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

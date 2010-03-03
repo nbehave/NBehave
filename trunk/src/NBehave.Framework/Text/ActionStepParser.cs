@@ -60,7 +60,7 @@ namespace NBehave.Narrator.Framework
             object action = null;
             MethodInfo methodInfo = method.MethodInfo;
 
-            switch (CountTokensInTokenString(method))
+            switch (CountParameters(method))
             {
                 case 0:
                     action = GetActionWithNoParameters(instance, method);
@@ -169,9 +169,9 @@ namespace NBehave.Narrator.Framework
             return Convert.ChangeType(parameter, methodInfo.GetParameters()[parameterIndex].ParameterType);
         }
 
-        private int CountTokensInTokenString(ActionMethodInfo actionMethodInfo)
+        private int CountParameters(ActionMethodInfo actionMethodInfo)
         {
-            return actionMethodInfo.GetParameterNames().Count();
+            return actionMethodInfo.ParameterInfo.Count();
         }
 
         private ActionMethodInfo BuildActionMethodInfo(ActionStepAttribute actionStep, MethodInfo method)

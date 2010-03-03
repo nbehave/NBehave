@@ -30,7 +30,7 @@ namespace NBehave.Narrator.Framework
         {
             ActionMethodInfo action = _actionCatalog.GetAction(actionStepText);
             List<string> paramNames = action.ParameterInfo.Select(a => a.Name).ToList();
-            Func<int, string> getValues = i => row.ColumnValues[paramNames[i]];
+            Func<int, string> getValues = i => row.ColumnValues[paramNames[i].ToLower()];
 
             return GetParametersForActionStepText(action, paramNames, getValues);
         }

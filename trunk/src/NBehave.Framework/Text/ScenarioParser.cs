@@ -124,7 +124,7 @@ namespace NBehave.Narrator.Framework
             string tableHeader = GetTableHeader(tableWithColumns);
             var columnNames = new Regex(@"[^\|]+");
             foreach (Match columnName in columnNames.Matches(tableHeader))
-                listOfColumnNames.Add(columnName.Value.Trim());
+                listOfColumnNames.Add(columnName.Value.Trim().ToLower());
             if (listOfColumnNames.Last() == string.Empty)
             {
                 var tmp = listOfColumnNames.Take(listOfColumnNames.Count - 1).ToArray();
