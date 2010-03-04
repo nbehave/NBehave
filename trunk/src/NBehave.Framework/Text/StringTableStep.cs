@@ -1,3 +1,6 @@
+using System;
+using System.Linq;
+using System.Text;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
@@ -27,7 +30,7 @@ namespace NBehave.Narrator.Framework
 
         public override ActionStepResult Run()
         {
-            var actionStepResult = new ActionStepResult(Step, new Passed());
+            var actionStepResult = GetNewActionStepResult();
             bool hasParamsInStep = HasParametersInStep();
             foreach (Row row in _tableSteps)
             {
@@ -38,6 +41,27 @@ namespace NBehave.Narrator.Framework
                 actionStepResult.MergeResult(result.Result);
             }
             return actionStepResult;
+        }
+
+        private ActionStepResult GetNewActionStepResult()
+        {
+            string fullStep = CreateStepText();
+            return new ActionStepResult(fullStep, new Passed());
+        }
+
+        private string CreateStepText()
+        {
+            var step = new StringBuilder(Step + Environment.NewLine);
+            step.Append(_tableSteps.First().ColumnNamesToString() + Environment.NewLine);
+            foreach (var row in _tableSteps)
+                step.Append(row.ColumnValuesToString() + Environment.NewLine);
+            RemoveLastNewLine(step);
+            return step.ToString();
+        }
+
+        private void RemoveLastNewLine(StringBuilder step)
+        {
+            step.Remove(step.Length - Environment.NewLine.Length, Environment.NewLine.Length);
         }
 
         readonly Regex _hasParamsInStep = new Regex(@"\[\w+\]");
