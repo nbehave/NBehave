@@ -8,6 +8,7 @@ namespace NBehave.Narrator.Framework
     public class ScenarioWithSteps
     {
         public static event EventHandler<EventArgs<ScenarioWithSteps>> ScenarioCreated;
+        public static event EventHandler<EventArgs<ActionStepText>> StepAdded;
 
         private readonly List<StringStep> _steps = new List<StringStep>();
         private readonly List<Example> _examples = new List<Example>();
@@ -51,6 +52,7 @@ namespace NBehave.Narrator.Framework
         public void AddStep(StringStep step)
         {
             _steps.Add(step);
+            OnStepAdded(step);
         }
 
         public void AddExamples(List<Example> examples)
@@ -73,6 +75,15 @@ namespace NBehave.Narrator.Framework
             {
                 var e = new EventArgs<ScenarioWithSteps>(this);
                 ScenarioCreated.Invoke(this, e);
+            }
+        }
+
+        private void OnStepAdded(ActionStepText step)
+        {
+            if (StepAdded != null)
+            {
+                var e = new EventArgs<ActionStepText>(step);
+                StepAdded.Invoke(this, e);
             }
         }
 

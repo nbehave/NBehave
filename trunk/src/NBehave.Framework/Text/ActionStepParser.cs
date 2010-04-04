@@ -33,9 +33,15 @@ namespace NBehave.Narrator.Framework
             }
         }
 
-        private void FindActionStepMethods(Type actionSteps)
+        public void FindActionStepMethods(Type actionSteps)
         {
             var instance = Activator.CreateInstance(actionSteps);
+            FindActionStepMethods(actionSteps, instance);
+        }
+
+
+        public void FindActionStepMethods(Type actionSteps, object instance)
+        {
             var methods = GetMethodsWithActionStepAttribute(actionSteps);
             foreach (ActionMethodInfo method in methods)
             {

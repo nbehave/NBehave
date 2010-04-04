@@ -19,14 +19,14 @@ namespace NBehave.Narrator.Framework
             _stringStepRunner = stringStepRunner;
         }
 
-        public List<ScenarioWithSteps> Parse(Stream stream)
+        public IEnumerable<Feature> Parse(Stream stream)
         {
             var reader = new StreamReader(stream);
             string scenarioText = reader.ReadToEnd();
             return ParseScenario(scenarioText);
         }
 
-        private List<ScenarioWithSteps> ParseScenario(string scenarioText)
+        private IEnumerable<Feature> ParseScenario(string scenarioText)
         {
             var scenarios = new List<ScenarioWithSteps>();
             ScenarioWithSteps scenario = null;
@@ -61,7 +61,9 @@ namespace NBehave.Narrator.Framework
                 }
                 scenarioText = RemoveStep(scenarioText, step);
             }
-            return scenarios;
+            
+            return scenarios.Select(s => s.Feature)
+                            .Distinct();
         }
 
         private ScenarioWithSteps CreateNewScenario(ICollection<ScenarioWithSteps> scenarios, Feature feature)

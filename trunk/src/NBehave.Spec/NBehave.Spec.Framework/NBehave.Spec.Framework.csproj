@@ -68,13 +68,37 @@
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="ActionSpecification.cs" />
+    <Compile Include="ActionStepStepResolver.cs" />
+    <Compile Include="DictionaryStepResolver.cs" />
+    <Compile Include="Extensions\FeatureExtensions.cs" />
+    <Compile Include="IAsAFragment.cs" />
+    <Compile Include="IGivenFragment.cs" />
+    <Compile Include="IIWantFragment.cs" />
+    <Compile Include="IScenarioBuilderStart.cs" />
+    <Compile Include="IScenarioBuilderStartWithHelperObject.cs" />
+    <Compile Include="IScenarioFragmentBase.cs" />
+    <Compile Include="ISoThatFragment.cs" />
+    <Compile Include="IStepResolver.cs" />
+    <Compile Include="IThenFragment.cs" />
+    <Compile Include="IWhenFragment.cs" />
+    <Compile Include="ReflectedMethodStepResolver.cs" />
+    <Compile Include="ScenarioBuilder.cs" />
+    <Compile Include="ScenarioDrivenSpecBase.cs" />
+    <Compile Include="ScenarioDrivenSpecStepRunner.cs" />
     <Compile Include="SpecBase.cs" />
     <Compile Include="IActionSpecification.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpecBase_generic.cs" />
+    <Compile Include="StoryBuilder.cs" />
     <Compile Include="ThrowingAction.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\NBehave.Framework\NBehave.Narrator.Framework.csproj">
+      <Project>{9C2E9E17-2A2C-4F6C-8072-D160A7EA9A51}</Project>
+      <Name>NBehave.Narrator.Framework</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

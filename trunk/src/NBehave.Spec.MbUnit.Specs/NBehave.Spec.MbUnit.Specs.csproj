@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{A9673996-D4FD-46C2-A749-42115A5FA835}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -63,9 +63,14 @@
   <ItemGroup>
     <Compile Include="ExtensionsSpecs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScenarioDrivenSpecBaseSpecs.cs" />
     <Compile Include="SpecBaseSpecs.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\NBehave.Framework\NBehave.Narrator.Framework.csproj">
+      <Project>{9C2E9E17-2A2C-4F6C-8072-D160A7EA9A51}</Project>
+      <Name>NBehave.Narrator.Framework</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NBehave.Spec.MbUnit\NBehave.Spec.MbUnit.csproj">
       <Project>{FB62C290-3C9C-4CE7-A798-E2BE3A1F12EA}</Project>
       <Name>NBehave.Spec.MbUnit</Name>

@@ -22,24 +22,32 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             return new StringStep(step, "filename", _stringStepRunner);
         }
 
-        private List<ScenarioWithSteps> _scenarios;
+        private IEnumerable<ScenarioWithSteps> _scenarios;
+        private IEnumerable<Feature> _feature;
 
         [Test]
         public virtual void Should_have_given_step()
         {
-            CollectionAssert.Contains(_scenarios[0].Steps, NewStringStep("  Given numbers 1 and 2"));
+            CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("  Given numbers 1 and 2"));
         }
 
         [Test]
         public virtual void Should_have_when_step()
         {
-            CollectionAssert.Contains(_scenarios[0].Steps, NewStringStep("  When I add the numbers"));
+            CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("  When I add the numbers"));
         }
 
         [Test]
         public virtual void Should_have_then_step()
         {
-            CollectionAssert.Contains(_scenarios[0].Steps, NewStringStep("  Then the sum is 3"));
+            CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("  Then the sum is 3"));
+        }
+
+        protected void Parse(string scenario)
+        {
+            var parser = CreateScenarioParser();
+            _feature = parser.Parse(scenario.ToStream());
+            _scenarios = _feature.SelectMany(feature => feature.Scenarios);
         }
 
         [TestFixture]
@@ -52,8 +60,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
                                   "  When I add the numbers" + Environment.NewLine +
                                   "  Then the sum is 3";
 
-                var parser = CreateScenarioParser();
-                _scenarios = parser.Parse(scenario.ToStream());
+                Parse(scenario);
             }
         }
 
@@ -67,20 +74,19 @@ namespace NBehave.Narrator.Framework.Specifications.Text
                                   "  When I add the numbers" + Environment.NewLine +
                                   "  Then the sum is 3";
 
-                var parser = CreateScenarioParser();
-                _scenarios = parser.Parse(scenario.ToStream());
+                Parse(scenario);
             }
 
             [Test]
             public void should_find_3_steps()
             {
-                Assert.That(_scenarios[0].Steps.Count(), Is.EqualTo(3));
+                Assert.That(_scenarios.First().Steps.Count(), Is.EqualTo(3));
             }
 
             [Test]
             public void Should_have_a_scenario_Title()
             {
-                Assert.That(_scenarios[0].Title, Is.EqualTo("Adding numbers"));
+                Assert.That(_scenarios.First().Title, Is.EqualTo("Adding numbers"));
             }
         }
 
@@ -99,8 +105,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
                                   "  When I add the numbers" + Environment.NewLine +
                                   "  Then the sum is 8";
 
-                var parser = CreateScenarioParser();
-                _scenarios = parser.Parse(scenario.ToStream());
+                Parse(scenario);
             }
 
             [Test]
@@ -112,8 +117,8 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             [Test]
             public void Should_have_a_scenario_Title_on_both_scenarios()
             {
-                Assert.That(_scenarios[0].Title, Is.EqualTo("Adding numbers"));
-                Assert.That(_scenarios[1].Title, Is.EqualTo("Adding numbers again"));
+                Assert.That(_scenarios.First().Title, Is.EqualTo("Adding numbers"));
+                Assert.That(_scenarios.Skip(1).First().Title, Is.EqualTo("Adding numbers again"));
             }
         }
 
@@ -133,8 +138,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
                                   "  When I add the numbers" + Environment.NewLine +
                                   "  Then the sum is 8";
 
-                var parser = CreateScenarioParser();
-                _scenarios = parser.Parse(scenario.ToStream());
+                Parse(scenario);
             }
 
             [Test]
@@ -146,7 +150,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             [Test]
             public void Should_have_a_feature_Title()
             {
-                Assert.That(_scenarios[0].Feature.Title, Is.EqualTo("Calculator"));
+                Assert.That(_scenarios.First().Feature.Title, Is.EqualTo("Calculator"));
             }
         }
 
@@ -168,14 +172,13 @@ namespace NBehave.Narrator.Framework.Specifications.Text
                                   "  When I add the numbers" + Environment.NewLine +
                                   "  Then the sum is 8";
 
-                var parser = CreateScenarioParser();
-                _scenarios = parser.Parse(scenario.ToStream());
+                Parse(scenario);
             }
 
             [Test]
             public void Should_have_narrative()
             {
-                Assert.That(_scenarios[0].Feature.Narrative, Is.EqualTo(
+                Assert.That(_scenarios.First().Feature.Narrative, Is.EqualTo(
                                                                  "  This is the narrative" + Environment.NewLine +
                                                                  "  This is second row of narrative"));
             }
@@ -189,7 +192,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             [Test]
             public void Should_have_a_feature_Title()
             {
-                Assert.That(_scenarios[0].Feature.Title, Is.EqualTo("Calculator"));
+                Assert.That(_scenarios.First().Feature.Title, Is.EqualTo("Calculator"));
             }
         }
 
@@ -208,38 +211,37 @@ namespace NBehave.Narrator.Framework.Specifications.Text
                                   "|1|2|3|" + Environment.NewLine +
                                   "|2|3|5";
 
-                var parser = CreateScenarioParser();
-                _scenarios = parser.Parse(scenario.ToStream());
+                Parse(scenario);
             }
 
             [Test]
             public void Scenario_should_have_two_examples()
             {
-                Assert.That(_scenarios[0].Examples.Count(), Is.EqualTo(2));
+                Assert.That(_scenarios.First().Examples.Count(), Is.EqualTo(2));
             }
 
             [Test]
             public void should_find_3_steps()
             {
-                Assert.That(_scenarios[0].Steps.Count(), Is.EqualTo(3));
+                Assert.That(_scenarios.First().Steps.Count(), Is.EqualTo(3));
             }
 
             [Test]
             public void Should_have_a_scenario_Title()
             {
-                Assert.That(_scenarios[0].Title, Is.EqualTo("Adding numbers"));
+                Assert.That(_scenarios.First().Title, Is.EqualTo("Adding numbers"));
             }
 
             [Test]
             public override void Should_have_given_step()
             {
-                CollectionAssert.Contains(_scenarios[0].Steps, NewStringStep("  Given numbers [left] and [right]"));
+                CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("  Given numbers [left] and [right]"));
             }
 
             [Test]
             public override void Should_have_then_step()
             {
-                CollectionAssert.Contains(_scenarios[0].Steps, NewStringStep("  Then the sum is [sum]"));
+                CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("  Then the sum is [sum]"));
             }
         }
 
@@ -261,9 +263,8 @@ namespace NBehave.Narrator.Framework.Specifications.Text
                                   "  |Morgan Persson|" + Environment.NewLine +
                                   "  |Jimmy Nilsson |";
 
-                var parser = CreateScenarioParser();
-                _scenarios = parser.Parse(scenario.ToStream());
-                _step = _scenarios[0].Steps.First() as StringTableStep;
+                Parse(scenario);
+                _step = _scenarios.First().Steps.First() as StringTableStep;
             }
 
             [Test]
@@ -284,19 +285,19 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             [Test]
             public override void Should_have_given_step()
             {
-                CollectionAssert.Contains(_scenarios[0].Steps, NewStringStep("  Given the following people exists:"));
+                CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("  Given the following people exists:"));
             }
 
             [Test]
             public override void Should_have_when_step()
             {
-                CollectionAssert.Contains(_scenarios[0].Steps, NewStringStep("  When I search for people in sweden"));
+                CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("  When I search for people in sweden"));
             }
 
             [Test]
             public override void Should_have_then_step()
             {
-                CollectionAssert.Contains(_scenarios[0].Steps, NewStringStep("  Then I should get:"));
+                CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("  Then I should get:"));
             }
         }
 
@@ -317,20 +318,19 @@ namespace NBehave.Narrator.Framework.Specifications.Text
                                   "  When I add the numbers" + Environment.NewLine +
                                   "  Then the sum is 3";
 
-                var parser = CreateScenarioParser();
-                _scenarios = parser.Parse(scenario.ToStream());
+                Parse(scenario);
             }
 
             [Test]
             public void feature_1_should_be_referenced_by_scenario_2()
             {
-                Assert.That(_scenarios[0].Feature.Title, Is.EqualTo("Calculator 1"));
+                Assert.That(_scenarios.First().Feature.Title, Is.EqualTo("Calculator 1"));
             }
 
             [Test]
             public void feature_2_should_be_referenced_by_scenario_2()
             {
-                Assert.That(_scenarios[1].Feature.Title, Is.EqualTo("Calculator 2"));
+                Assert.That(_scenarios.Skip(1).First().Feature.Title, Is.EqualTo("Calculator 2"));
             }
         }
     }

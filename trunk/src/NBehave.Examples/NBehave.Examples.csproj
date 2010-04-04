@@ -59,9 +59,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\Debug\NBehave\NBehave.Narrator.Framework.dll</HintPath>
     </Reference>
-    <Reference Include="NBehave.Spec.NUnit">
-      <HintPath>..\..\build\Debug\NBehave\NBehave.Spec.NUnit.dll</HintPath>
-    </Reference>
     <Reference Include="nunit.framework">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\nunit.framework.dll</HintPath>
@@ -76,6 +73,9 @@
   <ItemGroup>
     <Compile Include="Bowling Game\Steps\GameSteps.cs" />
     <Compile Include="Calculator table\Calculator.cs" />
+    <Compile Include="Calculator table\CalculatorSpecWithImplementationInBaseClass.cs" />
+    <Compile Include="Calculator table\CalculatorSpecWithInlineImplementation.cs" />
+    <Compile Include="Calculator table\CalculatorSpecWithImplementationInHelperClass.cs" />
     <Compile Include="Calculator table\Steps\AddNumbers.cs" />
     <Compile Include="CommonAssemblyInfo.cs" />
     <Compile Include="Game of life\Game.cs" />
@@ -118,6 +118,16 @@
     <None Include="Tables\Table.feature">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NBehave.Spec.NUnit\NBehave.Spec.NUnit.csproj">
+      <Project>{7BDFA147-A451-4FB0-8536-94EC1C52926E}</Project>
+      <Name>NBehave.Spec.NUnit</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NBehave.Spec\NBehave.Spec.Framework\NBehave.Spec.Framework.csproj">
+      <Project>{87B1B4CA-3EF7-44EB-BF48-5A472E26F1B0}</Project>
+      <Name>NBehave.Spec.Framework</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

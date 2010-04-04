@@ -6,7 +6,7 @@ namespace NBehave.Narrator.Framework
 {
     public class TextRunner : RunnerBase
     {
-        private readonly List<List<ScenarioWithSteps>> _scenarios = new List<List<ScenarioWithSteps>>();
+        private readonly List<Feature> _features = new List<Feature>();
         private readonly ActionStepFileLoader _actionStepFileLoader;
         private readonly IStringStepRunner _stringStepRunner;
         
@@ -36,11 +36,11 @@ namespace NBehave.Narrator.Framework
 
         private void RunEachFeature(FeatureResults featureResults)
         {
-            foreach (List<ScenarioWithSteps> scenarioSteps in _scenarios)
+            foreach (var feature in _features)
             {
                 ScenarioStepRunner scenarioStepRunner = CreateScenarioStepRunner();
 
-                IEnumerable<ScenarioResult> scenarioResults = scenarioStepRunner.Run(scenarioSteps);
+                IEnumerable<ScenarioResult> scenarioResults = scenarioStepRunner.Run(feature.Scenarios);
                 AddScenarioResultsToStoryResults(scenarioResults, featureResults);
                 featureResults.NumberOfStories++;
                 //EventListener.StoryResults(featureResults);
@@ -61,13 +61,13 @@ namespace NBehave.Narrator.Framework
 
         public void Load(IEnumerable<string> fileLocations)
         {
-            _scenarios.AddRange(_actionStepFileLoader.Load(fileLocations));
+            _features.AddRange(_actionStepFileLoader.Load(fileLocations));
         }
 
         public void Load(Stream stream)
         {
-            List<ScenarioWithSteps> scenarios = _actionStepFileLoader.Load(stream);
-            _scenarios.Add(scenarios);
+            var features = _actionStepFileLoader.Load(stream);
+            _features.AddRange(features);
         }
     }
 }

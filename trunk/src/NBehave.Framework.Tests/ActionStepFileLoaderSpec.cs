@@ -39,8 +39,8 @@ namespace NBehave.Narrator.Framework.Specifications
 			};
             var stories = _actionStepFileLoader.Load(files);
 
-            Assert.That(stories[0][0].Steps.First().Source, Is.Not.Null);
-            Assert.That(stories[0][0].Steps.First().Source, Is.Not.EqualTo(string.Empty));
+            Assert.That(stories[0].Scenarios.First().Steps.First().Source, Is.Not.Null);
+            Assert.That(stories[0].Scenarios.First().Steps.First().Source, Is.Not.EqualTo(string.Empty));
         }
 
         [Specification]

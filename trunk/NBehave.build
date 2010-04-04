@@ -84,6 +84,7 @@
 			<arg value="NBehave.Spec.MbUnit.Specs.dll" />
 			<arg value="NBehave.Spec.MSTest.Specs.dll" />
 			<arg value="NBehave.Spec.Xunit.Specs.dll" />
+			<arg value="NBehave.Spec.Framework.Specification.dll" />
 			<arg value="NBehave.NAnt.Tests.dll" />
 			<arg value="NBehave.MSBuild.Tests.dll" />
 			<arg value="/xml:..\..\test-reports\UnitTests.xml" />

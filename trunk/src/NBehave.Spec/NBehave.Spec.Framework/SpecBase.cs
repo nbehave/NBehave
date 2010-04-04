@@ -39,4 +39,6 @@ namespace NBehave.Spec
             return MockRepository.GenerateStub<TType>();
         }
     }
+
+
 }

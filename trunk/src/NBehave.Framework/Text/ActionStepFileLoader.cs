@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace NBehave.Narrator.Framework
 {
@@ -13,9 +14,9 @@ namespace NBehave.Narrator.Framework
             _stringStepRunner = stringStepRunner;
         }
 
-        public List<List<ScenarioWithSteps>> Load(IEnumerable<string> scenarioLocations)
+        public List<Feature> Load(IEnumerable<string> scenarioLocations)
         {
-            var stories = new List<List<ScenarioWithSteps>>();
+            var stories = new List<Feature>();
 
             foreach (var location in scenarioLocations)
             {
@@ -49,34 +50,35 @@ namespace NBehave.Narrator.Framework
             return fullLocation;
         }
 
-        private List<List<ScenarioWithSteps>> LoadFiles(IEnumerable<string> files)
+        private IEnumerable<Feature> LoadFiles(IEnumerable<string> files)
         {
-            var stories = new List<List<ScenarioWithSteps>>();
+            var stories = new List<Feature>();
             foreach (var file in files)
             {
-                List<ScenarioWithSteps> scenarios = GetScenarios(file);
-                stories.Add(scenarios);
+                IEnumerable<Feature> scenarios = GetScenarios(file);
+                stories.AddRange(scenarios);
             }
             return stories;
         }
 
-        private List<ScenarioWithSteps> GetScenarios(string file)
+        private IEnumerable<Feature> GetScenarios(string file)
         {
-            List<ScenarioWithSteps> scenarios;
+            IEnumerable<Feature> features;
             using (Stream stream = File.OpenRead(file))
             {
-                scenarios = Load(stream);
-                foreach (var scenario in scenarios)
+                features = Load(stream);
+                foreach (var scenario in features.SelectMany(feature => feature.Scenarios))
+                {
                     scenario.Source = file;
+                }
             }
-            return scenarios;
+            return features;
         }
 
-        public List<ScenarioWithSteps> Load(Stream stream)
+        public IEnumerable<Feature> Load(Stream stream)
         {
             var scenarioTextParser = new ScenarioParser(_stringStepRunner);
-            List<ScenarioWithSteps> steps = scenarioTextParser.Parse(stream);
-            return steps;
+            return scenarioTextParser.Parse(stream);
         }
     }
 }
