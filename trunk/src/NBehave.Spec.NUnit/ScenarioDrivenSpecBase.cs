@@ -5,13 +5,13 @@ namespace NBehave.Spec.NUnit
     [TestFixture]
     public abstract class ScenarioDrivenSpecBase : Spec.ScenarioDrivenSpecBase
     {
-        [SetUp]
+        [TestFixtureSetUp]
         public override void MainSetup()
         {
             base.MainSetup();
         }
 
-        [TearDown]
+        [TestFixtureTearDown]
         public override void MainTeardown()
         {
             base.MainTeardown();
