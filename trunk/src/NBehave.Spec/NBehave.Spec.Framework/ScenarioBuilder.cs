@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using NBehave.Narrator.Framework;
 
@@ -15,23 +16,33 @@ namespace NBehave.Spec
     {
         private object _stepHelper;
         private ScenarioDrivenSpecStepRunner _stepRunner;
-        private Feature Feature { get; set; }
-        private ScenarioWithSteps Scenario { get; set; }
+        private ScenarioWithSteps _scenario;
+        private readonly string _scenarioTitle;
 
-        private ScenarioDrivenSpecStepRunner StepRunner
+        protected Feature Feature { get; private set; }
+
+        protected ScenarioWithSteps Scenario
         {
             get
             {
-                if(_stepRunner == null)
-                    _stepRunner = new ScenarioDrivenSpecStepRunner(_stepHelper); 
-                return _stepRunner;
+                if(_scenario == null)
+                {
+                    _scenario = new ScenarioWithSteps(StepRunner) {Title = _scenarioTitle};
+                    Feature.AddScenario(Scenario);
+                }
+                return _scenario;
             }
         }
 
-        public ScenarioBuilder(Feature feature)
+        private ScenarioDrivenSpecStepRunner StepRunner
+        {
+            get { return _stepRunner ?? (_stepRunner = new ScenarioDrivenSpecStepRunner(_stepHelper)); }
+        }
+
+        public ScenarioBuilder(Feature feature, string scenarioTitle)
         {
             Feature = feature;
-            Scenario = new ScenarioWithSteps(StepRunner);
+            _scenarioTitle = scenarioTitle;
         }
 
         private void SetHelperObject(object helper)
@@ -52,10 +63,11 @@ namespace NBehave.Spec
             var stringStringStep = new StringStep(step, Scenario.Source, StepRunner);
             Scenario.AddStep(stringStringStep);
             
-            var stepResult = stringStringStep.Run();
-            if(stepResult.Result is Failed)
+            stringStringStep.Run();
+            var failure = stringStringStep.StepResult.Result as Failed;
+            if (failure != null)
             {
-                throw new ApplicationException("Failed on step " + step, ((Failed)stepResult.Result).Exception);
+                throw new ApplicationException("Failed on step " + step, failure.Exception);
             }
         }
 
@@ -63,9 +75,13 @@ namespace NBehave.Spec
         {
             private readonly ScenarioBuilder _builder;
 
-            public StartFragment(Feature feature)
+            public StartFragment(Feature feature) : this(feature, null)
             {
-                _builder = new ScenarioBuilder(feature);
+            }
+
+            public StartFragment(Feature feature, string scenarioTitle)
+            {
+                _builder = new ScenarioBuilder(feature, scenarioTitle);
             }
 
             public IGivenFragment Given(string step)

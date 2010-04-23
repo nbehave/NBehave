@@ -28,7 +28,7 @@ namespace NBehave.Narrator.Framework
             _tableSteps.Add(row);
         }
 
-        public override ActionStepResult Run()
+        public override void Run()
         {
             var actionStepResult = GetNewActionStepResult();
             bool hasParamsInStep = HasParametersInStep();
@@ -40,7 +40,7 @@ namespace NBehave.Narrator.Framework
                 ActionStepResult result = StringStepRunner.Run(step, row);
                 actionStepResult.MergeResult(result.Result);
             }
-            return actionStepResult;
+            StepResult = actionStepResult;
         }
 
         private ActionStepResult GetNewActionStepResult()

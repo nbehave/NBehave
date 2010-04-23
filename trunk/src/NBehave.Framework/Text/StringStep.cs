@@ -1,3 +1,5 @@
+using System;
+
 namespace NBehave.Narrator.Framework
 {
     public class StringStep : ActionStepText
@@ -23,10 +25,11 @@ namespace NBehave.Narrator.Framework
             return ((obj == this) || obj.ToString() == ToString());
         }
 
-        public virtual ActionStepResult Run()
+        public virtual void Run()
         {
-            ActionStepResult actionStepResult = StringStepRunner.Run(this);
-            return actionStepResult;
+            StepResult = StringStepRunner.Run(this);
         }
+
+        public ActionStepResult StepResult { get; protected set; }
     }
 }

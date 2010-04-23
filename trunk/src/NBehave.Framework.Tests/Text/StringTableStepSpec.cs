@@ -34,7 +34,8 @@ namespace NBehave.Narrator.Framework.Specifications.Text
                 tableStep.AddTableStep(new Row(columnNames, new Dictionary<string, string> { { "name", "Jimmy Nilsson" }, { "country", "Sweden" } }));
                 tableStep.AddTableStep(new Row(columnNames, new Dictionary<string, string> { { "name", "Jimmy Bogard" }, { "country", "USA" } }));
 
-                _actionStepResult = tableStep.Run();
+                tableStep.Run();
+                _actionStepResult = tableStep.StepResult;
             }
 
             [Test]

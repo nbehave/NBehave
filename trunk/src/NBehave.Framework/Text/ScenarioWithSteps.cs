@@ -93,8 +93,8 @@ namespace NBehave.Narrator.Framework
             _stringStepRunner.BeforeScenario();
             foreach (var step in stepsToRun)
             {
-                ActionStepResult stepResult = step.Run();
-                scenarioResult.AddActionStepResult(stepResult);
+                step.Run();
+                scenarioResult.AddActionStepResult(step.StepResult);
             }
             if (stepsToRun.Any())
                 _stringStepRunner.AfterScenario();
