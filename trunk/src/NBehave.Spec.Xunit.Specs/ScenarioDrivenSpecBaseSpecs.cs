@@ -23,15 +23,6 @@ namespace Xunit.SpecBase_Specifications
         }
 
         [Specification]
-        public void should_allow_pending_scenarios_to_pass()
-        {
-            Feature.AddScenario()
-                .Given("a scenario pending implementation")
-                .When("the scenario is executed")
-                .Then("the specification should pass");
-        }
-
-        [Specification]
         public void should_execute_scenarios_implemented_inline()
         {
             string detail1 = null;
