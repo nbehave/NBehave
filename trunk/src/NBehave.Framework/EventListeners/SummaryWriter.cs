@@ -68,7 +68,7 @@ namespace NBehave.Narrator.Framework
                 {
                     if (result.Result.GetType() == typeof(Pending))
                     {
-                        _writer.WriteLine("{0}) {1} ({2}): {3}", pendingNumber, result.FeatureTitle,
+                        _writer.WriteLine("{0}) {1} ({2}):\n{3}", pendingNumber, result.FeatureTitle,
                                           result.ScenarioTitle, result.Message);
                         pendingNumber++;
                     }

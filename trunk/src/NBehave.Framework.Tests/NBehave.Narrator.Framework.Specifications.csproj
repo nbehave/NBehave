@@ -75,9 +75,11 @@
     </Compile>
     <Compile Include="ActionCatalogSpec.cs" />
     <Compile Include="ActionStepAliasSpec.cs" />
+    <Compile Include="ActionStepCodeGeneratorSpec.cs" />
     <Compile Include="ActionStepFileLoaderSpec.cs" />
     <Compile Include="ActionStepParserSpec.cs" />
     <Compile Include="ActionStepSpec.cs" />
+    <Compile Include="EventListeners\CodeGenEventListenerSpec.cs" />
     <Compile Include="EventListeners\MultiOutputEventListenerFixture.cs" />
     <Compile Include="EventListeners\XmlOutputEventListenerSpec.cs" />
     <Compile Include="ParameterConverterSpec.cs" />

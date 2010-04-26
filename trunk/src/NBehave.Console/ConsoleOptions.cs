@@ -24,6 +24,9 @@ namespace NBehave.Console
         [Option(Description = "Do not display the logo")]
         public bool nologo;
 
+        [Option(Short = "c", Description = "Generate stub methods for pending steps")] 
+        public bool codegen;
+
         public ConsoleOptions(params string[] args)
             : base(args)
         {

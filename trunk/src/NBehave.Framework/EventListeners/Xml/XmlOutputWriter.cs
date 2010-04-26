@@ -184,7 +184,7 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
             var actionSteps = from e in EventsOf(evt, EventType.ScenarioResult)
                               where e.EventType == EventType.ScenarioCreated
                               select e;
-            foreach (var step in actionSteps)
+            foreach (EventReceived step in actionSteps)
                 scenarioResult.AddActionStepResult(new ActionStepResult(step.Message, new Pending(scenarioResult.Message)));
         }
 

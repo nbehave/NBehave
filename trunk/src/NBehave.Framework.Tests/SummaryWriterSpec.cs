@@ -7,13 +7,13 @@ namespace NBehave.Narrator.Framework.Specifications
 	[TestFixture]
 	public class SummaryWriterSpec
 	{
-        private SummaryWriter output;
-		private TextWriter writer;
+        private SummaryWriter _output;
+		private TextWriter _writer;
 		[SetUp]
 		public void Establish_context()
 		{
-			writer = new StringWriter();
-            output = new SummaryWriter(writer);
+			_writer = new StringWriter();
+            _output = new SummaryWriter(_writer);
 			var results = new FeatureResults();
 			var feature = new Feature("feature title");
 			var scenarioResult = new ScenarioResult(feature, "scenario title");
@@ -23,25 +23,25 @@ namespace NBehave.Narrator.Framework.Specifications
 			scenarioResult.AddActionStepResult(new ActionStepResult("d", new Failed(new Exception("why it failed"))));
 			results.AddResult(scenarioResult);
 			
-			output.WriteSummaryResults(results);
+			_output.WriteSummaryResults(results);
 		}
 		
 		[Test]
 		public void Should_write_number_of_actionsteps_in_summary()
 		{
-			Assert.That(writer.ToString(),Is.StringContaining("Steps 4"));
+			Assert.That(_writer.ToString(),Is.StringContaining("Steps 4"));
 		}
 		
 		[Test]
 		public void Should_write_number_of_failed_actionsteps_in_summary()
 		{
-			Assert.That(writer.ToString(),Is.StringContaining("failed 1"));
+			Assert.That(_writer.ToString(),Is.StringContaining("failed 1"));
 		}
 		
 		[Test]
 		public void Should_write_number_of_pending_actionsteps_in_summary()
 		{
-			Assert.That(writer.ToString(),Is.StringContaining("pending 1"));
+			Assert.That(_writer.ToString(),Is.StringContaining("pending 1"));
 		}
 	}
 }

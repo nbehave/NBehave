@@ -67,5 +67,10 @@ namespace NBehave.Narrator.Framework.EventListeners
         {
             return value.Blank() == false;
         }
+
+        public static IEventListener CodeGenEventListener(TextWriter writer)
+        {
+            return new CodeGenEventListener(writer);
+        }
     }
 }

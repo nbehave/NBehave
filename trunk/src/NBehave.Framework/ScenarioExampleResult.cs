@@ -24,7 +24,7 @@ namespace NBehave.Narrator.Framework
 
         public override void AddActionStepResult(ActionStepResult actionStepResult)
         {
-            MergeResult(actionStepResult.Result);
+            MergeResult(actionStepResult);
             var step = ActionStepResults.FirstOrDefault(s => s.StringStep == actionStepResult.StringStep);
             if (step == null)
                 base.AddActionStepResult(actionStepResult);
@@ -51,7 +51,7 @@ namespace NBehave.Narrator.Framework
             {
                 var step = actionStepResults[idx++];
                 step.MergeResult(stepResult.Result);
-                MergeResult(stepResult.Result);
+                MergeResult(stepResult);
             }
         }
     }

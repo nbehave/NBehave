@@ -38,7 +38,7 @@ namespace NBehave.Narrator.Framework.Specifications
         [Test]
         public void Should_set_message_with_pending_reason_when_pending()
         {
-            _results.Pend("reason");
+            _results.Pend("reason", "Given step");
 
             Assert.That(_results.Result, Is.TypeOf(typeof(Pending)));
             Assert.That(_results.Message, Is.EqualTo("reason"));
@@ -94,7 +94,7 @@ namespace NBehave.Narrator.Framework.Specifications
         [Test]
         public void Failed_Step_message_should_not_overwrite_existing_message()
         {
-            _results.Pend("not done");
+            _results.Pend("not done", "Given step");
             var ex = new Exception("bad thing happened!");
             _results.Fail(ex);
 

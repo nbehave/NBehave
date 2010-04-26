@@ -71,6 +71,8 @@ namespace NBehave.Console
                 eventListeners.Add(EventListeners.XmlWriterEventListener(options.xml));
             if (eventListeners.Count == 0)
                 eventListeners.Add(new ColorfulConsoleOutputEventListener());
+            if (options.codegen)
+                eventListeners.Add(EventListeners.CodeGenEventListener(System.Console.Out));
 
             return new MultiOutputEventListener(eventListeners.ToArray());
         }

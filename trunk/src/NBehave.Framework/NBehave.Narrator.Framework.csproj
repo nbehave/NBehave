@@ -67,6 +67,8 @@
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="ActionCatalog.cs" />
+    <Compile Include="ActionStepCodeGenerator.cs" />
+    <Compile Include="EventListeners\CodeGenEventListener.cs" />
     <Compile Include="EventListeners\ColorfulConsoleOutputEventListener.cs" />
     <Compile Include="EventListeners\Xml\EventReceived.cs" />
     <Compile Include="EventListeners\Xml\EventType.cs" />

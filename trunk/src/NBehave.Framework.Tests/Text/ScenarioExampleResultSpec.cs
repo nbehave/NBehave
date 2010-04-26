@@ -38,12 +38,13 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             public void Should_pend_correct_step()
             {
                 var exampleResult = new ScenarioResult(new Feature("featureTitle"), "scenarioTitle");
-                exampleResult.AddActionStepResult(new ActionStepResult("Given I have entered [num1] into the calculator", new Pending("step is pending")));
+                const string step = "Given I have entered [num1] into the calculator";
+                exampleResult.AddActionStepResult(new ActionStepResult(step, new Pending("step is pending")));
                 _scenarioExampleResult.AddResult(exampleResult);
 
                 ActionStepResult actionStepResult = _scenarioExampleResult.ActionStepResults.First();
                 Assert.That(actionStepResult.Result, Is.TypeOf(typeof(Pending)));
-                Assert.That(actionStepResult.Message, Is.EqualTo("step is pending"));
+                StringAssert.StartsWith("step is pending", actionStepResult.Message);
             }
         }
     }

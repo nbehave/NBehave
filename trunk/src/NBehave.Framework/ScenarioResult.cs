@@ -40,11 +40,12 @@ namespace NBehave.Narrator.Framework
         public virtual void AddActionStepResult(ActionStepResult actionStepResult)
         {
             _actionStepResults.Add(actionStepResult);
-            MergeResult(actionStepResult.Result);
+            MergeResult(actionStepResult);
         }
 
-        protected void MergeResult(Result newResult)
+        protected void MergeResult(ActionStepResult actionStepResult)
         {
+            Result newResult = actionStepResult.Result;
             if (newResult.GetType() == typeof(Failed))
             {
                 _result = newResult;
@@ -53,7 +54,7 @@ namespace NBehave.Narrator.Framework
             if (newResult.GetType() == typeof(Pending) && _result.GetType() != typeof(Failed))
             {
                 _result = newResult;
-                Pend(newResult.Message);
+                Pend(newResult.Message, actionStepResult.StringStep);
             }
         }
 
@@ -69,7 +70,7 @@ namespace NBehave.Narrator.Framework
             _result = new Failed(exception);
         }
 
-        public void Pend(string reason)
+        public void Pend(string reason, string step)
         {
             AddToCurrentMessage(reason);
 

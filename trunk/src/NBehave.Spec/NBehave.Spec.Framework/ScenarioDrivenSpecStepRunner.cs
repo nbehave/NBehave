@@ -6,7 +6,7 @@ using NBehave.Narrator.Framework;
 
 namespace NBehave.Spec
 {
-    public class ScenarioDrivenSpecStepRunner : IStringStepRunner 
+    public class ScenarioDrivenSpecStepRunner : IStringStepRunner
     {
         private readonly DictionaryStepResolver _inlineImplementations;
         private readonly List<IStepResolver> _resolvers;
@@ -21,7 +21,7 @@ namespace NBehave.Spec
                                  _inlineImplementations
                              };
 
-            if(stepHelper == null)
+            if (stepHelper == null)
                 return;
 
             if (stepHelper.GetType()
@@ -48,7 +48,7 @@ namespace NBehave.Spec
             Action stepImplementation = _resolvers.Select(resolver => resolver.ResolveStep(CurrentScenarioStage, actionStep))
                                                   .Where(action => action != null)
                                                   .FirstOrDefault();
-            if(stepImplementation == null)
+            if (stepImplementation == null)
             {
                 return new ActionStepResult(stepText, new Pending("No implementation located"));
             }
