@@ -11,30 +11,28 @@ namespace NBehave.Narrator.Framework
             string attrib = actionStep.GetFirstWord();
             string attribute = string.Format("[{0}(\"{1}\")]{2}", attrib, actionStepParameterized, Environment.NewLine);
             string methodName = ExtractMethodName(attrib + " " + actionStepParameterized);
-            string methodSignature = string.Format("public void {0}({1}){2}", 
-                methodName.Replace(' ', '_'), 
-                GetParameters(actionStep), 
+            string methodSignature = string.Format("public void {0}({1}){2}",
+                methodName.Replace(' ', '_'),
+                GetParameters(actionStep),
                 " ");
-            const string methodBody = "{ }";
-            return attribute + methodSignature + methodBody;
+            const string methodBody = "{ throw new System.NotImplementedException(); }";
+            return attribute + methodSignature + Environment.NewLine + methodBody;
         }
+        private char[] _whiteSpaces = new[] { ' ', '\n', '\r', '\t' };
 
         private string GetParameters(string row)
         {
             int numberOfParameters = 0;
             string parameters = string.Empty;
-            row = TrimRow(row);
-            string[] words = row.Split(new[] { ' ', '\n', '\r', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] words = SplitStringToWords(ref row);
+
             foreach (var word in words)
             {
-                var regEx = new Regex(@"^(\w+\d*)$");
-                int dummy;
-                bool isInt = int.TryParse(word, out dummy);
-                if ((regEx.IsMatch(word) == false) || isInt)
+                if (IsParameter(word))
                 {
                     numberOfParameters++;
                     var paramName = string.Format("param{0}", numberOfParameters);
-                    if (isInt)
+                    if (IsInt(word))
                         parameters += string.Format("int {0}, ", paramName);
                     else
                         parameters += string.Format("string {0}, ", paramName);
@@ -49,24 +47,40 @@ namespace NBehave.Narrator.Framework
         {
             string actionStep = string.Empty;
             int paramNumber = 1;
-            row = TrimRow(row).RemoveFirstWord();
-            string[] words = row.Split(new[] { ' ', '\n', '\r', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] words = SplitStringToWords(ref row);
             foreach (var word in words)
             {
-                var regEx = new Regex(@"^\w+\d*$");
-                int dummy;
-                bool isInt = int.TryParse(word, out dummy);
-                if (regEx.IsMatch(word) && isInt == false)
-                {
-                    actionStep += word + " ";
-                }
-                else
+                if (IsParameter(word))
                 {
                     actionStep += string.Format("$param{0} ", paramNumber);
                     paramNumber++;
                 }
+                else
+                {
+                    actionStep += word + " ";
+                }
             }
             return actionStep.Substring(0, actionStep.Length - 1);
+        }
+
+        private string[] SplitStringToWords(ref string row)
+        {
+            row = TrimRow(row).RemoveFirstWord();
+            string[] words = row.Split(_whiteSpaces, StringSplitOptions.RemoveEmptyEntries);
+            return words;
+        }
+
+        private Regex _stringRegex = new Regex(@"^('|"").+('|"")$");
+        private bool IsParameter(string word)
+        {
+            return IsInt(word) || _stringRegex.IsMatch(word);
+        }
+
+        private bool IsInt(string word)
+        {
+            int dummy;
+            bool isInt = int.TryParse(word, out dummy);
+            return isInt;
         }
 
         private string TrimRow(string row)

@@ -94,6 +94,30 @@ namespace NBehave.Narrator.Framework.Specifications
         }
 
         [Context]
+        public class When_adding_a_method_with_a_apostrof_in_step : ActionStepCodeGeneratorSpec
+        {
+            private string _generatedCode;
+
+            public override void Given_these_conditions()
+            {
+                base.Given_these_conditions();
+                _generatedCode = _codeGen.GenerateMethodFor("Given I'm using a special char");
+            }
+
+            [Specification]
+            public void Method_Should_have_ActionStep_attribute_with_no_parameters()
+            {
+                StringAssert.Contains(@"[Given(""I'm using a special char"")]", _generatedCode);
+            }
+
+            [Specification]
+            public void Method_Should_have_name()
+            {
+                StringAssert.Contains(@"public void Given_I_m_using_a_special_char()", _generatedCode);
+            }
+        }
+
+        [Context]
         public class When_adding_a_method_more_than_one_parameter : ActionStepCodeGeneratorSpec
         {
             private string _generatedCode;
@@ -101,7 +125,7 @@ namespace NBehave.Narrator.Framework.Specifications
             public override void Given_these_conditions()
             {
                 base.Given_these_conditions();
-                _generatedCode = _codeGen.GenerateMethodFor("Given 2 for 'one'");
+                _generatedCode = _codeGen.GenerateMethodFor("Given 2 for 2");
             }
 
             [Specification]
@@ -113,7 +137,7 @@ namespace NBehave.Narrator.Framework.Specifications
             [Specification]
             public void Method_Should_have_name()
             {
-                StringAssert.Contains(@"public void Given_param1_for_param2(int param1, string param2)", _generatedCode);
+                StringAssert.Contains(@"public void Given_param1_for_param2(int param1, int param2)", _generatedCode);
             }
         }
     }
