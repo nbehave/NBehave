@@ -5,15 +5,13 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{E2F5DC64-F661-459E-AC9C-1435FE9DFAA7}</ProjectGuid>
+    <ProjectGuid>{1C67DD24-2A67-45CB-B46E-B4D4DF60B4A0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NBehave.TestDriven.Plugin</RootNamespace>
-    <AssemblyName>NBehave.TestDriven.Plugin</AssemblyName>
+    <RootNamespace>NBehave.TestDriven.Plugin.Tests</RootNamespace>
+    <AssemblyName>NBehave.TestDriven.Plugin.Tests</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\NBehave.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -34,10 +32,12 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'AutomatedDebug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\..\build\Debug\NBehave\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;AUTODEBUG</DefineConstants>
+    <OutputPath>bin\AutomatedDebug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
@@ -47,7 +47,7 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="TestDriven.Framework">
+    <Reference Include="TestDriven.Framework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=50ecb853f8c6b8d2">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\TestDriven.Framework.dll</HintPath>
     </Reference>
@@ -56,22 +56,33 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AssemblyHelper.cs" />
-    <Compile Include="DirectoryWalker.cs" />
-    <Compile Include="NBehaveStoryRunner.cs" />
+    <Compile Include="FindPlainTextFiles.cs" />
+    <Compile Include="SubDirectory\FindPlainTextFiles.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ResultExtension.cs" />
-    <Compile Include="StoryLocator.cs" />
-    <Compile Include="StoryRunnerEventListenerProxy.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="FindPlainTextFiles.feature">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NBehave.Framework\NBehave.Narrator.Framework.csproj">
       <Project>{9C2E9E17-2A2C-4F6C-8072-D160A7EA9A51}</Project>
       <Name>NBehave.Narrator.Framework</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NBehave.Spec.NUnit\NBehave.Spec.NUnit.csproj">
+      <Project>{7BDFA147-A451-4FB0-8536-94EC1C52926E}</Project>
+      <Name>NBehave.Spec.NUnit</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NBehave.TestDriven.Plugin\NBehave.TestDriven.Plugin.csproj">
+      <Project>{E2F5DC64-F661-459E-AC9C-1435FE9DFAA7}</Project>
+      <Name>NBehave.TestDriven.Plugin</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="NBehave.Narrator.Framework.dll.tdnet" />
+    <Content Include="SubDirectory\FindPlainTextFiles.feature">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

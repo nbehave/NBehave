@@ -87,6 +87,7 @@
 			<arg value="NBehave.Spec.Framework.Specification.dll" />
 			<arg value="NBehave.NAnt.Tests.dll" />
 			<arg value="NBehave.MSBuild.Tests.dll" />
+			<arg value="NBehave.TestDriven.Plugin.Specs.dll" />
 			<arg value="/xml:..\..\test-reports\UnitTests.xml" />
 		</exec>
 	</target>
