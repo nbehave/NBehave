@@ -95,6 +95,7 @@
     <Compile Include="StoryFixture.cs" />
     <Compile Include="StoryResultsFixture.cs" />
     <Compile Include="StoryRunnerFilterSpecs.cs" />
+    <Compile Include="Text\ActionStepAttributeSpec.cs" />
     <Compile Include="Text\IgnoreSpaceAndUnderScoreMatcherSpec.cs" />
     <Compile Include="Text\RowSpec.cs" />
     <Compile Include="Text\ScenarioExampleResultSpec.cs" />

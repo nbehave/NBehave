@@ -23,11 +23,17 @@ namespace NBehave.Narrator.Framework
                 ActionMatch = regexOrTokenString.AsRegex();
         }
 
-        private static readonly Regex _isTokenString = new Regex(@"\$\w+");
+        private static readonly Regex _isTokenString = new Regex(ActionStepConverterExtensions.TokenRegexPattern); //new Regex(@"\$\w+");
+        private static readonly Regex _isCharsAndNumbersOnly = new Regex(@"^(\w|\d|\s)+$"); //new Regex(@"\$\w+");
 
         private bool IsRegex(string regexOrTokenString)
         {
-            return _isTokenString.IsMatch(regexOrTokenString) == false;
+            if (regexOrTokenString.EndsWith("$"))
+                return true;
+            if (_isTokenString.IsMatch(regexOrTokenString) 
+                || _isCharsAndNumbersOnly.IsMatch(regexOrTokenString))
+                return false;
+            return true;
         }
 
         protected ActionStepAttribute(Regex actionMatch)
