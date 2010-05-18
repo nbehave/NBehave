@@ -104,6 +104,7 @@
     <Compile Include="Text\StringExtension.cs" />
     <Compile Include="Text\StringStepSpec.cs" />
     <Compile Include="Text\StringTableStepSpec.cs" />
+    <Compile Include="Text\TestData\CalculatorSteps.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NBehave.Framework\NBehave.Narrator.Framework.csproj">
@@ -118,6 +119,7 @@
       <Project>{B734DE3F-E1EC-42B4-8AB1-A55A934584CF}</Project>
       <Name>TestPlainTextAssembly</Name>
     </ProjectReference>
+    <Folder Include="Text\TestData" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="GreetingSystemWithScenarioTitle.txt">

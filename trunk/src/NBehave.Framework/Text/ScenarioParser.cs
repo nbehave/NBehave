@@ -198,7 +198,7 @@ namespace NBehave.Narrator.Framework
             var regex = new Regex(regexString, RegexOptions.IgnoreCase);
             //scenario = scenario.Trim(_whiteSpaceChars);
 
-            string[] actionRows = Split(scenario);
+            string[] actionRows = RemoveComments(Split(scenario));
             int firstActionWordRow = FindRowForFirstStepWord(actionRows, regex);
             var secondActionWordRow = FindRowForNextStepWord(actionRows, regex, firstActionWordRow + 1);
             string actionRow;
@@ -207,6 +207,11 @@ namespace NBehave.Narrator.Framework
             else
                 actionRow = BuildActionStep(actionRows, firstActionWordRow, secondActionWordRow);
             return actionRow;
+        }
+        
+        private string[] RemoveComments(string[] rows)
+        {
+        	return rows.Where(_=>_.TrimStart().StartsWith("#") == false).ToArray();
         }
 
         private string BuildActionStep(string[] rows, int startRow, int endRow)

@@ -14,13 +14,12 @@ namespace NBehave.Narrator.Framework
             _writer = writer;
         }
 
-
         public void WriteCompleteSummary(List<ScenarioResult> results)
         {
             var featureResults = GetFeatureResult(results);
             WriteSummaryResults(featureResults);
             WriteFailures(featureResults);
-            WritePending(featureResults);
+            //WritePending(featureResults);
         }
 
         public void WriteSummaryResults(FeatureResults featureResults)
@@ -32,7 +31,6 @@ namespace NBehave.Narrator.Framework
             int pendingSteps = CountPendingActionSteps(featureResults);
             _writer.WriteLine("Steps {0}, failed {1}, pending {2}", actionSteps, failedSteps, pendingSteps);
         }
-
 
         public void WriteFailures(FeatureResults results)
         {
