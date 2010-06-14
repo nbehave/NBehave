@@ -59,6 +59,11 @@ namespace NBehave.Console
 
             int result = results.NumberOfFailingScenarios > 0 ? 2 : 0;
 
+            if(options.pause) {
+            	System.Console.WriteLine("Press any key to exit");
+            	System.Console.ReadKey();
+            }
+            
             return result;
         }
 

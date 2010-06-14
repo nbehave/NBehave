@@ -122,6 +122,9 @@
     <Folder Include="Text\TestData" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="GreetingSystemWithNoFeatureAndManyGreetings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="GreetingSystemWithScenarioTitle.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

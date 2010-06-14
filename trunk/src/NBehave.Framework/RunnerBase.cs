@@ -6,6 +6,7 @@ namespace NBehave.Narrator.Framework
 {
     public abstract class RunnerBase
     {
+    	protected abstract void RunScenario(FeatureResults results, string featureName, string scenarioName);
         protected abstract void RunFeatures(FeatureResults results);
         protected abstract void ParseAssembly(Assembly assembly);
 
@@ -33,6 +34,24 @@ namespace NBehave.Narrator.Framework
                 InitializeRun(results, EventListener);
                 StartWatching(EventListener);
                 RunFeatures(results);
+            }
+            finally
+            {
+                StopWatching(EventListener);
+            }
+
+            return results;
+        }
+        
+        public FeatureResults RunScenario(string featureName, string scenarioName)
+        {        	
+        	 var results = new FeatureResults();
+
+            try
+            {
+                InitializeRun(results, EventListener);
+                StartWatching(EventListener);
+                RunScenario(results, featureName, scenarioName);
             }
             finally
             {

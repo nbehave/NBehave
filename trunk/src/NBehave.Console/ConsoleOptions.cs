@@ -17,6 +17,9 @@ namespace NBehave.Console
 
         [Option(Short = "?", Description = "Display help")]
         public bool help;
+        
+        [Option(Short = "p", Description = "Pause console after running")]
+        public bool pause;
 
         [Option(Short = "d", Description = "Do not execute actions and output all story text to <storyOutput>")]
         public bool dryRun;
