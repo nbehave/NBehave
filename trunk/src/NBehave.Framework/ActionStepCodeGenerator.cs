@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace NBehave.Narrator.Framework
@@ -18,13 +19,14 @@ namespace NBehave.Narrator.Framework
             const string methodBody = "{ throw new System.NotImplementedException(); }";
             return attribute + methodSignature + Environment.NewLine + methodBody;
         }
-        private char[] _whiteSpaces = new[] { ' ', '\n', '\r', '\t' };
+       
+        private readonly char[] _whiteSpaces = new[] { ' ', '\n', '\r', '\t' };
 
         private string GetParameters(string row)
         {
             int numberOfParameters = 0;
             string parameters = string.Empty;
-            string[] words = SplitStringToWords(ref row);
+            IEnumerable<string> words = SplitStringToWords(ref row);
 
             foreach (var word in words)
             {
@@ -47,7 +49,7 @@ namespace NBehave.Narrator.Framework
         {
             string actionStep = string.Empty;
             int paramNumber = 1;
-            string[] words = SplitStringToWords(ref row);
+            IEnumerable<string> words = SplitStringToWords(ref row);
             foreach (var word in words)
             {
                 if (IsParameter(word))
@@ -63,14 +65,14 @@ namespace NBehave.Narrator.Framework
             return actionStep.Substring(0, actionStep.Length - 1);
         }
 
-        private string[] SplitStringToWords(ref string row)
+        private IEnumerable<string> SplitStringToWords(ref string row)
         {
             row = TrimRow(row).RemoveFirstWord();
             string[] words = row.Split(_whiteSpaces, StringSplitOptions.RemoveEmptyEntries);
             return words;
         }
 
-        private Regex _stringRegex = new Regex(@"^('|"").+('|"")$");
+        private readonly Regex _stringRegex = new Regex(@"^('|"").+('|"")$");
         private bool IsParameter(string word)
         {
             return IsInt(word) || _stringRegex.IsMatch(word);

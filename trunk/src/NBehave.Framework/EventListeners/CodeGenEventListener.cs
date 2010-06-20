@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -18,6 +19,7 @@ namespace NBehave.Narrator.Framework.EventListeners
             _bufferWriter = new StringWriter(new StringBuilder());
             _actionStepCodeGenerator = new ActionStepCodeGenerator();
         }
+
         void IEventListener.FeatureCreated(string feature)
         {
         }
@@ -58,8 +60,7 @@ namespace NBehave.Narrator.Framework.EventListeners
             var validNames = Enum.GetNames(typeof(TypeOfStep)).ToList();
             foreach (var actionStepResult in result.ActionStepResults)
             {
-                if (validNames.Contains(actionStepResult.StringStep.GetFirstWord()))
-                    lastStep = (TypeOfStep)Enum.Parse(typeof(TypeOfStep), actionStepResult.StringStep.GetFirstWord(), true);
+                lastStep = DetermineTypeOfStep(validNames, actionStepResult, lastStep);
                 if (actionStepResult.Result is Pending)
                 {
                     if (_isFirstPendingStep)
@@ -72,6 +73,13 @@ namespace NBehave.Narrator.Framework.EventListeners
                     _bufferWriter.WriteLine(code);
                 }
             }
+        }
+
+        private TypeOfStep DetermineTypeOfStep(List<string> validNames, ActionStepResult actionStepResult, TypeOfStep lastStep)
+        {
+            if (validNames.Contains(actionStepResult.StringStep.GetFirstWord()))
+                lastStep = (TypeOfStep)Enum.Parse(typeof(TypeOfStep), actionStepResult.StringStep.GetFirstWord(), true);
+            return lastStep;
         }
 
         private void WriteStart()
