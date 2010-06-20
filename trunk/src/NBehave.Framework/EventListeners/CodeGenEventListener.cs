@@ -1,11 +1,13 @@
+using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace NBehave.Narrator.Framework.EventListeners
 {
     public class CodeGenEventListener : IEventListener
     {
-        private readonly  ActionStepCodeGenerator _actionStepCodeGenerator;
+        private readonly ActionStepCodeGenerator _actionStepCodeGenerator;
         private readonly TextWriter _writer;
         private readonly TextWriter _bufferWriter;
         private bool _isFirstPendingStep = true;
@@ -34,7 +36,7 @@ namespace NBehave.Narrator.Framework.EventListeners
 
         void IEventListener.RunFinished()
         {
-            if (_isFirstPendingStep==false)
+            if (_isFirstPendingStep == false)
             {
                 _bufferWriter.Flush();
                 _writer.Write(_bufferWriter.ToString());
@@ -52,8 +54,12 @@ namespace NBehave.Narrator.Framework.EventListeners
 
         void IEventListener.ScenarioResult(ScenarioResult result)
         {
+            var lastStep = TypeOfStep.Given;
+            var validNames = Enum.GetNames(typeof(TypeOfStep)).ToList();
             foreach (var actionStepResult in result.ActionStepResults)
             {
+                if (validNames.Contains(actionStepResult.StringStep.GetFirstWord()))
+                    lastStep = (TypeOfStep)Enum.Parse(typeof(TypeOfStep), actionStepResult.StringStep.GetFirstWord(), true);
                 if (actionStepResult.Result is Pending)
                 {
                     if (_isFirstPendingStep)
@@ -61,7 +67,7 @@ namespace NBehave.Narrator.Framework.EventListeners
                         WriteStart();
                         _isFirstPendingStep = false;
                     }
-                    var code = _actionStepCodeGenerator.GenerateMethodFor(actionStepResult.StringStep);
+                    var code = _actionStepCodeGenerator.GenerateMethodFor(actionStepResult.StringStep, lastStep);
                     _bufferWriter.WriteLine("");
                     _bufferWriter.WriteLine(code);
                 }

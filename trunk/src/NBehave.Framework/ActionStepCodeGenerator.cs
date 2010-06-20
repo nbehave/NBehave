@@ -5,10 +5,10 @@ namespace NBehave.Narrator.Framework
 {
     public class ActionStepCodeGenerator
     {
-        public string GenerateMethodFor(string actionStep)
+        public string GenerateMethodFor(string actionStep, TypeOfStep step)
         {
             string actionStepParameterized = ParameterizeActionStep(actionStep);
-            string attrib = actionStep.GetFirstWord();
+            string attrib = step.ToString();
             string attribute = string.Format("[{0}(\"{1}\")]{2}", attrib, actionStepParameterized, Environment.NewLine);
             string methodName = ExtractMethodName(attrib + " " + actionStepParameterized);
             string methodSignature = string.Format("public void {0}({1}){2}",
@@ -106,5 +106,10 @@ namespace NBehave.Narrator.Framework
             }
             return methodName.Substring(0, methodName.Length - 1);
         }
+    }
+
+    public enum TypeOfStep
+    {
+        Given, When, Then
     }
 }

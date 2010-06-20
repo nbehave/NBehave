@@ -25,7 +25,6 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
 
         public class When_running_with_codegen : CodeGenEventListenerSpec
         {
-
             public override void SetUp()
             {
                 _feature = XmlOutputEventListenerTestData.Feature;
@@ -42,6 +41,20 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
             public void Should_NOT_generate_code_for_step_Given_something_pending()
             {
                 StringAssert.DoesNotContain(@"[Given(""something"")]", _output);
+            }
+
+            [Test]
+            public void Should_generate_code_for_step_pending_And_as_Given()
+            {
+                StringAssert.DoesNotContain(@"[And(""", _output);
+                StringAssert.Contains(@"[Given(""something more pending"")]", _output);
+            }
+
+            [Test]
+            public void Should_generate_code_for_step_pending_And_as_When()
+            {
+                StringAssert.DoesNotContain(@"[And(""", _output);
+                StringAssert.Contains(@"[When(""some more pending event occurs"")]", _output);
             }
         }
     }

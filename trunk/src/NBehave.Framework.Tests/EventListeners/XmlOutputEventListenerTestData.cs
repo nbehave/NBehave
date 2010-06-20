@@ -19,7 +19,10 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
                                        "  Then there is some outcome #2" + Environment.NewLine +
                                        "Scenario: Pending scenario" + Environment.NewLine +
                                        "  Given something pending" + Environment.NewLine +
+                                       "  And something pending" + Environment.NewLine +
+                                       "  And something more pending" + Environment.NewLine +
                                        "  When some pending event occurs" + Environment.NewLine +
+                                       "  And some more pending event occurs" + Environment.NewLine +
                                        "  Then this text should still show up in xml output" +
                                        "  " + Environment.NewLine +
                                        "Feature: S2" + Environment.NewLine +
