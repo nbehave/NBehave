@@ -6,7 +6,6 @@
 ; The name of the installer
 Name "NBehave"
 
-
 ; The files to write
 Outfile "..\..\Build\NBehave_${VERSION}.exe"
 
@@ -19,9 +18,7 @@ InstallDirRegKey HKLM "Software\NBehave\${VERSION}" "Install_Dir"
 
 ; Request application privileges for Windows Vista
 RequestExecutionLevel admin
-
 ;--------------------------------
-
 ; Pages
 
 Page components
@@ -30,9 +27,7 @@ Page instfiles
 
 UninstPage uninstConfirm
 UninstPage instfiles
-
 ;--------------------------------
-
 ; The stuff to install
 Section "Framework Files (required)" ;No components page, name is not important
 	
@@ -44,7 +39,9 @@ Section "Framework Files (required)" ;No components page, name is not important
   ; Put file there
 	File "${FILES}\NBehave-Console.exe"	
 	File "${FILES}\NBehave.NAnt.dll"
+	File "${FILES}\NBehave.MSBuild.dll"
 	File "${FILES}\NBehave.Narrator.Framework.dll"
+	File "${FILES}\NBehave.Narrator.Framework.dll.tdnet"
 	File "${FILES}\NBehave.Spec.Framework.dll"
 	File "${FILES}\NBehave.Spec.MbUnit.dll"
 	File "${FILES}\NBehave.Spec.MSTest.dll"
@@ -69,24 +66,6 @@ Section "Framework Files (required)" ;No components page, name is not important
 
 SectionEnd
 
-Section "Testdriven.NET plugin"
-	File "${FILES}\NBehave.TestDriven.Plugin.dll"
-	;File "${FILES}\TestDriven.Framework.dll"
-	
-	WriteRegStr HKLM "SOFTWARE\MutantDesign\TestDriven.NET\TestRunners\NBehave ${VERSION}" "" "3"
-	WriteRegStr HKLM "SOFTWARE\MutantDesign\TestDriven.NET\TestRunners\NBehave ${VERSION}" "AssemblyPath" "$INSTDIR\NBehave.TestDriven.Plugin.dll"
-	WriteRegStr HKLM "SOFTWARE\MutantDesign\TestDriven.NET\TestRunners\NBehave ${VERSION}" "Application" "$INSTDIR\NBehave-Console.exe"
-	WriteRegStr HKLM "SOFTWARE\MutantDesign\TestDriven.NET\TestRunners\NBehave ${VERSION}" "TypeName" "NBehave.TestDriven.Plugin.NBehaveStoryRunner"
-	WriteRegStr HKLM "SOFTWARE\MutantDesign\TestDriven.NET\TestRunners\NBehave ${VERSION}" "TargetFrameworkAssemblyName" "NBehave.Narrator.Framework"
-SectionEnd
-Section "MSbuild task"
-	File "${FILES}\NBehave.MSBuild.dll"
-SectionEnd
-
-Section "NAnt task"
-	File "${FILES}\NBehave.NAnt.dll"
-SectionEnd
-
 Section "NBehave Example code"
 	File "${EXAMPLEFILES}\NBehave.Examples.zip"
 SectionEnd
@@ -97,9 +76,9 @@ Section "Uninstall"
   ; Remove registry keys
   DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\NBehave ${VERSION}"
   DeleteRegKey HKLM SOFTWARE\NBehave\${VERSION}
-  DeleteRegKey HKLM "SOFTWARE\MutantDesign\TestDriven.NET\TestRunners\NBehave ${VERSION}"
   ; Remove files and uninstaller
   Delete $INSTDIR\*.dll
+  Delete $INSTDIR\*.tdnet
   Delete $INSTDIR\*.zip
   Delete $INSTDIR\NBehave-Console.exe
   Delete $INSTDIR\uninstall.exe
