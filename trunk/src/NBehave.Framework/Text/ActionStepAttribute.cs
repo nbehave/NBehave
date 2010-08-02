@@ -3,10 +3,10 @@ using System.Text.RegularExpressions;
 
 namespace NBehave.Narrator.Framework
 {
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     /// <summary>
     /// Use Given, When or Then Attribute
     /// </summary>
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public abstract class ActionStepAttribute : Attribute
     {
         public Regex ActionMatch { get; protected set; }

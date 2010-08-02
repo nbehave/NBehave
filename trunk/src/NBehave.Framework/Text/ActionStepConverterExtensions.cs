@@ -15,15 +15,23 @@ namespace NBehave.Narrator.Framework
             string regex = "^";
             foreach (var word in words)
             {
-                if (WordIsToken(word))
+                if (!WordIsToken(word))
                 {
-                    var groupName = GetValidRegexGroupName(word);
-                    var stuffAtStart = word.Substring(0, word.IndexOf(groupName) - 1);
-                    var stuffAtEnd = word.Substring(word.IndexOf(groupName) + groupName.Length);
-                    regex += string.Format(@"{1}(?<{0}>.+){2}\s+", groupName, stuffAtStart, stuffAtEnd);
-                }
-                else
                     regex += string.Format(@"{0}\s+", word);
+                    continue;
+                }
+                
+                var groupName = GetValidRegexGroupName(word);
+                var stuffAtStart = word.Substring(0, word.IndexOf(groupName) - 1);
+                var stuffAtEnd = word.Substring(word.IndexOf(groupName) + groupName.Length);
+
+                var lengthRestriction = "+";
+                if(stuffAtEnd.StartsWith("{") && stuffAtEnd.Contains("}"))
+                {
+                    lengthRestriction = stuffAtEnd.Substring(0, stuffAtEnd.IndexOf("}") + 1);
+                    stuffAtEnd = stuffAtEnd.Remove(0, lengthRestriction.Length);
+                }
+                regex += string.Format(@"{1}(?<{0}>.{3}){2}\s+", groupName, stuffAtStart, stuffAtEnd, lengthRestriction);
             }
             if (regex.EndsWith(@"\s+"))
                 regex = regex.Substring(0, regex.Length - 1) + "*";

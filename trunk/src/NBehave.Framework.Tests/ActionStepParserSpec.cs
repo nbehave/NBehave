@@ -112,6 +112,12 @@ namespace NBehave.Narrator.Framework.Specifications
 
             }
 
+            [Given("a length restriction on the \"$param{0,3}\" should work")]
+            public void RestrictedLengthParam(string param)
+            {
+
+            }
+
             [Specification]
             public void Should_match_parameters_in_tokenString_to_method_parameters()
             {
@@ -137,6 +143,23 @@ namespace NBehave.Narrator.Framework.Specifications
                 var actionStepToFind = new ActionStepText("a method with \"embedded\" parameter like \"this\" should work", "file");
                 var action = _actionCatalog.GetAction(actionStepToFind);
                 Assert.That(action, Is.Not.Null);
+            }
+
+
+            [Specification]
+            public void Should_match_short_text_against_the_restricted_length_parameter()
+            {
+                var actionStepToFind = new ActionStepText("a length restriction on the \"txt\" should work", "file");
+                var action = _actionCatalog.GetAction(actionStepToFind);
+                Assert.That(action, Is.Not.Null);
+            }
+
+            [Specification]
+            public void Should_not_match_long_text_against_the_restricted_length_parameter()
+            {
+                var actionStepToFind = new ActionStepText("a length restriction on the \"supplied value\" should work", "file");
+                var action = _actionCatalog.GetAction(actionStepToFind);
+                Assert.That(action, Is.Null);
             }
         }
 
