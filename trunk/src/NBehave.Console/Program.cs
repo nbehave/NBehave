@@ -6,13 +6,14 @@ using NBehave.Narrator.Framework.EventListeners;
 
 namespace NBehave.Console
 {
-    public class Program
-    {
-        [STAThread]
-        public static int Main(string[] args)
-        {
-            var output = new PlainTextOutput(System.Console.Out);
-            var options = new ConsoleOptions(args);
+	public class Program
+	{
+		[STAThread]
+		public static int Main(string[] args)
+		{
+		    var t0 = DateTime.Now;
+			var output = new PlainTextOutput(System.Console.Out);
+			var options = new ConsoleOptions(args);
 
             if (!options.nologo)
             {
@@ -53,12 +54,12 @@ namespace NBehave.Console
             }
 
             FeatureResults results = runner.Run();
+            System.Console.WriteLine("Time Taken {0:0.##}", DateTime.Now.Subtract(t0).TotalSeconds);
 
             if (options.dryRun)
                 return 0;
 
             int result = results.NumberOfFailingScenarios > 0 ? 2 : 0;
-
             if(options.pause) {
             	System.Console.WriteLine("Press any key to exit");
             	System.Console.ReadKey();

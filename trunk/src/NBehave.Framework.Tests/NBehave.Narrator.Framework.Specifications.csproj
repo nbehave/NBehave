@@ -74,7 +74,6 @@
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="ActionCatalogSpec.cs" />
-    <Compile Include="ActionStepAliasSpec.cs" />
     <Compile Include="ActionStepCodeGeneratorSpec.cs" />
     <Compile Include="ActionStepFileLoaderSpec.cs" />
     <Compile Include="ActionStepParserSpec.cs" />
@@ -104,7 +103,7 @@
     <Compile Include="Text\StringExtension.cs" />
     <Compile Include="Text\StringStepSpec.cs" />
     <Compile Include="Text\StringTableStepSpec.cs" />
-    <Compile Include="Text\TestData\CalculatorSteps.cs" />
+    <Compile Include="YmlParserSpec.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NBehave.Framework\NBehave.Narrator.Framework.csproj">
@@ -137,9 +136,6 @@
     <Content Include="GreetingSystem.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

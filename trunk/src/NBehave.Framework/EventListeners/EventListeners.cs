@@ -29,7 +29,7 @@ namespace NBehave.Narrator.Framework.EventListeners
             return NullEventListener();
         }
 
-        private static IEventListener NullEventListener()
+        public static IEventListener NullEventListener()
         {
             return new NullEventListener();
         }

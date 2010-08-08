@@ -93,6 +93,10 @@
     <Compile Include="Tables\Table.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\NBehave.Framework\languages.yml">
+      <Link>languages.yml</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Bowling Game\BowlingGame.msbuild">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -10,8 +10,7 @@ namespace NBehave.Narrator.Framework
     {
         private readonly char[] _whiteSpaceChars = new[] { ' ', '\t', '\n', '\r' };
 
-        private readonly ActionStepAlias _actionStepAlias = new ActionStepAlias();
-        private readonly ActionStep _actionStep = new ActionStep();
+        private ActionStep _actionStep;
         private readonly IStringStepRunner _stringStepRunner;
 
         public ScenarioParser(IStringStepRunner stringStepRunner)
@@ -23,7 +22,20 @@ namespace NBehave.Narrator.Framework
         {
             var reader = new StreamReader(stream);
             string scenarioText = reader.ReadToEnd();
+            ParseLanguage(scenarioText);
             return ParseScenario(scenarioText);
+        }
+
+        private void ParseLanguage(string scenarioText)
+        {
+            string language = ActionStep.DefaultLanguage;
+            string trimmed = scenarioText.TrimStart(_whiteSpaceChars);
+            var lang = new Regex(@"^# language:\s+(?<language>\w+)\s+");
+            var matches = lang.Match(trimmed);
+            if (matches.Success)
+                language = matches.Groups["language"].Value;
+
+            _actionStep = new ActionStep(Language.LoadLanguages(), language);
         }
 
         private IEnumerable<Feature> ParseScenario(string scenarioText)
@@ -48,7 +60,7 @@ namespace NBehave.Narrator.Framework
                     else if (_actionStep.IsExample(step))
                     {
                         if (scenario == null)
-                        	scenario = CreateNewScenario(scenarios, feature);
+                            scenario = CreateNewScenario(scenarios, feature);
                         AddExample(scenario, step);
                     }
                     else
@@ -69,7 +81,7 @@ namespace NBehave.Narrator.Framework
         private ScenarioWithSteps CreateNewScenario(ICollection<ScenarioWithSteps> scenarios, Feature feature)
         {
             var scenario = new ScenarioWithSteps(_stringStepRunner);
-		    scenarios.Add(scenario);
+            scenarios.Add(scenario);
             scenario.Feature = feature;
             feature.AddScenario(scenario);
             return scenario;
@@ -144,7 +156,7 @@ namespace NBehave.Narrator.Framework
             return tableHeader;
         }
 
-        private List<Dictionary<string, string>> ReadTableColumnValues(string tableWithValues, IList<string> columnNames)
+        private IEnumerable<Dictionary<string, string>> ReadTableColumnValues(string tableWithValues, IList<string> columnNames)
         {
             var columnValues = new List<Dictionary<string, string>>();
             var rowMatch = new Regex(@".+");
@@ -180,9 +192,11 @@ namespace NBehave.Narrator.Framework
         private Feature CreateFeature(string step)
         {
             string[] rows = Split(step);
-            var feature = new Feature();
-            feature.Title = _actionStep.GetTitle(rows.First());
-            feature.Narrative = RemoveStep(step, rows[0]).TrimStart(Environment.NewLine.ToCharArray());
+            var feature = new Feature
+                              {
+                                  Title = _actionStep.GetTitle(rows.First()),
+                                  Narrative = RemoveStep(step, rows[0]).TrimStart(Environment.NewLine.ToCharArray())
+                              };
             return feature;
         }
 
@@ -241,30 +255,14 @@ namespace NBehave.Narrator.Framework
 
         private string BuildRegexString()
         {
-            string regex = @"^\s*("; // @"^\n*";
-            List<string> aliases = GetAliases();
-            foreach (var alias in aliases)
+            string regex = @"^\s*(";
+            IEnumerable<string> allWords = _actionStep.AllWords;
+            foreach (var alias in allWords)
             {
                 regex += alias + "|";
             }
             regex = regex.Substring(0, regex.Length - 1) + ")";
             return regex;
-        }
-
-        private List<string> GetAliases()
-        {
-            var aliases = new List<string>();
-            foreach (string actionWord in _actionStepAlias.AliasesForAllActionWords.Keys)
-            {
-                if (aliases.Contains(actionWord) == false)
-                    aliases.Add(actionWord);
-                foreach (var alias in _actionStepAlias.AliasesForAllActionWords[actionWord])
-                {
-                    if (aliases.Contains(alias) == false)
-                        aliases.Add(alias);
-                }
-            }
-            return aliases;
         }
 
         private string[] Split(string text)

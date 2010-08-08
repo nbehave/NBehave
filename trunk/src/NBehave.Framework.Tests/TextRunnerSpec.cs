@@ -426,5 +426,86 @@ namespace NBehave.Narrator.Framework.Specifications
                 _listener.AssertWasCalled(l => l.ScenarioCreated("Greeting someone"));
             }
         }
+    
+        [Context, ActionSteps]
+        public class When_running_plain_Text_scenario_in_swedish : TextRunnerSpec
+        {
+            private TextRunner _runner;
+
+            private readonly Stack<int> _numbers = new Stack<int>();
+            private int _calcResult;
+            private static bool _givenWasCalled;
+            private static bool _whenWasCalled;
+            private static bool _thenWasCalled;
+            private FeatureResults _featureResults;
+
+            [Given(@"att jag knappat in $number")]
+            public void GivenNumber(int number)
+            {
+                _numbers.Push(number);
+                _givenWasCalled = true;
+            }
+
+            [When("jag summerar")]
+            public void Sum()
+            {
+                _calcResult = _numbers.Pop() + _numbers.Pop();
+                _whenWasCalled = true;
+            }
+
+            [Then("ska resultatet vara $sum")]
+            public void Result(int sum)
+            {
+                Assert.AreEqual(sum, _calcResult);
+                _thenWasCalled = true;
+            }
+
+            [SetUp]
+            public void SetUp()
+            {
+                _runner = new TextRunner(Framework.EventListeners.EventListeners.NullEventListener());
+                _runner.LoadAssembly(GetType().Assembly);
+                _featureResults = RunScenario();
+            }
+
+            private FeatureResults RunScenario()
+            {
+                var ms = new MemoryStream();
+                var sr = new StreamWriter(ms);
+                sr.WriteLine("# language: se");
+                sr.WriteLine("Givet att jag knappat in 5");
+                sr.WriteLine("Och att jag knappat in 4");
+                sr.WriteLine("När jag summerar");
+                sr.WriteLine("Då ska resultatet vara 9");
+                sr.Flush();
+                ms.Seek(0, SeekOrigin.Begin);
+                _runner.Load(ms);
+                return _runner.Run();
+            }
+
+            [Specification]
+            public void Should_run_text_scenario_in_stream()
+            {
+                Assert.That(_featureResults.NumberOfPassingScenarios, Is.EqualTo(1));
+            }
+
+            [Specification]
+            public void Given_should_be_called()
+            {
+                Assert.That(_givenWasCalled, Is.True);
+            }
+
+            [Specification]
+            public void When_should_be_called()
+            {
+                Assert.That(_whenWasCalled, Is.True);
+            }
+
+            [Specification]
+            public void then_should_be_called()
+            {
+                Assert.That(_thenWasCalled, Is.True);
+            }
+        }
     }
 }

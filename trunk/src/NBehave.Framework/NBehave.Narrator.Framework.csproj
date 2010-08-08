@@ -82,14 +82,13 @@
     <Compile Include="Text\ActionMethodInfo.cs" />
     <Compile Include="ActionMissingException.cs" />
     <Compile Include="Text\ActionStep.cs" />
-    <Compile Include="Text\ActionStepAlias.cs" />
-    <Compile Include="Text\ActionStepAliasConfiguration.cs" />
     <Compile Include="Text\ActionStepAttribute.cs" />
     <Compile Include="Text\ActionStepConverterExtensions.cs" />
     <Compile Include="Text\ActionStepFileLoader.cs" />
     <Compile Include="Text\IFileMatcher.cs" />
     <Compile Include="Text\IgnoreSpaceAndUnderScoreMatcher.cs" />
     <Compile Include="Text\IStringStepRunner.cs" />
+    <Compile Include="Text\Language.cs" />
     <Compile Include="Text\MatchAllFiles.cs" />
     <Compile Include="Text\StringStepRunner.cs" />
     <Compile Include="Text\ActionStepsAttribute.cs" />
@@ -130,10 +129,15 @@
     <Compile Include="Text\StringStep.cs" />
     <Compile Include="Text\StringTableStep.cs" />
     <Compile Include="Text\WhenAttribute.cs" />
+    <Compile Include="YmlEntry.cs" />
+    <Compile Include="YmlParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\NBehave.snk">
       <Link>NBehave.snk</Link>
+    </None>
+    <None Include="languages.yml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
