@@ -171,8 +171,9 @@
 		</copy>
 		<copy todir="${examplesdest.dir}\lib">
 			<fileset basedir="${build.dir}\dist">
-				<include name="NBehave*.dll" />
+				<include name="NBehave*.*" />
 				<include name="nunit.framework.dll" />
+        <include name="languages.yml" />
 			</fileset>
 		</copy>
 		<copy todir="${examplesdest.dir}\lib" flatten="true" file="tools\nant\tasks\net\NAnt.Contrib.Tasks.dll" />
@@ -232,7 +233,8 @@
 				<include name="MbUnit.dll" />
 				<include name="nunit.framework.dll" />
 				<include name="Rhino.Mocks.dll" />
-				<include name="xunit.dll" />
+        <include name="xunit.dll" />
+        <include name="languages.yml" />
 			</fileset>
 		</copy>
 	</target>
