@@ -6,14 +6,14 @@ using NBehave.Narrator.Framework.EventListeners;
 
 namespace NBehave.Console
 {
-	public class Program
-	{
-		[STAThread]
-		public static int Main(string[] args)
-		{
-		    var t0 = DateTime.Now;
-			var output = new PlainTextOutput(System.Console.Out);
-			var options = new ConsoleOptions(args);
+    public class Program
+    {
+        [STAThread]
+        public static int Main(string[] args)
+        {
+            var t0 = DateTime.Now;
+            var output = new PlainTextOutput(System.Console.Out);
+            var options = new ConsoleOptions(args);
 
             if (!options.nologo)
             {
@@ -54,18 +54,31 @@ namespace NBehave.Console
             }
 
             FeatureResults results = runner.Run();
-            System.Console.WriteLine("Time Taken {0:0.##}", DateTime.Now.Subtract(t0).TotalSeconds);
+            PrintTimeTaken(t0);
 
             if (options.dryRun)
                 return 0;
 
             int result = results.NumberOfFailingScenarios > 0 ? 2 : 0;
-            if(options.pause) {
-            	System.Console.WriteLine("Press any key to exit");
-            	System.Console.ReadKey();
+            if (options.pause)
+            {
+                System.Console.WriteLine("Press any key to exit");
+                System.Console.ReadKey();
             }
-            
+
             return result;
+        }
+
+        private static void PrintTimeTaken(DateTime t0)
+        {
+            double timeTaken = DateTime.Now.Subtract(t0).TotalSeconds;
+            if (timeTaken >= 60)
+            {
+                int totalMinutes = Convert.ToInt32(Math.Floor(timeTaken / 60));
+                System.Console.WriteLine("Time Taken {0}m {1:0.#}s", totalMinutes, timeTaken - 60);
+            }
+            else
+                System.Console.WriteLine("Time Taken {0:0.#}s", timeTaken);
         }
 
         public static IEventListener CreateEventListener(ConsoleOptions options)
