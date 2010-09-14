@@ -27,33 +27,72 @@ Page instfiles
 
 UninstPage uninstConfirm
 UninstPage instfiles
+
 ;--------------------------------
-; The stuff to install
-Section "Framework Files (required)" ;No components page, name is not important
+; .Net 3.5 version
+Section ".Net 3.5 files" ;No components page, name is not important
 	
-	SectionIn RO
+	;SectionIn RO
 	
 	; Set output path to the installation directory.
-	SetOutPath $INSTDIR
+	SetOutPath $INSTDIR\v3.5
   
-  ; Put file there
-	File "${FILES}\NBehave-Console.exe"	
-	File "${FILES}\NBehave.NAnt.dll"
-	File "${FILES}\NBehave.MSBuild.dll"
-	File "${FILES}\NBehave.Narrator.Framework.dll"
-	File "${FILES}\NBehave.Narrator.Framework.dll.tdnet"
-	File "${FILES}\NBehave.Spec.Framework.dll"
-	File "${FILES}\NBehave.Spec.MbUnit.dll"
-	File "${FILES}\NBehave.Spec.MSTest.dll"
-	File "${FILES}\NBehave.Spec.NUnit.dll"
-	File "${FILES}\NBehave.Spec.Xunit.dll"
-	File "${FILES}\NBehave.TestDriven.Plugin.dll"
-	File "${FILES}\Gallio.dll"
-	File "${FILES}\MbUnit.dll"
-	File "${FILES}\nunit.framework.dll"
-	File "${FILES}\Rhino.Mocks.dll"
-	File "${FILES}\xunit.dll"
-	File "${FILES}\languages.yml"
+	; Put file there
+	File "${FILES}\v3.5\NBehave-Console.exe"	
+	File "${FILES}\v3.5\NBehave.NAnt.dll"
+	File "${FILES}\v3.5\NBehave.MSBuild.dll"
+	File "${FILES}\v3.5\NBehave.Narrator.Framework.dll"
+	File "${FILES}\v3.5\NBehave.Narrator.Framework.dll.tdnet"
+	File "${FILES}\v3.5\NBehave.Spec.Framework.dll"
+	File "${FILES}\v3.5\NBehave.Spec.MbUnit.dll"
+	File "${FILES}\v3.5\NBehave.Spec.MSTest.dll"
+	File "${FILES}\v3.5\NBehave.Spec.NUnit.dll"
+	File "${FILES}\v3.5\NBehave.Spec.Xunit.dll"
+	File "${FILES}\v3.5\NBehave.TestDriven.Plugin.dll"
+	File "${FILES}\v3.5\Gallio.dll"
+	File "${FILES}\v3.5\MbUnit.dll"
+	File "${FILES}\v3.5\nunit.framework.dll"
+	File "${FILES}\v3.5\Rhino.Mocks.dll"
+	File "${FILES}\v3.5\xunit.dll"
+	File "${FILES}\v3.5\languages.yml"
+
+	; Write the installation path into the registry
+	WriteRegStr HKLM SOFTWARE\NBehave\${VERSION} "Install_Dir" "$INSTDIR"
+  
+	; Write the uninstall keys for Windows
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\NBehave ${VERSION}" "DisplayName" "NBehave ${VERSION}"
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\NBehave ${VERSION}" "UninstallString" '"$INSTDIR\uninstall.exe"'
+	WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\NBehave ${VERSION}" "NoModify" 1
+	WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\NBehave ${VERSION}" "NoRepair" 1
+	WriteUninstaller "uninstall.exe"
+
+SectionEnd
+
+;--------------------------------
+; .Net 4.0 version
+Section ".Net 4.0 files" ;No components page, name is not important
+	
+	; Set output path to the installation directory.
+	SetOutPath $INSTDIR\v4.0
+  
+	; Put file there
+	File "${FILES}\v4.0\NBehave-Console.exe"	
+	File "${FILES}\v4.0\NBehave.NAnt.dll"
+	File "${FILES}\v4.0\NBehave.MSBuild.dll"
+	File "${FILES}\v4.0\NBehave.Narrator.Framework.dll"
+	File "${FILES}\v4.0\NBehave.Narrator.Framework.dll.tdnet"
+	File "${FILES}\v4.0\NBehave.Spec.Framework.dll"
+	File "${FILES}\v4.0\NBehave.Spec.MbUnit.dll"
+	File "${FILES}\v4.0\NBehave.Spec.MSTest.dll"
+	File "${FILES}\v4.0\NBehave.Spec.NUnit.dll"
+	File "${FILES}\v4.0\NBehave.Spec.Xunit.dll"
+	File "${FILES}\v4.0\NBehave.TestDriven.Plugin.dll"
+	File "${FILES}\v4.0\Gallio.dll"
+	File "${FILES}\v4.0\MbUnit.dll"
+	File "${FILES}\v4.0\nunit.framework.dll"
+	File "${FILES}\v4.0\Rhino.Mocks.dll"
+	File "${FILES}\v4.0\xunit.dll"
+	File "${FILES}\v4.0\languages.yml"
 
 	; Write the installation path into the registry
 	WriteRegStr HKLM SOFTWARE\NBehave\${VERSION} "Install_Dir" "$INSTDIR"
@@ -77,12 +116,22 @@ Section "Uninstall"
   ; Remove registry keys
   DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\NBehave ${VERSION}"
   DeleteRegKey HKLM SOFTWARE\NBehave\${VERSION}
-  ; Remove files and uninstaller
-  Delete $INSTDIR\*.dll
-  Delete $INSTDIR\*.tdnet
-  Delete $INSTDIR\*.zip
-  Delete $INSTDIR\*.yml
-  Delete $INSTDIR\NBehave-Console.exe
+  
+  ; Remove v3.5 files and uninstaller
+  Delete $INSTDIR\v3.5\*.dll
+  Delete $INSTDIR\v3.5\*.tdnet
+  Delete $INSTDIR\v3.5\*.zip
+  Delete $INSTDIR\v3.5\*.yml
+  Delete $INSTDIR\v3.5\NBehave-Console.exe
+  
+  ; Remove v3.5 files and uninstaller
+  Delete $INSTDIR\v4.0\*.dll
+  Delete $INSTDIR\v4.0\*.tdnet
+  Delete $INSTDIR\v4.0\*.zip
+  Delete $INSTDIR\v4.0\*.yml
+  Delete $INSTDIR\v4.0\NBehave-Console.exe
+
+  ; Remove uninstaller
   Delete $INSTDIR\uninstall.exe
 
   ; Remove directories used

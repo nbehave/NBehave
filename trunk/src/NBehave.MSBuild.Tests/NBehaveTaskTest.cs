@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using Microsoft.Build.Framework;
+using Microsoft.Build.Utilities;
 using Microsoft.Win32;
 using NUnit.Framework;
 using System.IO;
@@ -16,9 +17,18 @@ namespace NBehave.MSBuild.Tests
         [Test]
         public void ShouldExecuteStorySuccessfullyViaMsbuildEXE()
         {
+            // This is a hacky way of getting the MSBuild location  :-(
+            var buildTaskAssemblyName = typeof (Task).Assembly.GetName().Name;
+            var clrVersion = buildTaskAssemblyName.Substring(buildTaskAssemblyName.Length - 4);
+            var msbuildFolder = clrVersion == "v3.5"
+                                    ? clrVersion
+                                    : String.Format("v{0}.{1}.{2}", Environment.Version.Major, Environment.Version.Minor,
+                                                    Environment.Version.Build);
+            
+
             string msbuild = Path.Combine(
                                     Path.Combine((string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\.NETFramework", "InstallRoot", string.Empty),
-                                    "v3.5"),
+                                    msbuildFolder),
                                 "MSBuild.exe");
 
             using (var process = new Process())

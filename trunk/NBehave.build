@@ -2,7 +2,8 @@
 <project name="NBehave" default="test" xmlns="http://nant.sf.net/schemas/nant.xsd">
 	<property name="solution.dir" value="src" />
 	<property name="build.dir" value="build" />
-	<property name="test.dir" value ="${build.dir}\Debug\UnitTests" />
+	<property name="test.dir.3.5" value ="${build.dir}\Debug-4.0\UnitTests" />
+	<property name="test.dir.4.0" value ="${build.dir}\Debug-3.5\UnitTests" />
 	<property name="company.name" value="${project::get-name()}"/>
 	<property name="project.fullversion" value="0.5.0.0" dynamic="true" />
 	<property name="project.config" value="release" />
@@ -14,34 +15,48 @@
 		</tstamp>
 		<echo message="Current Directory: ${project::get-base-directory()}"/>
 	</target>
-	
+
 	<target name="clean" depends="init" description="Delete automated build artifacts">
-		<delete dir="${build.dir}/Debug" if="${directory::exists(build.dir)}"/>
+		<delete dir="${build.dir}/Debug-3.5" if="${directory::exists(build.dir)}"/>
+		<delete dir="${build.dir}/Debug-4.0" if="${directory::exists(build.dir)}"/>
 		<delete dir="${build.dir}/dist" if="${directory::exists(build.dir)}"/>
 		<delete dir="${build.dir}/test-reports" if="${directory::exists(build.dir)}"/>
 	</target>
 	
-	<target name="compile">
-		<exec program="${environment::get-folder-path('System')}\..\Microsoft.NET\Framework\v3.5\msbuild.exe"
-		      commandline="/property:Configuration=AutomatedDebug /v:m src\NBehave.sln" />
+  <target name="compile" depends="compile-3.5, compile-4.0" ></target>
+
+	<target name="compile-3.5">
+    <exec program="${environment::get-folder-path('System')}\..\Microsoft.NET\Framework\v4.0.30319\msbuild.exe"
+		      commandline="/property:Configuration=AutomatedDebug-3.5 /v:m /p:TargetFrameworkVersion=v3.5 /toolsversion:3.5 src\NBehave.sln" />
 	</target>
-	
+
+	<target name="compile-4.0">
+		<exec program="${environment::get-folder-path('System')}\..\Microsoft.NET\Framework\v4.0.30319\msbuild.exe"
+		      commandline="/property:Configuration=AutomatedDebug-4.0 /v:d /p:TargetFrameworkVersion=v4.0 /toolsversion:4.0 src\NBehave.sln" />
+	</target>
+
 	<target name="test" depends="compile, run-unit-tests"
 	        description="Compile and run tests" />
-	
+
+	<target name="test-3.5" depends="compile-3.5, run-unit-tests-3.5"
+	        description="Compile and run tests for .Net 3.5 only" />
+
+	<target name="test-4.0" depends="compile-4.0, run-unit-tests-4.0"
+	        description="Compile and run tests for .Net 4.0 only" />
+
 	<target name="test-with-coverage" depends="compile, run-unit-tests-with-coverage"
 	        description="Compile and run tests with coverage" />
-	
+
 	<target name="full" depends="clean, commonassemblyinfo, test, dist"
 	        description="Compiles, tests, and produces distributions" />
-	
+
 	<target name="version" description="mark AssemblyInfo builds with the build number">
 		<if test="${property::exists('build.number')}">
 			<property name="project.fullversion" value="${build.number}" />
 		</if>
 		<echo message="MARKING THIS BUILD AS VERSION ${project.fullversion}" />
 	</target>
-	
+
 	<target name="commonassemblyinfo" depends="version, init">
 		<delete file="${solution.dir}/CommonAssemblyInfo.cs" failonerror="false"/>
 		<asminfo output="${solution.dir}/CommonAssemblyInfo.cs" language="CSharp">
@@ -73,11 +88,13 @@
 		         ProjectFilePath="tools\NDepend\NBehave.NDependProject.xml"
 		         Silent="true"/>
 	</target>
-	
-	<target name="run-unit-tests" depends="teamcity-nunit-addin">
+
+  <target name="run-unit-tests" depends="run-unit-tests-3.5, run-unit-tests-4.0" /> 
+  
+	<target name="run-unit-tests-3.5" depends="teamcity-nunit-addin">
 		<mkdir dir="${build.dir}\test-reports" />
 		
-		<exec program="nunit-console.exe" basedir="tools\nunit" workingdir="${test.dir}">
+		<exec program="nunit-console.exe" basedir="tools\nunit" workingdir="${test.dir.3.5}">
 			<arg value="NBehave.Narrator.Framework.Specifications.dll" />
 			<arg value="NBehave.Console.Tests.dll" />
 			<arg value="NBehave.Spec.NUnit.Specs.dll" />
@@ -88,10 +105,28 @@
 			<arg value="NBehave.NAnt.Tests.dll" />
 			<arg value="NBehave.MSBuild.Tests.dll" />
 			<arg value="NBehave.TestDriven.Plugin.Specs.dll" />
-			<arg value="/xml:..\..\test-reports\UnitTests.xml" />
+			<arg value="/xml:..\..\test-reports\UnitTests-3.5.xml" />
 		</exec>
 	</target>
-	
+  
+	<target name="run-unit-tests-4.0" depends="teamcity-nunit-addin">
+		<mkdir dir="${build.dir}\test-reports" />
+		
+		<exec program="nunit-console.exe" basedir="tools\nunit" workingdir="${test.dir.4.0}">
+			<arg value="NBehave.Narrator.Framework.Specifications.dll" />
+			<arg value="NBehave.Console.Tests.dll" />
+			<arg value="NBehave.Spec.NUnit.Specs.dll" />
+			<arg value="NBehave.Spec.MbUnit.Specs.dll" />
+			<arg value="NBehave.Spec.MSTest.Specs.dll" />
+			<arg value="NBehave.Spec.Xunit.Specs.dll" />
+			<arg value="NBehave.Spec.Framework.Specification.dll" />
+			<arg value="NBehave.NAnt.Tests.dll" />
+			<arg value="NBehave.MSBuild.Tests.dll" />
+			<arg value="NBehave.TestDriven.Plugin.Specs.dll" />
+			<arg value="/xml:..\..\test-reports\UnitTests-4.0.xml" />
+		</exec>
+	</target>
+
 	<target name="teamcity-nunit-addin" if="${property::exists('teamcity.dotnet.nunitaddin')}" >
 		<mkdir dir="tools/nunit/addins" />
 		<copy todir ="tools/nunit/addins">
@@ -105,7 +140,7 @@
 			</fileset>
 		</copy>
 	</target>
-	
+
 	<target name="run-unit-tests-with-coverage">
 		<mkdir dir="${build.dir}\test-reports" />
 		
@@ -134,7 +169,7 @@
 		</exec>
 	
 	</target>
-	
+
 	<target name="dist" depends="dist.examples">
 		
 		<zip zipfile="${build.dir}\NBehave_${project.fullversion}.zip">
@@ -152,7 +187,7 @@
 		</exec>
 		<delete file="${exampleFiles}" if="${file::exists(exampleFiles)}" />
 	</target>
-	
+
 	<target name="dist.examples" depends="dist.binaries">
 		<property name="examplesdest.dir" value="${build.dir}\Examples" />
 		<property name="examplesource.dir" value="${solution.dir}\NBehave.Examples" />
@@ -222,10 +257,10 @@
 			</fileset>
 		</zip>
 	</target>
-	
+
 	<target name="dist.binaries">
-		<copy todir="${build.dir}\dist">
-			<fileset basedir="${build.dir}\Debug\NBehave">
+		<copy todir="${build.dir}\dist\v3.5">
+			<fileset basedir="${build.dir}\Debug-3.5\NBehave">
 				<include name="**\NBehave*"/>
 				<exclude name="**\*.pdb" />
 				<include name="nunit.framework.dll" />
@@ -237,8 +272,21 @@
         <include name="languages.yml" />
 			</fileset>
 		</copy>
-	</target>
-	
+    <copy todir="${build.dir}\dist\v4.0">
+      <fileset basedir="${build.dir}\Debug-4.0\NBehave">
+        <include name="**\NBehave*"/>
+        <exclude name="**\*.pdb" />
+        <include name="nunit.framework.dll" />
+        <include name="Gallio.dll" />
+        <include name="MbUnit.dll" />
+        <include name="nunit.framework.dll" />
+        <include name="Rhino.Mocks.dll" />
+        <include name="xunit.dll" />
+        <include name="languages.yml" />
+      </fileset>
+    </copy>
+  </target>
+
 </project>
 
 

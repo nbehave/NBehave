@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
-using Microsoft.Build.Utilities;
 using Microsoft.Build.Framework;
+using Microsoft.Build.Utilities;
 using NBehave.Narrator.Framework;
 using System.IO;
 using NBehave.Narrator.Framework.EventListeners;
