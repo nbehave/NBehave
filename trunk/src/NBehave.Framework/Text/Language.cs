@@ -46,7 +46,7 @@ namespace NBehave.Narrator.Framework
 
         private static string GetFullFileName()
         {
-            string directory = Path.GetDirectoryName((new System.Uri(typeof(YmlEntry).Assembly.CodeBase)).AbsolutePath);
+            string directory = Path.GetDirectoryName((new System.Uri(typeof(YmlEntry).Assembly.CodeBase)).LocalPath);
             return Path.Combine(directory, "languages.yml");
         }
     }

@@ -2,6 +2,7 @@
 	!define VERSION "0.0.0"
 !endif
 !define FILES "..\..\Build\dist"
+!define PLUGIN "..\..\Build\plugin"
 !define EXAMPLEFILES "..\..\Build"
 ; The name of the installer
 Name "NBehave"
@@ -110,6 +111,16 @@ Section "NBehave Example code"
 	File "${EXAMPLEFILES}\NBehave.Examples.zip"
 SectionEnd
 
+Section "Visual Studio 2010 Plugin"
+
+	SetOutPath "$PROGRAMFILES\Microsoft Visual Studio 10.0\Common7\IDE\Extensions\NBehave"
+	
+	File "${PLUGIN}\extension.vsixmanifest"
+	File "${PLUGIN}\NBehave.VS2010.Plugin.dll"
+	File "${PLUGIN}\NBehave.VS2010.Plugin.pkgdef"
+
+SectionEnd
+
 ; Uninstaller
 Section "Uninstall"
   
@@ -131,10 +142,17 @@ Section "Uninstall"
   Delete $INSTDIR\v4.0\*.yml
   Delete $INSTDIR\v4.0\NBehave-Console.exe
 
+  ; Remove VS2010 Plugin
+  Delete "$PROGRAMFILES\Microsoft Visual Studio 10.0\Common7\IDE\Extensions\NBehave\extension.vsixmanifest"
+  Delete "$PROGRAMFILES\Microsoft Visual Studio 10.0\Common7\IDE\Extensions\NBehave\NBehave.VS2010.Plugin.dll"
+  Delete "$PROGRAMFILES\Microsoft Visual Studio 10.0\Common7\IDE\Extensions\NBehave\NBehave.VS2010.Plugin.pkgdef"
+  
   ; Remove uninstaller
   Delete $INSTDIR\uninstall.exe
-
+  
+  
   ; Remove directories used
   RMDir "$INSTDIR"
-
+  RMDir "$PROGRAMFILES\Microsoft Visual Studio 10.0\Common7\IDE\Extensions\NBehave"
+  
 SectionEnd

@@ -30,6 +30,9 @@ namespace NBehave.Console
         [Option(Short = "c", Description = "Generate stub methods for pending steps")] 
         public bool codegen;
 
+        [Option(Short = "wd", Description = "Block the process until a debugger is attached")]
+        public bool waitForDebugger;
+
         public ConsoleOptions(params string[] args)
             : base(args)
         {

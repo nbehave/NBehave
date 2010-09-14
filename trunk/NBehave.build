@@ -34,7 +34,7 @@
 		<exec program="${environment::get-folder-path('System')}\..\Microsoft.NET\Framework\v4.0.30319\msbuild.exe"
 		      commandline="/property:Configuration=AutomatedDebug-4.0 /v:m /p:TargetFrameworkVersion=v4.0 /toolsversion:4.0 src\NBehave.sln" />
 	</target>
-
+	
 	<target name="test" depends="compile, run-unit-tests"
 	        description="Compile and run tests" />
 
@@ -94,7 +94,7 @@
 	<target name="run-unit-tests-3.5" depends="teamcity-nunit-addin">
 		<mkdir dir="${build.dir}\test-reports" />
 		
-		<exec program="nunit-console.exe" basedir="tools\nunit" workingdir="${test.dir.3.5}">
+		<exec program="nunit-console-x86.exe" basedir="tools\nunit" workingdir="${test.dir.3.5}">
 			<arg value="NBehave.Narrator.Framework.Specifications.dll" />
 			<arg value="NBehave.Console.Tests.dll" />
 			<arg value="NBehave.Spec.NUnit.Specs.dll" />
@@ -112,7 +112,7 @@
 	<target name="run-unit-tests-4.0" depends="teamcity-nunit-addin">
 		<mkdir dir="${build.dir}\test-reports" />
 		
-		<exec program="nunit-console.exe" basedir="tools\nunit" workingdir="${test.dir.4.0}">
+		<exec program="nunit-console-x86.exe" basedir="tools\nunit" workingdir="${test.dir.4.0}">
 			<arg value="NBehave.Narrator.Framework.Specifications.dll" />
 			<arg value="NBehave.Console.Tests.dll" />
 			<arg value="NBehave.Spec.NUnit.Specs.dll" />
@@ -258,7 +258,7 @@
 		</zip>
 	</target>
 
-	<target name="dist.binaries">
+	<target name="dist.binaries" depends="dist.vsplugin">
 		<copy todir="${build.dir}\dist\v3.5">
 			<fileset basedir="${build.dir}\Debug-3.5\NBehave">
 				<include name="**\NBehave*"/>
@@ -272,19 +272,46 @@
         <include name="languages.yml" />
 			</fileset>
 		</copy>
-    <copy todir="${build.dir}\dist\v4.0">
-      <fileset basedir="${build.dir}\Debug-4.0\NBehave">
-        <include name="**\NBehave*"/>
-        <exclude name="**\*.pdb" />
-        <include name="nunit.framework.dll" />
-        <include name="Gallio.dll" />
-        <include name="MbUnit.dll" />
-        <include name="nunit.framework.dll" />
-        <include name="Rhino.Mocks.dll" />
-        <include name="xunit.dll" />
-        <include name="languages.yml" />
-      </fileset>
-    </copy>
+		<copy todir="${build.dir}\dist\v4.0">
+		  <fileset basedir="${build.dir}\Debug-4.0\NBehave">
+			<include name="**\NBehave*"/>
+			<exclude name="**\*.pdb" />
+			<include name="nunit.framework.dll" />
+			<include name="Gallio.dll" />
+			<include name="MbUnit.dll" />
+			<include name="nunit.framework.dll" />
+			<include name="Rhino.Mocks.dll" />
+			<include name="xunit.dll" />
+			<include name="languages.yml" />
+		  </fileset>
+		</copy>
+	</target>
+	
+	<target name="dist.vsplugin">
+		<copy todir="${build.dir}\plugin">
+			<fileset basedir="${build.dir}\Debug-4.0\VSPlugin">
+				<include name="**\NBehave*"/>
+				<exclude name="**\*.pdb" />
+				<exclude name="**\*.vsix" />
+				<include name="extension.vsixmanifest" />
+			</fileset>
+		</copy>
+		<xmlpoke
+			file="${build.dir}\plugin\extension.vsixmanifest"
+			value="true"
+			xpath="/vsx:Vsix/vsx:Identifier/vsx:InstalledByMsi">
+			<namespaces>
+				<namespace prefix="vsx" uri="http://schemas.microsoft.com/developer/vsx-schema/2010" />
+			</namespaces>
+		</xmlpoke>
+		<xmlpoke
+			file="${build.dir}\plugin\extension.vsixmanifest"
+			value="${project.fullversion}"
+			xpath="/vsx:Vsix/vsx:Identifier/vsx:Version">
+			<namespaces>
+				<namespace prefix="vsx" uri="http://schemas.microsoft.com/developer/vsx-schema/2010" />
+			</namespaces>
+		</xmlpoke>
   </target>
 
 </project>

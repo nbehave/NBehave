@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Threading;
 using NBehave.Narrator.Framework;
 using NBehave.Narrator.Framework.EventListeners;
 
@@ -34,6 +36,24 @@ namespace NBehave.Console
                 System.Console.Error.WriteLine("fatal error: invalid arguments");
                 options.Help();
                 return 2;
+            }
+
+            if (options.waitForDebugger)
+            {
+                int countdown = 5000;
+                int waitTime = 200;
+
+                while (!Debugger.IsAttached && countdown >= 0)
+                {
+                    Thread.Sleep(waitTime);
+                    countdown -= waitTime;
+                }
+
+                if (!Debugger.IsAttached)
+                {
+                    output.WriteLine("fatal error: timeout while waiting for debugger to attach");
+                    return 2;
+                }
             }
 
             IEventListener listener = CreateEventListener(options);
