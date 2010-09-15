@@ -166,7 +166,7 @@
     <VsSDKToolsPath>$(SolutionDir)tools\vs2010.sdk\</VsSDKToolsPath>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(SolutionDir)tools\vs2010.sdk\Microsoft.VsSDK.targets" />
+  <Import Project="$(SolutionDir)..\tools\vs2010.sdk\Microsoft.VsSDK.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
