@@ -26,7 +26,7 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
   <UsingTask TaskName="CreateMenuPkgDef" AssemblyFile="Microsoft.VsSDK.Build.Tasks.dll" />
 
   <!--
-    Set the general properties for this installation of the SDK
+    Set the general properties for this installation of the SDK 
   -->
   <PropertyGroup>
     <VsSDKVersion>10.0</VsSDKVersion>
