@@ -163,18 +163,29 @@
   <PropertyGroup>
       <VsSDKInstall>$(SolutionDir)..\tools\vs2010.sdk\</VsSDKInstall>
       <VsSDKIncludes>$(VsSDKInstall)inc\</VsSDKIncludes>
-	    <VsixSchemaPath>$(VsSDKInstall)VSIXManifestSchema.xsd</VsixSchemaPath>
-      <VsSDKToolsPath>$(VsSDKInstall)Tools\bin</VsSDKToolsPath>
+	  <VsixSchemaPath>$(VsSDKInstall)VSIXManifestSchema.xsd</VsixSchemaPath>
+      <!--<VsSDKToolsPath>$(VsSDKInstall)Tools\bin</VsSDKToolsPath>-->
   </PropertyGroup>
   
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VsSDKInstall)Microsoft.VsSDK.targets" />
 	
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
+       Other similar extension points exist, see Microsoft.Common.targets. -->
+  <UsingTask 
+		TaskName="EnvironmentVariable" 
+		AssemblyFile="$(SolutionDir)..\tools\msbuild.extension.pack\MSBuild.ExtensionPack.dll" />
+  <Target Name="BeforeBuild" DependsOnTargets="ConfigureVsSDKBuild">
   </Target>
-  <Target Name="AfterBuild">
+  	<Target Name="ConfigureVsSDKBuild">
+	
+		<EnvironmentVariable 
+			TaskAction="Set" 
+			Variable="VsSDKToolsPath" 
+			Value="$(VsSDKInstall)VisualStudioIntegration\Tools\bin" />
+	
+	</Target>
+  <!--<Target Name="AfterBuild">
   </Target>
   -->
   
