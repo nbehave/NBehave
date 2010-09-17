@@ -182,7 +182,7 @@
 		<EnvironmentVariable 
 			TaskAction="Set" 
 			Variable="VsSDKToolsPath" 
-			Value="$(VsSDKInstall)VisualStudioIntegration\Tools\bin" />
+			Value="$(VsSDKInstall)Tools\bin" />
 	
 	</Target>
   <!--<Target Name="AfterBuild">
