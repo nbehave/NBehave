@@ -1,0 +1,13 @@
+glob:*.cache
+glob:*.Cache
+glob:*/Debug/
+glob:*_ReSharper*
+glob:*.resharper.*
+glob:*/bin/
+glob:*/Output/*
+glob:*/obj/
+glob:*.user
+glob:*.suo
+glob:.svn
+glob:build/
+glob:release/
