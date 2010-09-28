@@ -91,22 +91,6 @@ namespace NBehave.Narrator.Framework.Specifications
                 Assert.That(result.NumberOfPassingScenarios, Is.EqualTo(1));
             }
             
-             [Specification]
-            public void Should_run_specified_scenario_in_text_file()
-            {
-                _runner.Load(new[] { @"GreetingSystem_ManyGreetings.txt" });
-                FeatureResults result = _runner.RunScenario("Greeting system", "greeting scott");
-                Assert.That(result.NumberOfPassingScenarios, Is.EqualTo(1));
-            }
-            
-             [Specification]
-            public void Should_run_specified_scenario_in_text_file_when_feature_has_no_name()
-            {
-                _runner.Load(new[] { @"GreetingSystemWithNoFeatureAndManyGreetings.txt" });
-                FeatureResults result = _runner.RunScenario("", "greeting scott");
-                Assert.That(result.NumberOfPassingScenarios, Is.EqualTo(1));
-            }
-
             [Specification]
             public void Should_get_result_of_running_scenarios_in_text_file()
             {

@@ -134,7 +134,7 @@
     <Compile Include="EventListeners\NullEventListener.cs" />
     <Compile Include="EventListeners\TextWriterEventListener.cs" />
     <Compile Include="EventListeners\Xml\XmlOutputEventListener.cs" />
-    <Compile Include="IEventListener.cs" />
+    <Compile Include="EventListeners\IEventListener.cs" />
     <Compile Include="Pair.cs" />
     <Compile Include="PlainTextOutput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -164,8 +164,8 @@
     <Compile Include="Text\StringStep.cs" />
     <Compile Include="Text\StringTableStep.cs" />
     <Compile Include="Text\WhenAttribute.cs" />
-    <Compile Include="YmlEntry.cs" />
-    <Compile Include="YmlParser.cs" />
+    <Compile Include="Language\YmlEntry.cs" />
+    <Compile Include="Language\YmlParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\NBehave.snk">

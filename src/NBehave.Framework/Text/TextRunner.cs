@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Linq;
@@ -15,8 +14,7 @@ namespace NBehave.Narrator.Framework
 		
 		public ActionCatalog ActionCatalog { get; private set; }
 
-		public TextRunner(IEventListener eventListener)
-			: base(eventListener)
+		public TextRunner(IEventListener eventListener) : base(eventListener)
 		{
 			ActionCatalog = new ActionCatalog();
 			StoryRunnerFilter = new StoryRunnerFilter();
@@ -30,14 +28,7 @@ namespace NBehave.Narrator.Framework
 			parser.FindActionSteps(assembly);
 		}
 
-		protected override void RunScenario(FeatureResults results, string featureTitle, string scenarioTitle)
-		{
-			EventListener.ThemeStarted(string.Empty);
-			RunEachFeature(results, feature => String.Compare(feature.Title.Trim(), featureTitle.Trim(), true)==0, scenario => String.Compare(scenario.Title.Trim(), scenarioTitle.Trim(), true)==0);
-			EventListener.ThemeFinished();
-		}
-		
-		protected override void RunFeatures(FeatureResults results)
+	    protected override void RunFeatures(FeatureResults results)
 		{
 			EventListener.ThemeStarted(string.Empty);
 			RunEachFeature(results, feature => true, scenario => true);
@@ -54,7 +45,6 @@ namespace NBehave.Narrator.Framework
 				IEnumerable<ScenarioResult> scenarioResults = scenarioStepRunner.Run(scenarios);
 				AddScenarioResultsToStoryResults(scenarioResults, featureResults);
 				featureResults.NumberOfStories++;
-				//EventListener.StoryResults(featureResults);
 			}
 		}
 
