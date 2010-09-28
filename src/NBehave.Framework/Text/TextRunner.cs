@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Reflection;
 using System.Linq;
 
@@ -40,7 +39,7 @@ namespace NBehave.Narrator.Framework
 			foreach (var feature in _features.Where(featurePredicate))
 			{		
 				var scenarios = feature.Scenarios.Where(scenarioPredicate);
-				ScenarioStepRunner scenarioStepRunner = CreateScenarioStepRunner();
+			    var scenarioStepRunner = new ScenarioStepRunner();
 
 				IEnumerable<ScenarioResult> scenarioResults = scenarioStepRunner.Run(scenarios);
 				AddScenarioResultsToStoryResults(scenarioResults, featureResults);
@@ -54,21 +53,9 @@ namespace NBehave.Narrator.Framework
 				featureResults.AddResult(result);
 		}
 
-		private ScenarioStepRunner CreateScenarioStepRunner()
-		{
-			var scenarioStepRunner = new ScenarioStepRunner();
-			return scenarioStepRunner;
-		}
-
-		public void Load(IEnumerable<string> fileLocations)
+	    public void Load(IEnumerable<string> fileLocations)
 		{
 			_features.AddRange(_actionStepFileLoader.Load(fileLocations));
-		}
-
-		public void Load(Stream stream)
-		{
-			var features = _actionStepFileLoader.Load(stream);
-			_features.AddRange(features);
 		}
 	}
 }

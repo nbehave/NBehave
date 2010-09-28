@@ -10,7 +10,7 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
     public class XmlOutputEventListenerSpec
     {
         private XmlDocument _xmlDoc;
-        private string _feature;
+        private string[] _feature;
 
         [SetUp]
         public virtual void Setup()
@@ -19,7 +19,7 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
             var listener = new XmlOutputEventListener(new XmlTextWriter(memStream, Encoding.UTF8));
             var runner = new TextRunner(listener);
             runner.LoadAssembly(GetType().Assembly);
-            runner.Load(_feature.ToStream());
+            runner.Load(_feature);
             runner.Run();
             _xmlDoc = new XmlDocument();
             memStream.Seek(0, 0);
@@ -31,7 +31,7 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
         {
             public override void Setup()
             {
-                _feature = XmlOutputEventListenerTestData.Feature;
+                _feature = new[] { "Features\\XmlOutputEventListenerTestData.feature" };
                 base.Setup();
             }
 
@@ -166,7 +166,7 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
                 var listener = Framework.EventListeners.EventListeners.XmlWriterEventListener(memStream);
                 var runner = new TextRunner(listener);
                 runner.LoadAssembly(GetType().Assembly);
-                runner.Load(XmlOutputEventListenerTestData.Feature.ToStream());
+                runner.Load(_feature);
                 runner.Run();
                 memStream.Seek(0, 0);
                 var xmlAsText = new StreamReader(memStream);
@@ -188,7 +188,7 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
         {
             public override void Setup()
             {
-                _feature = XmlOutputEventListenerTestData.Feature_With_Examples;
+                _feature = new[] { "Features\\XmlOutputEventListenerTestDataWithExamples.feature" };
                 base.Setup();
             }
 

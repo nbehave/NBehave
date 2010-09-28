@@ -117,6 +117,7 @@
     <Compile Include="EventListeners\CodeGenEventListenerSpec.cs" />
     <Compile Include="EventListeners\MultiOutputEventListenerFixture.cs" />
     <Compile Include="EventListeners\XmlOutputEventListenerSpec.cs" />
+    <Compile Include="Features\TestFeatures.cs" />
     <Compile Include="ParameterConverterSpec.cs" />
     <Compile Include="StringExtensionsSpec.cs" />
     <Compile Include="StringStepRunnerSpec.cs" />
@@ -156,25 +157,68 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="GreetingSystemWithNoFeatureAndManyGreetings.txt">
+    <None Include="Features\GreetingSystemDifferentLanguage.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>GreetingSystem1.feature.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="GreetingSystemWithScenarioTitle.txt">
+    </None>
+    <None Include="Features\GreetingSystemBDDGuyStory.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>GreetingSystem1.feature.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="GreetingSystem_ManyGreetings.txt">
+    </None>
+    <None Include="Features\GreetingSystemWithFailedStep.feature">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="GreetingSystemFailure.txt">
+    </None>
+    <None Include="Features\ShouldListAllPendingActionSteps.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>GreetingSystem1.feature.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="GreetingSystem.txt">
+    </None>
+    <None Include="Features\GreetingSystemWithNoActionSteps.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>GreetingSystem1.feature.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </None>
+    <None Include="Features\GreetingSystemWithNewLinesInGiven.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>GreetingSystem1.feature.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Features\GreetingSystemStory.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>GreetingSystem1.feature.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Features\XmlOutputEventListenerTestDataWithExamples.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>GreetingSystem1.feature.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Features\XmlOutputEventListenerTestData.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>GreetingSystem1.feature.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Features\GreetingSystemWithNoFeatureAndManyGreetings.feature">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Features\GreetingSystemWithScenarioTitle.feature">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Features\GreetingSystemManyGreetings.feature">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Features\GreetingSystemFailure.feature">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Features\GreetingSystem.feature">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>GreetingSystem1.feature.cs</LastGenOutput>
+    </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Text\TestData\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
       <Visible>False</Visible>

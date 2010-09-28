@@ -195,27 +195,6 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             }
         }
 
-        public class Scenario_Given_step_is_all_text_upto_comment : ScenarioParserSpec
-        {
-            [SetUp]
-            public void Scenario()
-            {
-                string scenario = "Feature: Calculator" + Environment.NewLine +
-                              	   "Scenario: Adding numbers" + Environment.NewLine +
-                                  "  Given numbers 1 and 2" + Environment.NewLine +
-                				  "  # a comment" + Environment.NewLine +
-                                  "  When I add the numbers" + Environment.NewLine +
-                                  "  Then the sum is 3" + Environment.NewLine +
-                                  Environment.NewLine +
-                                  "Scenario: Adding numbers again" + Environment.NewLine +
-                                  "  Given numbers 3 and 5" + Environment.NewLine +
-                                  "  When I add the numbers" + Environment.NewLine +
-                                  "  Then the sum is 8";
-
-                Parse(scenario);
-            }
-        }
-
         public class Scenario_scenario_with_example_table : ScenarioParserSpec
         {
             [SetUp]
