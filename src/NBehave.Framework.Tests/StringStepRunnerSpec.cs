@@ -26,7 +26,7 @@ namespace NBehave.Narrator.Framework.Specifications
             [Specification]
             public void Should_invoke_action_given_a_token_string()
             {
-                bool wasCalled = false;
+                var wasCalled = false;
                 Action<string> action = name => { wasCalled = true; };
                 _actionCatalog.Add(new ActionMethodInfo(new Regex(@"my name is (?<name>\w+)"), action, action.Method, "Given"));
                 _runner.Run(new ActionStepText("Given my name is Morgan", ""));
@@ -36,7 +36,7 @@ namespace NBehave.Narrator.Framework.Specifications
             [Specification]
             public void Should_get_parameter_value_for_action()
             {
-                string actual = string.Empty;
+                var actual = string.Empty;
                 Action<string> action = name => { actual = name; };
                 _actionCatalog.Add(new ActionMethodInfo(new Regex(@"my name is (?<name>\w+)"), action, action.Method, "Given"));
                 _runner.Run(new ActionStepText("Given my name is Morgan", ""));
@@ -46,7 +46,7 @@ namespace NBehave.Narrator.Framework.Specifications
             [Specification]
             public void Should_return_pending_if_action_given_in_token_string_doesnt_exist()
             {
-                ActionStepResult result = _runner.Run(new ActionStepText("Given this doesnt exist", ""));
+                var result = _runner.Run(new ActionStepText("Given this doesnt exist", ""));
                 Assert.That(result.Result, Is.TypeOf(typeof(Pending)));
             }
         }

@@ -45,9 +45,9 @@ namespace NBehave.Narrator.Framework
         public List<string> GetParameterNames()
         {
             var names = new List<string>();
-            int index = 0;
-            string name = ".";
-            Regex regex = ActionStepMatcher;
+            var index = 0;
+            var name = ".";
+            var regex = ActionStepMatcher;
             while (string.IsNullOrEmpty(name) == false)
             {
                 name = regex.GroupNameFromNumber(index);

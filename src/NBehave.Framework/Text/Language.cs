@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -26,7 +27,7 @@ namespace NBehave.Narrator.Framework
         public static IEnumerable<Language> LoadLanguages()
         {
             var ymlParser = new YmlParser();
-            string path = GetFullFileName();
+            var path = GetFullFileName();
             var ymlStream = File.OpenRead(path);
             var yml = ymlParser.Parse(ymlStream);
             var languages = CreateLanguagesList(yml);
@@ -46,7 +47,7 @@ namespace NBehave.Narrator.Framework
 
         private static string GetFullFileName()
         {
-            string directory = Path.GetDirectoryName((new System.Uri(typeof(YmlEntry).Assembly.CodeBase)).LocalPath);
+            var directory = Path.GetDirectoryName((new Uri(typeof(YmlEntry).Assembly.CodeBase)).LocalPath);
             return Path.Combine(directory, "languages.yml");
         }
     }

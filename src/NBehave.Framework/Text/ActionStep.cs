@@ -29,7 +29,7 @@ namespace NBehave.Narrator.Framework
         public ActionStep(IEnumerable<Language> languages, string language)
         {
             _languages = languages;
-            Language languageToUse = _languages.First(_ => _.Lang == language);
+            var languageToUse = _languages.First(_ => _.Lang == language);
             Setup(languageToUse);
         }
 
@@ -84,8 +84,8 @@ namespace NBehave.Narrator.Framework
         private readonly Regex _title = new Regex(@"\s*\w+:?\s+(?<title>.*)", RegexOptions.Compiled);
         public string GetTitle(string actionStep)
         {
-            Match m = _title.Match(actionStep);
-            string t = m.Groups[TitleKey].Value;
+            var m = _title.Match(actionStep);
+            var t = m.Groups[TitleKey].Value;
             return t;
         }
 

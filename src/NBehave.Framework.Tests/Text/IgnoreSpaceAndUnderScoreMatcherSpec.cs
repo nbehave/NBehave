@@ -1,6 +1,5 @@
 ﻿using System;
 using NUnit.Framework;
-using NBehave.Narrator.Framework;
 
 namespace NBehave.Narrator.Framework.Specifications.Text
 {

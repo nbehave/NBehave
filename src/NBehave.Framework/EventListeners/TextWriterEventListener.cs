@@ -62,7 +62,7 @@ namespace NBehave.Narrator.Framework.EventListeners
             _allResults.Add(result);
             foreach (var actionStepResult in result.ActionStepResults)
             {
-                string msg = (actionStepResult.Result is Passed) ? "" : " - " + actionStepResult.Result.ToString().ToUpper();
+                var msg = (actionStepResult.Result is Passed) ? "" : " - " + actionStepResult.Result.ToString().ToUpper();
                 _writer.WriteLine(actionStepResult.StringStep + msg);
             }
         }

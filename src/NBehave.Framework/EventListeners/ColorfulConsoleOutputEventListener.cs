@@ -87,7 +87,7 @@ namespace NBehave.Narrator.Framework.EventListeners
             if (scenarioExampleResult == null)
                 return;
 
-            string columns = "Examples:" + Environment.NewLine+ "|";
+            var columns = "Examples:" + Environment.NewLine+ "|";
             foreach (var columnName in scenarioExampleResult.Examples.First().ColumnNames)
             {
                 columns += columnName + "|";
@@ -95,10 +95,10 @@ namespace NBehave.Narrator.Framework.EventListeners
             WriteColorString(columns, ConsoleColor.Gray);
 
             var scenarioResults = scenarioExampleResult.ExampleResults.ToArray();
-            int idx = 0;
+            var idx = 0;
             foreach (var example in scenarioExampleResult.Examples)
             {
-                string row = "|";
+                var row = "|";
                 foreach (var columnName in example.ColumnNames)
                 {
                     row += example.ColumnValues[columnName] + "|";

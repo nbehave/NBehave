@@ -40,8 +40,8 @@ namespace NBehave.Console
 
             if (options.waitForDebugger)
             {
-                int countdown = 5000;
-                int waitTime = 200;
+                var countdown = 5000;
+                var waitTime = 200;
 
                 while (!Debugger.IsAttached && countdown >= 0)
                 {
@@ -56,7 +56,7 @@ namespace NBehave.Console
                 }
             }
 
-            IEventListener listener = CreateEventListener(options);
+            var listener = CreateEventListener(options);
             var runner = new TextRunner(listener);
             runner.Load(options.scenarioFiles.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
             runner.IsDryRun = options.dryRun;
@@ -73,13 +73,13 @@ namespace NBehave.Console
                 }
             }
 
-            FeatureResults results = runner.Run();
+            var results = runner.Run();
             PrintTimeTaken(t0);
 
             if (options.dryRun)
                 return 0;
 
-            int result = results.NumberOfFailingScenarios > 0 ? 2 : 0;
+            var result = results.NumberOfFailingScenarios > 0 ? 2 : 0;
             if (options.pause)
             {
                 System.Console.WriteLine("Press any key to exit");
@@ -91,10 +91,10 @@ namespace NBehave.Console
 
         private static void PrintTimeTaken(DateTime t0)
         {
-            double timeTaken = DateTime.Now.Subtract(t0).TotalSeconds;
+            var timeTaken = DateTime.Now.Subtract(t0).TotalSeconds;
             if (timeTaken >= 60)
             {
-                int totalMinutes = Convert.ToInt32(Math.Floor(timeTaken / 60));
+                var totalMinutes = Convert.ToInt32(Math.Floor(timeTaken / 60));
                 System.Console.WriteLine("Time Taken {0}m {1:0.#}s", totalMinutes, timeTaken - 60);
             }
             else

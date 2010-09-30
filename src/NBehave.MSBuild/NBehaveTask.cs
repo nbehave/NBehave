@@ -1,11 +1,10 @@
 ﻿using System;
+using System.IO;
 using System.Text;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 using NBehave.Narrator.Framework;
-using System.IO;
 using NBehave.Narrator.Framework.EventListeners;
-
 
 namespace NBehave.MSBuild
 {
@@ -52,7 +51,7 @@ namespace NBehave.MSBuild
 
             WriteHeaderInto(output);
 
-            IEventListener listener = EventListeners.CreateEventListenerUsing(msbuildLogWriter,
+            var listener = EventListeners.CreateEventListenerUsing(msbuildLogWriter,
                                                                               TextOutputFile,
                                                                               XmlOutputFile);
             var runner = new TextRunner(listener) { IsDryRun = DryRun };
@@ -63,7 +62,7 @@ namespace NBehave.MSBuild
             if (DryRun)
                 return true;
 
-            string message = logString.ToString();
+            var message = logString.ToString();
             Log.LogMessage(message);
 
             if (FailBuild && FailBuildBasedOn(FeatureResults))
@@ -74,7 +73,7 @@ namespace NBehave.MSBuild
 
         private void LoadAssemblies(RunnerBase runner)
         {
-            foreach (string path in TestAssemblies)
+            foreach (var path in TestAssemblies)
                 runner.LoadAssembly(path);
         }
 
@@ -92,7 +91,7 @@ namespace NBehave.MSBuild
                 return false;
 
             var exceptionMessage = new StringBuilder();
-            foreach (ScenarioResult result in results.ScenarioResults)
+            foreach (var result in results.ScenarioResults)
             {
                 exceptionMessage.AppendLine(result.Message);
                 exceptionMessage.AppendLine(result.StackTrace);

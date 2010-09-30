@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using NBehave.Narrator.Framework;
+﻿using NBehave.Narrator.Framework;
 using TestDriven.Framework;
 
 namespace NBehave.TestDriven.Plugin

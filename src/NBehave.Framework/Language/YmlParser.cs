@@ -8,14 +8,14 @@ namespace NBehave.Narrator.Framework
         public YmlEntry Parse(Stream stream)
         {
             var root = new YmlEntry("root");
-            ICollection<YmlEntry> categories = root.Values;
-            IEnumerable<string> rows = ReadAllRows(stream);
+            var categories = root.Values;
+            var rows = ReadAllRows(stream);
             YmlEntry parent = null;
-            foreach (string row in rows)
+            foreach (var row in rows)
             {
                 if (row.StartsWith("\""))
                 {
-                    string name = row.Substring(1, row.IndexOf("\"", 1) - 1);
+                    var name = row.Substring(1, row.IndexOf("\"", 1) - 1);
                     parent = new YmlEntry(name);
                     categories.Add(parent);
                 }

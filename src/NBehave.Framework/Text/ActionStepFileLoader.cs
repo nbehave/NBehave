@@ -20,7 +20,7 @@ namespace NBehave.Narrator.Framework
 
             foreach (var location in scenarioLocations)
             {
-                string[] files = GetFiles(location);
+                var files = GetFiles(location);
                 stories.AddRange(LoadFiles(files));
             }
             return stories;
@@ -34,8 +34,8 @@ namespace NBehave.Narrator.Framework
             else
             {
                 var absoluteLocation = GetAbsolutePath(location);
-                string path = Path.GetFileName(absoluteLocation);
-                string pattern = Path.GetDirectoryName(absoluteLocation);
+                var path = Path.GetFileName(absoluteLocation);
+                var pattern = Path.GetDirectoryName(absoluteLocation);
                 files = Directory.GetFiles(pattern, path);
             }
             return files;
@@ -55,7 +55,7 @@ namespace NBehave.Narrator.Framework
             var stories = new List<Feature>();
             foreach (var file in files)
             {
-                IEnumerable<Feature> scenarios = GetScenarios(file);
+                var scenarios = GetScenarios(file);
                 stories.AddRange(scenarios);
             }
             return stories;

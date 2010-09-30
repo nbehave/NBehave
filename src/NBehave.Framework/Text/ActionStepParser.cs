@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text.RegularExpressions;
 
 namespace NBehave.Narrator.Framework
 {
@@ -19,7 +18,7 @@ namespace NBehave.Narrator.Framework
 
         public void FindActionSteps(Assembly assembly)
         {
-            foreach (Type t in assembly.GetExportedTypes())
+            foreach (var t in assembly.GetExportedTypes())
             {
                 if (t.GetCustomAttributes(typeof(ActionStepsAttribute), true).Length > 0)
                 {
@@ -43,9 +42,9 @@ namespace NBehave.Narrator.Framework
         public void FindActionStepMethods(Type actionSteps, object instance)
         {
             var methods = GetMethodsWithActionStepAttribute(actionSteps);
-            foreach (ActionMethodInfo method in methods)
+            foreach (var method in methods)
             {
-                object action = CreateAction(instance, method);
+                var action = CreateAction(instance, method);
                 var m = new ActionMethodInfo(method.ActionStepMatcher, action, method.MethodInfo, method.ActionType, instance);
                 AddFileMatcher(m, instance);
                 _actionCatalog.Add(m);
@@ -64,7 +63,7 @@ namespace NBehave.Narrator.Framework
         private object CreateAction(object instance, ActionMethodInfo method)
         {
             object action = null;
-            MethodInfo methodInfo = method.MethodInfo;
+            var methodInfo = method.MethodInfo;
 
             switch (CountParameters(method))
             {
@@ -141,8 +140,8 @@ namespace NBehave.Narrator.Framework
 
         private IEnumerable<ActionMethodInfo> GetMethodsWithActionStepAttribute(Type actionSteps)
         {
-            IEnumerable<MethodInfo> methodsWithActionStepAttribute = GetAllMethodsWithActionStepAttribute(actionSteps);
-            List<ActionMethodInfo> allMethods = GetAllMethodsWithActionStepAttribute(methodsWithActionStepAttribute);
+            var methodsWithActionStepAttribute = GetAllMethodsWithActionStepAttribute(actionSteps);
+            var allMethods = GetAllMethodsWithActionStepAttribute(methodsWithActionStepAttribute);
             return allMethods;
         }
 
@@ -153,7 +152,7 @@ namespace NBehave.Narrator.Framework
             {
                 foreach (ActionStepAttribute actionStep in method.GetCustomAttributes(typeof(ActionStepAttribute), true))
                 {
-                    ActionMethodInfo actionMethodInfo = BuildActionMethodInfo(actionStep, method);
+                    var actionMethodInfo = BuildActionMethodInfo(actionStep, method);
                     allMethods.Add(actionMethodInfo);
                 }
             }
@@ -184,9 +183,9 @@ namespace NBehave.Narrator.Framework
         {
             if (actionStep.ActionMatch == null)
             {
-                string tokenString = BuildTokenString(method);
-                string tokenStringWithoutFirstWord = tokenString.RemoveFirstWord();
-                Regex actionMatcher = tokenStringWithoutFirstWord.AsRegex();
+                var tokenString = BuildTokenString(method);
+                var tokenStringWithoutFirstWord = tokenString.RemoveFirstWord();
+                var actionMatcher = tokenStringWithoutFirstWord.AsRegex();
                 return new ActionMethodInfo(actionMatcher, null, method, tokenString.GetFirstWord());
             }
 
@@ -195,13 +194,13 @@ namespace NBehave.Narrator.Framework
 
         private string BuildTokenString(MethodInfo method)
         {
-            string methodName = method.Name.Replace('_', ' ');
-            ParameterInfo[] parameters = method.GetParameters();
+            var methodName = method.Name.Replace('_', ' ');
+            var parameters = method.GetParameters();
 
             foreach (var param in parameters)
             {
                 var paramName = param.Name;
-                int pos = methodName.IndexOf(paramName);
+                var pos = methodName.IndexOf(paramName);
                 if (pos > 0)
                     methodName = methodName.Substring(0, pos) + "$" + methodName.Substring(pos);
             }

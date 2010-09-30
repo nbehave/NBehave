@@ -16,7 +16,7 @@ namespace NBehave.Narrator.Framework
 
         private void AddSteps(IEnumerable<StringStep> stringSteps)
         {
-            foreach (StringStep stringStep in stringSteps)
+            foreach (var stringStep in stringSteps)
             {
                 AddActionStepResult(new ActionStepResult(stringStep.Step, new Passed()));
             }
@@ -46,7 +46,7 @@ namespace NBehave.Narrator.Framework
         {
             var actionStepResults = ActionStepResults.ToArray();
 
-            int idx = 0;
+            var idx = 0;
             foreach (var stepResult in result.ActionStepResults)
             {
                 var step = actionStepResults[idx++];

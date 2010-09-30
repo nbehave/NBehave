@@ -18,11 +18,11 @@ namespace NBehave.Examples.GameOfLife
 
         public override string ToString()
         {
-            string board = string.Empty;
+            var board = string.Empty;
 
-            for (int y = 0; y <= _board.GetUpperBound(1); y++)
+            for (var y = 0; y <= _board.GetUpperBound(1); y++)
             {
-                for (int x = 0; x <= _board.GetUpperBound(0); x++)
+                for (var x = 0; x <= _board.GetUpperBound(0); x++)
                 {
                     if (_board[x, y])
                         board += "X";

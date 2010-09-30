@@ -2,7 +2,6 @@
 using System.Reflection;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
-using NBehave.Narrator.Framework;
 using Context = NUnit.Framework.TestFixtureAttribute;
 using Specification = NUnit.Framework.TestAttribute;
 
@@ -25,49 +24,49 @@ namespace NBehave.Narrator.Framework.Specifications
             [Specification]
             public void Should_consider_any_character_in_english_alphabet_as_valid()
             {
-                string message = _actionCatalog.BuildMessage("valid $parameterName", new[] { "parameter" });
+                var message = _actionCatalog.BuildMessage("valid $parameterName", new[] { "parameter" });
                 Assert.AreEqual("valid parameter", message);
             }
 
             [Test]
             public void Should_consider_any_character_in_english_alphabet_mixed_with_numbers_as_valid()
             {
-                string message = _actionCatalog.BuildMessage("valid $parameter1Name2", new[] { "parameter" });
+                var message = _actionCatalog.BuildMessage("valid $parameter1Name2", new[] { "parameter" });
                 Assert.AreEqual("valid parameter", message);
             }
 
             [Test]
             public void Should_consider_any_character_in_english_alphabet_mixed_with_underscore_valid()
             {
-                string message = _actionCatalog.BuildMessage("valid $parameter_Name", new[] { "parameter" });
+                var message = _actionCatalog.BuildMessage("valid $parameter_Name", new[] { "parameter" });
                 Assert.AreEqual("valid parameter", message);
             }
 
             [Test]
             public void Should_not_consider_parameter_name_as_valid_if_it_starts_with_a_number()
             {
-                string message = _actionCatalog.BuildMessage("valid $1parameter1Name2", new[] { "parameter" });
+                var message = _actionCatalog.BuildMessage("valid $1parameter1Name2", new[] { "parameter" });
                 Assert.AreEqual("valid $1parameter1Name2", message);
             }
 
             [Test]
             public void Should_not_consider_space_as_part_of_parameter_name()
             {
-                string message = _actionCatalog.BuildMessage("valid $parameterName it is", new[] { "parameter" });
+                var message = _actionCatalog.BuildMessage("valid $parameterName it is", new[] { "parameter" });
                 Assert.AreEqual("valid parameter it is", message);
             }
 
             [Test]
             public void Should_consider_parameter_name_enclosed_in_square_brackets_as_valid()
             {
-                string message = _actionCatalog.BuildMessage("valid [parameter1Name2]", new[] { "parameter" });
+                var message = _actionCatalog.BuildMessage("valid [parameter1Name2]", new[] { "parameter" });
                 Assert.AreEqual("valid parameter", message);
             }
 
             [Test]
             public void Should_be_able_to_embedd_a_parameter_inside_non_alphabetic_characters()
             {
-                string message = _actionCatalog.BuildMessage("I should see a message, \"$message\"", new[] { "Hello, Morgan" });
+                var message = _actionCatalog.BuildMessage("I should see a message, \"$message\"", new[] { "Hello, Morgan" });
                 Assert.AreEqual("I should see a message, \"Hello, Morgan\"", message);
             }
         }
@@ -79,8 +78,15 @@ namespace NBehave.Narrator.Framework.Specifications
             public void should_consider_the_2_actions_as_equal()
             {
                 var catalog = new ActionCatalog();
-                catalog.Add("my savings account balance is $balance", new object(), GetDummyParameterInfo());
-                bool actionExists = catalog.ActionExists("my savings account balance is 500");
+
+                var action = new ActionMethodInfo(
+                    "my savings account balance is $balance".AsRegex(), 
+                    new object(), 
+                    GetDummyParameterInfo(), 
+                    null);
+                
+                catalog.Add(action);
+                var actionExists = catalog.ActionExists("my savings account balance is 500");
 
                 Assert.That(actionExists, Is.True);
             }
@@ -90,8 +96,14 @@ namespace NBehave.Narrator.Framework.Specifications
             {
                 var catalog = new ActionCatalog();
 
-                catalog.Add("my savings account\nbalance is $balance", new object(), GetDummyParameterInfo());
-                bool actionExists = catalog.ActionExists("my\tsavings account balance is 500");
+                var action = new ActionMethodInfo(
+                    "my savings account\nbalance is $balance".AsRegex(),
+                    new object(),
+                    GetDummyParameterInfo(),
+                    null);
+
+                catalog.Add(action);
+                var actionExists = catalog.ActionExists("my\tsavings account balance is 500");
 
                 Assert.That(actionExists, Is.True);
             }
@@ -101,10 +113,17 @@ namespace NBehave.Narrator.Framework.Specifications
             {
                 var catalog = new ActionCatalog();
 
-                catalog.Add("my savings account balance is $balance", new object(), GetDummyParameterInfo());
-                ActionMethodInfo action = catalog.GetAction(new ActionStepText("my savings account balance is 500", ""));
+                var action = new ActionMethodInfo(
+                    "my savings account balance is $balance".AsRegex(),
+                    new object(),
+                    GetDummyParameterInfo(),
+                    null);
 
-                Assert.That(action, Is.Not.Null);
+                catalog.Add(action);
+
+                var actionResult = catalog.GetAction(new ActionStepText("my savings account balance is 500", ""));
+
+                Assert.That(actionResult, Is.Not.Null);
             }
 
             [Test]
@@ -112,8 +131,16 @@ namespace NBehave.Narrator.Framework.Specifications
             {
                 var catalog = new ActionCatalog();
                 Action<int> action = accountBalance => { };
-                catalog.Add("I have $amount euros on my cash account", action, GetDummyParameterInfo());
-                ActionMethodInfo actionFetched = catalog.GetAction(new ActionStepText("I have 20 euros on my cash account", ""));
+
+                var actionMethodInfo = new ActionMethodInfo(
+                    "I have $amount euros on my cash account".AsRegex(),
+                    action,
+                    action.Method,
+                    null);
+
+                catalog.Add(actionMethodInfo);
+
+                var actionFetched = catalog.GetAction(new ActionStepText("I have 20 euros on my cash account", ""));
 
                 Assert.That(actionFetched, Is.Not.Null);
             }
@@ -142,7 +169,7 @@ namespace NBehave.Narrator.Framework.Specifications
             private void Because_of()
             {
                 var actionText = new ActionStepText("abc def", "somestory.story");
-                ActionMethodInfo action = _actionCatalog.GetAction(actionText);
+                var action = _actionCatalog.GetAction(actionText);
                 (action.Action as Action).Invoke();
             }
 

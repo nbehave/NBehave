@@ -9,8 +9,8 @@ namespace NBehave.Narrator.Framework.EventListeners
     {
         public static IEventListener CreateEventListenerUsing(TextWriter writer, string textWriterFile, string xmlWriterFile)
         {
-            bool useTextWriter = textWriterFile.NotBlank();
-            bool useXmlWriter = xmlWriterFile.NotBlank();
+            var useTextWriter = textWriterFile.NotBlank();
+            var useXmlWriter = xmlWriterFile.NotBlank();
 
             if (useTextWriter && useXmlWriter)
                 return new MultiOutputEventListener(FileOutputEventListener(textWriterFile),
@@ -54,7 +54,7 @@ namespace NBehave.Narrator.Framework.EventListeners
             var settings = new XmlWriterSettings();
             settings.Encoding = Encoding.UTF8;
             settings.Indent = true;
-            XmlWriter writer = XmlWriter.Create(stream, settings);
+            var writer = XmlWriter.Create(stream, settings);
             return new XmlOutputEventListener(writer);
         }
 

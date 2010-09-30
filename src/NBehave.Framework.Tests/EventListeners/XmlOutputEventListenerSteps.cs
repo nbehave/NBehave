@@ -4,7 +4,7 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
 {
     //TODO: Remove
     [ActionSteps]
-    public class XmlOutputEventListenerTestData
+    public class XmlOutputEventListenerSteps
     {
         [Given(@"a string $str")]
         public void a_string(string str)

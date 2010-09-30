@@ -26,9 +26,9 @@ namespace NBehave.Narrator.Framework
         {
             _writer.WriteLine("Scenarios run: {0}, Failures: {1}, Pending: {2}", featureResults.NumberOfScenariosFound,
                               featureResults.NumberOfFailingScenarios, featureResults.NumberOfPendingScenarios);
-            int actionSteps = CountActionSteps(featureResults);
-            int failedSteps = CountFailedActionSteps(featureResults);
-            int pendingSteps = CountPendingActionSteps(featureResults);
+            var actionSteps = CountActionSteps(featureResults);
+            var failedSteps = CountFailedActionSteps(featureResults);
+            var pendingSteps = CountPendingActionSteps(featureResults);
             _writer.WriteLine("Steps {0}, failed {1}, pending {2}", actionSteps, failedSteps, pendingSteps);
         }
 
@@ -38,9 +38,9 @@ namespace NBehave.Narrator.Framework
             {
                 WriteSeparator();
                 _writer.WriteLine("Failures:");
-                int failureNumber = 1;
+                var failureNumber = 1;
 
-                foreach (ScenarioResult result in results.ScenarioResults)
+                foreach (var result in results.ScenarioResults)
                 {
                     if (result.Result.GetType() == typeof(Failed))
                     {
@@ -60,9 +60,9 @@ namespace NBehave.Narrator.Framework
             {
                 WriteSeparator();
                 _writer.WriteLine("Pending:");
-                int pendingNumber = 1;
+                var pendingNumber = 1;
 
-                foreach (ScenarioResult result in results.ScenarioResults)
+                foreach (var result in results.ScenarioResults)
                 {
                     if (result.Result.GetType() == typeof(Pending))
                     {
@@ -111,7 +111,7 @@ namespace NBehave.Narrator.Framework
 
         private int CountActionStepsOfType(FeatureResults featureResults, Type typeOfStep)
         {
-            int sum = 0;
+            var sum = 0;
             foreach (var result in featureResults.ScenarioResults)
             {
                 var toCount = from r in result.ActionStepResults

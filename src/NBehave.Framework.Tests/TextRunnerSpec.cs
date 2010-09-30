@@ -64,7 +64,7 @@ namespace NBehave.Narrator.Framework.Specifications
             public void Should_run_scenarios_in_text_file()
             {
                 _runner.Load(new[] { TestFeatures.GreetingSystem });
-                FeatureResults result = _runner.Run();
+                var result = _runner.Run();
                 Assert.That(result.NumberOfPassingScenarios, Is.EqualTo(1));
             }
             
@@ -72,7 +72,7 @@ namespace NBehave.Narrator.Framework.Specifications
             public void Should_get_result_of_running_scenarios_in_text_file()
             {
                 _runner.Load(new[] { TestFeatures.GreetingSystem });
-                FeatureResults results = _runner.Run();
+                var results = _runner.Run();
                 Assert.That(results.NumberOfThemes, Is.EqualTo(0));
                 Assert.That(results.NumberOfStories, Is.EqualTo(1));
                 Assert.That(results.NumberOfScenariosFound, Is.EqualTo(1));
@@ -83,7 +83,7 @@ namespace NBehave.Narrator.Framework.Specifications
             public void Should_get_correct_errormessage_from_failed_scenario()
             {
                 _runner.Load(new[] { TestFeatures.GreetingSystemFailure });
-                FeatureResults results = _runner.Run();
+                var results = _runner.Run();
                 Assert.That(results.NumberOfFailingScenarios, Is.EqualTo(1));
                 Assert.That(results.ScenarioResults[0].Message.StartsWith("NUnit.Framework.AssertionException :"), Is.True);
             }
@@ -108,7 +108,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 _runner = CreateTextRunner(listener);
                 _runner.LoadAssembly("TestPlainTextAssembly.dll");
                 _runner.Load(new[] { TestFeatures.GreetingSystemManyGreetings });
-                FeatureResults results = _runner.Run();
+                var results = _runner.Run();
                 Assert.That(results.NumberOfScenariosFound, Is.EqualTo(2));
                 Assert.That(results.NumberOfPassingScenarios, Is.EqualTo(2));
             }
@@ -127,7 +127,7 @@ namespace NBehave.Narrator.Framework.Specifications
             public void Should_run_text_scenario_whith_newlines_in_given()
             {
                 _runner.Load(new [] { TestFeatures.GreetingSystemWithNewLinesInGiven });
-                FeatureResults result = _runner.Run();
+                var result = _runner.Run();
                 Assert.That(result.NumberOfPassingScenarios, Is.EqualTo(1));
             }
 
@@ -135,7 +135,7 @@ namespace NBehave.Narrator.Framework.Specifications
             public void Should_set_scenario_pending_if_action_given_in_token_string_doesnt_exist()
             {
                 _runner.Load(new [] { TestFeatures.GreetingSystemWithNoActionSteps });
-                FeatureResults result = _runner.Run();
+                var result = _runner.Run();
                 Assert.That(result.NumberOfPendingScenarios, Is.EqualTo(1));
             }
 
@@ -143,7 +143,7 @@ namespace NBehave.Narrator.Framework.Specifications
             public void Should_list_all_pending_actionSteps()
             {
                 _runner.Load(new [] { TestFeatures.ShouldListAllPendingActionSteps });
-                FeatureResults result = _runner.Run();
+                var result = _runner.Run();
                 StringAssert.Contains("No matching Action found for \"Given something that has no ActionStep\"", result.ScenarioResults[0].Message);
                 StringAssert.Contains("No matching Action found for \"And something else that has no ActionStep\"", result.ScenarioResults[0].Message);
             }
@@ -152,7 +152,7 @@ namespace NBehave.Narrator.Framework.Specifications
             public void Should_use_wildcard_and_run_all_scenarios_in_all_matching_text_files()
             {
                 _runner.Load(new[] { @"Features\\GreetingSystem*.feature" });
-                FeatureResults result = _runner.Run();
+                var result = _runner.Run();
                 Assert.That(result.NumberOfPassingScenarios, Is.EqualTo(10));
             }
         }
@@ -265,7 +265,7 @@ namespace NBehave.Narrator.Framework.Specifications
             [Test]
             public void Should_set_narrative_on_result()
             {
-                string messages = _messages.ToString();
+                var messages = _messages.ToString();
                 StringAssert.Contains("As a project member", messages);
                 StringAssert.Contains("I want", messages);
                 StringAssert.Contains("So that", messages);
@@ -303,7 +303,7 @@ namespace NBehave.Narrator.Framework.Specifications
             [Test]
             public void Should_get_story_narrative()
             {
-                IList<object[]> args = _listener.GetArgumentsForCallsMadeOn(l => l.FeatureNarrative(null), opt => opt.IgnoreArguments());
+                var args = _listener.GetArgumentsForCallsMadeOn(l => l.FeatureNarrative(null), opt => opt.IgnoreArguments());
                 var arg = args[0][0] as string;
                 StringAssert.Contains("As a", arg);
                 StringAssert.Contains("I want", arg);

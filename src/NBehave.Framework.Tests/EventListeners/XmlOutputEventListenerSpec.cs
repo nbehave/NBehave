@@ -151,14 +151,6 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
                 Assert.AreEqual(3, nodes.Count);
             }
 
-            [Test, Ignore("Keep it?")]
-            public void Scenarios_child_node_actionStep_should_Not_be_empty_on_pending_scenario()
-            {
-                var nodes = _xmlDoc.SelectNodes(@"//scenario[@name='Pending scenario']/actionStep");
-                Assert.IsNotNull(nodes[0].InnerText);
-                StringAssert.AreEqualIgnoringCase("Pending: Im not done yet", nodes[0].Attributes["name"].Value);
-            }
-
             [Test]
             public void Should_have_linebreaks_between_nodes()
             {
@@ -170,7 +162,7 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
                 runner.Run();
                 memStream.Seek(0, 0);
                 var xmlAsText = new StreamReader(memStream);
-                string xml = xmlAsText.ReadToEnd();
+                var xml = xmlAsText.ReadToEnd();
                 StringAssert.Contains(">" + Environment.NewLine + "<", xml);
             }
 
@@ -217,7 +209,7 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
                 var nodes = _xmlDoc.SelectNodes(@"//story[@name='Example']/scenarios/scenario[@name='SC1']/actionStep");
                 Assert.IsNotNull(nodes);
                 Assert.AreEqual(3, nodes.Count);
-                for (int i = 0; i < 3; i++)
+                for (var i = 0; i < 3; i++)
                 {
                     Assert.That(nodes[i].Attributes["name"].Value, Is.EqualTo(expectedNodes[i]));
                 }

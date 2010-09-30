@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Linq;
+using System.Reflection;
 
 namespace NBehave.Narrator.Framework
 {
@@ -41,7 +41,7 @@ namespace NBehave.Narrator.Framework
 				var scenarios = feature.Scenarios.Where(scenarioPredicate);
 			    var scenarioStepRunner = new ScenarioStepRunner();
 
-				IEnumerable<ScenarioResult> scenarioResults = scenarioStepRunner.Run(scenarios);
+				var scenarioResults = scenarioStepRunner.Run(scenarios);
 				AddScenarioResultsToStoryResults(scenarioResults, featureResults);
 				featureResults.NumberOfStories++;
 			}

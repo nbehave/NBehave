@@ -38,8 +38,8 @@ namespace NBehave.Spec.NUnit.Specs
         [Specification]
         public void Should_allow_substitution_for_AreNotEqual()
         {
-            int i = 5;
-            int j = 6;
+            var i = 5;
+            var j = 6;
 
             i.ShouldNotEqual(j);
         }
@@ -57,7 +57,7 @@ namespace NBehave.Spec.NUnit.Specs
         public void Should_allow_substitution_for_AreSame()
         {
             object test1 = "blarg";
-            object test2 = test1;
+            var test2 = test1;
 
             test2.ShouldBeTheSameAs(test1);
         }
@@ -231,14 +231,14 @@ namespace NBehave.Spec.NUnit.Specs
         [Specification]
         public void Should_allow_substitution_for_ShouldContain_for_string()
         {
-            string str = "Hello";
+            var str = "Hello";
             str.ShouldContain("Hell");
         }
 
         [Specification, ExpectedException(typeof(AssertionException))]
         public void Should_allow_substitution_for_ShouldContain_for_string_failing()
         {
-            string str = "Hello";
+            var str = "Hello";
             str.ShouldContain("Foo");
         }
     }
@@ -354,7 +354,7 @@ namespace NBehave.Spec.NUnit.Specs
         [Specification]
         public void Should_return_exception_thrown_from_action()
         {
-            Exception exception = new Action(() => { throw new ArgumentException(); }).GetException();
+            var exception = new Action(() => { throw new ArgumentException(); }).GetException();
 
             exception.ShouldBeInstanceOfType<ArgumentException>();
         }

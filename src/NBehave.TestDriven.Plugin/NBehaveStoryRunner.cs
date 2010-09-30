@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-
 using NBehave.Narrator.Framework;
 using TestDriven.Framework;
 
@@ -40,7 +38,7 @@ namespace NBehave.TestDriven.Plugin
                             };
 
             var type = member as Type;
-            IEnumerable<string> stories = (type == null)
+            var stories = (type == null)
                                       ? locator.LocateAllStories() 
                                       : locator.LocateStoriesMatching(type);
             
@@ -48,14 +46,14 @@ namespace NBehave.TestDriven.Plugin
             _runner.StoryRunnerFilter = StoryRunnerFilter.GetFilter(member);
             _runner.LoadAssembly(assembly);
 
-            FeatureResults results = _runner.Run();
+            var results = _runner.Run();
 
             return GetTestRunState(results);
         }
 
         private static TestRunState GetTestRunState(FeatureResults results)
         {
-            TestRunState state = TestRunState.Success;
+            var state = TestRunState.Success;
             if (results.NumberOfFailingScenarios > 0)
                 state = TestRunState.Failure;
             if (results.NumberOfScenariosFound == 0)

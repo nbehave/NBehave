@@ -1,7 +1,7 @@
 using System;
-using Context = MbUnit.Framework.TestFixtureAttribute;
 using NBehave.Narrator.Framework;
 using NBehave.Spec.Extensions;
+using Context = MbUnit.Framework.TestFixtureAttribute;
 
 namespace NBehave.Spec.MbUnit.Specs
 {

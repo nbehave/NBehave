@@ -1,7 +1,7 @@
 using System;
 using NBehave.Narrator.Framework;
-using NBehave.Spec.Xunit;
 using NBehave.Spec.Extensions;
+using NBehave.Spec.Xunit;
 
 namespace Xunit.SpecBase_Specifications
 {

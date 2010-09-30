@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.IO;
+using System.Linq;
 
 namespace NBehave.TestDriven.Plugin
 {
@@ -74,7 +74,7 @@ namespace NBehave.TestDriven.Plugin
 
         public void VisitDirectory(DirectoryInfo directory)
         {
-            _locatedStories.AddRange(Extensions.Select(x => directory.GetFiles(x))
+            _locatedStories.AddRange(Extensions.Select(directory.GetFiles)
                                                .SelectMany(files => files.AsEnumerable())
                                                .Select(file => file.FullName));
         }

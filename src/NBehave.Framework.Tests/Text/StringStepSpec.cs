@@ -25,7 +25,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             [Test]
             public void same_ref_should_be_equal()
             {
-                StringStep s = CreateInstance("Foo");
+                var s = CreateInstance("Foo");
                 Assert.That(s.Equals(s), Is.True);
             }
 

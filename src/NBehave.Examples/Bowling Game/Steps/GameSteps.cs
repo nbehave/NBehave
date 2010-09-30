@@ -19,7 +19,7 @@ namespace NBehave.Examples.Bowling_Game.Specs
         [When(@"the rest of my $rolls rolls are $pins")]
         public void RollMany(int rolls, int pins)
         {
-            for (int i = 0; i < rolls; i++)
+            for (var i = 0; i < rolls; i++)
             {
                 _game.Roll(pins);
             }

@@ -55,7 +55,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             [SetUp]
             public void Scenario()
             {
-                string scenario = "  Given numbers 1 and 2" + Environment.NewLine +
+                var scenario = "  Given numbers 1 and 2" + Environment.NewLine +
                                   "  When I add the numbers" + Environment.NewLine +
                                   "  Then the sum is 3";
 
@@ -68,7 +68,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             [SetUp]
             public void Scenario()
             {
-                string scenario = "Scenario: Adding numbers" + Environment.NewLine +
+                var scenario = "Scenario: Adding numbers" + Environment.NewLine +
                                   "  Given numbers 1 and 2" + Environment.NewLine +
                                   "  When I add the numbers" + Environment.NewLine +
                                   "  Then the sum is 3";
@@ -94,7 +94,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             [SetUp]
             public void Scenario()
             {
-                string scenario = "Scenario: Adding numbers" + Environment.NewLine +
+                var scenario = "Scenario: Adding numbers" + Environment.NewLine +
                                   "  Given numbers 1 and 2" + Environment.NewLine +
                                   "  When I add the numbers" + Environment.NewLine +
                                   "  Then the sum is 3" + Environment.NewLine +
@@ -126,7 +126,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             [SetUp]
             public void Scenario()
             {
-                string scenario = "Feature: Calculator" + Environment.NewLine +
+                var scenario = "Feature: Calculator" + Environment.NewLine +
                                   "Scenario: Adding numbers" + Environment.NewLine +
                                   "  Given numbers 1 and 2" + Environment.NewLine +
                                   "  When I add the numbers" + Environment.NewLine +
@@ -158,7 +158,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             [SetUp]
             public void Scenario()
             {
-                string scenario = "Feature: Calculator" + Environment.NewLine +
+                var scenario = "Feature: Calculator" + Environment.NewLine +
                                   "  This is the narrative" + Environment.NewLine +
                                   "  This is second row of narrative" + Environment.NewLine +
                                   "Scenario: Adding numbers" + Environment.NewLine +
@@ -200,7 +200,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             [SetUp]
             public void Scenario()
             {
-                string scenario = "Scenario: Adding numbers" + Environment.NewLine +
+                var scenario = "Scenario: Adding numbers" + Environment.NewLine +
                                   "  Given numbers [left] and [right]" + Environment.NewLine +
                                   "  When I add the numbers" + Environment.NewLine +
                                   "  Then the sum is [sum]" + Environment.NewLine +
@@ -251,7 +251,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             [SetUp]
             public void Scenario()
             {
-                string scenario = "  Given the following people exists:" + Environment.NewLine +
+                var scenario = "  Given the following people exists:" + Environment.NewLine +
                                   "  |Name          |Country|" + Environment.NewLine +
                                   "  |Morgan Persson|Sweden |" + Environment.NewLine +
                                   "  |Jimmy Nilsson |Sweden |" + Environment.NewLine +
@@ -305,7 +305,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             [SetUp]
             public void Scenario()
             {
-                string scenario = "Feature: Calculator 1" + Environment.NewLine +
+                var scenario = "Feature: Calculator 1" + Environment.NewLine +
                                   "Scenario: Adding numbers 1" + Environment.NewLine +
                                   "  Given numbers 1 and 2" + Environment.NewLine +
                                   "  When I add the numbers" + Environment.NewLine +

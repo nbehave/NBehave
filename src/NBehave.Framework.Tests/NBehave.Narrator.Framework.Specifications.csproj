@@ -121,7 +121,7 @@
     <Compile Include="ParameterConverterSpec.cs" />
     <Compile Include="StringExtensionsSpec.cs" />
     <Compile Include="StringStepRunnerSpec.cs" />
-    <Compile Include="EventListeners\XmlOutputEventListenerTestData.cs" />
+    <Compile Include="EventListeners\XmlOutputEventListenerSteps.cs" />
     <Compile Include="EventListeners\XmlOutputWriterSpec.cs" />
     <Compile Include="SummaryWriterSpec.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

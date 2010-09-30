@@ -12,7 +12,7 @@ namespace NBehave.Narrator.Framework.Specifications
         public void Establish_context()
         {
             var lang = new List<Language>();
-            Language en = BuildEnglish();
+            var en = BuildEnglish();
             lang.Add(en);
             _actionStep = new ActionStep(lang);
         }

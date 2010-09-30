@@ -42,7 +42,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
                 exampleResult.AddActionStepResult(new ActionStepResult(step, new Pending("step is pending")));
                 _scenarioExampleResult.AddResult(exampleResult);
 
-                ActionStepResult actionStepResult = _scenarioExampleResult.ActionStepResults.First();
+                var actionStepResult = _scenarioExampleResult.ActionStepResults.First();
                 Assert.That(actionStepResult.Result, Is.TypeOf(typeof(Pending)));
                 StringAssert.StartsWith("step is pending", actionStepResult.Message);
             }

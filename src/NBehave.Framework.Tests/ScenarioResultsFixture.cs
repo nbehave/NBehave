@@ -86,7 +86,7 @@ namespace NBehave.Narrator.Framework.Specifications
 
             _results.Fail(ex);
 
-            string expected = ex.StackTrace + "\r\n--ApplicationException\r\n" + ex.InnerException.StackTrace;
+            var expected = ex.StackTrace + "\r\n--ApplicationException\r\n" + ex.InnerException.StackTrace;
 
             Assert.That(_results.StackTrace, Is.EqualTo(expected));
         }
@@ -98,7 +98,7 @@ namespace NBehave.Narrator.Framework.Specifications
             var ex = new Exception("bad thing happened!");
             _results.Fail(ex);
 
-            string expected = "not done" + Environment.NewLine + "System.Exception : bad thing happened!";
+            var expected = "not done" + Environment.NewLine + "System.Exception : bad thing happened!";
             Assert.That(_results.Message, Is.EqualTo(expected));
         }
     }

@@ -1,5 +1,5 @@
-﻿using Rhino.Mocks;
-using NBehave.Spec.Xunit;
+﻿using NBehave.Spec.Xunit;
+using Rhino.Mocks;
 
 namespace Xunit.SpecBase_Specifications
 {

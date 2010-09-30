@@ -1,7 +1,6 @@
-﻿using NBehave.Spec.NUnit;
+﻿using System.Collections.Generic;
 using NBehave.Narrator.Framework;
-
-using System.Collections.Generic;
+using NBehave.Spec.NUnit;
 
 namespace TestPlainTextAssembly
 {

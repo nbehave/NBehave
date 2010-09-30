@@ -34,14 +34,14 @@ namespace NBehave.Narrator.Framework.Specifications
             [Specification]
             public void Should_find_action_using_first_actionStep_attribute_match()
             {
-                ActionMethodInfo action = _actionCatalog.GetAction(new ActionStepText("one", ""));
+                var action = _actionCatalog.GetAction(new ActionStepText("one", ""));
                 Assert.That(action, Is.Not.Null);
             }
 
             [Specification]
             public void Should_find_action_using_second_actionStep_attribute_match()
             {
-                ActionMethodInfo action = _actionCatalog.GetAction(new ActionStepText("two", ""));
+                var action = _actionCatalog.GetAction(new ActionStepText("two", ""));
                 Assert.That(action, Is.Not.Null);
             }
         }
@@ -121,7 +121,7 @@ namespace NBehave.Narrator.Framework.Specifications
             [Specification]
             public void Should_match_parameters_in_tokenString_to_method_parameters()
             {
-                ActionMethodInfo action = _actionCatalog.GetAction(new ActionStepText("a method with tokenstring and two parameters, one int value 42 plus text thistext", ""));
+                var action = _actionCatalog.GetAction(new ActionStepText("a method with tokenstring and two parameters, one int value 42 plus text thistext", ""));
 
                 Assert.That(action.ParameterInfo.GetLength(0), Is.EqualTo(2));
                 Assert.That(action.ParameterInfo[0].ParameterType.Name, Is.EqualTo(typeof(int).Name));
@@ -187,14 +187,14 @@ namespace NBehave.Narrator.Framework.Specifications
             [Specification]
             public void Should_match_filename()
             {
-                ActionStepText actionStepText = new ActionStepText("something", FileNameToMatch);
+                var actionStepText = new ActionStepText("something", FileNameToMatch);
                 Assert.IsTrue(_actionCatalog.ActionExists(actionStepText));
             }
 
             [Specification]
             public void Should_call_IsMatch_on_interface_with_correct_fileName()
             {
-                ActionStepText actionStepText = new ActionStepText("Given something", FileNameToMatch);
+                var actionStepText = new ActionStepText("Given something", FileNameToMatch);
                 _actionCatalog.ActionExists(actionStepText);
                 Assert.That(_wasCalledWithFileName, Is.EqualTo(FileNameToMatch));
             }
@@ -228,7 +228,7 @@ namespace NBehave.Narrator.Framework.Specifications
             [Specification]
             public void Should_find_action_using_first_actionStep_attribute_match()
             {
-                ActionMethodInfo action = _actionCatalog.GetAction(new ActionStepText("one abstract", ""));
+                var action = _actionCatalog.GetAction(new ActionStepText("one abstract", ""));
                 Assert.That(action, Is.Not.Null);
             }
         }

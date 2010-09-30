@@ -1,6 +1,5 @@
-﻿using System.Text.RegularExpressions;
-using System.Reflection;
-
+﻿using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace NBehave.Narrator.Framework
 {
@@ -24,9 +23,9 @@ namespace NBehave.Narrator.Framework
 
         public static StoryRunnerFilter GetFilter(MemberInfo member)
         {
-            string nsFilter = ".";
-            string clsFilter = ".";
-            string memberNameFilter = ".";
+            var nsFilter = ".";
+            var clsFilter = ".";
+            var memberNameFilter = ".";
             if (member != null)
             {
                 switch (member.MemberType)

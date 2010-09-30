@@ -21,15 +21,15 @@ namespace NBehave.Narrator.Framework
         public IEnumerable<Feature> Parse(Stream stream)
         {
             var reader = new StreamReader(stream);
-            string scenarioText = reader.ReadToEnd();
+            var scenarioText = reader.ReadToEnd();
             ParseLanguage(scenarioText);
             return ParseScenario(scenarioText);
         }
 
         private void ParseLanguage(string scenarioText)
         {
-            string language = ActionStep.DefaultLanguage;
-            string trimmed = scenarioText.TrimStart(_whiteSpaceChars);
+            var language = ActionStep.DefaultLanguage;
+            var trimmed = scenarioText.TrimStart(_whiteSpaceChars);
             var lang = new Regex(@"^# language:\s+(?<language>\w+)\s+");
             var matches = lang.Match(trimmed);
             if (matches.Success)
@@ -46,7 +46,7 @@ namespace NBehave.Narrator.Framework
 
             while (scenarioText.Length > 0 && scenarioText.Trim().Length > 0)
             {
-                string step = GetNextStep(scenarioText);
+                var step = GetNextStep(scenarioText);
                 if (step.Length > 0)
                 {
                     if (_actionStep.IsFeatureTitle(step))
@@ -97,11 +97,11 @@ namespace NBehave.Narrator.Framework
         {
             if (HasTable(step))
             {
-                List<Example> table = ParseTable(step);
+                var table = ParseTable(step);
                 var endOfStep = step.IndexOf('|');
-                string stepToMatch = step.Substring(0, endOfStep - 1).TrimEnd(_whiteSpaceChars);
+                var stepToMatch = step.Substring(0, endOfStep - 1).TrimEnd(_whiteSpaceChars);
                 var theStep = new StringTableStep(stepToMatch, scenario.Source, _stringStepRunner);
-                foreach (Example row in table)
+                foreach (var row in table)
                 {
                     theStep.AddTableStep(new Row(row.ColumnNames, row.ColumnValues));
                 }
@@ -119,8 +119,8 @@ namespace NBehave.Narrator.Framework
 
         private List<Example> ParseTable(string step)
         {
-            ExampleColumns columnNames = ReadTableColumnNames(step);
-            string tableWithValues = GetTableWithValues(step);
+            var columnNames = ReadTableColumnNames(step);
+            var tableWithValues = GetTableWithValues(step);
             var rowsWithColumnValues = ReadTableColumnValues(tableWithValues, columnNames);
 
             var examples = new List<Example>();
@@ -135,7 +135,7 @@ namespace NBehave.Narrator.Framework
         private ExampleColumns ReadTableColumnNames(string tableWithColumns)
         {
             var listOfColumnNames = new ExampleColumns();
-            string tableHeader = GetTableHeader(tableWithColumns);
+            var tableHeader = GetTableHeader(tableWithColumns);
             var columnNames = new Regex(@"[^\|]+");
             foreach (Match columnName in columnNames.Matches(tableHeader))
                 listOfColumnNames.Add(columnName.Value.Trim().ToLower());
@@ -150,9 +150,9 @@ namespace NBehave.Narrator.Framework
 
         private string GetTableHeader(string table)
         {
-            int tableHeaderStart = table.IndexOf('|');
-            int tableHeaderEnd = table.IndexOf(Environment.NewLine, tableHeaderStart);
-            string tableHeader = table.Substring(tableHeaderStart, tableHeaderEnd - tableHeaderStart - 1).Trim();
+            var tableHeaderStart = table.IndexOf('|');
+            var tableHeaderEnd = table.IndexOf(Environment.NewLine, tableHeaderStart);
+            var tableHeader = table.Substring(tableHeaderStart, tableHeaderEnd - tableHeaderStart - 1).Trim();
             return tableHeader;
         }
 
@@ -163,15 +163,15 @@ namespace NBehave.Narrator.Framework
             var columnMatch = new Regex(@"[^\|]+");
             while (tableWithValues.Length > 0)
             {
-                string row = rowMatch.Match(tableWithValues).Value.Trim();
+                var row = rowMatch.Match(tableWithValues).Value.Trim();
                 if (string.IsNullOrEmpty(row) == false)
                 {
-                    MatchCollection columns = columnMatch.Matches(row);
+                    var columns = columnMatch.Matches(row);
 
                     var d = new Dictionary<string, string>();
-                    for (int i = 0; i < columnNames.Count(); i++)
+                    for (var i = 0; i < columnNames.Count(); i++)
                     {
-                        string value = columns[i].Value;
+                        var value = columns[i].Value;
                         d.Add(columnNames[i], value);
                     }
                     columnValues.Add(d);
@@ -191,7 +191,7 @@ namespace NBehave.Narrator.Framework
 
         private Feature CreateFeature(string step)
         {
-            string[] rows = Split(step);
+            var rows = Split(step);
             var feature = new Feature
                               {
                                   Title = _actionStep.GetTitle(rows.First()),
@@ -202,18 +202,18 @@ namespace NBehave.Narrator.Framework
 
         private string RemoveStep(string scenarioText, string step)
         {
-            int idx = scenarioText.IndexOf(step);
+            var idx = scenarioText.IndexOf(step);
             return scenarioText.Remove(0, step.Length + idx);
         }
 
         private string GetNextStep(string scenario)
         {
-            string regexString = BuildRegexString(); //Optimize
+            var regexString = BuildRegexString(); //Optimize
             var regex = new Regex(regexString, RegexOptions.IgnoreCase);
             //scenario = scenario.Trim(_whiteSpaceChars);
 
-            string[] actionRows = RemoveComments(Split(scenario));
-            int firstActionWordRow = FindRowForFirstStepWord(actionRows, regex);
+            var actionRows = RemoveComments(Split(scenario));
+            var firstActionWordRow = FindRowForFirstStepWord(actionRows, regex);
             var secondActionWordRow = FindRowForNextStepWord(actionRows, regex, firstActionWordRow + 1);
             string actionRow;
             if (actionRows.Length == 1 && secondActionWordRow == 0 && regex.IsMatch(actionRows[0]))
@@ -230,8 +230,8 @@ namespace NBehave.Narrator.Framework
 
         private string BuildActionStep(string[] rows, int startRow, int endRow)
         {
-            string actionRow = string.Empty;
-            for (int row = startRow; row < endRow; row++)
+            var actionRow = string.Empty;
+            for (var row = startRow; row < endRow; row++)
             {
                 actionRow += rows[row] + Environment.NewLine;
             }
@@ -245,7 +245,7 @@ namespace NBehave.Narrator.Framework
 
         private int FindRowForNextStepWord(string[] rows, Regex regex, int startAtRow)
         {
-            int row = startAtRow;
+            var row = startAtRow;
             while (row < rows.Length && regex.IsMatch(rows[row]) == false)
                 row++;
             if (row == rows.Length && regex.IsMatch(rows[row - 1]))
@@ -255,8 +255,8 @@ namespace NBehave.Narrator.Framework
 
         private string BuildRegexString()
         {
-            string regex = @"^\s*(";
-            IEnumerable<string> allWords = _actionStep.AllWords;
+            var regex = @"^\s*(";
+            var allWords = _actionStep.AllWords;
             foreach (var alias in allWords)
             {
                 regex += alias + "|";
@@ -267,12 +267,12 @@ namespace NBehave.Narrator.Framework
 
         private string[] Split(string text)
         {
-            StreamWriter sw = WriteTextToStream(text);
+            var sw = WriteTextToStream(text);
             var stream = new StreamReader(sw.BaseStream);
             var rows = new List<string>();
             while (stream.EndOfStream == false)
             {
-                string row = stream.ReadLine();
+                var row = stream.ReadLine();
                 if (string.IsNullOrEmpty(row.Trim(_whiteSpaceChars)) == false)
                     rows.Add(row);
             }

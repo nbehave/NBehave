@@ -4,7 +4,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ExpectedExceptionNUnit = NUnit.Framework.ExpectedExceptionAttribute;
 using Context = NUnit.Framework.TestFixtureAttribute;
 using Specification = NUnit.Framework.TestAttribute;
-using NBehave.Spec.MSTest;
 
 namespace NBehave.Spec.MSTest.Specs
 {
@@ -51,7 +50,7 @@ namespace NBehave.Spec.MSTest.Specs
         public void Should_allow_substitution_for_AreSame()
         {
             object test1 = "blarg";
-            object test2 = test1;
+            var test2 = test1;
 
             test1.ShouldBeTheSameAs(test2);
         }
@@ -161,7 +160,7 @@ namespace NBehave.Spec.MSTest.Specs
         [Specification]
         public void Should_return_exception_thrown_from_action()
         {
-            Exception exception = new Action(() => { throw new ArgumentException(); }).GetException();
+            var exception = new Action(() => { throw new ArgumentException(); }).GetException();
 
             exception.ShouldBeInstanceOfType<ArgumentException>();
         }
@@ -255,14 +254,14 @@ namespace NBehave.Spec.MSTest.Specs
         [Specification]
         public void Should_allow_substitution_for_ShouldContain_for_string()
         {
-            string str = "Hello";
+            var str = "Hello";
             str.ShouldContain("Hell");
         }
 
         [Specification, ExpectedExceptionNUnit(typeof(AssertFailedException))]
         public void Should_allow_substitution_for_ShouldContain_for_string_failing()
         {
-            string str = "Hello";
+            var str = "Hello";
             str.ShouldContain("Foo");
         }
     }
