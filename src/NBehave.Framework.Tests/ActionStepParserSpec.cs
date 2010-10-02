@@ -1,28 +1,24 @@
 using NUnit.Framework;
-using Context = NUnit.Framework.TestFixtureAttribute;
-using Specification = NUnit.Framework.TestAttribute;
 
 namespace NBehave.Narrator.Framework.Specifications
 {
-    [Context]
+    [TestFixture]
     public class ActionStepParserSpec
     {
         private ActionStepParser _actionStepParser;
         private ActionCatalog _actionCatalog;
         private StoryRunnerFilter _storyRunnerFilter = new StoryRunnerFilter(".", ".", ".");
-        private ParameterConverter _parameterConverter;
 
         [SetUp]
         public virtual void SetUp()
         {
             _actionCatalog = new ActionCatalog();
-            _parameterConverter = new ParameterConverter(_actionCatalog);
             _actionStepParser = new ActionStepParser(_storyRunnerFilter, _actionCatalog);
             _actionStepParser.FindActionSteps(GetType().Assembly);
         }
 
-        [Context, ActionSteps]
-        public class When_having_ActionStepAttribute_multiple_times_on_same_method : ActionStepParserSpec
+        [TestFixture, ActionSteps]
+        public class WhenHavingActionStepAttributeMultipleTimesOnSameMethod : ActionStepParserSpec
         {
             [Given("one")]
             [Given("two")]
@@ -31,24 +27,25 @@ namespace NBehave.Narrator.Framework.Specifications
                 Assert.IsTrue(true);
             }
 
-            [Specification]
-            public void Should_find_action_using_first_actionStep_attribute_match()
+            [Test]
+            public void ShouldFindActionUsingFirstActionStepAttributeMatch()
             {
                 var action = _actionCatalog.GetAction(new ActionStepText("one", ""));
                 Assert.That(action, Is.Not.Null);
             }
 
-            [Specification]
-            public void Should_find_action_using_second_actionStep_attribute_match()
+            [Test]
+            public void ShouldFindActionUsingSecondActionStepAttributeMatch()
             {
                 var action = _actionCatalog.GetAction(new ActionStepText("two", ""));
                 Assert.That(action, Is.Not.Null);
             }
         }
 
-        [Context, ActionSteps]
-        public class When_having_ActionStepAttribute_without_tokenString : ActionStepParserSpec
+        [TestFixture, ActionSteps]
+        public class WhenHavingActionStepAttributeWithoutTokenString : ActionStepParserSpec
         {
+            // ReSharper disable InconsistentNaming
             [Given]
             public void Given_a_method_with_no_parameters()
             {
@@ -70,9 +67,10 @@ namespace NBehave.Narrator.Framework.Specifications
             [Then]
             public void Then_using_ThenAttribute_with_no_regex()
             { }
+            // ReSharper restore InconsistentNaming
 
-            [Specification]
-            public void Should_find_given_step_with_GivenAttribute()
+            [Test]
+            public void ShouldFindGivenStepWithGivenAttribute()
             {
                 var actionStepToFind = new ActionStepText("using GivenAttribute with no regex", "file");
                 var action = _actionCatalog.GetAction(actionStepToFind);
@@ -80,8 +78,8 @@ namespace NBehave.Narrator.Framework.Specifications
                 Assert.That(action.ActionStepMatcher.ToString(), Is.EqualTo(@"^using\s+GivenAttribute\s+with\s+no\s+regex\s*$"));
             }
 
-            [Specification]
-            public void Should_find_when_step_with_WhenAttribute()
+            [Test]
+            public void ShouldFindWhenStepWithWhenAttribute()
             {
                 var actionStepToFind = new ActionStepText("using WhenAttribute with no regex", "file");
                 var action = _actionCatalog.GetAction(actionStepToFind);
@@ -89,8 +87,8 @@ namespace NBehave.Narrator.Framework.Specifications
                 Assert.That(action.ActionStepMatcher.ToString(), Is.EqualTo(@"^using\s+WhenAttribute\s+with\s+no\s+regex\s*$"));
             }
 
-            [Specification]
-            public void Should_find_then_step_with_ThenAttribute()
+            [Test]
+            public void ShouldFindThenStepWithThenAttribute()
             {
                 var actionStepToFind = new ActionStepText("using ThenAttribute with no regex", "file");
                 var action = _actionCatalog.GetAction(actionStepToFind);
@@ -99,11 +97,11 @@ namespace NBehave.Narrator.Framework.Specifications
             }
         }
 
-        [Context, ActionSteps]
-        public class When_having_ActionStepAttribute_with_tokenString : ActionStepParserSpec
+        [TestFixture, ActionSteps]
+        public class WhenHavingActionStepAttributeWithTokenString : ActionStepParserSpec
         {
             [Given("a method with tokenstring and two parameters, one int value $intParam plus text $stringParam")]
-            public void Given_a_method_with_a_value_intParam_plus_text_stringParam(int intParam, string stringParam)
+            public void GivenAMethodWithAValueIntParamPlusTextStringParam(int intParam, string stringParam)
             { }
 
             [Given("a method with \"embedded\" parameter like \"$param\" should work")]
@@ -118,8 +116,8 @@ namespace NBehave.Narrator.Framework.Specifications
 
             }
 
-            [Specification]
-            public void Should_match_parameters_in_tokenString_to_method_parameters()
+            [Test]
+            public void ShouldMatchParametersInTokenStringToMethodParameters()
             {
                 var action = _actionCatalog.GetAction(new ActionStepText("a method with tokenstring and two parameters, one int value 42 plus text thistext", ""));
 
@@ -128,8 +126,8 @@ namespace NBehave.Narrator.Framework.Specifications
                 Assert.That(action.ParameterInfo[1].ParameterType.Name, Is.EqualTo(typeof(string).Name));
             }
 
-            [Specification]
-            public void Should_find_given_step_with_GivenAttribute()
+            [Test]
+            public void ShouldFindGivenStepWithGivenAttribute()
             {
                 var actionStepToFind = new ActionStepText("a method with tokenstring and two parameters, one int value 42 plus text thistext", "file");
                 var action = _actionCatalog.GetAction(actionStepToFind);
@@ -137,8 +135,8 @@ namespace NBehave.Narrator.Framework.Specifications
                 Assert.That(action.ActionStepMatcher.ToString(), Is.EqualTo(@"^a\s+method\s+with\s+tokenstring\s+and\s+two\s+parameters,\s+one\s+int\s+value\s+(?<intParam>.+)\s+plus\s+text\s+(?<stringParam>.+)\s*$"));
             }
 
-            [Specification]
-            public void Should_find_given_with_embedded_param()
+            [Test]
+            public void ShouldFindGivenWithEmbeddedParam()
             {
                 var actionStepToFind = new ActionStepText("a method with \"embedded\" parameter like \"this\" should work", "file");
                 var action = _actionCatalog.GetAction(actionStepToFind);
@@ -146,16 +144,16 @@ namespace NBehave.Narrator.Framework.Specifications
             }
 
 
-            [Specification]
-            public void Should_match_short_text_against_the_restricted_length_parameter()
+            [Test]
+            public void ShouldMatchShortTextAgainstTheRestrictedLengthParameter()
             {
                 var actionStepToFind = new ActionStepText("a length restriction on the \"txt\" should work", "file");
                 var action = _actionCatalog.GetAction(actionStepToFind);
                 Assert.That(action, Is.Not.Null);
             }
 
-            [Specification]
-            public void Should_not_match_long_text_against_the_restricted_length_parameter()
+            [Test]
+            public void ShouldNotMatchLongTextAgainstTheRestrictedLengthParameter()
             {
                 var actionStepToFind = new ActionStepText("a length restriction on the \"supplied value\" should work", "file");
                 var action = _actionCatalog.GetAction(actionStepToFind);
@@ -163,11 +161,11 @@ namespace NBehave.Narrator.Framework.Specifications
             }
         }
 
-        [Context, ActionSteps]
-        public class When_class_with_actionSteps_attribute_implements_IMatchFiles : ActionStepParserSpec, IMatchFiles, IFileMatcher
+        [TestFixture, ActionSteps]
+        public class WhenClassWithActionStepsAttributeImplementsIMatchFiles : ActionStepParserSpec, IMatchFiles, IFileMatcher
         {
             [Given(@"something$")]
-            public void Given_something()
+            public void GivenSomething()
             { }
 
             const string FileNameToMatch = "FileNameToMatch";
@@ -184,15 +182,15 @@ namespace NBehave.Narrator.Framework.Specifications
                 return FileNameToMatch.Equals(fileName);
             }
 
-            [Specification]
-            public void Should_match_filename()
+            [Test]
+            public void ShouldMatchFilename()
             {
                 var actionStepText = new ActionStepText("something", FileNameToMatch);
                 Assert.IsTrue(_actionCatalog.ActionExists(actionStepText));
             }
 
-            [Specification]
-            public void Should_call_IsMatch_on_interface_with_correct_fileName()
+            [Test]
+            public void ShouldCallIsMatchOnInterfaceWithCorrectFileName()
             {
                 var actionStepText = new ActionStepText("Given something", FileNameToMatch);
                 _actionCatalog.ActionExists(actionStepText);
@@ -201,8 +199,8 @@ namespace NBehave.Narrator.Framework.Specifications
         }
 
 
-        [Context]
-        public class When_having_ActionStepAttribute_on_abstract_class : ActionStepParserSpec
+        [TestFixture]
+        public class WhenHavingActionStepAttributeOnAbstractClass : ActionStepParserSpec
         {
             [ActionSteps]
             public abstract class AbstaractBase
@@ -225,8 +223,8 @@ namespace NBehave.Narrator.Framework.Specifications
                 base.SetUp();
             }
 
-            [Specification]
-            public void Should_find_action_using_first_actionStep_attribute_match()
+            [Test]
+            public void ShouldFindActionUsingFirstActionStepAttributeMatch()
             {
                 var action = _actionCatalog.GetAction(new ActionStepText("one abstract", ""));
                 Assert.That(action, Is.Not.Null);

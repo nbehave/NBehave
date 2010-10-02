@@ -23,7 +23,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
         }
 
         [Test]
-        public void Should_have_original_steps()
+        public void ShouldHaveOriginalSteps()
         {
             var steps = _scenarioExampleResult.ActionStepResults.ToArray();
             Assert.That(steps[0].StringStep, Is.EqualTo("Given I have entered [num1] into the calculator"));
@@ -32,10 +32,10 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             Assert.That(steps[3].StringStep, Is.EqualTo("Then the sum should be [result]"));
         }
 
-        public class When_a_step_is_pending : ScenarioExampleResultSpec
+        public class WhenAStepIsPending : ScenarioExampleResultSpec
         {
             [Test]
-            public void Should_pend_correct_step()
+            public void ShouldPendCorrectStep()
             {
                 var exampleResult = new ScenarioResult(new Feature("featureTitle"), "scenarioTitle");
                 const string step = "Given I have entered [num1] into the calculator";

@@ -128,8 +128,6 @@
     <Compile Include="ScenarioResultsFixture.cs" />
     <Compile Include="ScenarioStepRunnerSpec.cs" />
     <Compile Include="TextRunnerSpec.cs" />
-    <Compile Include="StoryFixture.cs" />
-    <Compile Include="StoryResultsFixture.cs" />
     <Compile Include="StoryRunnerFilterSpecs.cs" />
     <Compile Include="Text\ActionStepAttributeSpec.cs" />
     <Compile Include="Text\IgnoreSpaceAndUnderScoreMatcherSpec.cs" />
@@ -157,65 +155,44 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Features\GreetingSystemDifferentLanguage.feature">
+    <None Include="Features\FeatureInSwedish.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>GreetingSystem1.feature.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Features\GreetingSystemBDDGuyStory.feature">
+    <None Include="Features\ScenarioWithNoActionSteps.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>GreetingSystem1.feature.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Features\GreetingSystemWithFailedStep.feature">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Features\ShouldListAllPendingActionSteps.feature">
+    <None Include="Features\FeatureWithNewLineInGivenClause.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>GreetingSystem1.feature.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Features\GreetingSystemWithNoActionSteps.feature">
+    <None Include="Features\FeatureNamedStory.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>GreetingSystem1.feature.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Features\GreetingSystemWithNewLinesInGiven.feature">
+    <None Include="Features\ScenarioWithExamples.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>GreetingSystem1.feature.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Features\GreetingSystemStory.feature">
+    <None Include="Features\FeaturesAndScenarios.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>GreetingSystem1.feature.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Features\XmlOutputEventListenerTestDataWithExamples.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>GreetingSystem1.feature.cs</LastGenOutput>
+    <None Include="Features\ScenariosWithoutFeature.feature">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Features\XmlOutputEventListenerTestData.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>GreetingSystem1.feature.cs</LastGenOutput>
+    <None Include="Features\FeatureWithManyScenarios.feature">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Features\GreetingSystemWithNoFeatureAndManyGreetings.feature">
+    <None Include="Features\FeatureWithFailingStep.feature">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Features\GreetingSystemWithScenarioTitle.feature">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Features\GreetingSystemManyGreetings.feature">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Features\GreetingSystemFailure.feature">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Features\GreetingSystem.feature">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>GreetingSystem1.feature.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup />

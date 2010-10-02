@@ -1,21 +1,21 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
 using NBehave.Spec.NUnit;
+using NUnit.Framework;
 using Rhino.Mocks;
-using Context = NUnit.Framework.TestFixtureAttribute;
 
 namespace NBehave.Narrator.Framework.Specifications
 {
-    [Context]
+    [TestFixture]
     public class StoryRunnerFilterSpecs
     {
-        private readonly MockRepository mocks = new MockRepository();
+        private readonly MockRepository _mocks = new MockRepository();
 
         private delegate void Action();
 
         private void Given(Action given)
         {
-            using (mocks.Record())
+            using (_mocks.Record())
             {
                 given.Invoke();
             }
@@ -23,7 +23,7 @@ namespace NBehave.Narrator.Framework.Specifications
 
         private void When(Action when)
         {
-            using (mocks.Playback())
+            using (_mocks.Playback())
             {
                 when.Invoke();
             }
@@ -31,12 +31,12 @@ namespace NBehave.Narrator.Framework.Specifications
 
         private void Then(Action then)
         {
-            mocks.ReplayAll();
+            _mocks.ReplayAll();
             then.Invoke();
         }
 
-        [Specification]
-        public void Should_set_memberfilter_for_MethodInfo_of_type_Method()
+        [Test]
+        public void ShouldSetMemberfilterForMethodInfoOfTypeMethod()
         {
             StoryRunnerFilter filter = null;
             MemberInfo member = null;
@@ -56,7 +56,7 @@ namespace NBehave.Narrator.Framework.Specifications
             Then(
                 () =>
                     {
-                        filter.MethodNameFiler.ToString().ShouldEqual("^Should_set_memberfilter_for_MethodInfo_of_type_Method$");
+                        filter.MethodNameFiler.ToString().ShouldEqual("^ShouldSetMemberfilterForMethodInfoOfTypeMethod$");
                         filter.ClassNameFilter.ToString().ShouldEqual("^" + typeof (StoryRunnerFilterSpecs).Name + "$");
                         filter.NamespaceFilter.ToString().ShouldEqual("^" + typeof (StoryRunnerFilterSpecs).Namespace + "$");
                     }

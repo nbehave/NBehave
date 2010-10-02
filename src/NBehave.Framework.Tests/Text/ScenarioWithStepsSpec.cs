@@ -57,7 +57,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
         private ActionCatalog _actionCatalog;
         private StringStepRunner _stringStepRunner;
 
-        protected abstract void Establish_context();
+        protected abstract void EstablishContext();
 
         [TestFixtureSetUp]
         public void SetUp()
@@ -66,7 +66,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             _actionCatalog = new ActionCatalog();
             ParseAssemblyForSteps();
             _stringStepRunner = new StringStepRunner(_actionCatalog);
-            Establish_context();
+            EstablishContext();
         }
 
         private void ParseAssemblyForSteps()
@@ -76,16 +76,15 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             parser.FindActionSteps(_calculatorSteps.GetType().Assembly);
         }
 
-        public class When_running_a_scenario : ScenarioWithStepsSpec
+        public class WhenRunningAScenario : ScenarioWithStepsSpec
         {
             private ScenarioResult _scenarioResult;
             private bool _scenarioCreatedCalled;
 
-            protected override void Establish_context()
+            protected override void EstablishContext()
             {
                 ScenarioWithSteps.ScenarioCreated += (o, e) => { _scenarioCreatedCalled = true; };
-                var scenarioWithSteps = new ScenarioWithSteps(_stringStepRunner);
-                scenarioWithSteps.Title = "scenario title";
+                var scenarioWithSteps = new ScenarioWithSteps(_stringStepRunner) {Title = "scenario title"};
                 scenarioWithSteps.AddStep("Given numbers 1 and 2");
                 scenarioWithSteps.AddStep("When I add the numbers");
                 scenarioWithSteps.AddStep("Then the sum is 3");
@@ -94,13 +93,13 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             }
 
             [Test]
-            public void Scenario_should_pass()
+            public void ScenarioShouldPass()
             {
                 Assert.That(_scenarioResult.Result, Is.TypeOf(typeof(Passed)));
             }
 
             [Test]
-            public void Scenario_should_have_3_passing_steps()
+            public void ScenarioShouldHave3PassingSteps()
             {
                 var stepResults = _scenarioResult.ActionStepResults;
 
@@ -112,35 +111,35 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             }
 
             [Test]
-            public void Should_set_Left_on_calculatorStep()
+            public void ShouldSetLeftOnCalculatorStep()
             {
                 Assert.That(_calculatorSteps.Left, Is.EqualTo(1));
             }
 
             [Test]
-            public void Should_set_Right_on_calculatorStep()
+            public void ShouldSetRightOnCalculatorStep()
             {
                 Assert.That(_calculatorSteps.Right, Is.EqualTo(2));
             }
 
             [Test]
-            public void Should_set_Sum_on_calculatorStep()
+            public void ShouldSetSumOnCalculatorStep()
             {
                 Assert.That(_calculatorSteps.Sum, Is.EqualTo(3));
             }
 
             [Test]
-            public void Should_raise_scenario_created_event()
+            public void ShouldRaiseScenarioCreatedEvent()
             {
                 Assert.That(_scenarioCreatedCalled, Is.True, "Event was not called");
             }
         }
 
-        public class When_running_a_example_scenario : ScenarioWithStepsSpec
+        public class WhenRunningAExampleScenario : ScenarioWithStepsSpec
         {
             private ScenarioResult _scenarioResult;
 
-            protected override void Establish_context()
+            protected override void EstablishContext()
             {
                 var scenarioWithSteps = new ScenarioWithSteps(_stringStepRunner);
                 scenarioWithSteps.AddStep("Given numbers [left] and [right]");
@@ -158,13 +157,13 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             }
 
             [Test]
-            public void Should_get_Result_of_type_ScenarioExampleResult()
+            public void ShouldGetResultOfTypeScenarioExampleResult()
             {
                 Assert.That(_scenarioResult, Is.TypeOf(typeof(ScenarioExampleResult)));
             }
 
             [Test]
-            public void Should_pass_both_examples()
+            public void ShouldPassBothExamples()
             {
                 Assert.That((_scenarioResult as ScenarioExampleResult).ExampleResults.Count(), Is.EqualTo(2));
                 foreach (var scenarioResult in (_scenarioResult as ScenarioExampleResult).ExampleResults)

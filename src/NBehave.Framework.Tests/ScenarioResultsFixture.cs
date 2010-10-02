@@ -9,13 +9,13 @@ namespace NBehave.Narrator.Framework.Specifications
         private ScenarioResult _results;
 
         [SetUp]
-        public void Establish_context()
+        public void EstablishContext()
         {
             _results = new ScenarioResult(new Feature("Feature Title"), "Scenario Title");
         }
 
         [Test]
-        public void Should_set_message_with_failure_when_failed()
+        public void ShouldSetMessageWithFailureWhenFailed()
         {
             _results.Fail(new Exception("Error"));
 
@@ -24,7 +24,7 @@ namespace NBehave.Narrator.Framework.Specifications
         }
 
         [Test]
-        public void Should_set_message_with_inner_exception_information_when_failed()
+        public void ShouldSetMessageWithInnerExceptionInformationWhenFailed()
         {
             var inner = new ApplicationException("Inner");
             var outer = new Exception("Outer", inner);
@@ -36,7 +36,7 @@ namespace NBehave.Narrator.Framework.Specifications
         }
 
         [Test]
-        public void Should_set_message_with_pending_reason_when_pending()
+        public void ShouldSetMessageWithPendingReasonWhenPending()
         {
             _results.Pend("reason", "Given step");
 
@@ -45,7 +45,7 @@ namespace NBehave.Narrator.Framework.Specifications
         }
 
         [Test]
-        public void Should_set_stack_trace_of_exception_when_failed()
+        public void ShouldSetStackTraceOfExceptionWhenFailed()
         {
             Exception ex;
 
@@ -64,7 +64,7 @@ namespace NBehave.Narrator.Framework.Specifications
         }
 
         [Test]
-        public void Should_set_stack_trace_with_inner_exception_details_when_failed()
+        public void ShouldSetStackTraceWithInnerExceptionDetailsWhenFailed()
         {
             Exception ex;
 
@@ -92,7 +92,7 @@ namespace NBehave.Narrator.Framework.Specifications
         }
 
         [Test]
-        public void Failed_Step_message_should_not_overwrite_existing_message()
+        public void FailedStepMessageShouldNotOverwriteExistingMessage()
         {
             _results.Pend("not done", "Given step");
             var ex = new Exception("bad thing happened!");

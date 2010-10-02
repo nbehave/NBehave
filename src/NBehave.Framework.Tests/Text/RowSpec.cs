@@ -9,10 +9,10 @@ namespace NBehave.Narrator.Framework.Specifications.Text
         Row _row;
 
         [SetUp]
-        public void Establish_context()
+        public void EstablishContext()
         {
-            var colName = "colName";
-            var colValue = "a really wide column value";
+            const string colName = "colName";
+            const string colValue = "a really wide column value";
             var columnNames = new ExampleColumns { colName };
             var columnValues = new Dictionary<string, string>
             {
@@ -22,20 +22,20 @@ namespace NBehave.Narrator.Framework.Specifications.Text
         }
 
         [Test]
-        public void Should_make_column_headers_as_wide_as_widest_row_for_column()
+        public void ShouldMakeColumnHeadersAsWideAsWidestRowForColumn()
         {
       
 
             var rowAsString = _row.ColumnNamesToString();
-            var expected = "|colName                   |";
+            const string expected = "|colName                   |";
             Assert.That(rowAsString, Is.EqualTo(expected));
         }
 
         [Test]
-        public void Should_make_column_values_to_string()
+        public void ShouldMakeColumnValuesToString()
         {
             var rowAsString = _row.ColumnValuesToString();
-            var expected = "|a really wide column value|";
+            const string expected = "|a really wide column value|";
             Assert.That(rowAsString, Is.EqualTo(expected));
         }
     }

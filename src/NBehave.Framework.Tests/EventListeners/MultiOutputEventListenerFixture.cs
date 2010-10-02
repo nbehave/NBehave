@@ -8,7 +8,7 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
     public class MultiOutputEventListenerFixture
     {
         [Test]
-        public void Should_invoke_method_on_all_specified_listeners()
+        public void ShouldInvokeMethodOnAllSpecifiedListeners()
         {
             var mockFirstEventListener = MockRepository.GenerateMock<IEventListener>();
             var mockSecondEventListener = MockRepository.GenerateMock<IEventListener>();

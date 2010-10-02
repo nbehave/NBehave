@@ -1,11 +1,11 @@
 using System;
+using MbUnit.Framework;
 using NBehave.Narrator.Framework;
 using NBehave.Spec.Extensions;
-using Context = MbUnit.Framework.TestFixtureAttribute;
 
 namespace NBehave.Spec.MbUnit.Specs
 {
-    [Context]
+    [TestFixture]
     public class ScenarioDrivenSpecBaseSpecs : ScenarioDrivenSpecBase
     {
         protected override Feature CreateFeature()
@@ -17,13 +17,13 @@ namespace NBehave.Spec.MbUnit.Specs
                 .SoThat("I can specify behaviour through scenarios");
         }
 
-        [Specification]
+        [Test]
         public void should_populate_the_feature_narrative()
         {
             Feature.Narrative.ShouldEqual("As a developer, I want to specify a feature so that I can specify behaviour through scenarios");
         }
 
-        [Specification]
+        [Test]
         public void should_execute_scenarios_implemented_inline()
         {
             string detail1 = null;
@@ -35,7 +35,7 @@ namespace NBehave.Spec.MbUnit.Specs
                 .And("the implementation from When should be called", () => detail2.ShouldNotBeNull());
         }
 
-        [Specification]
+        [Test]
         public void should_call_notification_events_before_executing_inline_implementation()
         {
             string lastLoggedScenario = null;

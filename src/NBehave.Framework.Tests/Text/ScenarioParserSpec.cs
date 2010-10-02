@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using Context = NUnit.Framework.TestFixtureAttribute;
 
 namespace NBehave.Narrator.Framework.Specifications.Text
 {
-    [Context]
+    [TestFixture]
     public abstract class ScenarioParserSpec
     {
         private readonly StringStepRunner _stringStepRunner = new StringStepRunner(new ActionCatalog());
@@ -25,19 +24,19 @@ namespace NBehave.Narrator.Framework.Specifications.Text
         private IEnumerable<Feature> _feature;
 
         [Test]
-        public virtual void Should_have_given_step()
+        public virtual void ShouldHaveGivenStep()
         {
             CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("  Given numbers 1 and 2"));
         }
 
         [Test]
-        public virtual void Should_have_when_step()
+        public virtual void ShouldHaveWhenStep()
         {
             CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("  When I add the numbers"));
         }
 
         [Test]
-        public virtual void Should_have_then_step()
+        public virtual void ShouldHaveThenStep()
         {
             CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("  Then the sum is 3"));
         }
@@ -50,7 +49,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
         }
 
         [TestFixture]
-        public class Scenario_simple_scenario_without_title : ScenarioParserSpec
+        public class ScenarioSimpleScenarioWithoutTitle : ScenarioParserSpec
         {
             [SetUp]
             public void Scenario()
@@ -63,7 +62,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             }
         }
 
-        public class Scenario_simple_scenario_with_title : ScenarioParserSpec
+        public class ScenarioSimpleScenarioWithTitle : ScenarioParserSpec
         {
             [SetUp]
             public void Scenario()
@@ -77,19 +76,19 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             }
 
             [Test]
-            public void should_find_3_steps()
+            public void ShouldFind3Steps()
             {
                 Assert.That(_scenarios.First().Steps.Count(), Is.EqualTo(3));
             }
 
             [Test]
-            public void Should_have_a_scenario_Title()
+            public void ShouldHaveAScenarioTitle()
             {
                 Assert.That(_scenarios.First().Title, Is.EqualTo("Adding numbers"));
             }
         }
 
-        public class Scenario_two_scenarios_with_title : ScenarioParserSpec
+        public class ScenarioTwoScenariosWithTitle : ScenarioParserSpec
         {
             [SetUp]
             public void Scenario()
@@ -108,20 +107,20 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             }
 
             [Test]
-            public void should_find_2_scenarios()
+            public void ShouldFind2Scenarios()
             {
                 Assert.That(_scenarios.Count(), Is.EqualTo(2));
             }
 
             [Test]
-            public void Should_have_a_scenario_Title_on_both_scenarios()
+            public void ShouldHaveAScenarioTitleOnBothScenarios()
             {
                 Assert.That(_scenarios.First().Title, Is.EqualTo("Adding numbers"));
                 Assert.That(_scenarios.Skip(1).First().Title, Is.EqualTo("Adding numbers again"));
             }
         }
 
-        public class Scenario_Feature_with_scenario : ScenarioParserSpec
+        public class ScenarioFeatureWithScenario : ScenarioParserSpec
         {
             [SetUp]
             public void Scenario()
@@ -141,19 +140,19 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             }
 
             [Test]
-            public void should_find_2_scenarios()
+            public void ShouldFind2Scenarios()
             {
                 Assert.That(_scenarios.Count(), Is.EqualTo(2));
             }
 
             [Test]
-            public void Should_have_a_feature_Title()
+            public void ShouldHaveAFeatureTitle()
             {
                 Assert.That(_scenarios.First().Feature.Title, Is.EqualTo("Calculator"));
             }
         }
 
-        public class Scenario_Feature_narrative_is_all_text_upto_next_step_keyWord : ScenarioParserSpec
+        public class ScenarioFeatureNarrativeIsAllTextUptoNextStepKeyWord : ScenarioParserSpec
         {
             [SetUp]
             public void Scenario()
@@ -175,7 +174,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             }
 
             [Test]
-            public void Should_have_narrative()
+            public void ShouldHaveNarrative()
             {
                 Assert.That(_scenarios.First().Feature.Narrative, Is.EqualTo(
                                                                  "  This is the narrative" + Environment.NewLine +
@@ -183,19 +182,19 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             }
 
             [Test]
-            public void should_find_2_scenarios()
+            public void ShouldFind2Scenarios()
             {
                 Assert.That(_scenarios.Count(), Is.EqualTo(2));
             }
 
             [Test]
-            public void Should_have_a_feature_Title()
+            public void ShouldHaveAFeatureTitle()
             {
                 Assert.That(_scenarios.First().Feature.Title, Is.EqualTo("Calculator"));
             }
         }
 
-        public class Scenario_scenario_with_example_table : ScenarioParserSpec
+        public class ScenarioScenarioWithExampleTable : ScenarioParserSpec
         {
             [SetUp]
             public void Scenario()
@@ -214,37 +213,37 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             }
 
             [Test]
-            public void Scenario_should_have_two_examples()
+            public void ScenarioShouldHaveTwoExamples()
             {
                 Assert.That(_scenarios.First().Examples.Count(), Is.EqualTo(2));
             }
 
             [Test]
-            public void should_find_3_steps()
+            public void ShouldFind3Steps()
             {
                 Assert.That(_scenarios.First().Steps.Count(), Is.EqualTo(3));
             }
 
             [Test]
-            public void Should_have_a_scenario_Title()
+            public void ShouldHaveAScenarioTitle()
             {
                 Assert.That(_scenarios.First().Title, Is.EqualTo("Adding numbers"));
             }
 
             [Test]
-            public override void Should_have_given_step()
+            public override void ShouldHaveGivenStep()
             {
                 CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("  Given numbers [left] and [right]"));
             }
 
             [Test]
-            public override void Should_have_then_step()
+            public override void ShouldHaveThenStep()
             {
                 CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("  Then the sum is [sum]"));
             }
         }
 
-        public class Scenario_scenario_with_table_on_given : ScenarioParserSpec
+        public class ScenarioScenarioWithTableOnGiven : ScenarioParserSpec
         {
             private StringTableStep _step;
 
@@ -267,14 +266,14 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             }
 
             [Test]
-            public void given_step_should_have_three_table_steps()
+            public void GivenStepShouldHaveThreeTableSteps()
             {
                 Assert.That(_step, Is.Not.Null);
                 Assert.That(_step.TableSteps.Count(), Is.EqualTo(3));
             }
 
             [Test]
-            public void table_step_column_names_should_be_stored_in_lower_case()
+            public void TableStepColumnNamesShouldBeStoredInLowerCase()
             {
                 var step = _step.TableSteps.First();
                 CollectionAssert.Contains(step.ColumnNames, "name");
@@ -282,25 +281,25 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             }
 
             [Test]
-            public override void Should_have_given_step()
+            public override void ShouldHaveGivenStep()
             {
                 CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("  Given the following people exists:"));
             }
 
             [Test]
-            public override void Should_have_when_step()
+            public override void ShouldHaveWhenStep()
             {
                 CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("  When I search for people in sweden"));
             }
 
             [Test]
-            public override void Should_have_then_step()
+            public override void ShouldHaveThenStep()
             {
                 CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("  Then I should get:"));
             }
         }
 
-        public class Scenario_Multiple_features : ScenarioParserSpec
+        public class ScenarioMultipleFeatures : ScenarioParserSpec
         {
             [SetUp]
             public void Scenario()
@@ -321,13 +320,13 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             }
 
             [Test]
-            public void feature_1_should_be_referenced_by_scenario_2()
+            public void Feature1ShouldBeReferencedByScenario2()
             {
                 Assert.That(_scenarios.First().Feature.Title, Is.EqualTo("Calculator 1"));
             }
 
             [Test]
-            public void feature_2_should_be_referenced_by_scenario_2()
+            public void Feature2ShouldBeReferencedByScenario2()
             {
                 Assert.That(_scenarios.Skip(1).First().Feature.Title, Is.EqualTo("Calculator 2"));
             }

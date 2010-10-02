@@ -7,11 +7,11 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
     public class XmlOutputEventListenerSteps
     {
         [Given(@"a string $str")]
-        public void a_string(string str)
+        public void AString(string str)
         { }
 
         [When(@"string is ecco'ed")]
-        public void Eccho_string()
+        public void EcchoString()
         { }
 
         [Then(@"you should see $strOut")]
@@ -21,25 +21,25 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
         [Given(@"something$")]
         [Given(@"something x$")]
         [Given(@"something two$")]
-        public void A_given()
+        public void AGiven()
         {
         }
 
         [When(@"some event occurs$")]
         [When(@"some event y occurs$")]
         [When(@"some event #2 occurs$")]
-        public void a_when()
+        public void AWhen()
         {
         }
 
         [Then(@"there is some outcome$")]
         [Then(@"there is some outcome #2$")]
-        public void a_then()
+        public void AThen()
         {
         }
 
         [Then(@"there is some failing outcome$")]
-        public void a_then_failing()
+        public void AThenFailing()
         {
             throw new Exception("outcome failed");
         }

@@ -1,40 +1,39 @@
 using System.Collections.Generic;
 using System.Linq;
+using NBehave.Narrator.Framework.Specifications.Features;
 using NUnit.Framework;
-using Context = NUnit.Framework.TestFixtureAttribute;
-using Specification = NUnit.Framework.TestAttribute;
 
 namespace NBehave.Narrator.Framework.Specifications
 {
-	[Context]
+	[TestFixture]
 	public class ActionStepFileLoaderSpec
 	{
 		private ActionStepFileLoader _actionStepFileLoader;
 
 		[SetUp]
-		public void Establish_context()
+		public void EstablishContext()
 		{
 			_actionStepFileLoader = new ActionStepFileLoader(new StringStepRunner(new ActionCatalog()));
 		}
 
-		[Specification]
-		public void Should_treat_each_file_as_a_story()
+		[Test]
+		public void ShouldTreatEachFileAsAStory()
 		{
 			var files = new[]
 			{
-				"Features\\GreetingSystem.feature",
-				"Features\\GreetingSystemWithScenarioTitle.feature"
+				TestFeatures.ScenariosWithoutFeature,
+				TestFeatures.ScenarioWithNoActionSteps
 			};
 			var stories = _actionStepFileLoader.Load(files);
 			Assert.That(stories.Count, Is.EqualTo(2));
 		}
 
-		[Specification]
-		public void Should_have_Source_set_on_step()
+		[Test]
+		public void ShouldHaveSourceSetOnStep()
 		{
 			var files = new[]
 			{
-				"Features\\GreetingSystem.feature",
+				TestFeatures.ScenariosWithoutFeature,
 			};
 			var stories = _actionStepFileLoader.Load(files);
 
@@ -42,8 +41,8 @@ namespace NBehave.Narrator.Framework.Specifications
 			Assert.That(stories[0].Scenarios.First().Steps.First().Source, Is.Not.EqualTo(string.Empty));
 		}
 
-		[Specification]
-		public void Should_be_able_to_use_relative_paths_with_dots()
+		[Test]
+		public void ShouldBeAbleToUseRelativePathsWithDots()
 		{
 			IEnumerable<string> locations = new[] { @"..\*.*" };
 			var steps = _actionStepFileLoader.Load(locations);

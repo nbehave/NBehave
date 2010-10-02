@@ -10,8 +10,8 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
 	[TestFixture]
 	public abstract class XmlOutputWriterSpec
 	{
-	    private XmlOutputWriter _xmlOutputWriter;
-	    private XmlDocument _xmlDoc;
+		private XmlOutputWriter _xmlOutputWriter;
+		private XmlDocument _xmlDoc;
 		
 		[SetUp]
 		public void SetUp()
@@ -30,18 +30,18 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
 			scenarioResult.AddActionStepResult(actionStepResult);
 
 			var eventsReceived = new List<EventReceived>
-			                         {
-			                             new EventReceived("", EventType.RunStart),
-			                             new EventReceived("", EventType.ThemeStarted),
-			                             new EventReceived("StoryTitle", EventType.FeatureCreated),
-			                             new EventReceived("As a x\nI want y\nSo That z", EventType.FeatureNarrative),
-			                             new EventReceived("ScenarioTitle", EventType.ScenarioCreated),
-			                             new ScenarioResultEventReceived(scenarioResult),
-			                             new EventReceived("", EventType.ThemeFinished),
-			                             new EventReceived("", EventType.RunFinished)
-			                         };
+									 {
+										 new EventReceived("", EventType.RunStart),
+										 new EventReceived("", EventType.ThemeStarted),
+										 new EventReceived("StoryTitle", EventType.FeatureCreated),
+										 new EventReceived("As a x\nI want y\nSo That z", EventType.FeatureNarrative),
+										 new EventReceived("ScenarioTitle", EventType.ScenarioCreated),
+										 new ScenarioResultEventReceived(scenarioResult),
+										 new EventReceived("", EventType.ThemeFinished),
+										 new EventReceived("", EventType.RunFinished)
+									 };
 
-		    _xmlOutputWriter = new XmlOutputWriter(xmlWriter, eventsReceived);
+			_xmlOutputWriter = new XmlOutputWriter(xmlWriter, eventsReceived);
 		}
 		
 		[TestFixture]
@@ -63,21 +63,21 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
 			}
 			
 			[Test]
-			public void Should_have_actionStep_node()
+			public void ShouldHaveActionStepNode()
 			{
 				var node = _xmlDoc.SelectSingleNode(XPathToNode);
 				Assert.That(node, Is.Not.Null);
 			}
 
 			[Test]
-			public void Node_should_have_name_attribute()
+			public void NodeShouldHaveNameAttribute()
 			{
 				var node = _xmlDoc.SelectSingleNode(XPathToNode);
 				Assert.That(node.Attributes["name"].Value, Is.EqualTo("Given Foo"));
 			}
 			
 			[Test]
-			public void Node_should_have_outcome()
+			public void NodeShouldHaveOutcome()
 			{
 				var node = _xmlDoc.SelectSingleNode(XPathToNode);
 				Assert.That(node.Attributes["outcome"].Value, Is.EqualTo("passed"));
@@ -85,9 +85,9 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
 		}
 
 		[TestFixture]
-		public class Scenario_node : XmlOutputWriterSpec
+		public class ScenarioNode : XmlOutputWriterSpec
 		{
-			const string _xPathToNode = @"/scenario";
+			const string XPathToNode = @"/scenario";
 			
 			protected override void EstablishContext()
 			{
@@ -103,11 +103,13 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
 				var actionStepResult3 = new ActionStepResult("Then c", new Passed());
 				scenarioResult.AddActionStepResult(actionStepResult3);
 
-				var eventsReceived = new List<EventReceived>();
-				eventsReceived.Add(new EventReceived("ScenarioTitle", EventType.ScenarioCreated));
-				eventsReceived.Add(new ScenarioResultEventReceived(scenarioResult));
+				var eventsReceived = new List<EventReceived>
+				                         {
+				                             new EventReceived("ScenarioTitle", EventType.ScenarioCreated),
+				                             new ScenarioResultEventReceived(scenarioResult)
+				                         };
 
-				_xmlOutputWriter = new XmlOutputWriter(xmlWriter, eventsReceived);
+			    _xmlOutputWriter = new XmlOutputWriter(xmlWriter, eventsReceived);
 				_xmlOutputWriter.DoScenario(eventsReceived[0], scenarioResult);
 				xmlWriter.Flush();
 				_xmlDoc = new XmlDocument();
@@ -116,38 +118,38 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
 			}
 			
 			[Test]
-			public void Should_have_scenario_node()
+			public void ShouldHaveScenarioNode()
 			{
-				var node = _xmlDoc.SelectSingleNode(_xPathToNode);
+				var node = _xmlDoc.SelectSingleNode(XPathToNode);
 				Assert.That(node, Is.Not.Null);
 			}
 
 			[Test]
-			public void Node_should_have_name_attribute()
+			public void NodeShouldHaveNameAttribute()
 			{
-				var node = _xmlDoc.SelectSingleNode(_xPathToNode);
+				var node = _xmlDoc.SelectSingleNode(XPathToNode);
 				Assert.That(node.Attributes["name"].Value, Is.EqualTo("ScenarioTitle"));
 			}
 			
 			[Test]
-			public void Node_should_have_time_attribute()
+			public void NodeShouldHaveTimeAttribute()
 			{
-				var node = _xmlDoc.SelectSingleNode(_xPathToNode);
+				var node = _xmlDoc.SelectSingleNode(XPathToNode);
 				Assert.That(node.Attributes["time"], Is.Not.Null);
 			}
 			
 			[Test]
-			public void Node_should_have_outcome()
+			public void NodeShouldHaveOutcome()
 			{
-				var node = _xmlDoc.SelectSingleNode(_xPathToNode);
+				var node = _xmlDoc.SelectSingleNode(XPathToNode);
 				Assert.That(node.Attributes["outcome"].Value, Is.EqualTo("passed"));
 			}
 		}
 
 		[TestFixture]
-		public class Story_node : XmlOutputWriterSpec
+		public class StoryNode : XmlOutputWriterSpec
 		{
-			const string _xPathToNode = @"/story";
+			const string XPathToNode = @"/story";
 			
 			protected override void EstablishContext()
 			{
@@ -163,12 +165,14 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
 				var actionStepResult3 = new ActionStepResult("Then c", new Passed());
 				scenarioResult.AddActionStepResult(actionStepResult3);
 
-				var eventsReceived = new List<EventReceived>();
-                eventsReceived.Add(new EventReceived("FeatureTitle", EventType.FeatureCreated));
-				eventsReceived.Add(new EventReceived("As a x\nI want y\nSo That z", EventType.FeatureNarrative));
-				eventsReceived.Add(new EventReceived("ScenarioTitle", EventType.ScenarioCreated));
-                eventsReceived.Add(new ScenarioResultEventReceived(scenarioResult));
-				_xmlOutputWriter = new XmlOutputWriter(xmlWriter, eventsReceived);
+				var eventsReceived = new List<EventReceived>
+				                         {
+				                             new EventReceived("FeatureTitle", EventType.FeatureCreated),
+				                             new EventReceived("As a x\nI want y\nSo That z", EventType.FeatureNarrative),
+				                             new EventReceived("ScenarioTitle", EventType.ScenarioCreated),
+				                             new ScenarioResultEventReceived(scenarioResult)
+				                         };
+			    _xmlOutputWriter = new XmlOutputWriter(xmlWriter, eventsReceived);
 				_xmlOutputWriter.DoStory("StoryTitle", eventsReceived[0]);
 				xmlWriter.Flush();
 				_xmlDoc = new XmlDocument();
@@ -177,37 +181,37 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
 			}
 			
 			[Test]
-			public void Should_have_story_node()
+			public void ShouldHaveStoryNode()
 			{
-				var node = _xmlDoc.SelectSingleNode(_xPathToNode);
+				var node = _xmlDoc.SelectSingleNode(XPathToNode);
 				Assert.That(node, Is.Not.Null);
 			}
 
 			[Test]
-			public void Node_should_have_name_attribute()
+			public void NodeShouldHaveNameAttribute()
 			{
-				var node = _xmlDoc.SelectSingleNode(_xPathToNode);
-                Assert.That(node.Attributes["name"].Value, Is.EqualTo("FeatureTitle"));
+				var node = _xmlDoc.SelectSingleNode(XPathToNode);
+				Assert.That(node.Attributes["name"].Value, Is.EqualTo("FeatureTitle"));
 			}
 			
 			[Test]
-			public void Node_should_have_time_attribute()
+			public void NodeShouldHaveTimeAttribute()
 			{
-				var node = _xmlDoc.SelectSingleNode(_xPathToNode);
+				var node = _xmlDoc.SelectSingleNode(XPathToNode);
 				Assert.That(node.Attributes["time"], Is.Not.Null);
 			}
 			
 			[Test]
-			public void Node_should_have_scenarios_subnode()
+			public void NodeShouldHaveScenariosSubnode()
 			{
-				var node = _xmlDoc.SelectSingleNode(_xPathToNode + @"/scenarios");
+				var node = _xmlDoc.SelectSingleNode(XPathToNode + @"/scenarios");
 				Assert.That(node, Is.Not.Null);
 			}
 
 			[Test]
-			public void Node_should_have_scenario_count_attributes()
+			public void NodeShouldHaveScenarioCountAttributes()
 			{
-				var node = _xmlDoc.SelectSingleNode(_xPathToNode);
+				var node = _xmlDoc.SelectSingleNode(XPathToNode);
 				Assert.That(node.Attributes["scenarios"].Value, Is.EqualTo("1"));
 				Assert.That(node.Attributes["scenariosFailed"].Value, Is.EqualTo("0"));
 				Assert.That(node.Attributes["scenariosPending"].Value, Is.EqualTo("0"));
@@ -215,9 +219,9 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
 		}
 		
 		[TestFixture]
-		public class Theme_node : XmlOutputWriterSpec
+		public class ThemeNode : XmlOutputWriterSpec
 		{
-			const string _xPathToNode = @"/theme";
+			const string XPathToNode = @"/theme";
 			
 			protected override void EstablishContext()
 			{
@@ -233,13 +237,15 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
 				var actionStepResult3 = new ActionStepResult("Then c", new Passed());
 				scenarioResult.AddActionStepResult(actionStepResult3);
 
-				var eventsReceived = new List<EventReceived>();
-				eventsReceived.Add(new EventReceived("", EventType.ThemeStarted));
-                eventsReceived.Add(new EventReceived("FeatureTitle", EventType.FeatureCreated));
-				eventsReceived.Add(new EventReceived("As a x\nI want y\nSo That z", EventType.FeatureNarrative));
-				eventsReceived.Add(new EventReceived("ScenarioTitle", EventType.ScenarioCreated));
-                eventsReceived.Add(new ScenarioResultEventReceived(scenarioResult));
-				_xmlOutputWriter = new XmlOutputWriter(xmlWriter, eventsReceived);
+				var eventsReceived = new List<EventReceived>
+				                         {
+				                             new EventReceived("", EventType.ThemeStarted),
+				                             new EventReceived("FeatureTitle", EventType.FeatureCreated),
+				                             new EventReceived("As a x\nI want y\nSo That z", EventType.FeatureNarrative),
+				                             new EventReceived("ScenarioTitle", EventType.ScenarioCreated),
+				                             new ScenarioResultEventReceived(scenarioResult)
+				                         };
+			    _xmlOutputWriter = new XmlOutputWriter(xmlWriter, eventsReceived);
 				eventsReceived.Add(new EventReceived("", EventType.ThemeFinished));
 				_xmlOutputWriter.DoTheme(eventsReceived[0]);
 				xmlWriter.Flush();
@@ -249,39 +255,39 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
 			}
 			
 			[Test]
-			public void Should_have_theme_node()
+			public void ShouldHaveThemeNode()
 			{
-				var node = _xmlDoc.SelectSingleNode(_xPathToNode);
+				var node = _xmlDoc.SelectSingleNode(XPathToNode);
 				Assert.That(node, Is.Not.Null);
 			}
 
 			[Test]
-			public void Node_should_have_name_attribute()
+			public void NodeShouldHaveNameAttribute()
 			{
-				var node = _xmlDoc.SelectSingleNode(_xPathToNode);
+				var node = _xmlDoc.SelectSingleNode(XPathToNode);
 				Assert.That(node.Attributes["name"].Value, Is.EqualTo(""));
 			}
 			
 			[Test]
-			public void Node_should_have_time_attribute()
+			public void NodeShouldHaveTimeAttribute()
 			{
-				var node = _xmlDoc.SelectSingleNode(_xPathToNode);
+				var node = _xmlDoc.SelectSingleNode(XPathToNode);
 				Assert.That(node.Attributes["time"], Is.Not.Null);
 			}
 			
 			[Test]
-			public void Node_should_have_story_count()
+			public void NodeShouldHaveStoryCount()
 			{
-				var node = _xmlDoc.SelectSingleNode(_xPathToNode);
+				var node = _xmlDoc.SelectSingleNode(XPathToNode);
 				var storyNode = node.Attributes["stories"];
 				Assert.That(storyNode, Is.Not.Null);
 				Assert.That(storyNode.Value, Is.EqualTo("1"));
 			}
 			
 			[Test]
-			public void Node_should_have_scenario_count()
+			public void NodeShouldHaveScenarioCount()
 			{
-				var node = _xmlDoc.SelectSingleNode(_xPathToNode);
+				var node = _xmlDoc.SelectSingleNode(XPathToNode);
 				Assert.That(node.Attributes["scenarios"].Value, Is.EqualTo("1"));
 				Assert.That(node.Attributes["scenariosFailed"].Value, Is.EqualTo("0"));
 				Assert.That(node.Attributes["scenariosPending"].Value, Is.EqualTo("0"));
@@ -289,7 +295,7 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
 		}
 
 		[TestFixture]
-		public class When_multiple_stories_have_Scenarios_with_same_title : XmlOutputWriterSpec
+		public class WhenMultipleStoriesHaveScenariosWithSameTitle : XmlOutputWriterSpec
 			// Then WTF?
 		{
 			private const string XPathToNode = @"//theme";
@@ -298,15 +304,17 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
 				var memStream = new MemoryStream();
 				var xmlWriter = new XmlTextWriter(memStream, Encoding.UTF8);
 
-				var eventsReceived =new List<EventReceived>();
-				eventsReceived.Add(new EventReceived("", EventType.RunStart));
-				eventsReceived.Add(new EventReceived("", EventType.ThemeStarted));
-				eventsReceived.AddRange(CreateFirstStory());
+				var eventsReceived =new List<EventReceived>
+				                        {
+				                            new EventReceived("", EventType.RunStart),
+				                            new EventReceived("", EventType.ThemeStarted)
+				                        };
+			    eventsReceived.AddRange(CreateFirstStory());
 				eventsReceived.AddRange(CreateSecondStory());
 				eventsReceived.Add(new EventReceived("",EventType.ThemeFinished));
 				eventsReceived.Add(new EventReceived("", EventType.RunFinished));
-                _xmlOutputWriter = new XmlOutputWriter(xmlWriter, eventsReceived);
-                _xmlOutputWriter.WriteAllXml();
+				_xmlOutputWriter = new XmlOutputWriter(xmlWriter, eventsReceived);
+				_xmlOutputWriter.WriteAllXml();
 				xmlWriter.Flush();
 				_xmlDoc = new XmlDocument();
 				memStream.Seek(0,SeekOrigin.Begin);
@@ -324,12 +332,14 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
 				var actionStepResult3 = new ActionStepResult("Then c", new Passed());
 				scenarioResult.AddActionStepResult(actionStepResult3);
 
-				var eventsReceived = new List<EventReceived>();
-				eventsReceived.Add(new EventReceived(feature.Title, EventType.FeatureCreated));
-				eventsReceived.Add(new EventReceived("As a x\nI want y\nSo That z", EventType.FeatureNarrative));
-				eventsReceived.Add(new EventReceived("ScenarioTitle", EventType.ScenarioCreated));
-                eventsReceived.Add(new ScenarioResultEventReceived(scenarioResult));
-				return eventsReceived;
+				var eventsReceived = new List<EventReceived>
+				                         {
+				                             new EventReceived(feature.Title, EventType.FeatureCreated),
+				                             new EventReceived("As a x\nI want y\nSo That z", EventType.FeatureNarrative),
+				                             new EventReceived("ScenarioTitle", EventType.ScenarioCreated),
+				                             new ScenarioResultEventReceived(scenarioResult)
+				                         };
+			    return eventsReceived;
 			}
 
 			IEnumerable<EventReceived> CreateSecondStory()
@@ -344,17 +354,17 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
 				scenarioResult.AddActionStepResult(actionStepResult3);
 
 				var eventsReceived = new List<EventReceived>
-				                         {
-				                             new EventReceived(feature.Title, EventType.FeatureCreated),
-				                             new EventReceived("As a x\nI want y\nSo That z", EventType.FeatureNarrative),
-				                             new EventReceived("ScenarioTitle", EventType.ScenarioCreated),
-				                             new ScenarioResultEventReceived(scenarioResult)
-				                         };
-			    return eventsReceived;
+										 {
+											 new EventReceived(feature.Title, EventType.FeatureCreated),
+											 new EventReceived("As a x\nI want y\nSo That z", EventType.FeatureNarrative),
+											 new EventReceived("ScenarioTitle", EventType.ScenarioCreated),
+											 new ScenarioResultEventReceived(scenarioResult)
+										 };
+				return eventsReceived;
 			}
 			
 			[Test]
-			public void Theme_node_should_have_story_count()
+			public void ThemeNodeShouldHaveStoryCount()
 			{
 				var node = _xmlDoc.SelectSingleNode(XPathToNode);
 				var storyNode = node.Attributes["stories"];
@@ -363,7 +373,7 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
 			}
 			
 			[Test]
-			public void Theme_node_should_have_scenario_count()
+			public void ThemeNodeShouldHaveScenarioCount()
 			{
 				var node = _xmlDoc.SelectSingleNode(XPathToNode);
 				Assert.That(node.Attributes["scenarios"].Value, Is.EqualTo("2"));
@@ -372,14 +382,14 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
 			}
 			
 			[Test]
-			public void First_story_should_have_one_scenario()
+			public void FirstStoryShouldHaveOneScenario()
 			{
 				var node = _xmlDoc.SelectSingleNode(XPathToNode + @"/stories/story[@name='First feature']");
 				Assert.That(node.Attributes["scenarios"].Value, Is.EqualTo("1"));
 			}
 			
 			[Test]
-			public void Second_story_should_have_one_scenario()
+			public void SecondStoryShouldHaveOneScenario()
 			{
 				var node = _xmlDoc.SelectSingleNode(XPathToNode + @"/stories/story[@name='Second story']");
 				Assert.That(node.Attributes["scenarios"].Value, Is.EqualTo("1"));

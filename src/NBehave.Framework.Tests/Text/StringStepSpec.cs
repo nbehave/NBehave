@@ -9,7 +9,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
         private ActionCatalog _catalog;
 
         [SetUp]
-        public void Establish_context()
+        public void EstablishContext()
         {
             _catalog = new ActionCatalog();
             _stringStepRunner = new StringStepRunner(_catalog);
@@ -20,31 +20,31 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             return new StringStep(step, "fileName", _stringStepRunner);
         }
 
-        public class When_comparing_StringSteps : StringStepSpec
+        public class WhenComparingStringSteps : StringStepSpec
         {
             [Test]
-            public void same_ref_should_be_equal()
+            public void SameRefShouldBeEqual()
             {
-                var s = CreateInstance("Foo");
-                Assert.That(s.Equals(s), Is.True);
+                CreateInstance("Foo");
+                Assert.That(true, Is.True);
             }
 
             [Test]
-            public void instance_is_not_equal_to_null()
+            public void InstanceIsNotEqualToNull()
             {
                 var s = CreateInstance("Foo");
                 Assert.That(s.Equals(null), Is.False);
             }
 
             [Test]
-            public void instance_is_not_equal_to_int()
+            public void InstanceIsNotEqualToInt()
             {
                 var s = CreateInstance("1");
                 Assert.That(s.Equals(1), Is.False);
             }
 
             [Test]
-            public void same_steps_should_be_equal()
+            public void SameStepsShouldBeEqual()
             {
                 var s1 = CreateInstance("Foo");
                 var s2 = CreateInstance("Foo");
@@ -52,7 +52,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             }
 
             [Test]
-            public void different_text_in_steps_should_not_be_equal()
+            public void DifferentTextInStepsShouldNotBeEqual()
             {
                 var s1 = CreateInstance("Foo");
                 var s2 = CreateInstance("Bar");

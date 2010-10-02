@@ -6,7 +6,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
     public class ActionStepAttributeSpec
     {
         [Test]
-        public void Should_ignore_space_at_End_of_step()
+        public void ShouldIgnoreSpaceAtEndOfStep()
         {
             var g = new GivenAttribute("something");
             Assert.That(g.ActionMatch.IsMatch("something  "), Is.True);

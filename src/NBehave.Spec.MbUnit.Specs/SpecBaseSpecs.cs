@@ -1,9 +1,9 @@
-﻿using Rhino.Mocks;
-using Context = MbUnit.Framework.TestFixtureAttribute;
+﻿using MbUnit.Framework;
+using Rhino.Mocks;
 
 namespace NBehave.Spec.MbUnit.Specs
 {
-    [Context]
+    [TestFixture]
     public class When_initializing_the_SpecBase : SpecBase<StopWatch>
     {
         protected override StopWatch Establish_context()
@@ -15,14 +15,14 @@ namespace NBehave.Spec.MbUnit.Specs
         {
         }
 
-        [Specification]
+        [Test]
         public void should_populate_the_SUT_before_starting_the_specification()
         {
             Sut.ShouldNotBeNull();
         }
     }
 
-    [Context]
+    [TestFixture]
     public class When_using_the_setup_methods_in_non_generic_specs : SpecBase
     {
         private static int _estContextCount;
@@ -47,18 +47,18 @@ namespace NBehave.Spec.MbUnit.Specs
             _cleanupCount.ShouldEqual(1);
         }
 
-        [Specification]
+        [Test]
         public void dummy_test_1()
         {
         }
 
-        [Specification]
+        [Test]
         public void dummy_test_2()
         {
         }
     }
 
-    [Context]
+    [TestFixture]
     public class When_using_the_setup_methods_in_generic_specs : SpecBase<object>
     {
         private static int _estContextCount;
@@ -84,18 +84,18 @@ namespace NBehave.Spec.MbUnit.Specs
             _cleanupCount.ShouldEqual(1);
         }
 
-        [Specification]
+        [Test]
         public void dummy_test_1()
         {
         }
 
-        [Specification]
+        [Test]
         public void dummy_test_2()
         {
         }
     }
 
-    [Context]
+    [TestFixture]
     public class When_initializing_the_SpecBase_with_mocks : SpecBase<StopWatch>
     {
         private ITimer _timer;
@@ -114,7 +114,7 @@ namespace NBehave.Spec.MbUnit.Specs
             Sut.Start();
         }
 
-        [Specification]
+        [Test]
         public void should_call_the_before_each_spec_before_starting_the_specification()
         {
             _timer.AssertWasCalled(x => x.Start(null), opt => opt.IgnoreArguments());

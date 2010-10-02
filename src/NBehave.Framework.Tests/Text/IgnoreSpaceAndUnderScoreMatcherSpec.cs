@@ -4,7 +4,9 @@ using NUnit.Framework;
 namespace NBehave.Narrator.Framework.Specifications.Text
 {
 	public class SomeSpec {}
+// ReSharper disable InconsistentNaming
 	public class Some_Spec {}
+// ReSharper restore InconsistentNaming
 	public class Some {}
 	public class Spec {}
 
@@ -17,7 +19,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
 		[TestCase("Some Spec.story", typeof(Some_Spec))]
 		[TestCase("Some_Spec.story", typeof(SomeSpec))]
 		[TestCase("Some_Spec.story", typeof(Some_Spec))]
-		public void Should_be_considired_equal(string fileName, Type typeToMatch)
+		public void ShouldBeConsidiredEqual(string fileName, Type typeToMatch)
 		{
 			IFileMatcher matcher = new IgnoreSpaceAndUnderScoreMatcher(typeToMatch);
 			Assert.IsTrue(matcher.IsMatch(fileName));
@@ -29,7 +31,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
 		[TestCase("Some.Spec.scenario", typeof(SomeSpec))]
 		[TestCase("Some Spec.story", typeof(Spec))]
 		[TestCase("Some_Spec.story", typeof(Some))]
-		public void Should_not_be_considired_equal(string fileName, Type typeToMatch)
+		public void ShouldNotBeConsidiredEqual(string fileName, Type typeToMatch)
 		{
 			IFileMatcher matcher = new IgnoreSpaceAndUnderScoreMatcher(typeToMatch);
 			Assert.IsFalse(matcher.IsMatch(fileName));

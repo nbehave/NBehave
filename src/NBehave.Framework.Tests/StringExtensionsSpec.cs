@@ -6,16 +6,16 @@ namespace NBehave.Narrator.Framework.Specifications
     public class StringExtensionsSpec
     {
         [Test]
-        public void Should_remove_first_word_when_first_char_is_not_whitespace()
+        public void ShouldRemoveFirstWordWhenFirstCharIsNotWhitespace()
         {
-            var str = "one two";
+            const string str = "one two";
             Assert.That(str.RemoveFirstWord(), Is.EqualTo("two"));
         }
 
         [Test]
-        public void Should_remove_first_word_when_first_char_is_a_whitespace()
+        public void ShouldRemoveFirstWordWhenFirstCharIsAWhitespace()
         {
-            var str = "\tone two";
+            const string str = "\tone two";
             Assert.That(str.RemoveFirstWord(), Is.EqualTo("two"));
         }
     }

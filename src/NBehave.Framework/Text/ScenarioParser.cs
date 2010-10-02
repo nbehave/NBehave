@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 
 namespace NBehave.Narrator.Framework
 {
+
     public class ScenarioParser
     {
         private readonly char[] _whiteSpaceChars = new[] { ' ', '\t', '\n', '\r' };
