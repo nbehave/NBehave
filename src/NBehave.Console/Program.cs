@@ -41,7 +41,7 @@ namespace NBehave.Console
             if (options.waitForDebugger)
             {
                 var countdown = 5000;
-                var waitTime = 200;
+                const int waitTime = 200;
 
                 while (!Debugger.IsAttached && countdown >= 0)
                 {
@@ -67,7 +67,7 @@ namespace NBehave.Console
                 {
                     runner.LoadAssembly(path);
                 }
-                catch (FileNotFoundException e)
+                catch (FileNotFoundException)
                 {
                     output.WriteLine(string.Format("File not found: {0}", path));
                 }

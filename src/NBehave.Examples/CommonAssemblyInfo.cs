@@ -1,3 +1,4 @@
+using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
@@ -11,8 +12,8 @@ using System.Runtime.InteropServices;
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: ComVisible(false)]
-[assembly: AssemblyVersion("0.5.0.0")]
+[assembly: ComVisibleAttribute(false)]
+[assembly: AssemblyVersionAttribute("0.5.0.0")]
 [assembly: AssemblyFileVersionAttribute("0.5.0.0")]
 [assembly: AssemblyCopyrightAttribute("Copyright © NBehave 2007-2010")]
 [assembly: AssemblyProductAttribute("NBehave")]

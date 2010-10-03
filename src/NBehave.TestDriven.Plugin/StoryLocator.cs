@@ -74,7 +74,7 @@ namespace NBehave.TestDriven.Plugin
 
         public void VisitDirectory(DirectoryInfo directory)
         {
-            _locatedStories.AddRange(Extensions.Select(directory.GetFiles)
+            _locatedStories.AddRange(Extensions.Select(x => directory.GetFiles())
                                                .SelectMany(files => files.AsEnumerable())
                                                .Select(file => file.FullName));
         }
