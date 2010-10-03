@@ -138,5 +138,10 @@ namespace NBehave.Narrator.Framework
             }
             return clones;
         }
+
+        public void RemoveLastStep()
+        {
+            _steps.Remove(_steps.Last());
+        }
     }
 }

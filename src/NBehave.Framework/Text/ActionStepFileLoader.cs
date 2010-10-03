@@ -26,7 +26,7 @@ namespace NBehave.Narrator.Framework
             return stories;
         }
 
-        private string[] GetFiles(string location)
+        private IEnumerable<string> GetFiles(string location)
         {
             string[] files;
             if (Path.IsPathRooted(location))
@@ -75,9 +75,9 @@ namespace NBehave.Narrator.Framework
             return features;
         }
 
-        public IEnumerable<Feature> Load(Stream stream)
+        private IEnumerable<Feature> Load(Stream stream)
         {
-            var scenarioTextParser = new ScenarioParser(_stringStepRunner);
+            var scenarioTextParser = new GherkinScenarioParser(_stringStepRunner);
             return scenarioTextParser.Parse(stream);
         }
     }

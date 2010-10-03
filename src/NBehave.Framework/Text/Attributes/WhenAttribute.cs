@@ -1,5 +1,3 @@
-using System.Text.RegularExpressions;
-
 namespace NBehave.Narrator.Framework
 {
     public class WhenAttribute : ActionStepAttribute
@@ -7,12 +5,6 @@ namespace NBehave.Narrator.Framework
         public WhenAttribute()
         {
             Type = "When";            
-        }
-
-        private WhenAttribute(Regex actionMatch)
-            : base(actionMatch)
-        {
-            Type = "When";
         }
 
         public WhenAttribute(string regexOrTokenString)

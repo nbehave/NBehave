@@ -12,3 +12,4 @@ glob:.svn
 glob:build/
 glob:release/
 glob:*.ReSharper
+glob:*.bak

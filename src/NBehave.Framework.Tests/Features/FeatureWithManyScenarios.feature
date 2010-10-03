@@ -1,4 +1,4 @@
-﻿Story: Greeting system
+﻿Feature: Greeting system
 As a X
 I want y
 So that Z

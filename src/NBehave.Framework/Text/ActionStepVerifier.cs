@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace NBehave.Narrator.Framework
 {
-    public class ActionStep
+    public class ActionStepVerifier
     {
         public IEnumerable<string> FeatureSteps;
         public IEnumerable<string> ScenarioTitles;
@@ -21,12 +21,12 @@ namespace NBehave.Narrator.Framework
         const string TitleKey = "title";
         private readonly IEnumerable<string> _stepKeys = new[] { "given", "when", "then", "and", "but" };
 
-        public ActionStep(IEnumerable<Language> languages)
+        public ActionStepVerifier(IEnumerable<Language> languages)
             : this(languages, DefaultLanguage)
         {
         }
 
-        public ActionStep(IEnumerable<Language> languages, string language)
+        public ActionStepVerifier(IEnumerable<Language> languages, string language)
         {
             _languages = languages;
             var languageToUse = _languages.First(_ => _.Lang == language);

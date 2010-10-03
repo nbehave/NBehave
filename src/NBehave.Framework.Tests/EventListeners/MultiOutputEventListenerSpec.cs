@@ -5,7 +5,7 @@ using Rhino.Mocks;
 namespace NBehave.Narrator.Framework.Specifications.EventListeners
 {
     [TestFixture]
-    public class MultiOutputEventListenerFixture
+    public class MultiOutputEventListenerSpec
     {
         [Test]
         public void ShouldInvokeMethodOnAllSpecifiedListeners()

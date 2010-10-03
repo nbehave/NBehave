@@ -9,6 +9,9 @@ namespace NBehave.Narrator.Framework
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public abstract class ActionStepAttribute : Attribute
     {
+        private static readonly Regex IsCharsAndNumbersOnly = new Regex(@"^(\w|\d|\s)+$"); //new Regex(@"\$\w+");
+        private static readonly Regex IsTokenString = new Regex(ActionStepConverterExtensions.TokenRegexPattern); //new Regex(@"\$\w+");
+        
         public Regex ActionMatch { get; protected set; }
         public string Type { get; protected set; }
 
@@ -23,15 +26,12 @@ namespace NBehave.Narrator.Framework
                 ActionMatch = regexOrTokenString.AsRegex();
         }
 
-        private static readonly Regex _isTokenString = new Regex(ActionStepConverterExtensions.TokenRegexPattern); //new Regex(@"\$\w+");
-        private static readonly Regex _isCharsAndNumbersOnly = new Regex(@"^(\w|\d|\s)+$"); //new Regex(@"\$\w+");
-
         private bool IsRegex(string regexOrTokenString)
         {
             if (regexOrTokenString.EndsWith("$"))
                 return true;
-            if (_isTokenString.IsMatch(regexOrTokenString) 
-                || _isCharsAndNumbersOnly.IsMatch(regexOrTokenString))
+            if (IsTokenString.IsMatch(regexOrTokenString) 
+                || IsCharsAndNumbersOnly.IsMatch(regexOrTokenString))
                 return false;
             return true;
         }

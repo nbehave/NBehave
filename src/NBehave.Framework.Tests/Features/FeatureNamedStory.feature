@@ -1,4 +1,4 @@
-﻿Story: Greeting system
+﻿Feature: Greeting system
     As a project member
     I want specs written in a non techie way
     So that everyone can understand them

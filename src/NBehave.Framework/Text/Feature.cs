@@ -24,6 +24,14 @@ namespace NBehave.Narrator.Framework
         public bool IsDryRun { get; set; }
         public IEnumerable<ScenarioWithSteps> Scenarios { get { return _scenarios; } }
 
+        public bool HasTitle
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(Title);
+            }
+        }
+
         public void AddScenario(ScenarioWithSteps scenario)
         {
             _scenarios.Add(scenario);

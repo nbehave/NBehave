@@ -6,7 +6,7 @@ namespace NBehave.Narrator.Framework.Specifications
     [TestFixture]
     public class ActionStepSpec
     {
-        private ActionStep _actionStep;
+        private ActionStepVerifier _actionStepVerifier;
 
         [SetUp]
         public void EstablishContext()
@@ -14,7 +14,7 @@ namespace NBehave.Narrator.Framework.Specifications
             var lang = new List<Language>();
             var en = BuildEnglish();
             lang.Add(en);
-            _actionStep = new ActionStep(lang);
+            _actionStepVerifier = new ActionStepVerifier(lang);
         }
 
         private Language BuildEnglish()
@@ -46,57 +46,57 @@ namespace NBehave.Narrator.Framework.Specifications
         [Test]
         public void ShouldPassAsAScenarioTitle()
         {
-            Assert.That(_actionStep.IsScenarioTitle("Scenario A test scenario"), Is.True);
+            Assert.That(_actionStepVerifier.IsScenarioTitle("Scenario A test scenario"), Is.True);
         }
 
         [Test]
         public void ShouldNotBeAScenarioTitle()
         {
-            Assert.That(_actionStep.IsScenarioTitle("Foo: A test scenario"), Is.False);
+            Assert.That(_actionStepVerifier.IsScenarioTitle("Foo: A test scenario"), Is.False);
         }
 
         [Test]
         public void ColonShouldBeAllowedAfterScenario()
         {
-            Assert.That(_actionStep.IsScenarioTitle("Scenario: A test scenario"), Is.True);
+            Assert.That(_actionStepVerifier.IsScenarioTitle("Scenario: A test scenario"), Is.True);
         }
 
         [Test]
         public void ShouldGetTitleOfScenario()
         {
-            Assert.That(_actionStep.GetTitle("Scenario: A test scenario"), Is.EqualTo("A test scenario"));
+            Assert.That(_actionStepVerifier.GetTitle("Scenario: A test scenario"), Is.EqualTo("A test scenario"));
         }
 
         [Test]
         public void ShouldPassAsAStoryTitle()
         {
-            Assert.That(_actionStep.IsFeatureTitle("Story A story"), Is.True);
+            Assert.That(_actionStepVerifier.IsFeatureTitle("Story A story"), Is.True);
         }
 
         [Test]
         public void ShouldNotBeAStoryTitle()
         {
-            Assert.That(_actionStep.IsFeatureTitle("Foo: A story"), Is.False);
+            Assert.That(_actionStepVerifier.IsFeatureTitle("Foo: A story"), Is.False);
         }
 
         [Test]
         public void ColonShouldBeAllowedAfterStory()
         {
-            Assert.That(_actionStep.IsFeatureTitle("Story: A story"), Is.True);
+            Assert.That(_actionStepVerifier.IsFeatureTitle("Story: A story"), Is.True);
         }
 
         [Test]
         public void ShouldGetTitleOfStory()
         {
-            Assert.That(_actionStep.GetTitle("Story: A story"), Is.EqualTo("A story"));
+            Assert.That(_actionStepVerifier.GetTitle("Story: A story"), Is.EqualTo("A story"));
         }
 
         [Test]
         public void ShouldPassAsScenarioStep()
         {
-            foreach (var step in _actionStep.ScenarioSteps)
+            foreach (var step in _actionStepVerifier.ScenarioSteps)
             {
-                Assert.That(_actionStep.IsScenarioStep(step + " X"), Is.True,
+                Assert.That(_actionStepVerifier.IsScenarioStep(step + " X"), Is.True,
                     string.Format("'{0}' should be a scenario step", step));
             }
         }

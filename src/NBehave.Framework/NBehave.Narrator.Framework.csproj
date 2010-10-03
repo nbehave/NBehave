@@ -131,10 +131,11 @@
     <Compile Include="EventListeners\SummaryWriter.cs" />
     <Compile Include="Text\ActionMethodInfo.cs" />
     <Compile Include="ActionMissingException.cs" />
-    <Compile Include="Text\ActionStep.cs" />
+    <Compile Include="Text\ActionStepVerifier.cs" />
     <Compile Include="Text\Attributes\ActionStepAttribute.cs" />
     <Compile Include="Text\ActionStepConverterExtensions.cs" />
     <Compile Include="Text\ActionStepFileLoader.cs" />
+    <Compile Include="Text\GherkinScenarioParser.cs" />
     <Compile Include="Text\IFileMatcher.cs" />
     <Compile Include="Text\IgnoreSpaceAndUnderScoreMatcher.cs" />
     <Compile Include="Text\IStringStepRunner.cs" />

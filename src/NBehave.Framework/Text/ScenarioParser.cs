@@ -6,12 +6,16 @@ using System.Text.RegularExpressions;
 
 namespace NBehave.Narrator.Framework
 {
+    public interface IScenarioParser
+    {
+        IEnumerable<Feature> Parse(Stream stream);
+    }
 
-    public class ScenarioParser
+    public class ScenarioParser : IScenarioParser
     {
         private readonly char[] _whiteSpaceChars = new[] { ' ', '\t', '\n', '\r' };
 
-        private ActionStep _actionStep;
+        private ActionStepVerifier _actionStepVerifier;
         private readonly IStringStepRunner _stringStepRunner;
 
         public ScenarioParser(IStringStepRunner stringStepRunner)
@@ -29,14 +33,14 @@ namespace NBehave.Narrator.Framework
 
         private void ParseLanguage(string scenarioText)
         {
-            var language = ActionStep.DefaultLanguage;
+            var language = ActionStepVerifier.DefaultLanguage;
             var trimmed = scenarioText.TrimStart(_whiteSpaceChars);
             var lang = new Regex(@"^# language:\s+(?<language>\w+)\s+");
             var matches = lang.Match(trimmed);
             if (matches.Success)
                 language = matches.Groups["language"].Value;
 
-            _actionStep = new ActionStep(Language.LoadLanguages(), language);
+            _actionStepVerifier = new ActionStepVerifier(Language.LoadLanguages(), language);
         }
 
         private IEnumerable<Feature> ParseScenario(string scenarioText)
@@ -50,15 +54,15 @@ namespace NBehave.Narrator.Framework
                 var step = GetNextStep(scenarioText);
                 if (step.Length > 0)
                 {
-                    if (_actionStep.IsFeatureTitle(step))
+                    if (_actionStepVerifier.IsFeatureTitle(step))
                         feature = CreateFeature(step);
-                    else if (_actionStep.IsScenarioTitle(step))
+                    else if (_actionStepVerifier.IsScenarioTitle(step))
                     {
                         scenario = CreateNewScenario(scenarios, feature);
-                        if (_actionStep.IsScenarioTitle(step))
-                            scenario.Title = _actionStep.GetTitle(step);
+                        if (_actionStepVerifier.IsScenarioTitle(step))
+                            scenario.Title = _actionStepVerifier.GetTitle(step);
                     }
-                    else if (_actionStep.IsExample(step))
+                    else if (_actionStepVerifier.IsExample(step))
                     {
                         if (scenario == null)
                             scenario = CreateNewScenario(scenarios, feature);
@@ -195,7 +199,7 @@ namespace NBehave.Narrator.Framework
             var rows = Split(step);
             var feature = new Feature
                               {
-                                  Title = _actionStep.GetTitle(rows.First()),
+                                  Title = _actionStepVerifier.GetTitle(rows.First()),
                                   Narrative = RemoveStep(step, rows[0]).TrimStart(Environment.NewLine.ToCharArray())
                               };
             return feature;
@@ -257,7 +261,7 @@ namespace NBehave.Narrator.Framework
         private string BuildRegexString()
         {
             var regex = @"^\s*(";
-            var allWords = _actionStep.AllWords;
+            var allWords = _actionStepVerifier.AllWords;
             foreach (var alias in allWords)
             {
                 regex += alias + "|";

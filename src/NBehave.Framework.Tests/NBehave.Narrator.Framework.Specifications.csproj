@@ -90,6 +90,13 @@
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="gherkin-2.2.4">
+      <HintPath>..\..\lib\Gherkin\gherkin-2.2.4.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.Core, Version=0.42.0.3, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL" />
+    <Reference Include="IKVM.OpenJDK.Security, Version=0.42.0.3, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL" />
+    <Reference Include="IKVM.OpenJDK.Text, Version=0.42.0.3, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL" />
+    <Reference Include="IKVM.Runtime, Version=0.42.0.3, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL" />
     <Reference Include="nunit.framework">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\nunit.framework.dll</HintPath>
@@ -115,13 +122,12 @@
     <Compile Include="ActionStepParserSpec.cs" />
     <Compile Include="ActionStepSpec.cs" />
     <Compile Include="EventListeners\CodeGenEventListenerSpec.cs" />
-    <Compile Include="EventListeners\MultiOutputEventListenerFixture.cs" />
+    <Compile Include="EventListeners\MultiOutputEventListenerSpec.cs" />
     <Compile Include="EventListeners\XmlOutputEventListenerSpec.cs" />
     <Compile Include="Features\TestFeatures.cs" />
     <Compile Include="ParameterConverterSpec.cs" />
     <Compile Include="StringExtensionsSpec.cs" />
     <Compile Include="StringStepRunnerSpec.cs" />
-    <Compile Include="EventListeners\XmlOutputEventListenerSteps.cs" />
     <Compile Include="EventListeners\XmlOutputWriterSpec.cs" />
     <Compile Include="SummaryWriterSpec.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

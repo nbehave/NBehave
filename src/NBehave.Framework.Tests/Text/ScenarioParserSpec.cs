@@ -10,9 +10,9 @@ namespace NBehave.Narrator.Framework.Specifications.Text
     {
         private readonly StringStepRunner _stringStepRunner = new StringStepRunner(new ActionCatalog());
 
-        private ScenarioParser CreateScenarioParser()
+        private IScenarioParser CreateScenarioParser()
         {
-            return new ScenarioParser(_stringStepRunner);
+            return new GherkinScenarioParser(_stringStepRunner);
         }
 
         private StringStep NewStringStep(string step)
@@ -26,19 +26,19 @@ namespace NBehave.Narrator.Framework.Specifications.Text
         [Test]
         public virtual void ShouldHaveGivenStep()
         {
-            CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("  Given numbers 1 and 2"));
+            CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("Given numbers 1 and 2"));
         }
 
         [Test]
         public virtual void ShouldHaveWhenStep()
         {
-            CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("  When I add the numbers"));
+            CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("When I add the numbers"));
         }
 
         [Test]
         public virtual void ShouldHaveThenStep()
         {
-            CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("  Then the sum is 3"));
+            CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("Then the sum is 3"));
         }
 
         protected void Parse(string scenario)
@@ -177,8 +177,8 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             public void ShouldHaveNarrative()
             {
                 Assert.That(_scenarios.First().Feature.Narrative, Is.EqualTo(
-                                                                 "  This is the narrative" + Environment.NewLine +
-                                                                 "  This is second row of narrative"));
+                                                                 "This is the narrative" + Environment.NewLine +
+                                                                 "This is second row of narrative"));
             }
 
             [Test]
@@ -207,7 +207,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
                                   "Examples:" + Environment.NewLine +
                                   "|left|right|sum|" + Environment.NewLine +
                                   "|1|2|3|" + Environment.NewLine +
-                                  "|2|3|5";
+                                  "|2|3|5|";
 
                 Parse(scenario);
             }
@@ -233,13 +233,13 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             [Test]
             public override void ShouldHaveGivenStep()
             {
-                CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("  Given numbers [left] and [right]"));
+                CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("Given numbers [left] and [right]"));
             }
 
             [Test]
             public override void ShouldHaveThenStep()
             {
-                CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("  Then the sum is [sum]"));
+                CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("Then the sum is [sum]"));
             }
         }
 
@@ -283,19 +283,19 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             [Test]
             public override void ShouldHaveGivenStep()
             {
-                CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("  Given the following people exists:"));
+                CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("Given the following people exists:"));
             }
 
             [Test]
             public override void ShouldHaveWhenStep()
             {
-                CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("  When I search for people in sweden"));
+                CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("When I search for people in sweden"));
             }
 
             [Test]
             public override void ShouldHaveThenStep()
             {
-                CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("  Then I should get:"));
+                CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("Then I should get:"));
             }
         }
 
