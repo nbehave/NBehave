@@ -11,6 +11,13 @@ namespace NBehave.Narrator.Framework
 
         public Lexer GetLexer(string scenarioText, GherkinScenarioParser gherkinScenarioParser)
         {
+            I18n gherkinLanguageService = GetGherkinLanguageService(scenarioText);
+
+            return gherkinLanguageService.lexer(gherkinScenarioParser);
+        }
+
+        public I18n GetGherkinLanguageService(string scenarioText)
+        {
             var language = DefaultLanguage;
             var trimmed = scenarioText.TrimStart(_whiteSpaceChars);
             var lang = new Regex(@"^# language:\s+(?<language>\w+)\s+");
@@ -20,9 +27,7 @@ namespace NBehave.Narrator.Framework
                 language = matches.Groups["language"].Value;
             }
 
-            var gherkinLanguageService = new I18n(language);
-
-            return gherkinLanguageService.lexer(gherkinScenarioParser);
+            return new I18n(language);
         }
     }
 }

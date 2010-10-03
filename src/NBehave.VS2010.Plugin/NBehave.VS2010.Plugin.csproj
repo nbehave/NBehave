@@ -6,6 +6,7 @@
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{E2EF537E-04C9-4804-9848-4205277D74AF}</ProjectGuid>
+    <ProjectTypeGuids>{82b43b9b-a64c-4715-b499-d71e9ca2bd60};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NBehave.VS2010.Plugin</RootNamespace>
@@ -61,12 +62,20 @@
       <EmbedInteropTypes>False</EmbedInteropTypes>
       <HintPath>..\..\tools\vs2010.sdk\envdte90.dll</HintPath>
     </Reference>
+    <Reference Include="gherkin-2.2.4">
+      <HintPath>..\..\lib\Gherkin\gherkin-2.2.4.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.Core">
+      <HintPath>..\..\lib\Gherkin\IKVM.OpenJDK.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualStudio.CommandBars, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>False</EmbedInteropTypes>
       <HintPath>..\..\tools\vs2010.sdk\Microsoft.VisualStudio.CommandBars.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualStudio.CoreUtility, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.Editor, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.VisualStudio.OLE.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\vs2010.sdk\Microsoft.VisualStudio.OLE.Interop.dll</HintPath>
@@ -96,6 +105,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\vs2010.sdk\Microsoft.VisualStudio.Shell.Interop.9.0.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualStudio.Text.Data, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.Text.Logic, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.Text.UI, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.Text.UI.Wpf, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.VisualStudio.TextManager.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\vs2010.sdk\Microsoft.VisualStudio.TextManager.Interop.dll</HintPath>
@@ -121,6 +134,15 @@
     <Compile Include="Configuration\OutputWindowInitialiser.cs" />
     <Compile Include="Contracts\IVisualStudioService.cs" />
     <Compile Include="Domain\VisualStudioService.cs" />
+    <Compile Include="GherkinFileEditor\EditorExtensionProviderBase.cs" />
+    <Compile Include="GherkinFileEditor\GherkinFileClassificationDefinition.cs" />
+    <Compile Include="GherkinFileEditor\GherkinFileClassifier.cs" />
+    <Compile Include="GherkinFileEditor\GherkinFileClassifierFormats.cs" />
+    <Compile Include="GherkinFileEditor\GherkinFileEditorClassifications.cs" />
+    <Compile Include="GherkinFileEditor\GherkinFileEditorInfo.cs" />
+    <Compile Include="GherkinFileEditor\GherkinFileEditorParser.cs" />
+    <Compile Include="GherkinFileEditor\GherkinFileEditorParserListener.cs" />
+    <Compile Include="GherkinFileEditor\GherkinFileOutliningTagger.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Contracts\IOutputWindow.cs" />
     <Compile Include="Contracts\IComponentInitialiser.cs" />
@@ -151,6 +173,12 @@
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NBehave.Framework\NBehave.Narrator.Framework.csproj">
+      <Project>{9C2E9E17-2A2C-4F6C-8072-D160A7EA9A51}</Project>
+      <Name>NBehave.Narrator.Framework</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <UseCodebase>true</UseCodebase>
   </PropertyGroup>
@@ -158,7 +186,7 @@
     <VsSDKInstall>$(SolutionDir)..\tools\vs2010.sdk\</VsSDKInstall>
     <VsSDKIncludes>$(VsSDKInstall)inc\</VsSDKIncludes>
     <VsixSchemaPath>$(VsSDKInstall)VSIXManifestSchema.xsd</VsixSchemaPath>
-    <DeployExtension>false</DeployExtension>
+    <DeployExtension>true</DeployExtension>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VsSDKInstall)Microsoft.VsSDK.targets" />
