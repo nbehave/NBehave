@@ -138,6 +138,7 @@
     <Compile Include="Text\IFileMatcher.cs" />
     <Compile Include="Text\IgnoreSpaceAndUnderScoreMatcher.cs" />
     <Compile Include="Text\IStringStepRunner.cs" />
+    <Compile Include="Text\LanguageService.cs" />
     <Compile Include="Text\MatchAllFiles.cs" />
     <Compile Include="Text\StringStepRunner.cs" />
     <Compile Include="Text\Attributes\ActionStepsAttribute.cs" />
@@ -203,9 +204,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Language\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

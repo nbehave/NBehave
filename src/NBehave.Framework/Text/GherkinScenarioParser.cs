@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
-using gherkin;
 using gherkin.lexer;
 using java.util;
 
@@ -11,18 +9,17 @@ namespace NBehave.Narrator.Framework
     public class GherkinScenarioParser : Listener
     {
         private readonly IStringStepRunner _stringStepRunner;
-        private readonly char[] _whiteSpaceChars = new[] { ' ', '\t', '\n', '\r' };
         private Feature _feature;
         private readonly List<Feature> _features;
         private ScenarioWithSteps _scenario;
         private ExampleColumns _exampleColumns;
         private bool _midExample;
-        private I18n _languageService;
-        public const string DefaultLanguage = "en";
+        private readonly LanguageService _languageService;
 
         public GherkinScenarioParser(IStringStepRunner stringStepRunner)
         {
             _stringStepRunner = stringStepRunner;
+            _languageService = new LanguageService();
             _scenario = new ScenarioWithSteps(_stringStepRunner);
             _feature = new Feature();
             _scenario.Feature = _feature;
@@ -36,26 +33,12 @@ namespace NBehave.Narrator.Framework
             var reader = new StreamReader(stream);
             var scenarioText = reader.ReadToEnd();
 
-            var language = DefaultLanguage;
-            var trimmed = scenarioText.TrimStart(_whiteSpaceChars);
-            var lang = new Regex(@"^# language:\s+(?<language>\w+)\s+");
-            var matches = lang.Match(trimmed);
-            if (matches.Success)
-            {
-                language = matches.Groups["language"].Value;
-            }
-
-            _languageService = new I18n(language);
-
-            var lexer = _languageService.lexer(this);
+            var lexer = _languageService.GetLexer(scenarioText, this);
             lexer.scan(scenarioText);
 
             return _features;
         }
 
-        public void pyString(string content, int line)
-        {
-        }
 
         public void feature(string keyword, string title, string description, int line)
         {
@@ -69,10 +52,6 @@ namespace NBehave.Narrator.Framework
                 _feature.Title = title;                
             }
             _feature.Narrative = description;
-        }
-
-        public void background(string keyword, string name, string description, int line)
-        {
         }
 
         public void scenario(string keyword, string title, string description, int line)
@@ -96,10 +75,6 @@ namespace NBehave.Narrator.Framework
             }
         }
 
-        public void scenarioOutline(string keyword, string name, string description, int line)
-        {
-        }
-
         public void examples(string keyword, string name, string description, int line)
         {
             _midExample = true;
@@ -108,14 +83,6 @@ namespace NBehave.Narrator.Framework
         public void step(string keyword, string text, int line)
         {
             _scenario.AddStep(string.Format("{0}{1}", keyword, text));
-        }
-
-        public void comment(string comment, int line)
-        {
-        }
-
-        public void tag(string name, int i)
-        {
         }
 
         public void row(List list, int line)
@@ -154,6 +121,26 @@ namespace NBehave.Narrator.Framework
                         .AddTableStep(new Row(_exampleColumns, row));
                 }
             }
+        }
+
+        public void background(string keyword, string name, string description, int line)
+        {
+        }
+
+        public void scenarioOutline(string keyword, string name, string description, int line)
+        {
+        }
+
+        public void comment(string comment, int line)
+        {
+        }
+
+        public void tag(string name, int i)
+        {
+        }
+
+        public void pyString(string content, int line)
+        {
         }
 
         public void eof()
