@@ -10,7 +10,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
     {
         private readonly StringStepRunner _stringStepRunner = new StringStepRunner(new ActionCatalog());
 
-        private IScenarioParser CreateScenarioParser()
+        private GherkinScenarioParser CreateScenarioParser()
         {
             return new GherkinScenarioParser(_stringStepRunner);
         }

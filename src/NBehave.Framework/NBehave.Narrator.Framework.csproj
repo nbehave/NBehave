@@ -173,7 +173,6 @@
     <Compile Include="Text\ExampleColumns.cs" />
     <Compile Include="Text\Feature.cs" />
     <Compile Include="Text\Row.cs" />
-    <Compile Include="Text\IScenarioParser.cs" />
     <Compile Include="Text\ScenarioWithSteps.cs" />
     <Compile Include="Text\StringStep.cs" />
     <Compile Include="Text\StringTableStep.cs" />

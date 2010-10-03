@@ -8,7 +8,7 @@ using java.util;
 
 namespace NBehave.Narrator.Framework
 {
-    public class GherkinScenarioParser : IScenarioParser, Listener
+    public class GherkinScenarioParser : Listener
     {
         private readonly IStringStepRunner _stringStepRunner;
         private readonly char[] _whiteSpaceChars = new[] { ' ', '\t', '\n', '\r' };
