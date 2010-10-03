@@ -18,6 +18,7 @@ namespace NBehave.Narrator.Framework
         private ExampleColumns _exampleColumns;
         private bool _midExample;
         private I18n _languageService;
+        public const string DefaultLanguage = "en";
 
         public GherkinScenarioParser(IStringStepRunner stringStepRunner)
         {
@@ -35,7 +36,7 @@ namespace NBehave.Narrator.Framework
             var reader = new StreamReader(stream);
             var scenarioText = reader.ReadToEnd();
 
-            var language = ActionStepVerifier.DefaultLanguage;
+            var language = DefaultLanguage;
             var trimmed = scenarioText.TrimStart(_whiteSpaceChars);
             var lang = new Regex(@"^# language:\s+(?<language>\w+)\s+");
             var matches = lang.Match(trimmed);
