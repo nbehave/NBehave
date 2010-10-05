@@ -62,8 +62,8 @@
       <EmbedInteropTypes>False</EmbedInteropTypes>
       <HintPath>..\..\tools\vs2010.sdk\envdte90.dll</HintPath>
     </Reference>
-    <Reference Include="gherkin-2.2.4">
-      <HintPath>..\..\lib\Gherkin\gherkin-2.2.4.dll</HintPath>
+    <Reference Include="gherkin">
+      <HintPath>..\..\lib\Gherkin\gherkin.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.Core">
       <HintPath>..\..\lib\Gherkin\IKVM.OpenJDK.Core.dll</HintPath>
