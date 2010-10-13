@@ -116,9 +116,18 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
+    <Reference Include="System.CoreEx">
+      <HintPath>..\..\lib\Reactive.Extensions\System.CoreEx.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Interactive">
+      <HintPath>..\..\lib\Reactive.Extensions\System.Interactive.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive">
+      <HintPath>..\..\lib\Reactive.Extensions\System.Reactive.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="PresentationCore" />
@@ -134,15 +143,13 @@
     <Compile Include="Configuration\OutputWindowInitialiser.cs" />
     <Compile Include="Contracts\IVisualStudioService.cs" />
     <Compile Include="Domain\VisualStudioService.cs" />
-    <Compile Include="GherkinFileEditor\EditorExtensionProviderBase.cs" />
-    <Compile Include="GherkinFileEditor\GherkinFileClassificationDefinition.cs" />
+    <Compile Include="GherkinFileEditor\Domain\GherkinFileClassificationDefinitions.cs" />
     <Compile Include="GherkinFileEditor\GherkinFileClassifier.cs" />
-    <Compile Include="GherkinFileEditor\GherkinFileClassifierFormats.cs" />
-    <Compile Include="GherkinFileEditor\GherkinFileEditorClassifications.cs" />
-    <Compile Include="GherkinFileEditor\GherkinFileEditorInfo.cs" />
+    <Compile Include="GherkinFileEditor\Domain\GherkinFileClassifierFormats.cs" />
+    <Compile Include="GherkinFileEditor\Domain\GherkinFileEditorClassifications.cs" />
     <Compile Include="GherkinFileEditor\GherkinFileEditorParser.cs" />
-    <Compile Include="GherkinFileEditor\GherkinFileEditorParserListener.cs" />
-    <Compile Include="GherkinFileEditor\GherkinFileOutliningTagger.cs" />
+    <Compile Include="GherkinFileEditor\Glyphs\GherkinFileOutliningTagger.cs" />
+    <Compile Include="GherkinFileEditor\Outlining\GherkinFileOutliningTagger.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Contracts\IOutputWindow.cs" />
     <Compile Include="Contracts\IComponentInitialiser.cs" />
@@ -179,6 +186,7 @@
       <Name>NBehave.Narrator.Framework</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <UseCodebase>true</UseCodebase>
   </PropertyGroup>

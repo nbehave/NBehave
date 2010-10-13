@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.ComponentModel.Composition.Hosting;
+using System.Linq;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Utilities;
@@ -8,51 +10,75 @@ using Microsoft.VisualStudio.Utilities;
 namespace NBehave.VS2010.Plugin.GherkinFileEditor
 {
 
-    #region Provider definition
     [Export(typeof(IClassifierProvider))]
     [ContentType("gherkin")]
-    internal class GherkinFileClassifierProvider : EditorExtensionProviderBase, IClassifierProvider
+    internal class GherkinFileClassifierProvider : IClassifierProvider
     {
+        [Import]
+        private GherkinFileClassifier GherkinFileClassifier { get; set; }
+
         public IClassifier GetClassifier(ITextBuffer buffer)
         {
-            GherkinFileEditorParser parser = GetParser(buffer);
-
-            return buffer.Properties.GetOrCreateSingletonProperty(() => 
-                new GherkinFileClassifier(parser));
+            GherkinFileClassifier.InitialiseWithBuffer(buffer);
+            return buffer.Properties.GetOrCreateSingletonProperty(() => GherkinFileClassifier);
         }
 
     }
-    #endregion //provider def
 
-    internal class GherkinFileClassifier : IClassifier
+    [Export(typeof(GherkinFileClassifier))]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
+    internal class GherkinFileClassifier : IClassifier, IDisposable
     {
-        private readonly GherkinFileEditorParser parser;
+        private GherkinFileEditorParser _parser;
+        private List<ClassificationSpan> _spans;
+        private IDisposable _disposable;
+        public event EventHandler<ClassificationChangedEventArgs> ClassificationChanged;
 
-        public GherkinFileClassifier(GherkinFileEditorParser parser)
+        public GherkinFileClassifier()
         {
-            this.parser = parser;
-
-            parser.ClassificationChanged += (sender, args) =>
-            {
-                if (ClassificationChanged != null)
-                    ClassificationChanged(this, args);
-            };
+            _spans = new List<ClassificationSpan>();
         }
 
-        /// <summary>
-        /// This method scans the given SnapshotSpan for potential matches for this classification.
-        /// In this instance, it classifies everything and returns each span as a new ClassificationSpan.
-        /// </summary>
-        /// <param name="span">The span currently being classified</param>
-        /// <returns>A list of ClassificationSpans that represent spans identified to be of this classification</returns>
+        [Import]
+        internal GherkinFileEditorParserFactory GherkinFileEditorParserFactory { get; set; }
+
+        [Import]
+        private GherkinFileEditorClassifications ClassificationRegistry { get; set; }
+
         public IList<ClassificationSpan> GetClassificationSpans(SnapshotSpan span)
         {
-            return parser.GetClassificationSpans(span);
+            return _spans;
         }
 
-        // This event gets raised if a non-text change would affect the classification in some way,
-        // for example typing /* would cause the clssification to change in C# without directly
-        // affecting the span.
-        public event EventHandler<ClassificationChangedEventArgs> ClassificationChanged;
+        public void InitialiseWithBuffer(ITextBuffer buffer)
+        {
+            _parser = GherkinFileEditorParserFactory.CreateParser(buffer); ;
+
+            IObservable<ClassificationSpan> observable = _parser.ParserEvents
+                .Where(@event => @event.EventType == ParserEventType.Feature)
+                .Select(parserEvent => new ClassificationSpan(new SnapshotSpan(buffer.CurrentSnapshot, new Span(0, 10)),
+                                                              ClassificationRegistry.FeatureTitle));
+
+            _disposable = observable
+                            .Do(
+                                span =>
+                                    {
+                                        if (ClassificationChanged != null)
+                                        {
+                                            ClassificationChanged(this,
+                                                                  new ClassificationChangedEventArgs(
+                                                                      new SnapshotSpan(buffer.CurrentSnapshot,
+                                                                                       new Span(0, 10))));
+                                        }
+                                    })
+                            .Subscribe(_spans.Add);
+
+            _parser.FirstParse();
+        }
+
+        public void Dispose()
+        {
+            _disposable.Dispose();
+        }
     }
 }

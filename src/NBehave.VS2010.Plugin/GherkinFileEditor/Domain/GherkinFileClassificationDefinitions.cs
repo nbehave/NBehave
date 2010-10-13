@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.Utilities;
 
 namespace NBehave.VS2010.Plugin.GherkinFileEditor
 {
-    internal static class GherkinFileClassificationDefinition
+    internal static class GherkinFileClassificationDefinitions
     {
         // export a new content format: gherkin
         [Export]

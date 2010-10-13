@@ -1,327 +1,212 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
+using System.ComponentModel.Composition;
 using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
-using gherkin;
 using gherkin.lexer;
+using java.util;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
-using Microsoft.VisualStudio.Text.Tagging;
 using NBehave.Narrator.Framework;
 
 namespace NBehave.VS2010.Plugin.GherkinFileEditor
 {
-    internal class GherkinFileEditorParser
+    [Export(typeof(GherkinFileEditorParserFactory))]
+    [PartCreationPolicy(CreationPolicy.Shared)]
+    internal class GherkinFileEditorParserFactory
     {
-        public static GherkinFileEditorParser GetParser(ITextBuffer buffer, IClassificationTypeRegistryService classificationRegistry)
+        [Import]
+        private GherkinFileEditorParser GherkinFileEditorParser { get; set; }
+
+        internal GherkinFileEditorParser CreateParser(ITextBuffer buffer)
         {
-            return buffer.Properties.GetOrCreateSingletonProperty(() =>
-                new GherkinFileEditorParser(buffer, classificationRegistry));
+            GherkinFileEditorParser.InitialiseWithBuffer(buffer);
+            return buffer.Properties.GetOrCreateSingletonProperty(() => GherkinFileEditorParser);
+        }
+    }
+
+    [Export(typeof(GherkinFileEditorParser))]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
+    internal class GherkinFileEditorParser : Listener
+    {
+        private ITextBuffer buffer;
+        private Subject<ParserEvent> _parserEvents;
+
+        public IObservable<ParserEvent> ParserEvents
+        {
+            get { return _parserEvents; }
         }
 
-        private class IdleHandler
+        public void InitialiseWithBuffer(ITextBuffer textBuffer)
         {
-            private DateTime nextParseTime = DateTime.MinValue;
-
-            public bool IsIdleTime()
-            {
-                return DateTime.Now >= nextParseTime;
-            }
-
-            public void SetIdleTime()
-            {
-                nextParseTime = DateTime.Now.AddMilliseconds(250);
-            }
-
-            public void WaitForIdle()
-            {
-                while (!IsIdleTime())
-                {
-                    Thread.Sleep(100);
-                }
-            }
+            buffer = textBuffer;
+            this.buffer.Changed += PartialParse;
+            _parserEvents = new Subject<ParserEvent>();
         }
 
-        private readonly ITextBuffer buffer;
-        public GherkinFileEditorInfo GherkinFileEditorInfo { get; set; }
-
-        readonly TaskFactory parsingTaskFactory = new TaskFactory();
-        private readonly object pendingChangeInfoSynchRoot = new object();
-
-        private readonly IdleHandler idleHandler = new IdleHandler();
-        private Task parsingTask;
-        private ChangeInfo pendingChangeInfo;
-        private readonly GherkinFileEditorClassifications classifications;
-
-        public event EventHandler<ClassificationChangedEventArgs> ClassificationChanged;
-        public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
-
-        public GherkinFileEditorParser(ITextBuffer buffer, IClassificationTypeRegistryService registry)
-        {
-            this.buffer = buffer;
-            this.buffer.Changed += BufferChanged;
-
-            this.classifications = new GherkinFileEditorClassifications(registry);
-
-            // initial parsing
-            ChangeInfo changeInfo = new ChangeInfo(buffer);
-            parsingTask = parsingTaskFactory.StartNew(() =>
-                ParseAndTriggerChanges(GherkinFileEditorInfo, changeInfo));
-        }
-
-        private void BufferChanged(object sender, TextContentChangedEventArgs e)
-        {
-            bool isIdleTime = idleHandler.IsIdleTime();
-            idleHandler.SetIdleTime();
-            if (parsingTask == null || (parsingTask.IsCompleted && isIdleTime))
-            {
-                // no parsing in progress -> we start parsing
-                ChangeInfo changeInfo = new ChangeInfo(e);
-                parsingTask = parsingTaskFactory.StartNew(() => 
-                    ParseAndTriggerChanges(GherkinFileEditorInfo, changeInfo));
-                return;
-            }
-
-            // the pendingChangeInfo is a shared resource, we need to protect any read/write
-            lock (pendingChangeInfoSynchRoot)
-            {
-                if (pendingChangeInfo == null)
-                {
-                    // parsing in progress, no pending request -> we queue up a pending request
-                    pendingChangeInfo = new ChangeInfo(e);
-                    parsingTask = parsingTask
-                        .ContinueWith(prevTask =>
-                                          {
-                                              idleHandler.WaitForIdle();
-                                              ParseAndTriggerChanges(GherkinFileEditorInfo,
-                                                                         ConsumePendingChangeInfo());
-                                          });
-                }
-                else
-                {
-                    // there is already a pending request -> we merge our new request into it
-                    pendingChangeInfo = pendingChangeInfo.Merge(e);
-                }
-            }
-        }
-
-        private ChangeInfo ConsumePendingChangeInfo()
-        {
-            // the pendingChangeInfo is a shared resource, we need to protect any read/write
-            ChangeInfo changeInfo;
-            lock (pendingChangeInfoSynchRoot)
-            {
-                changeInfo = pendingChangeInfo;
-                pendingChangeInfo = null;
-            }
-            return changeInfo;
-        }
-
-        private void ParseAndTriggerChanges(GherkinFileEditorInfo gherkinFileEditorInfo, ChangeInfo changeInfo)
-        {
-            if (gherkinFileEditorInfo == null)
-            {
-                // initial parsing
-                FullParse(changeInfo);
-                return;
-            }
-
-            // incremental parsing
-            var firstAffectedScenario = gherkinFileEditorInfo.ScenarioEditorInfos.LastOrDefault(
-                s => s.StartLine <= changeInfo.ChangeFirstLine);
-
-            if (firstAffectedScenario == null)
-            {
-                FullParse(changeInfo);
-                return;
-            }
-
-            PartialParse(gherkinFileEditorInfo, changeInfo, firstAffectedScenario);
-        }
-
-        private void PartialParse(GherkinFileEditorInfo gherkinFileEditorInfo, ChangeInfo changeInfo, ScenarioEditorInfo firstAffectedScenario)
-        {
-            int parseStartPosition = 
-                changeInfo.TextSnapshot.GetLineFromLineNumber(firstAffectedScenario.StartLine).Start;
-
-            string fileContent = changeInfo.TextSnapshot.GetText(parseStartPosition, changeInfo.TextSnapshot.Length - parseStartPosition);
-            string fileHeader = changeInfo.TextSnapshot.GetText(0, parseStartPosition);
-            I18n languageService = GetLanguageService(fileHeader);
-
-            ScenarioEditorInfo firstUnchangedScenario;
-            var partialResult = DoParsePartial(fileContent, languageService, 
-                                               firstAffectedScenario.StartLine, 
-                                               out firstUnchangedScenario, 
-                                               changeInfo.TextSnapshot,
-                                               gherkinFileEditorInfo,
-                                               changeInfo.ChangeLastLine,
-                                               changeInfo.LineCountDelta);
-
-            if (partialResult.HeaderClassificationSpans.Any())
-            {
-                //TODO: merge to the prev scenario?
-                partialResult.HeaderClassificationSpans.Clear();
-            }
-            partialResult.HeaderClassificationSpans.AddRange(
-                gherkinFileEditorInfo.HeaderClassificationSpans
-                    .Select(cs => cs.Shift(changeInfo.TextSnapshot, 0)));
-
-            // inserting the non-affected scenarios
-            partialResult.ScenarioEditorInfos.InsertRange(0,
-                                                          gherkinFileEditorInfo.ScenarioEditorInfos.TakeUntilItemExclusive(firstAffectedScenario)
-                                                              .Select(senario => senario.Shift(changeInfo.TextSnapshot, 0, 0)));
-
-            if (firstUnchangedScenario != null)
-            {
-                // inserting the non-effected scenarios at the end
-
-                partialResult.ScenarioEditorInfos.AddRange(
-                    gherkinFileEditorInfo.ScenarioEditorInfos.SkipFromItemInclusive(firstUnchangedScenario)
-                        .Select(
-                            scenario =>
-                            scenario.Shift(changeInfo.TextSnapshot, changeInfo.LineCountDelta, changeInfo.PositionDelta)));
-            }
-
-            TriggerChanges(partialResult, changeInfo, firstAffectedScenario, firstUnchangedScenario);
-        }
-
-        private void FullParse(ChangeInfo changeInfo)
-        {
-            string fileContent = changeInfo.TextSnapshot.GetText();
-            I18n languageService = GetLanguageService(fileContent);
-
-            var result = DoParse(fileContent, languageService, changeInfo.TextSnapshot);
-
-            TriggerChanges(result, changeInfo);
-        }
-
-        private void TriggerChanges(GherkinFileEditorInfo gherkinFileEditorInfo, ChangeInfo changeInfo, ScenarioEditorInfo firstAffectedScenario = null, ScenarioEditorInfo firstUnchangedScenario = null)
-        {
-            this.GherkinFileEditorInfo = gherkinFileEditorInfo;
-
-            var textSnapshot = changeInfo.TextSnapshot;
-            int startPosition = 0;
-            if (firstAffectedScenario != null)
-                startPosition = textSnapshot.GetLineFromLineNumber(firstAffectedScenario.StartLine).Start;
-            int endPosition = textSnapshot.Length;
-            if (firstUnchangedScenario != null)
-                endPosition = textSnapshot.GetLineFromLineNumber(firstUnchangedScenario.StartLine).Start;
-            var snapshotSpan = new SnapshotSpan(textSnapshot, startPosition, endPosition - startPosition);
-
-            if (ClassificationChanged != null)
-            {
-                ClassificationChanged(this, new ClassificationChangedEventArgs(snapshotSpan));
-            }
-            if (TagsChanged != null)
-            {
-                TagsChanged(this, new SnapshotSpanEventArgs(snapshotSpan));
-            }
-        }
-
-        private GherkinFileEditorInfo DoParsePartial(string fileContent, I18n languageService, int lineOffset, out ScenarioEditorInfo firstUnchangedScenario, ITextSnapshot textSnapshot, GherkinFileEditorInfo previousGherkinFileEditorInfo, int changeLastLine, int changeLineDelta)
-        {
-            var gherkinListener = new GherkinFileEditorParserListener(textSnapshot, classifications, previousGherkinFileEditorInfo, lineOffset, changeLastLine, changeLineDelta);
-            return DoScan(fileContent, textSnapshot, lineOffset, languageService, gherkinListener, 0, out firstUnchangedScenario);
-        }
-
-        private GherkinFileEditorInfo DoScan(string fileContent, ITextSnapshot textSnapshot, int lineOffset, I18n languageService, GherkinFileEditorParserListener gherkinListener, int errorRertyCount, out ScenarioEditorInfo firstUnchangedScenario)
-        {
-            const int MAX_ERROR_RETRY = 5;
-            const int NO_ERROR_RETRY_FOR_LINES = 5;
-
-            firstUnchangedScenario = null;
-            try
-            {
-                Lexer lexer = languageService.lexer(gherkinListener);
-                lexer.scan(fileContent);
-            }
-            catch (PartialListeningDoneException partialListeningDoneException)
-            {
-                firstUnchangedScenario = partialListeningDoneException.FirstUnchangedScenario;
-            }
-            catch(LexingError lexingError)
-            {
-                int? errorLine = GetErrorLine(lexingError, lineOffset);
-                if (errorLine != null && 
-                    errorLine.Value < textSnapshot.LineCount - NO_ERROR_RETRY_FOR_LINES &&
-                    errorRertyCount < MAX_ERROR_RETRY)
-                {
-                    //add error classification & continue
-
-                    var restartLineNumber = errorLine.Value + 1;
-                    int restartPosition = textSnapshot.GetLineFromLineNumber(restartLineNumber).Start;
-                    string restartFileContent = textSnapshot.GetText(restartPosition, textSnapshot.Length - restartPosition);
-
-                    gherkinListener.LineOffset = restartLineNumber;
-                    return DoScan(restartFileContent, textSnapshot, 
-                                  restartLineNumber, languageService, gherkinListener, 
-                                  errorRertyCount + 1,
-                                  out firstUnchangedScenario);
-                }
-            }
-// ReSharper disable EmptyGeneralCatchClause
-            catch
-// ReSharper restore EmptyGeneralCatchClause
-            {
-                // unknown error
-            }
-
-            return gherkinListener.GetResult();
-        }
-
-        private int? GetErrorLine(LexingError lexingError, int lineOffset)
-        {
-            Regex lineNoRe = new Regex(@"^Lexing error on line (?<lineno>\d+):");
-
-            var match = lineNoRe.Match(lexingError.Message);
-            if (!match.Success)
-                return null;
-
-            int parserdLine = Int32.Parse(match.Groups["lineno"].Value);
-            return parserdLine - 1 + lineOffset;
-        }
-
-        private GherkinFileEditorInfo DoParse(string fileContent, I18n languageService, ITextSnapshot textSnapshot)
-        {
-            ScenarioEditorInfo firstUnchangedScenario;
-            return DoParsePartial(fileContent, languageService, 0, out firstUnchangedScenario, textSnapshot, null, 0, 0);
-        }
-
-        private I18n GetLanguageService(string fileContent)
+        public void FirstParse()
         {
             var languageService = new LanguageService();
-            return languageService.GetGherkinLanguageService(fileContent);
+
+            Lexer lexer = languageService.GetLexer(buffer.CurrentSnapshot.GetText(), this);
+            lexer.scan(buffer.CurrentSnapshot.GetText());
         }
 
-        public IList<ClassificationSpan> GetClassificationSpans(SnapshotSpan span)
+        private void PartialParse(object sender, TextContentChangedEventArgs e)
         {
-            if (GherkinFileEditorInfo == null)
-                return new ClassificationSpan[0];
-
-            var result = new List<ClassificationSpan>();
-            result.AddRange(GherkinFileEditorInfo.HeaderClassificationSpans);
-            foreach (var scenarioEditorInfo in GherkinFileEditorInfo.ScenarioEditorInfos)
-            {
-                result.AddRange(scenarioEditorInfo.ClassificationSpans);
-            }
-            return result;
         }
 
-        public IEnumerable<ITagSpan<IOutliningRegionTag>> GetTags(NormalizedSnapshotSpanCollection spans)
+        public void feature(string keyword, string title, string description, int line)
         {
-            if (GherkinFileEditorInfo == null)
-                return new ITagSpan<IOutliningRegionTag>[0];
-
-            var result = new List<ITagSpan<IOutliningRegionTag>>();
-            result.AddRange(GherkinFileEditorInfo.HeaderOutliningRegions);
-            foreach (var scenarioEditorInfo in GherkinFileEditorInfo.ScenarioEditorInfos)
+            _parserEvents.OnNext(new ParserEvent(ParserEventType.Feature)
             {
-                result.AddRange(scenarioEditorInfo.OutliningRegions);
-            }
-            return result;
+                Keyword = keyword,
+                Title = title,
+                Description = description,
+                Line = line
+            });
         }
+
+        public void scenario(string keyword, string title, string description, int line)
+        {
+            _parserEvents.OnNext(new ParserEvent(ParserEventType.Scenario)
+            {
+                Keyword = keyword,
+                Title = title,
+                Description = description,
+                Line = line
+            });
+        }
+
+        public void examples(string keyword, string name, string description, int line)
+        {
+            _parserEvents.OnNext(new ParserEvent(ParserEventType.Examples)
+            {
+                Keyword = keyword,
+                Name = name,
+                Description = description,
+                Line = line
+            });
+        }
+
+        public void step(string keyword, string text, int line)
+        {
+            _parserEvents.OnNext(new ParserEvent(ParserEventType.Step)
+            {
+                Keyword = keyword,
+                Text = text,
+                Line = line
+            });
+        }
+
+        public void row(List list, int line)
+        {
+            _parserEvents.OnNext(new ParserEvent(ParserEventType.Row)
+            {
+                List = list.toArray().Cast<string>(),
+                Line = line
+            });
+        }
+
+        public void background(string keyword, string name, string description, int line)
+        {
+            _parserEvents.OnNext(new ParserEvent(ParserEventType.Background)
+            {
+                Keyword = keyword,
+                Name = name,
+                Description = description,
+                Line = line
+            });
+        }
+
+        public void scenarioOutline(string keyword, string name, string description, int line)
+        {
+            _parserEvents.OnNext(new ParserEvent(ParserEventType.ScenarioOutline)
+            {
+                Keyword = keyword,
+                Name = name,
+                Description = description,
+                Line = line
+            });
+        }
+
+        public void comment(string comment, int line)
+        {
+            _parserEvents.OnNext(new ParserEvent(ParserEventType.Comment)
+            {
+                Comment = comment,
+                Line = line
+            });
+        }
+
+        public void tag(string name, int line)
+        {
+            _parserEvents.OnNext(new ParserEvent(ParserEventType.Tag)
+            {
+                Name = name,
+                Line = line
+            });
+        }
+
+        public void pyString(string content, int line)
+        {
+            _parserEvents.OnNext(new ParserEvent(ParserEventType.PyString)
+            {
+                Content = content,
+                Line = line
+            });
+        }
+
+        public void eof()
+        {
+            _parserEvents.OnNext(new ParserEvent(ParserEventType.Eof)
+            {
+                Eof = true
+            });
+        }
+    }
+
+    internal enum ParserEventType
+    {
+        Feature,
+        Scenario,
+        Examples,
+        Step,
+        Row,
+        Background,
+        ScenarioOutline,
+        Comment,
+        Tag,
+        PyString,
+        Eof
+    }
+
+    internal class ParserEvent
+    {
+        public ParserEvent(ParserEventType eventType)
+        {
+            EventType = eventType;
+        }
+
+        public ParserEventType EventType { get; set; }
+
+        public string Keyword { get; set; }
+
+        public string Title { get; set; }
+
+        public string Description { get; set; }
+
+        public int Line { get; set; }
+
+        public string Name { get; set; }
+
+        public string Text { get; set; }
+
+        public IEnumerable<string> List { get; set; }
+
+        public string Comment { get; set; }
+
+        public string Content { get; set; }
+
+        public bool Eof { get; set; }
     }
 }
