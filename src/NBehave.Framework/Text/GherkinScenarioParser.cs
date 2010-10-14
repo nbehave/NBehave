@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using gherkin.lexer;
-using java.util;
+using Gherkin;
 
 namespace NBehave.Narrator.Framework
 {
-    public class GherkinScenarioParser : Listener
+    public class GherkinScenarioParser : IListener
     {
         private readonly IStringStepRunner _stringStepRunner;
         private Feature _feature;
@@ -34,66 +35,69 @@ namespace NBehave.Narrator.Framework
             var scenarioText = reader.ReadToEnd();
 
             var lexer = _languageService.GetLexer(scenarioText, this);
-            lexer.scan(scenarioText);
+            lexer.Scan(reader);
 
             return _features;
         }
 
 
-        public void feature(string keyword, string title, string description, int line)
+        public void Feature(Token keyword, Token title)
         {
             if(_features.Last().HasTitle)
             {
-                _feature = new Feature(title);
+                _feature = new Feature(title.Content);
                 _features.Add(_feature);
             }
             else
             {
-                _feature.Title = title;                
+                _feature.Title = title.Content;                
             }
-            _feature.Narrative = description;
         }
 
-        public void scenario(string keyword, string title, string description, int line)
+        public void Scenario(Token keyword, Token title)
         {
             _midExample = false;
 
             if (!_scenario.Steps.Any())
             {
                 _scenario.Feature = _feature;
-                _scenario.Title = title;    
+                _scenario.Title = title.Content;    
             }
             else
             {
                 _scenario = new ScenarioWithSteps(_stringStepRunner)
                 {
                     Feature = _feature,
-                    Title = title
+                    Title = title.Content
                 };
 
                 _feature.AddScenario(_scenario);    
             }
         }
 
-        public void examples(string keyword, string name, string description, int line)
+        public void Examples(Token keyword, Token name)
         {
             _midExample = true;
         }
 
-        public void step(string keyword, string text, int line)
+        public void Step(Token keyword, Token name, StepKind stepKind)
         {
-            _scenario.AddStep(string.Format("{0}{1}", keyword, text));
+            _scenario.AddStep(string.Format("{0}{1}", keyword, name.Content));
         }
 
-        public void row(List list, int line)
+        public void Table(IList<IList<Token>> rows, Position tablePosition)
+        {
+        }
+
+        public void Row(ArrayList list, int line)
         {
             if (!_exampleColumns.Any())
             {
-                _exampleColumns = new ExampleColumns(list.toArray().Cast<string>().Select(s => s.ToLower()));
+                _exampleColumns = new ExampleColumns(list.ToArray().Cast<string>().Select(s => s.ToLower()));
             }
             else
             {
-                var example = list.toArray().Cast<string>();
+                var example = list.ToArray().Cast<string>();
 
                 var row = new Dictionary<string, string>();
 
@@ -123,27 +127,31 @@ namespace NBehave.Narrator.Framework
             }
         }
 
-        public void background(string keyword, string name, string description, int line)
+        public void Background(Token keyword, Token name)
         {
         }
 
-        public void scenarioOutline(string keyword, string name, string description, int line)
+        public void ScenarioOutline(Token keyword, Token name)
         {
         }
 
-        public void comment(string comment, int line)
+        public void Comment(Token comment)
         {
         }
 
-        public void tag(string name, int i)
+        public void Tag(Token name)
         {
         }
 
-        public void pyString(string content, int line)
+        public void PythonString(Token content)
         {
         }
 
-        public void eof()
+        public void SyntaxError(string state, string @event, IEnumerable<string> legalEvents, Position position)
+        {
+        }
+
+        public void Eof()
         {
         }
     }

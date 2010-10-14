@@ -1,6 +1,5 @@
 ﻿using System.Text.RegularExpressions;
-using gherkin;
-using gherkin.lexer;
+using Gherkin;
 
 namespace NBehave.Narrator.Framework
 {
@@ -9,14 +8,13 @@ namespace NBehave.Narrator.Framework
         private const string DefaultLanguage = "en";
         private readonly char[] _whiteSpaceChars = new[] { ' ', '\t', '\n', '\r' };
 
-        public Lexer GetLexer(string scenarioText, Listener gherkinScenarioParser)
+        public ILexer GetLexer(string scenarioText, IListener gherkinScenarioParser)
         {
-            I18n gherkinLanguageService = GetGherkinLanguageService(scenarioText);
-
-            return gherkinLanguageService.lexer(gherkinScenarioParser);
+            var gherkinLanguage = GetGherkinLanguage(scenarioText);
+            return Lexers.Create(gherkinLanguage, gherkinScenarioParser);
         }
 
-        private I18n GetGherkinLanguageService(string scenarioText)
+        private string GetGherkinLanguage(string scenarioText)
         {
             var language = DefaultLanguage;
             var trimmed = scenarioText.TrimStart(_whiteSpaceChars);
@@ -27,7 +25,7 @@ namespace NBehave.Narrator.Framework
                 language = matches.Groups["language"].Value;
             }
 
-            return new I18n(language);
+            return language;
         }
     }
 }
