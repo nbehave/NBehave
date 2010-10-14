@@ -53,23 +53,24 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
         {
             _parser = GherkinFileEditorParserFactory.CreateParser(buffer); ;
 
-            IObservable<ClassificationSpan> observable = _parser.ParserEvents
+            IObservable<ClassificationSpan[]> observable = _parser.ParserEvents
                 .Where(@event => @event.EventType == ParserEventType.Feature)
-                .Select(parserEvent => new ClassificationSpan(new SnapshotSpan(buffer.CurrentSnapshot, parserEvent.Span), ClassificationRegistry.FeatureTitle));
+                .Select(parserEvent => new[]
+                                           {
+                                               new ClassificationSpan(new SnapshotSpan(buffer.CurrentSnapshot, parserEvent.KeywordSpan), ClassificationRegistry.Keyword),
+                                               new ClassificationSpan(new SnapshotSpan(buffer.CurrentSnapshot, parserEvent.TitleSpan), ClassificationRegistry.FeatureTitle),
+                                           });
 
-            _disposable = observable
-                            .Do(
-                                span =>
+            _disposable = observable.Do(span =>
+                            {
+                                if (ClassificationChanged != null)
+                                {
+                                    foreach (var classificationSpan in span)
                                     {
-                                        if (ClassificationChanged != null)
-                                        {
-                                            ClassificationChanged(this,
-                                                                  new ClassificationChangedEventArgs(
-                                                                      new SnapshotSpan(buffer.CurrentSnapshot,
-                                                                                       new Span(0, 10))));
-                                        }
-                                    })
-                            .Subscribe(_spans.Add);
+                                        ClassificationChanged(this, new ClassificationChangedEventArgs(new SnapshotSpan(buffer.CurrentSnapshot, classificationSpan.Span)));
+                                    }
+                                }
+                            }).Subscribe(_spans.AddRange);
 
             _parser.FirstParse();
         }

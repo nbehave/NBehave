@@ -61,10 +61,14 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
         {
             ITextSnapshotLine textSnapshotLine = buffer.CurrentSnapshot.GetLineFromLineNumber(line - 1);
             string lineFromLineNumber = textSnapshotLine.GetText();
+            var keywordMatches = new Regex("^\\s*" + keyword).Match(lineFromLineNumber);
+            Span KeywordSpan = new Span(textSnapshotLine.Start.Position + keywordMatches.Captures[0].Index, keyword.Length);
 
-            var matches = new Regex("^\\s*Feature").Match(lineFromLineNumber);
+            var titleMatches = new Regex(":").Match(lineFromLineNumber);
+            Span titleSpan = new Span(textSnapshotLine.Start.Position + titleMatches.Captures[0].Index + 1, lineFromLineNumber.Substring(titleMatches.Captures[0].Index + 1).Length);            
 
-            Span span = new Span(textSnapshotLine.Start.Position + matches.Captures[0].Index, keyword.Length);            
+
+
 
             _parserEvents.OnNext(new ParserEvent(ParserEventType.Feature)
             {
@@ -72,7 +76,9 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
                 Title = title,
                 Description = description,
                 Line = line,
-                Span = span
+                KeywordSpan = KeywordSpan,
+                TitleSpan = titleSpan
+//                DescriptionSpan = titleSpan
             });
         }
 
@@ -173,52 +179,5 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
                 Eof = true
             });
         }
-    }
-
-    public enum ParserEventType
-    {
-        Feature,
-        Scenario,
-        Examples,
-        Step,
-        Row,
-        Background,
-        ScenarioOutline,
-        Comment,
-        Tag,
-        PyString,
-        Eof
-    }
-
-    public class ParserEvent
-    {
-        public ParserEvent(ParserEventType eventType)
-        {
-            EventType = eventType;
-        }
-
-        public ParserEventType EventType { get; set; }
-
-        public string Keyword { get; set; }
-
-        public string Title { get; set; }
-
-        public string Description { get; set; }
-
-        public int Line { get; set; }
-
-        public string Name { get; set; }
-
-        public string Text { get; set; }
-
-        public IEnumerable<string> List { get; set; }
-
-        public string Comment { get; set; }
-
-        public string Content { get; set; }
-
-        public bool Eof { get; set; }
-
-        public Span Span { get; set; }
     }
 }

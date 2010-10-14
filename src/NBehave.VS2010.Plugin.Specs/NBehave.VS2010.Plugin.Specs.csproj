@@ -62,6 +62,7 @@
     <Compile Include="GherkinFileClassifierSpec.cs" />
     <Compile Include="MockObjects\MockClassificationType.cs" />
     <Compile Include="MockObjects\MockTextSnapshot.cs" />
+    <Compile Include="MockObjects\MockTextSnapshotLine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

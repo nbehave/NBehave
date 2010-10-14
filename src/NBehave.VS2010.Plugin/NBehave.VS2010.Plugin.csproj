@@ -147,12 +147,14 @@
     <Compile Include="Contracts\IVisualStudioService.cs" />
     <Compile Include="Domain\VisualStudioService.cs" />
     <Compile Include="GherkinFileEditor\Domain\GherkinFileClassificationDefinitions.cs" />
-    <Compile Include="GherkinFileEditor\GherkinFileClassifier.cs" />
+    <Compile Include="GherkinFileEditor\SyntaxHighlighting\GherkinFileClassifier.cs" />
     <Compile Include="GherkinFileEditor\Domain\GherkinFileClassifierFormats.cs" />
     <Compile Include="GherkinFileEditor\Domain\GherkinFileEditorClassifications.cs" />
     <Compile Include="GherkinFileEditor\GherkinFileEditorParser.cs" />
     <Compile Include="GherkinFileEditor\Glyphs\GherkinFileOutliningTagger.cs" />
     <Compile Include="GherkinFileEditor\Outlining\GherkinFileOutliningTagger.cs" />
+    <Compile Include="GherkinFileEditor\Domain\ParserEvent.cs" />
+    <Compile Include="GherkinFileEditor\Domain\ParserEventType.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Contracts\IOutputWindow.cs" />
     <Compile Include="Contracts\IComponentInitialiser.cs" />
