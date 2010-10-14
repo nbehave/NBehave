@@ -8,7 +8,7 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
     public class GherkinFileEditorClassifications
     {
         [Import]
-        private IClassificationTypeRegistryService ClassificationRegistry { get; set; }
+        public IClassificationTypeRegistryService ClassificationRegistry { get; set; }
 
         public IClassificationType Keyword
         {

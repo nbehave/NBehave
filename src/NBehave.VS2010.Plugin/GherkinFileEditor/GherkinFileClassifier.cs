@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.ComponentModel.Composition.Hosting;
 using System.Linq;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
@@ -27,7 +26,7 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
 
     [Export(typeof(GherkinFileClassifier))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
-    internal class GherkinFileClassifier : IClassifier, IDisposable
+    public class GherkinFileClassifier : IClassifier, IDisposable
     {
         private GherkinFileEditorParser _parser;
         private List<ClassificationSpan> _spans;
@@ -40,10 +39,10 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
         }
 
         [Import]
-        internal GherkinFileEditorParserFactory GherkinFileEditorParserFactory { get; set; }
+        public GherkinFileEditorParserFactory GherkinFileEditorParserFactory { get; set; }
 
         [Import]
-        private GherkinFileEditorClassifications ClassificationRegistry { get; set; }
+        public GherkinFileEditorClassifications ClassificationRegistry { get; set; }
 
         public IList<ClassificationSpan> GetClassificationSpans(SnapshotSpan span)
         {
@@ -56,8 +55,7 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
 
             IObservable<ClassificationSpan> observable = _parser.ParserEvents
                 .Where(@event => @event.EventType == ParserEventType.Feature)
-                .Select(parserEvent => new ClassificationSpan(new SnapshotSpan(buffer.CurrentSnapshot, new Span(0, 10)),
-                                                              ClassificationRegistry.FeatureTitle));
+                .Select(parserEvent => new ClassificationSpan(new SnapshotSpan(buffer.CurrentSnapshot, parserEvent.Span), ClassificationRegistry.FeatureTitle));
 
             _disposable = observable
                             .Do(

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
+using System.Text.RegularExpressions;
 using gherkin.lexer;
 using java.util;
 using Microsoft.VisualStudio.Text;
@@ -12,10 +13,10 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
 {
     [Export(typeof(GherkinFileEditorParserFactory))]
     [PartCreationPolicy(CreationPolicy.Shared)]
-    internal class GherkinFileEditorParserFactory
+    public class GherkinFileEditorParserFactory
     {
         [Import]
-        private GherkinFileEditorParser GherkinFileEditorParser { get; set; }
+        public GherkinFileEditorParser GherkinFileEditorParser { get; set; }
 
         internal GherkinFileEditorParser CreateParser(ITextBuffer buffer)
         {
@@ -26,7 +27,7 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
 
     [Export(typeof(GherkinFileEditorParser))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
-    internal class GherkinFileEditorParser : Listener
+    public class GherkinFileEditorParser : Listener
     {
         private ITextBuffer buffer;
         private Subject<ParserEvent> _parserEvents;
@@ -38,9 +39,10 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
 
         public void InitialiseWithBuffer(ITextBuffer textBuffer)
         {
+            _parserEvents = new Subject<ParserEvent>();
+
             buffer = textBuffer;
             this.buffer.Changed += PartialParse;
-            _parserEvents = new Subject<ParserEvent>();
         }
 
         public void FirstParse()
@@ -57,12 +59,20 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
 
         public void feature(string keyword, string title, string description, int line)
         {
+            ITextSnapshotLine textSnapshotLine = buffer.CurrentSnapshot.GetLineFromLineNumber(line - 1);
+            string lineFromLineNumber = textSnapshotLine.GetText();
+
+            var matches = new Regex("^\\s*Feature").Match(lineFromLineNumber);
+
+            Span span = new Span(textSnapshotLine.Start.Position + matches.Captures[0].Index, keyword.Length);            
+
             _parserEvents.OnNext(new ParserEvent(ParserEventType.Feature)
             {
                 Keyword = keyword,
                 Title = title,
                 Description = description,
-                Line = line
+                Line = line,
+                Span = span
             });
         }
 
@@ -165,7 +175,7 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
         }
     }
 
-    internal enum ParserEventType
+    public enum ParserEventType
     {
         Feature,
         Scenario,
@@ -180,7 +190,7 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
         Eof
     }
 
-    internal class ParserEvent
+    public class ParserEvent
     {
         public ParserEvent(ParserEventType eventType)
         {
@@ -208,5 +218,7 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
         public string Content { get; set; }
 
         public bool Eof { get; set; }
+
+        public Span Span { get; set; }
     }
 }
