@@ -1,6 +1,6 @@
 namespace NBehave.VS2010.Plugin.Contracts
 {
-    internal interface IOutputWindow
+    public interface IOutputWindow
     {
         void WriteLine(string message);
         void BringToFront();

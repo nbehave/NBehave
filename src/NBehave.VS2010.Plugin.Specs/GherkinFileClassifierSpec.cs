@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.Text;
@@ -16,6 +17,12 @@ namespace NBehave.VS2010.Plugin.Specs
         private GherkinFileClassifier _gherkinFileClassifier;
         private ITextSnapshot _snapshot;
         private ITextBuffer _buffer;
+
+        [SetUp]
+        public void Setup()
+        {
+            TestInitialise("Features/gherkin.feature");
+        }
 
         private void TestInitialise(string gherkinFileLocation)
         {
@@ -56,12 +63,7 @@ namespace NBehave.VS2010.Plugin.Specs
         [Test]
         public void ShouldClassifyFeatureKeyword()
         {
-            TestInitialise("Features/gherkin.feature");
-
-            var spans = _gherkinFileClassifier
-                                .GetClassificationSpans(new SnapshotSpan())
-                                .Where(span => span.ClassificationType.IsOfType("gherkin.keyword"))
-                                .Select(classificationSpan => classificationSpan.Span.GetText());
+            IEnumerable<string> spans = GetSpans("gherkin.keyword");
 
             CollectionAssert.AreEqual(spans, new[]{ "Feature", "Feature", "Feature"});
         }
@@ -69,14 +71,38 @@ namespace NBehave.VS2010.Plugin.Specs
         [Test]
         public void ShouldClassifyFeatureTitle()
         {
-            TestInitialise("Features/gherkin.feature");
-
-            var spans = _gherkinFileClassifier
-                                .GetClassificationSpans(new SnapshotSpan())
-                                .Where(span => span.ClassificationType.IsOfType("gherkin.featuretitle"))
-                                .Select(classificationSpan => classificationSpan.Span.GetText());
+            IEnumerable<string> spans = GetSpans("gherkin.featuretitle");
 
             CollectionAssert.AreEqual(spans, new[] { " S1" + Environment.NewLine, " S2" + Environment.NewLine, " S3" + Environment.NewLine });
+        }
+
+        [Test]
+        public void ShouldClassifyFeatureDescription()
+        {
+            IEnumerable<string> spans = GetSpans("gherkin.description").ToArray();
+
+            CollectionAssert.AreEqual(spans, new[]
+                                                 {
+                                                    "  As a X1" + Environment.NewLine +
+                                                    "  I want Y1" + Environment.NewLine +
+                                                    "  So that Z1"  + Environment.NewLine,
+                                                    
+                                                    "  As a X2" + Environment.NewLine +
+                                                    "  I want Y2" + Environment.NewLine +
+                                                    "  So that Z2"  + Environment.NewLine,
+                                                    
+                                                    "  As a X3" + Environment.NewLine +
+                                                    "  I want Y3" + Environment.NewLine +
+                                                    "  So that Z3"  + Environment.NewLine,
+                                                });
+        }
+
+        private IEnumerable<string> GetSpans(string gherkinKeyword)
+        {
+            return _gherkinFileClassifier
+                .GetClassificationSpans(new SnapshotSpan())
+                .Where(span => span.ClassificationType.IsOfType(gherkinKeyword))
+                .Select(classificationSpan => classificationSpan.Span.GetText());
         }
     }
 }

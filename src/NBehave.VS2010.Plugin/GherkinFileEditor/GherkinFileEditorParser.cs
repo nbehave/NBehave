@@ -6,8 +6,8 @@ using System.Text.RegularExpressions;
 using gherkin.lexer;
 using java.util;
 using Microsoft.VisualStudio.Text;
-using Microsoft.VisualStudio.Text.Classification;
 using NBehave.Narrator.Framework;
+using Observable = System.Linq.Observable;
 
 namespace NBehave.VS2010.Plugin.GherkinFileEditor
 {
@@ -27,10 +27,11 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
 
     [Export(typeof(GherkinFileEditorParser))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
-    public class GherkinFileEditorParser : Listener
+    public class GherkinFileEditorParser : Listener, IDisposable
     {
-        private ITextBuffer buffer;
         private Subject<ParserEvent> _parserEvents;
+        private IDisposable _inputListener;
+        private ITextSnapshot _snapshot;
 
         public IObservable<ParserEvent> ParserEvents
         {
@@ -40,35 +41,55 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
         public void InitialiseWithBuffer(ITextBuffer textBuffer)
         {
             _parserEvents = new Subject<ParserEvent>();
+            _snapshot = textBuffer.CurrentSnapshot;
 
-            buffer = textBuffer;
-            this.buffer.Changed += PartialParse;
+            IObservable<IEvent<TextContentChangedEventArgs>> fromEvent = 
+                Observable.FromEvent((EventHandler<TextContentChangedEventArgs> ev) => 
+                    new EventHandler<TextContentChangedEventArgs>(ev),
+                    handler => textBuffer.Changed += handler,
+                    handler => textBuffer.Changed -= handler);
+
+            _inputListener = fromEvent
+                .Sample(TimeSpan.FromSeconds(2))
+                .Select(event1 => event1.EventArgs.After)
+                .Subscribe(Parse);
+        }
+
+        private void Parse(ITextSnapshot snapshot)
+        {
+            _snapshot = snapshot;
+
+            try
+            {
+                var languageService = new LanguageService();
+
+                Lexer lexer = languageService.GetLexer(snapshot.GetText(), this);
+                lexer.scan(snapshot.GetText());
+            }
+            catch (Exception) { }
         }
 
         public void FirstParse()
         {
-            var languageService = new LanguageService();
-
-            Lexer lexer = languageService.GetLexer(buffer.CurrentSnapshot.GetText(), this);
-            lexer.scan(buffer.CurrentSnapshot.GetText());
-        }
-
-        private void PartialParse(object sender, TextContentChangedEventArgs e)
-        {
+            Parse(_snapshot);
         }
 
         public void feature(string keyword, string title, string description, int line)
         {
-            ITextSnapshotLine textSnapshotLine = buffer.CurrentSnapshot.GetLineFromLineNumber(line - 1);
+            ITextSnapshotLine textSnapshotLine = _snapshot.GetLineFromLineNumber(line - 1);
             string lineFromLineNumber = textSnapshotLine.GetText();
             var keywordMatches = new Regex("^\\s*" + keyword).Match(lineFromLineNumber);
             Span KeywordSpan = new Span(textSnapshotLine.Start.Position + keywordMatches.Captures[0].Index, keyword.Length);
 
             var titleMatches = new Regex(":").Match(lineFromLineNumber);
-            Span titleSpan = new Span(textSnapshotLine.Start.Position + titleMatches.Captures[0].Index + 1, lineFromLineNumber.Substring(titleMatches.Captures[0].Index + 1).Length);            
+            Span titleSpan = new Span(textSnapshotLine.Start.Position + titleMatches.Captures[0].Index + 1, lineFromLineNumber.Substring(titleMatches.Captures[0].Index + 1).Length);
 
+            int descriptionEndPosition = _snapshot.GetLineFromLineNumber(
+                description.Split(new[] {Environment.NewLine}, StringSplitOptions.None).Count() + line -1).Start.Position;
 
+            int descriptionStartPosition = _snapshot.GetLineFromLineNumber(line).Start.Position;
 
+            Span descriptionSpan = new Span(descriptionStartPosition, descriptionEndPosition - descriptionStartPosition);
 
             _parserEvents.OnNext(new ParserEvent(ParserEventType.Feature)
             {
@@ -77,8 +98,8 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
                 Description = description,
                 Line = line,
                 KeywordSpan = KeywordSpan,
-                TitleSpan = titleSpan
-//                DescriptionSpan = titleSpan
+                TitleSpan = titleSpan,
+                DescriptionSpan = descriptionSpan
             });
         }
 
@@ -174,10 +195,12 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
 
         public void eof()
         {
-            _parserEvents.OnNext(new ParserEvent(ParserEventType.Eof)
-            {
-                Eof = true
-            });
+            _parserEvents.OnNext(new ParserEvent(ParserEventType.Eof));
+        }
+
+        public void Dispose()
+        {
+            _inputListener.Dispose();
         }
     }
 }
