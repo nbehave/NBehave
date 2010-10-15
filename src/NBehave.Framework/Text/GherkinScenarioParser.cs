@@ -33,9 +33,17 @@ namespace NBehave.Narrator.Framework
         {
             var reader = new StreamReader(stream);
             var scenarioText = reader.ReadToEnd();
+            //stream.Position = 0;
+
+            // We write a new stream just to remove \r
+            var ms = new MemoryStream();
+            var sr = new StreamWriter(ms);
+            sr.Write(scenarioText.Replace("\r", ""));
+            sr.Flush();
+            ms.Seek(0, SeekOrigin.Begin);
 
             var lexer = _languageService.GetLexer(scenarioText, this);
-            lexer.Scan(reader);
+            lexer.Scan(new StreamReader(ms));
 
             return _features;
         }
@@ -50,7 +58,7 @@ namespace NBehave.Narrator.Framework
             }
             else
             {
-                _feature.Title = title.Content;                
+                _feature.ExtractTitleAndNarrative(title.Content);
             }
         }
 
@@ -82,22 +90,26 @@ namespace NBehave.Narrator.Framework
 
         public void Step(Token keyword, Token name, StepKind stepKind)
         {
-            _scenario.AddStep(string.Format("{0}{1}", keyword, name.Content));
+            _scenario.AddStep(string.Format("{0}{1}", keyword.Content, name.Content));
         }
 
         public void Table(IList<IList<Token>> rows, Position tablePosition)
         {
+            foreach (var row in rows)
+            {
+                Row(row, tablePosition);
+            }
         }
 
-        public void Row(ArrayList list, int line)
+        public void Row(IList<Token> list, Position tablePosition)
         {
             if (!_exampleColumns.Any())
             {
-                _exampleColumns = new ExampleColumns(list.ToArray().Cast<string>().Select(s => s.ToLower()));
+                _exampleColumns = new ExampleColumns(list.Select(token => token.Content.ToLower()));
             }
             else
             {
-                var example = list.ToArray().Cast<string>();
+                var example = list.Select(token => token.Content);
 
                 var row = new Dictionary<string, string>();
 

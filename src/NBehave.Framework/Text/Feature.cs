@@ -15,8 +15,7 @@ namespace NBehave.Narrator.Framework
 
         public Feature(string title)
         {
-            Title = title;
-            Narrative = string.Empty;
+            ExtractTitleAndNarrative(title);
         }
 
         public string Title { get; set; }
@@ -44,6 +43,21 @@ namespace NBehave.Narrator.Framework
 
             var e = new EventArgs<Feature>(this);
             FeatureCreated(null, e);
+        }
+
+        public void ExtractTitleAndNarrative(string content)
+        {
+            if(content.Contains(Environment.NewLine))
+            {
+                var lineBreakPosn = content.IndexOf(Environment.NewLine);
+                Title = content.Substring(0, lineBreakPosn);
+                Narrative = content.Substring(lineBreakPosn + Environment.NewLine.Length);
+            }
+            else
+            {
+                Title = content;
+                Narrative = String.Empty;
+            }
         }
     }
 }

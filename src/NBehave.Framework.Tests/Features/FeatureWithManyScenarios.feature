@@ -1,7 +1,7 @@
 ﻿Feature: Greeting system
-As a X
-I want y
-So that Z
+ As a X
+ I want y
+ So that Z
 
 Scenario: greeting Morgan 
 	Given my name is Morgan

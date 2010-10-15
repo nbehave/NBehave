@@ -40,7 +40,7 @@ namespace NBehave.Examples.Calculator_table
             _calculator = new Calculator();
         }
 
-        protected void And_I_have_entered_1_into_the_calculator()
+        protected void Given_I_have_entered_1_into_the_calculator()
         {
             _calculator.Enter(1);
         }
