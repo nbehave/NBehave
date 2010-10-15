@@ -33,10 +33,6 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
 
         public bool Eof { get; set; }
 
-        public Span KeywordSpan { get; set; }
-
-        public Span TitleSpan { get; set; }
-
-        public Span DescriptionSpan { get; set; }
+        public ITextSnapshot Snapshot { get; set; }
     }
 }

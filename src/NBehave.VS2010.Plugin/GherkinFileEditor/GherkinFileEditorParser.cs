@@ -76,30 +76,13 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
 
         public void feature(string keyword, string title, string description, int line)
         {
-            ITextSnapshotLine textSnapshotLine = _snapshot.GetLineFromLineNumber(line - 1);
-            string lineFromLineNumber = textSnapshotLine.GetText();
-            var keywordMatches = new Regex("^\\s*" + keyword).Match(lineFromLineNumber);
-            Span KeywordSpan = new Span(textSnapshotLine.Start.Position + keywordMatches.Captures[0].Index, keyword.Length);
-
-            var titleMatches = new Regex(":").Match(lineFromLineNumber);
-            Span titleSpan = new Span(textSnapshotLine.Start.Position + titleMatches.Captures[0].Index + 1, lineFromLineNumber.Substring(titleMatches.Captures[0].Index + 1).Length);
-
-            int descriptionEndPosition = _snapshot.GetLineFromLineNumber(
-                description.Split(new[] {Environment.NewLine}, StringSplitOptions.None).Count() + line -1).Start.Position;
-
-            int descriptionStartPosition = _snapshot.GetLineFromLineNumber(line).Start.Position;
-
-            Span descriptionSpan = new Span(descriptionStartPosition, descriptionEndPosition - descriptionStartPosition);
-
             _parserEvents.OnNext(new ParserEvent(ParserEventType.Feature)
             {
                 Keyword = keyword,
                 Title = title,
                 Description = description,
                 Line = line,
-                KeywordSpan = KeywordSpan,
-                TitleSpan = titleSpan,
-                DescriptionSpan = descriptionSpan
+                Snapshot = _snapshot
             });
         }
 
@@ -110,7 +93,8 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
                 Keyword = keyword,
                 Title = title,
                 Description = description,
-                Line = line
+                Line = line,
+                Snapshot = _snapshot
             });
         }
 
@@ -121,7 +105,8 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
                 Keyword = keyword,
                 Name = name,
                 Description = description,
-                Line = line
+                Line = line,
+                Snapshot = _snapshot
             });
         }
 
@@ -131,7 +116,8 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
             {
                 Keyword = keyword,
                 Text = text,
-                Line = line
+                Line = line,
+                Snapshot = _snapshot
             });
         }
 
@@ -140,7 +126,8 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
             _parserEvents.OnNext(new ParserEvent(ParserEventType.Row)
             {
                 List = list.toArray().Cast<string>(),
-                Line = line
+                Line = line,
+                Snapshot = _snapshot
             });
         }
 
@@ -151,7 +138,8 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
                 Keyword = keyword,
                 Name = name,
                 Description = description,
-                Line = line
+                Line = line,
+                Snapshot = _snapshot
             });
         }
 
@@ -162,7 +150,8 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
                 Keyword = keyword,
                 Name = name,
                 Description = description,
-                Line = line
+                Line = line,
+                Snapshot = _snapshot
             });
         }
 
@@ -171,7 +160,8 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
             _parserEvents.OnNext(new ParserEvent(ParserEventType.Comment)
             {
                 Comment = comment,
-                Line = line
+                Line = line,
+                Snapshot = _snapshot
             });
         }
 
@@ -180,7 +170,8 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
             _parserEvents.OnNext(new ParserEvent(ParserEventType.Tag)
             {
                 Name = name,
-                Line = line
+                Line = line,
+                Snapshot = _snapshot
             });
         }
 
@@ -189,7 +180,8 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
             _parserEvents.OnNext(new ParserEvent(ParserEventType.PyString)
             {
                 Content = content,
-                Line = line
+                Line = line,
+                Snapshot = _snapshot
             });
         }
 

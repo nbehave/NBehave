@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Utilities;
 using NBehave.VS2010.Plugin.GherkinFileEditor;
+using NBehave.VS2010.Plugin.GherkinFileEditor.SyntaxHighlighting.Classifiers;
 using NUnit.Framework;
 using Rhino.Mocks;
 
@@ -15,7 +16,6 @@ namespace NBehave.VS2010.Plugin.Specs
     public class GherkinFileClassifierSpec
     {
         private GherkinFileClassifier _gherkinFileClassifier;
-        private ITextSnapshot _snapshot;
         private ITextBuffer _buffer;
 
         [SetUp]
@@ -37,21 +37,23 @@ namespace NBehave.VS2010.Plugin.Specs
                                 };
                 });
 
+            var gherkinFileEditorClassifications = new GherkinFileEditorClassifications{ ClassificationRegistry = registry};
+
             _gherkinFileClassifier = new GherkinFileClassifier
                                          {
-                                             ClassificationRegistry = new GherkinFileEditorClassifications
-                                                                          {
-                                                                              ClassificationRegistry = registry
-                                                                          },
                                              GherkinFileEditorParserFactory = new GherkinFileEditorParserFactory
                                                                                   {
                                                                                       GherkinFileEditorParser = new GherkinFileEditorParser()
-                                                                                  }
+                                                                                  },
+                                             Classifiers = new IGherkinClassifier[]
+                                                               {
+                                                                    new FeatureClassifier{ ClassificationRegistry = gherkinFileEditorClassifications },  
+                                                                    new ScenarioKeywordClassifier{ ClassificationRegistry = gherkinFileEditorClassifications }  
+                                                               }
                                          };
 
             _buffer = MockRepository.GenerateMock<ITextBuffer>();
             _buffer.Stub(textBuffer => textBuffer.Properties).Return(new PropertyCollection());
-            _snapshot = MockRepository.GenerateMock<ITextSnapshot>();
 
             var gherkinFile = new StreamReader(gherkinFileLocation).ReadToEnd();
 
@@ -63,9 +65,9 @@ namespace NBehave.VS2010.Plugin.Specs
         [Test]
         public void ShouldClassifyFeatureKeyword()
         {
-            IEnumerable<string> spans = GetSpans("gherkin.keyword");
+            IEnumerable<string> spans = GetSpans("gherkin.keyword").Where(s => s == "Feature");
 
-            CollectionAssert.AreEqual(spans, new[]{ "Feature", "Feature", "Feature"});
+            Assert.That(spans.Count(), Is.EqualTo(3));
         }
 
         [Test]
@@ -95,6 +97,14 @@ namespace NBehave.VS2010.Plugin.Specs
                                                     "  I want Y3" + Environment.NewLine +
                                                     "  So that Z3"  + Environment.NewLine,
                                                 });
+        }
+
+        [Test]
+        public void ShouldClassifyScenarioKeyword()
+        {
+            IEnumerable<string> spans = GetSpans("gherkin.keyword").Where(s => s.Trim() == "Scenario");
+
+            Assert.That(spans.Count(), Is.EqualTo(5));
         }
 
         private IEnumerable<string> GetSpans(string gherkinKeyword)

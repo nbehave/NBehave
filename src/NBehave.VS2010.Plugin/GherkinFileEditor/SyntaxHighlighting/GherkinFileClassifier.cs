@@ -5,6 +5,7 @@ using System.Linq;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Utilities;
+using NBehave.VS2010.Plugin.GherkinFileEditor.SyntaxHighlighting.Classifiers;
 
 namespace NBehave.VS2010.Plugin.GherkinFileEditor
 {
@@ -30,23 +31,18 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
     {
         private GherkinFileEditorParser _parser;
         private List<ClassificationSpan> _spans;
-        private IDisposable _featureListener;
+        private IDisposable _classificationsListener;
         private bool _finishedParsing;
         private IDisposable _eofListener;
         private IDisposable _startListener;
         public event EventHandler<ClassificationChangedEventArgs> ClassificationChanged;
-
-        public GherkinFileClassifier()
-        {
-            _spans = new List<ClassificationSpan>();
-        }
-
+        
         [Import]
         public GherkinFileEditorParserFactory GherkinFileEditorParserFactory { get; set; }
 
-        [Import]
-        public GherkinFileEditorClassifications ClassificationRegistry { get; set; }
-
+        [ImportMany]
+        public IList<IGherkinClassifier> Classifiers { get; set; }
+        
         public IList<ClassificationSpan> GetClassificationSpans(SnapshotSpan span)
         {
             return _spans;
@@ -57,11 +53,12 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
             if (_parser != null)
                 return;
 
-            _spans.Clear();
+            _spans = new List<ClassificationSpan>();
 
             _parser = GherkinFileEditorParserFactory.CreateParser(buffer); ;
 
-            _startListener = _parser.ParserEvents.Where(event2 => event2.EventType != ParserEventType.Eof)
+            _startListener = _parser.ParserEvents
+                .Where(event2 => event2.EventType != ParserEventType.Eof)
                 .Subscribe(parserEvent2 =>
                 {
                     if (_finishedParsing)
@@ -70,57 +67,37 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
                         _spans.Clear();
                     }
                 });
-            _eofListener = _parser.ParserEvents.Where(event1 => event1.EventType == ParserEventType.Eof)
+
+            _eofListener = _parser.ParserEvents
+                .Where(event1 => event1.EventType == ParserEventType.Eof)
                 .Subscribe(parserEvent1 =>
-                               {
-
-                                   foreach (var classificationSpan in _spans)
-                                   {
-                                       if (ClassificationChanged != null)
-                                       {
-                                           ClassificationChanged(this, new ClassificationChangedEventArgs(classificationSpan.Span));
-                                       }
-                                   }
-
-                                   _finishedParsing = true;
-                               }
-                );
-
-            IObservable<ClassificationSpan[]> observable = _parser.ParserEvents
-                .Where(@event => @event.EventType == ParserEventType.Feature)
-                .Select(parserEvent => new[]
-                                           {
-                                               new ClassificationSpan(new SnapshotSpan(buffer.CurrentSnapshot, parserEvent.KeywordSpan), ClassificationRegistry.Keyword),
-                                               new ClassificationSpan(new SnapshotSpan(buffer.CurrentSnapshot, parserEvent.TitleSpan), ClassificationRegistry.FeatureTitle),
-                                               new ClassificationSpan(new SnapshotSpan(buffer.CurrentSnapshot, parserEvent.DescriptionSpan), ClassificationRegistry.Description),
-                                           });
-            
-            
-            
-            _featureListener = observable.Subscribe((spans => _spans.AddRange(spans)));
+                {
+                    if (ClassificationChanged != null)
+                    {
+                        foreach (var classificationSpan in _spans)
+                        {
+                            ClassificationChanged(this, new ClassificationChangedEventArgs(classificationSpan.Span));
+                        }
+                    }
+                    _finishedParsing = true;
+                });
 
 
+            _classificationsListener = _parser
+                                        .ParserEvents
+                                        .Select(parserEvent => Classifiers
+                                                .With(list => list.FirstOrDefault(classifier => classifier.CanClassify(parserEvent)))
+                                                .Return(gherkinClassifier => gherkinClassifier.Classify(parserEvent), new List<ClassificationSpan>()))
+                                        .Subscribe((spans => _spans.AddRange(spans)));
 
-//
-//
-//            , () =>
-//                                                              {
-//         if (ClassificationChanged != null)
-//                                {
-//                                                                  foreach (var classificationSpan in _spans)
-//                                                                  {
-//                                                                  }
-//                                                                  ClassificationChanged(this, null);
-//
-//                                }
-//
-//                                                              }
             _parser.FirstParse();
         }
 
         public void Dispose()
         {
-            _featureListener.Dispose();
+            _eofListener.Dispose();
+            _startListener.Dispose();
+            _classificationsListener.Dispose();
         }
     }
 }
