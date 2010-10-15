@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using Microsoft.VisualStudio.Text;
@@ -15,26 +14,11 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor.SyntaxHighlighting.Classifiers
             return parserEvent.EventType == ParserEventType.Feature;
         }
 
-        public override IList<ClassificationSpan> Classify(ParserEvent event3)
+        public override void RegisterClassificationDefinitions()
         {
-            ITextSnapshotLine textSnapshotLine = event3.Snapshot.GetLineFromLineNumber(event3.Line - 1);
-
-            List<ClassificationSpan> spans = new List<ClassificationSpan>();
-
-            try
-            {
-                ClassificationSpan keyword = GetKeywordSpan(textSnapshotLine, event3.Keyword, event3.Snapshot);
-                spans.Add(keyword);
-                ClassificationSpan title = GetTitleSpan(textSnapshotLine, event3.Snapshot, ClassificationRegistry.FeatureTitle);
-                spans.Add(title);
-                ClassificationSpan description = GetDescriptionSpan(event3.Line, event3.Description, event3.Snapshot);
-                spans.Add(description);
-            }
-            catch(Exception) 
-            {
-            }
-
-            return spans;
+            Register(GetKeywordSpan);
+            Register(parserEvent => GetTitleSpan(parserEvent, ClassificationRegistry.FeatureTitle));
+            Register(parserEvent => GetDescriptionSpan(parserEvent.Line, parserEvent.Description, parserEvent.Snapshot));   
         }
 
         private ClassificationSpan GetDescriptionSpan(int line, string description, ITextSnapshot snapshot)

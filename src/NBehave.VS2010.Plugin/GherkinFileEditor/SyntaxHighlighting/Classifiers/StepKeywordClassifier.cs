@@ -3,17 +3,16 @@
 namespace NBehave.VS2010.Plugin.GherkinFileEditor.SyntaxHighlighting.Classifiers
 {
     [Export(typeof(IGherkinClassifier))]
-    public class ScenarioClassifier : GherkinClassifierBase
+    public class StepKeywordClassifier : GherkinClassifierBase
     {
         public override bool CanClassify(ParserEvent parserEvent)
         {
-            return parserEvent.EventType == ParserEventType.Scenario;
+            return parserEvent.EventType == ParserEventType.Step;
         }
 
         public override void RegisterClassificationDefinitions()
         {
-            Register(GetKeywordSpan);
-            Register(@event => GetTitleSpan(@event, ClassificationRegistry.ScenarioTitle));
+            Register(@event => GetKeywordSpan(@event));
         }
     }
 }

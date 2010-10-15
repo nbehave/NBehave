@@ -7,6 +7,6 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor.SyntaxHighlighting.Classifiers
     public interface IGherkinClassifier
     {
         bool CanClassify(ParserEvent parserEvent);
-        IList<ClassificationSpan> Classify(ParserEvent event3);
+        IList<ClassificationSpan> Classify(ParserEvent parserEvent);
     }
 }

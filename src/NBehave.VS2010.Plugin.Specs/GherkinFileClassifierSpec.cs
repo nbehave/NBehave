@@ -48,7 +48,8 @@ namespace NBehave.VS2010.Plugin.Specs
                                              Classifiers = new IGherkinClassifier[]
                                                                {
                                                                     new FeatureClassifier{ ClassificationRegistry = gherkinFileEditorClassifications },  
-                                                                    new ScenarioClassifier{ ClassificationRegistry = gherkinFileEditorClassifications }  
+                                                                    new ScenarioClassifier{ ClassificationRegistry = gherkinFileEditorClassifications },
+                                                                    new StepKeywordClassifier(){ ClassificationRegistry = gherkinFileEditorClassifications },
                                                                }
                                          };
 
@@ -120,6 +121,15 @@ namespace NBehave.VS2010.Plugin.Specs
                                               " SC3" + Environment.NewLine,
                                               " FailingScenario" + Environment.NewLine
                                           });
+        }
+
+        [Test]
+        public void ShouldClassifyStepKeywords()
+        {
+            IEnumerable<string> spans = GetSpans("gherkin.keyword")
+                                            .Where(s => s.Trim() == "Given" || s.Trim() == "When" || s.Trim() == "Then");
+
+            Assert.That(spans.Count(), Is.EqualTo(15));
         }
 
         private IEnumerable<string> GetSpans(string gherkinKeyword)
