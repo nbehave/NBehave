@@ -10,14 +10,14 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor.SyntaxHighlighting.Classifiers
 {
     public abstract class GherkinClassifierBase : IGherkinClassifier
     {
-        private List<Func<ParserEvent, ClassificationSpan>> definitions = new List<Func<ParserEvent, ClassificationSpan>>();
+        private List<Func<ParserEvent, IEnumerable<ClassificationSpan>>> definitions = new List<Func<ParserEvent, IEnumerable<ClassificationSpan>>>();
 
         [Import]
         public GherkinFileEditorClassifications ClassificationRegistry { get; set; }
 
         protected GherkinClassifierBase()
         {
-            definitions = new List<Func<ParserEvent, ClassificationSpan>>();
+            definitions = new List<Func<ParserEvent, IEnumerable<ClassificationSpan>>>();
             RegisterClassificationDefinitions();
         }
 
@@ -52,7 +52,7 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor.SyntaxHighlighting.Classifiers
 
             try
             {
-                spans.AddRange(definitions.Select(definition => definition.Invoke(parserEvent)));
+                spans.AddRange(definitions.SelectMany(definition => definition(parserEvent)));
             }
             catch (Exception) { }
 
@@ -62,6 +62,11 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor.SyntaxHighlighting.Classifiers
         public abstract void RegisterClassificationDefinitions();
 
         public void Register(Func<ParserEvent, ClassificationSpan> definition)
+        {
+            definitions.Add(parserEvent => new List<ClassificationSpan>{definition(parserEvent)});
+        }
+
+        public void Register(Func<ParserEvent, IEnumerable<ClassificationSpan>> definition)
         {
             definitions.Add(definition);
         }

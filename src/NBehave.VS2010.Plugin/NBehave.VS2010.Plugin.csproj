@@ -149,7 +149,7 @@
     <Compile Include="GherkinFileEditor\SyntaxHighlighting\Classifiers\GherkinClassifierBase.cs" />
     <Compile Include="GherkinFileEditor\SyntaxHighlighting\Classifiers\ScenarioClassifier.cs" />
     <Compile Include="GherkinFileEditor\SyntaxHighlighting\Classifiers\IGherkinClassifier.cs" />
-    <Compile Include="GherkinFileEditor\SyntaxHighlighting\Classifiers\StepKeywordClassifier.cs" />
+    <Compile Include="GherkinFileEditor\SyntaxHighlighting\Classifiers\StepClassifier.cs" />
     <Compile Include="GherkinFileEditor\SyntaxHighlighting\GherkinFileClassifier.cs" />
     <Compile Include="GherkinFileEditor\Domain\GherkinFileClassifierFormats.cs" />
     <Compile Include="GherkinFileEditor\Domain\GherkinFileEditorClassifications.cs" />

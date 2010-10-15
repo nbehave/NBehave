@@ -49,7 +49,7 @@ namespace NBehave.VS2010.Plugin.Specs
                                                                {
                                                                     new FeatureClassifier{ ClassificationRegistry = gherkinFileEditorClassifications },  
                                                                     new ScenarioClassifier{ ClassificationRegistry = gherkinFileEditorClassifications },
-                                                                    new StepKeywordClassifier(){ ClassificationRegistry = gherkinFileEditorClassifications },
+                                                                    new StepClassifier(){ ClassificationRegistry = gherkinFileEditorClassifications },
                                                                }
                                          };
 
@@ -76,7 +76,12 @@ namespace NBehave.VS2010.Plugin.Specs
         {
             IEnumerable<string> spans = GetSpans("gherkin.featuretitle");
 
-            CollectionAssert.AreEqual(spans, new[] { " S1" + Environment.NewLine, " S2" + Environment.NewLine, " S3" + Environment.NewLine });
+            CollectionAssert.AreEqual(spans, new[]
+                                                 {
+                                                     " S1" + Environment.NewLine, 
+                                                     " S2" + Environment.NewLine, 
+                                                     " S3" + Environment.NewLine
+                                                 });
         }
 
         [Test]
@@ -130,6 +135,19 @@ namespace NBehave.VS2010.Plugin.Specs
                                             .Where(s => s.Trim() == "Given" || s.Trim() == "When" || s.Trim() == "Then");
 
             Assert.That(spans.Count(), Is.EqualTo(15));
+        }
+
+        [Test]
+        public void ShouldClassifyPlaceHolders()
+        {
+            IEnumerable<string> spans = GetSpans("gherkin.placeholder").ToArray();
+
+            CollectionAssert.AreEqual(spans, new[]
+                                                 {
+                                                     "[left]",
+                                                     "[right]",
+                                                     "[sum]"
+                                                 });
         }
 
         private IEnumerable<string> GetSpans(string gherkinKeyword)

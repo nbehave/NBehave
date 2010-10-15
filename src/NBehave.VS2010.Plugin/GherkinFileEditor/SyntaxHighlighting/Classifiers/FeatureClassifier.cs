@@ -16,7 +16,7 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor.SyntaxHighlighting.Classifiers
 
         public override void RegisterClassificationDefinitions()
         {
-            Register(GetKeywordSpan);
+            Register(parserEvent => GetKeywordSpan(parserEvent));
             Register(parserEvent => GetTitleSpan(parserEvent, ClassificationRegistry.FeatureTitle));
             Register(parserEvent => GetDescriptionSpan(parserEvent.Line, parserEvent.Description, parserEvent.Snapshot));   
         }
