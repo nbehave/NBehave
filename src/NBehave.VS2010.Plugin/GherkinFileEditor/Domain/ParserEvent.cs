@@ -25,13 +25,11 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
 
         public string Text { get; set; }
 
-        public IEnumerable<string> List { get; set; }
+        public IEnumerable<string> TableColumns { get; set; }
 
         public string Comment { get; set; }
 
-        public string Content { get; set; }
-
-        public bool Eof { get; set; }
+        public string PythonString { get; set; }
 
         public ITextSnapshot Snapshot { get; set; }
     }

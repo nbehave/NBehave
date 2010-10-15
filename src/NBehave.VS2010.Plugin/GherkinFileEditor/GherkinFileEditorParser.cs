@@ -149,9 +149,9 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
 
         public void Table(IList<IList<Token>> rows, Position tablePosition)
         {
-            _parserEvents.OnNext(new ParserEvent(ParserEventType.Row)
+            _parserEvents.OnNext(new ParserEvent(ParserEventType.Table)
             {
-                List = rows.Cast<string>(),
+                TableColumns = rows.First().Select(token => token.Content),
                 Line = tablePosition.Line,
                 Snapshot = _snapshot
             });
@@ -203,7 +203,7 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
         {
             _parserEvents.OnNext(new ParserEvent(ParserEventType.PyString)
             {
-                Content = pyString.Content,
+                PythonString = pyString.Content,
                 Line = pyString.Position.Line,
                 Snapshot = _snapshot
             });

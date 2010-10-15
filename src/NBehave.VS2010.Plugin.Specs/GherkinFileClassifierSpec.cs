@@ -50,6 +50,7 @@ namespace NBehave.VS2010.Plugin.Specs
                                                                     new FeatureClassifier{ ClassificationRegistry = gherkinFileEditorClassifications },  
                                                                     new ScenarioClassifier{ ClassificationRegistry = gherkinFileEditorClassifications },
                                                                     new StepClassifier(){ ClassificationRegistry = gherkinFileEditorClassifications },
+                                                                    new TableClassifier(){ ClassificationRegistry = gherkinFileEditorClassifications },
                                                                }
                                          };
 
@@ -147,6 +148,22 @@ namespace NBehave.VS2010.Plugin.Specs
                                                      "[left]",
                                                      "[right]",
                                                      "[sum]"
+                                                 });
+        }
+
+        [Test]
+        public void ShouldClassifyTableHeaders()
+        {
+            IEnumerable<string> spans = GetSpans("gherkin.tableheader").ToArray().Select(s => s.Trim());
+
+            CollectionAssert.AreEqual(spans, new[]
+                                                 {
+                                                    "left",
+                                                    "right",
+                                                    "sum",
+                                                    "Name",
+                                                    "Country",
+                                                    "Name"
                                                  });
         }
 

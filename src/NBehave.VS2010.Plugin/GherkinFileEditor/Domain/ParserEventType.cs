@@ -6,7 +6,7 @@
         Scenario,
         Examples,
         Step,
-        Row,
+        Table,
         Background,
         ScenarioOutline,
         Comment,
