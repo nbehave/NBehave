@@ -48,7 +48,7 @@ namespace NBehave.VS2010.Plugin.Specs
                                              Classifiers = new IGherkinClassifier[]
                                                                {
                                                                     new FeatureClassifier{ ClassificationRegistry = gherkinFileEditorClassifications },  
-                                                                    new ScenarioKeywordClassifier{ ClassificationRegistry = gherkinFileEditorClassifications }  
+                                                                    new ScenarioClassifier{ ClassificationRegistry = gherkinFileEditorClassifications }  
                                                                }
                                          };
 
@@ -105,6 +105,21 @@ namespace NBehave.VS2010.Plugin.Specs
             IEnumerable<string> spans = GetSpans("gherkin.keyword").Where(s => s.Trim() == "Scenario");
 
             Assert.That(spans.Count(), Is.EqualTo(5));
+        }
+
+        [Test]
+        public void ShouldClassifyScenarioTitle()
+        {
+            IEnumerable<string> spans = GetSpans("gherkin.scenariotitle").ToArray();
+
+            CollectionAssert.AreEqual(spans, new[]
+                                          {
+                                              " SC1" + Environment.NewLine,
+                                              " inline table" + Environment.NewLine,
+                                              " SC1" + Environment.NewLine,
+                                              " SC3" + Environment.NewLine,
+                                              " FailingScenario" + Environment.NewLine
+                                          });
         }
 
         private IEnumerable<string> GetSpans(string gherkinKeyword)

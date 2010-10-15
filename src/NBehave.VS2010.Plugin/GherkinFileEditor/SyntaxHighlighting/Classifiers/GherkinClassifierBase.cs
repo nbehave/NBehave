@@ -11,13 +11,13 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor.SyntaxHighlighting.Classifiers
         [Import]
         public GherkinFileEditorClassifications ClassificationRegistry { get; set; }
 
-        protected ClassificationSpan GetTitleSpan(ITextSnapshotLine textSnapshotLine, ITextSnapshot snapshot)
+        protected ClassificationSpan GetTitleSpan(ITextSnapshotLine textSnapshotLine, ITextSnapshot snapshot, IClassificationType classificationType)
         {
             string lineFromLineNumber = textSnapshotLine.GetText();
 
             var titleMatches = new Regex(":").Match(lineFromLineNumber);
             var titleSpan = new Span(textSnapshotLine.Start.Position + titleMatches.Captures[0].Index + 1, lineFromLineNumber.Substring(titleMatches.Captures[0].Index + 1).Length);
-            return new ClassificationSpan(new SnapshotSpan(snapshot, titleSpan), ClassificationRegistry.FeatureTitle);
+            return new ClassificationSpan(new SnapshotSpan(snapshot, titleSpan), classificationType);
         }
 
         protected ClassificationSpan GetKeywordSpan(ITextSnapshotLine textSnapshotLine, string keyword, ITextSnapshot snapshot)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.ComponentModel.Composition.Hosting;
 using System.Linq;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
@@ -14,13 +15,29 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
     [ContentType("gherkin")]
     internal class GherkinFileClassifierProvider : IClassifierProvider
     {
+        private CompositionContainer _container;
+
         [Import]
-        private GherkinFileClassifier GherkinFileClassifier { get; set; }
+        public IClassificationTypeRegistryService ClassificationRegistry { get; set; }
 
         public IClassifier GetClassifier(ITextBuffer buffer)
         {
-            GherkinFileClassifier.InitialiseWithBuffer(buffer);
-            return buffer.Properties.GetOrCreateSingletonProperty(() => GherkinFileClassifier);
+            if (!buffer.Properties.ContainsProperty(typeof(GherkinFileClassifier)))
+            {
+                _container = buffer.Properties.GetOrCreateSingletonProperty(() => new CompositionContainer(new AssemblyCatalog(typeof(NBehaveRunnerPackage).Assembly)));
+                _container.ComposeExportedValue(ClassificationRegistry);
+                _container.ComposeParts();
+            
+                GherkinFileClassifier fileClassifierForBuffer = buffer.Properties.GetOrCreateSingletonProperty(() => new GherkinFileClassifier());
+                _container.ComposeParts(fileClassifierForBuffer);
+                fileClassifierForBuffer.InitialiseWithBuffer(buffer);
+
+                return fileClassifierForBuffer;
+            }
+            else
+            {
+                return buffer.Properties.GetOrCreateSingletonProperty(() => new GherkinFileClassifier());
+            }
         }
 
     }
@@ -41,7 +58,7 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
         public GherkinFileEditorParserFactory GherkinFileEditorParserFactory { get; set; }
 
         [ImportMany]
-        public IList<IGherkinClassifier> Classifiers { get; set; }
+        public IEnumerable<IGherkinClassifier> Classifiers { get; set; }
         
         public IList<ClassificationSpan> GetClassificationSpans(SnapshotSpan span)
         {
@@ -52,7 +69,7 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
         {
             if (_parser != null)
                 return;
-
+            
             _spans = new List<ClassificationSpan>();
 
             _parser = GherkinFileEditorParserFactory.CreateParser(buffer); ;

@@ -19,13 +19,22 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor.SyntaxHighlighting.Classifiers
         {
             ITextSnapshotLine textSnapshotLine = event3.Snapshot.GetLineFromLineNumber(event3.Line - 1);
 
-            return new[]
-                       {
-                           GetKeywordSpan(textSnapshotLine, event3.Keyword, event3.Snapshot),
-                           GetTitleSpan(textSnapshotLine, event3.Snapshot),
-                           GetDescriptionSpan(event3.Line, event3.Description, event3.Snapshot),
-                       };
+            List<ClassificationSpan> spans = new List<ClassificationSpan>();
 
+            try
+            {
+                ClassificationSpan keyword = GetKeywordSpan(textSnapshotLine, event3.Keyword, event3.Snapshot);
+                spans.Add(keyword);
+                ClassificationSpan title = GetTitleSpan(textSnapshotLine, event3.Snapshot, ClassificationRegistry.FeatureTitle);
+                spans.Add(title);
+                ClassificationSpan description = GetDescriptionSpan(event3.Line, event3.Description, event3.Snapshot);
+                spans.Add(description);
+            }
+            catch(Exception) 
+            {
+            }
+
+            return spans;
         }
 
         private ClassificationSpan GetDescriptionSpan(int line, string description, ITextSnapshot snapshot)

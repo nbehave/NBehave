@@ -66,7 +66,7 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
                 Lexer lexer = languageService.GetLexer(snapshot.GetText(), this);
                 lexer.scan(snapshot.GetText());
             }
-            catch (Exception) { }
+            catch (LexingError) { }
         }
 
         public void FirstParse()
