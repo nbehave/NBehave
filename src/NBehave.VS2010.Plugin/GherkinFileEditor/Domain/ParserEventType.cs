@@ -12,6 +12,5 @@
         Comment,
         Tag,
         PyString,
-        Eof
     }
 }

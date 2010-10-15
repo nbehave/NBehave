@@ -4,11 +4,10 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Gherkin;
 using Microsoft.VisualStudio.Text;
-using Microsoft.VisualStudio.Text.Classification;
 using NBehave.Narrator.Framework;
+using Observable = System.Linq.Observable;
 
 namespace NBehave.VS2010.Plugin.GherkinFileEditor
 {
@@ -28,56 +27,89 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
 
     [Export(typeof(GherkinFileEditorParser))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
-    public class GherkinFileEditorParser : IListener
+    public class GherkinFileEditorParser : IListener, IDisposable
     {
-        private ITextBuffer buffer;
         private Subject<ParserEvent> _parserEvents;
+
+        private IDisposable _inputListener;
+
+        private ITextSnapshot _snapshot;
+        private Subject<bool> _isParsing;
 
         public IObservable<ParserEvent> ParserEvents
         {
             get { return _parserEvents; }
         }
 
+        public IObservable<bool> IsParsing
+        {
+            get { return _isParsing; }
+        }
+
         public void InitialiseWithBuffer(ITextBuffer textBuffer)
         {
             _parserEvents = new Subject<ParserEvent>();
+            _isParsing = new Subject<bool>();
 
-            buffer = textBuffer;
-            this.buffer.Changed += PartialParse;
+            _snapshot = textBuffer.CurrentSnapshot;
+
+            IObservable<IEvent<TextContentChangedEventArgs>> fromEvent = 
+                Observable.FromEvent((EventHandler<TextContentChangedEventArgs> ev) => 
+                    new EventHandler<TextContentChangedEventArgs>(ev),
+                    handler => textBuffer.Changed += handler,
+                    handler => textBuffer.Changed -= handler);
+
+            _inputListener = fromEvent
+                .Sample(TimeSpan.FromSeconds(2))
+                .Select(event1 => event1.EventArgs.After)
+                .Subscribe(Parse);
+        }
+
+        private void Parse(ITextSnapshot snapshot)
+        {
+            _isParsing.OnNext(true);
+            _snapshot = snapshot;
+
+            try
+            {
+                var languageService = new LanguageService();
+                ILexer lexer = languageService.GetLexer(snapshot.GetText(), this);
+                lexer.Scan(new StringReader(snapshot.GetText()));
+            }
+            catch (LexingException) { }
+            finally
+            {
+                _isParsing.OnNext(false);
+            }
         }
 
         public void FirstParse()
         {
-            var languageService = new LanguageService();
-
-            ILexer lexer = languageService.GetLexer(buffer.CurrentSnapshot.GetText(), this);
-            lexer.Scan(new StringReader(buffer.CurrentSnapshot.GetText()));
-        }
-
-        private void PartialParse(object sender, TextContentChangedEventArgs e)
-        {
+            Parse(_snapshot);
         }
 
         public void Feature(Token keyword, Token title)
         {
-            ITextSnapshotLine textSnapshotLine = buffer.CurrentSnapshot.GetLineFromLineNumber(keyword.Position.Line - 1);
-            string lineFromLineNumber = textSnapshotLine.GetText();
-            var keywordMatches = new Regex("^\\s*" + keyword.Content).Match(lineFromLineNumber);
-            Span KeywordSpan = new Span(textSnapshotLine.Start.Position + keywordMatches.Captures[0].Index, keyword.Content.Length);
-
-            var titleMatches = new Regex(":").Match(lineFromLineNumber);
-            Span titleSpan = new Span(textSnapshotLine.Start.Position + titleMatches.Captures[0].Index + 1, lineFromLineNumber.Substring(titleMatches.Captures[0].Index + 1).Length);            
-
-
-
+            string featureTitle, description;
+            if (title.Content.Contains(Environment.NewLine))
+            {
+                var lineBreakPosn = title.Content.IndexOf(Environment.NewLine);
+                featureTitle = title.Content.Substring(0, lineBreakPosn);
+                description = title.Content.Substring(lineBreakPosn + Environment.NewLine.Length);
+            }
+            else
+            {
+                featureTitle = title.Content;
+                description = String.Empty;
+            }
 
             _parserEvents.OnNext(new ParserEvent(ParserEventType.Feature)
             {
                 Keyword = keyword.Content,
-                Title = title.Content,
+                Title = featureTitle,
+                Description = description,
                 Line = keyword.Position.Line,
-                KeywordSpan = KeywordSpan,
-                TitleSpan = titleSpan
+                Snapshot = _snapshot
             });
         }
 
@@ -87,9 +119,11 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
             {
                 Keyword = keyword.Content,
                 Title = name.Content,
-                Line = keyword.Position.Line
+                Line = keyword.Position.Line,
+                Snapshot = _snapshot
             });
         }
+
 
         public void Examples(Token keyword, Token name)
         {
@@ -97,31 +131,29 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
             {
                 Keyword = keyword.Content,
                 Name = name.Content,
-                Line = keyword.Position.Line
+                Line = keyword.Position.Line,
+                Snapshot = _snapshot
             });
         }
 
-        public void Step(Token keyword, Token text, StepKind stepKind)
+        public void Step(Token keyword, Token name, StepKind stepKind)
         {
             _parserEvents.OnNext(new ParserEvent(ParserEventType.Step)
             {
                 Keyword = keyword.Content,
-                Text = text.Content,
-                Line = keyword.Position.Line
+                Text = name.Content,
+                Line = keyword.Position.Line,
+                Snapshot = _snapshot
             });
         }
 
         public void Table(IList<IList<Token>> rows, Position tablePosition)
         {
-            
-        }
-
-        public void row(ArrayList list, int line)
-        {
             _parserEvents.OnNext(new ParserEvent(ParserEventType.Row)
             {
-                List = list.ToArray().Cast<string>(),
-                Line = line
+                List = rows.Cast<string>(),
+                Line = tablePosition.Line,
+                Snapshot = _snapshot
             });
         }
 
@@ -131,7 +163,8 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
             {
                 Keyword = keyword.Content,
                 Name = name.Content,
-                Line = keyword.Position.Line
+                Line = keyword.Position.Line,
+                Snapshot = _snapshot
             });
         }
 
@@ -141,16 +174,18 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
             {
                 Keyword = keyword.Content,
                 Name = name.Content,
-                Line = keyword.Position.Line
+                Line = keyword.Position.Line,
+                Snapshot = _snapshot
             });
         }
 
-        public void Comment(Token comment)
+        public void Comment(Token content)
         {
             _parserEvents.OnNext(new ParserEvent(ParserEventType.Comment)
             {
-                Comment = comment.Content,
-                Line = comment.Position.Line
+                Comment = content.Content,
+                Line = content.Position.Line,
+                Snapshot = _snapshot
             });
         }
 
@@ -159,16 +194,18 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
             _parserEvents.OnNext(new ParserEvent(ParserEventType.Tag)
             {
                 Name = name.Content,
-                Line = name.Position.Line
+                Line = name.Position.Line,
+                Snapshot = _snapshot
             });
         }
 
-        public void PythonString(Token content)
+        public void PythonString(Token pyString)
         {
             _parserEvents.OnNext(new ParserEvent(ParserEventType.PyString)
             {
-                Content = content.Content,
-                Line = content.Position.Line
+                Content = pyString.Content,
+                Line = pyString.Position.Line,
+                Snapshot = _snapshot
             });
         }
 
@@ -176,12 +213,9 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
         {
         }
 
-        public void eof()
+        public void Dispose()
         {
-            _parserEvents.OnNext(new ParserEvent(ParserEventType.Eof)
-            {
-                Eof = true
-            });
+            _inputListener.Dispose();
         }
     }
 }
