@@ -60,7 +60,7 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
                     handler => textBuffer.Changed -= handler);
 
             _inputListener = fromEvent
-                .Sample(TimeSpan.FromSeconds(2))
+                .Sample(TimeSpan.FromSeconds(1))
                 .Select(event1 => event1.EventArgs.After)
                 .Subscribe(Parse);
         }
