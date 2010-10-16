@@ -35,12 +35,9 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
 
                 return fileClassifierForBuffer;
             }
-            else
-            {
-                return buffer.Properties.GetOrCreateSingletonProperty(() => new GherkinFileClassifier());
-            }
+            
+            return buffer.Properties.GetOrCreateSingletonProperty(() => new GherkinFileClassifier());
         }
-
     }
 
     [Export(typeof(GherkinFileClassifier))]

@@ -54,8 +54,7 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
             _snapshot = textBuffer.CurrentSnapshot;
 
             IObservable<IEvent<TextContentChangedEventArgs>> fromEvent = 
-                Observable.FromEvent((EventHandler<TextContentChangedEventArgs> ev) => 
-                    new EventHandler<TextContentChangedEventArgs>(ev),
+                Observable.FromEvent<TextContentChangedEventArgs>(
                     handler => textBuffer.Changed += handler,
                     handler => textBuffer.Changed -= handler);
 
