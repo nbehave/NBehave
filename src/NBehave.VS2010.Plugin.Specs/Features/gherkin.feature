@@ -23,7 +23,7 @@
     Then I should get:
       |Name          |
       |Morgan Persson|
-      |Jimmy Nilsson |                    
+      |Jimmy Nilsson |
 
 Feature: S2
   As a X2

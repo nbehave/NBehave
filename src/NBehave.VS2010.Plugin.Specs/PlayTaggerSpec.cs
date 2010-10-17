@@ -67,5 +67,23 @@ namespace NBehave.VS2010.Plugin.Specs
                                                        "    |1   | 2   |3  |"                  + Environment.NewLine +
                                                        "    |3   | 4   |7  |"                  + Environment.NewLine));
         }
+
+        [Test]
+        public void ShouldClassifyScenarioWithInlineTable()
+        {
+            var tag = _playTagger.GetTags(null).Where(span => span.Span.GetText().StartsWith("  Scenario: inline table")).First();
+
+            Assert.That(tag.Span.GetText(), Is.EqualTo("  Scenario: inline table"                 + Environment.NewLine +
+                                                       "    Given the following people exists:"   + Environment.NewLine +
+                                                       "      |Name          |Country|"           + Environment.NewLine +
+                                                       "      |Morgan Persson|Sweden |"           + Environment.NewLine +
+                                                       "      |Jimmy Nilsson |Sweden |"           + Environment.NewLine +
+                                                       "      |Jimmy bogard  |USA    |"           + Environment.NewLine +
+                                                       "    When I search for people in sweden"   + Environment.NewLine +
+                                                       "    Then I should get:"                   + Environment.NewLine +
+                                                       "      |Name          |"                   + Environment.NewLine +
+                                                       "      |Morgan Persson|"                   + Environment.NewLine +
+                                                       "      |Jimmy Nilsson |"                   + Environment.NewLine));
+        }
     }
 }
