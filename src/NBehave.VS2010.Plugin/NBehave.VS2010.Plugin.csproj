@@ -145,6 +145,12 @@
     <Compile Include="Contracts\IVisualStudioService.cs" />
     <Compile Include="Domain\VisualStudioService.cs" />
     <Compile Include="GherkinFileEditor\Domain\GherkinFileClassificationDefinitions.cs" />
+    <Compile Include="GherkinFileEditor\Glyphs\PlayGlyph.xaml.cs">
+      <DependentUpon>PlayGlyph.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GherkinFileEditor\Glyphs\PlayGlyphMouseProcessorProvider.cs" />
+    <Compile Include="GherkinFileEditor\Glyphs\PlayTagger.cs" />
+    <Compile Include="GherkinFileEditor\Glyphs\PlayGlyphFactoryProvider.cs" />
     <Compile Include="GherkinFileEditor\SyntaxHighlighting\Classifiers\FeatureClassifier.cs" />
     <Compile Include="GherkinFileEditor\SyntaxHighlighting\Classifiers\GherkinClassifierBase.cs" />
     <Compile Include="GherkinFileEditor\SyntaxHighlighting\Classifiers\ScenarioClassifier.cs" />
@@ -155,7 +161,6 @@
     <Compile Include="GherkinFileEditor\Domain\GherkinFileClassifierFormats.cs" />
     <Compile Include="GherkinFileEditor\Domain\GherkinFileEditorClassifications.cs" />
     <Compile Include="GherkinFileEditor\GherkinFileEditorParser.cs" />
-    <Compile Include="GherkinFileEditor\Glyphs\GherkinFileOutliningTagger.cs" />
     <Compile Include="GherkinFileEditor\Outlining\GherkinFileOutliningTagger.cs" />
     <Compile Include="GherkinFileEditor\Domain\ParserEvent.cs" />
     <Compile Include="GherkinFileEditor\Domain\ParserEventType.cs" />
@@ -195,7 +200,15 @@
       <Name>NBehave.Narrator.Framework</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="PlayGlyph.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="GherkinFileEditor\Glyphs\PlayGlyph.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
   <PropertyGroup>
     <UseCodebase>true</UseCodebase>
   </PropertyGroup>
@@ -206,7 +219,8 @@
     <DeployExtension>true</DeployExtension>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(VsSDKInstall)Microsoft.VsSDK.targets" />
+  <!-- Condition to allow blend to open project -->
+  <Import Condition="'$(BuildingInsideVisualStudio)' == 'true'" Project="$(VsSDKInstall)Microsoft.VsSDK.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets. -->
   <UsingTask TaskName="EnvironmentVariable" AssemblyFile="$(SolutionDir)..\tools\msbuild.extension.pack\MSBuild.ExtensionPack.dll" />

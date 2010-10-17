@@ -6,7 +6,9 @@ using System.Disposables;
 using System.Linq;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
+using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
+using NBehave.VS2010.Plugin.GherkinFileEditor.Glyphs;
 using NBehave.VS2010.Plugin.GherkinFileEditor.SyntaxHighlighting.Classifiers;
 
 namespace NBehave.VS2010.Plugin.GherkinFileEditor
@@ -16,27 +18,40 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
     [ContentType("gherkin")]
     internal class GherkinFileClassifierProvider : IClassifierProvider
     {
-        private CompositionContainer _container;
-
         [Import]
-        public IClassificationTypeRegistryService ClassificationRegistry { get; set; }
+        public ServiceRegistrar ServiceRegistrar { get; set; }
 
         public IClassifier GetClassifier(ITextBuffer buffer)
         {
+            ServiceRegistrar.Initialise(buffer);
+            
+            return buffer.Properties.GetProperty<IClassifier>(typeof(GherkinFileClassifier));
+        }
+    }
+
+    [Export(typeof(ServiceRegistrar))]
+    [PartCreationPolicy(CreationPolicy.Shared)]
+    internal class ServiceRegistrar
+    {
+        [Import]
+        public IClassificationTypeRegistryService ClassificationRegistry { get; set; }
+
+        public void Initialise(ITextBuffer buffer)
+        {
             if (!buffer.Properties.ContainsProperty(typeof(GherkinFileClassifier)))
             {
-                _container = buffer.Properties.GetOrCreateSingletonProperty(() => new CompositionContainer(new AssemblyCatalog(typeof(NBehaveRunnerPackage).Assembly)));
-                _container.ComposeExportedValue(ClassificationRegistry);
-                _container.ComposeParts();
-            
-                GherkinFileClassifier fileClassifierForBuffer = buffer.Properties.GetOrCreateSingletonProperty(() => new GherkinFileClassifier());
-                _container.ComposeParts(fileClassifierForBuffer);
-                fileClassifierForBuffer.InitialiseWithBuffer(buffer);
+                var container = buffer.Properties.GetOrCreateSingletonProperty(() => new CompositionContainer(new AssemblyCatalog(typeof(NBehaveRunnerPackage).Assembly)));
+                container.ComposeExportedValue(ClassificationRegistry);
+                container.ComposeParts();
 
-                return fileClassifierForBuffer;
+                container.GetExport<GherkinFileEditorParserFactory>().Value.CreateParser(buffer);
+
+                GherkinFileClassifier fileClassifierForBuffer = buffer.Properties.GetOrCreateSingletonProperty(() => new GherkinFileClassifier(buffer));
+                buffer.Properties.GetOrCreateSingletonProperty(() => new PlayTagger(buffer) as ITagger<PlayTag>);
+
+                container.ComposeParts(fileClassifierForBuffer);
+                fileClassifierForBuffer.BeginClassifications();
             }
-            
-            return buffer.Properties.GetOrCreateSingletonProperty(() => new GherkinFileClassifier());
         }
     }
 
@@ -47,6 +62,25 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
         private GherkinFileEditorParser _parser;
         private List<ClassificationSpan> _spans;
         private CompositeDisposable _listeners;
+
+        public GherkinFileClassifier(ITextBuffer buffer)
+        {
+            _spans = new List<ClassificationSpan>();
+            _listeners = new CompositeDisposable();
+
+            _parser = buffer.Properties.GetProperty<GherkinFileEditorParser>(typeof (GherkinFileEditorParser));
+
+            _listeners.Add(_parser.IsParsing.Where(isParsing => isParsing).Subscribe(b => _spans.Clear()));
+            _listeners.Add(_parser.IsParsing.Where(isParsing => !isParsing).Subscribe(b => PublishClassificationEvents()));
+
+            _listeners.Add(_parser
+                            .ParserEvents
+                            .Select(parserEvent => Classifiers
+                                    .With(list => list.FirstOrDefault(classifier => classifier.CanClassify(parserEvent)))
+                                    .Return(gherkinClassifier => gherkinClassifier.Classify(parserEvent), new List<ClassificationSpan>()))
+                            .Subscribe((spans => _spans.AddRange(spans))));
+        }
+
         public event EventHandler<ClassificationChangedEventArgs> ClassificationChanged;
         
         [Import]
@@ -60,25 +94,8 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
             return _spans;
         }
 
-        public void InitialiseWithBuffer(ITextBuffer buffer)
+        public void BeginClassifications()
         {
-            if (_parser != null)
-                return;
-            
-            _spans = new List<ClassificationSpan>();
-            _listeners = new CompositeDisposable();
-            _parser = GherkinFileEditorParserFactory.CreateParser(buffer);
-
-            _listeners.Add(_parser.IsParsing.Where(isParsing => isParsing).Subscribe(b => _spans.Clear()));
-            _listeners.Add(_parser.IsParsing.Where(isParsing => !isParsing).Subscribe(b => PublishClassificationEvents()));
-
-            _listeners.Add(_parser
-                            .ParserEvents
-                            .Select(parserEvent => Classifiers
-                                    .With(list => list.FirstOrDefault(classifier => classifier.CanClassify(parserEvent)))
-                                    .Return(gherkinClassifier => gherkinClassifier.Classify(parserEvent), new List<ClassificationSpan>()))
-                            .Subscribe((spans => _spans.AddRange(spans))));
-
             _parser.FirstParse();
         }
 

@@ -38,8 +38,9 @@ namespace NBehave.VS2010.Plugin.Specs
                 });
 
             var gherkinFileEditorClassifications = new GherkinFileEditorClassifications{ ClassificationRegistry = registry};
+            _buffer = MockRepository.GenerateMock<ITextBuffer>();
 
-            _gherkinFileClassifier = new GherkinFileClassifier
+            _gherkinFileClassifier = new GherkinFileClassifier(_buffer)
                                          {
                                              GherkinFileEditorParserFactory = new GherkinFileEditorParserFactory
                                                                                   {
@@ -54,14 +55,13 @@ namespace NBehave.VS2010.Plugin.Specs
                                                                }
                                          };
 
-            _buffer = MockRepository.GenerateMock<ITextBuffer>();
             _buffer.Stub(textBuffer => textBuffer.Properties).Return(new PropertyCollection());
 
             var gherkinFile = new StreamReader(gherkinFileLocation).ReadToEnd();
 
             _buffer.Stub(buffer => buffer.CurrentSnapshot).Return(new MockTextSnapshot(gherkinFile));
 
-            _gherkinFileClassifier.InitialiseWithBuffer(_buffer);
+            _gherkinFileClassifier.BeginClassifications();
         }
 
         [Test]

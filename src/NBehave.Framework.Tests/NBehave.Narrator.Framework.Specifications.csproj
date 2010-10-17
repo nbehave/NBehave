@@ -156,32 +156,26 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Features\FeatureInSwedish.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>GreetingSystem1.feature.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Features\ScenarioWithNoActionSteps.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>GreetingSystem1.feature.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Features\FeatureWithNewLineInGivenClause.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>GreetingSystem1.feature.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Features\FeatureNamedStory.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>GreetingSystem1.feature.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Features\ScenarioWithExamples.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>GreetingSystem1.feature.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Features\FeaturesAndScenarios.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>GreetingSystem1.feature.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
