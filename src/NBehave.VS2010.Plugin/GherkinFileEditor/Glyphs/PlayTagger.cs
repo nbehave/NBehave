@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Disposables;
 using System.Linq;
-using System.Windows;
-using System.Windows.Controls.Primitives;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Editor;
@@ -54,6 +52,7 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor.Glyphs
         private CompositeDisposable _listeners;
         private List<ITagSpan<PlayTag>> _tagSpans;
         public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
+        private Stack<SnapshotSpan> _snapshotSpans = new Stack<SnapshotSpan>();
 
         public PlayTagger(ITextBuffer buffer)
         {
@@ -63,6 +62,14 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor.Glyphs
             var parser = buffer.Properties.GetProperty<GherkinFileEditorParser>(typeof (GherkinFileEditorParser));
 
             _listeners.Add(parser.IsParsing.Where(b => b).Subscribe(b1 => _tagSpans.Clear()));
+            _listeners.Add(parser.IsParsing.Where(b2 => !b2).Subscribe(b3 =>
+                                                                           {
+                                                                               while (!_snapshotSpans.IsEmpty())
+                                                                               {
+                                                                                   _tagSpans.Add(new TagSpan<PlayTag>(_snapshotSpans.Pop(), new PlayTag()));
+                                                                               }
+                                                                               _tagSpans.Reverse();
+                                                                           }));
 
             _listeners.Add(parser
                 .ParserEvents
@@ -70,8 +77,31 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor.Glyphs
                 .Subscribe(parserEvent =>
                                {
                                    ITextSnapshotLine lineFromLineNumber = parserEvent.Snapshot.GetLineFromLineNumber(parserEvent.Line - 1);
-                                   _tagSpans.Add(new TagSpan<PlayTag>(new SnapshotSpan(lineFromLineNumber.Start, lineFromLineNumber.Length), new PlayTag()));
+
+                                   _snapshotSpans.Push(new SnapshotSpan(lineFromLineNumber.Start, lineFromLineNumber.Length));
                                }));
+
+            _listeners.Add(parser
+                .ParserEvents
+                .Where(parserEvent => parserEvent.EventType == ParserEventType.Step || parserEvent.EventType == ParserEventType.Examples)
+                .Subscribe(parserEvent =>
+                               {
+                                   ITextSnapshotLine lineFromLineNumber = parserEvent.Snapshot.GetLineFromLineNumber(parserEvent.Line - 1);
+                                   var snapshotSpan = _snapshotSpans.Pop();
+                                   _snapshotSpans.Push(new SnapshotSpan(snapshotSpan.Start, (lineFromLineNumber.Start.Position - snapshotSpan.Start.Position + lineFromLineNumber.Length)));
+                               })
+                );
+
+            _listeners.Add(parser
+                .ParserEvents
+                .Where(parserEvent => parserEvent.EventType == ParserEventType.Table)
+                .Subscribe(parserEvent =>
+                               {
+                                   ITextSnapshotLine lastRowLine = parserEvent.Snapshot.GetLineFromLineNumber(parserEvent.Line + parserEvent.RowCount);
+                                   var snapshotSpan = _snapshotSpans.Pop();
+                                   _snapshotSpans.Push(new SnapshotSpan(snapshotSpan.Start, (lastRowLine.Start.Position - snapshotSpan.Start.Position)));
+                               }));
+
         }
 
         /// <summary>

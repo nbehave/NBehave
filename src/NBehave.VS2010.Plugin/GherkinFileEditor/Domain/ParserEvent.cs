@@ -32,5 +32,7 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
         public string PythonString { get; set; }
 
         public ITextSnapshot Snapshot { get; set; }
+
+        public int RowCount { get; set; }
     }
 }

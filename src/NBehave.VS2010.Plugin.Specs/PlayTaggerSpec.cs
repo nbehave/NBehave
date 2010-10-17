@@ -61,11 +61,11 @@ namespace NBehave.VS2010.Plugin.Specs
                                                        "    Given numbers [left] and [right]"  + Environment.NewLine +
                                                        "    When I add the numbers"            + Environment.NewLine +
                                                        "    Then the sum is [sum]"             + Environment.NewLine +
-                                                       
+                                                       "    "                                  + Environment.NewLine +
                                                        "    Examples:"                         + Environment.NewLine +
                                                        "    |left|right|sum|"                  + Environment.NewLine +
                                                        "    |1   | 2   |3  |"                  + Environment.NewLine +
-                                                       "    |3   | 4   |7  |"));
+                                                       "    |3   | 4   |7  |"                  + Environment.NewLine));
         }
     }
 }

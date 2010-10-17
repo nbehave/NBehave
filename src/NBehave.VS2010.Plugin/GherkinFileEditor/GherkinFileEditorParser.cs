@@ -152,6 +152,7 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
             {
                 TableColumns = rows.First().Select(token => token.Content),
                 Line = tablePosition.Line,
+                RowCount = rows.Count - 1,
                 Snapshot = _snapshot
             });
         }
