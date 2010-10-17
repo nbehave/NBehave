@@ -85,5 +85,16 @@ namespace NBehave.VS2010.Plugin.Specs
                                                        "      |Morgan Persson|"                   + Environment.NewLine +
                                                        "      |Jimmy Nilsson |"                   + Environment.NewLine));
         }
+
+        [Test]
+        public void ShouldClassifyScenario()
+        {
+            var tag = _playTagger.GetTags(null).Where(span => span.Span.GetText().StartsWith("  Scenario: SC2")).First();
+
+            Assert.That(tag.Span.GetText(), Is.EqualTo("  Scenario: SC2"                           + Environment.NewLine +
+                                                       "    Given something"                       + Environment.NewLine +
+                                                       "    When some event occurs"                + Environment.NewLine +
+                                                       "    Then there is some outcome"            + Environment.NewLine));
+        }
     }
 }

@@ -30,7 +30,7 @@ Feature: S2
   I want Y2
   So that Z2
 
-  Scenario: SC1
+  Scenario: SC2
     Given something
     When some event occurs
     Then there is some outcome
