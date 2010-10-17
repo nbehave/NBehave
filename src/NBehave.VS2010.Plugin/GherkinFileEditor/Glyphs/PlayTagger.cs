@@ -13,7 +13,7 @@ using Microsoft.VisualStudio.Utilities;
 
 namespace NBehave.VS2010.Plugin.GherkinFileEditor.Glyphs
 {
-    internal class PlayTag : IGlyphTag
+    public class PlayTag : IGlyphTag
     {
         public void Execute()
         {
@@ -49,13 +49,13 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor.Glyphs
     /// This class implements ITagger for ToDoTag.  It is responsible for creating
     /// ToDoTag TagSpans, which our GlyphFactory will then create glyphs for.
     /// </summary>
-    internal class PlayTagger : ITagger<PlayTag>
+    public class PlayTagger : ITagger<PlayTag>
     {
         private CompositeDisposable _listeners;
         private List<ITagSpan<PlayTag>> _tagSpans;
         public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
 
-        internal PlayTagger(ITextBuffer buffer)
+        public PlayTagger(ITextBuffer buffer)
         {
             _listeners = new CompositeDisposable();
             _tagSpans = new List<ITagSpan<PlayTag>>();

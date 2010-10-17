@@ -69,7 +69,7 @@ namespace NBehave.VS2010.Plugin.Specs
 
         public int Length
         {
-            get { throw new NotImplementedException(); }
+            get { return _text.Length; }
         }
 
         public int LengthIncludingLineBreak

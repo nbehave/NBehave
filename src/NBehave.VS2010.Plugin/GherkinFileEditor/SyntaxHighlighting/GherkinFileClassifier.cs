@@ -83,9 +83,6 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
 
         public event EventHandler<ClassificationChangedEventArgs> ClassificationChanged;
         
-        [Import]
-        public GherkinFileEditorParserFactory GherkinFileEditorParserFactory { get; set; }
-
         [ImportMany]
         public IEnumerable<IGherkinClassifier> Classifiers { get; set; }
         

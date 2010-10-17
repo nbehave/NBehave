@@ -39,13 +39,18 @@ namespace NBehave.VS2010.Plugin.Specs
 
             var gherkinFileEditorClassifications = new GherkinFileEditorClassifications{ ClassificationRegistry = registry};
             _buffer = MockRepository.GenerateMock<ITextBuffer>();
+            _buffer.Stub(textBuffer => textBuffer.Properties).Return(new PropertyCollection());
+            
+            var gherkinFile = new StreamReader(gherkinFileLocation).ReadToEnd();
+            _buffer.Stub(buffer => buffer.CurrentSnapshot).Return(new MockTextSnapshot(gherkinFile));
+
+            var gherkinFileEditorParser = new GherkinFileEditorParser();
+            gherkinFileEditorParser.InitialiseWithBuffer(_buffer);
+            _buffer.Properties.AddProperty(typeof(GherkinFileEditorParser), gherkinFileEditorParser);
+
 
             _gherkinFileClassifier = new GherkinFileClassifier(_buffer)
                                          {
-                                             GherkinFileEditorParserFactory = new GherkinFileEditorParserFactory
-                                                                                  {
-                                                                                      GherkinFileEditorParser = new GherkinFileEditorParser()
-                                                                                  },
                                              Classifiers = new IGherkinClassifier[]
                                                                {
                                                                     new FeatureClassifier{ ClassificationRegistry = gherkinFileEditorClassifications },  
@@ -55,11 +60,8 @@ namespace NBehave.VS2010.Plugin.Specs
                                                                }
                                          };
 
-            _buffer.Stub(textBuffer => textBuffer.Properties).Return(new PropertyCollection());
 
-            var gherkinFile = new StreamReader(gherkinFileLocation).ReadToEnd();
 
-            _buffer.Stub(buffer => buffer.CurrentSnapshot).Return(new MockTextSnapshot(gherkinFile));
 
             _gherkinFileClassifier.BeginClassifications();
         }

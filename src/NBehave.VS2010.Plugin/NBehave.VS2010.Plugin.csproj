@@ -201,9 +201,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="PlayGlyph.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Page Include="GherkinFileEditor\Glyphs\PlayGlyph.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
