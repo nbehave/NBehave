@@ -1,0 +1,34 @@
+# encoding: UTF-8
+# We use the codes here (prefer 2 letters when possible)
+# http://en.wikipedia.org/wiki/List_of_ISO_639-2_codes
+#
+# If  a keyword has multiple aliases, seperate them with a |
+#
+# If your langugae isnt here, add it yourself or grab Cucumbers languages.yml file, it works for NBehave ;-)
+#
+"en":
+  name: English
+  native: English
+  encoding: UTF-8
+  feature: Feature|Story
+  scenario: Scenario
+  examples: Examples|Scenarios
+  given: Given
+  when: When
+  then: Then
+  and: And
+  but: But
+
+"se":
+  name: Swedish
+  native: Svenska
+  encoding: UTF-8
+  feature: Egenskap
+  background: Bakgrund
+  scenario: Scenario
+  examples: Exempel
+  given: Givet
+  when: När
+  then: Så|Då
+  and: Och
+  but: Men

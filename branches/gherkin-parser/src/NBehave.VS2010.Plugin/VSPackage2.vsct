@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+ 
+  <Extern href="stdidcmd.h"/>
+  <Extern href="vsshlids.h"/>
+  <Extern href="msobtnid.h"/>
+
+  <Commands package="PackageGuidString">
+    
+    <Groups>
+      <Group guid="CommandGroupGuidString" id="CommandGroup" priority="0x0600">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN"/>
+      </Group>
+    </Groups>
+    
+    <Buttons>
+
+      <Button guid="CommandGroupGuidString" id="RunCommandId" priority="0x0100" type="Button">
+        <Parent guid="CommandGroupGuidString" id="CommandGroup" />
+        <Strings>
+          <CommandName>RunCommandId</CommandName>
+          <ButtonText>Run Scenario</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="CommandGroupGuidString" id="DebugCommandId" priority="0x0100" type="Button">
+        <Parent guid="CommandGroupGuidString" id="CommandGroup" />
+        <Strings>
+          <CommandName>DebugCommandId</CommandName>
+          <ButtonText>Debug Scenario</ButtonText>
+        </Strings>
+      </Button>
+      
+    </Buttons>
+
+  </Commands>
+
+  <Symbols>
+    <GuidSymbol name="PackageGuidString" value="{39b466a1-7b58-4a9d-91d1-010d05512884}" />
+    
+    <GuidSymbol name="CommandGroupGuidString" value="{14e96ffb-091b-4471-9a94-f5c9790b5f4b}">
+      <IDSymbol name="CommandGroup" value="0x1020" />
+      <IDSymbol name="RunCommandId" value="0x0100" />
+      <IDSymbol name="DebugCommandId" value="0x0101" />
+    </GuidSymbol>
+
+  </Symbols>
+
+</CommandTable>
