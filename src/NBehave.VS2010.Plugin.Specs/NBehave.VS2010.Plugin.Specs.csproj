@@ -68,6 +68,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\NBehave.VS2010.Plugin.Editor\NBehave.VS2010.Plugin.Editor.csproj">
+      <Project>{36ED8153-EFD9-4863-8818-D47964526AF4}</Project>
+      <Name>NBehave.VS2010.Plugin.Editor</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NBehave.VS2010.Plugin\NBehave.VS2010.Plugin.csproj">
       <Project>{E2EF537E-04C9-4804-9848-4205277D74AF}</Project>
       <Name>NBehave.VS2010.Plugin</Name>

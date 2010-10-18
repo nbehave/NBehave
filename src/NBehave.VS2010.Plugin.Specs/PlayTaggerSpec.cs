@@ -47,7 +47,7 @@ namespace NBehave.VS2010.Plugin.Specs
             gherkinFileEditorParser.InitialiseWithBuffer(_buffer);
             _buffer.Properties.AddProperty(typeof(GherkinFileEditorParser), gherkinFileEditorParser);
 
-            _playTagger = new PlayTagger(_buffer);
+            _playTagger = new PlayTagger(_buffer, TODO);
 
             gherkinFileEditorParser.FirstParse();
         }

@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.ComponentModel.Composition.Hosting;
 using System.Disposables;
 using System.Linq;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
-using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
-using NBehave.VS2010.Plugin.GherkinFileEditor.Glyphs;
 using NBehave.VS2010.Plugin.GherkinFileEditor.SyntaxHighlighting.Classifiers;
 
 namespace NBehave.VS2010.Plugin.GherkinFileEditor
@@ -26,32 +23,6 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
             ServiceRegistrar.Initialise(buffer);
             
             return buffer.Properties.GetProperty<IClassifier>(typeof(GherkinFileClassifier));
-        }
-    }
-
-    [Export(typeof(ServiceRegistrar))]
-    [PartCreationPolicy(CreationPolicy.Shared)]
-    internal class ServiceRegistrar
-    {
-        [Import]
-        public IClassificationTypeRegistryService ClassificationRegistry { get; set; }
-
-        public void Initialise(ITextBuffer buffer)
-        {
-            if (!buffer.Properties.ContainsProperty(typeof(GherkinFileClassifier)))
-            {
-                var container = buffer.Properties.GetOrCreateSingletonProperty(() => new CompositionContainer(new AssemblyCatalog(typeof(NBehaveRunnerPackage).Assembly)));
-                container.ComposeExportedValue(ClassificationRegistry);
-                container.ComposeParts();
-
-                container.GetExport<GherkinFileEditorParserFactory>().Value.CreateParser(buffer);
-
-                GherkinFileClassifier fileClassifierForBuffer = buffer.Properties.GetOrCreateSingletonProperty(() => new GherkinFileClassifier(buffer));
-                buffer.Properties.GetOrCreateSingletonProperty(() => new PlayTagger(buffer) as ITagger<PlayTag>);
-
-                container.ComposeParts(fileClassifierForBuffer);
-                fileClassifierForBuffer.BeginClassifications();
-            }
         }
     }
 

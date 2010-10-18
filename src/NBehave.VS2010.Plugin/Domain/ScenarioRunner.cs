@@ -7,7 +7,7 @@ using NBehave.VS2010.Plugin.Contracts;
 
 namespace NBehave.VS2010.Plugin.Domain
 {
-    internal class ScenarioRunner
+    public class ScenarioRunner
     {
         private readonly IOutputWindow _outputWindow;
         private readonly IVisualStudioService _visualStudioService;
