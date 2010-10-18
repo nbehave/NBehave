@@ -7,11 +7,11 @@ namespace NBehave.Narrator.Framework
     {
         public static string ReplaceFirst(this string str, string toReplace, string replaceWith)
         {
-            int start = str.IndexOf(toReplace);
+            var start = str.IndexOf(toReplace);
             if (start < 0)
                 return str;
 
-            string newString = str.Remove(start, toReplace.Length);
+            var newString = str.Remove(start, toReplace.Length);
             return newString.Insert(start, replaceWith);
         }
 
@@ -25,10 +25,10 @@ namespace NBehave.Narrator.Framework
         public static string RemoveFirstWord(this string tokenString)
         {
             var tokenStringToMatch = tokenString.TrimStart();
-            Match firstWhiteSpace = _whiteSpace.Match(tokenStringToMatch);
+            var firstWhiteSpace = _whiteSpace.Match(tokenStringToMatch);
             if (firstWhiteSpace.Success)
             {
-                int posOfFirstSpace = firstWhiteSpace.Index;
+                var posOfFirstSpace = firstWhiteSpace.Index;
                 return tokenStringToMatch.Substring(posOfFirstSpace + 1).TrimStart(new[] { ' ', '\n', '\r', '\t' });
             }
             return tokenString;

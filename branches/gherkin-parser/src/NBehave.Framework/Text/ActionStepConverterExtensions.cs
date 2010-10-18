@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace NBehave.Narrator.Framework
 {
-    internal static class ActionStepConverterExtensions
+    public static class ActionStepConverterExtensions
     {
         public const string TokenRegexPattern = @"(\$[a-zA-Z]\w+)|(\[[a-zA-Z]\w+\])";
         private static readonly Regex _tokenPattern = new Regex(TokenRegexPattern);
@@ -11,8 +11,8 @@ namespace NBehave.Narrator.Framework
 
         public static Regex AsRegex(this string actionStep)
         {
-            string[] words = actionStep.Split(new[] { ' ', '\n', '\r', '\t' }, StringSplitOptions.RemoveEmptyEntries);
-            string regex = "^";
+            var words = actionStep.Split(new[] { ' ', '\n', '\r', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+            var regex = "^";
             foreach (var word in words)
             {
                 if (!WordIsToken(word))

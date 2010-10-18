@@ -11,7 +11,7 @@ namespace NBehave.Spec.Framework.Specification
         {
             var stepRunner = new ScenarioDrivenSpecStepRunner(null);
             
-            bool didRun = false;
+            var didRun = false;
 
             stepRunner.RegisterImplementation("change my flag", () => didRun = true);
 

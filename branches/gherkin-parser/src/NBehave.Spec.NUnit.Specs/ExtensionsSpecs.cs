@@ -6,26 +6,26 @@ using Context = NUnit.Framework.TestFixtureAttribute;
 
 namespace NBehave.Spec.NUnit.Specs
 {
-    [Context]
+    [TestFixture]
     public class When_using_BDD_style_language_for_boolean_assertions
     {
-        [Specification]
+        [Test]
         public void Should_allow_substitution_for_IsFalse()
         {
             false.ShouldBeFalse();
         }
 
-        [Specification]
+        [Test]
         public void Should_allow_substitution_for_IsTrue()
         {
             true.ShouldBeTrue();
         }
     }
 
-    [Context]
+    [TestFixture]
     public class When_using_BDD_style_language_for_equality_assertions
     {
-        [Specification]
+        [Test]
         public void Should_allow_substitution_for_AreEqual()
         {
             int i, j;
@@ -35,16 +35,16 @@ namespace NBehave.Spec.NUnit.Specs
             i.ShouldEqual(j);
         }
 
-        [Specification]
+        [Test]
         public void Should_allow_substitution_for_AreNotEqual()
         {
-            int i = 5;
-            int j = 6;
+            var i = 5;
+            var j = 6;
 
             i.ShouldNotEqual(j);
         }
 
-        [Specification]
+        [Test]
         public void Should_allow_substitution_for_AreNotSame()
         {
             object test1 = "blarg";
@@ -53,20 +53,20 @@ namespace NBehave.Spec.NUnit.Specs
             test2.ShouldNotBeTheSameAs(test1);
         }
 
-        [Specification]
+        [Test]
         public void Should_allow_substitution_for_AreSame()
         {
             object test1 = "blarg";
-            object test2 = test1;
+            var test2 = test1;
 
             test2.ShouldBeTheSameAs(test1);
         }
     }
 
-    [Context]
+    [TestFixture]
     public class When_using_BDD_style_language_for_collection_assertions
     {
-        [Specification]
+        [Test]
         public void Should_allow_substitution_for_Contains_on_collections()
         {
             int[] vals = { 5, 6, 7, 8 };
@@ -74,7 +74,7 @@ namespace NBehave.Spec.NUnit.Specs
             vals.ShouldContain(6);
         }
 
-        [Specification]
+        [Test]
         public void Should_allow_substitution_for_ShouldNotContain_on_collections()
         {
             int[] vals = { 5, 6, 7, 8 };
@@ -82,7 +82,7 @@ namespace NBehave.Spec.NUnit.Specs
             vals.ShouldNotContain(1);
         }
 
-        [Specification]
+        [Test]
         public void Should_allow_substitution_for_IsEmpty_for_collections()
         {
             int[] vals = { };
@@ -90,7 +90,7 @@ namespace NBehave.Spec.NUnit.Specs
             vals.ShouldBeEmpty();
         }
 
-        [Specification]
+        [Test]
         public void Should_allow_substitution_for_IsNotEmpty_for_collections()
         {
             int[] vals = { 1, 2, 3 };
@@ -98,14 +98,14 @@ namespace NBehave.Spec.NUnit.Specs
             vals.ShouldNotBeEmpty();
         }
 
-        [Specification]
+        [Test]
         public void should_allow_substitution_for_contains_on_ienumerable()
         {
             IEnumerable lst = new ArrayList { 1, 2, 3, 4 };
             lst.ShouldContain(3);
         }
 
-        [Specification]
+        [Test]
         public void Should_allow_substitutions_for_AreEqual()
         {
             int[] values1 = { 4, 5, 6 };
@@ -114,7 +114,7 @@ namespace NBehave.Spec.NUnit.Specs
             values1.ShouldBeEqualTo(values2);
         }
 
-        [Specification]
+        [Test]
         public void Should_allow_substitutions_for_AreNotEqual()
         {
             int[] values1 = { 4, 5, 6 };
@@ -123,7 +123,7 @@ namespace NBehave.Spec.NUnit.Specs
             values1.ShouldNotBeEqualTo(values2);
         }
 
-        [Specification]
+        [Test]
         public void Should_allow_substitutions_for_AreEquivalent()
         {
             int[] values1 = { 4, 5, 6 };
@@ -132,7 +132,7 @@ namespace NBehave.Spec.NUnit.Specs
             values1.ShouldBeEquivalentTo(values2);
         }
 
-        [Specification]
+        [Test]
         public void Should_allow_substitutions_for_AreNotEquivalent()
         {
             int[] values1 = { 4, 5, 6 };
@@ -142,81 +142,81 @@ namespace NBehave.Spec.NUnit.Specs
         }
     }
 
-    [Context]
+    [TestFixture]
     public class When_using_BDD_style_language_for_integer_assertions
     {
-        [Specification]
+        [Test]
         public void Should_allow_substitution_for_Greater()
         {
             5.ShouldBeGreaterThan(4);
         }
 
-        [Specification]
+        [Test]
         public void Should_allow_substitution_for_GreaterOrEqual()
         {
             5.ShouldBeGreaterThanOrEqualTo(5);
         }
 
-        [Specification]
+        [Test]
         public void Should_allow_substitution_for_IsNaN()
         {
             double.NaN.ShouldBeNaN();
         }
 
-        [Specification]
+        [Test]
         public void Should_allow_substitution_for_Less()
         {
             5.ShouldBeLessThan(6);
         }
 
-        [Specification]
+        [Test]
         public void Should_allow_substitution_for_LessOrEqualTo()
         {
             5.ShouldBeLessThanOrEqualTo(6);
         }
     }
 
-    [Context]
+    [TestFixture]
     public class When_using_BDD_style_language_for_string_assertions
     {
 
-        [Specification]
+        [Test]
         public void Should_allow_substitutions_for_EndsWith()
         {
             "blarg".ShouldEndWith("arg");
         }
 
-        [Specification]
+        [Test]
         public void Should_allow_substitutions_for_Matches()
         {
             "blarg".ShouldMatch(new Regex("blarg"));
         }
 
-        [Specification]
+        [Test]
         public void Should_allow_substitution_for_IsEmpty_for_strings()
         {
             string.Empty.ShouldBeEmpty();
         }
 
-        [Specification]
+        [Test]
         public void Should_allow_substitution_for_IsNotEmpty_for_strings()
         {
             "blarg".ShouldNotBeEmpty();
         }
 
-        [Specification]
+        [Test]
         public void Should_allow_substitutions_for_DoesNotMatch()
         {
             "blarg".ShouldNotMatch(new Regex("asdf"));
         }
 
-        [Specification]
+        [Test]
         public void Should_allow_substitutions_for_StartsWith()
         {
             "blarg".ShouldStartWith("bl");
         }
 
-        [Specification]
+        [Test]
         public void Should_allow_substitution_for_ShouldNotContain_for_string()
         {
             "Lorem ipsum dolor sit amet.".ShouldNotContain("foo");
@@ -228,49 +228,49 @@ namespace NBehave.Spec.NUnit.Specs
             "Lorem ipsum dolor sit amet.".ShouldNotContain("ipsum");
         }
 
-        [Specification]
+        [Test]
         public void Should_allow_substitution_for_ShouldContain_for_string()
         {
-            string str = "Hello";
+            var str = "Hello";
             str.ShouldContain("Hell");
         }
 
         [Specification, ExpectedException(typeof(AssertionException))]
         public void Should_allow_substitution_for_ShouldContain_for_string_failing()
         {
-            string str = "Hello";
+            var str = "Hello";
             str.ShouldContain("Foo");
         }
     }
 
-    [Context]
+    [TestFixture]
     public class When_using_BDD_style_language_for_instance_type_assertions
     {
-        [Specification]
+        [Test]
         public void Should_allow_substitution_for_IsAssignableFrom()
         {
             5.ShouldBeAssignableFrom(typeof(int));
         }
 
-        [Specification]
+        [Test]
         public void Should_allow_substitution_for_IsInstanceOfType()
         {
             5.ShouldBeInstanceOfType(typeof(int));
         }
 
-        [Specification]
+        [Test]
         public void Should_allow_substitution_for_IsNotAssignableFrom()
         {
             5.ShouldNotBeAssignableFrom(typeof(string));
         }
 
-        [Specification]
+        [Test]
         public void Should_allow_substitution_for_IsNotInstanceOfType()
         {
             5.ShouldNotBeInstanceOfType(typeof(double));
         }
 
-        [Specification]
+        [Test]
         public void Should_allow_substitution_for_IsNotNull()
         {
             object value = "blarg";
@@ -278,7 +278,7 @@ namespace NBehave.Spec.NUnit.Specs
             value.ShouldNotBeNull();
         }
 
-        [Specification]
+        [Test]
         public void Should_allow_substitution_for_IsNull()
         {
             object value = null;
@@ -287,79 +287,79 @@ namespace NBehave.Spec.NUnit.Specs
         }
     }
 
-    [Context]
+    [TestFixture]
     public class When_using_BDD_style_language_for_instance_type_assertions_using_generics
     {
-        [Specification]
+        [Test]
         public void Should_allow_substitution_for_IsAssignableFrom()
         {
             5.ShouldBeAssignableFrom<int>();
         }
 
-        [Specification]
+        [Test]
         public void Should_allow_substitution_for_IsInstanceOfType()
         {
             5.ShouldBeInstanceOfType<int>();
         }
 
-        [Specification]
+        [Test]
         public void Should_allow_substitution_for_IsNotAssignableFrom()
         {
             5.ShouldNotBeAssignableFrom<string>();
         }
 
-        [Specification]
+        [Test]
         public void Should_allow_substitution_for_IsNotInstanceOfType()
         {
             5.ShouldNotBeInstanceOfType<double>();
         }
     }
 
-    [Context]
+    [TestFixture]
     public class When_specifying_exceptions_to_be_thrown
     {
-        [Specification]
+        [Test]
         [ExpectedException(typeof(AssertionException))]
         public void Should_fail_when_exception_is_of_a_different_type()
         {
             (typeof(SystemException)).ShouldBeThrownBy(() => { throw new ApplicationException(); });
         }
 
-        [Specification]
+        [Test]
         public void Should_pass_when_exception_is_of_the_correct_type()
         {
             (typeof(ApplicationException)).ShouldBeThrownBy(() => { throw new ApplicationException(); });
         }
 
-        [Specification]
+        [Test]
         [ExpectedException(typeof(AssertionException))]
         public void Should_fail_when_exception_is_not_thrown()
         {
             (typeof(ApplicationException)).ShouldBeThrownBy(() => { });
         }
 
-        [Specification]
+        [Test]
         [ExpectedException(typeof(AssertionException))]
         public void Should_fail_when_exception_is_of_a_different_type_using_actions()
         {
             (typeof(SystemException)).ShouldBeThrownBy(() => { throw new ApplicationException(); });
         }
 
-        [Specification]
+        [Test]
         public void Should_pass_when_exception_is_of_the_correct_type_using_actions()
         {
             (typeof(ApplicationException)).ShouldBeThrownBy(() => { throw new ApplicationException(); });
         }
 
-        [Specification]
+        [Test]
         public void Should_return_exception_thrown_from_action()
         {
-            Exception exception = new Action(() => { throw new ArgumentException(); }).GetException();
+            var exception = new Action(() => { throw new ArgumentException(); }).GetException();
 
             exception.ShouldBeInstanceOfType<ArgumentException>();
         }
 
-        [Specification]
+        [Test]
         public void Should_pass_when_exception_is_correct_type()
         {
             Action action = () => { throw new ArgumentException("blerg"); };
@@ -380,7 +380,7 @@ namespace NBehave.Spec.NUnit.Specs
             action.ShouldThrow<ArgumentException>();
         }
 
-        [Specification]
+        [Test]
         public void Should_pass_when_exception_is_correct_type_and_message_is_correct_type()
         {
             Action action = () => { throw new ArgumentException("blerg"); };
@@ -388,46 +388,46 @@ namespace NBehave.Spec.NUnit.Specs
         }
     }
 
-    [Context]
+    [TestFixture]
     public class When_using_BDD_style_language_for_double_assertions
     {
-        [Specification]
+        [Test]
         public void Should_allow_substitution_for_Greater()
         {
             5.1.ShouldBeGreaterThan(4.5);
         }
 
-        [Specification]
+        [Test]
         public void Should_allow_substitution_for_GreaterOrEqual()
         {
             5.1.ShouldBeGreaterThanOrEqualTo(5.1);
         }
 
-        [Specification]
+        [Test]
         public void Should_allow_substitution_for_IsNaN()
         {
             double.NaN.ShouldBeNaN();
         }
 
-        [Specification]
+        [Test]
         public void Should_allow_substitution_for_Less()
         {
             5.1.ShouldBeLessThan(5.2);
         }
 
-        [Specification]
+        [Test]
         public void Should_allow_substitution_for_LessOrEqualTo()
         {
             5.1.ShouldBeLessThanOrEqualTo(6.2);
         }
 
-        [Specification]
+        [Test]
         public void Should_allow_substitiution_for_AreApproximatelyEqual()
         {
             5.1.ShouldApproximatelyEqual(5.2, 0.11);
         }
 
-        //[Specification]
+        //[Test]
         //public void Should_allow_substitiution_for_AreNotApproximatelyEqual()
         //{
         //    5.1.ShouldNotApproximatelyEqual(5.3, 0.1);

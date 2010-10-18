@@ -1,9 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text.RegularExpressions;
 
 namespace NBehave.Narrator.Framework
 {
@@ -18,9 +16,9 @@ namespace NBehave.Narrator.Framework
 
         public object[] GetParametersForActionStepText(ActionStepText actionStepText)
         {
-            ActionMethodInfo action = _actionCatalog.GetAction(actionStepText);
-            List<string> paramNames = GetParameterNames(action);
-            Match match = action.ActionStepMatcher.Match(actionStepText.Step);
+            var action = _actionCatalog.GetAction(actionStepText);
+            var paramNames = GetParameterNames(action);
+            var match = action.ActionStepMatcher.Match(actionStepText.Step);
             Func<int, string> getValues = i => match.Groups[paramNames[i]].Value;
 
             return GetParametersForActionStepText(action, paramNames, getValues);
@@ -28,8 +26,8 @@ namespace NBehave.Narrator.Framework
 
         public object[] GetParametersForActionStepText(ActionStepText actionStepText, Row row)
         {
-            ActionMethodInfo action = _actionCatalog.GetAction(actionStepText);
-            List<string> paramNames = action.ParameterInfo.Select(a => a.Name).ToList();
+            var action = _actionCatalog.GetAction(actionStepText);
+            var paramNames = action.ParameterInfo.Select(a => a.Name).ToList();
             Func<int, string> getValues = i => row.ColumnValues[paramNames[i].ToLower()];
 
             return GetParametersForActionStepText(action, paramNames, getValues);
@@ -37,12 +35,12 @@ namespace NBehave.Narrator.Framework
 
         private object[] GetParametersForActionStepText(ActionMethodInfo action, ICollection<string> paramNames, Func<int, string> getValue)
         {
-            ParameterInfo[] args = action.ParameterInfo;
+            var args = action.ParameterInfo;
             var values = new object[args.Length];
 
-            for (int argNumber = 0; argNumber < paramNames.Count; argNumber++)
+            for (var argNumber = 0; argNumber < paramNames.Count; argNumber++)
             {
-                string strParam = getValue(argNumber);
+                var strParam = getValue(argNumber);
                 values[argNumber] = ChangeParameterType(strParam, args[argNumber]);
             }
 
@@ -65,7 +63,7 @@ namespace NBehave.Narrator.Framework
 
         private object CreateArray(string strParam, Type arrayOfType)
         {
-            string[] strParamAsArray = GetParamAsArray(strParam);
+            var strParamAsArray = GetParamAsArray(strParam);
             var typedArray = Activator.CreateInstance(arrayOfType, strParamAsArray.Length);
             var typeInList = arrayOfType.GetElementType();
             SetValues(strParamAsArray, typeInList, typedArray, "SetValue");
@@ -74,7 +72,7 @@ namespace NBehave.Narrator.Framework
 
         private object CreateList(string param, Type parameterType)
         {
-            Type innerType = parameterType.GetGenericArguments()[0];
+            var innerType = parameterType.GetGenericArguments()[0];
             var genericList = CreateGeneric(typeof (List<>), innerType);
             var strParamAsArray = GetParamAsArray(param);
             SetValues(strParamAsArray, innerType, genericList, "AddValue");
@@ -89,13 +87,13 @@ namespace NBehave.Narrator.Framework
             var genericArgs = paramType.ParameterType.GetGenericArguments();
             if (genericArgs.Length > 1)
                 throw new NotSupportedException("Sorry, nbehave only supports one generic parameter");
-            object ien = CreateGeneric(typeof(List<>), genericArgs[0]);
+            var ien = CreateGeneric(typeof(List<>), genericArgs[0]);
             return paramType.ParameterType.IsAssignableFrom(ien.GetType());
         }
 
         public object CreateGeneric(Type generic, Type innerType)
         {
-            Type specificType = generic.MakeGenericType(new[] { innerType });
+            var specificType = generic.MakeGenericType(new[] { innerType });
             return Activator.CreateInstance(specificType, null);
         }
 
@@ -104,9 +102,9 @@ namespace NBehave.Narrator.Framework
             var method = GetType().GetMethod(function, BindingFlags.NonPublic | BindingFlags.Instance);
             var types = new[] { typeInList };
             var genMethod = method.MakeGenericMethod(types);
-            for (int i = 0; i < strParamAsArray.Length; i++)
+            for (var i = 0; i < strParamAsArray.Length; i++)
             {
-                object value = Convert.ChangeType(strParamAsArray[i], typeInList);
+                var value = Convert.ChangeType(strParamAsArray[i], typeInList);
                 genMethod.Invoke(this, new[] { typedArray, i, value });
             }
         }
@@ -121,7 +119,7 @@ namespace NBehave.Narrator.Framework
 
         private void TrimValues(string[] strParamAsArray)
         {
-            for (int i = 0; i < strParamAsArray.Length; i++)
+            for (var i = 0; i < strParamAsArray.Length; i++)
             {
                 if (string.IsNullOrEmpty(strParamAsArray[i]) == false)
                     strParamAsArray[i] = strParamAsArray[i].Trim();
@@ -135,6 +133,9 @@ namespace NBehave.Narrator.Framework
             return strParamAsArray;
         }
 
+        // ReSharper disable UnusedMember.Local
+        // ReSharper disable UnusedParameter.Local
+
         //This method is called with reflection by the CreateArray method
         private void SetValue<T>(T[] array, int index, T value)
         {
@@ -146,5 +147,8 @@ namespace NBehave.Narrator.Framework
         {
             array.Add(value);
         }
+
+        // ReSharper restore UnusedParameter.Local
+        // ReSharper restore UnusedMember.Local
     }
 }

@@ -1,7 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace NBehave.Narrator.Framework
@@ -31,13 +31,13 @@ namespace NBehave.Narrator.Framework
         public override void Run()
         {
             var actionStepResult = GetNewActionStepResult();
-            bool hasParamsInStep = HasParametersInStep();
-            foreach (Row row in _tableSteps)
+            var hasParamsInStep = HasParametersInStep();
+            foreach (var row in _tableSteps)
             {
                 StringStep step = this;
                 if (hasParamsInStep)
                     step = InsertParametersToStep(row);
-                ActionStepResult result = StringStepRunner.Run(step, row);
+                var result = StringStepRunner.Run(step, row);
                 actionStepResult.MergeResult(result.Result);
             }
             StepResult = actionStepResult;
@@ -45,7 +45,7 @@ namespace NBehave.Narrator.Framework
 
         private ActionStepResult GetNewActionStepResult()
         {
-            string fullStep = CreateStepText();
+            var fullStep = CreateStepText();
             return new ActionStepResult(fullStep, new Passed());
         }
 
@@ -73,7 +73,7 @@ namespace NBehave.Narrator.Framework
 
         private StringStep InsertParametersToStep(Row step)
         {
-            string stringStep = Step;
+            var stringStep = Step;
             foreach (var column in step.ColumnValues)
             {
                 var replceWithValue = new Regex(string.Format(@"\[{0}\]", column.Key), RegexOptions.IgnoreCase);

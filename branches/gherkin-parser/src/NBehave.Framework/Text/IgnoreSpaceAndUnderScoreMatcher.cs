@@ -15,9 +15,9 @@ namespace NBehave.Narrator.Framework
 		
         bool IFileMatcher.IsMatch(string fileName)
         {
-            string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
-            string match = Regex.Match(fileNameWithoutExtension, @"^[\w+_|\s]*$").Value;
-            string matchWithoutSpaceAndUnderScore = match.Replace("_","").Replace(" ","");
+            var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
+            var match = Regex.Match(fileNameWithoutExtension, @"^[\w+_|\s]*$").Value;
+            var matchWithoutSpaceAndUnderScore = match.Replace("_","").Replace(" ","");
             return _className == matchWithoutSpaceAndUnderScore;
         }
 

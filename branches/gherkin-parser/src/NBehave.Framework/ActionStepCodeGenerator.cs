@@ -8,11 +8,11 @@ namespace NBehave.Narrator.Framework
     {
         public string GenerateMethodFor(string actionStep, TypeOfStep step)
         {
-            string actionStepParameterized = ParameterizeActionStep(actionStep);
-            string attrib = step.ToString();
-            string attribute = string.Format("[{0}(\"{1}\")]{2}", attrib, actionStepParameterized, Environment.NewLine);
-            string methodName = ExtractMethodName(attrib + " " + actionStepParameterized);
-            string methodSignature = string.Format("public void {0}({1}){2}",
+            var actionStepParameterized = ParameterizeActionStep(actionStep);
+            var attrib = step.ToString();
+            var attribute = string.Format("[{0}(\"{1}\")]{2}", attrib, actionStepParameterized, Environment.NewLine);
+            var methodName = ExtractMethodName(attrib + " " + actionStepParameterized);
+            var methodSignature = string.Format("public void {0}({1}){2}",
                 methodName.Replace(' ', '_'),
                 GetParameters(actionStep),
                 " ");
@@ -24,9 +24,9 @@ namespace NBehave.Narrator.Framework
 
         private string GetParameters(string row)
         {
-            int numberOfParameters = 0;
-            string parameters = string.Empty;
-            IEnumerable<string> words = SplitStringToWords(ref row);
+            var numberOfParameters = 0;
+            var parameters = string.Empty;
+            var words = SplitStringToWords(ref row);
 
             foreach (var word in words)
             {
@@ -47,9 +47,9 @@ namespace NBehave.Narrator.Framework
 
         private string ParameterizeActionStep(string row)
         {
-            string actionStep = string.Empty;
-            int paramNumber = 1;
-            IEnumerable<string> words = SplitStringToWords(ref row);
+            var actionStep = string.Empty;
+            var paramNumber = 1;
+            var words = SplitStringToWords(ref row);
             foreach (var word in words)
             {
                 if (IsParameter(word))
@@ -68,7 +68,7 @@ namespace NBehave.Narrator.Framework
         private IEnumerable<string> SplitStringToWords(ref string row)
         {
             row = TrimRow(row).RemoveFirstWord();
-            string[] words = row.Split(_whiteSpaces, StringSplitOptions.RemoveEmptyEntries);
+            var words = row.Split(_whiteSpaces, StringSplitOptions.RemoveEmptyEntries);
             return words;
         }
 
@@ -81,13 +81,13 @@ namespace NBehave.Narrator.Framework
         private bool IsInt(string word)
         {
             int dummy;
-            bool isInt = int.TryParse(word, out dummy);
+            var isInt = int.TryParse(word, out dummy);
             return isInt;
         }
 
         private string TrimRow(string row)
         {
-            string trimmedRow = row;
+            var trimmedRow = row;
             var start = new Regex(@"^\s*");
             if (start.IsMatch(trimmedRow))
                 trimmedRow = trimmedRow.Substring(start.Match(trimmedRow).Length);
@@ -101,7 +101,7 @@ namespace NBehave.Narrator.Framework
         private string ExtractMethodName(string row)
         {
             var regEx = new Regex(@"(\w+\d*)(\w|\d)*");
-            string methodName = string.Empty;
+            var methodName = string.Empty;
             foreach (Match match in regEx.Matches(row))
             {
                 methodName += match.Value + "_";

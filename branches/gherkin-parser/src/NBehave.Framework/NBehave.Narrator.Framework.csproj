@@ -89,6 +89,9 @@
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Gherkin">
+      <HintPath>..\..\lib\Gherkin\Gherkin.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core">
@@ -116,17 +119,17 @@
     <Compile Include="EventListeners\SummaryWriter.cs" />
     <Compile Include="Text\ActionMethodInfo.cs" />
     <Compile Include="ActionMissingException.cs" />
-    <Compile Include="Text\ActionStep.cs" />
-    <Compile Include="Text\ActionStepAttribute.cs" />
+    <Compile Include="Text\Attributes\ActionStepAttribute.cs" />
     <Compile Include="Text\ActionStepConverterExtensions.cs" />
     <Compile Include="Text\ActionStepFileLoader.cs" />
+    <Compile Include="Text\GherkinScenarioParser.cs" />
     <Compile Include="Text\IFileMatcher.cs" />
     <Compile Include="Text\IgnoreSpaceAndUnderScoreMatcher.cs" />
     <Compile Include="Text\IStringStepRunner.cs" />
-    <Compile Include="Text\Language.cs" />
+    <Compile Include="Text\LanguageService.cs" />
     <Compile Include="Text\MatchAllFiles.cs" />
     <Compile Include="Text\StringStepRunner.cs" />
-    <Compile Include="Text\ActionStepsAttribute.cs" />
+    <Compile Include="Text\Attributes\ActionStepsAttribute.cs" />
     <Compile Include="EventArgs.cs" />
     <Compile Include="Text\ActionStepParser.cs" />
     <Compile Include="EventListeners\EventListeners.cs" />
@@ -134,7 +137,7 @@
     <Compile Include="EventListeners\NullEventListener.cs" />
     <Compile Include="EventListeners\TextWriterEventListener.cs" />
     <Compile Include="EventListeners\Xml\XmlOutputEventListener.cs" />
-    <Compile Include="IEventListener.cs" />
+    <Compile Include="EventListeners\IEventListener.cs" />
     <Compile Include="Pair.cs" />
     <Compile Include="PlainTextOutput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -142,30 +145,27 @@
     <Compile Include="Result.cs" />
     <Compile Include="ScenarioResult.cs" />
     <Compile Include="Text\ActionStepText.cs" />
-    <Compile Include="Text\AfterScenarioAttribute.cs" />
-    <Compile Include="Text\AfterStepAttribute.cs" />
-    <Compile Include="Text\BeforeScenarioAttribute.cs" />
-    <Compile Include="Text\BeforeStepAttribute.cs" />
-    <Compile Include="Text\GivenAttribute.cs" />
+    <Compile Include="Text\Attributes\AfterScenarioAttribute.cs" />
+    <Compile Include="Text\Attributes\AfterStepAttribute.cs" />
+    <Compile Include="Text\Attributes\BeforeScenarioAttribute.cs" />
+    <Compile Include="Text\Attributes\BeforeStepAttribute.cs" />
+    <Compile Include="Text\Attributes\GivenAttribute.cs" />
     <Compile Include="Text\IMatchFiles.cs" />
-    <Compile Include="Text\NotificationMethodAttribute.cs" />
+    <Compile Include="Text\Attributes\NotificationMethodAttribute.cs" />
     <Compile Include="Text\ScenarioStepRunner.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="Text\TextRunner.cs" />
     <Compile Include="FeatureResults.cs" />
     <Compile Include="StoryRunnerFilter.cs" />
-    <Compile Include="Text\ThenAttribute.cs" />
+    <Compile Include="Text\Attributes\ThenAttribute.cs" />
     <Compile Include="Text\Example.cs" />
     <Compile Include="Text\ExampleColumns.cs" />
     <Compile Include="Text\Feature.cs" />
     <Compile Include="Text\Row.cs" />
-    <Compile Include="Text\ScenarioParser.cs" />
     <Compile Include="Text\ScenarioWithSteps.cs" />
     <Compile Include="Text\StringStep.cs" />
     <Compile Include="Text\StringTableStep.cs" />
-    <Compile Include="Text\WhenAttribute.cs" />
-    <Compile Include="YmlEntry.cs" />
-    <Compile Include="YmlParser.cs" />
+    <Compile Include="Text\Attributes\WhenAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\NBehave.snk">
@@ -192,6 +192,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

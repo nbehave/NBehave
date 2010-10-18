@@ -20,13 +20,13 @@ namespace NBehave.Narrator.Framework
 
             foreach (var location in scenarioLocations)
             {
-                string[] files = GetFiles(location);
+                var files = GetFiles(location);
                 stories.AddRange(LoadFiles(files));
             }
             return stories;
         }
 
-        private string[] GetFiles(string location)
+        private IEnumerable<string> GetFiles(string location)
         {
             string[] files;
             if (Path.IsPathRooted(location))
@@ -34,8 +34,8 @@ namespace NBehave.Narrator.Framework
             else
             {
                 var absoluteLocation = GetAbsolutePath(location);
-                string path = Path.GetFileName(absoluteLocation);
-                string pattern = Path.GetDirectoryName(absoluteLocation);
+                var path = Path.GetFileName(absoluteLocation);
+                var pattern = Path.GetDirectoryName(absoluteLocation);
                 files = Directory.GetFiles(pattern, path);
             }
             return files;
@@ -55,7 +55,7 @@ namespace NBehave.Narrator.Framework
             var stories = new List<Feature>();
             foreach (var file in files)
             {
-                IEnumerable<Feature> scenarios = GetScenarios(file);
+                var scenarios = GetScenarios(file);
                 stories.AddRange(scenarios);
             }
             return stories;
@@ -75,9 +75,9 @@ namespace NBehave.Narrator.Framework
             return features;
         }
 
-        public IEnumerable<Feature> Load(Stream stream)
+        private IEnumerable<Feature> Load(Stream stream)
         {
-            var scenarioTextParser = new ScenarioParser(_stringStepRunner);
+            var scenarioTextParser = new GherkinScenarioParser(_stringStepRunner);
             return scenarioTextParser.Parse(stream);
         }
     }

@@ -1,5 +1,6 @@
-﻿using Rhino.Mocks;
-using NBehave.Spec.Xunit;
+﻿using NBehave.Spec.Xunit;
+using NUnit.Framework;
+using Rhino.Mocks;
 
 namespace Xunit.SpecBase_Specifications
 {
@@ -14,10 +15,10 @@ namespace Xunit.SpecBase_Specifications
 		{
 		}
 
-		[Specification]
+		[Test]
 		public void should_populate_the_SUT_before_starting_the_specification()
 		{
-            Assert.NotNull(Sut);
+			Assert.NotNull(Sut);
 		}
 	}
 
@@ -39,35 +40,35 @@ namespace Xunit.SpecBase_Specifications
 			Sut.Start();
 		}
 
-		[Specification]
+		[Test]
 		public void should_call_the_before_each_spec_before_starting_the_specification()
 		{
 			_timer.AssertWasCalled(x => x.Start(null), opt => opt.IgnoreArguments());
 		}
 	}
 
-    public class StopWatch
-    {
-        private readonly ITimer _timer;
+	public class StopWatch
+	{
+		private readonly ITimer _timer;
 
-        public StopWatch()
-        {
-        }
+		public StopWatch()
+		{
+		}
 
-        public StopWatch(ITimer timer)
-        {
-            _timer = timer;
-        }
+		public StopWatch(ITimer timer)
+		{
+			_timer = timer;
+		}
 
-        public void Start()
-        {
-            _timer.Start("");
-        }
-    }
+		public void Start()
+		{
+			_timer.Start("");
+		}
+	}
 
-    public interface ITimer
-    {
-        bool Start(string reason);
-        void Start();
-    }
+	public interface ITimer
+	{
+		bool Start(string reason);
+		void Start();
+	}
 }
