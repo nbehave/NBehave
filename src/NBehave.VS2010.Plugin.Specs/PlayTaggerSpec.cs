@@ -18,12 +18,6 @@ namespace NBehave.VS2010.Plugin.Specs
         private ITextBuffer _buffer;
         private ITagger<PlayTag> _playTagger;
 
-        [SetUp]
-        public void Setup()
-        {
-            TestInitialise("Features/gherkin.feature");
-        }
-
         private void TestInitialise(string gherkinFileLocation)
         {
             var registry = MockRepository.GenerateMock<IClassificationTypeRegistryService>();
@@ -47,7 +41,7 @@ namespace NBehave.VS2010.Plugin.Specs
             gherkinFileEditorParser.InitialiseWithBuffer(_buffer);
             _buffer.Properties.AddProperty(typeof(GherkinFileEditorParser), gherkinFileEditorParser);
 
-            _playTagger = new PlayTagger(_buffer, TODO);
+            _playTagger = new PlayTagger(_buffer, null);
 
             gherkinFileEditorParser.FirstParse();
         }
@@ -55,6 +49,8 @@ namespace NBehave.VS2010.Plugin.Specs
         [Test]
         public void ShouldClassifyScenarioWithExamples()
         {
+            TestInitialise("Features/gherkin.feature");
+
             var tag = _playTagger.GetTags(null).Where(span => span.Span.GetText().StartsWith("  Scenario: SC1")).First();
 
             Assert.That(tag.Span.GetText(), Is.EqualTo("  Scenario: SC1"                       + Environment.NewLine +
@@ -65,12 +61,14 @@ namespace NBehave.VS2010.Plugin.Specs
                                                        "    Examples:"                         + Environment.NewLine +
                                                        "    |left|right|sum|"                  + Environment.NewLine +
                                                        "    |1   | 2   |3  |"                  + Environment.NewLine +
-                                                       "    |3   | 4   |7  |"                  + Environment.NewLine));
+                                                       "    |3   | 4   |7  |"));
         }
 
         [Test]
         public void ShouldClassifyScenarioWithInlineTable()
         {
+            TestInitialise("Features/gherkin.feature");
+
             var tag = _playTagger.GetTags(null).Where(span => span.Span.GetText().StartsWith("  Scenario: inline table")).First();
 
             Assert.That(tag.Span.GetText(), Is.EqualTo("  Scenario: inline table"                 + Environment.NewLine +
@@ -83,18 +81,43 @@ namespace NBehave.VS2010.Plugin.Specs
                                                        "    Then I should get:"                   + Environment.NewLine +
                                                        "      |Name          |"                   + Environment.NewLine +
                                                        "      |Morgan Persson|"                   + Environment.NewLine +
-                                                       "      |Jimmy Nilsson |"                   + Environment.NewLine));
+                                                       "      |Jimmy Nilsson |"));
         }
 
         [Test]
         public void ShouldClassifyScenario()
         {
+            TestInitialise("Features/gherkin.feature");
+
             var tag = _playTagger.GetTags(null).Where(span => span.Span.GetText().StartsWith("  Scenario: SC2")).First();
 
             Assert.That(tag.Span.GetText(), Is.EqualTo("  Scenario: SC2"                           + Environment.NewLine +
                                                        "    Given something"                       + Environment.NewLine +
                                                        "    When some event occurs"                + Environment.NewLine +
                                                        "    Then there is some outcome"            + Environment.NewLine));
+        }
+
+        [Test]
+        public void ShouldClassifyScenarioWithMultipleInlineTables()
+        {
+            TestInitialise("../../../NBehave.Examples/Tables/Table.feature");
+
+            var tag = _playTagger.GetTags(null).Where(span => span.Span.GetText().StartsWith("Scenario: a table")).First();
+
+            Assert.That(tag.Span.GetText(), Is.EqualTo("Scenario: a table"                        + Environment.NewLine +
+                                                       ""                                         + Environment.NewLine +
+                                                       "Given a list of people:"                  + Environment.NewLine +
+                                                       "|name          |country|"                 + Environment.NewLine +
+                                                       "|Morgan Persson|Sweden |"                 + Environment.NewLine +
+                                                       "|Jimmy Nilsson |Sweden |"                 + Environment.NewLine +
+                                                       "|Jimmy Bogard  |USA    |"                 + Environment.NewLine +
+                                                       ""                                         + Environment.NewLine +
+                                                       "When I search for people from Sweden"     + Environment.NewLine +
+                                                       ""                                         + Environment.NewLine +
+                                                       "Then I should find:"                      + Environment.NewLine +
+                                                       "|Name          |Country|"                 + Environment.NewLine +
+                                                       "|Morgan Persson|Sweden |"                 + Environment.NewLine +
+                                                       "|Jimmy Nilsson |Sweden |"                 ));
         }
     }
 }

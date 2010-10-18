@@ -20,13 +20,19 @@ namespace NBehave.VS2010.Plugin.Domain
 
         public void Run(bool debug)
         {
+            var activeDocumentFullName = _visualStudioService.GetActiveDocumentFullName();
+            Run(activeDocumentFullName, debug);
+        }
+
+        public void Run(string documentName, bool debug)
+        {
             _visualStudioService.BuildSolution();
             _outputWindow.Clear();
 
             var assemblyPath = _visualStudioService.GetAssemblyPath();
-            var activeDocumentFullName = _visualStudioService.GetActiveDocumentFullName();
 
-            var args = string.Format("\"{0}\" /sf=\"{1}\"", assemblyPath, activeDocumentFullName);
+
+            var args = string.Format("\"{0}\" /sf=\"{1}\"", assemblyPath, documentName);
 
             if (debug)
             {
@@ -37,7 +43,7 @@ namespace NBehave.VS2010.Plugin.Domain
                                        {
                                            Arguments = args,
                                            CreateNoWindow = true,
-                                           FileName = GetExecutable(),
+                                           FileName = GetExecutable(Path.GetDirectoryName(assemblyPath)),
                                            RedirectStandardOutput = true,
                                            UseShellExecute = false,
                                            WorkingDirectory = Path.GetDirectoryName(assemblyPath)
@@ -74,7 +80,7 @@ namespace NBehave.VS2010.Plugin.Domain
             }
         }
 
-        private string GetExecutable()
+        private string GetExecutable(string workingDirectory)
         {
             var nbehaveRegKey =
                 Registry.LocalMachine.OpenSubKey(string.Format("{0}{1}", "SOFTWARE\\NBehave\\",
@@ -92,6 +98,10 @@ namespace NBehave.VS2010.Plugin.Domain
 
                     return Path.Combine((string) installDirectory, version, nbehaveConsoleExe);
                 }
+            }
+            else
+            {
+                return Path.Combine(workingDirectory, nbehaveConsoleExe);
             }
             return nbehaveConsoleExe;
         }

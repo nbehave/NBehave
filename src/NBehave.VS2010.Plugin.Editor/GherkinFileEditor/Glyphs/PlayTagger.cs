@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Disposables;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using Microsoft.VisualStudio.Text;
@@ -26,7 +27,13 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor.Glyphs
 
         public void Execute()
         {
-            _scenarioRunner.Run(false);
+            var tempFileName = Path.GetTempFileName();
+            using (var writer = new StreamWriter(tempFileName))
+            {
+                writer.Write(_snapshotSpan.GetText());
+            }
+
+            _scenarioRunner.Run(tempFileName, false);
         }
     }
 
@@ -109,9 +116,10 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor.Glyphs
                 .Where(parserEvent => parserEvent.EventType == ParserEventType.Table)
                 .Subscribe(parserEvent =>
                 {
-                    ITextSnapshotLine lastRowLine = parserEvent.Snapshot.GetLineFromLineNumber(parserEvent.Line + parserEvent.RowCount);
+                    ITextSnapshotLine lastRowLine = parserEvent.Snapshot.GetLineFromLineNumber(parserEvent.Line + parserEvent.RowCount - 1);
                     var snapshotSpan = _snapshotSpans.Pop();
-                    _snapshotSpans.Push(new SnapshotSpan(snapshotSpan.Start, (lastRowLine.Start.Position - snapshotSpan.Start.Position)));
+                    int lastLineReturn = lastRowLine.GetText().EndsWith(Environment.NewLine) ? Environment.NewLine.Length : 0;
+                    _snapshotSpans.Push(new SnapshotSpan(snapshotSpan.Start, (lastRowLine.Start.Position - snapshotSpan.Start.Position) + lastRowLine.Length - lastLineReturn));
                 }));
 
         }

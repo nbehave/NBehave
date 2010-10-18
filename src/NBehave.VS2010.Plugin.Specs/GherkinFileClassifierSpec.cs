@@ -125,7 +125,7 @@ namespace NBehave.VS2010.Plugin.Specs
                                           {
                                               " SC1" + Environment.NewLine,
                                               " inline table" + Environment.NewLine,
-                                              " SC1" + Environment.NewLine,
+                                              " SC2" + Environment.NewLine,
                                               " SC3" + Environment.NewLine,
                                               " FailingScenario" + Environment.NewLine
                                           });
