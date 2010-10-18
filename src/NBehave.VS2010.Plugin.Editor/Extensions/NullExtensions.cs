@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace NBehave.VS2010.Plugin
+namespace NBehave.VS2010.Plugin.Editor.Extensions
 {
     public static class NullExtensions
     {

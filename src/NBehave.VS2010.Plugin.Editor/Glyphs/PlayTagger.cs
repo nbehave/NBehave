@@ -4,15 +4,15 @@ using System.ComponentModel.Composition;
 using System.Disposables;
 using System.IO;
 using System.Linq;
-using System.Windows;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
 using NBehave.VS2010.Plugin.Domain;
+using NBehave.VS2010.Plugin.Editor.Domain;
 
-namespace NBehave.VS2010.Plugin.GherkinFileEditor.Glyphs
+namespace NBehave.VS2010.Plugin.Editor.Glyphs
 {
     public class PlayTag : IGlyphTag
     {
@@ -40,7 +40,7 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor.Glyphs
     [Export(typeof(ITaggerProvider))]
     [ContentType("gherkin")]
     [TagType(typeof(PlayTag))]
-    class ToDoTaggerProvider : ITaggerProvider
+    class PlayTaggerProvider : ITaggerProvider
     {
         [Import]
         internal IClassifierAggregatorService AggregatorFactory;
@@ -53,11 +53,6 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor.Glyphs
         /// <returns>An instance of our custom TodoTagger.</returns>
         public ITagger<T> CreateTagger<T>(ITextBuffer buffer) where T : ITag
         {
-            if (buffer == null)
-            {
-                throw new ArgumentNullException("buffer");
-            }
-
             return buffer.Properties.GetProperty<ITagger<T>>(typeof(ITagger<PlayTag>));
         }
     }
@@ -68,10 +63,10 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor.Glyphs
     /// </summary>
     public class PlayTagger : ITagger<PlayTag>
     {
-        private CompositeDisposable _listeners;
-        private List<ITagSpan<PlayTag>> _tagSpans;
+        private readonly CompositeDisposable _listeners;
+        private readonly List<ITagSpan<PlayTag>> _tagSpans;
         public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
-        private Stack<SnapshotSpan> _snapshotSpans = new Stack<SnapshotSpan>();
+        private readonly Stack<SnapshotSpan> _snapshotSpans = new Stack<SnapshotSpan>();
 
         public PlayTagger(ITextBuffer buffer, ScenarioRunner scenarioRunner)
         {

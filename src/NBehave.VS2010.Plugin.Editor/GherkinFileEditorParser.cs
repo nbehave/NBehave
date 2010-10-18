@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
@@ -7,9 +6,9 @@ using System.Linq;
 using Gherkin;
 using Microsoft.VisualStudio.Text;
 using NBehave.Narrator.Framework;
-using Observable = System.Linq.Observable;
+using NBehave.VS2010.Plugin.Editor.Domain;
 
-namespace NBehave.VS2010.Plugin.GherkinFileEditor
+namespace NBehave.VS2010.Plugin.Editor
 {
     [Export(typeof(GherkinFileEditorParserFactory))]
     [PartCreationPolicy(CreationPolicy.Shared)]

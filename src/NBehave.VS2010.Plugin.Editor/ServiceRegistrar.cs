@@ -1,19 +1,16 @@
 ﻿using System;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
-using System.Runtime.InteropServices;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Tagging;
 using NBehave.VS2010.Plugin.Contracts;
 using NBehave.VS2010.Plugin.Domain;
-using NBehave.VS2010.Plugin.GherkinFileEditor.Glyphs;
-using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
+using NBehave.VS2010.Plugin.Editor.Glyphs;
+using NBehave.VS2010.Plugin.Editor.SyntaxHighlighting;
 
-namespace NBehave.VS2010.Plugin.GherkinFileEditor
+namespace NBehave.VS2010.Plugin.Editor
 {
     [Export(typeof(ServiceRegistrar))]
     [PartCreationPolicy(CreationPolicy.Shared)]
@@ -24,9 +21,6 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
 
         [Import(typeof(SVsServiceProvider))]
         public IServiceProvider ServiceProvider { get; set; }
-
-//        [Import]
-//        public IOutputWindow OutputWindow { get; set; }
 
         public void Initialise(ITextBuffer buffer)
         {

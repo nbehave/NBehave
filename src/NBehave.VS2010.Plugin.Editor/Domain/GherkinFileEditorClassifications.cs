@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.Composition;
 using Microsoft.VisualStudio.Text.Classification;
 
-namespace NBehave.VS2010.Plugin.GherkinFileEditor
+namespace NBehave.VS2010.Plugin.Editor.Domain
 {
     [Export(typeof(GherkinFileEditorClassifications))]
     [PartCreationPolicy(CreationPolicy.Shared)]

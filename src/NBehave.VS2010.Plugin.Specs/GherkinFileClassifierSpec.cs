@@ -5,8 +5,10 @@ using System.Linq;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Utilities;
-using NBehave.VS2010.Plugin.GherkinFileEditor;
-using NBehave.VS2010.Plugin.GherkinFileEditor.SyntaxHighlighting.Classifiers;
+using NBehave.VS2010.Plugin.Editor;
+using NBehave.VS2010.Plugin.Editor.Domain;
+using NBehave.VS2010.Plugin.Editor.SyntaxHighlighting;
+using NBehave.VS2010.Plugin.Editor.SyntaxHighlighting.Classifiers;
 using NUnit.Framework;
 using Rhino.Mocks;
 

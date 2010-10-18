@@ -2,14 +2,13 @@
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Utilities;
 
-namespace NBehave.VS2010.Plugin.GherkinFileEditor
+namespace NBehave.VS2010.Plugin.Editor.Domain
 {
-    // exports a classification format for the classification type gherkin.tag
     [Export(typeof(EditorFormatDefinition))]
     [ClassificationType(ClassificationTypeNames = "gherkin.keyword")]
     [Name("gherkin.keyword")]
-    [UserVisible(true)] //this should be visible to the end user
-    [Order(Before = Priority.Default)] //set the priority to be after the default classifiers
+    [UserVisible(true)] 
+    [Order(Before = Priority.Default)] 
     internal sealed class GherkinKeywordClassificationFormat : ClassificationFormatDefinition
     {
         public GherkinKeywordClassificationFormat()
@@ -18,12 +17,11 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
         }
     }
 
-    // exports a classification format for the classification type gherkin.tag
     [Export(typeof(EditorFormatDefinition))]
     [ClassificationType(ClassificationTypeNames = "gherkin.comment")]
     [Name("gherkin.comment")]
-    [UserVisible(true)] //this should be visible to the end user
-    [Order(Before = Priority.Default)] //set the priority to be after the default classifiers
+    [UserVisible(true)] 
+    [Order(Before = Priority.Default)] 
     internal sealed class GherkinCommentClassificationFormat : ClassificationFormatDefinition
     {
         public GherkinCommentClassificationFormat()
@@ -32,12 +30,11 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
         }
     }
 
-    // exports a classification format for the classification type gherkin.tag
     [Export(typeof(EditorFormatDefinition))]
     [ClassificationType(ClassificationTypeNames = "gherkin.tag")]
     [Name("gherkin.tag")]
-    [UserVisible(true)] //this should be visible to the end user
-    [Order(Before = Priority.Default)] //set the priority to be after the default classifiers
+    [UserVisible(true)] 
+    [Order(Before = Priority.Default)] 
     internal sealed class GherkinTagClassificationFormat : ClassificationFormatDefinition
     {
         public GherkinTagClassificationFormat()
@@ -47,12 +44,11 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
         }
     }
 
-    // exports a classification format for the classification type gherkin.placeholder
     [Export(typeof(EditorFormatDefinition))]
     [ClassificationType(ClassificationTypeNames = "gherkin.placeholder")]
     [Name("gherkin.placeholder")]
-    [UserVisible(true)] //this should be visible to the end user
-    [Order(Before = Priority.Default)] //set the priority to be after the default classifiers
+    [UserVisible(true)] 
+    [Order(Before = Priority.Default)] 
     internal sealed class GherkinPlaceholderClassificationFormat : ClassificationFormatDefinition
     {
         public GherkinPlaceholderClassificationFormat()
@@ -61,12 +57,11 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
         }
     }
 
-    // exports a classification format for the classification type gherkin.multilinetext
     [Export(typeof(EditorFormatDefinition))]
     [ClassificationType(ClassificationTypeNames = "gherkin.multilinetext")]
     [Name("gherkin.multilinetext")]
-    [UserVisible(true)] //this should be visible to the end user
-    [Order(Before = Priority.Default)] //set the priority to be after the default classifiers
+    [UserVisible(true)] 
+    [Order(Before = Priority.Default)]
     internal sealed class GherkinMultilineTextClassificationFormat : ClassificationFormatDefinition
     {
         public GherkinMultilineTextClassificationFormat()
@@ -75,12 +70,11 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
         }
     }
 
-    // exports a classification format for the classification type gherkin.tablecell
     [Export(typeof(EditorFormatDefinition))]
     [ClassificationType(ClassificationTypeNames = "gherkin.tablecell")]
     [Name("gherkin.tablecell")]
-    [UserVisible(true)] //this should be visible to the end user
-    [Order(Before = Priority.Default)] //set the priority to be after the default classifiers
+    [UserVisible(true)] 
+    [Order(Before = Priority.Default)] 
     internal sealed class GherkinTableCellClassificationFormat : ClassificationFormatDefinition
     {
         public GherkinTableCellClassificationFormat()
@@ -89,12 +83,11 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
         }
     }
 
-    // exports a classification format for the classification type gherkin.tableheader
     [Export(typeof(EditorFormatDefinition))]
     [ClassificationType(ClassificationTypeNames = "gherkin.tableheader")]
     [Name("gherkin.tableheader")]
-    [UserVisible(true)] //this should be visible to the end user
-    [Order(Before = Priority.Default)] //set the priority to be after the default classifiers
+    [UserVisible(true)] 
+    [Order(Before = Priority.Default)]
     internal sealed class GherkinTableHeaderClassificationFormat : ClassificationFormatDefinition
     {
         public GherkinTableHeaderClassificationFormat()
@@ -104,12 +97,11 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
         }
     }
 
-    // exports a classification format for the classification type gherkin.description
     [Export(typeof(EditorFormatDefinition))]
     [ClassificationType(ClassificationTypeNames = "gherkin.description")]
     [Name("gherkin.description")]
-    [UserVisible(true)] //this should be visible to the end user
-    [Order(Before = Priority.Default)] //set the priority to be after the default classifiers
+    [UserVisible(true)] 
+    [Order(Before = Priority.Default)] 
     internal sealed class GherkinDescriptionClassificationFormat : ClassificationFormatDefinition
     {
         public GherkinDescriptionClassificationFormat()
@@ -119,12 +111,11 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
         }
     }
 
-    // exports a classification format for the classification type gherkin.placeholder
     [Export(typeof(EditorFormatDefinition))]
     [ClassificationType(ClassificationTypeNames = "gherkin.scenariotitle")]
     [Name("gherkin.scenariotitle")]
-    [UserVisible(true)] //this should be visible to the end user
-    [Order(Before = Priority.Default)] //set the priority to be after the default classifiers
+    [UserVisible(true)] 
+    [Order(Before = Priority.Default)] 
     internal sealed class GherkinScenarioTitleClassificationFormat : ClassificationFormatDefinition
     {
         public GherkinScenarioTitleClassificationFormat()
@@ -133,12 +124,11 @@ namespace NBehave.VS2010.Plugin.GherkinFileEditor
         }
     }
 
-    // exports a classification format for the classification type gherkin.placeholder
     [Export(typeof(EditorFormatDefinition))]
     [ClassificationType(ClassificationTypeNames = "gherkin.featuretitle")]
     [Name("gherkin.featuretitle")]
-    [UserVisible(true)] //this should be visible to the end user
-    [Order(Before = Priority.Default)] //set the priority to be after the default classifiers
+    [UserVisible(true)] 
+    [Order(Before = Priority.Default)] 
     internal sealed class GherkinFeatureTitleClassificationFormat : ClassificationFormatDefinition
     {
         public GherkinFeatureTitleClassificationFormat()

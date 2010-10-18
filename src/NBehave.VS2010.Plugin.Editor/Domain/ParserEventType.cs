@@ -1,4 +1,4 @@
-﻿namespace NBehave.VS2010.Plugin.GherkinFileEditor
+﻿namespace NBehave.VS2010.Plugin.Editor.Domain
 {
     public enum ParserEventType
     {

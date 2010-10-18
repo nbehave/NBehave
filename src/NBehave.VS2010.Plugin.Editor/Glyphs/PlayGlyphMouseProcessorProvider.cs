@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
 
-namespace NBehave.VS2010.Plugin.GherkinFileEditor.Glyphs
+namespace NBehave.VS2010.Plugin.Editor.Glyphs
 {
     [Export(typeof(IGlyphMouseProcessorProvider))]
     [ContentType("gherkin")]

@@ -142,27 +142,26 @@
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Extensions\NullExtensions.cs" />
-    <Compile Include="GherkinFileEditor\Domain\GherkinFileClassificationDefinitions.cs" />
-    <Compile Include="GherkinFileEditor\Domain\GherkinFileClassifierFormats.cs" />
-    <Compile Include="GherkinFileEditor\Domain\GherkinFileEditorClassifications.cs" />
-    <Compile Include="GherkinFileEditor\Domain\ParserEvent.cs" />
-    <Compile Include="GherkinFileEditor\Domain\ParserEventType.cs" />
-    <Compile Include="GherkinFileEditor\GherkinFileEditorParser.cs" />
-    <Compile Include="GherkinFileEditor\Glyphs\PlayGlyph.xaml.cs">
+    <Compile Include="Domain\GherkinFileClassificationDefinitions.cs" />
+    <Compile Include="Domain\GherkinFileClassifierFormats.cs" />
+    <Compile Include="Domain\GherkinFileEditorClassifications.cs" />
+    <Compile Include="Domain\ParserEvent.cs" />
+    <Compile Include="Domain\ParserEventType.cs" />
+    <Compile Include="GherkinFileEditorParser.cs" />
+    <Compile Include="Glyphs\PlayGlyph.xaml.cs">
       <DependentUpon>PlayGlyph.xaml</DependentUpon>
     </Compile>
-    <Compile Include="GherkinFileEditor\Glyphs\PlayGlyphFactoryProvider.cs" />
-    <Compile Include="GherkinFileEditor\Glyphs\PlayGlyphMouseProcessorProvider.cs" />
-    <Compile Include="GherkinFileEditor\Glyphs\PlayTagger.cs" />
-    <Compile Include="GherkinFileEditor\Outlining\GherkinFileOutliningTagger.cs" />
-    <Compile Include="GherkinFileEditor\SyntaxHighlighting\Classifiers\FeatureClassifier.cs" />
-    <Compile Include="GherkinFileEditor\SyntaxHighlighting\Classifiers\GherkinClassifierBase.cs" />
-    <Compile Include="GherkinFileEditor\SyntaxHighlighting\Classifiers\IGherkinClassifier.cs" />
-    <Compile Include="GherkinFileEditor\SyntaxHighlighting\Classifiers\ScenarioClassifier.cs" />
-    <Compile Include="GherkinFileEditor\SyntaxHighlighting\Classifiers\StepClassifier.cs" />
-    <Compile Include="GherkinFileEditor\SyntaxHighlighting\Classifiers\TableClassifier.cs" />
-    <Compile Include="GherkinFileEditor\SyntaxHighlighting\GherkinFileClassifier.cs" />
-    <Compile Include="GherkinFileEditor\SyntaxHighlighting\ServiceRegistrar.cs" />
+    <Compile Include="Glyphs\PlayGlyphFactoryProvider.cs" />
+    <Compile Include="Glyphs\PlayGlyphMouseProcessorProvider.cs" />
+    <Compile Include="Glyphs\PlayTagger.cs" />
+    <Compile Include="SyntaxHighlighting\Classifiers\FeatureClassifier.cs" />
+    <Compile Include="SyntaxHighlighting\Classifiers\GherkinClassifierBase.cs" />
+    <Compile Include="SyntaxHighlighting\Classifiers\IGherkinClassifier.cs" />
+    <Compile Include="SyntaxHighlighting\Classifiers\ScenarioClassifier.cs" />
+    <Compile Include="SyntaxHighlighting\Classifiers\StepClassifier.cs" />
+    <Compile Include="SyntaxHighlighting\Classifiers\TableClassifier.cs" />
+    <Compile Include="SyntaxHighlighting\GherkinFileClassifier.cs" />
+    <Compile Include="ServiceRegistrar.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -181,7 +180,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="GherkinFileEditor\Glyphs\PlayGlyph.xaml">
+    <Page Include="Glyphs\PlayGlyph.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

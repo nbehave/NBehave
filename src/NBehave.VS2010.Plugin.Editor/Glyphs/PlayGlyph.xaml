@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="NBehave.VS2010.Plugin.GherkinFileEditor.Glyphs.PlayGlyph"
+﻿<UserControl x:Class="NBehave.VS2010.Plugin.Editor.Glyphs.PlayGlyph"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 

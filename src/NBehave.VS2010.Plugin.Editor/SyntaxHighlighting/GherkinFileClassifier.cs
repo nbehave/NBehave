@@ -6,9 +6,10 @@ using System.Linq;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Utilities;
-using NBehave.VS2010.Plugin.GherkinFileEditor.SyntaxHighlighting.Classifiers;
+using NBehave.VS2010.Plugin.Editor.Extensions;
+using NBehave.VS2010.Plugin.Editor.SyntaxHighlighting.Classifiers;
 
-namespace NBehave.VS2010.Plugin.GherkinFileEditor
+namespace NBehave.VS2010.Plugin.Editor.SyntaxHighlighting
 {
 
     [Export(typeof(IClassifierProvider))]

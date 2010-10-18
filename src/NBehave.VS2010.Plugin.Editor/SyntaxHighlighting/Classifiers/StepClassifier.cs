@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Text.RegularExpressions;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
+using NBehave.VS2010.Plugin.Editor.Domain;
 
-namespace NBehave.VS2010.Plugin.GherkinFileEditor.SyntaxHighlighting.Classifiers
+namespace NBehave.VS2010.Plugin.Editor.SyntaxHighlighting.Classifiers
 {
     [Export(typeof(IGherkinClassifier))]
     public class StepClassifier : GherkinClassifierBase

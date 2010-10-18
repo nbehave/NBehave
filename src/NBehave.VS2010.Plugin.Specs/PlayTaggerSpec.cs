@@ -5,8 +5,8 @@ using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
-using NBehave.VS2010.Plugin.GherkinFileEditor;
-using NBehave.VS2010.Plugin.GherkinFileEditor.Glyphs;
+using NBehave.VS2010.Plugin.Editor;
+using NBehave.VS2010.Plugin.Editor.Glyphs;
 using NUnit.Framework;
 using Rhino.Mocks;
 
