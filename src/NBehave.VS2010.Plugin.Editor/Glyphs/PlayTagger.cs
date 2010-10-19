@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Disposables;
-using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
-using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
 using NBehave.VS2010.Plugin.Domain;
@@ -14,33 +12,10 @@ using NBehave.VS2010.Plugin.Editor.Domain;
 
 namespace NBehave.VS2010.Plugin.Editor.Glyphs
 {
-    public class PlayTag : IGlyphTag
-    {
-        private readonly SnapshotSpan _snapshotSpan;
-        private readonly ScenarioRunner _scenarioRunner;
-
-        public PlayTag(SnapshotSpan snapshotSpan, ScenarioRunner scenarioRunner)
-        {
-            _snapshotSpan = snapshotSpan;
-            _scenarioRunner = scenarioRunner;
-        }
-
-        public void Execute()
-        {
-            var tempFileName = Path.GetTempFileName();
-            using (var writer = new StreamWriter(tempFileName))
-            {
-                writer.Write(_snapshotSpan.GetText());
-            }
-
-            _scenarioRunner.Run(tempFileName, false);
-        }
-    }
-
     [Export(typeof(ITaggerProvider))]
     [ContentType("gherkin")]
-    [TagType(typeof(PlayTag))]
-    class PlayTaggerProvider : ITaggerProvider
+    [TagType(typeof(PlayGlyphTag))]
+    public class PlayTaggerProvider : ITaggerProvider
     {
         [Import]
         internal IClassifierAggregatorService AggregatorFactory;
@@ -53,7 +28,7 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs
         /// <returns>An instance of our custom TodoTagger.</returns>
         public ITagger<T> CreateTagger<T>(ITextBuffer buffer) where T : ITag
         {
-            return buffer.Properties.GetProperty<ITagger<T>>(typeof(ITagger<PlayTag>));
+            return buffer.Properties.GetProperty<ITagger<T>>(typeof(ITagger<PlayGlyphTag>));
         }
     }
 
@@ -61,17 +36,17 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs
     /// This class implements ITagger for ToDoTag.  It is responsible for creating
     /// ToDoTag TagSpans, which our GlyphFactory will then create glyphs for.
     /// </summary>
-    public class PlayTagger : ITagger<PlayTag>
+    public class PlayTagger : ITagger<PlayGlyphTag>
     {
         private readonly CompositeDisposable _listeners;
-        private readonly List<ITagSpan<PlayTag>> _tagSpans;
+        private readonly List<ITagSpan<PlayGlyphTag>> _tagSpans;
         public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
         private readonly Stack<SnapshotSpan> _snapshotSpans = new Stack<SnapshotSpan>();
 
         public PlayTagger(ITextBuffer buffer, ScenarioRunner scenarioRunner)
         {
             _listeners = new CompositeDisposable();
-            _tagSpans = new List<ITagSpan<PlayTag>>();
+            _tagSpans = new List<ITagSpan<PlayGlyphTag>>();
 
             var parser = buffer.Properties.GetProperty<GherkinFileEditorParser>(typeof (GherkinFileEditorParser));
 
@@ -82,7 +57,8 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs
                 while (!_snapshotSpans.IsEmpty())
                 {
                     var snapshotSpan = _snapshotSpans.Pop();
-                    _tagSpans.Add(new TagSpan<PlayTag>(snapshotSpan, new PlayTag(snapshotSpan, scenarioRunner)));
+                    var playGlyphTag = new PlayGlyphTag();
+                    _tagSpans.Add(new TagSpan<PlayGlyphTag>(snapshotSpan, playGlyphTag));
                 }
                 _tagSpans.Reverse();
             }));
@@ -124,7 +100,7 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs
         /// </summary>
         /// <param name="spans">A set of spans we want to get tags for.</param>
         /// <returns>The list of ToDoTag TagSpans.</returns>
-        IEnumerable<ITagSpan<PlayTag>> ITagger<PlayTag>.GetTags(NormalizedSnapshotSpanCollection spans)
+        IEnumerable<ITagSpan<PlayGlyphTag>> ITagger<PlayGlyphTag>.GetTags(NormalizedSnapshotSpanCollection spans)
         {
             return _tagSpans;
         }

@@ -16,7 +16,7 @@ namespace NBehave.VS2010.Plugin.Specs
     public class PlayTaggerSpec
     {
         private ITextBuffer _buffer;
-        private ITagger<PlayTag> _playTagger;
+        private ITagger<PlayGlyphTag> _playTagger;
 
         private void TestInitialise(string gherkinFileLocation)
         {

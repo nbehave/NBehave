@@ -11,7 +11,7 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs
     [Name("PlayGlyph")]
     [Order(After = "VsTextMarker")]
     [ContentType("gherkin")]
-    [TagType(typeof(PlayTag))]
+    [TagType(typeof(PlayGlyphTag))]
     internal sealed class PlayGlyphFactoryProvider : IGlyphFactoryProvider
     {
         /// <summary>
@@ -30,7 +30,7 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs
     {
         public UIElement GenerateGlyph(IWpfTextViewLine line, IGlyphTag tag)
         {
-            if (tag == null || !(tag is PlayTag))
+            if (tag == null || !(tag is PlayGlyphTag))
             {
                 return null;
             }

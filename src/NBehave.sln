@@ -82,6 +82,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.VS2010.Plugin.Specs
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.VS2010.Plugin.Editor", "NBehave.VS2010.Plugin.Editor\NBehave.VS2010.Plugin.Editor.csproj", "{36ED8153-EFD9-4863-8818-D47964526AF4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MEFedMVVM.WPF", "..\..\MEFedMVVM\MEFedMVVMDemo\MEFedMVVM.WPF\MEFedMVVM.WPF.csproj", "{1909F45C-9C63-40B7-87A9-C68E78E8D501}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		AutomatedDebug-3.5|Any CPU = AutomatedDebug-3.5|Any CPU
@@ -617,6 +619,26 @@ Global
 		{36ED8153-EFD9-4863-8818-D47964526AF4}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{36ED8153-EFD9-4863-8818-D47964526AF4}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{36ED8153-EFD9-4863-8818-D47964526AF4}.Release|x86.ActiveCfg = Release|Any CPU
+		{1909F45C-9C63-40B7-87A9-C68E78E8D501}.AutomatedDebug-3.5|Any CPU.ActiveCfg = Debug|Any CPU
+		{1909F45C-9C63-40B7-87A9-C68E78E8D501}.AutomatedDebug-3.5|Any CPU.Build.0 = Debug|Any CPU
+		{1909F45C-9C63-40B7-87A9-C68E78E8D501}.AutomatedDebug-3.5|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{1909F45C-9C63-40B7-87A9-C68E78E8D501}.AutomatedDebug-3.5|Mixed Platforms.Build.0 = Debug|Any CPU
+		{1909F45C-9C63-40B7-87A9-C68E78E8D501}.AutomatedDebug-3.5|x86.ActiveCfg = Debug|Any CPU
+		{1909F45C-9C63-40B7-87A9-C68E78E8D501}.AutomatedDebug-4.0|Any CPU.ActiveCfg = Debug|Any CPU
+		{1909F45C-9C63-40B7-87A9-C68E78E8D501}.AutomatedDebug-4.0|Any CPU.Build.0 = Debug|Any CPU
+		{1909F45C-9C63-40B7-87A9-C68E78E8D501}.AutomatedDebug-4.0|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{1909F45C-9C63-40B7-87A9-C68E78E8D501}.AutomatedDebug-4.0|Mixed Platforms.Build.0 = Debug|Any CPU
+		{1909F45C-9C63-40B7-87A9-C68E78E8D501}.AutomatedDebug-4.0|x86.ActiveCfg = Debug|Any CPU
+		{1909F45C-9C63-40B7-87A9-C68E78E8D501}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1909F45C-9C63-40B7-87A9-C68E78E8D501}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1909F45C-9C63-40B7-87A9-C68E78E8D501}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{1909F45C-9C63-40B7-87A9-C68E78E8D501}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{1909F45C-9C63-40B7-87A9-C68E78E8D501}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1909F45C-9C63-40B7-87A9-C68E78E8D501}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1909F45C-9C63-40B7-87A9-C68E78E8D501}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1909F45C-9C63-40B7-87A9-C68E78E8D501}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{1909F45C-9C63-40B7-87A9-C68E78E8D501}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{1909F45C-9C63-40B7-87A9-C68E78E8D501}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -648,6 +670,7 @@ Global
 		{E2EF537E-04C9-4804-9848-4205277D74AF} = {F0FE6340-3B43-4A3B-83D3-D51622BAC3F3}
 		{534FD760-E694-481E-B215-419018D1210F} = {F0FE6340-3B43-4A3B-83D3-D51622BAC3F3}
 		{36ED8153-EFD9-4863-8818-D47964526AF4} = {F0FE6340-3B43-4A3B-83D3-D51622BAC3F3}
+		{1909F45C-9C63-40B7-87A9-C68E78E8D501} = {F0FE6340-3B43-4A3B-83D3-D51622BAC3F3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		CodeStyleEnforcer_Active = 0

@@ -14,6 +14,8 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\NBehave.snk</AssemblyOriginatorKeyFile>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <Utf8Output>true</Utf8Output>
+    <ExpressionBlendVersion>4.0.20525.0</ExpressionBlendVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -65,7 +67,11 @@
     <Reference Include="Gherkin">
       <HintPath>..\..\lib\Gherkin\Gherkin.dll</HintPath>
     </Reference>
+    <Reference Include="MEFedMVVM.WPF">
+      <HintPath>..\..\lib\mefedmvvm\MEFedMVVM.WPF.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Expression.Interactions" />
     <Reference Include="Microsoft.VisualStudio.CommandBars, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>False</EmbedInteropTypes>
@@ -131,6 +137,7 @@
       <HintPath>..\..\lib\Reactive.Extensions\System.Reactive.dll</HintPath>
     </Reference>
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Interactivity" />
     <Reference Include="System.Xml" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -148,12 +155,17 @@
     <Compile Include="Domain\ParserEvent.cs" />
     <Compile Include="Domain\ParserEventType.cs" />
     <Compile Include="GherkinFileEditorParser.cs" />
-    <Compile Include="Glyphs\PlayGlyph.xaml.cs">
+    <Compile Include="Glyphs\PlayGlyphTag.cs" />
+    <Compile Include="Glyphs\ViewModels\RunOrDebugViewModel.cs" />
+    <Compile Include="Glyphs\Views\PlayGlyph.xaml.cs">
       <DependentUpon>PlayGlyph.xaml</DependentUpon>
     </Compile>
     <Compile Include="Glyphs\PlayGlyphFactoryProvider.cs" />
     <Compile Include="Glyphs\PlayGlyphMouseProcessorProvider.cs" />
     <Compile Include="Glyphs\PlayTagger.cs" />
+    <Compile Include="Glyphs\Views\RunOrDebugView.xaml.cs">
+      <DependentUpon>RunOrDebugView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SyntaxHighlighting\Classifiers\FeatureClassifier.cs" />
     <Compile Include="SyntaxHighlighting\Classifiers\GherkinClassifierBase.cs" />
     <Compile Include="SyntaxHighlighting\Classifiers\IGherkinClassifier.cs" />
@@ -180,11 +192,16 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Glyphs\PlayGlyph.xaml">
+    <Page Include="Glyphs\Views\PlayGlyph.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Glyphs\Views\RunOrDebugView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <UseCodebase>true</UseCodebase>
   </PropertyGroup>
