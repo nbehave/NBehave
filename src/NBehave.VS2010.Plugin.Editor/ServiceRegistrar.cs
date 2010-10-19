@@ -45,7 +45,7 @@ namespace NBehave.VS2010.Plugin.Editor
                 buffer.Properties.GetOrCreateSingletonProperty(() => new PlayTagger(buffer, scenarioRunner) as ITagger<PlayGlyphTag>);
 
                 container.ComposeExportedValue(scenarioRunner);
-                container.ComposeExportedValue((fileClassifierForBuffer));
+                container.ComposeParts((fileClassifierForBuffer));
 
                 LocatorBootstrapper.ApplyComposer(new VisualStudioRuntimeComposer(container));
                 LocatorBootstrapper.EnsureLocatorBootstrapper();
