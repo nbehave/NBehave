@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Windows;
@@ -47,9 +48,8 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs
             ITextViewLine textViewLine = 
                 textView.TextViewLines.GetTextViewLineContainingYCoordinate(position.Y + textView.ViewportTop);
             
-            var tags = this._createTagAggregator.GetTags(textViewLine.ExtentAsMappingSpan);
-            var glyphs = tags.Select(span => span.Tag);
-            glyphs.First().Execute(position, textView.VisualElement);
+            PlayGlyphTag tag = this._createTagAggregator.GetTags(textViewLine.ExtentAsMappingSpan).Select(span => span.Tag).First();
+            tag.Execute(position, textView.VisualElement);
         }
     }
 }

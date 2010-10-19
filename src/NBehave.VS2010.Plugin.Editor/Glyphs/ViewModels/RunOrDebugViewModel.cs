@@ -1,9 +1,15 @@
 ﻿using System;
+using System.ComponentModel.Composition;
+using System.Concurrency;
+using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using MEFedMVVM.Common;
 using MEFedMVVM.ViewModelLocator;
 using Microsoft.Expression.Interactivity.Core;
+using NBehave.VS2010.Plugin.Domain;
+using NBehave.VS2010.Plugin.Editor.Glyphs.Views;
 
 namespace NBehave.VS2010.Plugin.Editor.Glyphs.ViewModels
 {
@@ -11,48 +17,98 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs.ViewModels
     public class RunOrDebugViewModel : NotifyPropertyChangedBase
     {
 
+        [Import]
+        public ScenarioRunner ScenarioRunner { get; set; }
+
         public ICommand RunClicked
         {
             get
             {
-//                Observable
-//                .Timer(TimeSpan.FromMilliseconds(250), TimeSpan.FromMilliseconds(250), Scheduler.Dispatcher)
-//                .Select(time => _popup.IsMouseOver)
-//                .TakeWhile(isMouseOver => isMouseOver).Subscribe(isMouseOver => { }, () => _popup.IsOpen = false);
-
-                //            tempFileName = Path.GetTempFileName();
-                //            using (var writer = new StreamWriter(tempFileName))
-                //            {
-                //                writer.Write(_snapshotSpan.GetText());
-                //            }
-                //
-                //            _scenarioRunner.Run(tempFileName, false);
-
                 return new ActionCommand(() =>
-                                             {
+                {
+                    string tempFileName = GetTempScenarioFile();
 
-                                             });
+                    ScenarioRunner.Run(tempFileName, false);
+                });
             }
         }
 
-        public void InitialiseProperties(Point position, FrameworkElement visualElement)
+        public ICommand DebugClicked
         {
-            this.Position = Point.Subtract(position, new Vector(3, 3));
-            this.RelativeVisualElement = visualElement;
-            OnPropertyChanged(() => Position);
-            OnPropertyChanged(() => RelativeVisualElement);
+            get
+            {
+                return new ActionCommand(() =>
+                {
+                    string tempFileName = GetTempScenarioFile();
+
+                    ScenarioRunner.Run(tempFileName, true);
+                });
+            }
         }
 
-        protected FrameworkElement RelativeVisualElement { get; set; }
+        private string GetTempScenarioFile()
+        {
+            var tempFileName = Path.GetTempFileName();
+            using (var writer = new StreamWriter(tempFileName))
+            {
+                writer.Write(ScenarioText);
+            }
+            return tempFileName;
+        }
 
-        protected Point Position { get; set; }
+        public void InitialiseProperties(Point position, FrameworkElement visualElement, IRunOrDebugView runOrDebugView, string scenarioText)
+        {
+            Position = Point.Subtract(position, new Vector(3, 3));
+            RelativeVisualElement = visualElement;
+            this.View = runOrDebugView;
+            this.ScenarioText = scenarioText;
+        }
+
+        protected string ScenarioText { get; set; }
+
+        protected IRunOrDebugView View { get; set; }
+
+        private FrameworkElement _relativeVisualElement;
+        public FrameworkElement RelativeVisualElement
+        {
+            get { return _relativeVisualElement; }
+            set
+            {
+                _relativeVisualElement = value;
+                OnPropertyChanged(() => RelativeVisualElement);
+            }
+        }
+
+        private Point _position;
+        public Point Position
+        {
+            get { return _position; }
+            set
+            {
+                _position = value;
+                OnPropertyChanged(() => Position);
+            }
+        }
 
         public void Show()
         {
             IsVisible = true;
-            OnPropertyChanged(() => IsVisible);
+            
+            Observable
+                .Timer(TimeSpan.FromMilliseconds(250), TimeSpan.FromMilliseconds(250), Scheduler.Dispatcher)
+                .Select(time => View.IsMouseOverPopup)
+                .TakeWhile(isMouseOver => isMouseOver).Subscribe(isMouseOver => { }, () => IsVisible = false);
         }
 
-        protected bool IsVisible { get; set; }
+        private bool _isVisible;
+        public bool IsVisible
+        {
+            get { return _isVisible; }
+            set
+            {
+                _isVisible = value;
+                OnPropertyChanged(() => IsVisible);
+            }
+        }
     }
 }

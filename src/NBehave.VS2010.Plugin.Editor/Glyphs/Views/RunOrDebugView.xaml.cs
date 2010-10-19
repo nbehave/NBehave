@@ -18,11 +18,13 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs.Views
     /// <summary>
     /// Interaction logic for RunOrDebugView.xaml
     /// </summary>
-    public partial class RunOrDebugView : UserControl
+    public partial class RunOrDebugView : Popup, IRunOrDebugView
     {
         public RunOrDebugView()
         {
             InitializeComponent();
         }
+
+        public bool IsMouseOverPopup { get { return this.IsMouseOver; }}
     }
 }

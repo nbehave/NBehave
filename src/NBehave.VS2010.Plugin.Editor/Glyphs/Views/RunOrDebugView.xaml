@@ -1,4 +1,4 @@
-﻿<UserControl
+﻿<Popup
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -6,8 +6,15 @@
              xmlns:meffed="http:\\www.codeplex.com\MEFedMVVM"
              x:Class="NBehave.VS2010.Plugin.Editor.Glyphs.Views.RunOrDebugView"
              meffed:ViewModelLocator.NonSharedViewModel="RunOrDebugViewModel"
-             mc:Ignorable="d">
-    <UserControl.Resources>
+             mc:Ignorable="d"
+             Placement="Relative" 
+             PlacementTarget="{Binding RelativeVisualElement}" 
+             VerticalOffset="{Binding Position.Y}"
+             HorizontalOffset="{Binding Position.X}"
+             IsOpen="{Binding IsVisible}"
+             
+                >
+    <Popup.Resources>
         <ControlTemplate x:Key="RunButtonControlTemplate" TargetType="{x:Type Button}">
             <Canvas Height="50" Width="50" Margin="0,0,0,0">
                 <VisualStateManager.VisualStateGroups>
@@ -137,22 +144,16 @@
                 <Path Data="M3.3333333,16.873333 C13.333333,16.873333 13.500333,16.873333 13.500333,16.873333" Fill="White" Height="2" Canvas.Left="2.833" Stretch="Fill" Stroke="Black" StrokeLineJoin="Miter" Canvas.Top="24.54" Width="12" StrokeThickness="2"/>
             </Canvas>
         </ControlTemplate>
-    </UserControl.Resources>
-    <Popup 
-        Placement="Relative" 
-        PlacementTarget="{Binding RelativeVisualElement}" 
-        VerticalOffset="{Binding Position.Y}"
-        HorizontalOffset="{Binding Position.X}">
-        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Orientation="Vertical">
-        
-            <Border BorderBrush="Black" BorderThickness="1" Background="White">
-                <TextBlock TextWrapping="Wrap" Text="Run Scenario" HorizontalAlignment="Center"/>
-            </Border>
-        
-            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Orientation="Horizontal">
-                <Button Content="Button" Template="{DynamicResource RunButtonControlTemplate}" />
-                <Button Content="Button" Template="{DynamicResource DebugButtonControlTemplate}"/>
-            </StackPanel>
+    </Popup.Resources>
+    <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Orientation="Vertical">
+
+        <Border BorderBrush="Black" BorderThickness="1" Background="White">
+            <TextBlock TextWrapping="Wrap" Text="Run Scenario" HorizontalAlignment="Center"/>
+        </Border>
+
+        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Orientation="Horizontal">
+            <Button Template="{DynamicResource RunButtonControlTemplate}" Command="{Binding RunClicked}" />
+            <Button Template="{DynamicResource DebugButtonControlTemplate}"  Command="{Binding DebugClicked}" />
         </StackPanel>
-    </Popup>
-</UserControl>
+    </StackPanel>
+</Popup>

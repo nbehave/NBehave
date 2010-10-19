@@ -29,8 +29,6 @@ namespace NBehave.VS2010.Plugin.Editor
 
         public void Initialise(ITextBuffer buffer)
         {
-            LocatorBootstrapper.ApplyComposer(new VisualStudioRuntimeComposer());
-
             if (!buffer.Properties.ContainsProperty(typeof(GherkinFileClassifier)))
             {
                 var container = buffer.Properties.GetOrCreateSingletonProperty(() => new CompositionContainer(new AssemblyCatalog(typeof(GherkinFileEditorParser).Assembly)));
@@ -46,7 +44,12 @@ namespace NBehave.VS2010.Plugin.Editor
                 GherkinFileClassifier fileClassifierForBuffer = buffer.Properties.GetOrCreateSingletonProperty(() => new GherkinFileClassifier(buffer));
                 buffer.Properties.GetOrCreateSingletonProperty(() => new PlayTagger(buffer, scenarioRunner) as ITagger<PlayGlyphTag>);
 
-                container.ComposeParts(fileClassifierForBuffer);
+                container.ComposeExportedValue(scenarioRunner);
+                container.ComposeExportedValue((fileClassifierForBuffer));
+
+                LocatorBootstrapper.ApplyComposer(new VisualStudioRuntimeComposer(container));
+                LocatorBootstrapper.EnsureLocatorBootstrapper();
+
                 fileClassifierForBuffer.BeginClassifications();
             }
         }
@@ -54,14 +57,21 @@ namespace NBehave.VS2010.Plugin.Editor
 
     public class VisualStudioRuntimeComposer : IComposer
     {
+        public CompositionContainer Container { get; set; }
+
+        public VisualStudioRuntimeComposer(CompositionContainer container)
+        {
+            Container = container;
+        }
+
         public ComposablePartCatalog InitializeContainer()
         {
-            return GetCatalog();
+            return Container.Catalog;
         }
 
         public IEnumerable<ExportProvider> GetCustomExportProviders()
         {
-            return null;
+            return new []{ Container };
         }
 
         private AggregateCatalog GetCatalog()

@@ -57,7 +57,7 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs
                 while (!_snapshotSpans.IsEmpty())
                 {
                     var snapshotSpan = _snapshotSpans.Pop();
-                    var playGlyphTag = new PlayGlyphTag();
+                    var playGlyphTag = new PlayGlyphTag(snapshotSpan.GetText());
                     _tagSpans.Add(new TagSpan<PlayGlyphTag>(snapshotSpan, playGlyphTag));
                 }
                 _tagSpans.Reverse();
