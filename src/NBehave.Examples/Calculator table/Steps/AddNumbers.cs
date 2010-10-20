@@ -8,7 +8,7 @@ namespace NBehave.Examples.Calculator_table.Steps
     {
         private Calculator _calculator;
 
-        [Given("a calculator")]
+        [BeforeScenario]
         public void SetUp_scenario()
         {
             _calculator = new Calculator();
