@@ -147,13 +147,13 @@
     </Popup.Resources>
     <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Orientation="Vertical">
 
-        <Border BorderBrush="Black" BorderThickness="1" Background="White">
+        <Border BorderBrush="Black" BorderThickness="1" Background="White" d:IsLocked="True">
             <TextBlock TextWrapping="Wrap" Text="Run Scenario" HorizontalAlignment="Center"/>
         </Border>
 
         <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Orientation="Horizontal">
-            <Button Template="{DynamicResource RunButtonControlTemplate}" Command="{Binding RunClicked}" />
-            <Button Template="{DynamicResource DebugButtonControlTemplate}"  Command="{Binding DebugClicked}" />
+            <Button Template="{DynamicResource RunButtonControlTemplate}" Command="{Binding DebugClicked}" ToolTip="Debug Scenario" />
+            <Button Template="{DynamicResource DebugButtonControlTemplate}"  Command="{Binding RunClicked}" ToolTip="Run Scenario" />
         </StackPanel>
     </StackPanel>
 </Popup>
