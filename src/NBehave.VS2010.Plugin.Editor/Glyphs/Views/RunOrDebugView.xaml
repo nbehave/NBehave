@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:meffed="http:\\www.codeplex.com\MEFedMVVM"
+             xmlns:nbehave="clr-namespace:NBehave.VS2010.Plugin.Editor.Glyphs.Controls"
              x:Class="NBehave.VS2010.Plugin.Editor.Glyphs.Views.RunOrDebugView"
              meffed:ViewModelLocator.NonSharedViewModel="RunOrDebugViewModel"
              mc:Ignorable="d"
@@ -11,149 +12,58 @@
              PlacementTarget="{Binding RelativeVisualElement}" 
              VerticalOffset="{Binding Position.Y}"
              HorizontalOffset="{Binding Position.X}"
-             IsOpen="{Binding IsVisible}"
-             
-                >
+             IsOpen="{Binding IsVisible}">
     <Popup.Resources>
-        <ControlTemplate x:Key="RunButtonControlTemplate" TargetType="{x:Type Button}">
-            <Canvas Height="50" Width="50" Margin="0,0,0,0">
-                <VisualStateManager.VisualStateGroups>
-                    <VisualStateGroup x:Name="CommonStates">
-                        <VisualStateGroup.Transitions>
-                            <VisualTransition GeneratedDuration="0:0:0.3"/>
-                            <VisualTransition From="MouseOver" GeneratedDuration="0" To="Pressed"/>
-                        </VisualStateGroup.Transitions>
-                        <VisualState x:Name="Normal">
-                            <Storyboard>
-                                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)" Storyboard.TargetName="rectangle">
-                                    <EasingColorKeyFrame KeyTime="0" Value="#FF5E5E5E"/>
-                                </ColorAnimationUsingKeyFrames>
-                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(GradientBrush.GradientStops)[0].(GradientStop.Offset)" Storyboard.TargetName="path">
-                                    <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                                </DoubleAnimationUsingKeyFrames>
-                                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(GradientBrush.GradientStops)[0].(GradientStop.Color)" Storyboard.TargetName="path">
-                                    <EasingColorKeyFrame KeyTime="0" Value="Black"/>
-                                </ColorAnimationUsingKeyFrames>
-                                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(GradientBrush.GradientStops)[1].(GradientStop.Color)" Storyboard.TargetName="path">
-                                    <EasingColorKeyFrame KeyTime="0" Value="Black"/>
-                                </ColorAnimationUsingKeyFrames>
-                            </Storyboard>
-                        </VisualState>
-                        <VisualState x:Name="MouseOver"/>
-                        <VisualState x:Name="Pressed">
-                            <Storyboard>
-                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="path">
-                                    <EasingDoubleKeyFrame KeyTime="0" Value="1.25"/>
-                                </DoubleAnimationUsingKeyFrames>
-                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="path">
-                                    <EasingDoubleKeyFrame KeyTime="0" Value="1"/>
-                                </DoubleAnimationUsingKeyFrames>
-                            </Storyboard>
-                        </VisualState>
-                        <VisualState x:Name="Disabled">
-                            <Storyboard>
-                                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)" Storyboard.TargetName="rectangle">
-                                    <EasingColorKeyFrame KeyTime="0" Value="#FF5E5E5E"/>
-                                </ColorAnimationUsingKeyFrames>
-                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(GradientBrush.GradientStops)[0].(GradientStop.Offset)" Storyboard.TargetName="path">
-                                    <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                                </DoubleAnimationUsingKeyFrames>
-                                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(GradientBrush.GradientStops)[0].(GradientStop.Color)" Storyboard.TargetName="path">
-                                    <EasingColorKeyFrame KeyTime="0" Value="#FF474747"/>
-                                </ColorAnimationUsingKeyFrames>
-                                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(GradientBrush.GradientStops)[1].(GradientStop.Color)" Storyboard.TargetName="path">
-                                    <EasingColorKeyFrame KeyTime="0" Value="#FF474747"/>
-                                </ColorAnimationUsingKeyFrames>
-                            </Storyboard>
-                        </VisualState>
-                    </VisualStateGroup>
-                </VisualStateManager.VisualStateGroups>
-                <Rectangle x:Name="rectangle" Height="50" Stroke="Black" Width="50" StrokeLineJoin="Miter" RadiusY="0" RadiusX="0" Fill="White"/>
-                <Path x:Name="path" Data="M0,0L0,100 50,50z" Height="34" Width="25.583" Canvas.Left="13.917" Stretch="Fill" Stroke="Black"  Canvas.Top="8" StrokeLineJoin="Round" RenderTransformOrigin="0.5,0.5">
-                    <Path.Fill>
-                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                            <GradientStop Color="#FF00BE03" Offset="0"/>
-                            <GradientStop Color="#FF00B802" Offset="1"/>
-                        </LinearGradientBrush>
-                    </Path.Fill>
-                    <Path.RenderTransform>
-                        <TransformGroup>
-                            <ScaleTransform/>
-                            <SkewTransform/>
-                            <RotateTransform/>
-                            <TranslateTransform/>
-                        </TransformGroup>
-                    </Path.RenderTransform>
-                </Path>
-            </Canvas>
-        </ControlTemplate>
-        <ControlTemplate x:Key="DebugButtonControlTemplate" TargetType="{x:Type Button}">
-            <Canvas Height="50" Width="50" Margin="0,0,0,0">
-                <VisualStateManager.VisualStateGroups>
-                    <VisualStateGroup x:Name="CommonStates">
-                        <VisualStateGroup.Transitions>
-                            <VisualTransition GeneratedDuration="0:0:0.3"/>
-                            <VisualTransition From="MouseOver" GeneratedDuration="0" To="Pressed"/>
-                        </VisualStateGroup.Transitions>
-                        <VisualState x:Name="Normal">
-                            <Storyboard>
-                                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)" Storyboard.TargetName="rectangle">
-                                    <EasingColorKeyFrame KeyTime="0" Value="#FF5E5E5E"/>
-                                </ColorAnimationUsingKeyFrames>
-                                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Stroke).(SolidColorBrush.Color)" Storyboard.TargetName="path">
-                                    <EasingColorKeyFrame KeyTime="0" Value="Black"/>
-                                </ColorAnimationUsingKeyFrames>
-                            </Storyboard>
-                        </VisualState>
-                        <VisualState x:Name="MouseOver"/>
-                        <VisualState x:Name="Pressed">
-                            <Storyboard>
-                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="path">
-                                    <EasingDoubleKeyFrame KeyTime="0" Value="1.25"/>
-                                </DoubleAnimationUsingKeyFrames>
-                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="path">
-                                    <EasingDoubleKeyFrame KeyTime="0" Value="1"/>
-                                </DoubleAnimationUsingKeyFrames>
-                            </Storyboard>
-                        </VisualState>
-                        <VisualState x:Name="Disabled">
-                            <Storyboard>
-                                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)" Storyboard.TargetName="rectangle">
-                                    <EasingColorKeyFrame KeyTime="0" Value="#FF5E5E5E"/>
-                                </ColorAnimationUsingKeyFrames>
-                                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Stroke).(SolidColorBrush.Color)" Storyboard.TargetName="path">
-                                    <EasingColorKeyFrame KeyTime="0" Value="Black"/>
-                                </ColorAnimationUsingKeyFrames>
-                            </Storyboard>
-                        </VisualState>
-                    </VisualStateGroup>
-                </VisualStateManager.VisualStateGroups>
-                <Rectangle x:Name="rectangle" Height="50" Stroke="Black" Width="50" StrokeLineJoin="Miter" RadiusY="0" RadiusX="0" Fill="White"/>
-                <Path x:Name="path" Data="M0,0L0,100 50,50z" Height="34" Width="25.583" Canvas.Left="16.417" Stretch="Fill" Stroke="#FF00B802"  Canvas.Top="8" StrokeLineJoin="Round" RenderTransformOrigin="0.5,0.5" StrokeThickness="2">
-                    <Path.RenderTransform>
-                        <TransformGroup>
-                            <ScaleTransform/>
-                            <SkewTransform/>
-                            <RotateTransform/>
-                            <TranslateTransform/>
-                        </TransformGroup>
-                    </Path.RenderTransform>
-                </Path>
-                <Path Data="M3.3333333,16.873333 C13.333333,16.873333 13.500333,16.873333 13.500333,16.873333" Fill="White" Height="2" Canvas.Left="4.833" Stretch="Fill" Stroke="Black" StrokeLineJoin="Miter" Canvas.Top="15.04" Width="10" StrokeThickness="2"/>
-                <Path Data="M3.3333333,16.873333 C13.333333,16.873333 13.500333,16.873333 13.500333,16.873333" Fill="White" Height="2" Canvas.Left="4.833" Stretch="Fill" Stroke="Black" StrokeLineJoin="Miter" Canvas.Top="34.707" Width="10" StrokeThickness="2"/>
-                <Path Data="M3.3333333,16.873333 C13.333333,16.873333 13.500333,16.873333 13.500333,16.873333" Fill="White" Height="2" Canvas.Left="2.833" Stretch="Fill" Stroke="Black" StrokeLineJoin="Miter" Canvas.Top="24.54" Width="12" StrokeThickness="2"/>
-            </Canvas>
-        </ControlTemplate>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/NBehave.VS2010.Plugin.Editor;component/Resources/Colours.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        	<ControlTemplate x:Key="ContextMenuButtonControlTemplate" TargetType="{x:Type nbehave:ContextMenuButton}">
+        		<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Background="{x:Null}">
+        			<Border HorizontalAlignment="Left" Height="Auto" Width="Auto">
+        				<Border.Background>
+        					<SolidColorBrush Color="{DynamicResource ContextMenuIconInactiveBackground}"/>
+        				</Border.Background>
+        				<Image Source="{TemplateBinding Source}" Width="24" Height="24" />
+        			</Border>
+        			<Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="Auto" Background="{x:Null}" >
+        				<TextBlock TextWrapping="Wrap" Text="{TemplateBinding Content}" Background="#FFD0E1E8" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,10,0"/>
+        			</Border>
+        		</StackPanel>
+        	</ControlTemplate>
+        </ResourceDictionary>
     </Popup.Resources>
-    <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Orientation="Vertical">
+    <Border HorizontalAlignment="Left" VerticalAlignment="Top" BorderBrush="#FF2A3A57" BorderThickness="3" CornerRadius="1" >
+    	<Border.Background>
+    		<SolidColorBrush Color="{DynamicResource ContextMenuInactiveBackground}"/>
+    	</Border.Background>
+        <StackPanel Orientation="Vertical">
 
-        <Border BorderBrush="Black" BorderThickness="1" Background="White">
-            <TextBlock TextWrapping="Wrap" Text="Run Scenario" HorizontalAlignment="Center"/>
-        </Border>
+            <Border BorderThickness="0" CornerRadius="1">
+                <Border.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Offset="0" Color="#FFFFFCF2"/>
+                        <GradientStop Color="{DynamicResource HeaderGradientBottom}" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <TextBlock TextWrapping="Wrap" Text="Run Scenario" HorizontalAlignment="Center"/>
+            </Border>
 
-        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Orientation="Horizontal">
-            <Button Template="{DynamicResource RunButtonControlTemplate}" Command="{Binding RunClicked}" />
-            <Button Template="{DynamicResource DebugButtonControlTemplate}"  Command="{Binding DebugClicked}" />
+            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top">
+                
+                <nbehave:ContextMenuButton 
+                    Content="Start With Debugger" Height="Auto" Width="Auto"
+                    Template="{DynamicResource ContextMenuButtonControlTemplate}"
+                    Source="Play.png">
+                </nbehave:ContextMenuButton>
+
+                <nbehave:ContextMenuButton 
+                    Content="Start Without Debugger" Height="Auto" Width="Auto"
+                    Template="{DynamicResource ContextMenuButtonControlTemplate}"
+                    Source="Play.png">
+                </nbehave:ContextMenuButton>
+                
+            </StackPanel>
         </StackPanel>
-    </StackPanel>
+    </Border>
 </Popup>

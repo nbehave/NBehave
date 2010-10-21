@@ -115,6 +115,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\vs2010.sdk\Microsoft.VisualStudio.TextManager.Interop.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationFramework.Aero" />
     <Reference Include="Rhino.Mocks">
       <HintPath>..\..\lib\Rhino.Mocks.dll</HintPath>
     </Reference>
@@ -152,6 +153,7 @@
     <Compile Include="Domain\ParserEvent.cs" />
     <Compile Include="Domain\ParserEventType.cs" />
     <Compile Include="GherkinFileEditorParser.cs" />
+    <Compile Include="Glyphs\Controls\ContextMenuButton.cs" />
     <Compile Include="Glyphs\PlayGlyphTag.cs" />
     <Compile Include="Glyphs\ViewModels\RunOrDebugViewModel.cs" />
     <Compile Include="Glyphs\Views\IRunOrDebugView.xaml.cs" />
@@ -202,6 +204,13 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Resources\Colours.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Glyphs\Views\Play.png" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>
