@@ -3,5 +3,6 @@
     public interface IRunOrDebugView
     {
         bool IsMouseOverPopup { get; }
+        void Deselect();
     }
 }

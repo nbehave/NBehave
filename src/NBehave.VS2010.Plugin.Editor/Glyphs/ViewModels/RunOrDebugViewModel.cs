@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.Concurrency;
 using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using MEFedMVVM.Common;
 using MEFedMVVM.ViewModelLocator;
 using Microsoft.Expression.Interactivity.Core;
@@ -14,11 +17,20 @@ using NBehave.VS2010.Plugin.Editor.Glyphs.Views;
 namespace NBehave.VS2010.Plugin.Editor.Glyphs.ViewModels
 {
     [ExportViewModel("RunOrDebugViewModel")]
-    public class RunOrDebugViewModel : NotifyPropertyChangedBase
+    public class RunOrDebugViewModel : NotifyPropertyChangedBase, IDesignTimeAware
     {
+        private List<dynamic> _buttons;
 
-        [Import]
+        [Import(AllowDefault = true)]
         public ScenarioRunner ScenarioRunner { get; set; }
+
+        public List<dynamic> Buttons
+        {
+            get
+            {
+                return _buttons;
+            }
+        }
 
         public ICommand RunClicked
         {
@@ -62,6 +74,25 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs.ViewModels
             RelativeVisualElement = visualElement;
             this.View = runOrDebugView;
             this.ScenarioText = scenarioText;
+
+            _buttons = new List<dynamic>
+            {
+                new { Icon = new BitmapImage(new Uri("pack://application:,,,/NBehave.VS2010.Plugin.Editor;component/Resources/Icons/Debug.png", UriKind.Absolute)), Text="Start With Debugger", Command = DebugClicked },
+                new { Icon = new BitmapImage(new Uri("pack://application:,,,/NBehave.VS2010.Plugin.Editor;component/Resources/Icons/Play.png", UriKind.Absolute)), Text="Start Without Debugger", Command = RunClicked }
+            };
+            OnPropertyChanged(() => Buttons);
+
+            Observable
+                .FromEvent<PropertyChangedEventHandler, PropertyChangedEventArgs>(
+                    handler => ((sender, args) => handler(sender, args)),
+                    eventHandler => this.PropertyChanged += eventHandler,
+                    changedEventHandler => this.PropertyChanged += changedEventHandler)
+                .Where(@event => @event.EventArgs.PropertyName == "SelectedItem" && SelectedItem != null)
+                .Subscribe(event1 =>
+                               {
+                                   this.SelectedItem.Command.Execute(null);
+                                   View.Deselect();
+                               });
         }
 
         protected string ScenarioText { get; set; }
@@ -69,6 +100,7 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs.ViewModels
         protected IRunOrDebugView View { get; set; }
 
         private FrameworkElement _relativeVisualElement;
+
         public FrameworkElement RelativeVisualElement
         {
             get { return _relativeVisualElement; }
@@ -80,6 +112,7 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs.ViewModels
         }
 
         private Point _position;
+
         public Point Position
         {
             get { return _position; }
@@ -92,6 +125,7 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs.ViewModels
 
         public void Show()
         {
+            View.Deselect();
             IsVisible = true;
             
             Observable
@@ -101,6 +135,8 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs.ViewModels
         }
 
         private bool _isVisible;
+        private dynamic _selectedItem;
+
         public bool IsVisible
         {
             get { return _isVisible; }
@@ -108,6 +144,25 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs.ViewModels
             {
                 _isVisible = value;
                 OnPropertyChanged(() => IsVisible);
+            }
+        }
+
+        public void DesignTimeInitialization()
+        {
+            _buttons = new List<dynamic>
+            {
+                new { Icon = new BitmapImage(new Uri("pack://application:,,,/NBehave.VS2010.Plugin.Editor;component/Resources/Icons/Debug.png", UriKind.Absolute)), Text="Start With Debugger" },
+                new { Icon = new BitmapImage(new Uri("pack://application:,,,/NBehave.VS2010.Plugin.Editor;component/Resources/Icons/Play.png", UriKind.Absolute)), Text="Start Without Debugger" }
+            };
+        }
+
+        public dynamic SelectedItem
+        {
+            get { return _selectedItem; }
+            set
+            {
+                _selectedItem = value;
+                OnPropertyChanged(() => SelectedItem);
             }
         }
     }

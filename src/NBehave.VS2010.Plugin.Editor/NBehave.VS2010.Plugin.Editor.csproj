@@ -210,9 +210,11 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Glyphs\Views\Play.png" />
+    <Resource Include="Resources\Icons\Play.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Debug.png" />
+  </ItemGroup>
   <PropertyGroup>
     <UseCodebase>true</UseCodebase>
   </PropertyGroup>

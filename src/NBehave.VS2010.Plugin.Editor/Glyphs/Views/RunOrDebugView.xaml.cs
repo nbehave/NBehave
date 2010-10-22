@@ -26,5 +26,11 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs.Views
         }
 
         public bool IsMouseOverPopup { get { return this.IsMouseOver; }}
+        public void Deselect()
+        {
+//            this.commandListBox.SelectedItem = null;
+//            this.commandListBox.SelectedIndex = -1;
+            this.commandListBox.SelectedValue = null;
+        }
     }
 }
