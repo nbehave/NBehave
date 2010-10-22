@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Configuration Condition=" '$(Configuration)' == '' ">ExpressionBlend</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
@@ -13,8 +13,19 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\NBehave.snk</AssemblyOriginatorKeyFile>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <Utf8Output>true</Utf8Output>
+    <ExpressionBlendVersion>4.0.20525.0</ExpressionBlendVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ExpressionBlend|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -75,6 +86,7 @@
       <HintPath>..\..\tools\MEFedMVVM\MEFedMVVM.WPF.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Expression.Drawing" />
     <Reference Include="Microsoft.Expression.Interactions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>False</EmbedInteropTypes>
@@ -210,6 +222,9 @@
     <Compile Include="Editor\Glyphs\Views\RunOrDebugView.xaml.cs">
       <DependentUpon>RunOrDebugView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Editor\Resources\Logo.xaml.cs">
+      <DependentUpon>Logo.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Editor\ServiceRegistrar.cs" />
     <Compile Include="Editor\SyntaxHighlighting\Classifiers\FeatureClassifier.cs" />
     <Compile Include="Editor\SyntaxHighlighting\Classifiers\GherkinClassifierBase.cs" />
@@ -253,6 +268,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Editor\Resources\Logo.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Include="Editor\Glyphs\Views\RunOrDebugView.xaml">
@@ -284,7 +303,7 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- Condition to allow blend to open project -->
   <!--  <Import Condition="'$(BuildingInsideVisualStudio)' == 'true'" Project="$(VsSDKInstall)Microsoft.VsSDK.targets" />-->
-  <Import Project="$(VsSDKInstall)Microsoft.VsSDK.targets" />
+  <Import Condition="'$(Configuration)' != 'ExpressionBlend'" Project="$(VsSDKInstall)Microsoft.VsSDK.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets. -->
   <UsingTask TaskName="EnvironmentVariable" AssemblyFile="$(SolutionDir)..\tools\msbuild.extension.pack\MSBuild.ExtensionPack.dll" />
