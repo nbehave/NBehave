@@ -67,6 +67,9 @@
     <Reference Include="Gherkin">
       <HintPath>..\..\lib\Gherkin\Gherkin.dll</HintPath>
     </Reference>
+    <Reference Include="MEFedMVVM.WPF">
+      <HintPath>..\..\tools\MEFedMVVM\MEFedMVVM.WPF.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Expression.Interactions" />
     <Reference Include="Microsoft.VisualStudio.CommandBars, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
@@ -182,10 +185,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\MEFedMVVM\MEFedMVVMDemo\MEFedMVVM.WPF\MEFedMVVM.WPF.csproj">
-      <Project>{1909F45C-9C63-40B7-87A9-C68E78E8D501}</Project>
-      <Name>MEFedMVVM.WPF</Name>
-    </ProjectReference>
     <ProjectReference Include="..\NBehave.Framework\NBehave.Narrator.Framework.csproj">
       <Project>{9C2E9E17-2A2C-4F6C-8072-D160A7EA9A51}</Project>
       <Name>NBehave.Narrator.Framework</Name>
