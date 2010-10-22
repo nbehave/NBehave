@@ -42,7 +42,7 @@ namespace NBehave.VS2010.Plugin.Editor
                 var scenarioRunner = new ScenarioRunner(outputWindow, visualStudioService);
 
                 GherkinFileClassifier fileClassifierForBuffer = buffer.Properties.GetOrCreateSingletonProperty(() => new GherkinFileClassifier(buffer));
-                buffer.Properties.GetOrCreateSingletonProperty(() => new PlayTagger(buffer, scenarioRunner) as ITagger<PlayGlyphTag>);
+                buffer.Properties.GetOrCreateSingletonProperty(() => new PlayTagger(buffer) as ITagger<PlayGlyphTag>);
 
                 container.ComposeExportedValue(scenarioRunner);
                 container.ComposeParts((fileClassifierForBuffer));

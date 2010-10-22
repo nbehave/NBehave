@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Formatting;
 using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
+using NBehave.VS2010.Plugin.Editor.Glyphs.Views;
 
 namespace NBehave.VS2010.Plugin.Editor.Glyphs
 {

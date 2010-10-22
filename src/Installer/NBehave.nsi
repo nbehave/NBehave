@@ -51,6 +51,7 @@ Section ".Net 3.5 files" ;No components page, name is not important
 	File "${FILES}\v3.5\NBehave.Spec.Xunit.dll"
 	File "${FILES}\v3.5\NBehave.TestDriven.Plugin.dll"
 	File "${FILES}\v3.5\Gallio.dll"
+	File "${FILES}\v3.5\Gherkin.dll"
 	File "${FILES}\v3.5\MbUnit.dll"
 	File "${FILES}\v3.5\nunit.framework.dll"
 	File "${FILES}\v3.5\Rhino.Mocks.dll"
@@ -89,6 +90,7 @@ Section ".Net 4.0 files" ;No components page, name is not important
 	File "${FILES}\v4.0\NBehave.Spec.Xunit.dll"
 	File "${FILES}\v4.0\NBehave.TestDriven.Plugin.dll"
 	File "${FILES}\v4.0\Gallio.dll"
+	File "${FILES}\v4.0\Gherkin.dll"
 	File "${FILES}\v4.0\MbUnit.dll"
 	File "${FILES}\v4.0\nunit.framework.dll"
 	File "${FILES}\v4.0\Rhino.Mocks.dll"
@@ -117,6 +119,12 @@ Section "Visual Studio 2010 Plugin"
 	
 	File "${PLUGIN}\extension.vsixmanifest"
 	File "${PLUGIN}\NBehave.VS2010.Plugin.dll"
+	File "${PLUGIN}\Gherkin.dll"
+	File "${PLUGIN}\MEFedMVVM.WPF.dll"
+	File "${PLUGIN}\Microsoft.Expression.Interactions.dll"
+	File "${PLUGIN}\Microsoft.VisualStudio.Settings.dll"
+	File "${PLUGIN}\NBehave.Narrator.Framework.dll"
+	File "${PLUGIN}\System.Windows.Interactivity.dll"
 	File "${PLUGIN}\NBehave.VS2010.Plugin.pkgdef"
 
 SectionEnd
@@ -145,6 +153,12 @@ Section "Uninstall"
   ; Remove VS2010 Plugin
   Delete "$PROGRAMFILES\Microsoft Visual Studio 10.0\Common7\IDE\Extensions\NBehave\extension.vsixmanifest"
   Delete "$PROGRAMFILES\Microsoft Visual Studio 10.0\Common7\IDE\Extensions\NBehave\NBehave.VS2010.Plugin.dll"
+  Delete "$PROGRAMFILES\Microsoft Visual Studio 10.0\Common7\IDE\Extensions\NBehave\Gherkin.dll"
+  Delete "$PROGRAMFILES\Microsoft Visual Studio 10.0\Common7\IDE\Extensions\NBehave\MEFedMVVM.WPF.dll"
+  Delete "$PROGRAMFILES\Microsoft Visual Studio 10.0\Common7\IDE\Extensions\NBehave\Microsoft.Expression.Interactions.dll"
+  Delete "$PROGRAMFILES\Microsoft Visual Studio 10.0\Common7\IDE\Extensions\NBehave\Microsoft.VisualStudio.Settings.dll"
+  Delete "$PROGRAMFILES\Microsoft Visual Studio 10.0\Common7\IDE\Extensions\NBehave\NBehave.Narrator.Framework.dll"
+  Delete "$PROGRAMFILES\Microsoft Visual Studio 10.0\Common7\IDE\Extensions\NBehave\System.Windows.Interactivity.dll"
   Delete "$PROGRAMFILES\Microsoft Visual Studio 10.0\Common7\IDE\Extensions\NBehave\NBehave.VS2010.Plugin.pkgdef"
   
   ; Remove uninstaller

@@ -7,7 +7,6 @@ using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
-using NBehave.VS2010.Plugin.Domain;
 using NBehave.VS2010.Plugin.Editor.Domain;
 
 namespace NBehave.VS2010.Plugin.Editor.Glyphs
@@ -18,7 +17,7 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs
     public class PlayTaggerProvider : ITaggerProvider
     {
         [Import]
-        internal IClassifierAggregatorService AggregatorFactory;
+        internal IClassifierAggregatorService AggregatorFactory = null;
 
         /// <summary>
         /// Creates an instance of our custom TodoTagger for a given buffer.
@@ -40,10 +39,12 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs
     {
         private readonly CompositeDisposable _listeners;
         private readonly List<ITagSpan<PlayGlyphTag>> _tagSpans;
+        
         public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
+
         private readonly Stack<SnapshotSpan> _snapshotSpans = new Stack<SnapshotSpan>();
 
-        public PlayTagger(ITextBuffer buffer, ScenarioRunner scenarioRunner)
+        public PlayTagger(ITextBuffer buffer)
         {
             _listeners = new CompositeDisposable();
             _tagSpans = new List<ITagSpan<PlayGlyphTag>>();

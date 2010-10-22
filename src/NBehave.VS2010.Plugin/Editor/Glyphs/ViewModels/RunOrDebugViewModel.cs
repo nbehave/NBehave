@@ -77,8 +77,8 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs.ViewModels
 
             _buttons = new List<dynamic>
             {
-                new { Icon = new BitmapImage(new Uri("pack://application:,,,/NBehave.VS2010.Plugin.Editor;component/Resources/Icons/Debug.png", UriKind.Absolute)), Text="Start With Debugger", Command = DebugClicked },
-                new { Icon = new BitmapImage(new Uri("pack://application:,,,/NBehave.VS2010.Plugin.Editor;component/Resources/Icons/Play.png", UriKind.Absolute)), Text="Start Without Debugger", Command = RunClicked }
+                new { Icon = new BitmapImage(new Uri("pack://application:,,,/NBehave.VS2010.Plugin;component/Editor/Resources/Icons/Debug.png", UriKind.Absolute)), Text="Start With Debugger", Command = DebugClicked },
+                new { Icon = new BitmapImage(new Uri("pack://application:,,,/NBehave.VS2010.Plugin;component/Editor/Resources/Icons/Play.png", UriKind.Absolute)), Text="Start Without Debugger", Command = RunClicked }
             };
             OnPropertyChanged(() => Buttons);
 
@@ -151,8 +151,8 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs.ViewModels
         {
             _buttons = new List<dynamic>
             {
-                new { Icon = new BitmapImage(new Uri("pack://application:,,,/NBehave.VS2010.Plugin.Editor;component/Resources/Icons/Debug.png", UriKind.Absolute)), Text="Start With Debugger" },
-                new { Icon = new BitmapImage(new Uri("pack://application:,,,/NBehave.VS2010.Plugin.Editor;component/Resources/Icons/Play.png", UriKind.Absolute)), Text="Start Without Debugger" }
+                new { Icon = new BitmapImage(new Uri("pack://application:,,,/NBehave.VS2010.Plugin;component/Editor/Resources/Icons/Debug.png", UriKind.Absolute)), Text="Start With Debugger" },
+                new { Icon = new BitmapImage(new Uri("pack://application:,,,/NBehave.VS2010.Plugin;component/Editor/Resources/Icons/Play.png", UriKind.Absolute)), Text="Start Without Debugger" }
             };
         }
 

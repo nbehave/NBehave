@@ -1,22 +1,22 @@
 ﻿<Popup
-			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-			 xmlns:meffed="http:\\www.codeplex.com\MEFedMVVM"
-			 x:Class="NBehave.VS2010.Plugin.Editor.Glyphs.Views.RunOrDebugView"
-			 meffed:ViewModelLocator.NonSharedViewModel="RunOrDebugViewModel"
-			 mc:Ignorable="d"
-			 Placement="Relative" 
-			 PlacementTarget="{Binding RelativeVisualElement}" 
-			 VerticalOffset="{Binding Position.Y}"
-			 HorizontalOffset="{Binding Position.X}"
-			 IsOpen="{Binding IsVisible}"
-			 AllowsTransparency="True">
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:meffed="http:\\www.codeplex.com\MEFedMVVM"
+    x:Class="NBehave.VS2010.Plugin.Editor.Glyphs.Views.RunOrDebugView"
+    meffed:ViewModelLocator.NonSharedViewModel="RunOrDebugViewModel"
+    mc:Ignorable="d"
+    Placement="Relative" 
+    PlacementTarget="{Binding RelativeVisualElement}" 
+    VerticalOffset="{Binding Position.Y}"
+    HorizontalOffset="{Binding Position.X}"
+    IsOpen="{Binding IsVisible}"
+    AllowsTransparency="True">
 	<Popup.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="/NBehave.VS2010.Plugin.Editor;component/Resources/Colours.xaml"/>
+				<ResourceDictionary Source="../../Resources/Colours.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 			<DataTemplate x:Key="ContextMenuButtonDataTemplate">
 				<StackPanel Orientation="Horizontal">
@@ -96,8 +96,8 @@
 				BorderThickness="0" 
 				ItemContainerStyle="{DynamicResource ListBoxItemStyle1}" 
 				Margin="1"
-                SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
-                Name="commandListBox"
+				SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+				Name="commandListBox"
 			/>
 		</StackPanel>
 	</Border>
