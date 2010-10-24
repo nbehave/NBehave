@@ -5,7 +5,7 @@
   <property name="test.dir.3.5" value ="${build.dir}\Debug-4.0\UnitTests" />
   <property name="test.dir.4.0" value ="${build.dir}\Debug-3.5\UnitTests" />
   <property name="company.name" value="${project::get-name()}"/>
-  <property name="project.fullversion" value="0.5.1.0" dynamic="true" />
+  <property name="project.fullversion" value="0.5.1.1" dynamic="true" />
   <property name="project.config" value="release" />
   
   <!-- User targets -->
@@ -293,9 +293,10 @@
     <copy todir="${build.dir}\plugin">
       <fileset basedir="${build.dir}\Debug-4.0\VSPlugin">
         <include name="**\*.dll"/>
-        <exclude name="**\*.pdb" />
+        <include name="**\*.pdb" />
         <exclude name="**\*.vsix" />
         <include name="extension.vsixmanifest" />
+		<include name="**\*.pkgdef" />
       </fileset>
     </copy>
     <xmlpoke
