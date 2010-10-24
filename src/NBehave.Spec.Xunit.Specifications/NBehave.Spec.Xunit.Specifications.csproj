@@ -8,8 +8,8 @@
     <ProjectGuid>{EFB6BFCC-A7B8-4B98-B0A5-EDEA0E006390}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NBehave.Spec.Xunit.Specs</RootNamespace>
-    <AssemblyName>NBehave.Spec.Xunit.Specs</AssemblyName>
+    <RootNamespace>NBehave.Spec.Xunit.Specifications</RootNamespace>
+    <AssemblyName>NBehave.Spec.Xunit.Specifications</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>

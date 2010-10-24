@@ -8,8 +8,8 @@
     <ProjectGuid>{CFC6A48D-10DA-4996-B1DF-E5F9C6D744A6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NBehave.NAnt.Tests</RootNamespace>
-    <AssemblyName>NBehave.NAnt.Tests</AssemblyName>
+    <RootNamespace>NBehave.NAnt.Specifications</RootNamespace>
+    <AssemblyName>NBehave.NAnt.Specifications</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>

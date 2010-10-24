@@ -8,8 +8,8 @@
     <ProjectGuid>{534FD760-E694-481E-B215-419018D1210F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NBehave.VS2010.Plugin.Specs</RootNamespace>
-    <AssemblyName>NBehave.VS2010.Plugin.Specs</AssemblyName>
+    <RootNamespace>NBehave.VS2010.Plugin.Specifications</RootNamespace>
+    <AssemblyName>NBehave.VS2010.Plugin.Specifications</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>

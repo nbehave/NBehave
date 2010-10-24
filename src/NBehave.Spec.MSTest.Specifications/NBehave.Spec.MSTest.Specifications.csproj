@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{B7F6CEC7-B298-467F-ABE2-9ABCF4394FAD}</ProjectGuid>
+    <ProjectGuid>{69D6B05D-C1AE-48B1-807F-7DB1EDC8E24E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NBehave.Spec.NUnit.Specs</RootNamespace>
-    <AssemblyName>NBehave.Spec.NUnit.Specs</AssemblyName>
+    <RootNamespace>NBehave.Spec.MSTest.Specifications</RootNamespace>
+    <AssemblyName>NBehave.Spec.MSTest.Specifications</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
@@ -58,8 +58,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
-    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
@@ -69,7 +67,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <CodeAnalysisLogFile>..\..\build\Debug-4.0\UnitTests\NBehave.Spec.NUnit.Specs.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisLogFile>..\..\build\Debug-4.0\UnitTests\NBehave.Spec.MSTest.Specs.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
     <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
     <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ErrorReport>prompt</ErrorReport>
@@ -77,8 +75,13 @@
     <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
     <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\mstest\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\nunit.framework.dll</HintPath>
@@ -103,9 +106,9 @@
       <Project>{9C2E9E17-2A2C-4F6C-8072-D160A7EA9A51}</Project>
       <Name>NBehave.Narrator.Framework</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NBehave.Spec.NUnit\NBehave.Spec.NUnit.csproj">
-      <Project>{7BDFA147-A451-4FB0-8536-94EC1C52926E}</Project>
-      <Name>NBehave.Spec.NUnit</Name>
+    <ProjectReference Include="..\NBehave.Spec.MSTest\NBehave.Spec.MSTest.csproj">
+      <Project>{32745321-6BAF-46A1-B3C4-E82CBA663F55}</Project>
+      <Name>NBehave.Spec.MSTest</Name>
     </ProjectReference>
     <ProjectReference Include="..\NBehave.Spec\NBehave.Spec.Framework\NBehave.Spec.Framework.csproj">
       <Project>{87B1B4CA-3EF7-44EB-BF48-5A472E26F1B0}</Project>
