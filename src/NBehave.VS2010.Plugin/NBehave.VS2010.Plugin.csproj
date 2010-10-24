@@ -79,9 +79,6 @@
       <EmbedInteropTypes>False</EmbedInteropTypes>
       <HintPath>..\..\tools\vs2010.sdk\envdte90.dll</HintPath>
     </Reference>
-    <Reference Include="Gherkin">
-      <HintPath>..\..\lib\Gherkin\Gherkin.dll</HintPath>
-    </Reference>
     <Reference Include="MEFedMVVM.WPF">
       <HintPath>..\..\tools\MEFedMVVM\MEFedMVVM.WPF.dll</HintPath>
     </Reference>
