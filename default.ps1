@@ -1,6 +1,5 @@
 Include "buildframework\versioning.ps1"
 Include "buildframework\psake_ext.ps1"
-Include "buildframework\msbuild_ext.ps1"
 
 Properties {
 	$project_dir         = Split-Path $psake.build_script_file
@@ -19,6 +18,7 @@ Task RunBuild {
 	Invoke-Task "Compile"
 	Invoke-Task "Test"
 	Invoke-Task "Distribute"
+	Invoke-Task "ILMerge"
 }
 
 Task Clean {
@@ -33,7 +33,7 @@ Task Version {
 }
 
 Task Compile {
-	BuildSolution "src\NBehave.sln" $framework
+	Exec { msbuild "src\NBehave.sln" /property:Configuration=AutomatedDebug-$framework /v:m /p:TargetFrameworkVersion=v$framework /toolsversion:$framework }
 }
 
 Task Test {
@@ -71,4 +71,13 @@ Task DistributeBinaries {
 
 Task BuildInstaller {
 	Exec { tools\nsis\makensis.exe /DVERSION=$version "$solution_dir\Installer\NBehave.nsi"}
+}
+
+Task ILMerge {
+	$key = "$solution_dir\NBehave.snk"
+	$directory = "$build_dir\dist\v$framework"
+	$name = "NBehave.Narrator.Framework"
+	$assemblies = @("$build_dir\dist\v$framework\NBehave.Narrator.Framework.dll", "$build_dir\dist\v$framework\gherkin.dll")
+	
+	#ilmerge $key $directory $name $assemblies
 }

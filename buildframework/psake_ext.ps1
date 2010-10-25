@@ -1,12 +1,4 @@
-﻿function SwitchDotNetFrameworkVersion
-{
-param(
-	[string]$version
-)
-	$framework = $version
-	Configure-BuildEnvironment
-}
-
+﻿
 function xmlPoke([string]$file, [string]$xpath, $value, [hashtable]$namespaces) { 
     [xml] $fileXml = Get-Content $file 
 	$xmlNameTable = new-object System.Xml.NameTable
@@ -38,4 +30,14 @@ function zip
 
 	$ZipFile = (new-object -com shell.application).NameSpace($path) 
 	$files | foreach {$zipfile.CopyHere($_.fullname)} 
+}
+
+function ilmerge($key, $directory, $name, $assemblies)
+{
+	Exec { tools\ilmerge\ilmerge.exe /internalize /keyfile:$key /out:"$directory\$name.temp.dll" $assemblies }
+	
+	Remove-Item "$directory\$name.dll" -ErrorAction SilentlyContinue
+	Remove-Item "$directory\$name.pdb" -ErrorAction SilentlyContinue
+	Move-Item "$directory\$name.temp.dll" "$directory\$name.dll"
+	Move-Item "$directory\$name.temp.pdb" "$directory\$name.pdb"
 }
