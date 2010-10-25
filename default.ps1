@@ -19,8 +19,8 @@ Task RunBuild {
 	Invoke-Task "Clean"
 	Invoke-Task "Version"
 	Invoke-Task "Compile"
-	#Invoke-Task "Test"
-	#Invoke-Task "Distribute"
+	Invoke-Task "Test"
+	Invoke-Task "Distribute"
 }
 
 Task Clean {
@@ -42,16 +42,46 @@ Task Compile {
 Task Test {
 	new-item -path "${build_dir}" -name "test-reports" -type directory -ErrorAction SilentlyContinue
 	
-	$arguments = GetTestAssemblies $test_dir_3_5
+	$arguments = Get-Item "$test_dir_3_5\*Specifications*.dll"
 	Exec { tools\nunit\nunit-console-x86.exe $arguments /xml:${build_dir}\test-reports\UnitTests-3.5.xml}
 	
-	$arguments = GetTestAssemblies $test_dir_4_0
+	$arguments = Get-Item "$test_dir_4_0\*Specifications*.dll"
 	Exec { tools\nunit\nunit-console-x86.exe $arguments /xml:${build_dir}\test-reports\UnitTests-4.0.xml}
 }
 
-function GetTestAssemblies
-{
-	param([string]$directory)
+Task Distribute -depends DistributeVSPlugin, DistributeBinaries, DistributeExamples
+
+Task DistributeVSPlugin {
+	new-item -path "${build_dir}" -name "plugin" -type directory -ErrorAction SilentlyContinue
+	$destination = "$build_dir\plugin\"
+	$source = "$build_dir\Debug-4.0\VSPlugin"
 	
-	return Get-Item "$directory\*Specifications*.dll"
+	Get-ChildItem "$source\*.*" -Include *.dll, *.vsixmanifest, *.pkgdef | Copy-Item -Destination $destination
+	
+	$namespaces = @{ "vsx" = "http://schemas.microsoft.com/developer/vsx-schema/2010"}
+	$xpath = "/vsx:Vsix/vsx:Identifier/vsx:"
+	xmlPoke "$destination\extension.vsixmanifest" $xpath"InstalledByMsi" "true" $namespaces
+	xmlPoke "$destination\extension.vsixmanifest" $xpath"Version" $version $namespaces
+}
+
+Task DistributeBinaries {
+	new-item -path "${build_dir}" -name "dist" -type directory -ErrorAction SilentlyContinue
+	new-item -path "${build_dir}" -name "dist\v3.5" -type directory -ErrorAction SilentlyContinue
+
+	$destination = "$build_dir\dist\v3.5"
+	$source = "$build_dir\Debug-3.5\NBehave"
+	
+	Get-ChildItem "$source\*.*" -Include *NBehave*, *.dll -Exclude *.pdb, *Microsoft* | Copy-Item -Destination $destination
+	
+	new-item -path "${build_dir}" -name "dist\v4.0" -type directory -ErrorAction SilentlyContinue
+	
+	$destination = "$build_dir\dist\v4.0"
+	$source = "$build_dir\Debug-4.0\NBehave"
+	Get-ChildItem "$source\*.*" -Include *NBehave*, *.dll -Exclude *.pdb, *Microsoft* | Copy-Item -Destination $destination
+	
+	
+}
+
+Task DistributeExamples {
+
 }

@@ -100,7 +100,7 @@ namespace NBehave.VS2010.Plugin.Specs
         [Test]
         public void ShouldClassifyScenarioWithMultipleInlineTables()
         {
-            TestInitialise("../../../NBehave.Examples/Tables/Table.feature");
+            TestInitialise("Features/Table.feature");
 
             var tag = _playTagger.GetTags(null).Where(span => span.Span.GetText().StartsWith("Scenario: a table")).First();
 
