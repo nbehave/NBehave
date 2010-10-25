@@ -7,8 +7,8 @@ Properties {
 	$build_dir           = "$project_dir\build"
 	$test_dir            = "$build_dir\Debug-$framework\UnitTests"
 	$project_name        = "NBehave"
-	$version             = "0.5.1.1"
 	$project_config      = "release"
+	$version             = "x.x.x.x"
 }
 
 Task default -Depends RunBuild
@@ -29,6 +29,8 @@ Task Clean {
 }
 
 Task Version {
+	$version = GetVersion("$project_dir\version")
+
 	Generate-Assembly-Info true $project_name $project_name $project_name $version "$solution_dir\CommonAssemblyInfo.cs"
 }
 

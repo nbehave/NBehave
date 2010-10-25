@@ -30,3 +30,14 @@ using System.Runtime.InteropServices;
 	Write-Host "Generating assembly info file: $file"
 	Write-Output $asmInfo > $file
 }
+
+function GetVersion([string]$file)
+{
+	$versionNumber = Get-Content $file
+	$versionArray = (Split-String "." $versionNumber)
+	$buildNumber = [int]($versionArray[3]) + 1
+	$versionArray[3] = ($buildNumber).ToString()
+	$finalVersion = ([string]$versionArray).Replace(" ",".")
+	Write-Output $finalVersion > $file
+	return $finalVersion	
+}
