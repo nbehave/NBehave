@@ -32,12 +32,18 @@ function zip
 	$files | foreach {$zipfile.CopyHere($_.fullname)} 
 }
 
-function ilmerge($key, $directory, $name, $assemblies)
-{
-	Exec { tools\ilmerge\ilmerge.exe /internalize /keyfile:$key /out:"$directory\$name.temp.dll" $assemblies }
+function ilmerge($key, $directory, $name, $assemblies, $extension)
+{	
+	Move-Item "$directory\$name.$extension" "$directory\$name.$temp.$extension"
+
+	if($framework -eq "4.0")
+	{
+		Exec { tools\ilmerge\ilmerge.exe /ndebug /keyfile:$key /out:"$directory\$name.$extension" "$directory\$name.$temp.$extension" $assemblies /targetplatform:"v4,$env:ProgramFiles\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0" }
+	}
+	else
+	{
+		Exec { tools\ilmerge\ilmerge.exe /ndebug /keyfile:$key /out:"$directory\$name.$extension" "$directory\$name.$temp.$extension" $assemblies }
+	}
 	
-	Remove-Item "$directory\$name.dll" -ErrorAction SilentlyContinue
-	Remove-Item "$directory\$name.pdb" -ErrorAction SilentlyContinue
-	Move-Item "$directory\$name.temp.dll" "$directory\$name.dll"
-	Move-Item "$directory\$name.temp.pdb" "$directory\$name.pdb"
+	Remove-Item "$directory\$name.$temp.$extension" -ErrorAction SilentlyContinue
 }
