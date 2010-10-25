@@ -6,8 +6,7 @@ Properties {
 	$project_dir         = Split-Path $psake.build_script_file
 	$solution_dir        = "$project_dir\src"
 	$build_dir           = "$project_dir\build"
-	$test_dir_3_5        = "$build_dir\Debug-3.5\UnitTests"
-	$test_dir_4_0        = "$build_dir\Debug-4.0\UnitTests"
+	$test_dir            = "$build_dir\Debug-$framework\UnitTests"
 	$project_name        = "NBehave"
 	$version             = "0.5.1.1"
 	$project_config      = "release"
@@ -16,12 +15,10 @@ Properties {
 Task default -Depends RunBuild
 
 Task RunBuild {
-	Invoke-Task "Clean"
 	Invoke-Task "Version"
 	Invoke-Task "Compile"
 	Invoke-Task "Test"
 	Invoke-Task "Distribute"
-	Invoke-Task "BuildInstaller"
 }
 
 Task Clean {
@@ -36,26 +33,23 @@ Task Version {
 }
 
 Task Compile {
-	BuildSolution "src\NBehave.sln" "3.5"
-	BuildSolution "src\NBehave.sln" "4.0"
+	BuildSolution "src\NBehave.sln" $framework
 }
 
 Task Test {
 	new-item -path "${build_dir}" -name "test-reports" -type directory -ErrorAction SilentlyContinue
 	
-	$arguments = Get-Item "$test_dir_3_5\*Specifications*.dll"
-	Exec { tools\nunit\nunit-console-x86.exe $arguments /xml:${build_dir}\test-reports\UnitTests-3.5.xml}
-	
-	$arguments = Get-Item "$test_dir_4_0\*Specifications*.dll"
-	Exec { tools\nunit\nunit-console-x86.exe $arguments /xml:${build_dir}\test-reports\UnitTests-4.0.xml}
+	$arguments = Get-Item "$test_dir\*Specifications*.dll"
+	Exec { tools\nunit\nunit-console-x86.exe $arguments /xml:${build_dir}\test-reports\UnitTests-$framework.xml}
 }
 
-Task Distribute -depends DistributeVSPlugin, DistributeBinaries, DistributeExamples
+Task Distribute -depends DistributeVSPlugin, DistributeBinaries
 
-Task DistributeVSPlugin {
+Task DistributeVSPlugin -precondition { return $framework -eq "4.0" }{
+	
 	new-item -path "${build_dir}" -name "plugin" -type directory -ErrorAction SilentlyContinue
 	$destination = "$build_dir\plugin\"
-	$source = "$build_dir\Debug-4.0\VSPlugin"
+	$source = "$build_dir\Debug-$framework\VSPlugin"
 	
 	Get-ChildItem "$source\*.*" -Include *.dll, *.vsixmanifest, *.pkgdef | Copy-Item -Destination $destination
 	
@@ -67,17 +61,11 @@ Task DistributeVSPlugin {
 
 Task DistributeBinaries {
 	new-item -path "${build_dir}" -name "dist" -type directory -ErrorAction SilentlyContinue
-	new-item -path "${build_dir}" -name "dist\v3.5" -type directory -ErrorAction SilentlyContinue
+	new-item -path "${build_dir}" -name "dist\v$framework" -type directory -ErrorAction SilentlyContinue
 
-	$destination = "$build_dir\dist\v3.5"
-	$source = "$build_dir\Debug-3.5\NBehave"
+	$destination = "$build_dir\dist\v$framework"
+	$source = "$build_dir\Debug-$framework\NBehave"
 	
-	Get-ChildItem "$source\*.*" -Include *NBehave*, *.dll -Exclude *.pdb, *Microsoft* | Copy-Item -Destination $destination
-	
-	new-item -path "${build_dir}" -name "dist\v4.0" -type directory -ErrorAction SilentlyContinue
-	
-	$destination = "$build_dir\dist\v4.0"
-	$source = "$build_dir\Debug-4.0\NBehave"
 	Get-ChildItem "$source\*.*" -Include *NBehave*, *.dll -Exclude *.pdb, *Microsoft* | Copy-Item -Destination $destination
 }
 
