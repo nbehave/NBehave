@@ -21,6 +21,7 @@ Task RunBuild {
 	Invoke-Task "Compile"
 	Invoke-Task "Test"
 	Invoke-Task "Distribute"
+	Invoke-Task "BuildInstaller"
 }
 
 Task Clean {
@@ -78,10 +79,8 @@ Task DistributeBinaries {
 	$destination = "$build_dir\dist\v4.0"
 	$source = "$build_dir\Debug-4.0\NBehave"
 	Get-ChildItem "$source\*.*" -Include *NBehave*, *.dll -Exclude *.pdb, *Microsoft* | Copy-Item -Destination $destination
-	
-	
 }
 
-Task DistributeExamples {
-
+Task BuildInstaller {
+	Exec { tools\nsis\makensis.exe /DVERSION=$version "$solution_dir\Installer\NBehave.nsi"}
 }

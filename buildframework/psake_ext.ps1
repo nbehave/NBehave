@@ -24,3 +24,18 @@ function xmlPoke([string]$file, [string]$xpath, $value, [hashtable]$namespaces) 
         $fileXml.Save($file)  
     } 
 }
+
+function zip
+{
+	$path = $args[0]
+	$files = $input
+  
+	if (-not $path.EndsWith('.zip')) {$path += '.zip'} 
+
+	if (-not (test-path $path)) { 
+	  set-content $path ("PK" + [char]5 + [char]6 + ("$([char]0)" * 18)) 
+	} 
+
+	$ZipFile = (new-object -com shell.application).NameSpace($path) 
+	$files | foreach {$zipfile.CopyHere($_.fullname)} 
+}

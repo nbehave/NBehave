@@ -56,7 +56,6 @@ Section ".Net 3.5 files" ;No components page, name is not important
 	File "${FILES}\v3.5\nunit.framework.dll"
 	File "${FILES}\v3.5\Rhino.Mocks.dll"
 	File "${FILES}\v3.5\xunit.dll"
-	File "${FILES}\v3.5\languages.yml"
 
 	; Write the installation path into the registry
 	WriteRegStr HKLM SOFTWARE\NBehave\${VERSION} "Install_Dir" "$INSTDIR"
@@ -95,7 +94,6 @@ Section ".Net 4.0 files" ;No components page, name is not important
 	File "${FILES}\v4.0\nunit.framework.dll"
 	File "${FILES}\v4.0\Rhino.Mocks.dll"
 	File "${FILES}\v4.0\xunit.dll"
-	File "${FILES}\v4.0\languages.yml"
 
 	; Write the installation path into the registry
 	WriteRegStr HKLM SOFTWARE\NBehave\${VERSION} "Install_Dir" "$INSTDIR"
@@ -110,7 +108,7 @@ Section ".Net 4.0 files" ;No components page, name is not important
 SectionEnd
 
 Section "NBehave Example code"
-	File "${EXAMPLEFILES}\NBehave.Examples.zip"
+
 SectionEnd
 
 Section "Visual Studio 2010 Plugin"
