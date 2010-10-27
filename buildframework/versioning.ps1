@@ -31,11 +31,18 @@ using System.Runtime.InteropServices;
 	Write-Output $asmInfo > $file
 }
 
-function GetVersion([string]$file)
+function GetVersion([string]$file, [bool]$increment)
 {
 	$versionNumber = Get-Content $file
 	$versionArray = (Split-String "." $versionNumber)
-	$buildNumber = [int]($versionArray[3]) + 1
+	$buildNumber = [int]($versionArray[3])
+	
+	#Only increment once for both 3.5 and 4.0 builds
+	if($increment)
+	{
+		$buildNumber = [int]($versionArray[3]) + 1
+	}
+	
 	$versionArray[3] = ($buildNumber).ToString()
 	$finalVersion = ([string]$versionArray).Replace(" ",".")
 	Write-Output $finalVersion > $file
