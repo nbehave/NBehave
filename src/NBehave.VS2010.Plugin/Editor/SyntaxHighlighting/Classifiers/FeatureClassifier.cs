@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.Composition;
+using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
@@ -26,8 +27,14 @@ namespace NBehave.VS2010.Plugin.Editor.SyntaxHighlighting.Classifiers
         {
             int descriptionStartPosition = snapshot.GetLineFromLineNumber(line).Start.Position;
 
+
+            int lineNumber = description.Split(new[] { Environment.NewLine }, StringSplitOptions.None).Count() + line;
+
+            if (snapshot.LineCount <= lineNumber)
+                return null;
+
             int descriptionEndPosition = snapshot.GetLineFromLineNumber(
-                description.Split(new[] { Environment.NewLine }, StringSplitOptions.None).Count() + line).Start.Position;
+                lineNumber).Start.Position;
 
             var descriptionSpan = new Span(descriptionStartPosition, descriptionEndPosition - descriptionStartPosition);
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.VisualStudio.Text;
@@ -47,13 +48,14 @@ namespace NBehave.VS2010.Plugin.Editor.SyntaxHighlighting.Classifiers
 
         public abstract bool CanClassify(ParserEvent parserEvent);
 
+        [DebuggerNonUserCode]
         public IList<ClassificationSpan> Classify(ParserEvent parserEvent)
         {
             List<ClassificationSpan> spans = new List<ClassificationSpan>();
 
             try
             {
-                spans.AddRange(definitions.SelectMany(definition => definition(parserEvent)));
+                spans.AddRange(definitions.SelectMany(definition => definition(parserEvent).Where(span => span != null)));
             }
             catch (Exception) { }
 

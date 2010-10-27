@@ -117,7 +117,10 @@ namespace NBehave.VS2010.Plugin.Specs
 
         public int LineCount
         {
-            get { throw new NotImplementedException(); }
+            get 
+            {
+                return GetText().Split(new[] { Environment.NewLine }, StringSplitOptions.None).Length;
+            }
         }
 
         public char this[int position]

@@ -79,7 +79,7 @@ Task ILMerge {
 	$key = "$solution_dir\NBehave.snk"
 	$directory = "$build_dir\dist\v$framework"
 	$name = "NBehave.Narrator.Framework"
-	$assemblies = @("$directory\gherkin.dll", "$directory\NBehave.Spec.Framework.dll")
+	$assemblies = @("$directory\gherkin.dll", "$directory\NBehave.Spec.Framework.dll", "$directory\Should.Core.dll", "$directory\Should.Fluent.dll")
 	
 	ilmerge $key $directory $name $assemblies "dll"
 }
