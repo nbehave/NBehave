@@ -88,6 +88,8 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs.ViewModels
                     eventHandler => this.PropertyChanged += eventHandler,
                     changedEventHandler => this.PropertyChanged += changedEventHandler)
                 .Where(@event => @event.EventArgs.PropertyName == "SelectedItem" && SelectedItem != null)
+                .Throttle(TimeSpan.FromSeconds(1))
+                .ObserveOnDispatcher()
                 .Subscribe(event1 =>
                                {
                                    this.SelectedItem.Command.Execute(null);
