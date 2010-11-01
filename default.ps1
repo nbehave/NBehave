@@ -70,7 +70,7 @@ Task DistributeBinaries {
 	$destination = "$build_dir\dist\v$framework"
 	$source = "$build_dir\Debug-$framework\NBehave"
 	
-	Get-ChildItem "$source\*.*" -Include *NBehave*, *.dll -Exclude *.pdb, *Microsoft* | Copy-Item -Destination $destination
+	Get-ChildItem "$source\*.*" -Include *NBehave*, *.dll -Exclude *Microsoft* | Copy-Item -Destination $destination
 }
 
 Task BuildInstaller {

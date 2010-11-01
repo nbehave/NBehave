@@ -34,16 +34,18 @@ function zip
 
 function ilmerge($key, $directory, $name, $assemblies, $extension)
 {	
-	Move-Item "$directory\$name.$extension" "$directory\$name.$temp.$extension"
-
+	new-item -path $directory -name "temp_merge" -type directory -ErrorAction SilentlyContinue
+	
 	if($framework -eq "4.0")
 	{
-		Exec { tools\ilmerge\ilmerge.exe /ndebug /keyfile:$key /out:"$directory\$name.$extension" "$directory\$name.$temp.$extension" $assemblies /targetplatform:"v4,$env:ProgramFiles\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0" }
+		Exec { tools\ilmerge\ilmerge.exe /keyfile:$key /out:"$directory\temp_merge\$name.$extension" "$directory\$name.$extension" $assemblies /targetplatform:"v4,$env:ProgramFiles\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0" }
 	}
 	else
 	{
-		Exec { tools\ilmerge\ilmerge.exe /ndebug /keyfile:$key /out:"$directory\$name.$extension" "$directory\$name.$temp.$extension" $assemblies }
+		Exec { tools\ilmerge\ilmerge.exe /keyfile:$key /out:"$directory\temp_merge\$name.$extension" "$directory\$name.$extension" $assemblies }
 	}
 	
-	Remove-Item "$directory\$name.$temp.$extension" -ErrorAction SilentlyContinue
+	Get-ChildItem "$directory\temp_merge\**" -Include *.dll, *.pdb | Copy-Item -Destination $directory
+	
+	Remove-Item "$directory\temp_merge" -Recurse -ErrorAction SilentlyContinue
 }
