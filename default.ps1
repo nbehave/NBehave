@@ -55,7 +55,7 @@ Task DistributeVSPlugin -precondition { return $framework -eq "4.0" }{
 	$destination = "$build_dir\plugin\"
 	$source = "$build_dir\Debug-$framework\VSPlugin"
 	
-	Get-ChildItem "$source\*.*" -Include *.dll, *.vsixmanifest, *.pkgdef | Copy-Item -Destination $destination
+	Get-ChildItem "$source\*.*" -Include *.dll, *.vsixmanifest, *.pkgdef, *.pdb | Copy-Item -Destination $destination
 	
 	$namespaces = @{ "vsx" = "http://schemas.microsoft.com/developer/vsx-schema/2010"}
 	$xpath = "/vsx:Vsix/vsx:Identifier/vsx:"
@@ -69,8 +69,9 @@ Task DistributeBinaries {
 
 	$destination = "$build_dir\dist\v$framework"
 	$source = "$build_dir\Debug-$framework\NBehave"
+	$exclusions = @("*Microsoft*", "log4net.dll", "NAnt.Core.dll", "TestDriven.Framework.dll")
 	
-	Get-ChildItem "$source\*.*" -Include *NBehave*, *.dll -Exclude *Microsoft* | Copy-Item -Destination $destination
+	Get-ChildItem "$source\*.*" -Include *NBehave*, *.dll -Exclude $exclusions | Copy-Item -Destination $destination
 }
 
 Task BuildInstaller {
@@ -81,7 +82,11 @@ Task ILMerge {
 	$key = "$solution_dir\NBehave.snk"
 	$directory = "$build_dir\dist\v$framework"
 	$name = "NBehave.Narrator.Framework"
-	$assemblies = @("$directory\gherkin.dll", "$directory\NBehave.Spec.Framework.dll", "$directory\Should.Core.dll", "$directory\Should.Fluent.dll")
+	
+	$assemblies = @("$directory\gherkin.dll", 
+					"$directory\NBehave.Spec.Framework.dll", 
+					"$directory\Should.Core.dll", 
+					"$directory\Should.Fluent.dll")
 	
 	ilmerge $key $directory $name $assemblies "dll"
 }
