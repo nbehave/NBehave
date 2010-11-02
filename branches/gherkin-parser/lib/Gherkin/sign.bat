@@ -1,2 +1,0 @@
-ildasm gherkin-2.2.4.unsigned.orig.dll /out:gherkin-2.2.4.il
-"C:\Windows\Microsoft.NET\framework\v2.0.50727\ilasm" gherkin-2.2.4.il /res:gherkin-2.2.4.res /dll /key:..\..\src\NBehave.snk /out:gherkin-2.2.4.dll
