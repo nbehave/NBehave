@@ -2,12 +2,10 @@
 using System.Reflection;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
-using Context = NUnit.Framework.TestFixtureAttribute;
-using Specification = NUnit.Framework.TestAttribute;
 
 namespace NBehave.Narrator.Framework.Specifications
 {
-    [Context]
+    [TestFixture]
     public class ActionCatalogSpec
     {
         private MethodInfo GetDummyParameterInfo()
@@ -16,116 +14,144 @@ namespace NBehave.Narrator.Framework.Specifications
             return a.Method;
         }
 
-        [Context]
-        public class Valid_parameter_names : ActionCatalogSpec
+        [TestFixture]
+        public class ValidParameterNames : ActionCatalogSpec
         {
             private readonly ActionCatalog _actionCatalog = new ActionCatalog();
 
-            [Specification]
-            public void Should_consider_any_character_in_english_alphabet_as_valid()
+            [Test]
+            public void ShouldConsiderAnyCharacterInEnglishAlphabetAsValid()
             {
-                string message = _actionCatalog.BuildMessage("valid $parameterName", new[] { "parameter" });
+                var message = _actionCatalog.BuildMessage("valid $parameterName", new[] { "parameter" });
                 Assert.AreEqual("valid parameter", message);
             }
 
             [Test]
-            public void Should_consider_any_character_in_english_alphabet_mixed_with_numbers_as_valid()
+            public void ShouldConsiderAnyCharacterInEnglishAlphabetMixedWithNumbersAsValid()
             {
-                string message = _actionCatalog.BuildMessage("valid $parameter1Name2", new[] { "parameter" });
+                var message = _actionCatalog.BuildMessage("valid $parameter1Name2", new[] { "parameter" });
                 Assert.AreEqual("valid parameter", message);
             }
 
             [Test]
-            public void Should_consider_any_character_in_english_alphabet_mixed_with_underscore_valid()
+            public void ShouldConsiderAnyCharacterInEnglishAlphabetMixedWithUnderscoreValid()
             {
-                string message = _actionCatalog.BuildMessage("valid $parameter_Name", new[] { "parameter" });
+                var message = _actionCatalog.BuildMessage("valid $parameter_Name", new[] { "parameter" });
                 Assert.AreEqual("valid parameter", message);
             }
 
             [Test]
-            public void Should_not_consider_parameter_name_as_valid_if_it_starts_with_a_number()
+            public void ShouldNotConsiderParameterNameAsValidIfItStartsWithANumber()
             {
-                string message = _actionCatalog.BuildMessage("valid $1parameter1Name2", new[] { "parameter" });
+                var message = _actionCatalog.BuildMessage("valid $1parameter1Name2", new[] { "parameter" });
                 Assert.AreEqual("valid $1parameter1Name2", message);
             }
 
             [Test]
-            public void Should_not_consider_space_as_part_of_parameter_name()
+            public void ShouldNotConsiderSpaceAsPartOfParameterName()
             {
-                string message = _actionCatalog.BuildMessage("valid $parameterName it is", new[] { "parameter" });
+                var message = _actionCatalog.BuildMessage("valid $parameterName it is", new[] { "parameter" });
                 Assert.AreEqual("valid parameter it is", message);
             }
 
             [Test]
-            public void Should_consider_parameter_name_enclosed_in_square_brackets_as_valid()
+            public void ShouldConsiderParameterNameEnclosedInSquareBracketsAsValid()
             {
-                string message = _actionCatalog.BuildMessage("valid [parameter1Name2]", new[] { "parameter" });
+                var message = _actionCatalog.BuildMessage("valid [parameter1Name2]", new[] { "parameter" });
                 Assert.AreEqual("valid parameter", message);
             }
 
             [Test]
-            public void Should_be_able_to_embedd_a_parameter_inside_non_alphabetic_characters()
+            public void ShouldBeAbleToEmbeddAParameterInsideNonAlphabeticCharacters()
             {
-                string message = _actionCatalog.BuildMessage("I should see a message, \"$message\"", new[] { "Hello, Morgan" });
+                var message = _actionCatalog.BuildMessage("I should see a message, \"$message\"", new[] { "Hello, Morgan" });
                 Assert.AreEqual("I should see a message, \"Hello, Morgan\"", message);
             }
         }
 
         [TestFixture]
-        public class when_adding_an_action_to_the_catalog : ActionCatalogSpec
+        public class WhenAddingAnActionToTheCatalog : ActionCatalogSpec
         {
             [Test]
-            public void should_consider_the_2_actions_as_equal()
+            public void ShouldConsiderThe2ActionsAsEqual()
             {
                 var catalog = new ActionCatalog();
-                catalog.Add("my savings account balance is $balance", new object(), GetDummyParameterInfo());
-                bool actionExists = catalog.ActionExists("my savings account balance is 500");
+
+                var action = new ActionMethodInfo(
+                    "my savings account balance is $balance".AsRegex(), 
+                    new object(), 
+                    GetDummyParameterInfo(), 
+                    null);
+                
+                catalog.Add(action);
+                var actionExists = catalog.ActionExists("my savings account balance is 500");
 
                 Assert.That(actionExists, Is.True);
             }
 
             [Test]
-            public void should_consider_all_whitespace_as_equal()
+            public void ShouldConsiderAllWhitespaceAsEqual()
             {
                 var catalog = new ActionCatalog();
 
-                catalog.Add("my savings account\nbalance is $balance", new object(), GetDummyParameterInfo());
-                bool actionExists = catalog.ActionExists("my\tsavings account balance is 500");
+                var action = new ActionMethodInfo(
+                    "my savings account\nbalance is $balance".AsRegex(),
+                    new object(),
+                    GetDummyParameterInfo(),
+                    null);
+
+                catalog.Add(action);
+                var actionExists = catalog.ActionExists("my\tsavings account balance is 500");
 
                 Assert.That(actionExists, Is.True);
             }
 
             [Test]
-            public void should_get_action()
+            public void ShouldGetAction()
             {
                 var catalog = new ActionCatalog();
 
-                catalog.Add("my savings account balance is $balance", new object(), GetDummyParameterInfo());
-                ActionMethodInfo action = catalog.GetAction(new ActionStepText("my savings account balance is 500", ""));
+                var action = new ActionMethodInfo(
+                    "my savings account balance is $balance".AsRegex(),
+                    new object(),
+                    GetDummyParameterInfo(),
+                    null);
 
-                Assert.That(action, Is.Not.Null);
+                catalog.Add(action);
+
+                var actionResult = catalog.GetAction(new ActionStepText("my savings account balance is 500", ""));
+
+                Assert.That(actionResult, Is.Not.Null);
             }
 
             [Test]
-            public void should_get_action_with_token_in_middle_of_string()
+            public void ShouldGetActionWithTokenInMiddleOfString()
             {
                 var catalog = new ActionCatalog();
                 Action<int> action = accountBalance => { };
-                catalog.Add("I have $amount euros on my cash account", action, GetDummyParameterInfo());
-                ActionMethodInfo actionFetched = catalog.GetAction(new ActionStepText("I have 20 euros on my cash account", ""));
+
+                var actionMethodInfo = new ActionMethodInfo(
+                    "I have $amount euros on my cash account".AsRegex(),
+                    action,
+                    action.Method,
+                    null);
+
+                catalog.Add(actionMethodInfo);
+
+                var actionFetched = catalog.GetAction(new ActionStepText("I have 20 euros on my cash account", ""));
 
                 Assert.That(actionFetched, Is.Not.Null);
             }
         }
 
         [TestFixture]
-        public class When_two_actions_match_the_same_text_step : ActionCatalogSpec
+        public class WhenTwoActionsMatchTheSameTextStep : ActionCatalogSpec
         {
             private ActionCatalog _actionCatalog;
             private bool _wasCalled;
 
             [SetUp]
-            public void Establish_context()
+            public void EstablishContext()
             {
                 _wasCalled = false;
                 _actionCatalog = new ActionCatalog();
@@ -138,17 +164,17 @@ namespace NBehave.Narrator.Framework.Specifications
                 _actionCatalog.Add(secondActionMethod);
             }
 
-            private void Because_of()
+            private void BecauseOf()
             {
                 var actionText = new ActionStepText("abc def", "somestory.story");
-                ActionMethodInfo action = _actionCatalog.GetAction(actionText);
+                var action = _actionCatalog.GetAction(actionText);
                 (action.Action as Action).Invoke();
             }
 
             [Test]
-            public void Should_call_greediest_matching_action()
+            public void ShouldCallGreediestMatchingAction()
             {
-                Because_of();
+                BecauseOf();
                 Assert.That(_wasCalled, Is.True);
             }
         }

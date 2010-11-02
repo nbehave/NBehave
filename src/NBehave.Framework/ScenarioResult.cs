@@ -45,7 +45,7 @@ namespace NBehave.Narrator.Framework
 
         protected void MergeResult(ActionStepResult actionStepResult)
         {
-            Result newResult = actionStepResult.Result;
+            var newResult = actionStepResult.Result;
             if (newResult.GetType() == typeof(Failed))
             {
                 _result = newResult;
@@ -90,7 +90,7 @@ namespace NBehave.Narrator.Framework
             var sb = new StringBuilder();
             sb.AppendFormat("{0} : {1}", exception.GetType(), exception.Message);
 
-            Exception inner = exception.InnerException;
+            var inner = exception.InnerException;
             while (inner != null)
             {
                 sb.AppendLine();
@@ -105,7 +105,7 @@ namespace NBehave.Narrator.Framework
         {
             var builder = new StringBuilder(exception.StackTrace);
 
-            Exception inner = exception.InnerException;
+            var inner = exception.InnerException;
             while (inner != null)
             {
                 builder.AppendLine();

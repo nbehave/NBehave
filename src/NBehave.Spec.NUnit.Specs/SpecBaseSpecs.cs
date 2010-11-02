@@ -1,67 +1,67 @@
 ﻿using NBehave.Spec.NUnit;
+using NUnit.Framework;
 using Rhino.Mocks;
-using Context = NUnit.Framework.TestFixtureAttribute;
 
 namespace NUnit.SpecBase_Specifications
 {
-    [Context]
-    public class When_initializing_the_SpecBase : SpecBase<StopWatch>
-    {
-        protected override StopWatch Establish_context()
-        {
-            return new StopWatch();
-        }
+	[TestFixture]
+	public class When_initializing_the_SpecBase : SpecBase<StopWatch>
+	{
+		protected override StopWatch Establish_context()
+		{
+			return new StopWatch();
+		}
 
-        protected override void Because_of()
-        {
-        }
+		protected override void Because_of()
+		{
+		}
 
-        [Specification]
-        public void should_populate_the_SUT_before_starting_the_specification()
-        {
-            Sut.ShouldNotBeNull();
-        }
-    }
+		[Test]
+		public void should_populate_the_SUT_before_starting_the_specification()
+		{
+			Sut.ShouldNotBeNull();
+		}
+	}
 
-    [Context]
-    public class When_using_the_setup_methods_in_non_generic_specs : SpecBase
-    {
-        private static int _estContextCount;
-        private static int _becauseOfCount;
-        private static int _cleanupCount;
+	[TestFixture]
+	public class When_using_the_setup_methods_in_non_generic_specs : SpecBase
+	{
+		private static int _estContextCount;
+		private static int _becauseOfCount;
+		private static int _cleanupCount;
 
-        protected override void Establish_context()
-        {
+		protected override void Establish_context()
+		{
 			_estContextCount++;
-        }
+		}
 
 		protected override void Because_of()
 		{
 			_becauseOfCount++;
 		}
 
-        protected override void Cleanup()
-        {
-            _cleanupCount++;
-            _estContextCount.ShouldEqual(1);
+		protected override void Cleanup()
+		{
+			_cleanupCount++;
+			_estContextCount.ShouldEqual(1);
 			_becauseOfCount.ShouldEqual(1);
-            _cleanupCount.ShouldEqual(1);
-        }
+			_cleanupCount.ShouldEqual(1);
+		}
 
-        [Specification]
-        public void dummy_test_1()
-        {
-        }
+		[Test]
+		public void dummy_test_1()
+		{
+		}
 
-        [Specification]
-        public void dummy_test_2()
-        {
-        }
-    }
+		[Test]
+		public void dummy_test_2()
+		{
+		}
+	}
 
-    [Context]
-    public class When_using_the_setup_methods_in_generic_specs : SpecBase<object>
-    {
+	[TestFixture]
+	public class When_using_the_setup_methods_in_generic_specs : SpecBase<object>
+	{
 		private static int _estContextCount;
 		private static int _becauseOfCount;
 		private static int _cleanupCount;
@@ -85,65 +85,65 @@ namespace NUnit.SpecBase_Specifications
 			_cleanupCount.ShouldEqual(1);
 		}
 
-		[Specification]
+		[Test]
 		public void dummy_test_1()
 		{
 		}
 
-		[Specification]
+		[Test]
 		public void dummy_test_2()
 		{
 		}
 	}
 
-    [Context]
-    public class When_initializing_the_SpecBase_with_mocks : SpecBase<StopWatch>
-    {
-        private ITimer _timer;
+	[TestFixture]
+	public class When_initializing_the_SpecBase_with_mocks : SpecBase<StopWatch>
+	{
+		private ITimer _timer;
 
-        protected override StopWatch Establish_context()
-        {
-            _timer = CreateDependency<ITimer>();
+		protected override StopWatch Establish_context()
+		{
+			_timer = CreateDependency<ITimer>();
 
-            _timer.Stub(x => x.Start(null)).IgnoreArguments().Return(true);
+			_timer.Stub(x => x.Start(null)).IgnoreArguments().Return(true);
 
-            return new StopWatch(_timer);
-        }
+			return new StopWatch(_timer);
+		}
 
-        protected override void Because_of()
-        {
-            Sut.Start();
-        }
+		protected override void Because_of()
+		{
+			Sut.Start();
+		}
 
-        [Specification]
-        public void should_call_the_before_each_spec_before_starting_the_specification()
-        {
-            _timer.AssertWasCalled(x => x.Start(null), opt => opt.IgnoreArguments());
-        }
-    }
+		[Test]
+		public void should_call_the_before_each_spec_before_starting_the_specification()
+		{
+			_timer.AssertWasCalled(x => x.Start(null), opt => opt.IgnoreArguments());
+		}
+	}
 
-    public class StopWatch
-    {
-        private readonly ITimer _timer;
+	public class StopWatch
+	{
+		private readonly ITimer _timer;
 
-        public StopWatch()
-        {
-        }
+		public StopWatch()
+		{
+		}
 
-        public StopWatch(ITimer timer)
-        {
-            _timer = timer;
-        }
+		public StopWatch(ITimer timer)
+		{
+			_timer = timer;
+		}
 
-        public void Start()
-        {
-            _timer.Start("");
-        }
-    }
+		public void Start()
+		{
+			_timer.Start("");
+		}
+	}
 
-    public interface ITimer
-    {
-        bool Start(string reason);
-        void Start();
-    }
+	public interface ITimer
+	{
+		bool Start(string reason);
+		void Start();
+	}
 }

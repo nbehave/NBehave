@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 using Microsoft.Win32;
 using NUnit.Framework;
-using System.IO;
 using Rhino.Mocks;
 using TestPlainTextAssembly;
-
 
 namespace NBehave.MSBuild.Tests
 {
@@ -26,7 +25,7 @@ namespace NBehave.MSBuild.Tests
                                                     Environment.Version.Build);
             
 
-            string msbuild = Path.Combine(
+            var msbuild = Path.Combine(
                                     Path.Combine((string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\.NETFramework", "InstallRoot", string.Empty),
                                     msbuildFolder),
                                 "MSBuild.exe");
@@ -38,11 +37,11 @@ namespace NBehave.MSBuild.Tests
                 process.StartInfo.UseShellExecute = false;
                 process.StartInfo.RedirectStandardOutput = true;
                 process.Start();
-                using (StreamReader sr = process.StandardOutput)
+                using (var sr = process.StandardOutput)
                 {
                     process.WaitForExit();
 
-                    string result = sr.ReadToEnd();
+                    var result = sr.ReadToEnd();
                     StringAssert.Contains("Scenarios run: 1, Failures: 0, Pending: 0", result);
                 }
             }

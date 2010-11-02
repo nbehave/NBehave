@@ -1,6 +1,7 @@
 using System.IO;
 using System.Text;
 using NBehave.Narrator.Framework.EventListeners;
+using NBehave.Narrator.Framework.Specifications.Features;
 using NUnit.Framework;
 
 namespace NBehave.Narrator.Framework.Specifications.EventListeners
@@ -8,7 +9,6 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
     [TestFixture]
     public class CodeGenEventListenerSpec
     {
-        private string _feature;
         private string _output;
 
         [SetUp]
@@ -18,40 +18,34 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
             IEventListener listener = new CodeGenEventListener(output);
             var runner = new TextRunner(listener);
             runner.LoadAssembly(GetType().Assembly);
-            runner.Load(_feature.ToStream());
+            runner.Load(new[] { TestFeatures.FeaturesAndScenarios });
             runner.Run();
             _output = output.ToString();
         }
 
-        public class When_running_with_codegen : CodeGenEventListenerSpec
+        public class WhenRunningWithCodegen : CodeGenEventListenerSpec
         {
-            public override void SetUp()
-            {
-                _feature = XmlOutputEventListenerTestData.Feature;
-                base.SetUp();
-            }
-
             [Test]
-            public void Should_generate_code_for_step_Given_something_pending()
+            public void ShouldGenerateCodeForStepGivenSomethingPending()
             {
                 StringAssert.Contains(@"[Given(""something pending"")]", _output);
             }
 
             [Test]
-            public void Should_NOT_generate_code_for_step_Given_something_pending()
+            public void ShouldNotGenerateCodeForStepGivenSomethingPending()
             {
                 StringAssert.DoesNotContain(@"[Given(""something"")]", _output);
             }
 
             [Test]
-            public void Should_generate_code_for_step_pending_And_as_Given()
+            public void ShouldGenerateCodeForStepPendingAndAsGiven()
             {
                 StringAssert.DoesNotContain(@"[And(""", _output);
                 StringAssert.Contains(@"[Given(""something more pending"")]", _output);
             }
 
             [Test]
-            public void Should_generate_code_for_step_pending_And_as_When()
+            public void ShouldGenerateCodeForStepPendingAndAsWhen()
             {
                 StringAssert.DoesNotContain(@"[And(""", _output);
                 StringAssert.Contains(@"[When(""some more pending event occurs"")]", _output);

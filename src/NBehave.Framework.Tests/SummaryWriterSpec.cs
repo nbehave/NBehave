@@ -7,13 +7,13 @@ namespace NBehave.Narrator.Framework.Specifications
 	[TestFixture]
 	public class SummaryWriterSpec
 	{
-        private SummaryWriter _output;
+		private SummaryWriter _output;
 		private TextWriter _writer;
 		[SetUp]
-		public void Establish_context()
+		public void EstablishContext()
 		{
 			_writer = new StringWriter();
-            _output = new SummaryWriter(_writer);
+			_output = new SummaryWriter(_writer);
 			var results = new FeatureResults();
 			var feature = new Feature("feature title");
 			var scenarioResult = new ScenarioResult(feature, "scenario title");
@@ -27,19 +27,19 @@ namespace NBehave.Narrator.Framework.Specifications
 		}
 		
 		[Test]
-		public void Should_write_number_of_actionsteps_in_summary()
+		public void ShouldWriteNumberOfActionstepsInSummary()
 		{
 			Assert.That(_writer.ToString(),Is.StringContaining("Steps 4"));
 		}
 		
 		[Test]
-		public void Should_write_number_of_failed_actionsteps_in_summary()
+		public void ShouldWriteNumberOfFailedActionstepsInSummary()
 		{
 			Assert.That(_writer.ToString(),Is.StringContaining("failed 1"));
 		}
 		
 		[Test]
-		public void Should_write_number_of_pending_actionsteps_in_summary()
+		public void ShouldWriteNumberOfPendingActionstepsInSummary()
 		{
 			Assert.That(_writer.ToString(),Is.StringContaining("pending 1"));
 		}

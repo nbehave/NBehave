@@ -46,14 +46,14 @@ namespace NBehave.NAnt
 
             WriteHeaderInto(output);
 
-            IEventListener listener = EventListeners.CreateEventListenerUsing(nantLogWriter,
+            var listener = EventListeners.CreateEventListenerUsing(nantLogWriter,
                                                                               TextOutputFile,
                                                                               XmlOutputFile);
 
             var runner = new TextRunner(listener) { IsDryRun = DryRun };
             runner.Load(GetFileNames(ScenarioFiles));
             LoadAssemblies(runner);
-            FeatureResults results = runner.Run();
+            var results = runner.Run();
 
             if (DryRun)
                 return;
@@ -64,7 +64,7 @@ namespace NBehave.NAnt
 
         private void LoadAssemblies(RunnerBase runner)
         {
-            foreach (string path in TestAssemblies.FileNames)
+            foreach (var path in TestAssemblies.FileNames)
                 runner.LoadAssembly(path);
         }
 
@@ -89,7 +89,7 @@ namespace NBehave.NAnt
             if (results.NumberOfFailingScenarios == 0) return;
 
             var exceptionMessage = new StringBuilder();
-            foreach (ScenarioResult result in results.ScenarioResults)
+            foreach (var result in results.ScenarioResults)
             {
                 exceptionMessage.AppendLine(result.Message);
                 exceptionMessage.AppendLine(result.StackTrace);

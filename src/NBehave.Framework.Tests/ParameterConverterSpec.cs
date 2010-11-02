@@ -13,100 +13,101 @@ namespace NBehave.Narrator.Framework.Specifications
         private ActionCatalog _actionCatalog;
 
         [SetUp]
-        public void Establish_context()
+        public void EstablishContext()
         {
             _actionCatalog = new ActionCatalog();
             _parameterConverter = new ParameterConverter(_actionCatalog);
         }
 
         [TestFixture]
-        public class When_fetching_parameters_for_actionStep : ParameterConverterSpec
+        public class WhenFetchingParametersForActionStep : ParameterConverterSpec
         {
             [Test]
-            public void should_get_parameter_for_action_with_token_in_middle_of_string()
+            public void ShouldGetParameterForActionWithTokenInMiddleOfString()
             {
                 Action<int> action = accountBalance => { };
-                _actionCatalog.Add("I have $amount euros on my cash account", action, action.Method);
-                object[] values = _parameterConverter.GetParametersForActionStepText(new ActionStepText("I have 20 euros on my cash account", ""));
+
+                _actionCatalog.Add(new ActionMethodInfo("I have $amount euros on my cash account".AsRegex(), action, action.Method, null));
+                var values = _parameterConverter.GetParametersForActionStepText(new ActionStepText("I have 20 euros on my cash account", ""));
 
                 Assert.That(values.Length, Is.EqualTo(1));
                 Assert.That(values[0].GetType(), Is.EqualTo(typeof(int)));
             }
 
             [Test]
-            public void should_get_parameter_for_action_if_token_has_newlines()
+            public void ShouldGetParameterForActionIfTokenHasNewlines()
             {
                 Action<string> action = someAction => { };
-                _actionCatalog.Add("I have a board like this\n$board", action, action.Method);
-                object[] values = _parameterConverter.GetParametersForActionStepText(new ActionStepText("I have a board like this\nxo \n x \no x", ""));
+                _actionCatalog.Add(new ActionMethodInfo("I have a board like this\n$board".AsRegex(), action, action.Method, null));
+                var values = _parameterConverter.GetParametersForActionStepText(new ActionStepText("I have a board like this\nxo \n x \no x", ""));
 
                 Assert.That(values.Length, Is.EqualTo(1));
                 Assert.That(values[0], Is.EqualTo("xo \n x \no x"));
             }
 
             [Test]
-            public void should_get_parameters_for_message_with_action_registered_twice()
+            public void ShouldGetParametersForMessageWithActionRegisteredTwice()
             {
                 Action<string> action = someAction => { };
-                _actionCatalog.Add("Given $value something", action, action.Method);
-                _actionCatalog.Add("And $value something", action, action.Method);
-                object[] givenValue = _parameterConverter.GetParametersForActionStepText(new ActionStepText("Given 20 something", ""));
-                object[] andValue = _parameterConverter.GetParametersForActionStepText(new ActionStepText("And 20 something", ""));
+                _actionCatalog.Add(new ActionMethodInfo("Given $value something".AsRegex(), action, action.Method, null));
+                _actionCatalog.Add(new ActionMethodInfo("And $value something".AsRegex(), action, action.Method, null));
+                var givenValue = _parameterConverter.GetParametersForActionStepText(new ActionStepText("Given 20 something", ""));
+                var andValue = _parameterConverter.GetParametersForActionStepText(new ActionStepText("And 20 something", ""));
 
                 Assert.That(givenValue.Length, Is.EqualTo(1));
                 Assert.That(andValue.Length, Is.EqualTo(1));
             }
 
             [Test]
-            public void should_get_parameters_for_message_with_a_negative_parameter()
+            public void ShouldGetParametersForMessageWithANegativeParameter()
             {
                 Action<string> action = someAction => { };
-                _actionCatalog.Add("Given $value something", action, action.Method);
-                object[] givenValue = _parameterConverter.GetParametersForActionStepText(new ActionStepText("Given -20 something", ""));
+                _actionCatalog.Add(new ActionMethodInfo("Given $value something".AsRegex(), action, action.Method, null));
+                var givenValue = _parameterConverter.GetParametersForActionStepText(new ActionStepText("Given -20 something", ""));
 
                 Assert.That(givenValue.Length, Is.EqualTo(1));
                 Assert.That(givenValue.First(), Is.EqualTo("-20"));
             }
 
             [Test]
-            public void Should_get_int_parameter()
+            public void ShouldGetIntParameter()
             {
                 Action<int> action = value => { };
                 _actionCatalog.Add(new ActionMethodInfo(new Regex(@"an int (?<value>\d+)"), action, action.Method, "Given"));
-                object[] values = _parameterConverter.GetParametersForActionStepText(new ActionStepText("an int 42", ""));
+                var values = _parameterConverter.GetParametersForActionStepText(new ActionStepText("an int 42", ""));
                 Assert.That(values[0], Is.TypeOf(typeof(int)));
             }
 
             [Test]
-            public void Should_get_decimal_parameter()
+            public void ShouldGetDecimalParameter()
             {
                 Action<decimal> action = value => { };
                 _actionCatalog.Add(new ActionMethodInfo(new Regex(@"a decimal (?<value>\d+)"), action, action.Method, "Given"));
-                object[] values = _parameterConverter.GetParametersForActionStepText(new ActionStepText("a decimal 42", ""));
+                var values = _parameterConverter.GetParametersForActionStepText(new ActionStepText("a decimal 42", ""));
                 Assert.That(values[0], Is.TypeOf(typeof(decimal)));
             }
 
             [Test]
-            public void Should_get_multiline_value_as_string()
+            public void ShouldGetMultilineValueAsString()
             {
                 Action<object> action = value => { };
                 _actionCatalog.Add(new ActionMethodInfo(new Regex(@"a string\s+(?<value>(\w+\s+)*)"), action, action.Method, "Given"));
-                string multiLineValue = "one" + Environment.NewLine + "two";
-                string actionString = "a string " + multiLineValue;
-                object[] values = _parameterConverter.GetParametersForActionStepText(new ActionStepText(actionString, ""));
+                var multiLineValue = "one" + Environment.NewLine + "two";
+                var actionString = "a string " + multiLineValue;
+                var values = _parameterConverter.GetParametersForActionStepText(new ActionStepText(actionString, ""));
                 Assert.That(values[0], Is.TypeOf(typeof(string)));
             }
 
             [Test]
-            public void Should_get_multiline_value_as_array_of_strings()
+            public void ShouldGetMultilineValueAsArrayOfStrings()
             {
-                object paramReceived = null;
+//                object paramReceived = null;
                 Action<string[]> actionStep = p => { };
-                Action<object> action = value => { paramReceived = value; };
-                _actionCatalog.Add(new ActionMethodInfo(new Regex(@"a string\s+(?<value>(\w+,?\s*)+)"), action, actionStep.Method, "Given"));
-                string multiLineValue = "one, two";
-                string actionString = "a string " + Environment.NewLine + multiLineValue;
-                object[] values = _parameterConverter.GetParametersForActionStepText(new ActionStepText(actionString, ""));
+//                Action<object> action = value => { paramReceived = value; };
+                _actionCatalog.Add(new ActionMethodInfo(new Regex(@"a string\s+(?<value>(\w+,?\s*)+)"), actionStep, actionStep.Method, "Given"));
+                const string multiLineValue = "one, two";
+                var actionString = "a string " + Environment.NewLine + multiLineValue;
+                var values = _parameterConverter.GetParametersForActionStepText(new ActionStepText(actionString, ""));
                 Assert.That(values[0], Is.TypeOf(typeof(string[])));
                 var arr = (string[])values[0];
                 Assert.AreEqual("one", arr[0]);
@@ -114,56 +115,56 @@ namespace NBehave.Narrator.Framework.Specifications
             }
 
             [Test]
-            public void Should_remove_empty_entries_at_end_of_array_values()
+            public void ShouldRemoveEmptyEntriesAtEndOfArrayValues()
             {
                 Action<string[]> action = value => { };
 
                 _actionCatalog.Add(new ActionMethodInfo(new Regex(@"a string\s+(?<value>(\w+,?\s*)+)"), action, action.Method, "Given"));
-                string multiLineValue = "one,two," + Environment.NewLine;
-                string actionString = "a string " + Environment.NewLine + multiLineValue;
-                object[] values = _parameterConverter.GetParametersForActionStepText(new ActionStepText(actionString, ""));
+                var multiLineValue = "one,two," + Environment.NewLine;
+                var actionString = "a string " + Environment.NewLine + multiLineValue;
+                var values = _parameterConverter.GetParametersForActionStepText(new ActionStepText(actionString, ""));
                 Assert.That((values[0] as string[]), Is.EqualTo(new[] { "one", "two" }));
             }
 
             [Test]
-            public void Should_get_multiline_value_as_array_of_integers()
+            public void ShouldGetMultilineValueAsArrayOfIntegers()
             {
-                Should_get_multiline_value_as_generic_collection_of_integers<int[]>();
+                ShouldGetMultilineValueAsGenericCollectionOfIntegers<int[]>();
             }
 
             [Test]
-            public void Should_get_multiline_value_as_generic_IEnumerable_of_integers()
+            public void ShouldGetMultilineValueAsGenericIEnumerableOfIntegers()
             {
-                Should_get_multiline_value_as_generic_collection_of_integers<IEnumerable<int>>();
+                ShouldGetMultilineValueAsGenericCollectionOfIntegers<IEnumerable<int>>();
             }
 
             [Test]
-            public void Should_get_multiline_value_as_generic_ICollection_of_integers()
+            public void ShouldGetMultilineValueAsGenericICollectionOfIntegers()
             {
-                Should_get_multiline_value_as_generic_collection_of_integers<ICollection<int>>();
+                ShouldGetMultilineValueAsGenericCollectionOfIntegers<ICollection<int>>();
             }
 
             [Test]
-            public void Should_get_multiline_value_as_generic_IList_of_integers()
+            public void ShouldGetMultilineValueAsGenericIListOfIntegers()
             {
-                Should_get_multiline_value_as_generic_collection_of_integers<IList<int>>();
+                ShouldGetMultilineValueAsGenericCollectionOfIntegers<IList<int>>();
             }
 
             [Test]
-            public void Should_get_multiline_value_as_generic_List_of_integers()
+            public void ShouldGetMultilineValueAsGenericListOfIntegers()
             {
-                Should_get_multiline_value_as_generic_collection_of_integers<List<int>>();
+                ShouldGetMultilineValueAsGenericCollectionOfIntegers<List<int>>();
             }
 
-            public void Should_get_multiline_value_as_generic_collection_of_integers<T>() where T : IEnumerable<int>
+            public void ShouldGetMultilineValueAsGenericCollectionOfIntegers<T>() where T : IEnumerable<int>
             {
-                object paramReceived = null;
+//                object paramReceived = null;
                 Action<T> actionStep = p => { };
-                Action<object> action = value => { paramReceived = value; };
-                _actionCatalog.Add(new ActionMethodInfo(new Regex(@"a list of integers (?<value>(\d+,?\s*)+)"), action, actionStep.Method, "Given"));
-                string multiLineValue = "1, 2, 5";
-                string actionString = "a list of integers " + multiLineValue;
-                object[] values = _parameterConverter.GetParametersForActionStepText(new ActionStepText(actionString, ""));
+//                Action<object> action = value => { paramReceived = value; };
+                _actionCatalog.Add(new ActionMethodInfo(new Regex(@"a list of integers (?<value>(\d+,?\s*)+)"), actionStep, actionStep.Method, "Given"));
+                const string multiLineValue = "1, 2, 5";
+                const string actionString = "a list of integers " + multiLineValue;
+                var values = _parameterConverter.GetParametersForActionStepText(new ActionStepText(actionString, ""));
                 Assert.That(values[0], Is.AssignableTo(typeof(T)));
                 var arr = (T)values[0];
                 Assert.AreEqual(1, arr.First());
@@ -173,15 +174,15 @@ namespace NBehave.Narrator.Framework.Specifications
         }
 
         [TestFixture]
-        public class When_fetching_parameters_with_row_value : ParameterConverterSpec
+        public class WhenFetchingParametersWithRowValue : ParameterConverterSpec
         {
             [Test]
-            public void should_get_parameter_for_action_with_token_in_middle_of_string()
+            public void ShouldGetParameterForActionWithTokenInMiddleOfString()
             {
                 Action<string> action = name => { };
-                _actionCatalog.Add("I have a name", action, action.Method);
-                Row row = new Row(new ExampleColumns(new[] { "name" }), new Dictionary<string, string> { { "name", "Morgan" } });
-                object[] values = _parameterConverter.GetParametersForActionStepText(new ActionStepText("I have a name", ""), row);
+                _actionCatalog.Add(new ActionMethodInfo("I have a name".AsRegex(), action, action.Method, null));
+                var row = new Row(new ExampleColumns(new[] { "name" }), new Dictionary<string, string> { { "name", "Morgan" } });
+                var values = _parameterConverter.GetParametersForActionStepText(new ActionStepText("I have a name", ""), row);
 
                 Assert.That(values.Length, Is.EqualTo(1));
                 Assert.That(values[0].GetType(), Is.EqualTo(typeof(string)));

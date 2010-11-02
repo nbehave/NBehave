@@ -16,8 +16,8 @@ namespace NBehave.Spec
         public Action ResolveStep(ScenarioFragment currentScenarioStage, ActionStepText actionStep)
         {
             var methodName = currentScenarioStage + "_" + actionStep.Step.Replace(' ', '_');
-            Type storyType = _methodProvider.GetType();
-            MethodInfo method = storyType.GetMethod(methodName, BindingFlags.FlattenHierarchy | BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public,
+            var storyType = _methodProvider.GetType();
+            var method = storyType.GetMethod(methodName, BindingFlags.FlattenHierarchy | BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public,
                                                     null, Type.EmptyTypes, null);
             if (method != null)
             {

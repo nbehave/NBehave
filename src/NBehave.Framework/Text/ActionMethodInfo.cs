@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
@@ -45,9 +46,9 @@ namespace NBehave.Narrator.Framework
         public List<string> GetParameterNames()
         {
             var names = new List<string>();
-            int index = 0;
-            string name = ".";
-            Regex regex = ActionStepMatcher;
+            var index = 0;
+            var name = ".";
+            var regex = ActionStepMatcher;
             while (string.IsNullOrEmpty(name) == false)
             {
                 name = regex.GroupNameFromNumber(index);
@@ -65,12 +66,9 @@ namespace NBehave.Narrator.Framework
 
         private MethodInfo LocateNotificationMethod(Type notificationType)
         {
-            foreach (var m in MethodInfo.DeclaringType.GetMethods())
-            {
-                if (m.GetCustomAttributes(notificationType, true).Length > 0)
-                    return m;
-            }
-            return null;
+            return MethodInfo.DeclaringType
+                    .GetMethods()
+                    .FirstOrDefault(m => m.GetCustomAttributes(notificationType, true).Length > 0);
         }
 
         public void ExecuteNotificationMethod(Type notificationType)

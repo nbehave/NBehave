@@ -6,8 +6,7 @@ namespace NBehave.Narrator.Framework
     {
         protected IStringStepRunner StringStepRunner { get; private set; }
 
-        public StringStep(string step, string fromFile, IStringStepRunner stringStepRunner)
-            : base(step, fromFile)
+        public StringStep(string step, string fromFile, IStringStepRunner stringStepRunner) : base(step, fromFile)
         {
             StringStepRunner = stringStepRunner;
         }

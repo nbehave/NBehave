@@ -10,15 +10,11 @@ namespace NBehave.VS2010.Plugin.Configuration
     [Export(typeof (IComponentInitialiser))]
     internal class MenuCommandInitialiser : IComponentInitialiser
     {
-        private readonly IServiceProvider _serviceProvider;
-        private readonly IVisualStudioService _visualStudioService;
+        [Import]
+        public IServiceProvider ServiceProvider { get; set; }
 
-        [ImportingConstructor]
-        public MenuCommandInitialiser(IServiceProvider serviceProvider, IVisualStudioService visualStudioService)
-        {
-            _serviceProvider = serviceProvider;
-            _visualStudioService = visualStudioService;
-        }
+        [Import]
+        public IVisualStudioService VisualStudioService { get; set; }
 
         [Import(AllowRecomposition = true)]
         public IOutputWindow OutputWindow { get; set; }
@@ -27,7 +23,7 @@ namespace NBehave.VS2010.Plugin.Configuration
 
         public void Initialise()
         {
-            var mcs = _serviceProvider.GetService(typeof (IMenuCommandService)) as OleMenuCommandService;
+            var mcs = ServiceProvider.GetService(typeof (IMenuCommandService)) as OleMenuCommandService;
             if (mcs == null) return;
             
             var menuCommandId = new CommandID((Identifiers.CommandGroupGuid), (int) Identifiers.RunCommandId);
@@ -55,7 +51,7 @@ namespace NBehave.VS2010.Plugin.Configuration
         {
             try
             {
-                var runner = new ScenarioRunner(OutputWindow, _visualStudioService);
+                var runner = new ScenarioRunner(OutputWindow, VisualStudioService);
                 runner.Run(debug);
             }
             catch (Exception exception)

@@ -1,7 +1,8 @@
 using System;
 using NBehave.Narrator.Framework;
-using NBehave.Spec.Xunit;
 using NBehave.Spec.Extensions;
+using NBehave.Spec.Xunit;
+using NUnit.Framework;
 
 namespace Xunit.SpecBase_Specifications
 {
@@ -16,13 +17,13 @@ namespace Xunit.SpecBase_Specifications
                 .SoThat("I can specify behaviour through scenarios");
         }
 
-        [Specification]
+        [Test]
         public void should_populate_the_feature_narrative()
         {
             Assert.Equal("As a developer, I want to specify a feature so that I can specify behaviour through scenarios", Feature.Narrative);
         }
 
-        [Specification]
+        [Test]
         public void should_execute_scenarios_implemented_inline()
         {
             string detail1 = null;
@@ -34,7 +35,7 @@ namespace Xunit.SpecBase_Specifications
                 .And("the implementation from When should be called", () => Assert.NotNull(detail2));
         }
 
-        [Specification]
+        [Test]
         public void should_call_notification_events_before_executing_inline_implementation()
         {
             string lastLoggedScenario = null;

@@ -10,7 +10,7 @@ namespace NBehave.Console.Tests
         {
             string[] args = { "foo.dll" };
             var options = new ConsoleOptions(args);
-            bool result = options.Validate();
+            var result = options.Validate();
             Assert.That(result, Is.False);
         }
     }

@@ -30,7 +30,7 @@ namespace NBehave.Narrator.Framework
             {
                 if (ActionCatalog.ActionExists(actionStepToUse) == false)
                 {
-                    string pendReason = string.Format("No matching Action found for \"{0}\"", actionStep);
+                    var pendReason = string.Format("No matching Action found for \"{0}\"", actionStep);
                     result = new ActionStepResult(actionStep.Step, new Pending(pendReason));
                 }
                 else
@@ -43,7 +43,7 @@ namespace NBehave.Narrator.Framework
             }
             catch (Exception e)
             {
-                Exception realException = FindUsefulException(e);
+                var realException = FindUsefulException(e);
                 result = new ActionStepResult(actionStep.Step, new Failed(realException));
             }
             return result;
@@ -69,7 +69,7 @@ namespace NBehave.Narrator.Framework
 
         private Type GetActionType(object action)
         {
-            Type actionType = action.GetType().IsGenericType
+            var actionType = action.GetType().IsGenericType
                 ? action.GetType().GetGenericTypeDefinition()
                 : action.GetType();
             return actionType;
@@ -104,9 +104,9 @@ namespace NBehave.Narrator.Framework
 
         private void RunStep(ActionMethodInfo info, Func<object[]> getParametersForActionStepText)
         {
-            Type actionType = GetActionType(info.Action);
-            MethodInfo methodInfo = actionType.GetMethod("DynamicInvoke");
-            object[] actionParamValues = getParametersForActionStepText();
+            var actionType = GetActionType(info.Action);
+            var methodInfo = actionType.GetMethod("DynamicInvoke");
+            var actionParamValues = getParametersForActionStepText();
             methodInfo.Invoke(info.Action, BindingFlags.InvokeMethod, null,
                               new object[] { actionParamValues }, CultureInfo.CurrentCulture);
         }
@@ -132,7 +132,7 @@ namespace NBehave.Narrator.Framework
 
         private Exception FindUsefulException(Exception e)
         {
-            Exception realException = e;
+            var realException = e;
             while (realException != null && realException.GetType() == typeof(TargetInvocationException))
             {
                 realException = realException.InnerException;

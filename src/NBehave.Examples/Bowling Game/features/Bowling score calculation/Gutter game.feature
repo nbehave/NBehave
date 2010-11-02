@@ -1,4 +1,6 @@
-﻿Scenario: All in the gutter
+﻿Feature: A Game of Bowling
+
+Scenario: All in the gutter
 
 	Given a game of bowling
 	When all my 20 rolls are 0

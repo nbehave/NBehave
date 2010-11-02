@@ -1,11 +1,8 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
-using NBehave.Narrator.Framework.EventListeners;
 using NUnit.Framework;
-using Rhino.Mocks;
-using Specification = NUnit.Framework.TestAttribute;
 
 
 namespace NBehave.Narrator.Framework.Specifications
@@ -30,10 +27,10 @@ namespace NBehave.Narrator.Framework.Specifications
             _runner = new ScenarioStepRunner();
         }
 
-        public class When_running_a_scenario : ScenarioStepRunnerSpec
+        public class WhenRunningAScenario : ScenarioStepRunnerSpec
         {
             [Test]
-            public void Should_have_result_for_each_step()
+            public void ShouldHaveResultForEachStep()
             {
                 Action<string> action = name => Assert.AreEqual("Morgan", name);
                 _actionCatalog.Add(new ActionMethodInfo(new Regex(@"my name is (?<name>\w+)"), action, action.Method, "Given"));
@@ -47,7 +44,7 @@ namespace NBehave.Narrator.Framework.Specifications
             }
 
             [Test]
-            public void Should_have_different_result_for_each_step()
+            public void ShouldHaveDifferentResultForEachStep()
             {
                 Action<string> action = name => Assert.AreEqual("Morgan", name);
                 _actionCatalog.Add(new ActionMethodInfo(new Regex(@"my name is (?<name>\w+)"), action, action.Method, "Given"));
@@ -64,7 +61,7 @@ namespace NBehave.Narrator.Framework.Specifications
         }
 
         [ActionSteps, TestFixture]
-        public class When_running_many_scenarios_and_class_with_actionSteps_implements_notification_attributes : ScenarioStepRunnerSpec
+        public class WhenRunningManyScenariosAndClassWithActionStepsImplementsNotificationAttributes : ScenarioStepRunnerSpec
         {
             private int _timesBeforeScenarioWasCalled;
             private int _timesBeforeStepWasCalled;
@@ -72,7 +69,7 @@ namespace NBehave.Narrator.Framework.Specifications
             private int _timesAfterScenarioWasCalled;
 
             [Given(@"something$")]
-            public void Given_something()
+            public void GivenSomething()
             { }
 
             [BeforeScenario]
@@ -102,8 +99,8 @@ namespace NBehave.Narrator.Framework.Specifications
             [TestFixtureSetUp]
             public void Setup()
             {
-                base.SetUp();
-                Action action = Given_something;
+                SetUp();
+                Action action = GivenSomething;
                 _actionCatalog.Add(new ActionMethodInfo(new Regex(@"something to count$"), action, action.Method, "Given", this));
 
                 var firstScenario = CreateScenarioWithSteps();
@@ -118,26 +115,26 @@ namespace NBehave.Narrator.Framework.Specifications
                 _runner.Run(new List<ScenarioWithSteps> { firstScenario, secondScenario });
             }
 
-            [Specification]
-            public void should_Call_before_Scenario_once_per_scenario()
+            [Test]
+            public void ShouldCallBeforeScenarioOncePerScenario()
             {
                 Assert.That(_timesBeforeScenarioWasCalled, Is.EqualTo(2));
             }
 
-            [Specification]
-            public void should_Call_after_Scenario_once_per_scenario()
+            [Test]
+            public void ShouldCallAfterScenarioOncePerScenario()
             {
                 Assert.That(_timesAfterScenarioWasCalled, Is.EqualTo(2));
             }
 
-            [Specification]
-            public void should_Call_before_step_once_per_step()
+            [Test]
+            public void ShouldCallBeforeStepOncePerStep()
             {
                 Assert.That(_timesBeforeStepWasCalled, Is.EqualTo(3));
             }
 
-            [Specification]
-            public void should_call_after_step_once_per_step()
+            [Test]
+            public void ShouldCallAfterStepOncePerStep()
             {
                 Assert.That(_timesAfterStepWasCalled, Is.EqualTo(3));
             }

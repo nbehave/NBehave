@@ -29,13 +29,13 @@
 // Gert Lombard (gert@codeblast.com)
 // James Newkirk (jim@nunit.org)
 
+using System;
+using System.Collections;
+using System.Reflection;
+using System.Text;
+
 namespace Codeblast
 {
-    using System;
-    using System.Reflection;
-    using System.Collections;
-    using System.Text;
-
     //
     // The Attributes
     //
@@ -90,11 +90,11 @@ namespace Codeblast
 
         public int Init(string[] args)
         {
-            int count = 0;
-            int n = 0;
+            var count = 0;
+            var n = 0;
             while (n < args.Length)
             {
-                int pos = IsOption(args[n]);
+                var pos = IsOption(args[n]);
                 if (pos > 0)
                 {
                     // It's an option:
@@ -146,7 +146,7 @@ namespace Codeblast
 
         protected virtual bool MatchShortName(FieldInfo field, string name)
         {
-            object[] atts = field.GetCustomAttributes(typeof(OptionAttribute), true);
+            var atts = field.GetCustomAttributes(typeof(OptionAttribute), true);
             foreach (OptionAttribute att in atts)
             {
                 if (string.Compare(att.Short, name, true) == 0) return true;
@@ -156,9 +156,9 @@ namespace Codeblast
 
         protected virtual FieldInfo GetMemberField(string name)
         {
-            Type t = GetType();
-            FieldInfo[] fields = t.GetFields(BindingFlags.Instance | BindingFlags.Public);
-            foreach (FieldInfo field in fields)
+            var t = GetType();
+            var fields = t.GetFields(BindingFlags.Instance | BindingFlags.Public);
+            foreach (var field in fields)
             {
                 if (string.Compare(field.Name, name, true) == 0) return field;
                 if (MatchShortName(field, name)) return field;
@@ -168,7 +168,7 @@ namespace Codeblast
 
         protected virtual object GetOptionValue(FieldInfo field)
         {
-            object[] atts = field.GetCustomAttributes(typeof(OptionAttribute), true);
+            var atts = field.GetCustomAttributes(typeof(OptionAttribute), true);
             if (atts.Length > 0)
             {
                 var att = (OptionAttribute)atts[0];
@@ -182,12 +182,12 @@ namespace Codeblast
             try
             {
                 object cmdLineVal = null;
-                string opt = args[index].Substring(pos, args[index].Length - pos);
+                var opt = args[index].Substring(pos, args[index].Length - pos);
                 SplitOptionAndValue(ref opt, ref cmdLineVal);
-                FieldInfo field = GetMemberField(opt);
+                var field = GetMemberField(opt);
                 if (field != null)
                 {
-                    object value = GetOptionValue(field);
+                    var value = GetOptionValue(field);
                     if (value == null)
                     {
                         if (field.FieldType == typeof(bool))
@@ -218,7 +218,7 @@ namespace Codeblast
         protected virtual void SplitOptionAndValue(ref string opt, ref object val)
         {
             // Look for ":" or "=" separator in the option:
-            int pos = opt.IndexOfAny(new[] { ':', '=' });
+            var pos = opt.IndexOfAny(new[] { ':', '=' });
             if (pos < 1) return;
 
             val = opt.Substring(pos + 1);
@@ -257,17 +257,17 @@ namespace Codeblast
         {
             var helpText = new StringBuilder();
 
-            Type t = GetType();
-            FieldInfo[] fields = t.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-            foreach (FieldInfo field in fields)
+            var t = GetType();
+            var fields = t.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            foreach (var field in fields)
             {
-                object[] atts = field.GetCustomAttributes(typeof(OptionAttribute), true);
+                var atts = field.GetCustomAttributes(typeof(OptionAttribute), true);
                 if (atts.Length > 0)
                 {
                     var att = (OptionAttribute)atts[0];
                     if (att.Description != null)
                     {
-                        string valType = "";
+                        var valType = string.Empty;
                         if (att.Value == null)
                         {
                             if (field.FieldType == typeof(float)) valType = "=FLOAT";

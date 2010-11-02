@@ -9,22 +9,16 @@ namespace NBehave.VS2010.Plugin.Configuration
     [Export(typeof (IComponentInitialiser))]
     internal class OutputWindowInitialiser : IComponentInitialiser
     {
-        private readonly IServiceProvider _serviceProvider;
-
-        [ImportingConstructor]
-        public OutputWindowInitialiser(IServiceProvider serviceProvider)
-        {
-            _serviceProvider = serviceProvider;
-        }
+        [Import]
+        public IServiceProvider ServiceProvider { get; set; }
 
         [Export(typeof (IOutputWindow))]
         public IOutputWindow OutputWindow { get; set; }
 
-        #region IComponentInitialiser Members
 
         public void Initialise()
         {
-            var pane = (IVsOutputWindow) _serviceProvider.GetService(typeof (SVsOutputWindow));
+            var pane = (IVsOutputWindow) ServiceProvider.GetService(typeof (SVsOutputWindow));
 
             var myGuidList = Guid.NewGuid();
             pane.CreatePane(myGuidList, "Scenario Results", 1, 1);
@@ -33,8 +27,10 @@ namespace NBehave.VS2010.Plugin.Configuration
             pane.GetPane(myGuidList, out outputWindowPane);
 
             OutputWindow = new OutputWindow(outputWindowPane);
+
+//            var serviceContainer = _serviceProvider as IServiceContainer;
+//            serviceContainer.AddService(typeof(IOutputWindow), OutputWindow);
         }
 
-        #endregion
     }
 }

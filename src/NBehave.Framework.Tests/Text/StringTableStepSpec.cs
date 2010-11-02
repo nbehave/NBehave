@@ -8,7 +8,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
     [TestFixture]
     public class StringTableStepSpec
     {
-        public class When_running_step_with_table : StringTableStepSpec
+        public class WhenRunningStepWithTable : StringTableStepSpec
         {
             private ActionStepResult _actionStepResult;
             private IStringStepRunner _stringStepRunner;
@@ -21,7 +21,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             {
                 _names = new List<string>();
                 _actionCatalog = new ActionCatalog();
-                Action<string> action = name => { _names.Add(name); }; //Depending on the parametername of the action
+                Action<string> action = name => _names.Add(name); //Depending on the parametername of the action
                 var stringStep = new Regex("I have a  list of names:");
                 var actionMethodInfo = new ActionMethodInfo(stringStep, action, action.Method, "Given");
                 _actionCatalog.Add(actionMethodInfo);
@@ -39,19 +39,19 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             }
 
             [Test]
-            public void Step_should_pass()
+            public void StepShouldPass()
             {
                 Assert.That(_actionStepResult.Result, Is.TypeOf(typeof(Passed)));
             }
 
             [Test]
-            public void Should_call_step_three_times()
+            public void ShouldCallStepThreeTimes()
             {
                 Assert.That(_names.Count, Is.EqualTo(3));
             }
 
             [Test]
-            public void List_of_users_should_contain_Jimmy_Nilsson_from_sweden()
+            public void ListOfUsersShouldContainJimmyNilssonFromSweden()
             {
                 CollectionAssert.Contains(_names, "Jimmy Nilsson");
             }

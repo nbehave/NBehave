@@ -43,9 +43,9 @@ namespace NBehave.Spec
 
         public ActionStepResult Run(ActionStepText actionStep)
         {
-            string stepText = actionStep.Step;
+            var stepText = actionStep.Step;
 
-            Action stepImplementation = _resolvers.Select(resolver => resolver.ResolveStep(CurrentScenarioStage, actionStep))
+            var stepImplementation = _resolvers.Select(resolver => resolver.ResolveStep(CurrentScenarioStage, actionStep))
                                                   .Where(action => action != null)
                                                   .FirstOrDefault();
             if (stepImplementation == null)
@@ -60,7 +60,7 @@ namespace NBehave.Spec
             }
             catch (Exception ex)
             {
-                Exception realException = FindUsefulException(ex);
+                var realException = FindUsefulException(ex);
                 return new ActionStepResult(stepText, new Failed(realException));
             }
         }
@@ -72,7 +72,7 @@ namespace NBehave.Spec
 
         public void OnCloseScenario()
         {
-            Action closeAction = _resolvers.Select(resolver => resolver.ResolveOnCloseScenario())
+            var closeAction = _resolvers.Select(resolver => resolver.ResolveOnCloseScenario())
                                                   .Where(action => action != null)
                                                   .FirstOrDefault();
             if (closeAction != null)
@@ -81,7 +81,7 @@ namespace NBehave.Spec
 
         public void BeforeScenario()
         {
-            Action beforeAction = _resolvers.Select(resolver => resolver.ResolveOnBeforeScenario())
+            var beforeAction = _resolvers.Select(resolver => resolver.ResolveOnBeforeScenario())
                                                   .Where(action => action != null)
                                                   .FirstOrDefault();
             if (beforeAction != null)
@@ -90,7 +90,7 @@ namespace NBehave.Spec
 
         public void AfterScenario()
         {
-            Action afterAction = _resolvers.Select(resolver => resolver.ResolveOnAfterScenario())
+            var afterAction = _resolvers.Select(resolver => resolver.ResolveOnAfterScenario())
                                                   .Where(action => action != null)
                                                   .FirstOrDefault();
             if (afterAction != null)
@@ -99,7 +99,7 @@ namespace NBehave.Spec
 
         private Exception FindUsefulException(Exception e)
         {
-            Exception realException = e;
+            var realException = e;
             while (realException != null && realException.GetType() == typeof(TargetInvocationException))
             {
                 realException = realException.InnerException;

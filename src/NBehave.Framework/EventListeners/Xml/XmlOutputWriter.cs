@@ -23,7 +23,7 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
                        select e).First();
 
             Writer.WriteStartElement("results");
-            string[] assemblyString = typeof(XmlOutputEventListener).AssemblyQualifiedName.Split(new[] { ',' });
+            var assemblyString = typeof(XmlOutputEventListener).AssemblyQualifiedName.Split(new[] { ',' });
             Writer.WriteAttributeString("name", assemblyString[1]);
             Writer.WriteAttributeString("version", assemblyString[2]);
             Writer.WriteAttributeString("date", evt.Time.ToShortDateString());
@@ -44,7 +44,7 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
         public void DoTheme(EventReceived evt)
         {
             var events = EventsOf(evt, EventType.ThemeFinished);
-            string themeTitle = evt.Message;
+            var themeTitle = evt.Message;
             WriteStartElement("theme", themeTitle, events.Last().Time.Subtract(events.First().Time));
             Writer.WriteAttributeString("stories", events.Where(e => e.EventType == EventType.FeatureCreated).Count().ToString());
             Writer.WriteAttributeString("scenarios", events.Where(e => e.EventType == EventType.ScenarioCreated).Count().ToString());
@@ -60,9 +60,9 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
         public void DoStory(string theme, EventReceived evt)
         {
             var events = EventsOf(evt, EventType.FeatureCreated);
-            string featureTitle = evt.Message;
+            var featureTitle = evt.Message;
             WriteStartElement("story", featureTitle, events.Last().Time.Subtract(events.First().Time));
-            IEnumerable<ScenarioResult> scenarioResultsForFeature = GetScenarioResultsForFeature(featureTitle, events);
+            var scenarioResultsForFeature = GetScenarioResultsForFeature(featureTitle, events);
 
             WriteStoryDataAttributes(scenarioResultsForFeature);
             WriteStoryNarrative(events);
@@ -97,10 +97,10 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
 
         void WriteStoryDataAttributes(IEnumerable<ScenarioResult> scenarioResultsForFeature)
         {
-            int totalScenariosFailed = (from f in scenarioResultsForFeature
+            var totalScenariosFailed = (from f in scenarioResultsForFeature
                                         where f.Result.GetType() == typeof(Failed)
                                         select f).Count();
-            int totalScenariosPending = (from f in scenarioResultsForFeature
+            var totalScenariosPending = (from f in scenarioResultsForFeature
                                          where f.Result.GetType() == typeof(Pending)
                                          select f).Count();
             Writer.WriteAttributeString("scenarios", scenarioResultsForFeature.Count().ToString());
@@ -152,7 +152,7 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
             Writer.WriteEndElement();
 
             var scenarioResults = scenarioExampleResult.ExampleResults.ToArray();
-            int idx = 0;
+            var idx = 0;
             foreach (var example in scenarioExampleResult.Examples)
             {
                 Writer.WriteStartElement("example");
@@ -184,7 +184,7 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
             var actionSteps = from e in EventsOf(evt, EventType.ScenarioResult)
                               where e.EventType == EventType.ScenarioCreated
                               select e;
-            foreach (EventReceived step in actionSteps)
+            foreach (var step in actionSteps)
                 scenarioResult.AddActionStepResult(new ActionStepResult(step.Message, new Pending(scenarioResult.Message)));
         }
 
@@ -261,8 +261,8 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
 
         private List<EventReceived> EventsOf(EventReceived startEvent, EventType endWithEvent)
         {
-            int idxStart = EventsReceived.IndexOf(startEvent);
-            int idxEnd = idxStart;
+            var idxStart = EventsReceived.IndexOf(startEvent);
+            var idxEnd = idxStart;
             var events = new List<EventReceived>();
             do
             {
@@ -288,7 +288,7 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
                                 where e.EventType == EventType.ScenarioResult
                                 select e as ScenarioResultEventReceived);
             var eventsToUse = events.Where(e => e.EventType == EventType.ScenarioCreated);
-            IEnumerable<ScenarioResult> sr = from s in storyResults
+            var sr = from s in storyResults
                                              where HasScenario(eventsToUse, s.ScenarioResult.ScenarioTitle)
                                              && scenarioResult(s.ScenarioResult.Result)
                                              select s.ScenarioResult;
