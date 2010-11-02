@@ -1,4 +1,4 @@
-﻿Scenario One Strike
+﻿Scenario: One Strike
 
 	Given a game of bowling
 	When I roll one strike

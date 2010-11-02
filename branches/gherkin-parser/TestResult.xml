@@ -1,0 +1,509 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!--This file represents the results of running a test suite-->
+<test-results name="C:\projects\nbehave\build\Debug-3.5\UnitTests\NBehave.Narrator.Framework.Specifications.dll" total="229" errors="0" failures="0" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2010-10-24" time="23:46:33">
+  <environment nunit-version="2.5.7.10213" clr-version="2.0.50727.4952" os-version="Microsoft Windows NT 6.1.7600.0" platform="Win32NT" cwd="C:\projects\nbehave" machine-name="KHEDAN" user="naeem.khedarun" user-domain="khedan" />
+  <culture-info current-culture="en-GB" current-uiculture="en-US" />
+  <test-suite type="Assembly" name="C:\projects\nbehave\build\Debug-3.5\UnitTests\NBehave.Narrator.Framework.Specifications.dll" executed="True" result="Success" success="True" time="1.450" asserts="0">
+    <results>
+      <test-suite type="Namespace" name="NBehave" executed="True" result="Success" success="True" time="1.447" asserts="0">
+        <results>
+          <test-suite type="Namespace" name="Narrator" executed="True" result="Success" success="True" time="1.416" asserts="0">
+            <results>
+              <test-suite type="Namespace" name="Framework" executed="True" result="Success" success="True" time="1.386" asserts="0">
+                <results>
+                  <test-suite type="Namespace" name="Specifications" executed="True" result="Success" success="True" time="1.385" asserts="0">
+                    <results>
+                      <test-suite type="TestFixture" name="ActionCatalogSpec" executed="True" result="Inconclusive" success="False" time="0.003" asserts="0" />
+                      <test-suite type="TestFixture" name="ActionCatalogSpec+ValidParameterNames" executed="True" result="Success" success="True" time="0.022" asserts="0">
+                        <results>
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ActionCatalogSpec+ValidParameterNames.ShouldBeAbleToEmbeddAParameterInsideNonAlphabeticCharacters" executed="True" result="Success" success="True" time="0.013" asserts="1" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ActionCatalogSpec+ValidParameterNames.ShouldConsiderAnyCharacterInEnglishAlphabetAsValid" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ActionCatalogSpec+ValidParameterNames.ShouldConsiderAnyCharacterInEnglishAlphabetMixedWithNumbersAsValid" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ActionCatalogSpec+ValidParameterNames.ShouldConsiderAnyCharacterInEnglishAlphabetMixedWithUnderscoreValid" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ActionCatalogSpec+ValidParameterNames.ShouldConsiderParameterNameEnclosedInSquareBracketsAsValid" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ActionCatalogSpec+ValidParameterNames.ShouldNotConsiderParameterNameAsValidIfItStartsWithANumber" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ActionCatalogSpec+ValidParameterNames.ShouldNotConsiderSpaceAsPartOfParameterName" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                        </results>
+                      </test-suite>
+                      <test-suite type="TestFixture" name="ActionCatalogSpec+WhenAddingAnActionToTheCatalog" executed="True" result="Success" success="True" time="0.012" asserts="0">
+                        <results>
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ActionCatalogSpec+WhenAddingAnActionToTheCatalog.ShouldConsiderAllWhitespaceAsEqual" executed="True" result="Success" success="True" time="0.005" asserts="1" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ActionCatalogSpec+WhenAddingAnActionToTheCatalog.ShouldConsiderThe2ActionsAsEqual" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ActionCatalogSpec+WhenAddingAnActionToTheCatalog.ShouldGetAction" executed="True" result="Success" success="True" time="0.005" asserts="1" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ActionCatalogSpec+WhenAddingAnActionToTheCatalog.ShouldGetActionWithTokenInMiddleOfString" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                        </results>
+                      </test-suite>
+                      <test-suite type="TestFixture" name="ActionCatalogSpec+WhenTwoActionsMatchTheSameTextStep" executed="True" result="Success" success="True" time="0.002" asserts="0">
+                        <results>
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ActionCatalogSpec+WhenTwoActionsMatchTheSameTextStep.ShouldCallGreediestMatchingAction" executed="True" result="Success" success="True" time="0.002" asserts="1" />
+                        </results>
+                      </test-suite>
+                      <test-suite type="TestFixture" name="ActionStepCodeGeneratorSpec" executed="True" result="Inconclusive" success="False" time="0.000" asserts="0" />
+                      <test-suite type="TestFixture" name="ActionStepCodeGeneratorSpec+WhenAddingAMethodMoreThanOneParameter" executed="True" result="Success" success="True" time="0.033" asserts="0">
+                        <results>
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ActionStepCodeGeneratorSpec+WhenAddingAMethodMoreThanOneParameter.MethodShouldHaveActionStepAttributeWithParameter" executed="True" result="Success" success="True" time="0.031" asserts="1" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ActionStepCodeGeneratorSpec+WhenAddingAMethodMoreThanOneParameter.MethodShouldHaveName" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                        </results>
+                      </test-suite>
+                      <test-suite type="TestFixture" name="ActionStepCodeGeneratorSpec+WhenAddingAMethodThatStartWithAnd" executed="True" result="Success" success="True" time="0.002" asserts="0">
+                        <results>
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ActionStepCodeGeneratorSpec+WhenAddingAMethodThatStartWithAnd.MethodShouldHaveActionStepAttribute" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ActionStepCodeGeneratorSpec+WhenAddingAMethodThatStartWithAnd.MethodShouldHaveName" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ActionStepCodeGeneratorSpec+WhenAddingAMethodThatStartWithAnd.ShouldCreateMethod" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                        </results>
+                      </test-suite>
+                      <test-suite type="TestFixture" name="ActionStepCodeGeneratorSpec+WhenAddingAMethodWithAApostrofInStep" executed="True" result="Success" success="True" time="0.001" asserts="0">
+                        <results>
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ActionStepCodeGeneratorSpec+WhenAddingAMethodWithAApostrofInStep.MethodShouldHaveActionStepAttributeWithNoParameters" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ActionStepCodeGeneratorSpec+WhenAddingAMethodWithAApostrofInStep.MethodShouldHaveName" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                        </results>
+                      </test-suite>
+                      <test-suite type="TestFixture" name="ActionStepCodeGeneratorSpec+WhenAddingAMethodWithAnIntegerParameter" executed="True" result="Success" success="True" time="0.001" asserts="0">
+                        <results>
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ActionStepCodeGeneratorSpec+WhenAddingAMethodWithAnIntegerParameter.MethodShouldHaveActionStepAttributeWithParameter" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ActionStepCodeGeneratorSpec+WhenAddingAMethodWithAnIntegerParameter.MethodShouldHaveValidName" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                        </results>
+                      </test-suite>
+                      <test-suite type="TestFixture" name="ActionStepCodeGeneratorSpec+WhenAddingAMethodWithAStringParameter" executed="True" result="Success" success="True" time="0.001" asserts="0">
+                        <results>
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ActionStepCodeGeneratorSpec+WhenAddingAMethodWithAStringParameter.MethodShouldHaveActionStepAttributeWithParameter" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ActionStepCodeGeneratorSpec+WhenAddingAMethodWithAStringParameter.MethodShouldHaveName" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                        </results>
+                      </test-suite>
+                      <test-suite type="TestFixture" name="ActionStepCodeGeneratorSpec+WhenAddingAMethodWithNoParameters" executed="True" result="Success" success="True" time="0.004" asserts="0">
+                        <results>
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ActionStepCodeGeneratorSpec+WhenAddingAMethodWithNoParameters.MethodShouldHaveActionStepAttribute" executed="True" result="Success" success="True" time="0.003" asserts="1" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ActionStepCodeGeneratorSpec+WhenAddingAMethodWithNoParameters.MethodShouldHaveName" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ActionStepCodeGeneratorSpec+WhenAddingAMethodWithNoParameters.ShouldCreateMethod" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                        </results>
+                      </test-suite>
+                      <test-suite type="TestFixture" name="ActionStepFileLoaderSpec" executed="True" result="Success" success="True" time="0.103" asserts="0">
+                        <results>
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ActionStepFileLoaderSpec.ShouldBeAbleToUseRelativePathsWithDots" executed="True" result="Success" success="True" time="0.003" asserts="1" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ActionStepFileLoaderSpec.ShouldHaveSourceSetOnStep" executed="True" result="Success" success="True" time="0.096" asserts="2" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ActionStepFileLoaderSpec.ShouldTreatEachFileAsAStory" executed="True" result="Success" success="True" time="0.004" asserts="1" />
+                        </results>
+                      </test-suite>
+                      <test-suite type="TestFixture" name="ActionStepParserSpec" executed="True" result="Inconclusive" success="False" time="0.001" asserts="0" />
+                      <test-suite type="TestFixture" name="ActionStepParserSpec+WhenClassWithActionStepsAttributeImplementsIMatchFiles" executed="True" result="Success" success="True" time="0.022" asserts="0">
+                        <results>
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ActionStepParserSpec+WhenClassWithActionStepsAttributeImplementsIMatchFiles.ShouldCallIsMatchOnInterfaceWithCorrectFileName" executed="True" result="Success" success="True" time="0.016" asserts="1" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ActionStepParserSpec+WhenClassWithActionStepsAttributeImplementsIMatchFiles.ShouldMatchFilename" executed="True" result="Success" success="True" time="0.006" asserts="1" />
+                        </results>
+                      </test-suite>
+                      <test-suite type="TestFixture" name="ActionStepParserSpec+WhenHavingActionStepAttributeMultipleTimesOnSameMethod" executed="True" result="Success" success="True" time="0.011" asserts="0">
+                        <results>
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ActionStepParserSpec+WhenHavingActionStepAttributeMultipleTimesOnSameMethod.ShouldFindActionUsingFirstActionStepAttributeMatch" executed="True" result="Success" success="True" time="0.005" asserts="1" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ActionStepParserSpec+WhenHavingActionStepAttributeMultipleTimesOnSameMethod.ShouldFindActionUsingSecondActionStepAttributeMatch" executed="True" result="Success" success="True" time="0.005" asserts="1" />
+                        </results>
+                      </test-suite>
+                      <test-suite type="TestFixture" name="ActionStepParserSpec+WhenHavingActionStepAttributeOnAbstractClass" executed="True" result="Success" success="True" time="0.004" asserts="0">
+                        <results>
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ActionStepParserSpec+WhenHavingActionStepAttributeOnAbstractClass.ShouldFindActionUsingFirstActionStepAttributeMatch" executed="True" result="Success" success="True" time="0.004" asserts="1" />
+                        </results>
+                      </test-suite>
+                      <test-suite type="TestFixture" name="ActionStepParserSpec+WhenHavingActionStepAttributeWithoutTokenString" executed="True" result="Success" success="True" time="0.016" asserts="0">
+                        <results>
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ActionStepParserSpec+WhenHavingActionStepAttributeWithoutTokenString.ShouldFindGivenStepWithGivenAttribute" executed="True" result="Success" success="True" time="0.005" asserts="2" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ActionStepParserSpec+WhenHavingActionStepAttributeWithoutTokenString.ShouldFindThenStepWithThenAttribute" executed="True" result="Success" success="True" time="0.005" asserts="2" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ActionStepParserSpec+WhenHavingActionStepAttributeWithoutTokenString.ShouldFindWhenStepWithWhenAttribute" executed="True" result="Success" success="True" time="0.005" asserts="2" />
+                        </results>
+                      </test-suite>
+                      <test-suite type="TestFixture" name="ActionStepParserSpec+WhenHavingActionStepAttributeWithTokenString" executed="True" result="Success" success="True" time="0.032" asserts="0">
+                        <results>
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ActionStepParserSpec+WhenHavingActionStepAttributeWithTokenString.ShouldFindGivenStepWithGivenAttribute" executed="True" result="Success" success="True" time="0.006" asserts="2" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ActionStepParserSpec+WhenHavingActionStepAttributeWithTokenString.ShouldFindGivenWithEmbeddedParam" executed="True" result="Success" success="True" time="0.009" asserts="1" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ActionStepParserSpec+WhenHavingActionStepAttributeWithTokenString.ShouldMatchParametersInTokenStringToMethodParameters" executed="True" result="Success" success="True" time="0.005" asserts="3" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ActionStepParserSpec+WhenHavingActionStepAttributeWithTokenString.ShouldMatchShortTextAgainstTheRestrictedLengthParameter" executed="True" result="Success" success="True" time="0.005" asserts="1" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ActionStepParserSpec+WhenHavingActionStepAttributeWithTokenString.ShouldNotMatchLongTextAgainstTheRestrictedLengthParameter" executed="True" result="Success" success="True" time="0.005" asserts="1" />
+                        </results>
+                      </test-suite>
+                      <test-suite type="Namespace" name="EventListeners" executed="True" result="Success" success="True" time="0.745" asserts="0">
+                        <results>
+                          <test-suite type="TestFixture" name="CodeGenEventListenerSpec" executed="True" result="Inconclusive" success="False" time="0.000" asserts="0" />
+                          <test-suite type="TestFixture" name="CodeGenEventListenerSpec+WhenRunningWithCodegen" executed="True" result="Success" success="True" time="0.085" asserts="0">
+                            <results>
+                              <test-case name="NBehave.Narrator.Framework.Specifications.EventListeners.CodeGenEventListenerSpec+WhenRunningWithCodegen.ShouldGenerateCodeForStepGivenSomethingPending" executed="True" result="Success" success="True" time="0.048" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.EventListeners.CodeGenEventListenerSpec+WhenRunningWithCodegen.ShouldGenerateCodeForStepPendingAndAsGiven" executed="True" result="Success" success="True" time="0.012" asserts="2" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.EventListeners.CodeGenEventListenerSpec+WhenRunningWithCodegen.ShouldGenerateCodeForStepPendingAndAsWhen" executed="True" result="Success" success="True" time="0.012" asserts="2" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.EventListeners.CodeGenEventListenerSpec+WhenRunningWithCodegen.ShouldNotGenerateCodeForStepGivenSomethingPending" executed="True" result="Success" success="True" time="0.012" asserts="1" />
+                            </results>
+                          </test-suite>
+                          <test-suite type="TestFixture" name="MultiOutputEventListenerSpec" executed="True" result="Success" success="True" time="0.227" asserts="0">
+                            <results>
+                              <test-case name="NBehave.Narrator.Framework.Specifications.EventListeners.MultiOutputEventListenerSpec.ShouldInvokeMethodOnAllSpecifiedListeners" executed="True" result="Success" success="True" time="0.227" asserts="0" />
+                            </results>
+                          </test-suite>
+                          <test-suite type="TestFixture" name="XmlOutputEventListenerSpec+WhenCreatingXmlForScenarioWithExamples" executed="True" result="Success" success="True" time="0.151" asserts="0">
+                            <results>
+                              <test-case name="NBehave.Narrator.Framework.Specifications.EventListeners.XmlOutputEventListenerSpec+WhenCreatingXmlForScenarioWithExamples.ScenarioNodeShouldHaveActionStepSubnodes" executed="True" result="Success" success="True" time="0.124" asserts="5" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.EventListeners.XmlOutputEventListenerSpec+WhenCreatingXmlForScenarioWithExamples.ScenarioNodeShouldHaveExampleNodes" executed="True" result="Success" success="True" time="0.008" asserts="2" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.EventListeners.XmlOutputEventListenerSpec+WhenCreatingXmlForScenarioWithExamples.ShouldHaveOneScenario" executed="True" result="Success" success="True" time="0.009" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.EventListeners.XmlOutputEventListenerSpec+WhenCreatingXmlForScenarioWithExamples.ShouldHaveXmlInTheSpecifiedXmlWriter" executed="True" result="Success" success="True" time="0.009" asserts="1" />
+                            </results>
+                          </test-suite>
+                          <test-suite type="TestFixture" name="XmlOutputEventListenerSpec+WhenRunningWithXmlListener" executed="True" result="Success" success="True" time="0.247" asserts="0">
+                            <results>
+                              <test-case name="NBehave.Narrator.Framework.Specifications.EventListeners.XmlOutputEventListenerSpec+WhenRunningWithXmlListener.ResultsNodeHouldHaveNameAttribute" executed="True" result="Success" success="True" time="0.011" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.EventListeners.XmlOutputEventListenerSpec+WhenRunningWithXmlListener.ResultsNodeShouldHaveDateAndTimeAttributes" executed="True" result="Success" success="True" time="0.011" asserts="2" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.EventListeners.XmlOutputEventListenerSpec+WhenRunningWithXmlListener.ResultsNodeShouldHaveOneTheme" executed="True" result="Success" success="True" time="0.011" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.EventListeners.XmlOutputEventListenerSpec+WhenRunningWithXmlListener.ResultsNodeShouldHaveVersionAttribute" executed="True" result="Success" success="True" time="0.011" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.EventListeners.XmlOutputEventListenerSpec+WhenRunningWithXmlListener.ScenarioNodeShouldHaveActionStepSubnodes" executed="True" result="Success" success="True" time="0.015" asserts="2" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.EventListeners.XmlOutputEventListenerSpec+WhenRunningWithXmlListener.ShouldHaveFailureChildNodeInFailedActionStep" executed="True" result="Success" success="True" time="0.012" asserts="2" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.EventListeners.XmlOutputEventListenerSpec+WhenRunningWithXmlListener.ShouldHaveLinebreaksBetweenNodes" executed="True" result="Success" success="True" time="0.049" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.EventListeners.XmlOutputEventListenerSpec+WhenRunningWithXmlListener.ShouldHaveScenariosInResultsNode" executed="True" result="Success" success="True" time="0.011" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.EventListeners.XmlOutputEventListenerSpec+WhenRunningWithXmlListener.ShouldHaveXmlInTheSpecifiedXmlWriter" executed="True" result="Success" success="True" time="0.011" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.EventListeners.XmlOutputEventListenerSpec+WhenRunningWithXmlListener.StoryNodeShouldHaveANameAttribute" executed="True" result="Success" success="True" time="0.013" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.EventListeners.XmlOutputEventListenerSpec+WhenRunningWithXmlListener.StoryNodeShouldHaveOneScenarioNodePerScenarioInStory" executed="True" result="Success" success="True" time="0.012" asserts="2" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.EventListeners.XmlOutputEventListenerSpec+WhenRunningWithXmlListener.StoryNodeShouldHaveSummary" executed="True" result="Success" success="True" time="0.011" asserts="3" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.EventListeners.XmlOutputEventListenerSpec+WhenRunningWithXmlListener.StoryShouldHaveANarrativeChildElement" executed="True" result="Success" success="True" time="0.013" asserts="2" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.EventListeners.XmlOutputEventListenerSpec+WhenRunningWithXmlListener.ThemeNodeShouldHaveOneFailedScenarios" executed="True" result="Success" success="True" time="0.011" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.EventListeners.XmlOutputEventListenerSpec+WhenRunningWithXmlListener.ThemeNodeShouldHaveOnePendingScenarios" executed="True" result="Success" success="True" time="0.011" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.EventListeners.XmlOutputEventListenerSpec+WhenRunningWithXmlListener.ThemeNodesShouldContainAttributeAboutExecutionTime" executed="True" result="Success" success="True" time="0.013" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.EventListeners.XmlOutputEventListenerSpec+WhenRunningWithXmlListener.ThemeT1ShouldHaveSixScenarios" executed="True" result="Success" success="True" time="0.012" asserts="1" />
+                            </results>
+                          </test-suite>
+                          <test-suite type="TestFixture" name="XmlOutputWriterSpec+ActionStepNode" executed="True" result="Success" success="True" time="0.007" asserts="0">
+                            <results>
+                              <test-case name="NBehave.Narrator.Framework.Specifications.EventListeners.XmlOutputWriterSpec+ActionStepNode.NodeShouldHaveNameAttribute" executed="True" result="Success" success="True" time="0.002" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.EventListeners.XmlOutputWriterSpec+ActionStepNode.NodeShouldHaveOutcome" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.EventListeners.XmlOutputWriterSpec+ActionStepNode.ShouldHaveActionStepNode" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                            </results>
+                          </test-suite>
+                          <test-suite type="TestFixture" name="XmlOutputWriterSpec+ScenarioNode" executed="True" result="Success" success="True" time="0.003" asserts="0">
+                            <results>
+                              <test-case name="NBehave.Narrator.Framework.Specifications.EventListeners.XmlOutputWriterSpec+ScenarioNode.NodeShouldHaveNameAttribute" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.EventListeners.XmlOutputWriterSpec+ScenarioNode.NodeShouldHaveOutcome" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.EventListeners.XmlOutputWriterSpec+ScenarioNode.NodeShouldHaveTimeAttribute" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.EventListeners.XmlOutputWriterSpec+ScenarioNode.ShouldHaveScenarioNode" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                            </results>
+                          </test-suite>
+                          <test-suite type="TestFixture" name="XmlOutputWriterSpec+StoryNode" executed="True" result="Success" success="True" time="0.003" asserts="0">
+                            <results>
+                              <test-case name="NBehave.Narrator.Framework.Specifications.EventListeners.XmlOutputWriterSpec+StoryNode.NodeShouldHaveNameAttribute" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.EventListeners.XmlOutputWriterSpec+StoryNode.NodeShouldHaveScenarioCountAttributes" executed="True" result="Success" success="True" time="0.001" asserts="3" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.EventListeners.XmlOutputWriterSpec+StoryNode.NodeShouldHaveScenariosSubnode" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.EventListeners.XmlOutputWriterSpec+StoryNode.NodeShouldHaveTimeAttribute" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.EventListeners.XmlOutputWriterSpec+StoryNode.ShouldHaveStoryNode" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                            </results>
+                          </test-suite>
+                          <test-suite type="TestFixture" name="XmlOutputWriterSpec+ThemeNode" executed="True" result="Success" success="True" time="0.007" asserts="0">
+                            <results>
+                              <test-case name="NBehave.Narrator.Framework.Specifications.EventListeners.XmlOutputWriterSpec+ThemeNode.NodeShouldHaveNameAttribute" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.EventListeners.XmlOutputWriterSpec+ThemeNode.NodeShouldHaveScenarioCount" executed="True" result="Success" success="True" time="0.000" asserts="3" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.EventListeners.XmlOutputWriterSpec+ThemeNode.NodeShouldHaveStoryCount" executed="True" result="Success" success="True" time="0.001" asserts="2" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.EventListeners.XmlOutputWriterSpec+ThemeNode.NodeShouldHaveTimeAttribute" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.EventListeners.XmlOutputWriterSpec+ThemeNode.ShouldHaveThemeNode" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                            </results>
+                          </test-suite>
+                          <test-suite type="TestFixture" name="XmlOutputWriterSpec+WhenMultipleStoriesHaveScenariosWithSameTitle" executed="True" result="Success" success="True" time="0.005" asserts="0">
+                            <results>
+                              <test-case name="NBehave.Narrator.Framework.Specifications.EventListeners.XmlOutputWriterSpec+WhenMultipleStoriesHaveScenariosWithSameTitle.FirstStoryShouldHaveOneScenario" executed="True" result="Success" success="True" time="0.003" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.EventListeners.XmlOutputWriterSpec+WhenMultipleStoriesHaveScenariosWithSameTitle.SecondStoryShouldHaveOneScenario" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.EventListeners.XmlOutputWriterSpec+WhenMultipleStoriesHaveScenariosWithSameTitle.ThemeNodeShouldHaveScenarioCount" executed="True" result="Success" success="True" time="0.000" asserts="3" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.EventListeners.XmlOutputWriterSpec+WhenMultipleStoriesHaveScenariosWithSameTitle.ThemeNodeShouldHaveStoryCount" executed="True" result="Success" success="True" time="0.000" asserts="2" />
+                            </results>
+                          </test-suite>
+                        </results>
+                      </test-suite>
+                      <test-suite type="TestFixture" name="ParameterConverterSpec" executed="True" result="Inconclusive" success="False" time="0.000" asserts="0" />
+                      <test-suite type="TestFixture" name="ParameterConverterSpec+WhenFetchingParametersForActionStep" executed="True" result="Success" success="True" time="0.025" asserts="0">
+                        <results>
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ParameterConverterSpec+WhenFetchingParametersForActionStep.ShouldGetDecimalParameter" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ParameterConverterSpec+WhenFetchingParametersForActionStep.ShouldGetIntParameter" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ParameterConverterSpec+WhenFetchingParametersForActionStep.ShouldGetMultilineValueAsArrayOfIntegers" executed="True" result="Success" success="True" time="0.009" asserts="4" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ParameterConverterSpec+WhenFetchingParametersForActionStep.ShouldGetMultilineValueAsArrayOfStrings" executed="True" result="Success" success="True" time="0.000" asserts="3" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ParameterConverterSpec+WhenFetchingParametersForActionStep.ShouldGetMultilineValueAsGenericICollectionOfIntegers" executed="True" result="Success" success="True" time="0.002" asserts="4" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ParameterConverterSpec+WhenFetchingParametersForActionStep.ShouldGetMultilineValueAsGenericIEnumerableOfIntegers" executed="True" result="Success" success="True" time="0.000" asserts="4" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ParameterConverterSpec+WhenFetchingParametersForActionStep.ShouldGetMultilineValueAsGenericIListOfIntegers" executed="True" result="Success" success="True" time="0.001" asserts="4" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ParameterConverterSpec+WhenFetchingParametersForActionStep.ShouldGetMultilineValueAsGenericListOfIntegers" executed="True" result="Success" success="True" time="0.000" asserts="4" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ParameterConverterSpec+WhenFetchingParametersForActionStep.ShouldGetMultilineValueAsString" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ParameterConverterSpec+WhenFetchingParametersForActionStep.ShouldGetParameterForActionIfTokenHasNewlines" executed="True" result="Success" success="True" time="0.001" asserts="2" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ParameterConverterSpec+WhenFetchingParametersForActionStep.ShouldGetParameterForActionWithTokenInMiddleOfString" executed="True" result="Success" success="True" time="0.000" asserts="2" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ParameterConverterSpec+WhenFetchingParametersForActionStep.ShouldGetParametersForMessageWithActionRegisteredTwice" executed="True" result="Success" success="True" time="0.001" asserts="2" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ParameterConverterSpec+WhenFetchingParametersForActionStep.ShouldGetParametersForMessageWithANegativeParameter" executed="True" result="Success" success="True" time="0.001" asserts="2" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ParameterConverterSpec+WhenFetchingParametersForActionStep.ShouldRemoveEmptyEntriesAtEndOfArrayValues" executed="True" result="Success" success="True" time="0.006" asserts="1" />
+                        </results>
+                      </test-suite>
+                      <test-suite type="TestFixture" name="ParameterConverterSpec+WhenFetchingParametersWithRowValue" executed="True" result="Success" success="True" time="0.002" asserts="0">
+                        <results>
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ParameterConverterSpec+WhenFetchingParametersWithRowValue.ShouldGetParameterForActionWithTokenInMiddleOfString" executed="True" result="Success" success="True" time="0.002" asserts="2" />
+                        </results>
+                      </test-suite>
+                      <test-suite type="TestFixture" name="ScenarioResultsFixture" executed="True" result="Success" success="True" time="0.005" asserts="0">
+                        <results>
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ScenarioResultsFixture.FailedStepMessageShouldNotOverwriteExistingMessage" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ScenarioResultsFixture.ShouldSetMessageWithFailureWhenFailed" executed="True" result="Success" success="True" time="0.000" asserts="2" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ScenarioResultsFixture.ShouldSetMessageWithInnerExceptionInformationWhenFailed" executed="True" result="Success" success="True" time="0.000" asserts="2" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ScenarioResultsFixture.ShouldSetMessageWithPendingReasonWhenPending" executed="True" result="Success" success="True" time="0.001" asserts="2" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ScenarioResultsFixture.ShouldSetStackTraceOfExceptionWhenFailed" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ScenarioResultsFixture.ShouldSetStackTraceWithInnerExceptionDetailsWhenFailed" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                        </results>
+                      </test-suite>
+                      <test-suite type="TestFixture" name="ScenarioStepRunnerSpec" executed="True" result="Inconclusive" success="False" time="0.000" asserts="0" />
+                      <test-suite type="TestFixture" name="ScenarioStepRunnerSpec+WhenRunningAScenario" executed="True" result="Success" success="True" time="0.009" asserts="0">
+                        <results>
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ScenarioStepRunnerSpec+WhenRunningAScenario.ShouldHaveDifferentResultForEachStep" executed="True" result="Success" success="True" time="0.007" asserts="4" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ScenarioStepRunnerSpec+WhenRunningAScenario.ShouldHaveResultForEachStep" executed="True" result="Success" success="True" time="0.001" asserts="3" />
+                        </results>
+                      </test-suite>
+                      <test-suite type="TestFixture" name="ScenarioStepRunnerSpec+WhenRunningManyScenariosAndClassWithActionStepsImplementsNotificationAttributes" executed="True" result="Success" success="True" time="0.003" asserts="0">
+                        <results>
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ScenarioStepRunnerSpec+WhenRunningManyScenariosAndClassWithActionStepsImplementsNotificationAttributes.ShouldCallAfterScenarioOncePerScenario" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ScenarioStepRunnerSpec+WhenRunningManyScenariosAndClassWithActionStepsImplementsNotificationAttributes.ShouldCallAfterStepOncePerStep" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ScenarioStepRunnerSpec+WhenRunningManyScenariosAndClassWithActionStepsImplementsNotificationAttributes.ShouldCallBeforeScenarioOncePerScenario" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.ScenarioStepRunnerSpec+WhenRunningManyScenariosAndClassWithActionStepsImplementsNotificationAttributes.ShouldCallBeforeStepOncePerStep" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                        </results>
+                      </test-suite>
+                      <test-suite type="TestFixture" name="StoryRunnerFilterSpecs" executed="True" result="Success" success="True" time="0.026" asserts="0">
+                        <results>
+                          <test-case name="NBehave.Narrator.Framework.Specifications.StoryRunnerFilterSpecs.ShouldSetMemberfilterForMethodInfoOfTypeMethod" executed="True" result="Success" success="True" time="0.025" asserts="3" />
+                        </results>
+                      </test-suite>
+                      <test-suite type="TestFixture" name="StringExtensionsSpec" executed="True" result="Success" success="True" time="0.001" asserts="0">
+                        <results>
+                          <test-case name="NBehave.Narrator.Framework.Specifications.StringExtensionsSpec.ShouldRemoveFirstWordWhenFirstCharIsAWhitespace" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.StringExtensionsSpec.ShouldRemoveFirstWordWhenFirstCharIsNotWhitespace" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                        </results>
+                      </test-suite>
+                      <test-suite type="TestFixture" name="StringStepRunnerSpec" executed="True" result="Inconclusive" success="False" time="0.000" asserts="0" />
+                      <test-suite type="TestFixture" name="StringStepRunnerSpec+WhenClassWithActionStepsImplementsNotificationAttributes" executed="True" result="Success" success="True" time="0.002" asserts="0">
+                        <results>
+                          <test-case name="NBehave.Narrator.Framework.Specifications.StringStepRunnerSpec+WhenClassWithActionStepsImplementsNotificationAttributes.CompletingAScenarioShouldCallAllAttributedMethods" executed="True" result="Success" success="True" time="0.001" asserts="4" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.StringStepRunnerSpec+WhenClassWithActionStepsImplementsNotificationAttributes.RunningAStepShouldCallMostAttributedMethods" executed="True" result="Success" success="True" time="0.000" asserts="4" />
+                        </results>
+                      </test-suite>
+                      <test-suite type="TestFixture" name="StringStepRunnerSpec+WhenRunningPlainTextScenarios" executed="True" result="Success" success="True" time="0.002" asserts="0">
+                        <results>
+                          <test-case name="NBehave.Narrator.Framework.Specifications.StringStepRunnerSpec+WhenRunningPlainTextScenarios.ShouldGetParameterValueForAction" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.StringStepRunnerSpec+WhenRunningPlainTextScenarios.ShouldInvokeActionGivenATokenString" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.StringStepRunnerSpec+WhenRunningPlainTextScenarios.ShouldReturnPendingIfActionGivenInTokenStringDoesntExist" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                        </results>
+                      </test-suite>
+                      <test-suite type="TestFixture" name="SummaryWriterSpec" executed="True" result="Success" success="True" time="0.004" asserts="0">
+                        <results>
+                          <test-case name="NBehave.Narrator.Framework.Specifications.SummaryWriterSpec.ShouldWriteNumberOfActionstepsInSummary" executed="True" result="Success" success="True" time="0.003" asserts="1" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.SummaryWriterSpec.ShouldWriteNumberOfFailedActionstepsInSummary" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.SummaryWriterSpec.ShouldWriteNumberOfPendingActionstepsInSummary" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                        </results>
+                      </test-suite>
+                      <test-suite type="Namespace" name="Text" executed="True" result="Success" success="True" time="0.094" asserts="0">
+                        <results>
+                          <test-suite type="TestFixture" name="ActionStepAttributeSpec" executed="True" result="Success" success="True" time="0.000" asserts="0">
+                            <results>
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ActionStepAttributeSpec.ShouldIgnoreSpaceAtEndOfStep" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                            </results>
+                          </test-suite>
+                          <test-suite type="TestFixture" name="IgnoreSpaceAndUnderScoreMatcherSpec" executed="True" result="Success" success="True" time="0.012" asserts="0">
+                            <results>
+                              <test-suite type="ParameterizedTest" name="ShouldBeConsidiredEqual" executed="True" result="Success" success="True" time="0.005" asserts="0">
+                                <results>
+                                  <test-case name="NBehave.Narrator.Framework.Specifications.Text.IgnoreSpaceAndUnderScoreMatcherSpec.ShouldBeConsidiredEqual(&quot;Some Spec.scenario&quot;,NBehave.Narrator.Framework.Specifications.Text.SomeSpec)" executed="True" result="Success" success="True" time="0.002" asserts="2" />
+                                  <test-case name="NBehave.Narrator.Framework.Specifications.Text.IgnoreSpaceAndUnderScoreMatcherSpec.ShouldBeConsidiredEqual(&quot;Spec.story&quot;,NBehave.Narrator.Framework.Specifications.Text.Spec)" executed="True" result="Success" success="True" time="0.000" asserts="2" />
+                                  <test-case name="NBehave.Narrator.Framework.Specifications.Text.IgnoreSpaceAndUnderScoreMatcherSpec.ShouldBeConsidiredEqual(&quot;Some Spec.story&quot;,NBehave.Narrator.Framework.Specifications.Text.SomeSpec)" executed="True" result="Success" success="True" time="0.000" asserts="2" />
+                                  <test-case name="NBehave.Narrator.Framework.Specifications.Text.IgnoreSpaceAndUnderScoreMatcherSpec.ShouldBeConsidiredEqual(&quot;Some Spec.story&quot;,NBehave.Narrator.Framework.Specifications.Text.Some_Spec)" executed="True" result="Success" success="True" time="0.000" asserts="2" />
+                                  <test-case name="NBehave.Narrator.Framework.Specifications.Text.IgnoreSpaceAndUnderScoreMatcherSpec.ShouldBeConsidiredEqual(&quot;Some_Spec.story&quot;,NBehave.Narrator.Framework.Specifications.Text.SomeSpec)" executed="True" result="Success" success="True" time="0.000" asserts="2" />
+                                  <test-case name="NBehave.Narrator.Framework.Specifications.Text.IgnoreSpaceAndUnderScoreMatcherSpec.ShouldBeConsidiredEqual(&quot;Some_Spec.story&quot;,NBehave.Narrator.Framework.Specifications.Text.Some_Spec)" executed="True" result="Success" success="True" time="0.000" asserts="2" />
+                                </results>
+                              </test-suite>
+                              <test-suite type="ParameterizedTest" name="ShouldNotBeConsidiredEqual" executed="True" result="Success" success="True" time="0.005" asserts="0">
+                                <results>
+                                  <test-case name="NBehave.Narrator.Framework.Specifications.Text.IgnoreSpaceAndUnderScoreMatcherSpec.ShouldNotBeConsidiredEqual(&quot;Spec.story&quot;,NBehave.Narrator.Framework.Specifications.Text.SomeSpec)" executed="True" result="Success" success="True" time="0.000" asserts="2" />
+                                  <test-case name="NBehave.Narrator.Framework.Specifications.Text.IgnoreSpaceAndUnderScoreMatcherSpec.ShouldNotBeConsidiredEqual(&quot;Some.Spec.scenario&quot;,NBehave.Narrator.Framework.Specifications.Text.SomeSpec)" executed="True" result="Success" success="True" time="0.000" asserts="2" />
+                                  <test-case name="NBehave.Narrator.Framework.Specifications.Text.IgnoreSpaceAndUnderScoreMatcherSpec.ShouldNotBeConsidiredEqual(&quot;SpecSome.story&quot;,NBehave.Narrator.Framework.Specifications.Text.SomeSpec)" executed="True" result="Success" success="True" time="0.000" asserts="2" />
+                                  <test-case name="NBehave.Narrator.Framework.Specifications.Text.IgnoreSpaceAndUnderScoreMatcherSpec.ShouldNotBeConsidiredEqual(&quot;Some-Spec.scenario&quot;,NBehave.Narrator.Framework.Specifications.Text.SomeSpec)" executed="True" result="Success" success="True" time="0.000" asserts="2" />
+                                  <test-case name="NBehave.Narrator.Framework.Specifications.Text.IgnoreSpaceAndUnderScoreMatcherSpec.ShouldNotBeConsidiredEqual(&quot;Some_Spec.story&quot;,NBehave.Narrator.Framework.Specifications.Text.Some)" executed="True" result="Success" success="True" time="0.000" asserts="2" />
+                                  <test-case name="NBehave.Narrator.Framework.Specifications.Text.IgnoreSpaceAndUnderScoreMatcherSpec.ShouldNotBeConsidiredEqual(&quot;Some Spec.story&quot;,NBehave.Narrator.Framework.Specifications.Text.Spec)" executed="True" result="Success" success="True" time="0.000" asserts="2" />
+                                </results>
+                              </test-suite>
+                            </results>
+                          </test-suite>
+                          <test-suite type="TestFixture" name="RowSpec" executed="True" result="Success" success="True" time="0.003" asserts="0">
+                            <results>
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.RowSpec.ShouldMakeColumnHeadersAsWideAsWidestRowForColumn" executed="True" result="Success" success="True" time="0.002" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.RowSpec.ShouldMakeColumnValuesToString" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                            </results>
+                          </test-suite>
+                          <test-suite type="TestFixture" name="ScenarioExampleResultSpec" executed="True" result="Success" success="True" time="0.001" asserts="0">
+                            <results>
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioExampleResultSpec.ShouldHaveOriginalSteps" executed="True" result="Success" success="True" time="0.001" asserts="4" />
+                            </results>
+                          </test-suite>
+                          <test-suite type="TestFixture" name="ScenarioExampleResultSpec+WhenAStepIsPending" executed="True" result="Success" success="True" time="0.002" asserts="0">
+                            <results>
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioExampleResultSpec+WhenAStepIsPending.ScenarioExampleResultSpec.ShouldHaveOriginalSteps" executed="True" result="Success" success="True" time="0.000" asserts="4" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioExampleResultSpec+WhenAStepIsPending.ShouldPendCorrectStep" executed="True" result="Success" success="True" time="0.001" asserts="2" />
+                            </results>
+                          </test-suite>
+                          <test-suite type="TestFixture" name="ScenarioParserSpec+ScenarioFeatureNarrativeIsAllTextUptoNextStepKeyWord" executed="True" result="Success" success="True" time="0.007" asserts="0">
+                            <results>
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioParserSpec+ScenarioFeatureNarrativeIsAllTextUptoNextStepKeyWord.ScenarioParserSpec.ShouldHaveGivenStep" executed="True" result="Success" success="True" time="0.003" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioParserSpec+ScenarioFeatureNarrativeIsAllTextUptoNextStepKeyWord.ScenarioParserSpec.ShouldHaveThenStep" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioParserSpec+ScenarioFeatureNarrativeIsAllTextUptoNextStepKeyWord.ScenarioParserSpec.ShouldHaveWhenStep" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioParserSpec+ScenarioFeatureNarrativeIsAllTextUptoNextStepKeyWord.ShouldFind2Scenarios" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioParserSpec+ScenarioFeatureNarrativeIsAllTextUptoNextStepKeyWord.ShouldHaveAFeatureTitle" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioParserSpec+ScenarioFeatureNarrativeIsAllTextUptoNextStepKeyWord.ShouldHaveNarrative" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                            </results>
+                          </test-suite>
+                          <test-suite type="TestFixture" name="ScenarioParserSpec+ScenarioFeatureWithScenario" executed="True" result="Success" success="True" time="0.004" asserts="0">
+                            <results>
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioParserSpec+ScenarioFeatureWithScenario.ScenarioParserSpec.ShouldHaveGivenStep" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioParserSpec+ScenarioFeatureWithScenario.ScenarioParserSpec.ShouldHaveThenStep" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioParserSpec+ScenarioFeatureWithScenario.ScenarioParserSpec.ShouldHaveWhenStep" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioParserSpec+ScenarioFeatureWithScenario.ShouldFind2Scenarios" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioParserSpec+ScenarioFeatureWithScenario.ShouldHaveAFeatureTitle" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                            </results>
+                          </test-suite>
+                          <test-suite type="TestFixture" name="ScenarioParserSpec+ScenarioMultipleFeatures" executed="True" result="Success" success="True" time="0.005" asserts="0">
+                            <results>
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioParserSpec+ScenarioMultipleFeatures.Feature1ShouldBeReferencedByScenario2" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioParserSpec+ScenarioMultipleFeatures.Feature2ShouldBeReferencedByScenario2" executed="True" result="Success" success="True" time="0.002" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioParserSpec+ScenarioMultipleFeatures.ScenarioParserSpec.ShouldHaveGivenStep" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioParserSpec+ScenarioMultipleFeatures.ScenarioParserSpec.ShouldHaveThenStep" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioParserSpec+ScenarioMultipleFeatures.ScenarioParserSpec.ShouldHaveWhenStep" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                            </results>
+                          </test-suite>
+                          <test-suite type="TestFixture" name="ScenarioParserSpec+ScenarioScenarioWithExampleTable" executed="True" result="Success" success="True" time="0.004" asserts="0">
+                            <results>
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioParserSpec+ScenarioScenarioWithExampleTable.ScenarioParserSpec.ShouldHaveWhenStep" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioParserSpec+ScenarioScenarioWithExampleTable.ScenarioShouldHaveTwoExamples" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioParserSpec+ScenarioScenarioWithExampleTable.ShouldFind3Steps" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioParserSpec+ScenarioScenarioWithExampleTable.ShouldHaveAScenarioTitle" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioParserSpec+ScenarioScenarioWithExampleTable.ShouldHaveGivenStep" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioParserSpec+ScenarioScenarioWithExampleTable.ShouldHaveThenStep" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                            </results>
+                          </test-suite>
+                          <test-suite type="TestFixture" name="ScenarioParserSpec+ScenarioScenarioWithTableOnGiven" executed="True" result="Success" success="True" time="0.005" asserts="0">
+                            <results>
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioParserSpec+ScenarioScenarioWithTableOnGiven.GivenStepShouldHaveThreeTableSteps" executed="True" result="Success" success="True" time="0.001" asserts="2" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioParserSpec+ScenarioScenarioWithTableOnGiven.ShouldHaveGivenStep" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioParserSpec+ScenarioScenarioWithTableOnGiven.ShouldHaveThenStep" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioParserSpec+ScenarioScenarioWithTableOnGiven.ShouldHaveWhenStep" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioParserSpec+ScenarioScenarioWithTableOnGiven.TableStepColumnNamesShouldBeStoredInLowerCase" executed="True" result="Success" success="True" time="0.000" asserts="2" />
+                            </results>
+                          </test-suite>
+                          <test-suite type="TestFixture" name="ScenarioParserSpec+ScenarioSimpleScenarioWithoutTitle" executed="True" result="Success" success="True" time="0.002" asserts="0">
+                            <results>
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioParserSpec+ScenarioSimpleScenarioWithoutTitle.ScenarioParserSpec.ShouldHaveGivenStep" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioParserSpec+ScenarioSimpleScenarioWithoutTitle.ScenarioParserSpec.ShouldHaveThenStep" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioParserSpec+ScenarioSimpleScenarioWithoutTitle.ScenarioParserSpec.ShouldHaveWhenStep" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                            </results>
+                          </test-suite>
+                          <test-suite type="TestFixture" name="ScenarioParserSpec+ScenarioSimpleScenarioWithTitle" executed="True" result="Success" success="True" time="0.004" asserts="0">
+                            <results>
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioParserSpec+ScenarioSimpleScenarioWithTitle.ScenarioParserSpec.ShouldHaveGivenStep" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioParserSpec+ScenarioSimpleScenarioWithTitle.ScenarioParserSpec.ShouldHaveThenStep" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioParserSpec+ScenarioSimpleScenarioWithTitle.ScenarioParserSpec.ShouldHaveWhenStep" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioParserSpec+ScenarioSimpleScenarioWithTitle.ShouldFind3Steps" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioParserSpec+ScenarioSimpleScenarioWithTitle.ShouldHaveAScenarioTitle" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                            </results>
+                          </test-suite>
+                          <test-suite type="TestFixture" name="ScenarioParserSpec+ScenarioTwoScenariosWithTitle" executed="True" result="Success" success="True" time="0.003" asserts="0">
+                            <results>
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioParserSpec+ScenarioTwoScenariosWithTitle.ScenarioParserSpec.ShouldHaveGivenStep" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioParserSpec+ScenarioTwoScenariosWithTitle.ScenarioParserSpec.ShouldHaveThenStep" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioParserSpec+ScenarioTwoScenariosWithTitle.ScenarioParserSpec.ShouldHaveWhenStep" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioParserSpec+ScenarioTwoScenariosWithTitle.ShouldFind2Scenarios" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioParserSpec+ScenarioTwoScenariosWithTitle.ShouldHaveAScenarioTitleOnBothScenarios" executed="True" result="Success" success="True" time="0.001" asserts="2" />
+                            </results>
+                          </test-suite>
+                          <test-suite type="TestFixture" name="ScenarioWithStepsSpec+WhenRunningAExampleScenario" executed="True" result="Success" success="True" time="0.008" asserts="2">
+                            <results>
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioWithStepsSpec+WhenRunningAExampleScenario.ShouldGetResultOfTypeScenarioExampleResult" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioWithStepsSpec+WhenRunningAExampleScenario.ShouldPassBothExamples" executed="True" result="Success" success="True" time="0.001" asserts="3" />
+                            </results>
+                          </test-suite>
+                          <test-suite type="TestFixture" name="ScenarioWithStepsSpec+WhenRunningAScenario" executed="True" result="Success" success="True" time="0.006" asserts="1">
+                            <results>
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioWithStepsSpec+WhenRunningAScenario.ScenarioShouldHave3PassingSteps" executed="True" result="Success" success="True" time="0.000" asserts="4" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioWithStepsSpec+WhenRunningAScenario.ScenarioShouldPass" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioWithStepsSpec+WhenRunningAScenario.ShouldRaiseScenarioCreatedEvent" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioWithStepsSpec+WhenRunningAScenario.ShouldSetLeftOnCalculatorStep" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioWithStepsSpec+WhenRunningAScenario.ShouldSetRightOnCalculatorStep" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.ScenarioWithStepsSpec+WhenRunningAScenario.ShouldSetSumOnCalculatorStep" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                            </results>
+                          </test-suite>
+                          <test-suite type="TestFixture" name="StringStepSpec" executed="True" result="Inconclusive" success="False" time="0.000" asserts="0" />
+                          <test-suite type="TestFixture" name="StringStepSpec+WhenComparingStringSteps" executed="True" result="Success" success="True" time="0.002" asserts="0">
+                            <results>
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.StringStepSpec+WhenComparingStringSteps.DifferentTextInStepsShouldNotBeEqual" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.StringStepSpec+WhenComparingStringSteps.InstanceIsNotEqualToInt" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.StringStepSpec+WhenComparingStringSteps.InstanceIsNotEqualToNull" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.StringStepSpec+WhenComparingStringSteps.SameRefShouldBeEqual" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.StringStepSpec+WhenComparingStringSteps.SameStepsShouldBeEqual" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                            </results>
+                          </test-suite>
+                          <test-suite type="TestFixture" name="StringTableStepSpec" executed="True" result="Inconclusive" success="False" time="0.000" asserts="0" />
+                          <test-suite type="TestFixture" name="StringTableStepSpec+WhenRunningStepWithTable" executed="True" result="Success" success="True" time="0.004" asserts="0">
+                            <results>
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.StringTableStepSpec+WhenRunningStepWithTable.ListOfUsersShouldContainJimmyNilssonFromSweden" executed="True" result="Success" success="True" time="0.003" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.StringTableStepSpec+WhenRunningStepWithTable.ShouldCallStepThreeTimes" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                              <test-case name="NBehave.Narrator.Framework.Specifications.Text.StringTableStepSpec+WhenRunningStepWithTable.StepShouldPass" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                            </results>
+                          </test-suite>
+                        </results>
+                      </test-suite>
+                      <test-suite type="TestFixture" name="TextRunnerSpec" executed="True" result="Inconclusive" success="False" time="0.000" asserts="0" />
+                      <test-suite type="TestFixture" name="TextRunnerSpec+WhenRunningPlainTextScenarioInSwedish" executed="True" result="Success" success="True" time="0.036" asserts="0">
+                        <results>
+                          <test-case name="NBehave.Narrator.Framework.Specifications.TextRunnerSpec+WhenRunningPlainTextScenarioInSwedish.GivenShouldBeCalled" executed="True" result="Success" success="True" time="0.014" asserts="2" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.TextRunnerSpec+WhenRunningPlainTextScenarioInSwedish.ShouldRunTextScenarioInStream" executed="True" result="Success" success="True" time="0.007" asserts="2" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.TextRunnerSpec+WhenRunningPlainTextScenarioInSwedish.ThenShouldBeCalled" executed="True" result="Success" success="True" time="0.006" asserts="2" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.TextRunnerSpec+WhenRunningPlainTextScenarioInSwedish.WhenShouldBeCalled" executed="True" result="Success" success="True" time="0.007" asserts="2" />
+                        </results>
+                      </test-suite>
+                      <test-suite type="TestFixture" name="TextRunnerSpec+WhenRunningPlainTextScenarios" executed="True" result="Success" success="True" time="0.073" asserts="0">
+                        <results>
+                          <test-case name="NBehave.Narrator.Framework.Specifications.TextRunnerSpec+WhenRunningPlainTextScenarios.ShouldExecuteMoreThanOneScenarioInTextFile" executed="True" result="Success" success="True" time="0.027" asserts="4" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.TextRunnerSpec+WhenRunningPlainTextScenarios.ShouldFindGivenActionStepInAssembly" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.TextRunnerSpec+WhenRunningPlainTextScenarios.ShouldFindThenActionStepInAssembly" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.TextRunnerSpec+WhenRunningPlainTextScenarios.ShouldFindWhenActionStepInAssembly" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.TextRunnerSpec+WhenRunningPlainTextScenarios.ShouldGetCorrectErrormessageFromFailedScenario" executed="True" result="Success" success="True" time="0.009" asserts="3" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.TextRunnerSpec+WhenRunningPlainTextScenarios.ShouldGetResultOfRunningScenariosInTextFile" executed="True" result="Success" success="True" time="0.003" asserts="6" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.TextRunnerSpec+WhenRunningPlainTextScenarios.ShouldListAllPendingActionSteps" executed="True" result="Success" success="True" time="0.001" asserts="2" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.TextRunnerSpec+WhenRunningPlainTextScenarios.ShouldMarkFailingStepAsFailedInOutput" executed="True" result="Success" success="True" time="0.006" asserts="2" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.TextRunnerSpec+WhenRunningPlainTextScenarios.ShouldRunScenarioInTextFileWithScenarioTitle" executed="True" result="Success" success="True" time="0.002" asserts="4" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.TextRunnerSpec+WhenRunningPlainTextScenarios.ShouldRunScenariosInTextFile" executed="True" result="Success" success="True" time="0.002" asserts="3" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.TextRunnerSpec+WhenRunningPlainTextScenarios.ShouldRunTextScenarioWhithNewlinesInGiven" executed="True" result="Success" success="True" time="0.002" asserts="2" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.TextRunnerSpec+WhenRunningPlainTextScenarios.ShouldSetScenarioPendingIfActionGivenInTokenStringDoesntExist" executed="True" result="Success" success="True" time="0.002" asserts="1" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.TextRunnerSpec+WhenRunningPlainTextScenarios.ShouldUseWildcardAndRunAllScenariosInAllMatchingTextFiles" executed="True" result="Success" success="True" time="0.010" asserts="6" />
+                        </results>
+                      </test-suite>
+                      <test-suite type="TestFixture" name="TextRunnerSpec+WhenRunningPlainTextScenariosWithStory" executed="True" result="Success" success="True" time="0.006" asserts="0">
+                        <results>
+                          <test-case name="NBehave.Narrator.Framework.Specifications.TextRunnerSpec+WhenRunningPlainTextScenariosWithStory.ShouldSetNarrativeOnResult" executed="True" result="Success" success="True" time="0.002" asserts="4" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.TextRunnerSpec+WhenRunningPlainTextScenariosWithStory.ShouldSetScenarioTitleOnResult" executed="True" result="Success" success="True" time="0.002" asserts="2" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.TextRunnerSpec+WhenRunningPlainTextScenariosWithStory.ShouldSetStoryTitleOnResult" executed="True" result="Success" success="True" time="0.002" asserts="2" />
+                        </results>
+                      </test-suite>
+                      <test-suite type="TestFixture" name="TextRunnerSpec+WhenRunningPlainTextScenariosWithStoryEventsRaised" executed="True" result="Success" success="True" time="0.012" asserts="1">
+                        <results>
+                          <test-case name="NBehave.Narrator.Framework.Specifications.TextRunnerSpec+WhenRunningPlainTextScenariosWithStoryEventsRaised.ShouldGetScenarioCreatedEventWithTitle" executed="True" result="Success" success="True" time="0.001" asserts="0" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.TextRunnerSpec+WhenRunningPlainTextScenariosWithStoryEventsRaised.ShouldGetStoryCreatedEventWithTitle" executed="True" result="Success" success="True" time="0.001" asserts="0" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.TextRunnerSpec+WhenRunningPlainTextScenariosWithStoryEventsRaised.ShouldGetStoryNarrative" executed="True" result="Success" success="True" time="0.005" asserts="3" />
+                        </results>
+                      </test-suite>
+                      <test-suite type="TestFixture" name="TextRunnerSpec+WhenRunningPlainTextScenariosWithXmlListener" executed="True" result="Success" success="True" time="0.009" asserts="0">
+                        <results>
+                          <test-case name="NBehave.Narrator.Framework.Specifications.TextRunnerSpec+WhenRunningPlainTextScenariosWithXmlListener.ShouldFindOneStory" executed="True" result="Success" success="True" time="0.003" asserts="3" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.TextRunnerSpec+WhenRunningPlainTextScenariosWithXmlListener.ShouldRunTwoScenarios" executed="True" result="Success" success="True" time="0.002" asserts="3" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.TextRunnerSpec+WhenRunningPlainTextScenariosWithXmlListener.ShouldSetTitleOfStory" executed="True" result="Success" success="True" time="0.002" asserts="3" />
+                        </results>
+                      </test-suite>
+                      <test-suite type="TestFixture" name="TextRunnerSpec+WhenRunningWithXmlListener" executed="True" result="Success" success="True" time="0.005" asserts="0">
+                        <results>
+                          <test-case name="NBehave.Narrator.Framework.Specifications.TextRunnerSpec+WhenRunningWithXmlListener.ShouldFindOneFailedActionStep" executed="True" result="Success" success="True" time="0.003" asserts="2" />
+                          <test-case name="NBehave.Narrator.Framework.Specifications.TextRunnerSpec+WhenRunningWithXmlListener.ShouldFindTwoPassedActionStep" executed="True" result="Success" success="True" time="0.002" asserts="2" />
+                        </results>
+                      </test-suite>
+                    </results>
+                  </test-suite>
+                </results>
+              </test-suite>
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+    </results>
+  </test-suite>
+</test-results>

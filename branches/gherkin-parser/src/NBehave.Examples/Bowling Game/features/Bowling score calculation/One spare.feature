@@ -1,4 +1,4 @@
-﻿Scenario One Spare
+﻿Scenario: One Spare
 
 	Given a game of bowling
 	When I roll one spare

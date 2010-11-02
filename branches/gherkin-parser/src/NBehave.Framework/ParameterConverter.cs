@@ -133,9 +133,6 @@ namespace NBehave.Narrator.Framework
             return strParamAsArray;
         }
 
-        // ReSharper disable UnusedMember.Local
-        // ReSharper disable UnusedParameter.Local
-
         //This method is called with reflection by the CreateArray method
         private void SetValue<T>(T[] array, int index, T value)
         {
@@ -147,8 +144,5 @@ namespace NBehave.Narrator.Framework
         {
             array.Add(value);
         }
-
-        // ReSharper restore UnusedParameter.Local
-        // ReSharper restore UnusedMember.Local
     }
 }
