@@ -1,3 +1,3 @@
-go.bat full & pause
+go.bat & pause
 
 

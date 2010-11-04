@@ -7,3 +7,5 @@
 @NBehave-Console.exe TestAssembly.dll /storyOutput=output.txt
 
 @POPD
+
+pause

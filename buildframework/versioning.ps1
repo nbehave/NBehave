@@ -34,7 +34,7 @@ using System.Runtime.InteropServices;
 function GetVersion([string]$file, [bool]$increment)
 {
 	$versionNumber = Get-Content $file
-	$versionArray = (Split-String "." $versionNumber)
+	$versionArray = $versionNumber.Split(".")
 	$buildNumber = [int]($versionArray[3])
 	
 	#Only increment once for both 3.5 and 4.0 builds

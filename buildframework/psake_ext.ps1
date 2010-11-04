@@ -38,11 +38,11 @@ function ilmerge($key, $directory, $name, $assemblies, $extension)
 	
 	if($framework -eq "4.0")
 	{
-		Exec { tools\ilmerge\ilmerge.exe /keyfile:$key /out:"$directory\temp_merge\$name.$extension" "$directory\$name.$extension" $assemblies /targetplatform:"v4,$env:ProgramFiles\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0" }
+		Exec { ..\tools\ilmerge\ilmerge.exe /keyfile:$key /out:"$directory\temp_merge\$name.$extension" "$directory\$name.$extension" $assemblies /targetplatform:"v4,$env:ProgramFiles\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0" }
 	}
 	else
 	{
-		Exec { tools\ilmerge\ilmerge.exe /keyfile:$key /out:"$directory\temp_merge\$name.$extension" "$directory\$name.$extension" $assemblies }
+		Exec { ..\tools\ilmerge\ilmerge.exe /keyfile:$key /out:"$directory\temp_merge\$name.$extension" "$directory\$name.$extension" $assemblies }
 	}
 	
 	Get-ChildItem "$directory\temp_merge\**" -Include *.dll, *.pdb | Copy-Item -Destination $directory
