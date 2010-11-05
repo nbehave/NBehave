@@ -17,11 +17,38 @@ function xmlPoke([string]$file, [string]$xpath, $value, [hashtable]$namespaces) 
     } 
 }
 
-function zip
+function xmlPeek([string]$file, [string]$xpath, [hashtable]$namespaces) { 
+    [xml] $fileXml = Get-Content $file 
+	$xmlNameTable = new-object System.Xml.NameTable
+	$xmlNameSpace = new-object System.Xml.XmlNamespaceManager($xmlNameTable)
+
+	foreach($key in $namespaces.keys)
+	{
+		$xmlNameSpace.AddNamespace($key, $namespaces.$key);
+	}
+	
+    $node = $fileXml.SelectSingleNode($xpath, $xmlNameSpace) 
+	return $node.InnerText
+}
+
+function xmlList([string]$file, [string]$xpath, [hashtable]$namespaces) { 
+    [xml] $fileXml = Get-Content $file 
+	$xmlNameTable = new-object System.Xml.NameTable
+	$xmlNameSpace = new-object System.Xml.XmlNamespaceManager($xmlNameTable)
+
+	foreach($key in $namespaces.keys)
+	{
+		$xmlNameSpace.AddNamespace($key, $namespaces.$key);
+	}
+	$nodes = @()
+    $node = $fileXml.SelectNodes($xpath, $xmlNameSpace) 
+	$node | ForEach-Object { $nodes += @($_.Value)}
+	
+	return $nodes
+}
+
+function zip($path, $files)
 {
-	$path = $args[0]
-	$files = $input
-  
 	if (-not $path.EndsWith('.zip')) {$path += '.zip'} 
 
 	if (-not (test-path $path)) { 
@@ -29,7 +56,7 @@ function zip
 	} 
 
 	$ZipFile = (new-object -com shell.application).NameSpace($path) 
-	$files | foreach {$zipfile.CopyHere($_.fullname)} 
+	$ZipFile.CopyHere($files)
 }
 
 function ilmerge($key, $directory, $name, $assemblies, $extension)

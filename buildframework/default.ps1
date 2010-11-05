@@ -47,7 +47,7 @@ Task Test {
 	Exec { ..\tools\nunit\nunit-console-x86.exe $arguments /xml:${build_dir}\test-reports\UnitTests-$framework.xml}
 }
 
-Task Distribute -depends DistributeVSPlugin, DistributeBinaries
+Task Distribute -depends DistributeVSPlugin, DistributeBinaries, DistributeExamples
 
 Task DistributeVSPlugin -precondition { return $framework -eq "4.0" }{
 	
@@ -72,6 +72,42 @@ Task DistributeBinaries {
 	$exclusions = @("*Microsoft*", "log4net.dll", "NAnt.Core.dll", "TestDriven.Framework.dll")
 	
 	Get-ChildItem "$source\*.*" -Include *NBehave*, *.dll -Exclude $exclusions | Copy-Item -Destination $destination
+}
+
+Task DistributeExamples -precondition { return $framework -eq "3.5" }{
+	$examplesdest_dir = "$build_dir\Examples\"
+	$examplessource_dir = "$solution_dir\NBehave.Examples"
+	
+	Remove-Item $examplesdest_dir -Recurse -ErrorAction SilentlyContinue
+	New-Item -Path $build_dir -Name "Examples" -type directory -ErrorAction SilentlyContinue
+	
+	$exclusions = @("**\bin\**\*.*", "*/obj/*")
+	
+	$items = Get-ChildItem $examplessource_dir -Recurse 
+	$items = $items | where {$_.FullName -notmatch "obj" -and $_.FullName -notmatch "bin"} 
+	$items | Copy-Item -Destination {Join-Path $examplesdest_dir $_.FullName.Substring($examplessource_dir.length)}
+
+	$examplesdest_dir_lib = "$examplesdest_dir\lib\"
+	New-Item -Path $examplesdest_dir -Name "lib" -type directory
+	Get-ChildItem "$build_dir\dist\v3.5\*.*" -Include *NBehave*, *.dll | Copy-Item -Destination $examplesdest_dir_lib
+	
+	$namespaces = @{ "xsi" = "http://schemas.microsoft.com/developer/msbuild/2003"}
+	$xpath = "//xsi:Reference/xsi:HintPath/../@Include"
+	
+	$path = "$examplesdest_dir\NBehave.Examples.csproj" 
+	$nodes = xmlList $path $xpath $namespaces
+	
+	foreach($node in $nodes)
+	{
+		$xpath = "//xsi:Reference[@Include='$node']/xsi:HintPath"
+		$pathToReference = xmlPeek $path $xpath $namespaces
+		$dllFile = [regex]::Match($pathToReference, "(?<dllfile>(\w+\.)+dll$)").Groups["dllfile"].Value
+		
+		$xpath = "//xsi:Reference[@Include='$node']/xsi:HintPath"
+		xmlPoke $path $xpath "lib\$dllfile" $namespaces
+	}
+	
+	zip "$build_dir\NBehave.Examples.zip" $examplesdest_dir
 }
 
 Task BuildInstaller {
