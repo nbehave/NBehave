@@ -199,7 +199,6 @@
     <Compile Include="Configuration\MenuCommandTask.cs" />
     <Compile Include="Configuration\OutputWindowTask.cs" />
     <Compile Include="Configuration\PublishCrossPackageServicesTask.cs" />
-    <Compile Include="Contracts\ICrossPackageService.cs" />
     <Compile Include="Contracts\IVisualStudioService.cs" />
     <Compile Include="Domain\VisualStudioService.cs" />
     <Compile Include="Contracts\IOutputWindow.cs" />

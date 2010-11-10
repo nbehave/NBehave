@@ -20,6 +20,11 @@ namespace NBehave.VS2010.Plugin.Configuration
 
         public void Initialise()
         {
+            /**
+             * Don't forget to add a guid to the contracts interface, and add the 
+             * ProvideService attribute to the Package class.
+             */
+
             ServiceCreatorCallback registerOutputWindow = RegisterOutputWindow;
             ServiceContainer.AddService(typeof(IOutputWindow), registerOutputWindow, true);
 
