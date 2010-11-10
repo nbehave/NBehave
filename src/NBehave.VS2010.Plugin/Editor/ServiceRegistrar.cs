@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition.Primitives;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using MEFedMVVM.ViewModelLocator;
@@ -17,6 +18,9 @@ using NBehave.VS2010.Plugin.Editor.SyntaxHighlighting;
 
 namespace NBehave.VS2010.Plugin.Editor
 {
+
+
+
     [Export(typeof(ServiceRegistrar))]
     [PartCreationPolicy(CreationPolicy.Shared)]
     internal class ServiceRegistrar
@@ -29,6 +33,9 @@ namespace NBehave.VS2010.Plugin.Editor
 
         public void Initialise(ITextBuffer buffer)
         {
+            AppDomain.CurrentDomain.UnhandledException +=
+                (sender, unhandledExceptionEventArgs) => Debug.Assert(false, unhandledExceptionEventArgs.ToString());
+
             if (!buffer.Properties.ContainsProperty(typeof(GherkinFileClassifier)))
             {
                 var container = buffer.Properties.GetOrCreateSingletonProperty(() => new CompositionContainer(new AssemblyCatalog(typeof(GherkinFileEditorParser).Assembly)));

@@ -7,8 +7,8 @@ using NBehave.VS2010.Plugin.Domain;
 
 namespace NBehave.VS2010.Plugin.Configuration
 {
-    [Export(typeof (IComponentInitialiser))]
-    internal class MenuCommandInitialiser : IComponentInitialiser
+    [Export(typeof (IStartUpTask))]
+    internal class MenuCommandTask : IStartUpTask
     {
         [Import]
         public IServiceProvider ServiceProvider { get; set; }
@@ -18,8 +18,6 @@ namespace NBehave.VS2010.Plugin.Configuration
 
         [Import(AllowRecomposition = true)]
         public IOutputWindow OutputWindow { get; set; }
-
-        #region IComponentInitialiser Members
 
         public void Initialise()
         {
@@ -34,8 +32,6 @@ namespace NBehave.VS2010.Plugin.Configuration
             var debugItem = new MenuCommand(DebugCommandOnClick, debugCommandId);
             mcs.AddCommand(debugItem);
         }
-
-        #endregion
 
         private void DebugCommandOnClick(object sender, EventArgs e)
         {

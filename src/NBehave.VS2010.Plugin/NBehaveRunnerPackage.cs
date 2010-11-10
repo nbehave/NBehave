@@ -2,15 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
-using System.ComponentModel.Composition.Primitives;
 using System.ComponentModel.Design;
-using System.Linq;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
-using Microsoft.VisualStudio.ComponentModelHost;
-using Microsoft.VisualStudio.ExtensibilityHosting;
 using Microsoft.VisualStudio.Shell;
 using NBehave.VS2010.Plugin.Contracts;
-using NBehave.VS2010.Plugin.Domain;
 
 namespace NBehave.VS2010.Plugin
 {
@@ -23,52 +19,36 @@ namespace NBehave.VS2010.Plugin
     [ProvideService(typeof(IVisualStudioService))] 
     public sealed class NBehaveRunnerPackage : Package
     {
-        private CompositionContainer _container;
-
         [Export(typeof (IServiceProvider))]
         public IServiceProvider ServiceProvider { get; set; }
 
+        [Export(typeof(IServiceContainer))]
+        public IServiceContainer ServiceContainer { get; set; }
+
         [ImportMany(AllowRecomposition = true)]
-        public IEnumerable<IComponentInitialiser> ComponentInitialisers { get; set; }
+        public IEnumerable<IStartUpTask> ComponentInitialisers { get; set; }
+
+        [Export(typeof(CompositionContainer))]
+        public CompositionContainer Container { get; set; }
 
         protected override void Initialize()
         {
             base.Initialize();
             ServiceProvider = this;
+            ServiceContainer = this;
 
-            try
+            AppDomain.CurrentDomain.UnhandledException += 
+                (sender, unhandledExceptionEventArgs) => Debug.Assert(false, unhandledExceptionEventArgs.ToString());
+
+            var catalog = new AssemblyCatalog(typeof (NBehaveRunnerPackage).Assembly);
+            Container = new CompositionContainer(catalog);
+            Container.ComposeParts(this);
+
+            foreach (var initialiser in ComponentInitialisers)
             {
-                var catalog = new AssemblyCatalog(typeof (NBehaveRunnerPackage).Assembly);
-                _container = new CompositionContainer(catalog);
-                _container.ComposeParts(this);
-
-                foreach (var initialiser in ComponentInitialisers)
-                {
-                    initialiser.Initialise();
-                    _container.ComposeParts(initialiser);
-                }
-
-                IServiceContainer serviceContainer = this as IServiceContainer;
-                ServiceCreatorCallback registerOutputWindow = RegisterOutputWindow;
-                serviceContainer.AddService(typeof(IOutputWindow), registerOutputWindow, true);
-
-                ServiceCreatorCallback registerVisualStudioService = RegisterVisualStudioService;
-                serviceContainer.AddService(typeof(IVisualStudioService), registerVisualStudioService, true);
+                initialiser.Initialise();
+                Container.ComposeParts(initialiser);
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
-        }
-
-        private object RegisterVisualStudioService(IServiceContainer container, Type servicetype)
-        {
-            return _container.GetExport<IVisualStudioService>().Value;
-        }
-
-        private object RegisterOutputWindow(IServiceContainer container, Type serviceType)
-        {
-            return _container.GetExport<IOutputWindow>().Value;
         }
     }
 }
