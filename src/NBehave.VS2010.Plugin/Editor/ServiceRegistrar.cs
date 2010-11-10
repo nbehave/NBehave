@@ -30,8 +30,8 @@ namespace NBehave.VS2010.Plugin.Editor
 
         public void Initialise(ITextBuffer buffer)
         {
-            AppDomain.CurrentDomain.UnhandledException +=
-                (sender, unhandledExceptionEventArgs) => Debug.Assert(false, unhandledExceptionEventArgs.ToString());
+//            AppDomain.CurrentDomain.UnhandledException +=
+//                (sender, unhandledExceptionEventArgs) => Debug.Assert(false, unhandledExceptionEventArgs.ToString());
 
             if (!buffer.Properties.ContainsProperty(typeof(GherkinFileClassifier)))
             {

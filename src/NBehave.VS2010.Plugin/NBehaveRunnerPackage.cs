@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Shell;
 using NBehave.VS2010.Plugin.Contracts;
+using NLog;
 
 namespace NBehave.VS2010.Plugin
 {
@@ -25,11 +26,14 @@ namespace NBehave.VS2010.Plugin
         [Export(typeof(IServiceContainer))]
         public IServiceContainer ServiceContainer { get; set; }
 
+        [Export(typeof(CompositionContainer))]
+        public CompositionContainer Container { get; set; }
+
         [ImportMany(AllowRecomposition = true)]
         public IEnumerable<IStartUpTask> ComponentInitialisers { get; set; }
 
-        [Export(typeof(CompositionContainer))]
-        public CompositionContainer Container { get; set; }
+        [Import(AllowRecomposition = true)]
+        public Logger Logger { get; set; }
 
         protected override void Initialize()
         {
@@ -37,8 +41,8 @@ namespace NBehave.VS2010.Plugin
             ServiceProvider = this;
             ServiceContainer = this;
 
-            AppDomain.CurrentDomain.UnhandledException += 
-                (sender, unhandledExceptionEventArgs) => Debug.Assert(false, unhandledExceptionEventArgs.ToString());
+            AppDomain.CurrentDomain.UnhandledException += (sender, unhandledExceptionEventArgs) 
+                => this.Logger.FatalException(("unhandled"), (Exception) unhandledExceptionEventArgs.ExceptionObject);
 
             var catalog = new AssemblyCatalog(typeof (NBehaveRunnerPackage).Assembly);
             Container = new CompositionContainer(catalog);
