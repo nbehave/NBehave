@@ -18,6 +18,7 @@ namespace NBehave.VS2010.Plugin
     [ProvideAutoLoad("{f1536ef8-92ec-443c-9ed7-fdadf150da82}")]
     [ProvideService(typeof(IOutputWindow))] 
     [ProvideService(typeof(IVisualStudioService))] 
+    [ProvideService(typeof(IPluginLogger))] 
     public sealed class NBehaveRunnerPackage : Package
     {
         [Export(typeof (IServiceProvider))]

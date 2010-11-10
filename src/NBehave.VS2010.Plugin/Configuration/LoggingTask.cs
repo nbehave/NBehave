@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.Composition;
 using NBehave.VS2010.Plugin.Contracts;
+using NBehave.VS2010.Plugin.Domain;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
@@ -10,7 +11,7 @@ namespace NBehave.VS2010.Plugin.Configuration
     public class LoggingTask : IStartUpTask
     {
         [Export(typeof(Logger))]
-        public Logger DefaultLogger { get; set; }
+        public IPluginLogger DefaultLogger { get; set; }
 
         public void Initialise()
         {
@@ -24,7 +25,7 @@ namespace NBehave.VS2010.Plugin.Configuration
             
             LogManager.Configuration = config;
 
-            DefaultLogger = LogManager.GetLogger("default");
+            DefaultLogger = new PluginLogger(LogManager.GetLogger("default"));
         }
     }
 }
