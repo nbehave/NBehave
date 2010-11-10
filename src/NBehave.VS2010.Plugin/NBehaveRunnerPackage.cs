@@ -34,16 +34,13 @@ namespace NBehave.VS2010.Plugin
         public IEnumerable<IStartUpTask> ComponentInitialisers { get; set; }
 
         [Import(AllowRecomposition = true)]
-        public Logger Logger { get; set; }
+        public IPluginLogger Logger { get; set; }
 
         protected override void Initialize()
         {
             base.Initialize();
             ServiceProvider = this;
             ServiceContainer = this;
-
-            AppDomain.CurrentDomain.UnhandledException += (sender, unhandledExceptionEventArgs) 
-                => this.Logger.FatalException(("unhandled"), (Exception) unhandledExceptionEventArgs.ExceptionObject);
 
             var catalog = new AssemblyCatalog(typeof (NBehaveRunnerPackage).Assembly);
             Container = new CompositionContainer(catalog);
@@ -54,6 +51,9 @@ namespace NBehave.VS2010.Plugin
                 initialiser.Initialise();
                 Container.ComposeParts(initialiser);
             }
+
+            AppDomain.CurrentDomain.UnhandledException += (sender, unhandledExceptionEventArgs)
+                => this.Logger.FatalException(("unhandled"), (Exception)unhandledExceptionEventArgs.ExceptionObject);
         }
     }
 }

@@ -204,6 +204,8 @@
     <Compile Include="Configuration\OutputWindowTask.cs" />
     <Compile Include="Configuration\PublishCrossPackageServicesTask.cs" />
     <Compile Include="Contracts\IVisualStudioService.cs" />
+    <Compile Include="Contracts\IPluginLogger.cs" />
+    <Compile Include="Domain\PluginLogger.cs" />
     <Compile Include="Domain\VisualStudioService.cs" />
     <Compile Include="Contracts\IOutputWindow.cs" />
     <Compile Include="Contracts\IStartUpTask.cs" />
