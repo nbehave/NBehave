@@ -165,6 +165,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\vs2010.sdk\Microsoft.VisualStudio.TextManager.Interop.dll</HintPath>
     </Reference>
+    <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\..\lib\nlog\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
@@ -196,6 +199,7 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Configuration\LoggingTask.cs" />
     <Compile Include="Configuration\MenuCommandTask.cs" />
     <Compile Include="Configuration\OutputWindowTask.cs" />
     <Compile Include="Configuration\PublishCrossPackageServicesTask.cs" />

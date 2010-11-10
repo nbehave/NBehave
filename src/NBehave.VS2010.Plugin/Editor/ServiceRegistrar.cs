@@ -18,9 +18,6 @@ using NBehave.VS2010.Plugin.Editor.SyntaxHighlighting;
 
 namespace NBehave.VS2010.Plugin.Editor
 {
-
-
-
     [Export(typeof(ServiceRegistrar))]
     [PartCreationPolicy(CreationPolicy.Shared)]
     internal class ServiceRegistrar
