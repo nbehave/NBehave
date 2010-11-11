@@ -73,6 +73,4 @@ namespace NBehave.VS2010.Plugin.Configuration
             this.Output(this.Layout.Render(logEvent));
         }
     }
-
-
 }
