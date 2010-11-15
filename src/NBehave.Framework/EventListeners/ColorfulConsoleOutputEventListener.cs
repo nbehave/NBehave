@@ -1,18 +1,22 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ColorfulConsoleOutputEventListener.cs" company="NBehave">
+//   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
+// </copyright>
+// <summary>
+//   Defines the ColorfulConsoleOutputEventListener type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace NBehave.Narrator.Framework.EventListeners
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+
     public class ColorfulConsoleOutputEventListener : IEventListener
     {
         private List<ScenarioResult> _allResults = new List<ScenarioResult>();
-
-        void IEventListener.RunStarted()
-        {
-            _allResults = new List<ScenarioResult>();
-        }
 
         public void FeatureCreated(string feature)
         {
@@ -21,22 +25,32 @@ namespace NBehave.Narrator.Framework.EventListeners
                 Console.WriteLine();
                 return;
             }
-            WriteColorString("Feature: " + feature, ConsoleColor.Cyan);
+
+            this.WriteColorString("Feature: " + feature, ConsoleColor.Cyan);
+        }
+
+        void IEventListener.RunStarted()
+        {
+            _allResults = new List<ScenarioResult>();
         }
 
         void IEventListener.FeatureNarrative(string narrative)
         {
             if (string.IsNullOrEmpty(narrative))
+            {
                 return;
+            }
+
             WriteColorString(narrative, ConsoleColor.DarkCyan);
         }
 
         void IEventListener.ScenarioCreated(string scenarioTitle)
-        { }
+        {
+        }
 
         void IEventListener.RunFinished()
         {
-            Console.WriteLine("");
+            Console.WriteLine(string.Empty);
             Console.ResetColor();
             var failureText = new StringBuilder("-----------------------------------------" + Environment.NewLine);
             foreach (var failedActionStepResult in _allResults)
@@ -56,42 +70,51 @@ namespace NBehave.Narrator.Framework.EventListeners
                     }
                 }
             }
+
             WriteSummary();
         }
 
-        private void WriteSummary()
+        void IEventListener.ThemeStarted(string name)
         {
-            var summaryWriter = new SummaryWriter(Console.Out);
-            summaryWriter.WriteCompleteSummary(_allResults);
         }
 
-        void IEventListener.ThemeStarted(string name)
-        { }
-
         void IEventListener.ThemeFinished()
-        { }
+        {
+        }
 
         void IEventListener.ScenarioResult(ScenarioResult scenarioResult)
         {
             WriteColorString("Scenario: " + scenarioResult.ScenarioTitle + " - " + scenarioResult.Result.ToString().ToUpper(), GetColorForResult(scenarioResult.Result));
             _allResults.Add(scenarioResult);
             foreach (var stepResult in scenarioResult.ActionStepResults)
-                WriteColorString(stepResult.StringStep + " - " + stepResult.Result.ToString().ToUpper(), GetColorForResult(stepResult.Result));
-      
+            {
+                WriteColorString(
+                    stepResult.StringStep + " - " + stepResult.Result.ToString().ToUpper(),
+                    GetColorForResult(stepResult.Result));
+            }
+
             DoExamplesInScenario(scenarioResult as ScenarioExampleResult);
         }
 
+        private void WriteSummary()
+        {
+            var summaryWriter = new SummaryWriter(Console.Out);
+            summaryWriter.WriteCompleteSummary(this._allResults);
+        }
 
         private void DoExamplesInScenario(ScenarioExampleResult scenarioExampleResult)
         {
             if (scenarioExampleResult == null)
+            {
                 return;
+            }
 
-            var columns = "Examples:" + Environment.NewLine+ "|";
+            var columns = "Examples:" + Environment.NewLine + "|";
             foreach (var columnName in scenarioExampleResult.Examples.First().ColumnNames)
             {
                 columns += columnName + "|";
             }
+
             WriteColorString(columns, ConsoleColor.Gray);
 
             var scenarioResults = scenarioExampleResult.ExampleResults.ToArray();
@@ -103,10 +126,10 @@ namespace NBehave.Narrator.Framework.EventListeners
                 {
                     row += example.ColumnValues[columnName] + "|";
                 }
+
                 WriteColorString(row, GetColorForResult(scenarioResults[idx++].Result));
             }
         }
-
 
         private void WriteColorString(string text, ConsoleColor color)
         {
@@ -119,11 +142,19 @@ namespace NBehave.Narrator.Framework.EventListeners
         private ConsoleColor GetColorForResult(Result result)
         {
             if (result is Passed)
+            {
                 return ConsoleColor.Green;
+            }
+
             if (result is Failed)
+            {
                 return ConsoleColor.Red;
+            }
+
             if (result is Pending)
+            {
                 return ConsoleColor.Yellow;
+            }
 
             return ConsoleColor.Gray;
         }

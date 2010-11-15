@@ -1,8 +1,17 @@
-﻿using System;
-using System.Text.RegularExpressions;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ActionStepConverterExtensions.cs" company="NBehave">
+//   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
+// </copyright>
+// <summary>
+//   Defines the ActionStepConverterExtensions type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace NBehave.Narrator.Framework
 {
+    using System;
+    using System.Text.RegularExpressions;
+
     public static class ActionStepConverterExtensions
     {
         public const string TokenRegexPattern = @"(\$[a-zA-Z]\w+)|(\[[a-zA-Z]\w+\])";
@@ -26,15 +35,20 @@ namespace NBehave.Narrator.Framework
                 var stuffAtEnd = word.Substring(word.IndexOf(groupName) + groupName.Length);
 
                 var lengthRestriction = "+";
-                if(stuffAtEnd.StartsWith("{") && stuffAtEnd.Contains("}"))
+                if (stuffAtEnd.StartsWith("{") && stuffAtEnd.Contains("}"))
                 {
                     lengthRestriction = stuffAtEnd.Substring(0, stuffAtEnd.IndexOf("}") + 1);
                     stuffAtEnd = stuffAtEnd.Remove(0, lengthRestriction.Length);
                 }
+
                 regex += string.Format(@"{1}(?<{0}>.{3}){2}\s+", groupName, stuffAtStart, stuffAtEnd, lengthRestriction);
             }
+
             if (regex.EndsWith(@"\s+"))
+            {
                 regex = regex.Substring(0, regex.Length - 1) + "*";
+            }
+
             regex += "$";
             return new Regex(regex, RegexOptions.Singleline | RegexOptions.IgnorePatternWhitespace);
         }

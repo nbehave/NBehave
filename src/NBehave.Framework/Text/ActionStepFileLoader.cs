@@ -1,10 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ActionStepFileLoader.cs" company="NBehave">
+//   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
+// </copyright>
+// <summary>
+//   Defines the ActionStepFileLoader type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace NBehave.Narrator.Framework
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+
     public class ActionStepFileLoader
     {
         private readonly IStringStepRunner _stringStepRunner;
@@ -23,6 +32,7 @@ namespace NBehave.Narrator.Framework
                 var files = GetFiles(location);
                 stories.AddRange(LoadFiles(files));
             }
+
             return stories;
         }
 
@@ -30,7 +40,9 @@ namespace NBehave.Narrator.Framework
         {
             string[] files;
             if (Path.IsPathRooted(location))
+            {
                 files = Directory.GetFiles(Path.GetDirectoryName(location), Path.GetFileName(location));
+            }
             else
             {
                 var absoluteLocation = GetAbsolutePath(location);
@@ -38,6 +50,7 @@ namespace NBehave.Narrator.Framework
                 var pattern = Path.GetDirectoryName(absoluteLocation);
                 files = Directory.GetFiles(pattern, path);
             }
+
             return files;
         }
 
@@ -58,6 +71,7 @@ namespace NBehave.Narrator.Framework
                 var scenarios = GetScenarios(file);
                 stories.AddRange(scenarios);
             }
+
             return stories;
         }
 
@@ -72,6 +86,7 @@ namespace NBehave.Narrator.Framework
                     scenario.Source = file;
                 }
             }
+
             return features;
         }
 

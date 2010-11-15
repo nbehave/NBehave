@@ -1,7 +1,16 @@
-using System;
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="MultiOutputEventListener.cs" company="NBehave">
+//   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
+// </copyright>
+// <summary>
+//   Defines the MultiOutputEventListener type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace NBehave.Narrator.Framework.EventListeners
 {
+    using System;
+
     public class MultiOutputEventListener : IEventListener
     {
         private readonly IEventListener[] _listeners;
