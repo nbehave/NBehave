@@ -123,7 +123,7 @@
     <Compile Include="EventListeners\SummaryWriter.cs" />
     <Compile Include="Text\ActionMethodInfo.cs" />
     <Compile Include="ActionMissingException.cs" />
-    <Compile Include="Text\Attributes\ActionStepAttribute.cs" />
+    <Compile Include="Attributes\ActionStepAttribute.cs" />
     <Compile Include="Text\ActionStepConverterExtensions.cs" />
     <Compile Include="Text\ActionStepFileLoader.cs" />
     <Compile Include="Text\GherkinScenarioParser.cs" />
@@ -133,7 +133,7 @@
     <Compile Include="Text\LanguageService.cs" />
     <Compile Include="Text\MatchAllFiles.cs" />
     <Compile Include="Text\StringStepRunner.cs" />
-    <Compile Include="Text\Attributes\ActionStepsAttribute.cs" />
+    <Compile Include="Attributes\ActionStepsAttribute.cs" />
     <Compile Include="EventArgs.cs" />
     <Compile Include="Text\ActionStepParser.cs" />
     <Compile Include="EventListeners\EventListeners.cs" />
@@ -148,19 +148,19 @@
     <Compile Include="Result.cs" />
     <Compile Include="ScenarioResult.cs" />
     <Compile Include="Text\ActionStepText.cs" />
-    <Compile Include="Text\Attributes\AfterScenarioAttribute.cs" />
-    <Compile Include="Text\Attributes\AfterStepAttribute.cs" />
-    <Compile Include="Text\Attributes\BeforeScenarioAttribute.cs" />
-    <Compile Include="Text\Attributes\BeforeStepAttribute.cs" />
-    <Compile Include="Text\Attributes\GivenAttribute.cs" />
+    <Compile Include="Attributes\AfterScenarioAttribute.cs" />
+    <Compile Include="Attributes\AfterStepAttribute.cs" />
+    <Compile Include="Attributes\BeforeScenarioAttribute.cs" />
+    <Compile Include="Attributes\BeforeStepAttribute.cs" />
+    <Compile Include="Attributes\GivenAttribute.cs" />
     <Compile Include="Text\IMatchFiles.cs" />
-    <Compile Include="Text\Attributes\NotificationMethodAttribute.cs" />
+    <Compile Include="Attributes\NotificationMethodAttribute.cs" />
     <Compile Include="Text\ScenarioStepRunner.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="Text\TextRunner.cs" />
     <Compile Include="FeatureResults.cs" />
     <Compile Include="StoryRunnerFilter.cs" />
-    <Compile Include="Text\Attributes\ThenAttribute.cs" />
+    <Compile Include="Attributes\ThenAttribute.cs" />
     <Compile Include="Text\Example.cs" />
     <Compile Include="Text\ExampleColumns.cs" />
     <Compile Include="Text\Feature.cs" />
@@ -168,7 +168,7 @@
     <Compile Include="Text\ScenarioWithSteps.cs" />
     <Compile Include="Text\StringStep.cs" />
     <Compile Include="Text\StringTableStep.cs" />
-    <Compile Include="Text\Attributes\WhenAttribute.cs" />
+    <Compile Include="Attributes\WhenAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\NBehave.snk">

@@ -82,10 +82,5 @@ namespace NBehave.Narrator.Framework
             }
             return tokens.ToArray();
         }
-
-        private Regex GetRegexForActionKey(string actionKey)
-        {
-            return actionKey.AsRegex();
-        }
     }
 }
