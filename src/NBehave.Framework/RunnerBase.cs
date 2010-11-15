@@ -10,7 +10,6 @@ namespace NBehave.Narrator.Framework
         protected abstract void ParseAssembly(Assembly assembly);
 
         private StoryRunnerFilter _storyRunnerFilter = new StoryRunnerFilter();
-        private readonly List<Pair<string, object>> _themes = new List<Pair<string, object>>();
 
         private EventHandler<EventArgs<Feature>> _featureCreatedEventHandler;
         private EventHandler<EventArgs<ScenarioWithSteps>> _scenarioCreatedEventHandler;
@@ -99,7 +98,6 @@ namespace NBehave.Narrator.Framework
         private void InitializeRun(FeatureResults results, IEventListener listener)
         {
             listener.RunStarted();
-            results.NumberOfThemes = _themes.Count;
         }
     }
 }

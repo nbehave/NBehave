@@ -118,10 +118,8 @@
     <Compile Include="EventListeners\Xml\EventType.cs" />
     <Compile Include="EventListeners\Xml\StoryResultsEventReceived.cs" />
     <Compile Include="EventListeners\Xml\XmlOutputWriter.cs" />
-    <Compile Include="MessageEventData.cs" />
     <Compile Include="ParameterConverter.cs" />
     <Compile Include="ScenarioExampleResult.cs" />
-    <Compile Include="ScenarioMessage.cs" />
     <Compile Include="EventListeners\SummaryWriter.cs" />
     <Compile Include="Text\ActionMethodInfo.cs" />
     <Compile Include="ActionMissingException.cs" />
@@ -144,7 +142,6 @@
     <Compile Include="EventListeners\TextWriterEventListener.cs" />
     <Compile Include="EventListeners\Xml\XmlOutputEventListener.cs" />
     <Compile Include="EventListeners\IEventListener.cs" />
-    <Compile Include="Pair.cs" />
     <Compile Include="PlainTextOutput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RunnerBase.cs" />
