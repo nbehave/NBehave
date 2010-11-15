@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
-using NBehave.Spec.NUnit;
 using NUnit.Framework;
 using Rhino.Mocks;
 
@@ -56,9 +55,9 @@ namespace NBehave.Narrator.Framework.Specifications
             Then(
                 () =>
                     {
-                        filter.MethodNameFiler.ToString().ShouldEqual("^ShouldSetMemberfilterForMethodInfoOfTypeMethod$");
-                        filter.ClassNameFilter.ToString().ShouldEqual("^" + typeof (StoryRunnerFilterSpecs).Name + "$");
-                        filter.NamespaceFilter.ToString().ShouldEqual("^" + typeof (StoryRunnerFilterSpecs).Namespace + "$");
+                        Assert.That(filter.MethodNameFiler.ToString(), Is.EqualTo("^ShouldSetMemberfilterForMethodInfoOfTypeMethod$"));
+                        Assert.That(filter.ClassNameFilter.ToString(), Is.EqualTo("^" + typeof (StoryRunnerFilterSpecs).Name + "$"));
+                        Assert.That(filter.NamespaceFilter.ToString(), Is.EqualTo("^" + typeof(StoryRunnerFilterSpecs).Namespace + "$"));
                     }
                 );
         }
