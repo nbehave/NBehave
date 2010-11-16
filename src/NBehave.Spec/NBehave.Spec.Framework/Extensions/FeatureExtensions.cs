@@ -29,7 +29,7 @@ namespace NBehave.Spec.Extensions
                                                {
                                                     scenario,
                                                     pendingSteps = scenario.Steps
-                                                                           .Where(step => step.StepResult.Result is Pending)
+                                                                           .Where(step => step.StepResult != null && step.StepResult.Result is Pending)
                                                })
                            .Where(scenarioStruct => scenarioStruct.pendingSteps.Count() > 0)
                            .Select(scenarioStruct => new GroupingStructure<ScenarioWithSteps, StringStep>(

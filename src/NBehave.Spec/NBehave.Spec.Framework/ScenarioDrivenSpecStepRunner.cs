@@ -43,9 +43,9 @@ namespace NBehave.Spec
 
         public ActionStepResult Run(ActionStepText actionStep)
         {
-            string stepText = actionStep.Step;
+            var stepText = actionStep.Step;
 
-            Action stepImplementation = _resolvers.Select(resolver => resolver.ResolveStep(CurrentScenarioStage, actionStep))
+            var stepImplementation = _resolvers.Select(resolver => resolver.ResolveStep(CurrentScenarioStage, actionStep))
                                                   .Where(action => action != null)
                                                   .FirstOrDefault();
             if (stepImplementation == null)
@@ -68,15 +68,6 @@ namespace NBehave.Spec
         public ActionStepResult Run(ActionStepText actionStep, Row row)
         {
             throw new NotSupportedException("NBehave.Spec does not support example-driven scenarios");
-        }
-
-        public void OnCloseScenario()
-        {
-            Action closeAction = _resolvers.Select(resolver => resolver.ResolveOnCloseScenario())
-                                                  .Where(action => action != null)
-                                                  .FirstOrDefault();
-            if (closeAction != null)
-                closeAction();
         }
 
         public void BeforeScenario()

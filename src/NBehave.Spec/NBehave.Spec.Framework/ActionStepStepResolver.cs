@@ -35,11 +35,6 @@ namespace NBehave.Spec
                        };
         }
 
-        public Action ResolveOnCloseScenario()
-        {
-            return LocateNotificationAction(typeof (AfterScenarioAttribute));
-        }
-
         public Action ResolveOnBeforeScenario()
         {
             return LocateNotificationAction(typeof(BeforeScenarioAttribute));
