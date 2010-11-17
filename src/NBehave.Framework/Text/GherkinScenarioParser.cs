@@ -1,19 +1,29 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using Gherkin;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="GherkinScenarioParser.cs" company="NBehave">
+//   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
+// </copyright>
+// <summary>
+//   Defines the GherkinScenarioParser type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace NBehave.Narrator.Framework
 {
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+
+    using Gherkin;
+
     public class GherkinScenarioParser : IListener
     {
         private readonly IStringStepRunner _stringStepRunner;
-        private Feature _feature;
         private readonly List<Feature> _features;
+        private readonly LanguageService _languageService;
+        private Feature _feature;
         private ScenarioWithSteps _scenario;
         private ExampleColumns _exampleColumns;
         private bool _midExample;
-        private readonly LanguageService _languageService;
 
         public GherkinScenarioParser(IStringStepRunner stringStepRunner)
         {
@@ -31,12 +41,11 @@ namespace NBehave.Narrator.Framework
         {
             var reader = new StreamReader(stream);
             var scenarioText = reader.ReadToEnd();
-            //stream.Position = 0;
 
             // We write a new stream just to remove \r
             var ms = new MemoryStream();
             var sr = new StreamWriter(ms);
-            sr.Write(scenarioText.Replace("\r", ""));
+            sr.Write(scenarioText.Replace("\r", string.Empty));
             sr.Flush();
             ms.Seek(0, SeekOrigin.Begin);
 
@@ -46,10 +55,9 @@ namespace NBehave.Narrator.Framework
             return _features;
         }
 
-
         public void Feature(Token keyword, Token title)
         {
-            if(_features.Last().HasTitle)
+            if (_features.Last().HasTitle)
             {
                 _feature = new Feature(title.Content);
                 _features.Add(_feature);
@@ -116,7 +124,7 @@ namespace NBehave.Narrator.Framework
                     row.Add(_exampleColumns[i], example.ElementAt(i));
                 }
 
-                if(_midExample)
+                if (_midExample)
                 {
                     _scenario.AddExamples(new List<Example> { new Example(_exampleColumns, row) });
                 }
@@ -124,7 +132,7 @@ namespace NBehave.Narrator.Framework
                 {
                     var step = _scenario.Steps.Last();
 
-                    if(!(step is StringTableStep))
+                    if (!(step is StringTableStep))
                     {
                         var stringTableStep = new StringTableStep(step.Step, step.Source, _stringStepRunner);
                         _scenario.RemoveLastStep();

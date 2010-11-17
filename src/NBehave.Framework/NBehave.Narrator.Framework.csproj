@@ -169,6 +169,7 @@
     <Compile Include="Text\StringStep.cs" />
     <Compile Include="Text\StringTableStep.cs" />
     <Compile Include="Attributes\WhenAttribute.cs" />
+    <Compile Include="TypeOfStep.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\NBehave.snk">

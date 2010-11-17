@@ -1,27 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="RunnerBase.cs" company="NBehave">
+//   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
+// </copyright>
+// <summary>
+//   Defines the RunnerBase type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace NBehave.Narrator.Framework
 {
+    using System;
+    using System.Reflection;
+
     public abstract class RunnerBase
     {
-        protected abstract void RunFeatures(FeatureResults results);
-        protected abstract void ParseAssembly(Assembly assembly);
-
         private StoryRunnerFilter _storyRunnerFilter = new StoryRunnerFilter();
 
         private EventHandler<EventArgs<Feature>> _featureCreatedEventHandler;
-        private EventHandler<EventArgs<ScenarioWithSteps>> _scenarioCreatedEventHandler;
-        private EventHandler<EventArgs<ScenarioResult>> _scenarioResultAddedEventHandler;
 
-        public bool IsDryRun { get; set; }
-        protected IEventListener EventListener { get; set; }
+        private EventHandler<EventArgs<ScenarioWithSteps>> _scenarioCreatedEventHandler;
+
+        private EventHandler<EventArgs<ScenarioResult>> _scenarioResultAddedEventHandler;
 
         protected RunnerBase(IEventListener listener)
         {
             EventListener = listener;
         }
+
+        public bool IsDryRun { get; set; }
+
+        public StoryRunnerFilter StoryRunnerFilter
+        {
+            get { return _storyRunnerFilter; }
+            set { _storyRunnerFilter = value; }
+        }
+
+        protected IEventListener EventListener { get; set; }
 
         public FeatureResults Run()
         {
@@ -29,7 +43,7 @@ namespace NBehave.Narrator.Framework
 
             try
             {
-                InitializeRun(results, EventListener);
+                InitializeRun(EventListener);
                 StartWatching(EventListener);
                 RunFeatures(results);
             }
@@ -51,11 +65,9 @@ namespace NBehave.Narrator.Framework
             ParseAssembly(assembly);
         }
 
-        public StoryRunnerFilter StoryRunnerFilter
-        {
-            get { return _storyRunnerFilter; }
-            set { _storyRunnerFilter = value; }
-        }
+        protected abstract void RunFeatures(FeatureResults results);
+
+        protected abstract void ParseAssembly(Assembly assembly);
 
         private void StartWatching(IEventListener listener)
         {
@@ -95,7 +107,7 @@ namespace NBehave.Narrator.Framework
             listener.RunFinished();
         }
 
-        private void InitializeRun(FeatureResults results, IEventListener listener)
+        private void InitializeRun(IEventListener listener)
         {
             listener.RunStarted();
         }

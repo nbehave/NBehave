@@ -1,47 +1,72 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ScenarioWithSteps.cs" company="NBehave">
+//   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
+// </copyright>
+// <summary>
+//   Defines the ScenarioWithSteps type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace NBehave.Narrator.Framework
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text.RegularExpressions;
+
     public class ScenarioWithSteps
     {
-        public static event EventHandler<EventArgs<ScenarioWithSteps>> ScenarioCreated;
-        public static event EventHandler<EventArgs<ActionStepText>> StepAdded;
-
-        private readonly List<StringStep> _steps = new List<StringStep>();
-        private readonly List<Example> _examples = new List<Example>();
+        private readonly List<StringStep> _steps;
+        private readonly List<Example> _examples;
         private readonly IStringStepRunner _stringStepRunner;
+        private string _source;
 
         public ScenarioWithSteps(IStringStepRunner stringStepRunner)
         {
             Feature = new Feature();
             Title = string.Empty;
             _stringStepRunner = stringStepRunner;
+            _steps = new List<StringStep>();
+            _examples = new List<Example>();
         }
+
+        public static event EventHandler<EventArgs<ScenarioWithSteps>> ScenarioCreated;
+
+        public static event EventHandler<EventArgs<ActionStepText>> StepAdded;
+
+        public string Title { get; set; }
+
+        public Feature Feature { get; set; }
 
         public IEnumerable<StringStep> Steps
         {
             get { return _steps; }
         }
 
-        public string Title { get; set; }
-        public Feature Feature { get; set; }
-        
-        private string _source;
-        public string Source 
-        { 
-        	get { return _source; }
-        	set 
-        	{
-        		_source = value;
-        		foreach(var step in Steps)
-        			step.Source = _source;
-        	}
+        public string Source
+        {
+            get
+            {
+                return _source;
+            }
+
+            set
+            {
+                _source = value;
+                foreach (var step in Steps)
+                {
+                    step.Source = _source;
+                }
+            }
         }
-        		
-        public IEnumerable<Example> Examples { get { return _examples; } }
+
+        public IEnumerable<Example> Examples
+        {
+            get
+            {
+                return _examples;
+            }
+        }
 
         public void AddStep(string step)
         {
@@ -64,9 +89,16 @@ namespace NBehave.Narrator.Framework
         {
             OnScenarioCreated();
             if (Examples.Any())
+            {
                 return RunExamples(Feature);
+            }
 
             return RunScenario(Feature, _steps);
+        }
+
+        public void RemoveLastStep()
+        {
+            _steps.Remove(_steps.Last());
         }
 
         private void OnScenarioCreated()
@@ -96,8 +128,12 @@ namespace NBehave.Narrator.Framework
                 step.Run();
                 scenarioResult.AddActionStepResult(step.StepResult);
             }
+
             if (stepsToRun.Any())
+            {
                 _stringStepRunner.AfterScenario();
+            }
+
             return scenarioResult;
         }
 
@@ -112,6 +148,7 @@ namespace NBehave.Narrator.Framework
                 var exampleResult = RunScenario(feature, steps);
                 exampleResults.AddResult(exampleResult);
             }
+
             return exampleResults;
         }
 
@@ -128,7 +165,7 @@ namespace NBehave.Narrator.Framework
             }
         }
 
-        private List<StringStep> CloneSteps()
+        private IEnumerable<StringStep> CloneSteps()
         {
             var clones = new List<StringStep>();
             foreach (var step in Steps)
@@ -136,12 +173,8 @@ namespace NBehave.Narrator.Framework
                 var s = new StringStep(step.Step, step.Source, _stringStepRunner);
                 clones.Add(s);
             }
-            return clones;
-        }
 
-        public void RemoveLastStep()
-        {
-            _steps.Remove(_steps.Last());
+            return clones;
         }
     }
 }

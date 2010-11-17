@@ -1,8 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ScenarioStepRunner.cs" company="NBehave">
+//   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
+// </copyright>
+// <summary>
+//   Defines the ScenarioStepRunner type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace NBehave.Narrator.Framework
 {
+    using System;
+    using System.Collections.Generic;
+
     public class ScenarioStepRunner
     {
         private Feature _lastFeature;
@@ -16,11 +25,15 @@ namespace NBehave.Narrator.Framework
             foreach (var scenario in scenarios)
             {
                 if (scenario.Feature != _lastFeature)
+                {
                     NewFeature(scenario);
+                }
+
                 var scenarioResults = scenario.Run();
                 RaiseFeatureResultsEvent(scenarioResults);
                 allResults.Add(scenarioResults);
             }
+
             return allResults;
         }
 
@@ -33,7 +46,10 @@ namespace NBehave.Narrator.Framework
         private void RaiseFeatureResultsEvent(ScenarioResult scenarioResult)
         {
             if (ScenarioResultCreated == null)
+            {
                 return;
+            }
+
             var e = new EventArgs<ScenarioResult>(scenarioResult);
             ScenarioResultCreated.Invoke(this, e);
         }

@@ -1,14 +1,22 @@
-﻿using System;
-using System.Globalization;
-using System.Reflection;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="StringStepRunner.cs" company="NBehave">
+//   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
+// </copyright>
+// <summary>
+//   Defines the StringStepRunner type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace NBehave.Narrator.Framework
 {
+    using System;
+    using System.Globalization;
+    using System.Reflection;
+
     public class StringStepRunner : IStringStepRunner
     {
-        private ActionCatalog ActionCatalog { get; set; }
-        private ParameterConverter ParameterConverter { get; set; }
         private ActionMethodInfo _lastAction;
+
         private bool _isFirstStepInScenario = true;
 
         public StringStepRunner(ActionCatalog actionCatalog)
@@ -16,6 +24,10 @@ namespace NBehave.Narrator.Framework
             ActionCatalog = actionCatalog;
             ParameterConverter = new ParameterConverter(ActionCatalog);
         }
+
+        private ActionCatalog ActionCatalog { get; set; }
+
+        private ParameterConverter ParameterConverter { get; set; }
 
         ActionStepResult IStringStepRunner.Run(ActionStepText actionStep)
         {
@@ -36,9 +48,13 @@ namespace NBehave.Narrator.Framework
                 else
                 {
                     if (row == null)
+                    {
                         RunStep(actionStepToUse);
+                    }
                     else
+                    {
                         RunStep(actionStepToUse, row);
+                    }
                 }
             }
             catch (Exception e)
@@ -46,14 +62,16 @@ namespace NBehave.Narrator.Framework
                 var realException = FindUsefulException(e);
                 result = new ActionStepResult(actionStep.Step, new Failed(realException));
             }
+
             return result;
         }
-
 
         void IStringStepRunner.OnCloseScenario()
         {
             if (_lastAction != null)
+            {
                 _lastAction.ExecuteNotificationMethod(typeof(AfterScenarioAttribute));
+            }
         }
 
         void IStringStepRunner.BeforeScenario()
@@ -64,7 +82,9 @@ namespace NBehave.Narrator.Framework
         void IStringStepRunner.AfterScenario()
         {
             if (_lastAction != null)
+            {
                 _lastAction.ExecuteNotificationMethod(typeof(AfterScenarioAttribute));
+            }
         }
 
         private Type GetActionType(object action)
@@ -90,7 +110,9 @@ namespace NBehave.Narrator.Framework
         private void RunStep(ActionStepText actionStep, Func<object[]> getParametersForActionStepText)
         {
             if (ActionCatalog.ActionExists(actionStep) == false)
+            {
                 throw new ArgumentException(string.Format("cannot find step string '{0}'", actionStep));
+            }
 
             var info = ActionCatalog.GetAction(actionStep);
 
@@ -107,8 +129,12 @@ namespace NBehave.Narrator.Framework
             var actionType = GetActionType(info.Action);
             var methodInfo = actionType.GetMethod("DynamicInvoke");
             var actionParamValues = getParametersForActionStepText();
-            methodInfo.Invoke(info.Action, BindingFlags.InvokeMethod, null,
-                              new object[] { actionParamValues }, CultureInfo.CurrentCulture);
+            methodInfo.Invoke(
+                info.Action,
+                BindingFlags.InvokeMethod,
+                null,
+                new object[] { actionParamValues },
+                CultureInfo.CurrentCulture);
         }
 
         private void BeforeEachStep(ActionMethodInfo info)
@@ -137,8 +163,12 @@ namespace NBehave.Narrator.Framework
             {
                 realException = realException.InnerException;
             }
+
             if (realException == null)
+            {
                 return e;
+            }
+
             return realException;
         }
     }

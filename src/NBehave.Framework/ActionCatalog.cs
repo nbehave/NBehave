@@ -1,10 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text.RegularExpressions;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ActionCatalog.cs" company="NBehave">
+//   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
+// </copyright>
+// <summary>
+//   Defines the ActionCatalog type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace NBehave.Narrator.Framework
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text.RegularExpressions;
+
     public class ActionCatalog
     {
         private readonly List<ActionMethodInfo> _actions = new List<ActionMethodInfo>();
@@ -16,12 +24,12 @@ namespace NBehave.Narrator.Framework
 
         public bool ActionExists(string text)
         {
-            return ActionExists(new ActionStepText(text, ""));
+            return ActionExists(new ActionStepText(text, string.Empty));
         }
 
         public bool ActionExists(ActionStepText actionStepText)
         {
-            return (FindMatchingAction(actionStepText) != null);
+            return FindMatchingAction(actionStepText) != null;
         }
 
         public ActionMethodInfo GetAction(ActionStepText message)
@@ -34,8 +42,12 @@ namespace NBehave.Narrator.Framework
             var resultString = message;
             var tokens = GetTokensInMessage(message);
             if (tokens.Length > 0 && tokens.Length != parameters.Length)
-                throw new ArgumentException(string.Format("message has {0} tokens and there are {1} parameters", tokens.Length,
-                                                          parameters.Length));
+            {
+                throw new ArgumentException(
+                    string.Format(
+                        "message has {0} tokens and there are {1} parameters", tokens.Length, parameters.Length));
+            }
+
             for (var i = 0; i < tokens.Length; i++)
             {
                 resultString = resultString.Replace(tokens[i], parameters[i].ToString());
@@ -63,6 +75,7 @@ namespace NBehave.Narrator.Framework
                     }
                 }
             }
+
             return matchedAction;
         }
 
@@ -80,6 +93,7 @@ namespace NBehave.Narrator.Framework
             {
                 tokens.Add(match.ToString());
             }
+
             return tokens.ToArray();
         }
     }

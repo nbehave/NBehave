@@ -1,19 +1,31 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="StringTableStep.cs" company="NBehave">
+//   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
+// </copyright>
+// <summary>
+//   Defines the StringTableStep type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
 
 namespace NBehave.Narrator.Framework
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Text.RegularExpressions;
+
     public class StringTableStep : StringStep
     {
+        private readonly Regex _hasParamsInStep = new Regex(@"\[\w+\]");
+
         private readonly List<Row> _tableSteps = new List<Row>();
 
         public StringTableStep(string step, string fromFile, IStringStepRunner stringTableStepRunner)
             : base(step, fromFile, stringTableStepRunner)
-        { }
-
+        {
+        }
 
         public IEnumerable<Row> TableSteps
         {
@@ -36,10 +48,14 @@ namespace NBehave.Narrator.Framework
             {
                 StringStep step = this;
                 if (hasParamsInStep)
+                {
                     step = InsertParametersToStep(row);
+                }
+
                 var result = StringStepRunner.Run(step, row);
                 actionStepResult.MergeResult(result.Result);
             }
+
             StepResult = actionStepResult;
         }
 
@@ -54,7 +70,10 @@ namespace NBehave.Narrator.Framework
             var step = new StringBuilder(Step + Environment.NewLine);
             step.Append(_tableSteps.First().ColumnNamesToString() + Environment.NewLine);
             foreach (var row in _tableSteps)
+            {
                 step.Append(row.ColumnValuesToString() + Environment.NewLine);
+            }
+
             RemoveLastNewLine(step);
             return step.ToString();
         }
@@ -63,8 +82,6 @@ namespace NBehave.Narrator.Framework
         {
             step.Remove(step.Length - Environment.NewLine.Length, Environment.NewLine.Length);
         }
-
-        readonly Regex _hasParamsInStep = new Regex(@"\[\w+\]");
 
         private bool HasParametersInStep()
         {
@@ -79,6 +96,7 @@ namespace NBehave.Narrator.Framework
                 var replceWithValue = new Regex(string.Format(@"\[{0}\]", column.Key), RegexOptions.IgnoreCase);
                 stringStep = replceWithValue.Replace(stringStep, column.Value);
             }
+
             return new StringStep(stringStep, Source, StringStepRunner);
         }
     }

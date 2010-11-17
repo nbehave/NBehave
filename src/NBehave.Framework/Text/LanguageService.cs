@@ -1,8 +1,18 @@
-﻿using System.Text.RegularExpressions;
-using Gherkin;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="LanguageService.cs" company="NBehave">
+//   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
+// </copyright>
+// <summary>
+//   Defines the LanguageService type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace NBehave.Narrator.Framework
 {
+    using System.Text.RegularExpressions;
+
+    using Gherkin;
+
     public class LanguageService
     {
         private const string DefaultLanguage = "en";

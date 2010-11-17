@@ -1,16 +1,18 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IFileMatcher.cs" company="NBehave">
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="TypeOfStep.cs" company="NBehave">
 //   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
 // </copyright>
 // <summary>
-//   Defines the IFileMatcher type.
+//   Defines the TypeOfStep type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace NBehave.Narrator.Framework
 {
-    public interface IFileMatcher
+    public enum TypeOfStep
     {
-        bool IsMatch(string fileName);
+        Given, 
+        When, 
+        Then
     }
 }

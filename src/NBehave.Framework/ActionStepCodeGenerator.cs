@@ -1,26 +1,38 @@
-using System;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ActionStepCodeGenerator.cs" company="NBehave">
+//   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
+// </copyright>
+// <summary>
+//   Defines the ActionStepCodeGenerator type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace NBehave.Narrator.Framework
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text.RegularExpressions;
+
     public class ActionStepCodeGenerator
     {
+        private readonly Regex _stringRegex = new Regex(@"^('|"").+('|"")$");
+
+        private readonly char[] _whiteSpaces = new[] { ' ', '\n', '\r', '\t' };
+
         public string GenerateMethodFor(string actionStep, TypeOfStep step)
         {
             var actionStepParameterized = ParameterizeActionStep(actionStep);
             var attrib = step.ToString();
             var attribute = string.Format("[{0}(\"{1}\")]{2}", attrib, actionStepParameterized, Environment.NewLine);
             var methodName = ExtractMethodName(attrib + " " + actionStepParameterized);
-            var methodSignature = string.Format("public void {0}({1}){2}",
+            var methodSignature = string.Format(
+                "public void {0}({1}){2}",
                 methodName.Replace(' ', '_'),
                 GetParameters(actionStep),
                 " ");
-            const string methodBody = "{ throw new System.NotImplementedException(); }";
+            string methodBody = "{ throw new System.NotImplementedException(); }";
             return attribute + methodSignature + Environment.NewLine + methodBody;
         }
-       
-        private readonly char[] _whiteSpaces = new[] { ' ', '\n', '\r', '\t' };
 
         private string GetParameters(string row)
         {
@@ -35,13 +47,21 @@ namespace NBehave.Narrator.Framework
                     numberOfParameters++;
                     var paramName = string.Format("param{0}", numberOfParameters);
                     if (IsInt(word))
+                    {
                         parameters += string.Format("int {0}, ", paramName);
+                    }
                     else
+                    {
                         parameters += string.Format("string {0}, ", paramName);
+                    }
                 }
             }
+
             if (numberOfParameters == 0)
+            {
                 return string.Empty;
+            }
+
             return parameters.Substring(0, parameters.Length - 2);
         }
 
@@ -62,6 +82,7 @@ namespace NBehave.Narrator.Framework
                     actionStep += word + " ";
                 }
             }
+
             return actionStep.Substring(0, actionStep.Length - 1);
         }
 
@@ -72,7 +93,6 @@ namespace NBehave.Narrator.Framework
             return words;
         }
 
-        private readonly Regex _stringRegex = new Regex(@"^('|"").+('|"")$");
         private bool IsParameter(string word)
         {
             return IsInt(word) || _stringRegex.IsMatch(word);
@@ -90,11 +110,16 @@ namespace NBehave.Narrator.Framework
             var trimmedRow = row;
             var start = new Regex(@"^\s*");
             if (start.IsMatch(trimmedRow))
+            {
                 trimmedRow = trimmedRow.Substring(start.Match(trimmedRow).Length);
+            }
 
             var end = new Regex(@"\s*$");
             if (end.IsMatch(trimmedRow))
+            {
                 trimmedRow = trimmedRow.Substring(0, trimmedRow.Length - end.Match(trimmedRow).Length);
+            }
+
             return trimmedRow;
         }
 
@@ -106,12 +131,8 @@ namespace NBehave.Narrator.Framework
             {
                 methodName += match.Value + "_";
             }
+
             return methodName.Substring(0, methodName.Length - 1);
         }
-    }
-
-    public enum TypeOfStep
-    {
-        Given, When, Then
     }
 }

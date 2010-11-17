@@ -1,15 +1,24 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ScenarioResult.cs" company="NBehave">
+//   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
+// </copyright>
+// <summary>
+//   Defines the ScenarioResult type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace NBehave.Narrator.Framework
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
     public class ScenarioResult
     {
+        private readonly List<ActionStepResult> _actionStepResults;
         private Result _result = new Passed();
         private string _message;
         private string _stackTrace;
-        private readonly List<ActionStepResult> _actionStepResults;
 
         public ScenarioResult(Feature feature, string scenarioTitle)
         {
@@ -37,30 +46,15 @@ namespace NBehave.Narrator.Framework
             get { return _stackTrace; }
         }
 
+        public IEnumerable<ActionStepResult> ActionStepResults
+        {
+            get { return _actionStepResults; }
+        }
+
         public virtual void AddActionStepResult(ActionStepResult actionStepResult)
         {
             _actionStepResults.Add(actionStepResult);
             MergeResult(actionStepResult);
-        }
-
-        protected void MergeResult(ActionStepResult actionStepResult)
-        {
-            var newResult = actionStepResult.Result;
-            if (newResult.GetType() == typeof(Failed))
-            {
-                _result = newResult;
-                Fail(((Failed)newResult).Exception);
-            }
-            if (newResult.GetType() == typeof(Pending) && _result.GetType() != typeof(Failed))
-            {
-                _result = newResult;
-                Pend(newResult.Message, actionStepResult.StringStep);
-            }
-        }
-
-        public IEnumerable<ActionStepResult> ActionStepResults
-        {
-            get { return _actionStepResults; }
         }
 
         public void Fail(Exception exception)
@@ -77,12 +71,32 @@ namespace NBehave.Narrator.Framework
             _result = new Pending(_message);
         }
 
+        protected void MergeResult(ActionStepResult actionStepResult)
+        {
+            var newResult = actionStepResult.Result;
+            if (newResult.GetType() == typeof(Failed))
+            {
+                _result = newResult;
+                Fail(((Failed)newResult).Exception);
+            }
+
+            if (newResult.GetType() == typeof(Pending) && _result.GetType() != typeof(Failed))
+            {
+                _result = newResult;
+                Pend(newResult.Message, actionStepResult.StringStep);
+            }
+        }
+
         private void AddToCurrentMessage(string messageToAdd)
         {
             if (string.IsNullOrEmpty(_message))
+            {
                 _message = messageToAdd;
+            }
             else
+            {
                 _message += Environment.NewLine + messageToAdd;
+            }
         }
 
         private string BuildMessage(Exception exception)
@@ -115,6 +129,7 @@ namespace NBehave.Narrator.Framework
                 builder.Append(inner.StackTrace);
                 inner = inner.InnerException;
             }
+
             return builder.ToString();
         }
     }

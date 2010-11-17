@@ -1,8 +1,17 @@
-﻿using System.Reflection;
-using System.Text.RegularExpressions;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="StoryRunnerFilter.cs" company="NBehave">
+//   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
+// </copyright>
+// <summary>
+//   Defines the StoryRunnerFilter type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace NBehave.Narrator.Framework
 {
+    using System.Reflection;
+    using System.Text.RegularExpressions;
+
     public class StoryRunnerFilter
     {
         private readonly Regex _namespaceFilter;
@@ -11,7 +20,8 @@ namespace NBehave.Narrator.Framework
 
         public StoryRunnerFilter()
             : this(".", ".", ".")
-        { }
+        {
+        }
 
         public StoryRunnerFilter(string namespaceFilter, string classNameFilter, string methodNameFilter)
         {
@@ -20,6 +30,20 @@ namespace NBehave.Narrator.Framework
             _methodNameFilter = new Regex(AnchorValue(methodNameFilter));
         }
 
+        public Regex NamespaceFilter
+        {
+            get { return this._namespaceFilter; }
+        }
+
+        public Regex ClassNameFilter
+        {
+            get { return this._classNameFilter; }
+        }
+
+        public Regex MethodNameFiler
+        {
+            get { return this._methodNameFilter; }
+        }
 
         public static StoryRunnerFilter GetFilter(MemberInfo member)
         {
@@ -56,31 +80,18 @@ namespace NBehave.Narrator.Framework
                         break;
                 }
             }
+
             return new StoryRunnerFilter(nsFilter, clsFilter, memberNameFilter);
-        }
-
-
-        public Regex NamespaceFilter
-        {
-            get { return _namespaceFilter; }
-        }
-
-        public Regex ClassNameFilter
-        {
-            get { return _classNameFilter; }
-        }
-
-        public Regex MethodNameFiler
-        {
-            get { return _methodNameFilter; }
         }
 
         private string AnchorValue(string value)
         {
             if (value == ".")
+            {
                 return value;
+            }
+
             return "^" + value + "$";
         }
-
     }
 }
