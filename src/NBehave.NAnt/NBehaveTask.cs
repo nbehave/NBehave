@@ -62,7 +62,7 @@ namespace NBehave.NAnt
                 FailBuildBasedOn(results);
         }
 
-        private void LoadAssemblies(RunnerBase runner)
+        private void LoadAssemblies(TextRunner runner)
         {
             foreach (var path in TestAssemblies.FileNames)
                 runner.LoadAssembly(path);

@@ -144,7 +144,6 @@
     <Compile Include="EventListeners\IEventListener.cs" />
     <Compile Include="PlainTextOutput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RunnerBase.cs" />
     <Compile Include="Result.cs" />
     <Compile Include="ScenarioResult.cs" />
     <Compile Include="Text\ActionStepText.cs" />

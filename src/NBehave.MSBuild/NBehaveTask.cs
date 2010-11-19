@@ -71,7 +71,7 @@ namespace NBehave.MSBuild
             return true;
         }
 
-        private void LoadAssemblies(RunnerBase runner)
+        private void LoadAssemblies(TextRunner runner)
         {
             foreach (var path in TestAssemblies)
                 runner.LoadAssembly(path);
