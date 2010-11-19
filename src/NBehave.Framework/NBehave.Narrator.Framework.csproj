@@ -121,8 +121,8 @@
     <Compile Include="ParameterConverter.cs" />
     <Compile Include="ScenarioExampleResult.cs" />
     <Compile Include="EventListeners\SummaryWriter.cs" />
-    <Compile Include="ActionMethodInfo.cs" />
-    <Compile Include="ActionMissingException.cs" />
+    <Compile Include="Domain\ActionMethodInfo.cs" />
+    <Compile Include="Domain\ActionMissingException.cs" />
     <Compile Include="Attributes\ActionStepAttribute.cs" />
     <Compile Include="ActionStepConverterExtensions.cs" />
     <Compile Include="ActionStepFileLoader.cs" />
@@ -134,7 +134,7 @@
     <Compile Include="MatchAllFiles.cs" />
     <Compile Include="StringStepRunner.cs" />
     <Compile Include="Attributes\ActionStepsAttribute.cs" />
-    <Compile Include="EventArgs.cs" />
+    <Compile Include="Domain\EventArgs.cs" />
     <Compile Include="ActionStepParser.cs" />
     <Compile Include="EventListeners\EventListeners.cs" />
     <Compile Include="EventListeners\MultiOutputEventListener.cs" />
@@ -146,7 +146,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Result.cs" />
     <Compile Include="ScenarioResult.cs" />
-    <Compile Include="ActionStepText.cs" />
+    <Compile Include="Domain\ActionStepText.cs" />
     <Compile Include="Attributes\AfterScenarioAttribute.cs" />
     <Compile Include="Attributes\AfterStepAttribute.cs" />
     <Compile Include="Attributes\BeforeScenarioAttribute.cs" />
@@ -160,15 +160,15 @@
     <Compile Include="FeatureResults.cs" />
     <Compile Include="StoryRunnerFilter.cs" />
     <Compile Include="Attributes\ThenAttribute.cs" />
-    <Compile Include="Example.cs" />
-    <Compile Include="ExampleColumns.cs" />
-    <Compile Include="Feature.cs" />
-    <Compile Include="Row.cs" />
+    <Compile Include="Domain\Example.cs" />
+    <Compile Include="Domain\ExampleColumns.cs" />
+    <Compile Include="Domain\Feature.cs" />
+    <Compile Include="Domain\Row.cs" />
     <Compile Include="ScenarioWithSteps.cs" />
-    <Compile Include="StringStep.cs" />
-    <Compile Include="StringTableStep.cs" />
+    <Compile Include="Domain\StringStep.cs" />
+    <Compile Include="Domain\StringTableStep.cs" />
     <Compile Include="Attributes\WhenAttribute.cs" />
-    <Compile Include="TypeOfStep.cs" />
+    <Compile Include="Domain\TypeOfStep.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\NBehave.snk">
