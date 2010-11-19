@@ -272,14 +272,5 @@ namespace NBehave.Spec.MSTest
         {
             StringAssert.StartsWith(value, substring);
         }
-
-        public static IActionSpecification<T> ShouldThrow<T>(this T value, Type exception)
-        {
-            return new ActionSpecification<T>(value, e =>
-            {
-                e.ShouldNotBeNull();
-                e.ShouldBeInstanceOfType(exception);
-            });
-        }
     }
 }

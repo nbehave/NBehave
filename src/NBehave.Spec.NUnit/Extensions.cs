@@ -268,15 +268,6 @@ namespace NBehave.Spec.NUnit
             StringAssert.StartsWith(substring, value);
         }
 
-        public static IActionSpecification<T> ShouldThrow<T>(this T value, Type exception)
-        {
-            return new ActionSpecification<T>(value, e =>
-            {
-                e.ShouldNotBeNull();
-                e.ShouldBeInstanceOfType(exception);
-            });
-        }
-
         public static Exception ShouldThrow<T>(this Action action)
         {
             bool failed = false;

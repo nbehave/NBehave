@@ -249,13 +249,5 @@ namespace NBehave.Spec.MbUnit
             Assert.StartsWith(actual, expected);
         }
 
-        public static IActionSpecification<T> ShouldThrow<T>(this T value, Type exception)
-        {
-            return new ActionSpecification<T>(value, e =>
-            {
-                e.ShouldNotBeNull();
-                e.ShouldBeInstanceOfType(exception);
-            });
-        }
     }
 }
