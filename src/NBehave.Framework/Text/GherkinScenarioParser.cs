@@ -147,6 +147,7 @@ namespace NBehave.Narrator.Framework
 
         public void Background(Token keyword, Token name)
         {
+
         }
 
         public void ScenarioOutline(Token keyword, Token name)

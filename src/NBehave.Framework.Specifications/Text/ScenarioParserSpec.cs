@@ -23,24 +23,6 @@ namespace NBehave.Narrator.Framework.Specifications.Text
         private IEnumerable<ScenarioWithSteps> _scenarios;
         private IEnumerable<Feature> _feature;
 
-        [Test]
-        public virtual void ShouldHaveGivenStep()
-        {
-            CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("Given numbers 1 and 2"));
-        }
-
-        [Test]
-        public virtual void ShouldHaveWhenStep()
-        {
-            CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("When I add the numbers"));
-        }
-
-        [Test]
-        public virtual void ShouldHaveThenStep()
-        {
-            CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("Then the sum is 3"));
-        }
-
         protected void Parse(string scenario)
         {
             var parser = CreateScenarioParser();
@@ -59,6 +41,24 @@ namespace NBehave.Narrator.Framework.Specifications.Text
                                   "  Then the sum is 3";
 
                 Parse(scenario);
+            }
+
+            [Test]
+            public void ShouldHaveGivenStep()
+            {
+                CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("Given numbers 1 and 2"));
+            }
+
+            [Test]
+            public void ShouldHaveWhenStep()
+            {
+                CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("When I add the numbers"));
+            }
+
+            [Test]
+            public void ShouldHaveThenStep()
+            {
+                CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("Then the sum is 3"));
             }
         }
 
@@ -231,13 +231,13 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             }
 
             [Test]
-            public override void ShouldHaveGivenStep()
+            public void ShouldHaveGivenStep()
             {
                 CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("Given numbers [left] and [right]"));
             }
 
             [Test]
-            public override void ShouldHaveThenStep()
+            public void ShouldHaveThenStep()
             {
                 CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("Then the sum is [sum]"));
             }
@@ -281,19 +281,19 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             }
 
             [Test]
-            public override void ShouldHaveGivenStep()
+            public void ShouldHaveGivenStep()
             {
                 CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("Given the following people exists:"));
             }
 
             [Test]
-            public override void ShouldHaveWhenStep()
+            public void ShouldHaveWhenStep()
             {
                 CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("When I search for people in sweden"));
             }
 
             [Test]
-            public override void ShouldHaveThenStep()
+            public void ShouldHaveThenStep()
             {
                 CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("Then I should get:"));
             }
@@ -329,6 +329,41 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             public void Feature2ShouldBeReferencedByScenario2()
             {
                 Assert.That(_scenarios.Skip(1).First().Feature.Title, Is.EqualTo("Calculator 2"));
+            }
+        }
+
+        public class ScenarioWithBackground : ScenarioParserSpec
+        {
+            [SetUp]
+            public void Scenario()
+            {
+                var scenario = "Feature: Support for background sections                                   " + Environment.NewLine +
+                               "  As a NBehave user                                                        " + Environment.NewLine +
+                               "  I want to be able to declare background sections                         " + Environment.NewLine +
+                               "  So that I can add context to my scenarios                                " + Environment.NewLine +
+                               "                                                                           " + Environment.NewLine +
+                               "  Background:                                                              " + Environment.NewLine +
+                               "    Given this background section declaration                              " + Environment.NewLine +
+                               "    And this one                                                           " + Environment.NewLine +
+                               "                                                                           " + Environment.NewLine +
+                               "  Scenario: Running a feature file with a background section               " + Environment.NewLine +
+                               "    Given this scenario under the context of a background section          " + Environment.NewLine +
+                               "    When the scenario is executed                                          " + Environment.NewLine +
+                               "    Then the background section steps should be called before this scenario" + Environment.NewLine;
+
+                Parse(scenario);
+            }
+
+            [Test]
+            public void ShouldHaveAddedBackgroundGivenStepToFeature()
+            {
+                Assert.That(_scenarios.First().Steps.First().Step, Is.EqualTo("Given this background section declaration"));
+            }
+
+            [Test]
+            public void ShouldHaveAddedBackgroundAndStepToFeature()
+            {
+                Assert.That(_scenarios.First().Steps.Skip(1).First().Step, Is.EqualTo("And this one"));
             }
         }
     }

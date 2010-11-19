@@ -85,7 +85,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 _runner.Load(new[] { TestFeatures.FeatureWithFailingStep });
                 var results = _runner.Run();
                 Assert.That(results.NumberOfFailingScenarios, Is.EqualTo(1));
-                Assert.That(results.ScenarioResults[0].Message.StartsWith("NUnit.Framework.AssertionException :"), Is.True);
+                Assert.That(results.ScenarioResults[0].Message.StartsWith("Should.Core.Exceptions.EqualException"), Is.True);
             }
 
             [Test]
