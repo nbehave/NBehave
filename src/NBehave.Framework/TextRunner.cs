@@ -16,6 +16,8 @@ namespace NBehave.Narrator.Framework
 
     public class TextRunner
     {
+        private readonly NBehaveConfiguration _configuration;
+
         private readonly List<Feature> _features = new List<Feature>();
         private readonly ActionStepFileLoader _actionStepFileLoader;
         private readonly IStringStepRunner _stringStepRunner;
@@ -24,13 +26,13 @@ namespace NBehave.Narrator.Framework
         private EventHandler<EventArgs<ScenarioWithSteps>> _scenarioCreatedEventHandler;
         private EventHandler<EventArgs<ScenarioResult>> _scenarioResultAddedEventHandler;
 
-        public TextRunner(IEventListener eventListener)
+        public TextRunner(NBehaveConfiguration configuration)
         {
+            _configuration = configuration;
             ActionCatalog = new ActionCatalog();
             StoryRunnerFilter = new StoryRunnerFilter();
             _stringStepRunner = new StringStepRunner(ActionCatalog);
             _actionStepFileLoader = new ActionStepFileLoader(_stringStepRunner);
-            EventListener = eventListener;
         }
 
         public StoryRunnerFilter StoryRunnerFilter
@@ -39,56 +41,59 @@ namespace NBehave.Narrator.Framework
             set { _storyRunnerFilter = value; }
         }
 
-        public bool IsDryRun { get; set; }
-
         public ActionCatalog ActionCatalog { get; private set; }
-
-        protected IEventListener EventListener { get; set; }
-
-        public void LoadAssembly(string assemblyPath)
-        {
-            LoadAssembly(Assembly.LoadFrom(assemblyPath));
-        }
 
         public FeatureResults Run()
         {
+            foreach (var assembly in _configuration.Assemblies)
+            {
+                LoadAssembly(assembly);    
+            }
+
+            this.Load(_configuration.ScenarioFiles);
+
             var results = new FeatureResults();
 
             try
             {
-                InitializeRun(EventListener);
-                StartWatching(EventListener);
+                InitializeRun();
+                StartWatching();
                 RunFeatures(results);
             }
             finally
             {
-                StopWatching(EventListener);
+                StopWatching();
             }
 
             return results;
         }
 
-        public void Load(IEnumerable<string> fileLocations)
+        private void LoadAssembly(string assemblyPath)
+        {
+            LoadAssembly(Assembly.LoadFrom(assemblyPath));
+        }
+
+        private void Load(IEnumerable<string> fileLocations)
         {
             _features.AddRange(_actionStepFileLoader.Load(fileLocations));
         }
 
-        public void LoadAssembly(Assembly assembly)
+        private void LoadAssembly(Assembly assembly)
         {
             ParseAssembly(assembly);
         }
 
-        protected void ParseAssembly(Assembly assembly)
+        private void ParseAssembly(Assembly assembly)
         {
             var parser = new ActionStepParser(StoryRunnerFilter, ActionCatalog);
             parser.FindActionSteps(assembly);
         }
 
-        protected void RunFeatures(FeatureResults results)
+        private void RunFeatures(FeatureResults results)
         {
-            EventListener.ThemeStarted(string.Empty);
+            _configuration.EventListener.ThemeStarted(string.Empty);
             RunEachFeature(results, feature => true, scenario => true);
-            EventListener.ThemeFinished();
+            _configuration.EventListener.ThemeFinished();
         }
 
         private void RunEachFeature(FeatureResults featureResults, Func<Feature, bool> featurePredicate, Func<ScenarioWithSteps, bool> scenarioPredicate)
@@ -112,11 +117,11 @@ namespace NBehave.Narrator.Framework
             }
         }
 
-        private void StartWatching(IEventListener listener)
+        private void StartWatching()
         {
-            StartWatchingFeatureCreated(listener);
-            StartWatchingFeatureResults(listener);
-            StartWatchingScenarioCreated(listener);
+            StartWatchingFeatureCreated(_configuration.EventListener);
+            StartWatchingFeatureResults(_configuration.EventListener);
+            StartWatchingScenarioCreated(_configuration.EventListener);
         }
 
         private void StartWatchingFeatureResults(IEventListener listener)
@@ -135,24 +140,24 @@ namespace NBehave.Narrator.Framework
         {
             _featureCreatedEventHandler = (sender, e) =>
             {
-                e.EventData.IsDryRun = IsDryRun;
+                e.EventData.IsDryRun = _configuration.IsDryRun;
                 listener.FeatureCreated(e.EventData.Title);
                 listener.FeatureNarrative(e.EventData.Narrative);
             };
             Feature.FeatureCreated += _featureCreatedEventHandler;
         }
 
-        private void StopWatching(IEventListener listener)
+        private void StopWatching()
         {
             Feature.FeatureCreated -= _featureCreatedEventHandler;
             ScenarioWithSteps.ScenarioCreated -= _scenarioCreatedEventHandler;
             ScenarioStepRunner.ScenarioResultCreated -= _scenarioResultAddedEventHandler;
-            listener.RunFinished();
+            _configuration.EventListener.RunFinished();
         }
 
-        private void InitializeRun(IEventListener listener)
+        private void InitializeRun()
         {
-            listener.RunStarted();
+            _configuration.EventListener.RunStarted();
         }
     }
 }

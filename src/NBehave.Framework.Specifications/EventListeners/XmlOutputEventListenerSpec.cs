@@ -19,10 +19,14 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
         {
             var memStream = new MemoryStream();
             var listener = new XmlOutputEventListener(new XmlTextWriter(memStream, Encoding.UTF8));
-            var runner = new TextRunner(listener);
-            runner.LoadAssembly(GetType().Assembly);
-            runner.Load(_feature);
-            runner.Run();
+
+            NBehaveConfiguration
+                .New
+                .SetScenarioFiles(_feature)
+                .SetAssemblies(new[] { GetType().Assembly.Location })
+                .SetEventListener(listener)
+                .Run();
+
             _xmlDoc = new XmlDocument();
             memStream.Seek(0, 0);
             _xmlDoc.Load(memStream);
@@ -158,10 +162,14 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
             {
                 var memStream = new MemoryStream();
                 var listener = Framework.EventListeners.EventListeners.XmlWriterEventListener(memStream);
-                var runner = new TextRunner(listener);
-                runner.LoadAssembly(GetType().Assembly);
-                runner.Load(_feature);
-                runner.Run();
+
+                NBehaveConfiguration
+                    .New
+                    .SetScenarioFiles(_feature)
+                    .SetAssemblies(new[]{GetType().Assembly.Location})
+                    .SetEventListener(listener)
+                    .Run();
+
                 memStream.Seek(0, 0);
                 var xmlAsText = new StreamReader(memStream);
                 var xml = xmlAsText.ReadToEnd();

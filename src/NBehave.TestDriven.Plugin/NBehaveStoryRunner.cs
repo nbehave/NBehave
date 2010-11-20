@@ -9,8 +9,6 @@ namespace NBehave.TestDriven.Plugin
 {
     public class NBehaveStoryRunner : ITestRunner
     {
-        private TextRunner _runner;
-
         TestRunState ITestRunner.RunAssembly(ITestListener tddNetListener, Assembly assembly)
         {
             return Run(assembly, null, tddNetListener);            
@@ -29,24 +27,23 @@ namespace NBehave.TestDriven.Plugin
 
         private TestRunState Run(Assembly assembly, MemberInfo member, ITestListener tddNetListener)
         {
-            var listener = new StoryRunnerEventListenerProxy(tddNetListener);
-            _runner = new TextRunner(listener);
-            
             var locator = new StoryLocator
-                            {
-                                RootLocation = Path.GetDirectoryName(assembly.Location)
-                            };
+            {
+                RootLocation = Path.GetDirectoryName(assembly.Location)
+            };
 
             var type = member as Type;
             var stories = (type == null)
-                                      ? locator.LocateAllStories() 
+                                      ? locator.LocateAllStories()
                                       : locator.LocateStoriesMatching(type);
-            
-            _runner.Load(stories);
-            _runner.StoryRunnerFilter = StoryRunnerFilter.GetFilter(member);
-            _runner.LoadAssembly(assembly);
 
-            var results = _runner.Run();
+            var results = NBehaveConfiguration
+                .New
+                .SetEventListener(new StoryRunnerEventListenerProxy(tddNetListener))
+                .SetScenarioFiles(stories)
+                .SetAssemblies(new[] { assembly.Location })
+                .SetFilter(StoryRunnerFilter.GetFilter(member))
+                .Run();
 
             return GetTestRunState(results);
         }

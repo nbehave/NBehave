@@ -16,10 +16,13 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
         {
             TextWriter output = new StringWriter(new StringBuilder());
             IEventListener listener = new CodeGenEventListener(output);
-            var runner = new TextRunner(listener);
-            runner.LoadAssembly(GetType().Assembly);
-            runner.Load(new[] { TestFeatures.FeaturesAndScenarios });
-            runner.Run();
+
+            NBehaveConfiguration
+                .New.SetEventListener(listener)
+                .SetAssemblies(new[] { GetType().Assembly.Location })
+                .SetScenarioFiles(new[] { TestFeatures.FeaturesAndScenarios })
+                .Run();
+
             _output = output.ToString();
         }
 

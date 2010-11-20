@@ -1,13 +1,24 @@
-﻿using System;
-using System.IO;
-using System.Text;
-using Microsoft.Build.Framework;
-using Microsoft.Build.Utilities;
-using NBehave.Narrator.Framework;
-using NBehave.Narrator.Framework.EventListeners;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="NBehaveTask.cs" company="NBehave">
+//   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
+// </copyright>
+// <summary>
+//   Defines the NBehaveTask type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace NBehave.MSBuild
 {
+    using System;
+    using System.IO;
+    using System.Text;
+
+    using Microsoft.Build.Framework;
+    using Microsoft.Build.Utilities;
+
+    using NBehave.Narrator.Framework;
+    using NBehave.Narrator.Framework.EventListeners;
+
     public class NBehaveTask : Task
     {
         public bool DryRun { get; set; }
@@ -51,12 +62,13 @@ namespace NBehave.MSBuild
 
             WriteHeaderInto(output);
 
-            var listener = EventListeners.CreateEventListenerUsing(msbuildLogWriter,
-                                                                              TextOutputFile,
-                                                                              XmlOutputFile);
-            var runner = new TextRunner(listener) { IsDryRun = DryRun };
-            runner.Load(ScenarioFiles);
-            LoadAssemblies(runner);
+            var config = NBehaveConfiguration.New
+                .SetScenarioFiles(ScenarioFiles)
+                .SetDryRun(DryRun)
+                .SetAssemblies(TestAssemblies)
+                .SetEventListener(EventListeners.CreateEventListenerUsing(msbuildLogWriter, TextOutputFile, XmlOutputFile));
+            var runner = new TextRunner(config);
+
             FeatureResults = runner.Run();
 
             if (DryRun)
@@ -69,12 +81,6 @@ namespace NBehave.MSBuild
                 return false;
 
             return true;
-        }
-
-        private void LoadAssemblies(TextRunner runner)
-        {
-            foreach (var path in TestAssemblies)
-                runner.LoadAssembly(path);
         }
 
         private void WriteHeaderInto(PlainTextOutput output)

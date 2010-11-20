@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using NAnt.Core;
@@ -10,6 +9,8 @@ using NAntCore = NAnt.Core;
 
 namespace NBehave.NAnt
 {
+    using System.Linq;
+
     [TaskName("nbehave")]
     public class NBehaveTask : Task
     {
@@ -50,9 +51,14 @@ namespace NBehave.NAnt
                                                                               TextOutputFile,
                                                                               XmlOutputFile);
 
-            var runner = new TextRunner(listener) { IsDryRun = DryRun };
-            runner.Load(GetFileNames(ScenarioFiles));
-            LoadAssemblies(runner);
+            var runner = NBehaveConfiguration
+                .New
+                .SetDryRun(DryRun)
+                .SetScenarioFiles(ScenarioFiles.FileNames.Cast<string>())
+                .SetAssemblies(TestAssemblies.FileNames.Cast<string>())
+                .SetEventListener(listener)
+                .Build();
+
             var results = runner.Run();
 
             if (DryRun)
@@ -60,20 +66,6 @@ namespace NBehave.NAnt
 
             if (FailBuild)
                 FailBuildBasedOn(results);
-        }
-
-        private void LoadAssemblies(TextRunner runner)
-        {
-            foreach (var path in TestAssemblies.FileNames)
-                runner.LoadAssembly(path);
-        }
-
-        private IEnumerable<string> GetFileNames(FileSet files)
-        {
-            foreach (var fileName in files.FileNames)
-            {
-                yield return fileName;
-            }
         }
 
         private void WriteHeaderInto(PlainTextOutput output)

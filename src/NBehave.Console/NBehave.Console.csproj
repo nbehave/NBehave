@@ -109,7 +109,7 @@
     </Compile>
     <Compile Include="CommandLineOptions.cs" />
     <Compile Include="ConsoleOptions.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="NBehaveConsoleRunner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
