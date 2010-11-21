@@ -9,14 +9,19 @@
 
 namespace NBehave.Narrator.Framework
 {
-    using System;
     using System.Collections.Generic;
+    using NBehave.Narrator.Framework.Tiny;
 
     public class ScenarioStepRunner
     {
+        private readonly ITinyMessengerHub _hub;
+
         private Feature _lastFeature;
 
-        public static event EventHandler<EventArgs<ScenarioResult>> ScenarioResultCreated;
+        public ScenarioStepRunner(ITinyMessengerHub hub)
+        {
+            _hub = hub;
+        }
 
         public IEnumerable<ScenarioResult> Run(IEnumerable<ScenarioWithSteps> scenarios)
         {
@@ -45,13 +50,7 @@ namespace NBehave.Narrator.Framework
 
         private void RaiseFeatureResultsEvent(ScenarioResult scenarioResult)
         {
-            if (ScenarioResultCreated == null)
-            {
-                return;
-            }
-
-            var e = new EventArgs<ScenarioResult>(scenarioResult);
-            ScenarioResultCreated.Invoke(this, e);
+            _hub.Publish(new ScenarioResultMessage(this, scenarioResult));
         }
     }
 }

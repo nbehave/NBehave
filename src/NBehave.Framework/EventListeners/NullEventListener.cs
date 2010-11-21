@@ -9,38 +9,7 @@
 
 namespace NBehave.Narrator.Framework.EventListeners
 {
-    public class NullEventListener : IEventListener
+    public class NullEventListener : EventListener
     {
-         void IEventListener.FeatureCreated(string feature)
-        {
-        }
-
-        void IEventListener.FeatureNarrative(string message)
-        {
-        }
-
-        void IEventListener.ScenarioCreated(string scenarioTitle)
-        {            
-        }
-
-        void IEventListener.RunStarted()
-        {
-        }
-
-        void IEventListener.RunFinished()
-        {
-        }
-
-        void IEventListener.ThemeStarted(string name)
-        {
-        }
-
-        void IEventListener.ThemeFinished()
-        {
-        }
-
-        public void ScenarioResult(ScenarioResult result)
-        {            
-        }
     }
 }

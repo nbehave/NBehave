@@ -4,6 +4,8 @@ using NUnit.Framework;
 
 namespace NBehave.Narrator.Framework.Specifications.Text
 {
+    using NBehave.Narrator.Framework.Tiny;
+
     [ActionSteps]
     public class CalculatorSteps
     {
@@ -83,8 +85,10 @@ namespace NBehave.Narrator.Framework.Specifications.Text
 
             protected override void EstablishContext()
             {
-                ScenarioWithSteps.ScenarioCreated += (o, e) => { _scenarioCreatedCalled = true; };
-                var scenarioWithSteps = new ScenarioWithSteps(_stringStepRunner) {Title = "scenario title"};
+                var tinyMessengerHub = Tiny.TinyIoCContainer.Current.Resolve<ITinyMessengerHub>();
+                tinyMessengerHub.Subscribe<ScenarioCreated>(created => { _scenarioCreatedCalled = true; });
+
+                var scenarioWithSteps = new ScenarioWithSteps(_stringStepRunner, tinyMessengerHub) { Title = "scenario title" };
                 scenarioWithSteps.AddStep("Given numbers 1 and 2");
                 scenarioWithSteps.AddStep("When I add the numbers");
                 scenarioWithSteps.AddStep("Then the sum is 3");
@@ -141,7 +145,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
 
             protected override void EstablishContext()
             {
-                var scenarioWithSteps = new ScenarioWithSteps(_stringStepRunner);
+                var scenarioWithSteps = new ScenarioWithSteps(_stringStepRunner, TinyIoCContainer.Current.Resolve<ITinyMessengerHub>());
                 scenarioWithSteps.AddStep("Given numbers [left] and [right]");
                 scenarioWithSteps.AddStep("When I add the numbers");
                 scenarioWithSteps.AddStep("Then the sum is [sum]");

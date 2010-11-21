@@ -12,7 +12,7 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
     using System.Collections.Generic;
     using System.Xml;
 
-    public class XmlOutputEventListener : IEventListener
+    public class XmlOutputEventListener : EventListener
     {
         private readonly XmlOutputWriter _xmlOutputWriter;
         private readonly List<EventReceived> _eventsReceived = new List<EventReceived>();
@@ -25,43 +25,43 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
 
         private XmlWriter Writer { get; set; }
 
-        void IEventListener.RunStarted()
+        public override void RunStarted()
         {
             _eventsReceived.Add(new EventReceived(string.Empty, EventType.RunStart));
         }
 
-        void IEventListener.RunFinished()
+        public override void RunFinished()
         {
             _eventsReceived.Add(new EventReceived(string.Empty, EventType.RunFinished));
             _xmlOutputWriter.WriteAllXml();
         }
 
-        void IEventListener.ThemeStarted(string name)
+        public override void ThemeStarted(string name)
         {
             _eventsReceived.Add(new EventReceived(name, EventType.ThemeStarted));
         }
 
-        void IEventListener.ThemeFinished()
+        public override void ThemeFinished()
         {
             _eventsReceived.Add(new EventReceived(string.Empty, EventType.ThemeFinished));
         }
 
-        void IEventListener.FeatureCreated(string feature)
+        public override void FeatureCreated(string feature)
         {
             _eventsReceived.Add(new EventReceived(feature, EventType.FeatureCreated));
         }
 
-        void IEventListener.FeatureNarrative(string message)
+        public override void FeatureNarrative(string message)
         {
             _eventsReceived.Add(new EventReceived(message, EventType.FeatureNarrative));
         }
 
-        void IEventListener.ScenarioCreated(string scenario)
+        public override void ScenarioCreated(string scenario)
         {
             _eventsReceived.Add(new EventReceived(scenario, EventType.ScenarioCreated));
         }
 
-        void IEventListener.ScenarioResult(ScenarioResult result)
+        public override void ScenarioResult(ScenarioResult result)
         {
             _eventsReceived.Add(new ScenarioResultEventReceived(result));
         }

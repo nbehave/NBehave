@@ -10,10 +10,10 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
         [Test]
         public void ShouldInvokeMethodOnAllSpecifiedListeners()
         {
-            var mockFirstEventListener = MockRepository.GenerateMock<IEventListener>();
-            var mockSecondEventListener = MockRepository.GenerateMock<IEventListener>();
+            var mockFirstEventListener = MockRepository.GenerateMock<EventListener>();
+            var mockSecondEventListener = MockRepository.GenerateMock<EventListener>();
 
-            IEventListener listener = new MultiOutputEventListener(mockFirstEventListener, mockSecondEventListener);
+            EventListener listener = new MultiOutputEventListener(mockFirstEventListener, mockSecondEventListener);
             listener.RunStarted();
             mockFirstEventListener.AssertWasCalled(l => l.RunStarted());
             mockSecondEventListener.AssertWasCalled(l => l.RunStarted());

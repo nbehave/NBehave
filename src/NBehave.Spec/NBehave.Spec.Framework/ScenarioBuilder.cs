@@ -4,6 +4,8 @@ using NBehave.Narrator.Framework;
 
 namespace NBehave.Spec
 {
+    using NBehave.Narrator.Framework.Tiny;
+
     public enum ScenarioFragment
     {
         Given,
@@ -26,7 +28,7 @@ namespace NBehave.Spec
             {
                 if(_scenario == null)
                 {
-                    _scenario = new ScenarioWithSteps(StepRunner) {Title = _scenarioTitle};
+                    _scenario = new ScenarioWithSteps(StepRunner, TinyIoCContainer.Current.Resolve<ITinyMessengerHub>()) { Title = _scenarioTitle };
                     Feature.AddScenario(Scenario);
                 }
                 return _scenario;

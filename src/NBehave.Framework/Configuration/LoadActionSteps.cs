@@ -2,7 +2,7 @@
 {
     using System.Reflection;
 
-    class LoadActionSteps : IStartupTask
+    public class LoadActionSteps : IStartupTask
     {
         private NBehaveConfiguration _configuration;
 

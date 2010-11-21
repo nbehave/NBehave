@@ -13,7 +13,7 @@ namespace NBehave.Narrator.Framework.EventListeners
     using System.Collections.Generic;
     using System.IO;
 
-    public class TextWriterEventListener : IEventListener, IDisposable
+    public class TextWriterEventListener : EventListener, IDisposable
     {
         private readonly TextWriter _writer;
 
@@ -31,32 +31,28 @@ namespace NBehave.Narrator.Framework.EventListeners
             Dispose(true);
         }
 
-        public void RunStarted()
-        {
-        }
-
-        public void FeatureCreated(string feature)
+        public override void FeatureCreated(string feature)
         {
             _writer.WriteLine("Feature: {0}", feature);
         }
 
-        public void FeatureNarrative(string message)
+        public override void FeatureNarrative(string message)
         {
             _writer.WriteLine(message);
         }
 
-        public void ScenarioCreated(string scenarioTitle)
+        public override void ScenarioCreated(string scenarioTitle)
         {
             _writer.WriteLine("Scenario: {0}", scenarioTitle);
         }
 
-        public void RunFinished()
+        public override void RunFinished()
         {
             WriteSummary();
             _writer.Flush();
         }
 
-        public void ThemeStarted(string name)
+        public override void ThemeStarted(string name)
         {
             if (string.IsNullOrEmpty(name) == false)
             {
@@ -64,11 +60,7 @@ namespace NBehave.Narrator.Framework.EventListeners
             }
         }
 
-        public void ThemeFinished()
-        {
-        }
-
-        public void ScenarioResult(ScenarioResult result)
+        public override void ScenarioResult(ScenarioResult result)
         {
             _allResults.Add(result);
             foreach (var actionStepResult in result.ActionStepResults)

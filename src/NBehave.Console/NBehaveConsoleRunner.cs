@@ -135,9 +135,9 @@ namespace NBehave.Console
             }
         }
 
-        internal static IEventListener CreateEventListener(ConsoleOptions options)
+        internal static EventListener CreateEventListener(ConsoleOptions options)
         {
-            var eventListeners = new List<IEventListener>();
+            var eventListeners = new List<EventListener>();
             if (options.HasStoryOutput)
             {
                 eventListeners.Add(EventListeners.FileOutputEventListener(options.storyOutput));

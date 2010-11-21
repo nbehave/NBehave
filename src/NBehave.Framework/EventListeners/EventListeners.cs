@@ -17,7 +17,7 @@ namespace NBehave.Narrator.Framework.EventListeners
 
     public static class EventListeners
     {
-        public static IEventListener CreateEventListenerUsing(TextWriter writer, string textWriterFile, string xmlWriterFile)
+        public static EventListener CreateEventListenerUsing(TextWriter writer, string textWriterFile, string xmlWriterFile)
         {
             var useTextWriter = textWriterFile.NotBlank();
             var useXmlWriter = xmlWriterFile.NotBlank();
@@ -45,34 +45,34 @@ namespace NBehave.Narrator.Framework.EventListeners
             return NullEventListener();
         }
 
-        public static IEventListener NullEventListener()
+        public static EventListener NullEventListener()
         {
             return new NullEventListener();
         }
 
-        public static IEventListener FileOutputEventListener(string outputPath)
+        public static EventListener FileOutputEventListener(string outputPath)
         {
             return new TextWriterEventListener(File.CreateText(outputPath));
         }
 
-        public static IEventListener XmlWriterEventListener(string xmlWriterFile)
+        public static EventListener XmlWriterEventListener(string xmlWriterFile)
         {
             return XmlWriterEventListener(new FileStream(xmlWriterFile, FileMode.Create));
         }
 
-        public static IEventListener XmlWriterEventListener(Stream stream)
+        public static EventListener XmlWriterEventListener(Stream stream)
         {
             var settings = new XmlWriterSettings { Encoding = Encoding.UTF8, Indent = true };
             var writer = XmlWriter.Create(stream, settings);
             return new XmlOutputEventListener(writer);
         }
 
-        public static IEventListener CodeGenEventListener(TextWriter writer)
+        public static EventListener CodeGenEventListener(TextWriter writer)
         {
             return new CodeGenEventListener(writer);
         }
 
-        private static IEventListener TextWriterEventListener(TextWriter writer)
+        private static EventListener TextWriterEventListener(TextWriter writer)
         {
             return new TextWriterEventListener(writer);
         }

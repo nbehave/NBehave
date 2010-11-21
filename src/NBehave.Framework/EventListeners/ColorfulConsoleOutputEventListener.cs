@@ -14,11 +14,11 @@ namespace NBehave.Narrator.Framework.EventListeners
     using System.Linq;
     using System.Text;
 
-    public class ColorfulConsoleOutputEventListener : IEventListener
+    public class ColorfulConsoleOutputEventListener : EventListener
     {
         private List<ScenarioResult> _allResults = new List<ScenarioResult>();
 
-        public void FeatureCreated(string feature)
+        public override void FeatureCreated(string feature)
         {
             if (string.IsNullOrEmpty(feature))
             {
@@ -29,12 +29,12 @@ namespace NBehave.Narrator.Framework.EventListeners
             this.WriteColorString("Feature: " + feature, ConsoleColor.Cyan);
         }
 
-        void IEventListener.RunStarted()
+        public override void RunStarted()
         {
             _allResults = new List<ScenarioResult>();
         }
 
-        void IEventListener.FeatureNarrative(string narrative)
+        public override void FeatureNarrative(string narrative)
         {
             if (string.IsNullOrEmpty(narrative))
             {
@@ -44,11 +44,7 @@ namespace NBehave.Narrator.Framework.EventListeners
             WriteColorString(narrative, ConsoleColor.DarkCyan);
         }
 
-        void IEventListener.ScenarioCreated(string scenarioTitle)
-        {
-        }
-
-        void IEventListener.RunFinished()
+        public override void RunFinished()
         {
             Console.WriteLine(string.Empty);
             Console.ResetColor();
@@ -74,15 +70,7 @@ namespace NBehave.Narrator.Framework.EventListeners
             WriteSummary();
         }
 
-        void IEventListener.ThemeStarted(string name)
-        {
-        }
-
-        void IEventListener.ThemeFinished()
-        {
-        }
-
-        void IEventListener.ScenarioResult(ScenarioResult scenarioResult)
+        public override void ScenarioResult(ScenarioResult scenarioResult)
         {
             WriteColorString("Scenario: " + scenarioResult.ScenarioTitle + " - " + scenarioResult.Result.ToString().ToUpper(), GetColorForResult(scenarioResult.Result));
             _allResults.Add(scenarioResult);

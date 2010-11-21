@@ -37,7 +37,7 @@ namespace NBehave.Narrator.Framework
 
         internal IEnumerable<string> Assemblies { get; set; }
 
-        internal IEventListener EventListener { get; set; }
+        internal EventListener EventListener { get; set; }
 
         internal StoryRunnerFilter Filter { get; set; }
 
@@ -68,7 +68,7 @@ namespace NBehave.Narrator.Framework
             return this;
         }
 
-        public NBehaveConfiguration SetEventListener(IEventListener eventListener)
+        public NBehaveConfiguration SetEventListener(EventListener eventListener)
         {
             this.EventListener = eventListener;
             return this;

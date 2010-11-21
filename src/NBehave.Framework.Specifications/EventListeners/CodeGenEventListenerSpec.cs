@@ -15,7 +15,7 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
         public virtual void SetUp()
         {
             TextWriter output = new StringWriter(new StringBuilder());
-            IEventListener listener = new CodeGenEventListener(output);
+            EventListener listener = new CodeGenEventListener(output);
 
             NBehaveConfiguration
                 .New.SetEventListener(listener)

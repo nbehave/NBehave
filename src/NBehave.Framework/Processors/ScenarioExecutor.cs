@@ -28,19 +28,20 @@ namespace NBehave.Narrator.Framework.Processors
 
         private void OnRunStarted(RunStarted runStarted)
         {
-            _configuration.EventListener.ThemeStarted(string.Empty);
+            _hub.Publish(new ThemeStarted(this, string.Empty));
+
             var featureResults = new FeatureResults(this);
             foreach (var feature in _features.Where(feature => true))
             {
                 var scenarios = feature.Scenarios.Where(steps => true);
-                var scenarioStepRunner = new ScenarioStepRunner();
+                var scenarioStepRunner = new ScenarioStepRunner(_hub);
 
                 var scenarioResults = scenarioStepRunner.Run(scenarios);
                 AddScenarioResultsToStoryResults(scenarioResults, featureResults);
                 featureResults.NumberOfStories++;
             }
 
-            _configuration.EventListener.ThemeFinished();
+            _hub.Publish(new ThemeFinished(this));
 
             _hub.Publish(featureResults);
         }

@@ -14,13 +14,18 @@ namespace NBehave.Narrator.Framework
     using System.IO;
     using System.Linq;
 
+    using NBehave.Narrator.Framework.Tiny;
+
     public class ActionStepFileLoader
     {
         private readonly IStringStepRunner _stringStepRunner;
 
-        public ActionStepFileLoader(IStringStepRunner stringStepRunner)
+        private readonly ITinyMessengerHub _hub;
+
+        public ActionStepFileLoader(IStringStepRunner stringStepRunner, ITinyMessengerHub hub)
         {
             _stringStepRunner = stringStepRunner;
+            _hub = hub;
         }
 
         public List<Feature> Load(IEnumerable<string> scenarioLocations)
@@ -92,7 +97,7 @@ namespace NBehave.Narrator.Framework
 
         private IEnumerable<Feature> Load(Stream stream)
         {
-            var scenarioTextParser = new GherkinScenarioParser(_stringStepRunner);
+            var scenarioTextParser = new GherkinScenarioParser(_stringStepRunner, _hub);
             return scenarioTextParser.Parse(stream);
         }
     }

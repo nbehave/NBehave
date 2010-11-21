@@ -53,7 +53,7 @@ namespace NBehave.Console.Tests
         {
             var options = new ConsoleOptions(new[] { "TestAssembly.dll" });
 
-            IEventListener listener = null;
+            EventListener listener = null;
             try
             {
                 listener = NBehaveConsoleRunner.CreateEventListener(options);
@@ -72,7 +72,7 @@ namespace NBehave.Console.Tests
         {
             var options = new ConsoleOptions(new[] { "TestAssembly.dll", "/storyOutput:Output.txt" });
 
-            IEventListener listener = null;
+            EventListener listener = null;
             try
             {
                 listener = NBehaveConsoleRunner.CreateEventListener(options);
@@ -91,7 +91,7 @@ namespace NBehave.Console.Tests
         {
             var options = new ConsoleOptions(new[] { "TestAssembly.dll", "/xml:XmlOutput.xml" });
 
-            IEventListener listener = null;
+            EventListener listener = null;
             try
             {
                 listener = NBehaveConsoleRunner.CreateEventListener(options);
@@ -113,7 +113,7 @@ namespace NBehave.Console.Tests
         {
             var options = new ConsoleOptions(new[] { "TestAssembly.dll", "/xml:XmlOutputTest.xml", "/storyOutput:storiesTest.txt" });
 
-            IEventListener listener = null;
+            EventListener listener = null;
             try
             {
                 listener = NBehaveConsoleRunner.CreateEventListener(options);

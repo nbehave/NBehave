@@ -14,23 +14,27 @@ namespace NBehave.Narrator.Framework
     using System.Linq;
     using System.Text.RegularExpressions;
 
+    using NBehave.Narrator.Framework.Tiny;
+
     public class ScenarioWithSteps
     {
         private readonly List<StringStep> _steps;
         private readonly List<Example> _examples;
         private readonly IStringStepRunner _stringStepRunner;
+
+        private readonly ITinyMessengerHub _hub;
+
         private string _source;
 
-        public ScenarioWithSteps(IStringStepRunner stringStepRunner)
+        public ScenarioWithSteps(IStringStepRunner stringStepRunner, ITinyMessengerHub hub)
         {
             Feature = new Feature();
             Title = string.Empty;
             _stringStepRunner = stringStepRunner;
+            _hub = hub;
             _steps = new List<StringStep>();
             _examples = new List<Example>();
         }
-
-        public static event EventHandler<EventArgs<ScenarioWithSteps>> ScenarioCreated;
 
         public static event EventHandler<EventArgs<ActionStepText>> StepAdded;
 
@@ -103,11 +107,7 @@ namespace NBehave.Narrator.Framework
 
         private void OnScenarioCreated()
         {
-            if (ScenarioCreated != null)
-            {
-                var e = new EventArgs<ScenarioWithSteps>(this);
-                ScenarioCreated.Invoke(this, e);
-            }
+            _hub.Publish(new ScenarioCreated(this, Title));
         }
 
         private void OnStepAdded(ActionStepText step)

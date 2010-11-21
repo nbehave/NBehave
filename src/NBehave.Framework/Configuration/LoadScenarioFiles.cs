@@ -6,7 +6,7 @@
     using NBehave.Narrator.Framework.Messages;
     using NBehave.Narrator.Framework.Tiny;
 
-    class LoadScenarioFiles : IStartupTask
+    public class LoadScenarioFiles : IStartupTask
     {
         private NBehaveConfiguration _configuration;
 

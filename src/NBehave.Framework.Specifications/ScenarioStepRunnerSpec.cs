@@ -7,6 +7,8 @@ using NUnit.Framework;
 
 namespace NBehave.Narrator.Framework.Specifications
 {
+    using NBehave.Narrator.Framework.Tiny;
+
     [TestFixture]
     public class ScenarioStepRunnerSpec
     {
@@ -16,7 +18,7 @@ namespace NBehave.Narrator.Framework.Specifications
 
         private ScenarioWithSteps CreateScenarioWithSteps()
         {
-            return new ScenarioWithSteps(_stringStepRunner);
+            return new ScenarioWithSteps(_stringStepRunner, Tiny.TinyIoCContainer.Current.Resolve<ITinyMessengerHub>());
         }
 
         [SetUp]
@@ -24,7 +26,7 @@ namespace NBehave.Narrator.Framework.Specifications
         {
             _actionCatalog = new ActionCatalog();
             _stringStepRunner = new StringStepRunner(_actionCatalog); 
-            _runner = new ScenarioStepRunner();
+            _runner = new ScenarioStepRunner(Tiny.TinyIoCContainer.Current.Resolve<ITinyMessengerHub>());
         }
 
         public class WhenRunningAScenario : ScenarioStepRunnerSpec

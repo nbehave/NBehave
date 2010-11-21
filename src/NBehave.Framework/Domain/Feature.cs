@@ -12,8 +12,11 @@ namespace NBehave.Narrator.Framework
     using System;
     using System.Collections.Generic;
 
+    using NBehave.Narrator.Framework.Tiny;
+
     public class Feature
     {
+        private readonly ITinyMessengerHub _hub;
         private readonly List<ScenarioWithSteps> _scenarios = new List<ScenarioWithSteps>();
 
         public Feature()
@@ -23,10 +26,10 @@ namespace NBehave.Narrator.Framework
 
         public Feature(string title)
         {
+            //TODO: Remove service location.
+            _hub = Tiny.TinyIoCContainer.Current.Resolve<ITinyMessengerHub>();
             ExtractTitleAndNarrative(title);
         }
-
-        public static event EventHandler<EventArgs<Feature>> FeatureCreated;
 
         public string Title { get; set; }
 
@@ -57,13 +60,8 @@ namespace NBehave.Narrator.Framework
 
         public void RaiseFeatureCreated()
         {
-            if (FeatureCreated == null)
-            {
-                return;
-            }
-
-            var e = new EventArgs<Feature>(this);
-            FeatureCreated(null, e);
+            _hub.Publish(new FeatureCreated(this, Title));
+            _hub.Publish(new FeatureNarrative(this, Narrative));
         }
 
         public void ExtractTitleAndNarrative(string content)

@@ -11,61 +11,71 @@ namespace NBehave.Narrator.Framework.EventListeners
 {
     using System;
 
-    public class MultiOutputEventListener : IEventListener
-    {
-        private readonly IEventListener[] _listeners;
+    using NBehave.Narrator.Framework.Tiny;
 
-        public MultiOutputEventListener(params IEventListener[] listeners)
+    public class MultiOutputEventListener : EventListener
+    {
+        private readonly EventListener[] _listeners;
+
+        public MultiOutputEventListener(params EventListener[] listeners)
         {
             _listeners = listeners;
         }
 
-        public IEventListener[] Listeners
+        public EventListener[] Listeners
         {
             get { return _listeners; }
         }
 
-        public void FeatureCreated(string feature)
+        public override void FeatureCreated(string feature)
         {
             Invoke(l => l.FeatureCreated(feature));
         }
 
-        public void FeatureNarrative(string message)
+        public override void FeatureNarrative(string message)
         {
             Invoke(l => l.FeatureNarrative(message));
         }
 
-        public void ScenarioCreated(string scenarioTitle)
+        public override void ScenarioCreated(string scenarioTitle)
         {
             Invoke(l => l.ScenarioCreated(scenarioTitle));
         }
 
-        public void RunStarted()
+        public override void RunStarted()
         {
             Invoke(l => l.RunStarted());
         }
 
-        public void RunFinished()
+        public override void RunFinished()
         {
             Invoke(l => l.RunFinished());
         }
 
-        public void ThemeStarted(string name)
+        public override void ThemeStarted(string name)
         {
             Invoke(l => l.ThemeStarted(name));
         }
 
-        public void ThemeFinished()
+        public override void ThemeFinished()
         {
             Invoke(l => l.ThemeFinished());
         }
 
-        public void ScenarioResult(ScenarioResult result)
+        public override void ScenarioResult(ScenarioResult result)
         {
             Invoke(l => l.ScenarioResult(result));
         }
 
-        private void Invoke(Action<IEventListener> f)
+        public override void Initialise(ITinyMessengerHub hub)
+        {
+            foreach (var listener in _listeners)
+            {
+                listener.Initialise(hub);
+            }
+        }
+
+        private void Invoke(Action<EventListener> f)
         {
             foreach (var listener in _listeners)
             {

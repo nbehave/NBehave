@@ -15,9 +15,12 @@ namespace NBehave.Narrator.Framework
 
     using Gherkin;
 
+    using NBehave.Narrator.Framework.Tiny;
+
     public class GherkinScenarioParser : IListener
     {
         private readonly IStringStepRunner _stringStepRunner;
+        private readonly ITinyMessengerHub _hub;
         private readonly List<Feature> _features;
         private readonly LanguageService _languageService;
         private Feature _feature;
@@ -25,11 +28,12 @@ namespace NBehave.Narrator.Framework
         private ExampleColumns _exampleColumns;
         private bool _midExample;
 
-        public GherkinScenarioParser(IStringStepRunner stringStepRunner)
+        public GherkinScenarioParser(IStringStepRunner stringStepRunner, ITinyMessengerHub hub)
         {
             _stringStepRunner = stringStepRunner;
+            _hub = hub;
             _languageService = new LanguageService();
-            _scenario = new ScenarioWithSteps(_stringStepRunner);
+            _scenario = new ScenarioWithSteps(_stringStepRunner, _hub);
             _feature = new Feature();
             _scenario.Feature = _feature;
             _feature.AddScenario(_scenario);
@@ -79,7 +83,7 @@ namespace NBehave.Narrator.Framework
             }
             else
             {
-                _scenario = new ScenarioWithSteps(_stringStepRunner)
+                _scenario = new ScenarioWithSteps(_stringStepRunner, _hub)
                 {
                     Feature = _feature,
                     Title = title.Content

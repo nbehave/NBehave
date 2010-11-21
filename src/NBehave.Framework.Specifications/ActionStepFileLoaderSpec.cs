@@ -5,48 +5,51 @@ using NUnit.Framework;
 
 namespace NBehave.Narrator.Framework.Specifications
 {
-	[TestFixture]
-	public class ActionStepFileLoaderSpec
-	{
-		private ActionStepFileLoader _actionStepFileLoader;
+    using NBehave.Narrator.Framework.Tiny;
 
-		[SetUp]
-		public void EstablishContext()
-		{
-			_actionStepFileLoader = new ActionStepFileLoader(new StringStepRunner(new ActionCatalog()));
-		}
+    [TestFixture]
+    public class ActionStepFileLoaderSpec
+    {
+        private ActionStepFileLoader _actionStepFileLoader;
 
-		[Test]
-		public void ShouldTreatEachFileAsAStory()
-		{
-			var files = new[]
-			{
-				TestFeatures.ScenariosWithoutFeature,
-				TestFeatures.ScenarioWithNoActionSteps
-			};
-			var stories = _actionStepFileLoader.Load(files);
-			Assert.That(stories.Count, Is.EqualTo(2));
-		}
+        [SetUp]
+        public void EstablishContext()
+        {
+            _actionStepFileLoader = new ActionStepFileLoader(
+                new StringStepRunner(new ActionCatalog()), TinyIoCContainer.Current.Resolve<ITinyMessengerHub>());
+        }
 
-		[Test]
-		public void ShouldHaveSourceSetOnStep()
-		{
-			var files = new[]
-			{
-				TestFeatures.ScenariosWithoutFeature,
-			};
-			var stories = _actionStepFileLoader.Load(files);
+        [Test]
+        public void ShouldTreatEachFileAsAStory()
+        {
+            var files = new[]
+            {
+                TestFeatures.ScenariosWithoutFeature,
+                TestFeatures.ScenarioWithNoActionSteps
+            };
+            var stories = _actionStepFileLoader.Load(files);
+            Assert.That(stories.Count, Is.EqualTo(2));
+        }
 
-			Assert.That(stories[0].Scenarios.First().Steps.First().Source, Is.Not.Null);
-			Assert.That(stories[0].Scenarios.First().Steps.First().Source, Is.Not.EqualTo(string.Empty));
-		}
+        [Test]
+        public void ShouldHaveSourceSetOnStep()
+        {
+            var files = new[]
+            {
+                TestFeatures.ScenariosWithoutFeature,
+            };
+            var stories = _actionStepFileLoader.Load(files);
 
-		[Test]
-		public void ShouldBeAbleToUseRelativePathsWithDots()
-		{
-			IEnumerable<string> locations = new[] { @"..\*.*" };
-			var steps = _actionStepFileLoader.Load(locations);
-			Assert.That(steps, Is.Not.Null);
-		}
-	}
+            Assert.That(stories[0].Scenarios.First().Steps.First().Source, Is.Not.Null);
+            Assert.That(stories[0].Scenarios.First().Steps.First().Source, Is.Not.EqualTo(string.Empty));
+        }
+
+        [Test]
+        public void ShouldBeAbleToUseRelativePathsWithDots()
+        {
+            IEnumerable<string> locations = new[] { @"..\*.*" };
+            var steps = _actionStepFileLoader.Load(locations);
+            Assert.That(steps, Is.Not.Null);
+        }
+    }
 }

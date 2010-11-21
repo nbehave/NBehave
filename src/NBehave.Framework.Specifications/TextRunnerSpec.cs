@@ -292,45 +292,6 @@ namespace NBehave.Narrator.Framework.Specifications
                 Assert.That(_result.ScenarioResults[0].ScenarioTitle, Is.EqualTo("Greeting someone"));
             }
         }
-
-        [TestFixture]
-        public class WhenRunningPlainTextScenariosWithStoryEventsRaised : TextRunnerSpec
-        {
-            private IEventListener _listener;
-            private FeatureResults _result;
-
-            [TestFixtureSetUp]
-            public void EstablishContext()
-            {
-                _listener = MockRepository.GenerateMock<IEventListener>();
-                _result = this.CreateRunnerWithBasicConfiguration()
-                   .SetEventListener(_listener)
-                   .SetScenarioFiles(new[] { TestFeatures.FeatureNamedStory })
-                   .Run();
-            }
-
-            [Test]
-            public void ShouldGetStoryCreatedEventWithTitle()
-            {
-                _listener.AssertWasCalled(l => l.FeatureCreated("Greeting system"));
-            }
-
-            [Test]
-            public void ShouldGetStoryNarrative()
-            {
-                var args = _listener.GetArgumentsForCallsMadeOn(l => l.FeatureNarrative(null), opt => opt.IgnoreArguments());
-                var arg = args[0][0] as string;
-                StringAssert.Contains("As a", arg);
-                StringAssert.Contains("I want", arg);
-                StringAssert.Contains("So that", arg);
-            }
-
-            [Test]
-            public void ShouldGetScenarioCreatedEventWithTitle()
-            {
-                _listener.AssertWasCalled(l => l.ScenarioCreated("Greeting someone"));
-            }
-        }
     
         [TestFixture, ActionSteps]
         public class WhenRunningPlainTextScenarioInSwedish : TextRunnerSpec

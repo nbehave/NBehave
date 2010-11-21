@@ -15,7 +15,7 @@ namespace NBehave.Narrator.Framework.EventListeners
     using System.Linq;
     using System.Text;
 
-    public class CodeGenEventListener : IEventListener
+    public class CodeGenEventListener : EventListener
     {
         private readonly ActionStepCodeGenerator _actionStepCodeGenerator;
         private readonly TextWriter _writer;
@@ -29,23 +29,7 @@ namespace NBehave.Narrator.Framework.EventListeners
             _actionStepCodeGenerator = new ActionStepCodeGenerator();
         }
 
-        void IEventListener.FeatureCreated(string feature)
-        {
-        }
-
-        void IEventListener.FeatureNarrative(string message)
-        {
-        }
-
-        void IEventListener.ScenarioCreated(string scenarioTitle)
-        {
-        }
-
-        void IEventListener.RunStarted()
-        {
-        }
-
-        void IEventListener.RunFinished()
+        public override void RunFinished()
         {
             if (this._firstPendingStep == false)
             {
@@ -56,15 +40,7 @@ namespace NBehave.Narrator.Framework.EventListeners
             _writer.Flush();
         }
 
-        void IEventListener.ThemeStarted(string name)
-        {
-        }
-
-        void IEventListener.ThemeFinished()
-        {
-        }
-
-        void IEventListener.ScenarioResult(ScenarioResult result)
+        public override void ScenarioResult(ScenarioResult result)
         {
             var lastStep = TypeOfStep.Given;
             var validNames = Enum.GetNames(typeof(TypeOfStep)).ToList();
