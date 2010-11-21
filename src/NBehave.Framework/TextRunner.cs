@@ -12,53 +12,54 @@ namespace NBehave.Narrator.Framework
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Reflection;
+
+    using NBehave.Narrator.Framework.Contracts;
+    using NBehave.Narrator.Framework.Messages;
+    using NBehave.Narrator.Framework.Processors;
+    using NBehave.Narrator.Framework.Tiny;
 
     public class TextRunner
     {
         private readonly NBehaveConfiguration _configuration;
 
-        private readonly List<Feature> _features = new List<Feature>();
-        private readonly ActionStepFileLoader _actionStepFileLoader;
-        private readonly IStringStepRunner _stringStepRunner;
-        private StoryRunnerFilter _storyRunnerFilter = new StoryRunnerFilter();
         private EventHandler<EventArgs<Feature>> _featureCreatedEventHandler;
         private EventHandler<EventArgs<ScenarioWithSteps>> _scenarioCreatedEventHandler;
         private EventHandler<EventArgs<ScenarioResult>> _scenarioResultAddedEventHandler;
+        private ITinyMessengerHub _hub;
 
         public TextRunner(NBehaveConfiguration configuration)
         {
             _configuration = configuration;
-            ActionCatalog = new ActionCatalog();
-            StoryRunnerFilter = new StoryRunnerFilter();
-            _stringStepRunner = new StringStepRunner(ActionCatalog);
-            _actionStepFileLoader = new ActionStepFileLoader(_stringStepRunner);
         }
-
-        public StoryRunnerFilter StoryRunnerFilter
-        {
-            get { return _storyRunnerFilter; }
-            set { _storyRunnerFilter = value; }
-        }
-
-        public ActionCatalog ActionCatalog { get; private set; }
 
         public FeatureResults Run()
         {
-            foreach (var assembly in _configuration.Assemblies)
-            {
-                LoadAssembly(assembly);    
-            }
+            var container = TinyIoCContainer.Current;
+            container.AutoRegister(this.GetType().Assembly);
+            container.Register<ActionCatalog>().AsSingleton();
+            container.Register(_configuration);
+            container.Register<ActionStepFileLoader>().AsSingleton();
+            _hub = container.Resolve<ITinyMessengerHub>();
 
-            this.Load(_configuration.ScenarioFiles);
+            IEnumerable<IStartupTask> startupTasks =
+                (from type in this.GetType().Assembly.GetTypes()
+                where type.GetInterfaces().Contains(typeof(IStartupTask))
+                select container.Resolve(type) as IStartupTask).ToList();
 
-            var results = new FeatureResults();
+            IEnumerable<IMessageProcessor> processors =
+                (from type in this.GetType().Assembly.GetTypes()
+                where type.GetInterfaces().Contains(typeof(IMessageProcessor))
+                select container.Resolve(type) as IMessageProcessor).ToList();
 
+            startupTasks.Each(startupTask => startupTask.Initialise());
+            processors.Each(startupTask => startupTask.Start());
+
+            FeatureResults results = null;
+            _hub.Subscribe<FeatureResults>(featureResults => results = featureResults);
             try
             {
+                StartWatching();    
                 InitializeRun();
-                StartWatching();
-                RunFeatures(results);
             }
             finally
             {
@@ -66,55 +67,6 @@ namespace NBehave.Narrator.Framework
             }
 
             return results;
-        }
-
-        private void LoadAssembly(string assemblyPath)
-        {
-            LoadAssembly(Assembly.LoadFrom(assemblyPath));
-        }
-
-        private void Load(IEnumerable<string> fileLocations)
-        {
-            _features.AddRange(_actionStepFileLoader.Load(fileLocations));
-        }
-
-        private void LoadAssembly(Assembly assembly)
-        {
-            ParseAssembly(assembly);
-        }
-
-        private void ParseAssembly(Assembly assembly)
-        {
-            var parser = new ActionStepParser(StoryRunnerFilter, ActionCatalog);
-            parser.FindActionSteps(assembly);
-        }
-
-        private void RunFeatures(FeatureResults results)
-        {
-            _configuration.EventListener.ThemeStarted(string.Empty);
-            RunEachFeature(results, feature => true, scenario => true);
-            _configuration.EventListener.ThemeFinished();
-        }
-
-        private void RunEachFeature(FeatureResults featureResults, Func<Feature, bool> featurePredicate, Func<ScenarioWithSteps, bool> scenarioPredicate)
-        {
-            foreach (var feature in _features.Where(featurePredicate))
-            {
-                var scenarios = feature.Scenarios.Where(scenarioPredicate);
-                var scenarioStepRunner = new ScenarioStepRunner();
-
-                var scenarioResults = scenarioStepRunner.Run(scenarios);
-                AddScenarioResultsToStoryResults(scenarioResults, featureResults);
-                featureResults.NumberOfStories++;
-            }
-        }
-
-        private void AddScenarioResultsToStoryResults(IEnumerable<ScenarioResult> scenarioResults, FeatureResults featureResults)
-        {
-            foreach (var result in scenarioResults)
-            {
-                featureResults.AddResult(result);
-            }
         }
 
         private void StartWatching()
@@ -158,6 +110,7 @@ namespace NBehave.Narrator.Framework
         private void InitializeRun()
         {
             _configuration.EventListener.RunStarted();
+            _hub.Publish(new RunStarted(this));
         }
     }
 }

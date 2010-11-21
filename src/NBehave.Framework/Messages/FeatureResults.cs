@@ -12,9 +12,15 @@ namespace NBehave.Narrator.Framework
     using System;
     using System.Collections.Generic;
 
-    public class FeatureResults
+    using NBehave.Narrator.Framework.Tiny;
+
+    public class FeatureResults : TinyMessageBase
     {
         private readonly List<ScenarioResult> _scenarioResults = new List<ScenarioResult>();
+
+        public FeatureResults(object sender) : base(sender)
+        {
+        }
 
         public int NumberOfThemes { get; set; }
 

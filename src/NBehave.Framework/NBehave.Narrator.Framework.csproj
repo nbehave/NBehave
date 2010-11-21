@@ -112,15 +112,23 @@
     </Compile>
     <Compile Include="ActionCatalog.cs" />
     <Compile Include="ActionStepCodeGenerator.cs" />
+    <Compile Include="Contracts\IStartupTask.cs" />
+    <Compile Include="Configuration\LoadActionSteps.cs" />
+    <Compile Include="Configuration\LoadScenarioFiles.cs" />
     <Compile Include="EventListeners\CodeGenEventListener.cs" />
     <Compile Include="EventListeners\ColorfulConsoleOutputEventListener.cs" />
     <Compile Include="EventListeners\Xml\EventReceived.cs" />
     <Compile Include="EventListeners\Xml\EventType.cs" />
     <Compile Include="EventListeners\Xml\StoryResultsEventReceived.cs" />
     <Compile Include="EventListeners\Xml\XmlOutputWriter.cs" />
+    <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Extensions\NBehaveConfigurationExtensions.cs" />
-    <Compile Include="NBehaveConfiguration.cs" />
+    <Compile Include="Configuration\NBehaveConfiguration.cs" />
+    <Compile Include="Messages\RunStarted.cs" />
+    <Compile Include="Messages\FeaturesLoaded.cs" />
     <Compile Include="ParameterConverter.cs" />
+    <Compile Include="Contracts\IMessageProcessor.cs" />
+    <Compile Include="Processors\ScenarioExecutor.cs" />
     <Compile Include="ScenarioExampleResult.cs" />
     <Compile Include="EventListeners\SummaryWriter.cs" />
     <Compile Include="Domain\ActionMethodInfo.cs" />
@@ -159,7 +167,7 @@
     <Compile Include="ScenarioStepRunner.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="TextRunner.cs" />
-    <Compile Include="FeatureResults.cs" />
+    <Compile Include="Messages\FeatureResults.cs" />
     <Compile Include="StoryRunnerFilter.cs" />
     <Compile Include="Attributes\ThenAttribute.cs" />
     <Compile Include="Domain\Example.cs" />
@@ -171,6 +179,8 @@
     <Compile Include="Domain\StringTableStep.cs" />
     <Compile Include="Attributes\WhenAttribute.cs" />
     <Compile Include="Domain\TypeOfStep.cs" />
+    <Compile Include="Tiny\TinyIoC.cs" />
+    <Compile Include="Tiny\TinyMessenger.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\NBehave.snk">

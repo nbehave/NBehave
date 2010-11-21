@@ -24,7 +24,10 @@ namespace NBehave.Narrator.Framework
         {
             get
             {
-                return new NBehaveConfiguration();
+                return new NBehaveConfiguration
+                {
+                    Filter = new StoryRunnerFilter()
+                };
             }
         }
 

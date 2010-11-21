@@ -10,6 +10,8 @@ using Rhino.Mocks;
 
 namespace NBehave.Narrator.Framework.Specifications
 {
+    using NBehave.Narrator.Framework.Tiny;
+
     [TestFixture]
     public class TextRunnerSpec
     {
@@ -28,16 +30,17 @@ namespace NBehave.Narrator.Framework.Specifications
         }
 
         [TestFixture]
-        public class WhenRunningPlainTextScenarios : TextRunnerSpec
+        public class WhenInitialisingBeforeRunningPlainTextScenarios : TextRunnerSpec
         {
-            private FeatureResults _result;
-
             [Test]
             public void ShouldFindGivenActionStepInAssembly()
             {
                 var runner = this.CreateRunnerWithBasicConfiguration().Build();
                 runner.Run();
-                Assert.That(runner.ActionCatalog.ActionExists("my name is Axel"), Is.True);
+
+                var actionCatalog = TinyIoCContainer.Current.Resolve<ActionCatalog>();
+
+                Assert.That(actionCatalog.ActionExists("my name is Axel"), Is.True);
             }
 
             [Test]
@@ -45,7 +48,10 @@ namespace NBehave.Narrator.Framework.Specifications
             {
                 var runner = this.CreateRunnerWithBasicConfiguration().Build();
                 runner.Run();
-                Assert.That(runner.ActionCatalog.ActionExists("I'm greeted"), Is.True);
+
+                var actionCatalog = TinyIoCContainer.Current.Resolve<ActionCatalog>();
+
+                Assert.That(actionCatalog.ActionExists("I'm greeted"), Is.True);
             }
 
             [Test]
@@ -53,9 +59,18 @@ namespace NBehave.Narrator.Framework.Specifications
             {
                 var runner = this.CreateRunnerWithBasicConfiguration().Build();
                 runner.Run();
-                Assert.That(runner.ActionCatalog.ActionExists("I should be greeted with “Hello, Axel!”"), Is.True);
+
+                var actionCatalog = TinyIoCContainer.Current.Resolve<ActionCatalog>();
+
+                Assert.That(actionCatalog.ActionExists("I should be greeted with “Hello, Axel!”"), Is.True);
             }
-            
+        }
+
+        [TestFixture]
+        public class WhenRunningPlainTextScenarios : TextRunnerSpec
+        {
+            private FeatureResults _result;
+
             [Test]
             public void ShouldRunScenariosInTextFile()
             {

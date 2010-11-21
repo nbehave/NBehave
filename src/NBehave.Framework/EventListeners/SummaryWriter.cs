@@ -97,7 +97,7 @@ namespace NBehave.Narrator.Framework
 
         private FeatureResults GetFeatureResult(IEnumerable<ScenarioResult> results)
         {
-            var featureResults = new FeatureResults();
+            var featureResults = new FeatureResults(this);
             foreach (var result in results)
             {
                 featureResults.AddResult(result);
