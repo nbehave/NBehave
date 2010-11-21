@@ -25,39 +25,23 @@ namespace NBehave.Narrator.Framework
         public FeatureResults Run()
         {
             var container = TinyIoCContainer.Current;
-            container.AutoRegister(this.GetType().Assembly);
-            container.Register<ActionCatalog>().AsSingleton();
-            container.Register(_configuration);
-            container.Register<ActionStepFileLoader>().AsSingleton();
             _hub = container.Resolve<ITinyMessengerHub>();
 
-            _configuration.EventListener.Initialise(_hub);
-
-            NBehaveInitialiser.Initialise(container);
+            NBehaveInitialiser.Initialise(container, _configuration);
 
             FeatureResults results = null;
             _hub.Subscribe<FeatureResults>(featureResults => results = featureResults);
             
             try
             {
-                InitializeRun();
+                this._hub.Publish(new RunStarted(this));
             }
             finally
             {
-                StopWatching();
+                this._hub.Publish(new RunFinished(this));
             }
 
             return results;
-        }
-
-        private void StopWatching()
-        {
-            _hub.Publish(new RunFinished(this));
-        }
-
-        private void InitializeRun()
-        {
-            _hub.Publish(new RunStarted(this));
         }
     }
 }
