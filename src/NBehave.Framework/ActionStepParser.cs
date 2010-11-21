@@ -41,12 +41,6 @@ namespace NBehave.Narrator.Framework
             }
         }
 
-        public void FindActionStepMethods(Type actionSteps)
-        {
-            var instance = Activator.CreateInstance(actionSteps);
-            FindActionStepMethods(actionSteps, instance);
-        }
-
         public void FindActionStepMethods(Type actionSteps, object instance)
         {
             var methods = GetMethodsWithActionStepAttribute(actionSteps);
@@ -58,6 +52,12 @@ namespace NBehave.Narrator.Framework
                 AddFileMatcher(m, instance);
                 _actionCatalog.Add(m);
             }
+        }
+
+        private void FindActionStepMethods(Type actionSteps)
+        {
+            var instance = Activator.CreateInstance(actionSteps);
+            FindActionStepMethods(actionSteps, instance);
         }
 
         private void AddFileMatcher(ActionMethodInfo action, object instance)

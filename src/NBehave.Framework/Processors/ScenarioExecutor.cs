@@ -8,14 +8,11 @@ namespace NBehave.Narrator.Framework.Processors
 
     public class ScenarioExecutor : IMessageProcessor 
     {
-        private readonly NBehaveConfiguration _configuration;
-
         private readonly ITinyMessengerHub _hub;
         private IEnumerable<Feature> _features;
 
-        public ScenarioExecutor(NBehaveConfiguration configuration, ITinyMessengerHub hub)
+        public ScenarioExecutor(ITinyMessengerHub hub)
         {
-            this._configuration = configuration;
             _hub = hub;
 
             _hub.Subscribe<FeaturesLoaded>(loaded => _features = loaded.Content);
@@ -31,12 +28,13 @@ namespace NBehave.Narrator.Framework.Processors
             _hub.Publish(new ThemeStarted(this, string.Empty));
 
             var featureResults = new FeatureResults(this);
-            foreach (var feature in _features.Where(feature => true))
+            
+            foreach (var feature in _features)
             {
-                var scenarios = feature.Scenarios.Where(steps => true);
-                var scenarioStepRunner = new ScenarioStepRunner(_hub);
+                var scenarios = feature.Scenarios;
 
-                var scenarioResults = scenarioStepRunner.Run(scenarios);
+                var scenarioResults = Run(scenarios);
+
                 AddScenarioResultsToStoryResults(scenarioResults, featureResults);
                 featureResults.NumberOfStories++;
             }
@@ -44,6 +42,32 @@ namespace NBehave.Narrator.Framework.Processors
             _hub.Publish(new ThemeFinished(this));
 
             _hub.Publish(featureResults);
+        }
+
+        public IEnumerable<ScenarioResult> Run(IEnumerable<ScenarioWithSteps> scenarios)
+        {
+            var allResults = new List<ScenarioResult>();
+
+            Feature lastFeature = null;
+
+            foreach (var scenario in scenarios)
+            {
+                if (scenario.Feature != lastFeature)
+                {
+                    lastFeature = scenario.Feature;
+
+                    _hub.Publish(new FeatureCreated(this, lastFeature.Title));
+                    _hub.Publish(new FeatureNarrative(this, lastFeature.Narrative));
+                }
+
+                var scenarioResults = scenario.Run();
+
+                this._hub.Publish(new ScenarioResultMessage(this, scenarioResults));
+
+                allResults.Add(scenarioResults);
+            }
+
+            return allResults;
         }
 
         private void AddScenarioResultsToStoryResults(IEnumerable<ScenarioResult> scenarioResults, FeatureResults featureResults)

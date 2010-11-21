@@ -58,12 +58,6 @@ namespace NBehave.Narrator.Framework
             _scenarios.Add(scenario);
         }
 
-        public void RaiseFeatureCreated()
-        {
-            _hub.Publish(new FeatureCreated(this, Title));
-            _hub.Publish(new FeatureNarrative(this, Narrative));
-        }
-
         public void ExtractTitleAndNarrative(string content)
         {
             if (content.Contains(Environment.NewLine))

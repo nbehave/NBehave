@@ -173,7 +173,6 @@
     <Compile Include="Attributes\GivenAttribute.cs" />
     <Compile Include="Contracts\IMatchFiles.cs" />
     <Compile Include="Attributes\NotificationMethodAttribute.cs" />
-    <Compile Include="ScenarioStepRunner.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="TextRunner.cs" />
     <Compile Include="Messages\FeatureResults.cs" />

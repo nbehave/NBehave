@@ -7,12 +7,13 @@ using NUnit.Framework;
 
 namespace NBehave.Narrator.Framework.Specifications
 {
+    using NBehave.Narrator.Framework.Processors;
     using NBehave.Narrator.Framework.Tiny;
 
     [TestFixture]
     public class ScenarioStepRunnerSpec
     {
-        private ScenarioStepRunner _runner;
+        private ScenarioExecutor _runner;
         private ActionCatalog _actionCatalog;
         private StringStepRunner _stringStepRunner;
 
@@ -25,8 +26,8 @@ namespace NBehave.Narrator.Framework.Specifications
         public void SetUp()
         {
             _actionCatalog = new ActionCatalog();
-            _stringStepRunner = new StringStepRunner(_actionCatalog); 
-            _runner = new ScenarioStepRunner(Tiny.TinyIoCContainer.Current.Resolve<ITinyMessengerHub>());
+            _stringStepRunner = new StringStepRunner(_actionCatalog);
+            _runner = new ScenarioExecutor(Tiny.TinyIoCContainer.Current.Resolve<ITinyMessengerHub>());
         }
 
         public class WhenRunningAScenario : ScenarioStepRunnerSpec

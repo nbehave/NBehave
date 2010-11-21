@@ -16,26 +16,12 @@
 
         public void Initialise()
         {
+            var parser = new ActionStepParser(this._configuration.Filter, this._actionCatalog);
+
             foreach (var assembly in _configuration.Assemblies)
             {
-                LoadAssembly(assembly);
+                parser.FindActionSteps(Assembly.LoadFrom(assembly));
             }
-        }
-
-        private void LoadAssembly(string assemblyPath)
-        {
-            LoadAssembly(Assembly.LoadFrom(assemblyPath));
-        }
-
-        private void LoadAssembly(Assembly assembly)
-        {
-            ParseAssembly(assembly);
-        }
-
-        private void ParseAssembly(Assembly assembly)
-        {
-            var parser = new ActionStepParser(_configuration.Filter, _actionCatalog);
-            parser.FindActionSteps(assembly);
         }
     }
 }

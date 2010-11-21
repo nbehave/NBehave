@@ -89,7 +89,7 @@ namespace NBehave.Narrator.Framework
             _examples.AddRange(examples);
         }
 
-        public virtual ScenarioResult Run()
+        public ScenarioResult Run()
         {
             OnScenarioCreated();
             if (Examples.Any())

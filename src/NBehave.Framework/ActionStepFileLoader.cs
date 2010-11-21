@@ -35,7 +35,8 @@ namespace NBehave.Narrator.Framework
             foreach (var location in scenarioLocations)
             {
                 var files = GetFiles(location);
-                stories.AddRange(LoadFiles(files));
+                IEnumerable<Feature> loadFiles = this.LoadFiles(files);
+                stories.AddRange(loadFiles);
             }
 
             return stories;
@@ -85,7 +86,9 @@ namespace NBehave.Narrator.Framework
             IEnumerable<Feature> features;
             using (Stream stream = File.OpenRead(file))
             {
-                features = Load(stream);
+                var scenarioTextParser = new GherkinScenarioParser(this._stringStepRunner, this._hub);
+                features = scenarioTextParser.Parse(stream);
+
                 foreach (var scenario in features.SelectMany(feature => feature.Scenarios))
                 {
                     scenario.Source = file;
@@ -93,12 +96,6 @@ namespace NBehave.Narrator.Framework
             }
 
             return features;
-        }
-
-        private IEnumerable<Feature> Load(Stream stream)
-        {
-            var scenarioTextParser = new GherkinScenarioParser(_stringStepRunner, _hub);
-            return scenarioTextParser.Parse(stream);
         }
     }
 }
