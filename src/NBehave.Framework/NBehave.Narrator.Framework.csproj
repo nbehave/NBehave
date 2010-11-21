@@ -111,11 +111,11 @@
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="ActionCatalog.cs" />
-    <Compile Include="ActionStepCodeGenerator.cs" />
+    <Compile Include="EventListeners\CodeGeneration\ActionStepCodeGenerator.cs" />
     <Compile Include="Configuration\IStartupTask.cs" />
     <Compile Include="Configuration\LoadActionSteps.cs" />
     <Compile Include="Configuration\LoadScenarioFiles.cs" />
-    <Compile Include="EventListeners\CodeGenEventListener.cs" />
+    <Compile Include="EventListeners\CodeGeneration\CodeGenEventListener.cs" />
     <Compile Include="EventListeners\ColorfulConsoleOutputEventListener.cs" />
     <Compile Include="Contracts\IMessengerHubAware.cs" />
     <Compile Include="Messages\ScenarioCreated.cs" />
@@ -174,7 +174,7 @@
     <Compile Include="Contracts\IMatchFiles.cs" />
     <Compile Include="Attributes\NotificationMethodAttribute.cs" />
     <Compile Include="ScenarioStepRunner.cs" />
-    <Compile Include="StringExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="TextRunner.cs" />
     <Compile Include="Messages\FeatureResults.cs" />
     <Compile Include="StoryRunnerFilter.cs" />

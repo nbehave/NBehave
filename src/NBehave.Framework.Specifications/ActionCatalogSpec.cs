@@ -15,61 +15,6 @@ namespace NBehave.Narrator.Framework.Specifications
         }
 
         [TestFixture]
-        public class ValidParameterNames : ActionCatalogSpec
-        {
-            private readonly ActionCatalog _actionCatalog = new ActionCatalog();
-
-            [Test]
-            public void ShouldConsiderAnyCharacterInEnglishAlphabetAsValid()
-            {
-                var message = _actionCatalog.BuildMessage("valid $parameterName", new[] { "parameter" });
-                Assert.AreEqual("valid parameter", message);
-            }
-
-            [Test]
-            public void ShouldConsiderAnyCharacterInEnglishAlphabetMixedWithNumbersAsValid()
-            {
-                var message = _actionCatalog.BuildMessage("valid $parameter1Name2", new[] { "parameter" });
-                Assert.AreEqual("valid parameter", message);
-            }
-
-            [Test]
-            public void ShouldConsiderAnyCharacterInEnglishAlphabetMixedWithUnderscoreValid()
-            {
-                var message = _actionCatalog.BuildMessage("valid $parameter_Name", new[] { "parameter" });
-                Assert.AreEqual("valid parameter", message);
-            }
-
-            [Test]
-            public void ShouldNotConsiderParameterNameAsValidIfItStartsWithANumber()
-            {
-                var message = _actionCatalog.BuildMessage("valid $1parameter1Name2", new[] { "parameter" });
-                Assert.AreEqual("valid $1parameter1Name2", message);
-            }
-
-            [Test]
-            public void ShouldNotConsiderSpaceAsPartOfParameterName()
-            {
-                var message = _actionCatalog.BuildMessage("valid $parameterName it is", new[] { "parameter" });
-                Assert.AreEqual("valid parameter it is", message);
-            }
-
-            [Test]
-            public void ShouldConsiderParameterNameEnclosedInSquareBracketsAsValid()
-            {
-                var message = _actionCatalog.BuildMessage("valid [parameter1Name2]", new[] { "parameter" });
-                Assert.AreEqual("valid parameter", message);
-            }
-
-            [Test]
-            public void ShouldBeAbleToEmbeddAParameterInsideNonAlphabeticCharacters()
-            {
-                var message = _actionCatalog.BuildMessage("I should see a message, \"$message\"", new[] { "Hello, Morgan" });
-                Assert.AreEqual("I should see a message, \"Hello, Morgan\"", message);
-            }
-        }
-
-        [TestFixture]
         public class WhenAddingAnActionToTheCatalog : ActionCatalogSpec
         {
             [Test]

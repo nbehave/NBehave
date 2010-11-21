@@ -9,9 +9,7 @@
 
 namespace NBehave.Narrator.Framework
 {
-    using System;
     using System.Collections.Generic;
-    using System.Text.RegularExpressions;
 
     public class ActionCatalog
     {
@@ -35,25 +33,6 @@ namespace NBehave.Narrator.Framework
         public ActionMethodInfo GetAction(ActionStepText message)
         {
             return FindMatchingAction(message);
-        }
-
-        public string BuildMessage(string message, object[] parameters)
-        {
-            var resultString = message;
-            var tokens = GetTokensInMessage(message);
-            if (tokens.Length > 0 && tokens.Length != parameters.Length)
-            {
-                throw new ArgumentException(
-                    string.Format(
-                        "message has {0} tokens and there are {1} parameters", tokens.Length, parameters.Length));
-            }
-
-            for (var i = 0; i < tokens.Length; i++)
-            {
-                resultString = resultString.Replace(tokens[i], parameters[i].ToString());
-            }
-
-            return resultString;
         }
 
         private ActionMethodInfo FindMatchingAction(ActionStepText actionStepText)
@@ -82,19 +61,6 @@ namespace NBehave.Narrator.Framework
         private bool MatchesFileName(ActionMethodInfo action, ActionStepText actionStepText)
         {
             return action.MatchesFileName(actionStepText.Source);
-        }
-
-        private string[] GetTokensInMessage(string message)
-        {
-            var tokens = new List<string>();
-
-            var matches = Regex.Matches(message, ActionStepConverterExtensions.TokenRegexPattern);
-            foreach (var match in matches)
-            {
-                tokens.Add(match.ToString());
-            }
-
-            return tokens.ToArray();
         }
     }
 }
