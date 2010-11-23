@@ -39,7 +39,7 @@ namespace NBehave.Narrator.Framework
 			foreach (ActionMethodInfo method in methods)
 			{
 				object action = CreateAction(instance, method);
-				ActionMethodInfo m = new ActionMethodInfo( method.ActionStepMatcher, action, method.MethodInfo);
+				ActionMethodInfo m = new ActionMethodInfo( method.ActionStepMatcher, action, method.MethodInfo, instance);
 				AddFileMatcher(m, instance);
 				_actionCatalog.Add(m);
 			}

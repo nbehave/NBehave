@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Xml;
+using NBehave.Console.Remoting;
 using NBehave.Narrator.Framework;
 using NBehave.Narrator.Framework.EventListeners;
 using NBehave.Narrator.Framework.EventListeners.Xml;
@@ -38,30 +40,7 @@ namespace NBehave.Console
                 return 2;
             }
 
-            RunnerBase runner;
-            if (string.IsNullOrEmpty(options.scenarioFiles))
-                runner = new StoryRunner();
-            else
-            {
-                runner = new TextRunner();
-                ((TextRunner)runner).Load(options.scenarioFiles.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
-            }
-            runner.IsDryRun = options.dryRun;
-
-            foreach (string path in options.Parameters)
-            {
-                try
-                {
-                    runner.LoadAssembly(path);
-                }
-                catch (FileNotFoundException)
-                {
-                    output.WriteLine(string.Format("File not found: {0}", path));
-                }
-            }
-            IEventListener listener = CreateEventListener(options);
-
-            StoryResults results = runner.Run(listener);
+            StoryResults results = SetupAndRunStories(options, output);
 
             if (options.dryRun)
                 return 0;
@@ -74,6 +53,44 @@ namespace NBehave.Console
             int result = results.NumberOfFailingScenarios > 0 ? 2 : 0;
 
             return result;
+        }
+
+        private static StoryResults SetupAndRunStories(ConsoleOptions options, PlainTextOutput output)
+        {
+            IEventListener listener = CreateEventListener(options);
+            IEventListener remotableListener = new DelegatingListener(listener);
+
+            string assemblyWithConfigFile = null;
+            foreach (string path in options.Parameters)
+            {
+                if(File.Exists(path + ".config"))
+                {
+                    assemblyWithConfigFile = path + ".config";
+                    break;
+                }
+            }
+
+            RemotableStoryRunner runner;
+            if (assemblyWithConfigFile != null)
+            {
+                var configFileInfo = new FileInfo(assemblyWithConfigFile);
+                AppDomainSetup ads = new AppDomainSetup
+                                         {
+                                             ConfigurationFile = configFileInfo.Name,
+                                             ApplicationBase = configFileInfo.DirectoryName //Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
+                                         };
+                AppDomain ad = AppDomain.CreateDomain("NBehave story runner", null, ads);
+                
+                var bootstrapper = (AppDomainBootstrapper) ad.CreateInstanceFromAndUnwrap(typeof(AppDomainBootstrapper).Assembly.Location, typeof(AppDomainBootstrapper).FullName);
+                bootstrapper.InitializeDomain(new[] { Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), configFileInfo.DirectoryName });
+
+                runner = (RemotableStoryRunner)ad.CreateInstanceAndUnwrap(Assembly.GetExecutingAssembly().FullName, typeof(RemotableStoryRunner).FullName);
+            }
+            else
+            {
+                runner = new RemotableStoryRunner();
+            }
+            return runner.SetupAndRunStories(remotableListener, options.scenarioFiles, options.Parameters, options.dryRun);
         }
 
         public static IEventListener CreateEventListener(ConsoleOptions options)

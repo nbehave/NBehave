@@ -7,6 +7,8 @@ namespace NBehave.Narrator.Framework
     public class ActionStepRunner
     {
         private readonly ActionCatalog _actionCatalog;
+        private bool _isFirstStep = true;
+        private ActionMethodInfo _lastAction;
 
         public ActionStepRunner(ActionCatalog actionCatalog)
         {
@@ -18,14 +20,31 @@ namespace NBehave.Narrator.Framework
             if (_actionCatalog.ActionExists(actionStep) == false)
                 throw new ArgumentException(string.Format("cannot find Token string '{0}'", actionStep));
 
-            object action = _actionCatalog.GetAction(actionStep).Action;
+            var info = _actionCatalog.GetAction(actionStep);
 
-            Type actionType = GetActionType(action);
+            Type actionType = GetActionType(info.Action);
             MethodInfo methodInfo = actionType.GetMethod("DynamicInvoke");
             object[] actionParamValues = _actionCatalog.GetParametersForActionStepText(actionStep);
 
-            methodInfo.Invoke(action, BindingFlags.InvokeMethod, null,
+            if(_isFirstStep)
+            {
+                _isFirstStep = false;
+                info.ExecuteNotificationMethod(typeof (BeforeScenarioAttribute));
+            }
+
+            info.ExecuteNotificationMethod(typeof(BeforeStepAttribute));
+
+            methodInfo.Invoke(info.Action, BindingFlags.InvokeMethod, null,
                               new object[] { actionParamValues }, CultureInfo.CurrentCulture);
+
+            info.ExecuteNotificationMethod(typeof(AfterStepAttribute));
+            _lastAction = info;
+        }
+
+        public void OnCloseScenario()
+        {
+            if(_lastAction != null)
+                _lastAction.ExecuteNotificationMethod(typeof(AfterScenarioAttribute));
         }
 
         public ActionStepResult RunActionStepRow(ActionStepText actionStep)

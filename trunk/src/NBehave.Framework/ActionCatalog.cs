@@ -18,7 +18,7 @@ namespace NBehave.Narrator.Framework
 			if (ActionExists(new ActionStepText(tokenString, "")))
 				return;
 			var regex = GetRegexForActionKey(tokenString);
-			Add(new ActionMethodInfo(regex, action, methodInfo));
+			Add(new ActionMethodInfo(regex, action, methodInfo, null));
 		}
 
 		public void Add(ActionMethodInfo actionValue)
@@ -33,7 +33,7 @@ namespace NBehave.Narrator.Framework
 		
 		public bool ActionExists(ActionStepText actionStepText)
 		{
-			return (FindMathingAction(actionStepText) != null);
+			return (FindMatchingAction(actionStepText) != null);
 		}
 
 		public string BuildFormatString(string message, ICollection<object> args)
@@ -80,7 +80,7 @@ namespace NBehave.Narrator.Framework
 
 		public ActionMethodInfo GetAction(ActionStepText message)
 		{
-			return FindMathingAction(message);
+			return FindMatchingAction(message);
 		}
 
 		public string BuildMessage(string message, object[] parameters)
@@ -97,10 +97,9 @@ namespace NBehave.Narrator.Framework
 			return resultString;
 		}
 
-		private ActionMethodInfo FindMathingAction(ActionStepText actionStepText)
+		private ActionMethodInfo FindMatchingAction(ActionStepText actionStepText)
 		{
-			ActionMethodInfo matchedAction = null;
-			string message = actionStepText.Text;
+		    string message = actionStepText.Text;
 			foreach (ActionMethodInfo action in _actions)
 			{
 				Regex regex = action.ActionStepMatcher;
@@ -108,10 +107,10 @@ namespace NBehave.Narrator.Framework
 				if (isMatch)
 				{
 					if (MatchesFileName(action, actionStepText))
-						matchedAction = action;
+						return action;
 				}
 			}
-			return matchedAction;
+			return null;
 		}
 		
 		private bool MatchesFileName(ActionMethodInfo action, ActionStepText actionStepText)

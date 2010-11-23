@@ -3,7 +3,8 @@ using System.Collections.Generic;
 
 namespace NBehave.Narrator.Framework
 {
-    public class StoryResults
+    [Serializable]
+    public class StoryResults : MarshalByRefObject
     {
         private readonly List<ScenarioResult> _scenarioResults = new List<ScenarioResult>();
 

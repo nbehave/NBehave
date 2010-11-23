@@ -4,7 +4,8 @@ using System.Text;
 
 namespace NBehave.Narrator.Framework
 {
-	public class ScenarioResult
+    [Serializable]
+    public class ScenarioResult : MarshalByRefObject
 	{
 		private Result _result = new Passed();
 		private string _message;

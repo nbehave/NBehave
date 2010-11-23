@@ -61,12 +61,19 @@ namespace NBehave.Narrator.Framework
                 HandleScenarioTitle(actionStepText);
                 HandleScenarioStep(actionStepText, scenarioCounter);
             }
+            HandleScenarioEnd();
+
             CreateStoryIfStoryNull();
             var scenario = new Scenario(_scenarioResult.ScenarioTitle, Story);
             Story.AddScenario(scenario);
             foreach (var action in _scenarioEventsToRaise)
                 action.Invoke();
             return _scenarioResult;
+        }
+
+        private void HandleScenarioEnd()
+        {
+            _actionStepRunner.OnCloseScenario();
         }
 
         private void SetStoryNarrative()

@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace NBehave.Narrator.Framework
 {
-    public class PlainTextOutput
+    public class PlainTextOutput : MarshalByRefObject
     {
         private readonly TextWriter _writer;
 

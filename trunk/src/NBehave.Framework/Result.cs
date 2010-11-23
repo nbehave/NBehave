@@ -2,6 +2,7 @@ using System;
 
 namespace NBehave.Narrator.Framework
 {
+    [Serializable]
 	public class ActionStepResult : Result
 	{
 		public string ActionStep { get; private set; }
@@ -19,7 +20,8 @@ namespace NBehave.Narrator.Framework
 			return Result.ToString();
 		}
 	}
-	
+
+    [Serializable]
     public class Passed : Result
     {
         public Passed()
@@ -28,6 +30,7 @@ namespace NBehave.Narrator.Framework
         }
     }
 
+    [Serializable]
     public class Failed : Result
     {
         public Exception Exception { get; private set; }
@@ -38,6 +41,7 @@ namespace NBehave.Narrator.Framework
         }
     }
 
+    [Serializable]
     public class Pending : Result
     {
         public Pending(string pendingReason)
@@ -46,7 +50,8 @@ namespace NBehave.Narrator.Framework
         }
     }
 
-    public abstract class Result
+    [Serializable]
+    public abstract class Result : MarshalByRefObject
     {
         public string Message { get; protected set; }
 
