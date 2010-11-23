@@ -111,10 +111,21 @@
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="ActionCatalog.cs" />
+    <Compile Include="Configuration\ParseScenarioFiles.cs" />
+    <Compile Include="Configuration\IStartupTask.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\LoadActionSteps.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\LoadScenarioFiles.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\NBehaveConfiguration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Messages\ScenarioFilesLoaded.cs" />
     <Compile Include="EventListeners\CodeGeneration\ActionStepCodeGenerator.cs" />
-    <Compile Include="Configuration\IStartupTask.cs" />
-    <Compile Include="Configuration\LoadActionSteps.cs" />
-    <Compile Include="Configuration\LoadScenarioFiles.cs" />
     <Compile Include="EventListeners\CodeGeneration\CodeGenEventListener.cs" />
     <Compile Include="EventListeners\ColorfulConsoleOutputEventListener.cs" />
     <Compile Include="Contracts\IMessengerHubAware.cs" />
@@ -131,7 +142,6 @@
     <Compile Include="EventListeners\Xml\XmlOutputWriter.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Extensions\NBehaveConfigurationExtensions.cs" />
-    <Compile Include="Configuration\NBehaveConfiguration.cs" />
     <Compile Include="Messages\RunStarted.cs" />
     <Compile Include="Messages\FeaturesLoaded.cs" />
     <Compile Include="NBehaveInitialiser.cs" />
