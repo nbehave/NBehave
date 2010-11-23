@@ -72,5 +72,15 @@ namespace NBehave.Narrator.Framework.EventListeners
         {
             return new CodeGenEventListener(writer);
         }
+
+        public static IEventListener ConsoleOutputEventListener(bool showResults)
+        {
+            return new ConsoleOutputEventListener(showResults);
+        }
+
+        public static IEventListener XmlToConsoleOutputEventListener(bool showResults)
+        {
+            return new XmlToConsoleOutputEventListener(showResults);
+        }
     }
 }

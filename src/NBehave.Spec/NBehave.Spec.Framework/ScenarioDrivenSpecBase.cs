@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NBehave.Narrator.Framework;
@@ -15,11 +16,13 @@ namespace NBehave.Spec
 
         public virtual void MainSetup()
         {
-            Feature = CreateFeature();
+            Feature = new ScenarioDrivenFeature(CreateFeature());
         }
 
         public virtual void MainTeardown()
         {
+            ((ScenarioDrivenFeature) Feature).CloseBuilders();
+
             var scenariosWithPendingSteps = Feature.FindPendingSteps();
             if (scenariosWithPendingSteps.Count() <= 0)
             {
@@ -50,6 +53,35 @@ namespace NBehave.Spec
             where TType : class
         {
             return MockRepository.GenerateStub<TType>();
+        }
+    }
+
+    public class ScenarioDrivenFeature : Feature
+    {
+        private readonly List<ScenarioBuilder> _builders = new List<ScenarioBuilder>();
+
+        public ScenarioDrivenFeature(Feature feature) : base(feature.Title)
+        {
+            Narrative = feature.Narrative;
+            IsDryRun = feature.IsDryRun;
+
+            foreach (var scenario in feature.Scenarios)
+            {
+                AddScenario(scenario);
+            }
+        }
+
+        public void RegisterScenarioBuilder(ScenarioBuilder scenarioBuilder)
+        {
+            _builders.Add(scenarioBuilder);
+        }
+
+        public void CloseBuilders()
+        {
+            foreach (var builder in _builders)
+            {
+                builder.OnFeatureClosing();
+            }
         }
     }
 }

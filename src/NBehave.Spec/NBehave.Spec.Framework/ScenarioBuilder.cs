@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using NBehave.Narrator.Framework;
+using NBehave.Narrator.Framework.EventListeners;
 
 namespace NBehave.Spec
 {
@@ -18,6 +20,9 @@ namespace NBehave.Spec
         private ScenarioDrivenSpecStepRunner _stepRunner;
         private ScenarioWithSteps _scenario;
         private readonly string _scenarioTitle;
+        private ScenarioFragment _lastPrintedStage = (ScenarioFragment)(-1);
+        private IEventListener _eventListener;
+        private readonly ScenarioResult _scenarioResult;
 
         protected Feature Feature { get; private set; }
 
@@ -43,6 +48,25 @@ namespace NBehave.Spec
         {
             Feature = feature;
             _scenarioTitle = scenarioTitle;
+
+            SetupEventListener();
+            _eventListener.FeatureCreated(feature.Title);
+            if(!String.IsNullOrEmpty(Feature.Narrative))
+                _eventListener.FeatureNarrative(Feature.Narrative);
+
+            var scenarioDrivenFeature = feature as ScenarioDrivenFeature;
+            if (scenarioDrivenFeature != null)
+            {
+                scenarioDrivenFeature.RegisterScenarioBuilder(this);
+            }
+
+            _scenarioResult = new ScenarioResult(feature, scenarioTitle);
+        }
+
+        private void SetupEventListener()
+        {
+            _eventListener = IsXmlOutput ? EventListeners.XmlToConsoleOutputEventListener(!IsDryRun) 
+                                         : EventListeners.ConsoleOutputEventListener(!IsDryRun);
         }
 
         private void SetHelperObject(object helper)
@@ -62,13 +86,38 @@ namespace NBehave.Spec
 
             var stringStringStep = new StringStep(step, Scenario.Source, StepRunner);
             Scenario.AddStep(stringStringStep);
-            
+
+            if (IsDryRun)
+            {
+                var stepPrefix = (currentStage == _lastPrintedStage ? "And " : currentStage.ToString()) + " ";
+                _scenarioResult.AddActionStepResult(new ActionStepResult(stepPrefix + step, new Passed()));
+                _lastPrintedStage = currentStage;
+                return;
+            }
+
             stringStringStep.Run();
+            _scenarioResult.AddActionStepResult(stringStringStep.StepResult);
+
             var failure = stringStringStep.StepResult.Result as Failed;
             if (failure != null)
             {
                 throw new ApplicationException("Failed on step " + step, failure.Exception);
             }
+        }
+
+        public void OnFeatureClosing()
+        {
+            _eventListener.ScenarioResult(_scenarioResult);
+        }
+
+        private static bool IsDryRun
+        {
+            get { return ConfigurationManager.AppSettings["nbehave.isdryrun"].ToLower() == "true"; }
+        }
+
+        private static bool IsXmlOutput
+        {
+            get { return ConfigurationManager.AppSettings["nbehave.xmloutput"].ToLower() == "true"; }
         }
 
         internal class StartFragment : IScenarioBuilderStartWithHelperObject

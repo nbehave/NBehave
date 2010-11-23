@@ -103,6 +103,7 @@
     </Compile>
     <Compile Include="ActionCatalog.cs" />
     <Compile Include="ActionStepCodeGenerator.cs" />
+    <Compile Include="ConsoleOutputEventListener.cs" />
     <Compile Include="EventListeners\CodeGenEventListener.cs" />
     <Compile Include="EventListeners\ColorfulConsoleOutputEventListener.cs" />
     <Compile Include="EventListeners\Xml\EventReceived.cs" />
@@ -164,6 +165,7 @@
     <Compile Include="Text\StringStep.cs" />
     <Compile Include="Text\StringTableStep.cs" />
     <Compile Include="Text\WhenAttribute.cs" />
+    <Compile Include="XmlToConsoleOutputEventListener.cs" />
     <Compile Include="YmlEntry.cs" />
     <Compile Include="YmlParser.cs" />
   </ItemGroup>

@@ -86,7 +86,7 @@ namespace NBehave.Console
             if (scenarioFiles == null)
                 return false;
 
-            if (dryRun && !HasStoryOutput)
+            if (dryRun && !(HasStoryOutput || HasStoryXmlOutput))
                 return false;
 
             return ParameterCount >= 1;
