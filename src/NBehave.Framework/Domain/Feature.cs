@@ -12,13 +12,8 @@ namespace NBehave.Narrator.Framework
     using System;
     using System.Collections.Generic;
 
-    using NBehave.Narrator.Framework.Tiny;
-
     public class Feature
     {
-        private readonly ITinyMessengerHub _hub;
-        private readonly List<ScenarioWithSteps> _scenarios = new List<ScenarioWithSteps>();
-
         public Feature()
             : this(string.Empty)
         {
@@ -26,8 +21,7 @@ namespace NBehave.Narrator.Framework
 
         public Feature(string title)
         {
-            //TODO: Remove service location.
-            _hub = Tiny.TinyIoCContainer.Current.Resolve<ITinyMessengerHub>();
+            this.Scenarios = new List<ScenarioWithSteps>();
             ExtractTitleAndNarrative(title);
         }
 
@@ -35,15 +29,7 @@ namespace NBehave.Narrator.Framework
 
         public string Narrative { get; set; }
 
-        public bool IsDryRun { get; set; }
-
-        public IEnumerable<ScenarioWithSteps> Scenarios
-        {
-            get
-            {
-                return _scenarios;
-            }
-        }
+        public List<ScenarioWithSteps> Scenarios { get; private set; }
 
         public bool HasTitle
         {
@@ -55,7 +41,7 @@ namespace NBehave.Narrator.Framework
 
         public void AddScenario(ScenarioWithSteps scenario)
         {
-            _scenarios.Add(scenario);
+            this.Scenarios.Add(scenario);
         }
 
         public void ExtractTitleAndNarrative(string content)

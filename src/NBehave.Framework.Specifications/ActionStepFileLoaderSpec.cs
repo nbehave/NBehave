@@ -5,18 +5,20 @@ using NUnit.Framework;
 
 namespace NBehave.Narrator.Framework.Specifications
 {
+    using NBehave.Narrator.Framework.Contracts;
     using NBehave.Narrator.Framework.Tiny;
 
     [TestFixture]
-    public class ActionStepFileLoaderSpec
+    public class LoadScenarioFilesSpec
     {
-        private ActionStepFileLoader _actionStepFileLoader;
+        private LoadScenarioFiles _actionStepFileLoader;
 
         [SetUp]
         public void EstablishContext()
         {
-            _actionStepFileLoader = new ActionStepFileLoader(
-                new StringStepRunner(new ActionCatalog()), TinyIoCContainer.Current.Resolve<ITinyMessengerHub>());
+            var config = NBehaveConfiguration.New;
+            _actionStepFileLoader = new LoadScenarioFiles(config, TinyIoCContainer.Current.Resolve<ITinyMessengerHub>(),
+                new StringStepRunner(new ActionCatalog()));
         }
 
         [Test]

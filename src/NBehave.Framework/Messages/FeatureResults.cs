@@ -22,10 +22,6 @@ namespace NBehave.Narrator.Framework
         {
         }
 
-        public int NumberOfThemes { get; set; }
-
-        public int NumberOfStories { get; set; }
-
         public int NumberOfScenariosFound
         {
             get { return _scenarioResults.Count; }

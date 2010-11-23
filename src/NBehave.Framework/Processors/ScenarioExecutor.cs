@@ -31,12 +31,12 @@ namespace NBehave.Narrator.Framework.Processors
             
             foreach (var feature in _features)
             {
-                var scenarios = feature.Scenarios;
+                var scenarioResults = Run(feature.Scenarios);
 
-                var scenarioResults = Run(scenarios);
-
-                AddScenarioResultsToStoryResults(scenarioResults, featureResults);
-                featureResults.NumberOfStories++;
+                foreach (var result in scenarioResults)
+                {
+                    featureResults.AddResult(result);
+                }
             }
 
             _hub.Publish(new ThemeFinished(this));
@@ -68,14 +68,6 @@ namespace NBehave.Narrator.Framework.Processors
             }
 
             return allResults;
-        }
-
-        private void AddScenarioResultsToStoryResults(IEnumerable<ScenarioResult> scenarioResults, FeatureResults featureResults)
-        {
-            foreach (var result in scenarioResults)
-            {
-                featureResults.AddResult(result);
-            }
         }
     }
 }

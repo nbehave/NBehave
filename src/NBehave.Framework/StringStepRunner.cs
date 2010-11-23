@@ -40,7 +40,7 @@ namespace NBehave.Narrator.Framework
             var result = new ActionStepResult(actionStep.Step, new Passed());
             try
             {
-                if (ActionCatalog.ActionExists(actionStepToUse) == false)
+                if (!ActionCatalog.ActionExists(actionStepToUse))
                 {
                     var pendReason = string.Format("No matching Action found for \"{0}\"", actionStep);
                     result = new ActionStepResult(actionStep.Step, new Pending(pendReason));

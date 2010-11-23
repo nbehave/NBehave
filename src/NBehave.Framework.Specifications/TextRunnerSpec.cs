@@ -84,8 +84,6 @@ namespace NBehave.Narrator.Framework.Specifications
             {
                 _result = this.CreateRunnerWithBasicConfiguration().Run();
 
-                Assert.That(_result.NumberOfThemes, Is.EqualTo(0));
-                Assert.That(_result.NumberOfStories, Is.EqualTo(1));
                 Assert.That(_result.NumberOfScenariosFound, Is.EqualTo(2));
                 Assert.That(_result.NumberOfPassingScenarios, Is.EqualTo(2));
             }

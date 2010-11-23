@@ -144,7 +144,6 @@
     <Compile Include="Domain\ActionMissingException.cs" />
     <Compile Include="Attributes\ActionStepAttribute.cs" />
     <Compile Include="Extensions\ActionStepConverterExtensions.cs" />
-    <Compile Include="ActionStepFileLoader.cs" />
     <Compile Include="GherkinScenarioParser.cs" />
     <Compile Include="Contracts\IFileMatcher.cs" />
     <Compile Include="IgnoreSpaceAndUnderScoreMatcher.cs" />
