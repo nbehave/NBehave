@@ -10,7 +10,6 @@ namespace NBehave.Spec.MbUnit.Specs
     [Context]
     public class When_using_BDD_style_language_for_boolean_assertions
     {
-
         [@Specification]
         public void Should_allow_substitution_for_IsFalse()
         {
@@ -187,18 +186,6 @@ namespace NBehave.Spec.MbUnit.Specs
         }
 
         [@Specification]
-        public void Should_allow_substitution_for_ShouldContain()
-        {
-            "Lorem ipsum dolor sit amet.".ShouldContain("dolor");
-        }
-
-        [@Specification]
-        public void Should_allow_substitution_for_ShouldNotContain()
-        {
-            "Lorem ipsum dolor sit amet.".ShouldNotContain("foo");
-        }
-
-        [@Specification]
         public void Should_allow_substitution_for_EndsWith()
         {
             "Lorem ipsum dolor sit amet.".ShouldEndWith("amet.");
@@ -227,7 +214,35 @@ namespace NBehave.Spec.MbUnit.Specs
         {
             "blarg".ShouldNotMatch(new Regex("asdf"));
         }
-    }
+    
+        [@Specification]
+        public void Should_allow_substitution_for_ShouldNotContain_for_string()
+        {
+            "Lorem ipsum dolor sit amet.".ShouldNotContain("foo");
+        }
+
+        [@Specification]
+		[ExpectedExceptionNUnit(typeof(AssertionFailureException))]
+        public void Should_allow_substitution_for_ShouldNotContain__for_string_failing()
+        {
+            "Lorem ipsum dolor sit amet.".ShouldNotContain("ipsum");
+        }
+
+        [@Specification]
+        public void Should_allow_substitution_for_ShouldContain_for_string()
+        {
+            string str = "Hello";
+            str.ShouldContain("Hell");
+        }
+
+        [@Specification]
+		[ExpectedExceptionNUnit(typeof(AssertionFailureException))]
+        public void Should_allow_substitution_for_ShouldContain_for_string_failing()
+        {
+            string str = "Hello";
+            str.ShouldContain("Foo");
+        }
+}
 
     [Context]
     public class When_using_BDD_style_language_for_instance_type_assertions

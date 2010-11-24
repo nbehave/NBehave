@@ -5,41 +5,48 @@ namespace NBehave.Narrator.Framework
 {
     internal static class ActionStepConverterExtensions
     {
+        public const string TokenRegexPattern = @"(\$[a-zA-Z]\w+)|(\[[a-zA-Z]\w+\])";
+        private static readonly Regex _tokenPattern = new Regex(TokenRegexPattern);
+        private static readonly Regex _validRegexGroupName = new Regex(@"[a-zA-Z]\w+");
+
         public static Regex AsRegex(this string actionStep)
         {
             string[] words = actionStep.Split(new[] { ' ', '\n', '\r', '\t' }, StringSplitOptions.RemoveEmptyEntries);
             string regex = "^";
             foreach (var word in words)
             {
-                if (WordIsToken(word))
+                if (!WordIsToken(word))
                 {
-                    var groupName = GetValidRegexGroupName(word);
-                    var stuffAtEnd = RemoveTokenPrefix(word).Replace(groupName, string.Empty);
-                    regex += string.Format(@"(?<{0}>(\-?\w+\s*)+){1}\s+", groupName, stuffAtEnd);
-                }
-                else
                     regex += string.Format(@"{0}\s+", word);
+                    continue;
+                }
+                
+                var groupName = GetValidRegexGroupName(word);
+                var stuffAtStart = word.Substring(0, word.IndexOf(groupName) - 1);
+                var stuffAtEnd = word.Substring(word.IndexOf(groupName) + groupName.Length);
+
+                var lengthRestriction = "+";
+                if(stuffAtEnd.StartsWith("{") && stuffAtEnd.Contains("}"))
+                {
+                    lengthRestriction = stuffAtEnd.Substring(0, stuffAtEnd.IndexOf("}") + 1);
+                    stuffAtEnd = stuffAtEnd.Remove(0, lengthRestriction.Length);
+                }
+                regex += string.Format(@"{1}(?<{0}>.{3}){2}\s+", groupName, stuffAtStart, stuffAtEnd, lengthRestriction);
             }
             if (regex.EndsWith(@"\s+"))
                 regex = regex.Substring(0, regex.Length - 1) + "*";
             regex += "$";
-            return new Regex(regex, RegexOptions.Multiline | RegexOptions.IgnorePatternWhitespace);
+            return new Regex(regex, RegexOptions.Singleline | RegexOptions.IgnorePatternWhitespace);
         }
 
         private static bool WordIsToken(string word)
         {
-            return word.StartsWith(ActionCatalog.TokenPrefix.ToString());
+            return _tokenPattern.IsMatch(word);
         }
 
         private static string GetValidRegexGroupName(string word)
         {
-            var regex = new Regex(@"\w+");
-            return regex.Match(word).Value;
-        }
-
-        private static string RemoveTokenPrefix(string word)
-        {
-            return word.Substring(ActionCatalog.TokenPrefix.ToString().Length);
+            return _validRegexGroupName.Match(word).Value;
         }
     }
 }

@@ -7,7 +7,6 @@ using gen = System.Collections.Generic;
 using NBehave.Narrator.Framework.EventListeners;
 using NBehave.Narrator.Framework.EventListeners.Xml;
 
-
 namespace NBehave.Console.Tests
 {
     [TestFixture]
@@ -36,7 +35,7 @@ namespace NBehave.Console.Tests
         [Test]
         public void Should_run_example_framework_correctly()
         {
-            Program.Main(new[] { "TestAssembly.dll" });
+            Program.Main(new[] { "TestPlainTextAssembly.dll", "/sf=*.scenario" });
 
             Assert.That(_output.ToString(), Is.StringContaining("Scenarios"));
         }
@@ -44,13 +43,13 @@ namespace NBehave.Console.Tests
         [Test]
         public void Should_not_display_header_when_nologo_argument_set()
         {
-            Program.Main(new[] { "TestAssembly.dll", "/nologo" });
+            Program.Main(new[] { "TestAssembly.dll", "/nologo", "/sf=*.scenario" });
 
             Assert.That(_output.ToString(), Is.Not.StringContaining("Copyright"));
         }
 
         [Test]
-        public void Should_create_empty_listener_when_no_story_output_argument_passed_in()
+        public void Should_create_colorful_listener_when_no_story_output_argument_passed_in()
         {
             var options = new ConsoleOptions(new[] { "TestAssembly.dll" });
 
@@ -59,7 +58,7 @@ namespace NBehave.Console.Tests
             {
                 listener = Program.CreateEventListener(options);
                 var multiOutputEventListener = (MultiOutputEventListener)listener;
-                Assert.That(multiOutputEventListener.Listeners[0], Is.TypeOf(typeof(NullEventListener)));
+                Assert.That(multiOutputEventListener.Listeners[0], Is.TypeOf(typeof(ColorfulConsoleOutputEventListener)));
             }
             finally
             {
@@ -78,7 +77,7 @@ namespace NBehave.Console.Tests
             {
                 listener = Program.CreateEventListener(options);
                 var multiOutputEventListener = (MultiOutputEventListener)listener;
-                Assert.That(multiOutputEventListener.Listeners[0], Is.TypeOf(typeof(FileOutputEventListener)));
+                Assert.That(multiOutputEventListener.Listeners[0], Is.TypeOf(typeof(TextWriterEventListener)));
             }
             finally
             {
@@ -134,7 +133,7 @@ namespace NBehave.Console.Tests
         [Test]
         public void Should_display_errormessage_if_assembly_doesnt_exist()
         {
-            Program.Main(new[] { "IDontExist.dll" });
+            Program.Main(new[] { "IDontExist.dll", "/sf=*.scenario" });
             Assert.IsTrue(_output.ToString().Contains("File not found: IDontExist.dll"));
         }
     }

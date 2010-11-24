@@ -205,12 +205,6 @@ namespace NBehave.Spec.MSTest.Specs
     public class When_using_BDD_style_language_for_string_assertions
     {
         [Specification]
-        public void Should_allow_substitutions_for_Contains()
-        {
-            "blarg".ShouldContain("lar");
-        }
-
-        [Specification]
         public void Should_allow_substitutions_for_StartsWith()
         {
             "blarg".ShouldStartWith("bl");
@@ -244,6 +238,32 @@ namespace NBehave.Spec.MSTest.Specs
         public void Should_allow_substitution_for_IsNotEmpty_for_strings()
         {
             "blarg".ShouldNotBeEmpty();
+        }
+        
+        [Specification]
+        public void Should_allow_substitution_for_ShouldNotContain_for_string()
+        {
+            "Lorem ipsum dolor sit amet.".ShouldNotContain("foo");
+        }
+
+        [Specification, ExpectedExceptionNUnit(typeof(AssertFailedException))]
+        public void Should_allow_substitution_for_ShouldNotContain__for_string_failing()
+        {
+            "Lorem ipsum dolor sit amet.".ShouldNotContain("ipsum");
+        }
+
+        [Specification]
+        public void Should_allow_substitution_for_ShouldContain_for_string()
+        {
+            string str = "Hello";
+            str.ShouldContain("Hell");
+        }
+
+        [Specification, ExpectedExceptionNUnit(typeof(AssertFailedException))]
+        public void Should_allow_substitution_for_ShouldContain_for_string_failing()
+        {
+            string str = "Hello";
+            str.ShouldContain("Foo");
         }
     }
 
@@ -355,11 +375,5 @@ namespace NBehave.Spec.MSTest.Specs
         {
             5.1.ShouldApproximatelyEqual(5.2, 0.11);
         }
-
-        //[Specification]
-        //public void Should_allow_substitiution_for_AreNotApproximatelyEqual()
-        //{
-        //    5.1.ShouldNotApproximatelyEqual(5.3, 0.1);
-        //}
     }
 }

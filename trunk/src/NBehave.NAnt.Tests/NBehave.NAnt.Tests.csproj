@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -10,17 +10,38 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NBehave.NAnt.Tests</RootNamespace>
     <AssemblyName>NBehave.NAnt.Tests</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\build\Debug\UnitTests\</OutputPath>
+    <OutputPath>..\..\build\Debug-3.5\UnitTests\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,9 +50,24 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'AutomatedDebug|AnyCPU' ">
-    <OutputPath>..\..\build\Debug\UnitTests\</OutputPath>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'AutomatedDebug-3.5|AnyCPU' ">
+    <OutputPath>..\..\build\Debug-3.5\UnitTests\</OutputPath>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'AutomatedDebug-4.0|AnyCPU'">
+    <OutputPath>..\..\build\Debug-4.0\UnitTests\</OutputPath>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>..\..\build\Debug-4.0\UnitTests\NBehave.NAnt.Tests.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+    <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CollectionGen, Version=1.0.834.34691, Culture=neutral">
@@ -54,11 +90,11 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\nant\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="NAnt, Version=0.85.2478.0, Culture=neutral">
+    <Reference Include="NAnt, Version=0.91.3881.0, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\nant\NAnt.exe</HintPath>
     </Reference>
-    <Reference Include="NAnt.CompressionTasks, Version=0.85.2478.0, Culture=neutral">
+    <Reference Include="NAnt.CompressionTasks, Version=0.91.3881.0, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\nant\NAnt.CompressionTasks.dll</HintPath>
     </Reference>
@@ -66,43 +102,43 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\nant\tasks\net\NAnt.Contrib.Tasks.dll</HintPath>
     </Reference>
-    <Reference Include="NAnt.Core, Version=0.85.2478.0, Culture=neutral">
+    <Reference Include="NAnt.Core, Version=0.91.3881.0, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\nant\NAnt.Core.dll</HintPath>
     </Reference>
-    <Reference Include="NAnt.DotNetTasks, Version=0.85.2478.0, Culture=neutral">
+    <Reference Include="NAnt.DotNetTasks, Version=0.91.3881.0, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\nant\NAnt.DotNetTasks.dll</HintPath>
     </Reference>
-    <Reference Include="NAnt.MSNetTasks, Version=0.85.2478.0, Culture=neutral">
+    <Reference Include="NAnt.MSNetTasks, Version=0.91.3881.0, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\nant\NAnt.MSNetTasks.dll</HintPath>
     </Reference>
-    <Reference Include="NAnt.NUnit, Version=0.85.2478.0, Culture=neutral">
+    <Reference Include="NAnt.NUnit, Version=0.91.3881.0, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\nant\NAnt.NUnit.dll</HintPath>
     </Reference>
-    <Reference Include="NAnt.NUnit1Tasks, Version=0.85.2478.0, Culture=neutral">
+    <Reference Include="NAnt.NUnit1Tasks, Version=0.91.3881.0, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\nant\NAnt.NUnit1Tasks.dll</HintPath>
     </Reference>
-    <Reference Include="NAnt.NUnit2Tasks, Version=0.85.2478.0, Culture=neutral">
+    <Reference Include="NAnt.NUnit2Tasks, Version=0.91.3881.0, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\nant\NAnt.NUnit2Tasks.dll</HintPath>
     </Reference>
-    <Reference Include="NAnt.SourceControlTasks, Version=0.85.2478.0, Culture=neutral">
+    <Reference Include="NAnt.SourceControlTasks, Version=0.91.3881.0, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\nant\NAnt.SourceControlTasks.dll</HintPath>
     </Reference>
-    <Reference Include="NAnt.VisualCppTasks, Version=0.85.2478.0, Culture=neutral">
+    <Reference Include="NAnt.VisualCppTasks, Version=0.91.3881.0, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\nant\NAnt.VisualCppTasks.dll</HintPath>
     </Reference>
-    <Reference Include="NAnt.VSNetTasks, Version=0.85.2478.0, Culture=neutral">
+    <Reference Include="NAnt.VSNetTasks, Version=0.91.3881.0, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\nant\NAnt.VSNetTasks.dll</HintPath>
     </Reference>
-    <Reference Include="NAnt.Win32Tasks, Version=0.85.2478.0, Culture=neutral">
+    <Reference Include="NAnt.Win32Tasks, Version=0.91.3881.0, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\nant\NAnt.Win32Tasks.dll</HintPath>
     </Reference>
@@ -114,7 +150,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\nant\lib\net\2.0\NDoc.Documenter.Msdn.dll</HintPath>
     </Reference>
-    <Reference Include="NDoc.Documenter.NAnt, Version=0.85.2478.0, Culture=neutral">
+    <Reference Include="NDoc.Documenter.NAnt, Version=0.91.3881.0, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\nant\NDoc.Documenter.NAnt.dll</HintPath>
     </Reference>
@@ -126,21 +162,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\nant\lib\net\2.0\nunit.core.dll</HintPath>
     </Reference>
-    <Reference Include="nunit.framework, Version=2.4.3.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+    <Reference Include="nunit.framework, Version=2.5.7.10213, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\nunit\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="scvs, Version=0.36.4902.7334, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\nant\scvs.exe</HintPath>
-    </Reference>
-    <Reference Include="SLiNgshoT, Version=0.85.2479.0, Culture=neutral">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\tools\nant\SLiNgshoT.exe</HintPath>
-    </Reference>
-    <Reference Include="SLiNgshoT.Core, Version=0.85.2479.0, Culture=neutral">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\tools\nant\SLiNgshoT.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -160,19 +188,14 @@
       <Project>{3CF07281-565F-412E-9710-E8104E0391D9}</Project>
       <Name>NBehave.NAnt</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TestAssembly\TestAssembly.csproj">
-      <Project>{E0CCE2D9-9720-4119-98D5-CDE44E283847}</Project>
-      <Name>TestAssembly</Name>
-    </ProjectReference>
     <ProjectReference Include="..\TestPlainTextAssembly\TestPlainTextAssembly.csproj">
       <Project>{B734DE3F-E1EC-42B4-8AB1-A55A934584CF}</Project>
       <Name>TestPlainTextAssembly</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
-    <None Include="Greetingsystem.build">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
     </None>
     <None Include="GreetingSystem.scenario">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -185,6 +208,23 @@
     <None Include="GreetingSystemFailure.scenario">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

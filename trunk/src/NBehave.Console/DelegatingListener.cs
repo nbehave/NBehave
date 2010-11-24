@@ -5,31 +5,26 @@ namespace NBehave.Console
 {
     public class DelegatingListener : MarshalByRefObject, IEventListener
     {
-        private IEventListener _localListener;
+        private readonly IEventListener _localListener;
 
         public DelegatingListener(IEventListener localListener)
         {
             _localListener = localListener;
         }
 
-        public void StoryCreated(string story)
+        public void FeatureCreated(string feature)
         {
-            _localListener.StoryCreated(story);
+            _localListener.FeatureCreated(feature);
         }
 
-        public void StoryMessageAdded(string message)
+        public void FeatureNarrative(string message)
         {
-            _localListener.StoryMessageAdded(message);
+            _localListener.FeatureNarrative(message);
         }
 
         public void ScenarioCreated(string scenarioTitle)
         {
             _localListener.ScenarioCreated(scenarioTitle);
-        }
-
-        public void ScenarioMessageAdded(string message)
-        {
-            _localListener.ScenarioMessageAdded(message);
         }
 
         public void RunStarted()
@@ -52,9 +47,9 @@ namespace NBehave.Console
             _localListener.ThemeFinished();
         }
 
-        public void StoryResults(StoryResults results)
+        public void ScenarioResult(ScenarioResult results)
         {
-            _localListener.StoryResults(results);
+            _localListener.ScenarioResult(results);
         }
     }
 }

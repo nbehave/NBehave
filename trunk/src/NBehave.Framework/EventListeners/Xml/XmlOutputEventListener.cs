@@ -1,129 +1,60 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Xml;
 
 namespace NBehave.Narrator.Framework.EventListeners.Xml
 {
-	public class XmlOutputEventListener : XmlOutputBase, IEventListener
+    public class XmlOutputEventListener : IEventListener
 	{
-		private int _totalThemes;
-		private int _totalStories;
-		private int _totalScenarios;
-		private ThemeXmlOutputWriter _themeWriter;
-		private StoryXmlOutputWriter _storyWriter;
-		private readonly List<ScenarioXmlOutputWriter> _scenarioWriters = new List<ScenarioXmlOutputWriter>();
-		private ScenarioXmlOutputWriter _currentScenarioWriter;
-		private StoryResults _storyResults = new StoryResults();
-
+	    private readonly XmlOutputWriter _xmlOutputWriter;
+        private readonly List<EventReceived> _eventsReceived = new List<EventReceived>();
+        private XmlWriter Writer { get; set; }
+	
 		public XmlOutputEventListener(XmlWriter writer)
-			: base(writer, new Queue<Action>())
-		{ }
+		{
+		    Writer = writer;
+			_xmlOutputWriter = new XmlOutputWriter(Writer, _eventsReceived);
+		}
 
 		void IEventListener.RunStarted()
 		{
-			Actions.Enqueue(
-				() =>
-				{
-					Writer.WriteStartElement("results");
-					string[] assemblyString = typeof(XmlOutputEventListener).AssemblyQualifiedName.Split(new[] { ',' });
-					Writer.WriteAttributeString("name", assemblyString[1]);
-					Writer.WriteAttributeString("version", assemblyString[2]);
-					Writer.WriteAttributeString("date", DateTime.Today.ToShortDateString());
-					Writer.WriteAttributeString("time", DateTime.Now.ToShortTimeString());
-					Writer.WriteAttributeString("themes", _storyResults.NumberOfThemes.ToString());
-					Writer.WriteAttributeString("stories", _storyResults.NumberOfStories.ToString());
-					
-					Writer.WriteAttributeString("scenarios", _storyResults.NumberOfScenariosFound.ToString());
-					Writer.WriteAttributeString("scenariosFailed", _storyResults.NumberOfFailingScenarios.ToString());
-					Writer.WriteAttributeString("scenariosPending", _storyResults.NumberOfPendingScenarios.ToString());
-
-				});
+			_eventsReceived.Add(new EventReceived("", EventType.RunStart));
 		}
 
 		void IEventListener.RunFinished()
 		{
-			Actions.Enqueue(
-				() =>
-				{
-					Writer.WriteEndElement(); // </results>
-					Writer.Flush();
-				});
-
-			foreach (Action a in Actions)
-				a.Invoke();
+			_eventsReceived.Add(new EventReceived("", EventType.RunFinished));
+			_xmlOutputWriter.WriteAllXml();
 		}
 
 		void IEventListener.ThemeStarted(string name)
 		{
-			_themeWriter = new ThemeXmlOutputWriter(Writer, Actions, _storyResults?? (new StoryResults()));
-			_themeWriter.ThemeStarted(name);
-			_totalThemes++;
-			Actions.Enqueue(
-				() => Writer.WriteStartElement("stories"));
+			_eventsReceived.Add(new EventReceived(name, EventType.ThemeStarted));
 		}
 
 		void IEventListener.ThemeFinished()
 		{
-			if (_storyWriter != null)
-			{
-				Actions.Enqueue(
-					() => Writer.WriteEndElement()); // </stories>
-			}
-			_themeWriter.ThemeFinished();
-			DoResults(_storyResults);
-			_storyWriter = null;
+			_eventsReceived.Add(new EventReceived("", EventType.ThemeFinished));
 		}
 
-		void IEventListener.StoryCreated(string story)
+        void IEventListener.FeatureCreated(string feature)
 		{
-			_storyWriter = new StoryXmlOutputWriter(Writer, Actions);
-			_storyWriter.StoryCreated(story);
-			_totalStories++;
-			_themeWriter.TotalStories++;
+			_eventsReceived.Add(new EventReceived(feature, EventType.FeatureCreated));
 		}
 
-		void IEventListener.StoryMessageAdded(string message)
+		void IEventListener.FeatureNarrative(string message)
 		{
-			_storyWriter.StoryMessageAdded(message);
+			_eventsReceived.Add(new EventReceived(message, EventType.FeatureNarrative));
 		}
 
 		void IEventListener.ScenarioCreated(string scenario)
 		{
-			if (_scenarioWriters.Count == 0)
-			{
-				Actions.Enqueue(() => Writer.WriteStartElement("scenarios"));
-			}
-
-			_currentScenarioWriter = new ScenarioXmlOutputWriter(Writer, Actions, _storyWriter.CurrentStoryTitle);
-			_currentScenarioWriter.ScenarioCreated(scenario);
-			_scenarioWriters.Add(_currentScenarioWriter);
-			_totalScenarios++;
+			_eventsReceived.Add(new EventReceived(scenario, EventType.ScenarioCreated));
 		}
 
-		void IEventListener.ScenarioMessageAdded(string message)
-		{
-			_currentScenarioWriter.ScenarioMessageAdded(message);
-		}
-
-		void IEventListener.StoryResults(StoryResults results)
-		{
-			Actions.Enqueue(() => Writer.WriteEndElement()); // </scenarios>
-			_storyResults = results;
-			HandleScenarioResults(results);
-			_storyWriter.DoResults(results);
-		}
-
-		private void HandleScenarioResults(StoryResults results)
-		{
-			foreach (var scenarioWriter in _scenarioWriters)
-				scenarioWriter.DoResults(results);
-			_scenarioWriters.Clear();
-		}
-
-		public override void DoResults(StoryResults results)
-		{
-			_themeWriter.DoResults(results);
-			base.DoResults(results);
-		}
-	}
+        void IEventListener.ScenarioResult(ScenarioResult result)
+        {
+            _eventsReceived.Add(new ScenarioResultEventReceived(result));
+        }
+    }
 }
+

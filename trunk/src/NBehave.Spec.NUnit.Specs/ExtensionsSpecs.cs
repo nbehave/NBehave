@@ -217,9 +217,29 @@ namespace NBehave.Spec.NUnit.Specs
         }
 
         [Specification]
-        public void Should_allow_substitution_for_ShouldNotContain()
+        public void Should_allow_substitution_for_ShouldNotContain_for_string()
         {
             "Lorem ipsum dolor sit amet.".ShouldNotContain("foo");
+        }
+
+        [Specification, ExpectedException(typeof(AssertionException))]
+        public void Should_allow_substitution_for_ShouldNotContain__for_string_failing()
+        {
+            "Lorem ipsum dolor sit amet.".ShouldNotContain("ipsum");
+        }
+
+        [Specification]
+        public void Should_allow_substitution_for_ShouldContain_for_string()
+        {
+            string str = "Hello";
+            str.ShouldContain("Hell");
+        }
+
+        [Specification, ExpectedException(typeof(AssertionException))]
+        public void Should_allow_substitution_for_ShouldContain_for_string_failing()
+        {
+            string str = "Hello";
+            str.ShouldContain("Foo");
         }
     }
 
@@ -337,6 +357,34 @@ namespace NBehave.Spec.NUnit.Specs
             Exception exception = new Action(() => { throw new ArgumentException(); }).GetException();
 
             exception.ShouldBeInstanceOfType<ArgumentException>();
+        }
+
+        [Specification]
+        public void Should_pass_when_exception_is_correct_type()
+        {
+            Action action = () => { throw new ArgumentException("blerg"); };
+            action.ShouldThrow<ArgumentException>();
+        }
+
+        [Specification, ExpectedException(typeof(AssertionException), ExpectedMessage = "Exception of type <System.ArgumentException> expected but no exception occurred")]
+        public void Should_fail_when_no_exception_occurs()
+        {
+            Action action = () => {  };
+            action.ShouldThrow<ArgumentException>();
+        }
+
+        [Specification, ExpectedException(typeof(AssertionException))]
+        public void Should_pass_fail_when_exception_is_not_correct_type()
+        {
+            Action action = () => { throw new ApplicationException("blerg"); };
+            action.ShouldThrow<ArgumentException>();
+        }
+
+        [Specification]
+        public void Should_pass_when_exception_is_correct_type_and_message_is_correct_type()
+        {
+            Action action = () => { throw new ArgumentException("blerg"); };
+            action.ShouldThrow<ArgumentException>().WithExceptionMessage("blerg");
         }
     }
 

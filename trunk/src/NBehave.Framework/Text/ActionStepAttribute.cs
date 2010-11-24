@@ -3,82 +3,38 @@ using System.Text.RegularExpressions;
 
 namespace NBehave.Narrator.Framework
 {
-    public class GivenAttribute : ActionStepAttribute
-    {
-        protected GivenAttribute(Regex actionMatch)
-            : base(actionMatch)
-        {
-            Type = "Given";
-        }
-        public GivenAttribute(string regex)
-            : this(new Regex(regex))
-        { }
-    }
-
-    public class WhenAttribute : ActionStepAttribute
-    {
-        protected WhenAttribute(Regex actionMatch)
-            : base(actionMatch)
-        {
-            Type = "When";
-        }
-
-        public WhenAttribute(string regex)
-            : this(new Regex(regex))
-        { }
-    }
-
-    public class ThenAttribute : ActionStepAttribute
-    {
-        protected ThenAttribute(Regex actionMatch)
-            : base(actionMatch)
-        {
-            Type = "Then";
-        }
-
-        public ThenAttribute(string regex)
-            : this(new Regex(regex))
-        { }
-    }
-
+    /// <summary>
+    /// Use Given, When or Then Attribute
+    /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
-    public class ActionStepAttribute : Attribute
+    public abstract class ActionStepAttribute : Attribute
     {
         public Regex ActionMatch { get; protected set; }
         public string Type { get; protected set; }
 
-        public ActionStepAttribute()
+        protected ActionStepAttribute()
         { }
 
-        public ActionStepAttribute(string tokenString)
-            : this(tokenString.RemoveFirstWord().AsRegex())
+        protected ActionStepAttribute(string regexOrTokenString)
         {
-            Type = tokenString.GetFirstWord();
+            if (IsRegex(regexOrTokenString))
+                ActionMatch = new Regex(regexOrTokenString);
+            else
+                ActionMatch = regexOrTokenString.AsRegex();
         }
 
-        protected ActionStepAttribute(Regex actionMatch)
+        private static readonly Regex _isTokenString = new Regex(ActionStepConverterExtensions.TokenRegexPattern); //new Regex(@"\$\w+");
+        private static readonly Regex _isCharsAndNumbersOnly = new Regex(@"^(\w|\d|\s)+$"); //new Regex(@"\$\w+");
+
+        private bool IsRegex(string regexOrTokenString)
         {
-            ActionMatch = actionMatch;
-            Type = actionMatch.ToString().GetFirstWord();
+            if (regexOrTokenString.EndsWith("$"))
+                return true;
+            if (_isTokenString.IsMatch(regexOrTokenString) 
+                || _isCharsAndNumbersOnly.IsMatch(regexOrTokenString))
+                return false;
+            return true;
+            //Type = actionMatch.ToString().GetFirstWord();
         }
-    }
-
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-    public class NotificationMethodAttribute : Attribute { }
-
-    public class BeforeStepAttribute : NotificationMethodAttribute
-    {
-    }
-    
-    public class AfterStepAttribute : NotificationMethodAttribute
-    {
-    }
-    
-    public class BeforeScenarioAttribute : NotificationMethodAttribute
-    {
-    }
-
-    public class AfterScenarioAttribute : NotificationMethodAttribute
-    {
     }
 }

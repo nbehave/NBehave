@@ -1,0 +1,5 @@
+﻿<TestRunner>
+  <FriendlyName>NBehave {0}.{1}.{2}</FriendlyName>
+  <AssemblyPath>NBehave.TestDriven.Plugin.dll</AssemblyPath>
+  <TypeName>NBehave.TestDriven.Plugin.NBehaveStoryRunner</TypeName>
+</TestRunner>

@@ -9,31 +9,28 @@ namespace NBehave.Console
     public class RemotableStoryRunner : MarshalByRefObject
     {
 
-        public StoryResults SetupAndRunStories(IEventListener listener, string scenarioFiles, ArrayList assemblyList, bool isDryRun)
+        public FeatureResults SetupAndRunStories(IEventListener listener, string scenarioFiles, ArrayList assemblyList, bool isDryRun, PlainTextOutput output)
         {
-            RunnerBase runner;
             if (string.IsNullOrEmpty(scenarioFiles))
-                runner = new StoryRunner();
-            else
-            {
-                runner = new TextRunner();
-                ((TextRunner)runner).Load(scenarioFiles.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
-            }
+                throw new ArgumentNullException("scenarioFiles");
+
+            var runner = new TextRunner(listener);
+            runner.Load(scenarioFiles.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
             runner.IsDryRun = isDryRun;
 
             foreach (string path in assemblyList)
             {
-                //try
-                //{
+                try
+                {
                     runner.LoadAssembly(path);
-                //}
-                //catch (FileNotFoundException)
-                //{
-                //    output.WriteLine(string.Format("File not found: {0}", path));
-                //}
+                }
+                catch (FileNotFoundException)
+                {
+                    output.WriteLine(string.Format("File not found: {0}", path));
+                }
             }
 
-            return runner.Run(listener);
+            return runner.Run();
         }
 
         private string[] _assemblyProbe;

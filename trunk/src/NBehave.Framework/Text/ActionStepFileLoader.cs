@@ -1,22 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace NBehave.Narrator.Framework
 {
     public class ActionStepFileLoader
     {
-        private readonly ActionStepAlias _actionStepAlias;
-        private readonly ActionStep _actionStep;
+        private readonly IStringStepRunner _stringStepRunner;
 
-        public ActionStepFileLoader(ActionStepAlias actionStepAlias, ActionStep actionStep)
+        public ActionStepFileLoader(IStringStepRunner stringStepRunner)
         {
-            _actionStepAlias = actionStepAlias;
-            _actionStep = actionStep;
+            _stringStepRunner = stringStepRunner;
         }
 
-        public List<List<ScenarioSteps>> Load(IEnumerable<string> scenarioLocations)
+        public List<Feature> Load(IEnumerable<string> scenarioLocations)
         {
-            var stories = new List<List<ScenarioSteps>>();
+            var stories = new List<Feature>();
 
             foreach (var location in scenarioLocations)
             {
@@ -32,43 +32,53 @@ namespace NBehave.Narrator.Framework
             if (Path.IsPathRooted(location))
                 files = Directory.GetFiles(Path.GetDirectoryName(location), Path.GetFileName(location));
             else
-                files = Directory.GetFiles(".", location);
+            {
+                var absoluteLocation = GetAbsolutePath(location);
+                string path = Path.GetFileName(absoluteLocation);
+                string pattern = Path.GetDirectoryName(absoluteLocation);
+                files = Directory.GetFiles(pattern, path);
+            }
             return files;
         }
 
-        private List<List<ScenarioSteps>> LoadFiles(IEnumerable<string> files)
+        private string GetAbsolutePath(string location)
         {
-            var stories = new List<List<ScenarioSteps>>();
+            var directory = Path.GetDirectoryName(location);
+            var fileName = Path.GetFileName(location);
+            var fullPath = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, directory));
+            var fullLocation = Path.Combine(fullPath, fileName);
+            return fullLocation;
+        }
+
+        private IEnumerable<Feature> LoadFiles(IEnumerable<string> files)
+        {
+            var stories = new List<Feature>();
             foreach (var file in files)
             {
-                List<ScenarioSteps> scenarios = GetScenarios(file);
-                stories.Add(scenarios);
+                IEnumerable<Feature> scenarios = GetScenarios(file);
+                stories.AddRange(scenarios);
             }
             return stories;
         }
 
-        private List<ScenarioSteps> GetScenarios(string file)
+        private IEnumerable<Feature> GetScenarios(string file)
         {
-            var scenarios = new List<ScenarioSteps>();
+            IEnumerable<Feature> features;
             using (Stream stream = File.OpenRead(file))
             {
-                scenarios = Load(stream);
-                foreach (var scenario in scenarios)
-                    scenario.FileName = file;
+                features = Load(stream);
+                foreach (var scenario in features.SelectMany(feature => feature.Scenarios))
+                {
+                    scenario.Source = file;
+                }
             }
-            return scenarios;
+            return features;
         }
 
-        public List<ScenarioSteps> Load(Stream stream)
+        public IEnumerable<Feature> Load(Stream stream)
         {
-            var scenarioTextParser = new TextToTokenStringsParser(_actionStepAlias, _actionStep);
-            using (var fs = new StreamReader(stream))
-                scenarioTextParser.ParseScenario(fs.ReadToEnd());
-            var tokenStringsToScenarioParser = new TokenStringsToScenarioParser(_actionStep);
-            tokenStringsToScenarioParser.ParseTokensToScenarios(scenarioTextParser.TokenStrings);
-            List<ScenarioSteps> scenarios = tokenStringsToScenarioParser.Scenarios;
-
-            return scenarios;
+            var scenarioTextParser = new ScenarioParser(_stringStepRunner);
+            return scenarioTextParser.Parse(stream);
         }
     }
 }

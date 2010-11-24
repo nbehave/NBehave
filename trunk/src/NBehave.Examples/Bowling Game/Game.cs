@@ -4,7 +4,7 @@ namespace NBehave.Examples.BowlingGame
     public class Game
     {
         private readonly int[] _rolls = new int[21];
-        private int _curentRoll = 0;
+        private int _curentRoll;
 
         public void Roll(int pins)
         {
@@ -40,6 +40,7 @@ namespace NBehave.Examples.BowlingGame
         {
             return _rolls[frameIndex] == 10;
         }
+
         private int SumOfBallsInFrame(int frameIndex)
         {
             return _rolls[frameIndex] + _rolls[frameIndex + 1];

@@ -1,6 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Rhino.Mocks;
-using Rhino.Mocks.Exceptions;
+﻿using Rhino.Mocks;
 using Context = Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute;
 using Specification = Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute;
 using NBehave.Spec.MSTest;
@@ -8,7 +6,7 @@ using NBehave.Spec.MSTest;
 namespace MSTest.SpecBase_Specifications
 {
 	[Context]
-	public class When_initializing_the_SpecBase : SpecBase<StopWatch>
+	public class When_initializing_the_SpecBase : NBehave.Spec.MSTest.SpecBase<StopWatch>
 	{
 		protected override StopWatch Establish_context()
 		{
@@ -27,7 +25,7 @@ namespace MSTest.SpecBase_Specifications
 	}
 
 	[Context]
-	public class When_initializing_the_SpecBase_with_mocks : SpecBase<StopWatch>
+	public class When_initializing_the_SpecBase_with_mocks : NBehave.Spec.MSTest.SpecBase<StopWatch>
 	{
 		private ITimer _timer;
 

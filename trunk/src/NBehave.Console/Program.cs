@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Xml;
+using System.Threading;
 using NBehave.Console.Remoting;
 using NBehave.Narrator.Framework;
 using NBehave.Narrator.Framework.EventListeners;
-using NBehave.Narrator.Framework.EventListeners.Xml;
 
 namespace NBehave.Console
 {
@@ -16,6 +16,7 @@ namespace NBehave.Console
         [STAThread]
         public static int Main(string[] args)
         {
+            var t0 = DateTime.Now;
             var output = new PlainTextOutput(System.Console.Out);
             var options = new ConsoleOptions(args);
 
@@ -40,48 +41,62 @@ namespace NBehave.Console
                 return 2;
             }
 
-            StoryResults results = SetupAndRunStories(options, output);
+            if (options.waitForDebugger)
+            {
+                int countdown = 5000;
+                int waitTime = 200;
+
+                while (!Debugger.IsAttached && countdown >= 0)
+                {
+                    Thread.Sleep(waitTime);
+                    countdown -= waitTime;
+                }
+
+                if (!Debugger.IsAttached)
+                {
+                    output.WriteLine("fatal error: timeout while waiting for debugger to attach");
+                    return 2;
+                }
+            }
+
+            FeatureResults results = SetupAndRunStories(options, output);
+            PrintTimeTaken(t0);
 
             if (options.dryRun)
                 return 0;
 
-            output.WriteDotResults(results);
-            output.WriteSummaryResults(results);
-            output.WriteFailures(results);
-            output.WritePending(results);
-
             int result = results.NumberOfFailingScenarios > 0 ? 2 : 0;
+            if (options.pause)
+            {
+                System.Console.WriteLine("Press any key to exit");
+                System.Console.ReadKey();
+            }
 
             return result;
         }
 
-        private static StoryResults SetupAndRunStories(ConsoleOptions options, PlainTextOutput output)
+        private static FeatureResults SetupAndRunStories(ConsoleOptions options, PlainTextOutput output)
         {
             IEventListener listener = CreateEventListener(options);
             IEventListener remotableListener = new DelegatingListener(listener);
 
-            string assemblyWithConfigFile = null;
-            foreach (string path in options.Parameters)
-            {
-                if(File.Exists(path + ".config"))
-                {
-                    assemblyWithConfigFile = path + ".config";
-                    break;
-                }
-            }
+            string assemblyWithConfigFile = options.Parameters.Cast<string>()
+                                                .Where(path => File.Exists(path + ".config"))
+                                                .Select(path => path + ".config")
+                                                .FirstOrDefault();
 
             RemotableStoryRunner runner;
             if (assemblyWithConfigFile != null)
             {
                 var configFileInfo = new FileInfo(assemblyWithConfigFile);
-                AppDomainSetup ads = new AppDomainSetup
-                                         {
-                                             ConfigurationFile = configFileInfo.Name,
-                                             ApplicationBase = configFileInfo.DirectoryName //Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
-                                         };
+                var ads = new AppDomainSetup
+                {
+                    ConfigurationFile = configFileInfo.Name,
+                    ApplicationBase = configFileInfo.DirectoryName //Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
+                };
                 AppDomain ad = AppDomain.CreateDomain("NBehave story runner", null, ads);
-                
-                var bootstrapper = (AppDomainBootstrapper) ad.CreateInstanceFromAndUnwrap(typeof(AppDomainBootstrapper).Assembly.Location, typeof(AppDomainBootstrapper).FullName);
+
+                var bootstrapper = (AppDomainBootstrapper)ad.CreateInstanceFromAndUnwrap(typeof(AppDomainBootstrapper).Assembly.Location, typeof(AppDomainBootstrapper).FullName);
                 bootstrapper.InitializeDomain(new[] { Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), configFileInfo.DirectoryName });
 
                 runner = (RemotableStoryRunner)ad.CreateInstanceAndUnwrap(Assembly.GetExecutingAssembly().FullName, typeof(RemotableStoryRunner).FullName);
@@ -90,18 +105,52 @@ namespace NBehave.Console
             {
                 runner = new RemotableStoryRunner();
             }
-            return runner.SetupAndRunStories(remotableListener, options.scenarioFiles, options.Parameters, options.dryRun);
+            return runner.SetupAndRunStories(remotableListener, options.scenarioFiles, options.Parameters, options.dryRun, output);
+
+            /*IEventListener listener = CreateEventListener(options);
+            
+            var runner = new TextRunner(listener);
+            runner.Load(options.scenarioFiles.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
+            runner.IsDryRun = options.dryRun;
+
+            foreach (string path in options.Parameters)
+            {
+                try
+                {
+                    runner.LoadAssembly(path);
+                }
+                catch (FileNotFoundException e)
+                {
+                    output.WriteLine(string.Format("File not found: {0}", path));
+                }
+            }
+
+            return runner.Run();*/
+        }
+
+        private static void PrintTimeTaken(DateTime t0)
+        {
+            double timeTaken = DateTime.Now.Subtract(t0).TotalSeconds;
+            if (timeTaken >= 60)
+            {
+                int totalMinutes = Convert.ToInt32(Math.Floor(timeTaken / 60));
+                System.Console.WriteLine("Time Taken {0}m {1:0.#}s", totalMinutes, timeTaken - 60);
+            }
+            else
+                System.Console.WriteLine("Time Taken {0:0.#}s", timeTaken);
         }
 
         public static IEventListener CreateEventListener(ConsoleOptions options)
         {
             var eventListeners = new List<IEventListener>();
             if (options.HasStoryOutput)
-                eventListeners.Add(new FileOutputEventListener(options.storyOutput));
+                eventListeners.Add(EventListeners.FileOutputEventListener(options.storyOutput));
             if (options.HasStoryXmlOutput)
                 eventListeners.Add(EventListeners.XmlWriterEventListener(options.xml));
             if (eventListeners.Count == 0)
-                eventListeners.Add(new NullEventListener());
+                eventListeners.Add(new ColorfulConsoleOutputEventListener());
+            if (options.codegen)
+                eventListeners.Add(EventListeners.CodeGenEventListener(System.Console.Out));
 
             return new MultiOutputEventListener(eventListeners.ToArray());
         }

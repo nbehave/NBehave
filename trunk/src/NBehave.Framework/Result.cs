@@ -3,23 +3,45 @@ using System;
 namespace NBehave.Narrator.Framework
 {
     [Serializable]
-	public class ActionStepResult : Result
-	{
-		public string ActionStep { get; private set; }
-		public Result Result { get; private set; }
-		
-		public ActionStepResult(string actionStep, Result resultForActionStep)
-			: base(resultForActionStep.Message)
-		{
-			ActionStep = actionStep;
-			Result = resultForActionStep;
-		}
-		
-		public override string ToString()
-		{
-			return Result.ToString();
-		}
-	}
+    public class ActionStepResult : Result
+    {
+        public string StringStep { get; private set; }
+        public Result Result { get; private set; }
+
+        public ActionStepResult(string stringStep, Result resultForActionStep)
+            : base(resultForActionStep.Message)
+        {
+            StringStep = stringStep;
+            Result = resultForActionStep;
+        }
+
+
+        public void MergeResult(Result stepResult)
+        {
+            if (stepResult is Passed)
+                return;
+            if (stepResult is Pending && Result is Passed)
+            {
+                Result = stepResult;
+                Message = stepResult.Message;
+            }
+            if (stepResult is Failed && (Result is Passed || Result is Pending))
+            {
+                Result = stepResult;
+                Message = stepResult.Message;
+            }
+            if (Result == null)
+            {
+                Result = stepResult;
+                Message = stepResult.Message;
+            }
+        }
+
+        public override string ToString()
+        {
+            return Result.ToString();
+        }
+    }
 
     [Serializable]
     public class Passed : Result
@@ -62,7 +84,7 @@ namespace NBehave.Narrator.Framework
 
         public override string ToString()
         {
-            return GetType().Name.Replace(typeof(Result).Name, "");
+            return GetType().Name.Replace(typeof(Result).Name, "").ToLower();
         }
     }
 }

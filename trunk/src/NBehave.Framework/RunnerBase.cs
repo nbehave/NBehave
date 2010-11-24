@@ -6,34 +6,56 @@ namespace NBehave.Narrator.Framework
 {
     public abstract class RunnerBase
     {
-        protected abstract void RunStories(StoryResults results, IEventListener listener);
+    	protected abstract void RunScenario(FeatureResults results, string featureName, string scenarioName);
+        protected abstract void RunFeatures(FeatureResults results);
         protected abstract void ParseAssembly(Assembly assembly);
 
         private StoryRunnerFilter _storyRunnerFilter = new StoryRunnerFilter();
         private readonly List<Pair<string, object>> _themes = new List<Pair<string, object>>();
-        protected List<Story> Stories { get; private set; }
 
-        private EventHandler<EventArgs<Story>> _storyCreatedEventHandler;
-        private EventHandler<EventArgs<Scenario>> _scenarioCreatedEventHandler;
-        private EventHandler<EventArgs<MessageEventData>> _messageAddedEventHandler;
-
-        protected List<Pair<string, object>> Themes { get { return _themes; } }
+        private EventHandler<EventArgs<Feature>> _featureCreatedEventHandler;
+        private EventHandler<EventArgs<ScenarioWithSteps>> _scenarioCreatedEventHandler;
+        private EventHandler<EventArgs<ScenarioResult>> _scenarioResultAddedEventHandler;
 
         public bool IsDryRun { get; set; }
+        protected IEventListener EventListener { get; set; }
 
-        public StoryResults Run(IEventListener listener)
+        protected RunnerBase(IEventListener listener)
         {
-            var results = new StoryResults();
+            EventListener = listener;
+        }
+
+        public FeatureResults Run()
+        {
+            var results = new FeatureResults();
 
             try
             {
-                InitializeRun(results, listener);
-                StartWatching(listener);
-                RunStories(results, listener);
+                InitializeRun(results, EventListener);
+                StartWatching(EventListener);
+                RunFeatures(results);
             }
             finally
             {
-                StopWatching(listener);
+                StopWatching(EventListener);
+            }
+
+            return results;
+        }
+        
+        public FeatureResults RunScenario(string featureName, string scenarioName)
+        {        	
+        	 var results = new FeatureResults();
+
+            try
+            {
+                InitializeRun(results, EventListener);
+                StartWatching(EventListener);
+                RunScenario(results, featureName, scenarioName);
+            }
+            finally
+            {
+                StopWatching(EventListener);
             }
 
             return results;
@@ -57,70 +79,46 @@ namespace NBehave.Narrator.Framework
 
         private void StartWatching(IEventListener listener)
         {
-            StartWatchingStoryCreated(listener);
+            StartWatchingFeatureCreated(listener);
+            StartWatchingFeatureResults(listener);
             StartWatchingScenarioCreated(listener);
-            StartWatchingMessageAdded(listener);
         }
 
-        private void StartWatchingMessageAdded(IEventListener listener)
+        private void StartWatchingFeatureResults(IEventListener listener)
         {
-            _messageAddedEventHandler = (sender, e) => SelectMessageType(listener, e.EventData);
-            Story.MessageAdded += _messageAddedEventHandler;
-        }
-
-        private void SelectMessageType(IEventListener listener, MessageEventData eventData)
-        {
-            switch (eventData.Type)
-            {
-                case "Given":
-                case "When":
-                case "Then":
-                case "And": listener.ScenarioMessageAdded(eventData.Message);
-                    break;
-                case "Pending": listener.ScenarioMessageAdded(string.Format("Pending: {0}", eventData.Message));
-                    break;
-                default:
-                    listener.StoryMessageAdded(eventData.Message);
-                    break;
-            }
+            _scenarioResultAddedEventHandler = (sender, e) => listener.ScenarioResult(e.EventData);
+            ScenarioStepRunner.ScenarioResultCreated += _scenarioResultAddedEventHandler;
         }
 
         private void StartWatchingScenarioCreated(IEventListener listener)
         {
             _scenarioCreatedEventHandler = (sender, e) => listener.ScenarioCreated(e.EventData.Title);
-            Story.ScenarioCreated += _scenarioCreatedEventHandler;
+            ScenarioWithSteps.ScenarioCreated += _scenarioCreatedEventHandler;
         }
 
-        private void StartWatchingStoryCreated(IEventListener listener)
+        private void StartWatchingFeatureCreated(IEventListener listener)
         {
-            _storyCreatedEventHandler = (sender, e) =>
+            _featureCreatedEventHandler = (sender, e) =>
             {
-                Stories.Add(e.EventData);
                 e.EventData.IsDryRun = IsDryRun;
-                listener.StoryCreated(e.EventData.Title);
+                listener.FeatureCreated(e.EventData.Title);
+                listener.FeatureNarrative(e.EventData.Narrative);
             };
-            Story.StoryCreated += _storyCreatedEventHandler;
+            Feature.FeatureCreated += _featureCreatedEventHandler;
         }
 
         private void StopWatching(IEventListener listener)
         {
-            Story.StoryCreated -= _storyCreatedEventHandler;
-            Story.ScenarioCreated -= _scenarioCreatedEventHandler;
-            Story.MessageAdded -= _messageAddedEventHandler;
+            Feature.FeatureCreated -= _featureCreatedEventHandler;
+            ScenarioWithSteps.ScenarioCreated -= _scenarioCreatedEventHandler;
+            ScenarioStepRunner.ScenarioResultCreated -= _scenarioResultAddedEventHandler;
             listener.RunFinished();
         }
 
-        private void InitializeRun(StoryResults results, IEventListener listener)
+        private void InitializeRun(FeatureResults results, IEventListener listener)
         {
             listener.RunStarted();
             results.NumberOfThemes = _themes.Count;
-            Stories = new List<Story>();
         }
-
-        protected void ClearStoryList()
-        {
-            Stories.Clear();
-        }
-
     }
 }

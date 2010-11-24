@@ -94,7 +94,7 @@ namespace NBehave.Spec.NUnit
 
         public static void ShouldBeInstanceOfType(this object actual, Type expected)
         {
-            Assert.That(actual, Is.InstanceOfType(expected));
+            Assert.That(actual, Is.InstanceOf(expected));
         }
 
         public static void ShouldBeLessThan(this IComparable arg1, IComparable arg2)
@@ -150,8 +150,14 @@ namespace NBehave.Spec.NUnit
             Assert.Contains(expected, actual);
         }
 
+        public static void ShouldContain(this string actual, string expected)
+        {
+            StringAssert.Contains(expected, actual);
+        }
+
         public static void ShouldContain(this IEnumerable actual, object expected)
         {
+
             var lst = new ArrayList();
             foreach (var o in actual)
             {
@@ -224,7 +230,7 @@ namespace NBehave.Spec.NUnit
 
         public static void ShouldNotBeInstanceOfType(this object actual, Type expected)
         {
-            Assert.That(actual, Is.Not.InstanceOfType(expected));
+            Assert.That(actual, Is.Not.InstanceOf(expected));
         }
 
         public static void ShouldNotBeNull(this object value)
@@ -269,6 +275,30 @@ namespace NBehave.Spec.NUnit
                 e.ShouldNotBeNull();
                 e.ShouldBeInstanceOfType(exception);
             });
+        }
+
+        public static Exception ShouldThrow<T>(this Action action)
+        {
+            bool failed = false;
+            var ex = new Exception("");
+            try
+            {
+                action();
+                failed = true;
+            }
+            catch (Exception e)
+            {
+                e.ShouldBeInstanceOfType(typeof(T));
+                ex = e;
+            }
+            if (failed)
+                Assert.Fail(string.Format("Exception of type <{0}> expected but no exception occurred", typeof(T)));
+            return ex;
+        }
+
+        public static void WithExceptionMessage(this Exception e, string exceptionMessage)
+        {
+            exceptionMessage.ShouldEqual(e.Message);
         }
     }
 }

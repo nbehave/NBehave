@@ -1,0 +1,19 @@
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Target Name="AfterBuild"
+  Condition="'$(_AssemblyTimestampBeforeCompile)'!='$(_AssemblyTimestampAfterCompile)'">
+    <CreateItem Include="@(ReferencePath)"
+    Condition="'%(ReferencePath.IlMerge)'=='true'">
+      <Output TaskParameter="Include" ItemName="IlmergeAssemblies" />
+    </CreateItem>
+    <Message Text="MERGING: @(IlmergeAssemblies->'%(Filename)')" Importance="High" />
+    <Exec Command="tools\ilmerge\ILMerge.exe /internalize /keyfile:&quot;..\..\myapp.snk=&quot; /out:Migrate.dll &quot;..\..\@(IntermediateAssembly=&quot;")" @(IlmergeAssemblies->'"%(FullPath="")"', ' ')"       WorkingDirectory="$(MSBuildProjectDirectory)\$(OutputPath)" />
+    <Copy SourceFiles="@(MainAssembly)"
+    DestinationFolder="$(IntermediateOutputPath)"
+    SkipUnchangedFiles="true" OverwriteReadOnlyFiles="$(OverwriteReadOnlyFiles)">
+    </Copy>
+    <Copy SourceFiles="@(_DebugSymbolsOutputPath)"
+    DestinationFiles="@(_DebugSymbolsIntermediatePath)" SkipUnchangedFiles="true"       OverwriteReadOnlyFiles="$(OverwriteReadOnlyFiles)"
+    Condition="'$(_DebugSymbolsProduced)'=='true' and '$(SkipCopyingSymbolsToOutputDirectory)' != 'true'">
+    </Copy>
+  </Target>
+</Project>

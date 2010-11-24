@@ -7,8 +7,7 @@ namespace NBehave.Narrator.Framework.EventListeners
 {
     public static class EventListeners
     {
-        public static IEventListener CreateEventListenerUsing(TextWriter writer, string textWriterFile,
-                                                              string xmlWriterFile)
+        public static IEventListener CreateEventListenerUsing(TextWriter writer, string textWriterFile, string xmlWriterFile)
         {
             bool useTextWriter = textWriterFile.NotBlank();
             bool useXmlWriter = xmlWriterFile.NotBlank();
@@ -35,12 +34,12 @@ namespace NBehave.Narrator.Framework.EventListeners
             return new NullEventListener();
         }
 
-        public static IEventListener FileOutputEventListener(string storyOutputPath)
+        public static IEventListener FileOutputEventListener(string outputPath)
         {
-            return new FileOutputEventListener(storyOutputPath);
+            return new TextWriterEventListener(File.CreateText(outputPath));
         }
 
-        public static IEventListener TextWriterEventListener(TextWriter writer)
+        private static IEventListener TextWriterEventListener(TextWriter writer)
         {
             return new TextWriterEventListener(writer);
         }
@@ -67,6 +66,11 @@ namespace NBehave.Narrator.Framework.EventListeners
         private static bool NotBlank(this string value)
         {
             return value.Blank() == false;
+        }
+
+        public static IEventListener CodeGenEventListener(TextWriter writer)
+        {
+            return new CodeGenEventListener(writer);
         }
     }
 }

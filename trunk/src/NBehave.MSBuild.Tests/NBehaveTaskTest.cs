@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
 using Microsoft.Build.Framework;
+using Microsoft.Build.Utilities;
 using Microsoft.Win32;
-using NBehave.Narrator.Framework;
 using NUnit.Framework;
 using System.IO;
 using Rhino.Mocks;
@@ -11,47 +11,24 @@ using TestPlainTextAssembly;
 
 namespace NBehave.MSBuild.Tests
 {
-    [Theme("A theme to use to test the MSBuildTask")]
-    public class AThemeClass
-    {
-        [Story]
-        public void AStory()
-        {
-            var story = new Story("Test NBehave's MSBuild Task");
-
-            story.AsA("NBehave committer").
-                IWant("To test the MSBuild task for NBehave").
-                SoThat("I know it works");
-
-            story.WithScenario("A scenario that doesnt do anything").
-                Given("a given", 0, a => { }).
-                When("event occurs", 0, a => { }).
-                Then("there's an outcome", 0, a => { });
-        }
-    }
-
     [TestFixture]
     public class NBehaveTaskTest
     {
         [Test]
-        public void ShouldExecuteTheOneStory()
-        {
-            var storyAssemblies = new[] { GetType().Assembly.Location };
-            var outputPath = Path.Combine(Path.GetDirectoryName(storyAssemblies[0]), "result.txt");
-            var buildEngine = MockRepository.GenerateStub<IBuildEngine2>();
-
-            var task = new NBehaveTask(buildEngine) { DryRun = false, FailBuild = true, TextOutputFile = outputPath, TestAssemblies = storyAssemblies };
-
-            task.Execute();
-            Assert.AreEqual(1, task.StoryResults.NumberOfPassingScenarios);
-        }
-
-        [Test]
         public void ShouldExecuteStorySuccessfullyViaMsbuildEXE()
         {
+            // This is a hacky way of getting the MSBuild location  :-(
+            var buildTaskAssemblyName = typeof (Task).Assembly.GetName().Name;
+            var clrVersion = buildTaskAssemblyName.Substring(buildTaskAssemblyName.Length - 4);
+            var msbuildFolder = clrVersion == "v3.5"
+                                    ? clrVersion
+                                    : String.Format("v{0}.{1}.{2}", Environment.Version.Major, Environment.Version.Minor,
+                                                    Environment.Version.Build);
+            
+
             string msbuild = Path.Combine(
                                     Path.Combine((string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\.NETFramework", "InstallRoot", string.Empty),
-                                    "v3.5"),
+                                    msbuildFolder),
                                 "MSBuild.exe");
 
             using (var process = new Process())
@@ -66,9 +43,7 @@ namespace NBehave.MSBuild.Tests
                     process.WaitForExit();
 
                     string result = sr.ReadToEnd();
-                    string[] results = result.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
-                    // Fails if language on computer isnt english: Assert.Contains("Build succeeded.", results);
-                    Assert.Contains("  Scenarios run: 1, Failures: 0, Pending: 0", results);
+                    StringAssert.Contains("Scenarios run: 1, Failures: 0, Pending: 0", result);
                 }
             }
         }
@@ -90,7 +65,7 @@ namespace NBehave.MSBuild.Tests
             };
 
             task.Execute();
-            Assert.AreEqual(1, task.StoryResults.NumberOfPassingScenarios);
+            Assert.AreEqual(1, task.FeatureResults.NumberOfPassingScenarios);
         }
     }
 }
