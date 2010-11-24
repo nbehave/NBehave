@@ -11,14 +11,11 @@ namespace NBehave.Narrator.Framework
 {
     public class StringStep : ActionStepText
     {
-        public StringStep(string step, string fromFile, IStringStepRunner stringStepRunner) : base(step, fromFile)
+        public StringStep(string step, string fromFile) : base(step, fromFile)
         {
-            StringStepRunner = stringStepRunner;
         }
 
-        public ActionStepResult StepResult { get; protected set; }
-
-        protected IStringStepRunner StringStepRunner { get; private set; }
+        public ActionStepResult StepResult { get; set; }
 
         public override string ToString()
         {
@@ -33,11 +30,6 @@ namespace NBehave.Narrator.Framework
             }
 
             return (obj == this) || obj.ToString() == ToString();
-        }
-
-        public virtual void Run()
-        {
-            StepResult = StringStepRunner.Run(this);
         }
     }
 }

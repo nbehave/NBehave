@@ -34,26 +34,5 @@ namespace NBehave.Spec.MbUnit.Specs
                 .Then("the implementation from Given should be called", () => detail1.ShouldNotBeNull())
                 .And("the implementation from When should be called", () => detail2.ShouldNotBeNull());
         }
-
-        [Test]
-        public void should_call_notification_events_before_executing_inline_implementation()
-        {
-            string lastLoggedScenario = null;
-            EventHandler<EventArgs<ActionStepText>> logger = (sender, e) => lastLoggedScenario = e.EventData.Step;
-            ScenarioWithSteps.StepAdded += logger;
-
-            try
-            {
-                Feature.AddScenario()
-                    .Given("a scenario with inline implementation", () => lastLoggedScenario.ShouldEqual("a scenario with inline implementation"))
-                    .When("the scenario is executed", () => lastLoggedScenario.ShouldEqual("the scenario is executed"))
-                    .Then("the implementation from Given should be called", () => lastLoggedScenario.ShouldEqual("the implementation from Given should be called"))
-                    .And("the implementation from When should be called", () => lastLoggedScenario.ShouldEqual("the implementation from When should be called"));
-            }
-            finally
-            {
-                ScenarioWithSteps.StepAdded -= logger;
-            }
-        }
     }
 }

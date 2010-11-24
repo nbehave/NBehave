@@ -128,17 +128,20 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScenarioResultsFixture.cs" />
     <Compile Include="ScenarioStepRunnerSpec.cs" />
+    <Compile Include="System.Specs\Backgrounds\WhenRunningAScenarioWithABackgroundSection.cs" />
+    <Compile Include="System.Specs\ScenarioOutlines\WhenRunningAScenarioWithScenarioOutlinesButNoActionSteps.cs" />
+    <Compile Include="System.Specs\Scenarios\WhenRunningAScenarioWithArguments.cs" />
+    <Compile Include="System.Specs\Scenarios\WhenRunningAScenario.cs" />
+    <Compile Include="System.Specs\SystemTestContext.cs" />
+    <Compile Include="System.Specs\ScenarioOutlines\WhenRunningAScenarioWithScenarioOutlines.cs" />
     <Compile Include="TextRunnerSpec.cs" />
     <Compile Include="StoryRunnerFilterSpecs.cs" />
-    <Compile Include="Text\ActionStepAttributeSpec.cs" />
-    <Compile Include="Text\IgnoreSpaceAndUnderScoreMatcherSpec.cs" />
-    <Compile Include="Text\RowSpec.cs" />
-    <Compile Include="Text\ScenarioExampleResultSpec.cs" />
-    <Compile Include="Text\ScenarioParserSpec.cs" />
-    <Compile Include="Text\ScenarioWithStepsSpec.cs" />
-    <Compile Include="Text\StringExtension.cs" />
-    <Compile Include="Text\StringStepSpec.cs" />
-    <Compile Include="Text\StringTableStepSpec.cs" />
+    <Compile Include="ActionStepAttributeSpec.cs" />
+    <Compile Include="IgnoreSpaceAndUnderScoreMatcherSpec.cs" />
+    <Compile Include="RowSpec.cs" />
+    <Compile Include="ScenarioParserSpec.cs" />
+    <Compile Include="StringExtension.cs" />
+    <Compile Include="StringStepSpec.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NBehave.Framework\NBehave.Narrator.Framework.csproj">
@@ -182,6 +185,21 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Features\FeatureWithFailingStep.feature">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="System.Specs\Backgrounds\Background.feature">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="System.Specs\ScenarioOutlines\ScenarioOutlinesWithPendingSteps.feature">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="System.Specs\ScenarioOutlines\ScenarioOutlines.feature">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="System.Specs\Scenarios\ScenarioWithArguments.feature">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="System.Specs\Scenarios\Scenario.feature">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

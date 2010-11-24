@@ -14,12 +14,12 @@ namespace NBehave.Narrator.Framework.Specifications.Text
 
         private GherkinScenarioParser CreateScenarioParser()
         {
-            return new GherkinScenarioParser(_stringStepRunner, Tiny.TinyIoCContainer.Current.Resolve<ITinyMessengerHub>());
+            return new GherkinScenarioParser(_stringStepRunner, TinyIoCContainer.Current.Resolve<ITinyMessengerHub>());
         }
 
         private StringStep NewStringStep(string step)
         {
-            return new StringStep(step, "filename", _stringStepRunner);
+            return new StringStep(step, "filename");
         }
 
         private IEnumerable<ScenarioWithSteps> _scenarios;

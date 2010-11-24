@@ -29,12 +29,12 @@ namespace NBehave.Narrator.Framework
 
         private ParameterConverter ParameterConverter { get; set; }
 
-        ActionStepResult IStringStepRunner.Run(ActionStepText actionStep)
+        public ActionStepResult Run(ActionStepText actionStep)
         {
             return (this as IStringStepRunner).Run(actionStep, null);
         }
 
-        ActionStepResult IStringStepRunner.Run(ActionStepText actionStep, Row row)
+        public ActionStepResult Run(ActionStepText actionStep, Row row)
         {
             var actionStepToUse = new ActionStepText(actionStep.Step.RemoveFirstWord(), actionStep.Source);
             var result = new ActionStepResult(actionStep.Step, new Passed());
@@ -66,7 +66,7 @@ namespace NBehave.Narrator.Framework
             return result;
         }
 
-        void IStringStepRunner.OnCloseScenario()
+        public void OnCloseScenario()
         {
             if (_lastAction != null)
             {
@@ -74,12 +74,12 @@ namespace NBehave.Narrator.Framework
             }
         }
 
-        void IStringStepRunner.BeforeScenario()
+        public void BeforeScenario()
         {
             _isFirstStepInScenario = true;
         }
 
-        void IStringStepRunner.AfterScenario()
+        public void AfterScenario()
         {
             if (_lastAction != null)
             {

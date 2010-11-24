@@ -19,7 +19,7 @@ namespace NBehave.Narrator.Framework.Specifications
 
         private ScenarioWithSteps CreateScenarioWithSteps()
         {
-            return new ScenarioWithSteps(_stringStepRunner, Tiny.TinyIoCContainer.Current.Resolve<ITinyMessengerHub>());
+            return new ScenarioWithSteps();
         }
 
         [SetUp]
@@ -27,7 +27,7 @@ namespace NBehave.Narrator.Framework.Specifications
         {
             _actionCatalog = new ActionCatalog();
             _stringStepRunner = new StringStepRunner(_actionCatalog);
-            _runner = new ScenarioExecutor(Tiny.TinyIoCContainer.Current.Resolve<ITinyMessengerHub>());
+            _runner = new ScenarioExecutor(Tiny.TinyIoCContainer.Current.Resolve<ITinyMessengerHub>(), null);
         }
 
         public class WhenRunningAScenario : ScenarioStepRunnerSpec

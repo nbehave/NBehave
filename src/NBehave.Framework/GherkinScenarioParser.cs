@@ -12,9 +12,7 @@ namespace NBehave.Narrator.Framework
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-
     using Gherkin;
-
     using NBehave.Narrator.Framework.Tiny;
 
     public class GherkinScenarioParser : IListener
@@ -33,7 +31,7 @@ namespace NBehave.Narrator.Framework
             _stringStepRunner = stringStepRunner;
             _hub = hub;
             _languageService = new LanguageService();
-            _scenario = new ScenarioWithSteps(_stringStepRunner, _hub);
+            _scenario = new ScenarioWithSteps();
             _feature = new Feature();
             _scenario.Feature = _feature;
             _feature.AddScenario(_scenario);
@@ -83,7 +81,7 @@ namespace NBehave.Narrator.Framework
             }
             else
             {
-                _scenario = new ScenarioWithSteps(_stringStepRunner, _hub)
+                _scenario = new ScenarioWithSteps()
                 {
                     Feature = _feature,
                     Title = title.Content
@@ -138,7 +136,7 @@ namespace NBehave.Narrator.Framework
 
                     if (!(step is StringTableStep))
                     {
-                        var stringTableStep = new StringTableStep(step.Step, step.Source, _stringStepRunner);
+                        var stringTableStep = new StringTableStep(step.Step, step.Source);
                         _scenario.RemoveLastStep();
                         _scenario.AddStep(stringTableStep);
                     }

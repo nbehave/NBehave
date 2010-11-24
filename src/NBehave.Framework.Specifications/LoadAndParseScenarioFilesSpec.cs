@@ -4,7 +4,7 @@ using NUnit.Framework;
 
 namespace NBehave.Narrator.Framework.Specifications
 {
-    using System.Linq;
+    using global::System.Linq;
 
     using NBehave.Narrator.Framework.Contracts;
     using NBehave.Narrator.Framework.Messages;
