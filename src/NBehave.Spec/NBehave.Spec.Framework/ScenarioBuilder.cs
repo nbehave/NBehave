@@ -59,10 +59,11 @@ namespace NBehave.Spec
             if(Scenario.Steps.Count() == 0)
                 StepRunner.BeforeScenario();
 
-            var stringStringStep = new StringStep(step, Scenario.Source, StepRunner);
+            var stringStringStep = new StringStep(step, Scenario.Source);
             Scenario.AddStep(stringStringStep);
-            
-            stringStringStep.Run();
+
+            stringStringStep.StepResult = StepRunner.Run(stringStringStep);
+
             var failure = stringStringStep.StepResult.Result as Failed;
             if (failure != null)
             {

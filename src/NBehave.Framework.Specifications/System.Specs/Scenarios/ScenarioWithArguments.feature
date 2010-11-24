@@ -5,5 +5,5 @@
 
 	Scenario: Running a feature file with a scenario that has arguments
 		Given a scenario that has arguments
-		When the scenario is executed
-		Then it should pass
+		When the scenario with arguments is executed
+		Then the scenario with arguments should pass

@@ -22,16 +22,16 @@ namespace NBehave.Narrator.Framework.Specifications
             return new ScenarioWithSteps();
         }
 
-        [SetUp]
-        public void SetUp()
-        {
-            _actionCatalog = new ActionCatalog();
-            _stringStepRunner = new StringStepRunner(_actionCatalog);
-            _runner = new ScenarioExecutor(Tiny.TinyIoCContainer.Current.Resolve<ITinyMessengerHub>(), null);
-        }
-
         public class WhenRunningAScenario : ScenarioStepRunnerSpec
         {
+            [SetUp]
+            public void SetUp()
+            {
+                _actionCatalog = new ActionCatalog();
+                _stringStepRunner = new StringStepRunner(_actionCatalog);
+                _runner = new ScenarioExecutor(TinyIoCContainer.Current.Resolve<ITinyMessengerHub>(), _stringStepRunner);
+            }
+
             [Test]
             public void ShouldHaveResultForEachStep()
             {
@@ -102,7 +102,10 @@ namespace NBehave.Narrator.Framework.Specifications
             [TestFixtureSetUp]
             public void Setup()
             {
-                SetUp();
+                _actionCatalog = new ActionCatalog();
+                _stringStepRunner = new StringStepRunner(_actionCatalog);
+                _runner = new ScenarioExecutor(TinyIoCContainer.Current.Resolve<ITinyMessengerHub>(), _stringStepRunner);
+
                 Action action = GivenSomething;
                 _actionCatalog.Add(new ActionMethodInfo(new Regex(@"something to count$"), action, action.Method, "Given", this));
 

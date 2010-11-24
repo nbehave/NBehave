@@ -1,5 +1,8 @@
 ﻿namespace NBehave.Narrator.Framework.Specifications.System.Specs
 {
+    using global::System.Collections.Generic;
+    using global::System.Linq;
+
     using NBehave.Narrator.Framework.EventListeners;
 
     using NUnit.Framework;
@@ -27,25 +30,34 @@
         [Test]
         public void AllStepsShouldPass()
         {
-            Assert.That(this._results.NumberOfPassingScenarios, Is.EqualTo(2)); 
+            IEnumerable<ActionStepResult> enumerable = this._results.ScenarioResults.SelectMany(result => result.ActionStepResults);
+            IEnumerable<Result> results = enumerable.Select(stepResult => stepResult.Result);
+
+            foreach (var result in results)
+            {
+                Assert.That(result, Is.TypeOf(typeof(Passed)), result.Message);       
+            }
         }
     }
 
     [ActionSteps]
     public class ScenarioSteps
     {
-        [Given("this scenario")]
+        [Given("this plain scenario")]
         public void Given(){}
 
-        [Given("another scenario")]
+        [Given("this second scenario")]
         public void AnotherGiven(){}
 
-        [When("the scenario is executed")]
-        public void When(){}
+        [When("this plain scenario is executed")]
+        public void When() { }
 
-        [Then("it should pass")]
+        [When("the second scenario is executed")]
+        public void SecondWhen(){}
+
+        [Then("this plain scenario should pass")]
         public void Then(){}
-        
+
         [Then("it should also pass")]
         public void AnotherThen(){}
     }

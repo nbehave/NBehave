@@ -9,5 +9,5 @@
 
 	Scenario: Running a feature file with a background section
 		Given this scenario under the context of a background section
-		When the scenario is executed
+		When the scenario with a background section is executed
 		Then the background section steps should be called before this scenario

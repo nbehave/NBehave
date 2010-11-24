@@ -40,13 +40,13 @@
             Assert.That(arguments, Is.EqualTo("arguments"));
         }
 
-        [When("the scenario is $executed")]
+        [When("the scenario with arguments is $executed")]
         public void When(string executed)
         {
             Assert.That(executed, Is.EqualTo("executed"));
         }
 
-        [Then("it should $pass")]
+        [Then(@"the scenario with arguments should $pass")]
         public void Then(string pass)
         {
             Assert.That(pass, Is.EqualTo("pass"));

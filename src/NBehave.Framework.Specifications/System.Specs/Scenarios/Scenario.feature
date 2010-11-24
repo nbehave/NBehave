@@ -4,11 +4,11 @@
 	So that I can test my features
 
 	Scenario: Running a feature file with a scenario
-		Given this scenario
-		When the scenario is executed
-		Then it should pass
+		Given this plain scenario
+		When this plain scenario is executed
+		Then this plain scenario should pass
 
 	Scenario: Running a feature file with multiple scenarios
-		Given another scenario
-		When the scenario is executed
+		Given this second scenario
+		When the second scenario is executed
 		Then it should also pass
