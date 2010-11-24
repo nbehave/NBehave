@@ -7,6 +7,7 @@ namespace NBehave.Narrator.Framework.Processors
     using System.Text;
     using System.Text.RegularExpressions;
 
+    using NBehave.Narrator.Framework.Contracts;
     using NBehave.Narrator.Framework.Messages;
     using NBehave.Narrator.Framework.Tiny;
 
@@ -16,22 +17,30 @@ namespace NBehave.Narrator.Framework.Processors
         private readonly IStringStepRunner _stringStepRunner;
         private IEnumerable<Feature> _features;
         private readonly Regex _hasParamsInStep = new Regex(@"\[\w+\]");
+        private bool _actionStepsLoaded;
 
         public ScenarioExecutor(ITinyMessengerHub hub, IStringStepRunner stringStepRunner)
         {
             _hub = hub;
             _stringStepRunner = stringStepRunner;
 
-            _hub.Subscribe<FeaturesLoaded>(loaded => _features = loaded.Content);
-            _hub.Subscribe<RunStarted>(this.OnRunStarted);
+            _hub.Subscribe<FeaturesLoaded>(loaded =>
+                {
+                    _features = loaded.Content;
+                    this.OnRunStarted();
+                });
+
+            _hub.Subscribe<ActionStepsLoaded>(stepsLoaded =>
+                {
+                    _actionStepsLoaded = true;
+                    this.OnRunStarted();
+                });
         }
 
-        public void Start()
+        private void OnRunStarted()
         {
-        }
+            if (_features == null || !_actionStepsLoaded) return;
 
-        private void OnRunStarted(RunStarted runStarted)
-        {
             _hub.Publish(new ThemeStarted(this, string.Empty));
 
             var featureResults = new FeatureResults(this);

@@ -111,14 +111,12 @@
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="ActionCatalog.cs" />
-    <Compile Include="Configuration\ParseScenarioFiles.cs" />
-    <Compile Include="Configuration\IStartupTask.cs">
+    <Compile Include="Messages\ActionStepsLoaded.cs" />
+    <Compile Include="Processors\ParseScenarioFiles.cs" />
+    <Compile Include="Processors\LoadActionSteps.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Configuration\LoadActionSteps.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Configuration\LoadScenarioFiles.cs">
+    <Compile Include="Processors\LoadScenarioFiles.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Configuration\NBehaveConfiguration.cs">
@@ -172,8 +170,8 @@
     <Compile Include="EventListeners\EventListener.cs" />
     <Compile Include="PlainTextOutput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Result.cs" />
-    <Compile Include="ScenarioResult.cs" />
+    <Compile Include="Domain\Result.cs" />
+    <Compile Include="Domain\ScenarioResult.cs" />
     <Compile Include="Domain\ActionStepText.cs" />
     <Compile Include="Attributes\AfterScenarioAttribute.cs" />
     <Compile Include="Attributes\AfterStepAttribute.cs" />
@@ -191,7 +189,7 @@
     <Compile Include="Domain\ExampleColumns.cs" />
     <Compile Include="Domain\Feature.cs" />
     <Compile Include="Domain\Row.cs" />
-    <Compile Include="ScenarioWithSteps.cs" />
+    <Compile Include="Domain\ScenarioWithSteps.cs" />
     <Compile Include="Domain\StringStep.cs" />
     <Compile Include="Domain\StringTableStep.cs" />
     <Compile Include="Attributes\WhenAttribute.cs" />

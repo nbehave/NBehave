@@ -5,9 +5,10 @@
     using System.Linq;
 
     using NBehave.Narrator.Framework.Messages;
+    using NBehave.Narrator.Framework.Processors;
     using NBehave.Narrator.Framework.Tiny;
 
-    public class ParseScenarioFiles : IStartupTask
+    public class ParseScenarioFiles : IMessageProcessor
     {
         private readonly ITinyMessengerHub _hub;
         private readonly IStringStepRunner _stringStepRunner;
@@ -53,10 +54,6 @@
             }
 
             return features;
-        }
-
-        public void Initialise()
-        {
         }
     }
 }

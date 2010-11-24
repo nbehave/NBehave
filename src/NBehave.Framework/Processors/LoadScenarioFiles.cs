@@ -5,9 +5,11 @@
     using System.IO;
     using System.Linq;
 
+    using NBehave.Narrator.Framework.Messages;
+    using NBehave.Narrator.Framework.Processors;
     using NBehave.Narrator.Framework.Tiny;
 
-    public class LoadScenarioFiles : IStartupTask
+    public class LoadScenarioFiles : IMessageProcessor
     {
         private readonly NBehaveConfiguration _configuration;
         private readonly ITinyMessengerHub _hub;
@@ -16,6 +18,8 @@
         {
             this._configuration = configuration;
             this._hub = hub;
+
+            this._hub.Subscribe<RunStarted>(started => this.Initialise());
         }
 
         public void Initialise()

@@ -2,16 +2,23 @@
 {
     using System.Reflection;
 
-    public class LoadActionSteps : IStartupTask
+    using NBehave.Narrator.Framework.Messages;
+    using NBehave.Narrator.Framework.Processors;
+    using NBehave.Narrator.Framework.Tiny;
+
+    public class LoadActionSteps : IMessageProcessor
     {
-        private NBehaveConfiguration _configuration;
-
+        private readonly NBehaveConfiguration _configuration;
         private readonly ActionCatalog _actionCatalog;
+        private readonly ITinyMessengerHub _hub;
 
-        public LoadActionSteps(NBehaveConfiguration configuration, ActionCatalog actionCatalog)
+        public LoadActionSteps(NBehaveConfiguration configuration, ActionCatalog actionCatalog, ITinyMessengerHub hub)
         {
             this._configuration = configuration;
             _actionCatalog = actionCatalog;
+            _hub = hub;
+
+            this._hub.Subscribe<RunStarted>(started => this.Initialise());
         }
 
         public void Initialise()
@@ -22,6 +29,8 @@
             {
                 parser.FindActionSteps(Assembly.LoadFrom(assembly));
             }
+
+            _hub.Publish(new ActionStepsLoaded(this));
         }
     }
 }
