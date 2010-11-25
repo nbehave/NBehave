@@ -32,35 +32,35 @@ namespace NBehave.Narrator.Framework.Specifications
                 _runner = new ScenarioExecutor(TinyIoCContainer.Current.Resolve<ITinyMessengerHub>(), _stringStepRunner);
             }
 
-            [Test]
-            public void ShouldHaveResultForEachStep()
-            {
-                Action<string> action = name => Assert.AreEqual("Morgan", name);
-                _actionCatalog.Add(new ActionMethodInfo(new Regex(@"my name is (?<name>\w+)"), action, action.Method, "Given"));
-
-                var scenario = CreateScenarioWithSteps();
-                scenario.AddStep("Given my name is Axel");
-                scenario.AddStep("And my name is Morgan");
-                var scenarioResult = _runner.Run(new[] { scenario }).First();
-
-                Assert.AreEqual(2, scenarioResult.ActionStepResults.Count());
-            }
-
-            [Test]
-            public void ShouldHaveDifferentResultForEachStep()
-            {
-                Action<string> action = name => Assert.AreEqual("Morgan", name);
-                _actionCatalog.Add(new ActionMethodInfo(new Regex(@"my name is (?<name>\w+)"), action, action.Method, "Given"));
-
-                var scenario = CreateScenarioWithSteps();
-                scenario.AddStep("Given my name is Morgan");
-                scenario.AddStep("Given my name is Axel");
-                var scenarioResult = _runner.Run(new[] { scenario }).First();
-
-
-                Assert.That(scenarioResult.ActionStepResults.First().Result, Is.TypeOf(typeof(Passed)));
-                Assert.That(scenarioResult.ActionStepResults.Last().Result, Is.TypeOf(typeof(Failed)));
-            }
+//            [Test]
+//            public void ShouldHaveResultForEachStep()
+//            {
+//                Action<string> action = name => Assert.AreEqual("Morgan", name);
+//                _actionCatalog.Add(new ActionMethodInfo(new Regex(@"my name is (?<name>\w+)"), action, action.Method, "Given"));
+//
+//                var scenario = CreateScenarioWithSteps();
+//                scenario.AddStep("Given my name is Axel");
+//                scenario.AddStep("And my name is Morgan");
+//                var scenarioResult = _runner.Run(new[] { scenario }).First();
+//
+//                Assert.AreEqual(2, scenarioResult.ActionStepResults.Count());
+//            }
+//
+//            [Test]
+//            public void ShouldHaveDifferentResultForEachStep()
+//            {
+//                Action<string> action = name => Assert.AreEqual("Morgan", name);
+//                _actionCatalog.Add(new ActionMethodInfo(new Regex(@"my name is (?<name>\w+)"), action, action.Method, "Given"));
+//
+//                var scenario = CreateScenarioWithSteps();
+//                scenario.AddStep("Given my name is Morgan");
+//                scenario.AddStep("Given my name is Axel");
+//                var scenarioResult = _runner.Run(new[] { scenario }).First();
+//
+//
+//                Assert.That(scenarioResult.ActionStepResults.First().Result, Is.TypeOf(typeof(Passed)));
+//                Assert.That(scenarioResult.ActionStepResults.Last().Result, Is.TypeOf(typeof(Failed)));
+//            }
         }
 
         [ActionSteps, TestFixture]

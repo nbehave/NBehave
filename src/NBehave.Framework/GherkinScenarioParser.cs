@@ -93,6 +93,7 @@ namespace NBehave.Narrator.Framework
 
         public void Step(Token keyword, Token name, StepKind stepKind)
         {
+            _exampleColumns = new ExampleColumns();
             _scenario.AddStep(string.Format("{0}{1}", keyword.Content, name.Content));
         }
 

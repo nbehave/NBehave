@@ -13,6 +13,8 @@ namespace NBehave.Narrator.Framework
     using System.Collections.Generic;
     using System.Text;
 
+    using NBehave.Narrator.Framework.Tiny;
+
     public class ScenarioResult
     {
         private readonly List<ActionStepResult> _actionStepResults;

@@ -243,7 +243,8 @@ namespace NBehave.Narrator.Framework.Specifications.Text
 
         public class ScenarioScenarioWithTableOnGiven : ScenarioParserSpec
         {
-            private StringTableStep _step;
+            private StringTableStep _givenStep;
+            private StringTableStep _thenStep;
 
             [SetUp]
             public void Scenario()
@@ -260,20 +261,26 @@ namespace NBehave.Narrator.Framework.Specifications.Text
                                   "  |Jimmy Nilsson |";
 
                 Parse(scenario);
-                _step = _scenarios.First().Steps.First() as StringTableStep;
+                this._givenStep = _scenarios.First().Steps.First() as StringTableStep;
+                this._thenStep = _scenarios.First().Steps.Last() as StringTableStep;
             }
 
             [Test]
             public void GivenStepShouldHaveThreeTableSteps()
             {
-                Assert.That(_step, Is.Not.Null);
-                Assert.That(_step.TableSteps.Count(), Is.EqualTo(3));
+                Assert.That(this._givenStep.TableSteps.Count(), Is.EqualTo(3));
+            }
+
+            [Test]
+            public void ThenStepShouldHaveTwoTableSteps()
+            {
+                Assert.That(this._thenStep.TableSteps.Count(), Is.EqualTo(2));
             }
 
             [Test]
             public void TableStepColumnNamesShouldBeStoredInLowerCase()
             {
-                var step = _step.TableSteps.First();
+                var step = this._givenStep.TableSteps.First();
                 CollectionAssert.Contains(step.ColumnNames, "name");
                 Assert.That(step.ColumnValues["name"], Is.Not.Null); 
             }

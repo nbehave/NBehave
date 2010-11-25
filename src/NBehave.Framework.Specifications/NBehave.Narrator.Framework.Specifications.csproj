@@ -134,6 +134,7 @@
     <Compile Include="System.Specs\Scenarios\WhenRunningAScenario.cs" />
     <Compile Include="System.Specs\SystemTestContext.cs" />
     <Compile Include="System.Specs\ScenarioOutlines\WhenRunningAScenarioWithScenarioOutlines.cs" />
+    <Compile Include="System.Specs\Tables\WhenRunningATableScenario.cs" />
     <Compile Include="TextRunnerSpec.cs" />
     <Compile Include="StoryRunnerFilterSpecs.cs" />
     <Compile Include="ActionStepAttributeSpec.cs" />
@@ -200,6 +201,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="System.Specs\Scenarios\Scenario.feature">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="System.Specs\Tables\TableScenario.feature">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

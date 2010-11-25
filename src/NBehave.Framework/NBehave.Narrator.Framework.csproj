@@ -112,6 +112,7 @@
     </Compile>
     <Compile Include="ActionCatalog.cs" />
     <Compile Include="Messages\ActionStepsLoaded.cs" />
+    <Compile Include="Processors\FeatureResultCollector.cs" />
     <Compile Include="Processors\ParseScenarioFiles.cs" />
     <Compile Include="Processors\LoadActionSteps.cs">
       <SubType>Code</SubType>

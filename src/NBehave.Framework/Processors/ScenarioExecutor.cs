@@ -43,61 +43,41 @@ namespace NBehave.Narrator.Framework.Processors
 
             _hub.Publish(new ThemeStarted(this, string.Empty));
 
-            var featureResults = new FeatureResults(this);
             
             foreach (var feature in _features)
             {
-                var scenarioResults = Run(feature.Scenarios);
+                _hub.Publish(new FeatureCreated(this, feature.Title));
+                _hub.Publish(new FeatureNarrative(this, feature.Narrative));
 
-                foreach (var result in scenarioResults)
-                {
-                    featureResults.AddResult(result);
-                }
+                Run(feature.Scenarios);
             }
 
             _hub.Publish(new ThemeFinished(this));
 
-            _hub.Publish(featureResults);
         }
 
-        public IEnumerable<ScenarioResult> Run(IEnumerable<ScenarioWithSteps> scenarios)
+        public void Run(IEnumerable<ScenarioWithSteps> scenarios)
         {
-            var allResults = new List<ScenarioResult>();
-
-            Feature lastFeature = null;
-
             foreach (var scenario in scenarios)
             {
-                if (scenario.Feature != lastFeature)
-                {
-                    lastFeature = scenario.Feature;
-
-                    _hub.Publish(new FeatureCreated(this, lastFeature.Title));
-                    _hub.Publish(new FeatureNarrative(this, lastFeature.Narrative));
-                }
-
-                var scenarioResults = this.Run(scenario);
-
-                this._hub.Publish(new ScenarioResultMessage(this, scenarioResults));
-
-                allResults.Add(scenarioResults);
+                this.Run(scenario);
             }
-
-            return allResults;
         }
 
-        public ScenarioResult Run(ScenarioWithSteps scenario)
+        public void Run(ScenarioWithSteps scenario)
         {
             this._hub.Publish(new ScenarioCreated(this, scenario.Title));
             if (scenario.Examples.Any())
             {
-                return RunExamples(scenario);
+                RunExamples(scenario);
             }
-
-            return RunScenario(scenario, scenario.Steps);
+            else
+            {
+                RunScenario(scenario, scenario.Steps);
+            }
         }
 
-        private ScenarioResult RunScenario(ScenarioWithSteps scenario, IEnumerable<StringStep> stepsToRun)
+        private void RunScenario(ScenarioWithSteps scenario, IEnumerable<StringStep> stepsToRun)
         {
             var scenarioResult = new ScenarioResult(scenario.Feature, scenario.Title);
             _stringStepRunner.BeforeScenario();
@@ -120,10 +100,10 @@ namespace NBehave.Narrator.Framework.Processors
                 _stringStepRunner.AfterScenario();
             }
 
-            return scenarioResult;
+            this._hub.Publish(new ScenarioResultMessage(this, scenarioResult));
         }
 
-        private ScenarioResult RunExamples(ScenarioWithSteps scenario)
+        private void RunExamples(ScenarioWithSteps scenario)
         {
             var exampleResults = new ScenarioExampleResult(scenario.Feature, scenario.Title, scenario.Steps, scenario.Examples);
 
@@ -131,11 +111,31 @@ namespace NBehave.Narrator.Framework.Processors
             {
                 var steps = CloneSteps(scenario);
                 InsertColumnValues(steps, example);
-                var exampleResult = RunScenario(scenario, steps);
-                exampleResults.AddResult(exampleResult);
+
+                var scenarioResult = new ScenarioResult(scenario.Feature, scenario.Title);
+                _stringStepRunner.BeforeScenario();
+                foreach (var step in steps)
+                {
+                    if (step is StringTableStep)
+                    {
+                        RunStringTableStep((StringTableStep)step);
+                    }
+                    else if (step is StringStep)
+                    {
+                        step.StepResult = _stringStepRunner.Run(step);
+                    }
+                    scenarioResult.AddActionStepResult(step.StepResult);
+                }
+
+                if (scenario.Steps.Any())
+                {
+                    _stringStepRunner.AfterScenario();
+                }
+
+                exampleResults.AddResult(scenarioResult);
             }
 
-            return exampleResults;
+            this._hub.Publish(new ScenarioResultMessage(this, exampleResults));
         }
 
         private void InsertColumnValues(IEnumerable<StringStep> steps, Row example)
