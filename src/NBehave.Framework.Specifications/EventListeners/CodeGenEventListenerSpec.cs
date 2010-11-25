@@ -18,7 +18,8 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
             EventListener listener = new CodeGenEventListener(output);
 
             NBehaveConfiguration
-                .New.SetEventListener(listener)
+                .New
+                .SetEventListener(listener)
                 .SetAssemblies(new[] { GetType().Assembly.Location })
                 .SetScenarioFiles(new[] { TestFeatures.FeaturesAndScenarios })
                 .Run();

@@ -8,9 +8,15 @@
     {
         public static void Initialise(TinyIoCContainer container, NBehaveConfiguration configuration)
         {
-            container.AutoRegister(typeof(NBehaveInitialiser).Assembly);
             container.Register<ActionCatalog>().AsSingleton();
             container.Register(configuration);
+            container.Register<IStringStepRunner, StringStepRunner>().AsMultiInstance();
+            container.Register<ITinyMessengerHub, TinyMessengerHub>().AsSingleton();
+
+            (from type in typeof(NBehaveInitialiser).Assembly.GetTypes()
+             where type.GetInterfaces().Contains(typeof(IMessageProcessor))
+             select container.Register(type).AsSingleton()).ToList();
+            
             configuration.EventListener.Initialise(container.Resolve<ITinyMessengerHub>());
 
             Compose<IMessageProcessor>(container);
@@ -21,7 +27,6 @@
             (from type in typeof(NBehaveInitialiser).Assembly.GetTypes()
              where type.GetInterfaces().Contains(typeof(T))
              select container.Resolve(type)).ToList().Cast<T>();
-            return;
         }
     }
 }

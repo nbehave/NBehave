@@ -11,11 +11,9 @@
     public class ParseScenarioFiles : IMessageProcessor
     {
         private readonly ITinyMessengerHub _hub;
-        private readonly IStringStepRunner _stringStepRunner;
 
-        public ParseScenarioFiles(ITinyMessengerHub hub, IStringStepRunner stringStepRunner)
+        public ParseScenarioFiles(ITinyMessengerHub hub)
         {
-            this._stringStepRunner = stringStepRunner;
             this._hub = hub;
 
             this._hub.Subscribe<ScenarioFilesLoaded>(loaded => OnScenarioFilesLoaded(loaded.Content));

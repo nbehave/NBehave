@@ -40,6 +40,7 @@ namespace NBehave.Narrator.Framework
                 this._hub.Publish(new RunFinished(this));
             }
 
+            container.Dispose();
             return results;
         }
     }

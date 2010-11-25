@@ -16,7 +16,7 @@
 #region Preprocessor Directives
 // Uncomment this line if you want the container to automatically
 // register the TinyMessenger messenger/event aggregator
-#define TINYMESSENGER
+// #define TINYMESSENGER
 
 // Preprocessor directives for enabling/disabling functionality
 // depending on platform features. If the platform has an appropriate
@@ -122,6 +122,8 @@ namespace NBehave.Narrator.Framework.Tiny
                 {
                     item.Dispose();
                 }
+
+                this.Clear();
             }
 
             GC.SuppressFinalize(this);
@@ -520,6 +522,19 @@ namespace NBehave.Narrator.Framework.Tiny
         public void AutoRegister(IEnumerable<Assembly> assemblies, bool ignoreDuplicateImplementations)
         {
             AutoRegisterInternal(assemblies, ignoreDuplicateImplementations);
+        }
+
+        public RegisterOptions Register(Type type)
+        {
+            MethodInfo[] methodInfos = this.GetType()
+                .GetMethods(BindingFlags.Instance | BindingFlags.NonPublic);
+            var defaultObjectFactoryMethod =
+                methodInfos
+                    .Where(info => info.Name.StartsWith("GetDefaultObjectFactory"))
+                    .First()
+                    .MakeGenericMethod(type, type);
+
+            return RegisterInternal(type, type, string.Empty, (ObjectFactoryBase)defaultObjectFactoryMethod.Invoke(this, null));
         }
 
         /// <summary>
@@ -2132,7 +2147,7 @@ namespace NBehave.Narrator.Framework.Tiny
         bool disposed = false;
         public void Dispose()
         {
-            if (disposed)
+            if (!disposed)
             {
                 disposed = true;
 
