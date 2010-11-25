@@ -5,16 +5,12 @@ using NUnit.Framework;
 
 namespace NBehave.Narrator.Framework.Specifications.Text
 {
-    using NBehave.Narrator.Framework.Tiny;
-
     [TestFixture]
     public abstract class ScenarioParserSpec
     {
-        private readonly StringStepRunner _stringStepRunner = new StringStepRunner(new ActionCatalog());
-
         private GherkinScenarioParser CreateScenarioParser()
         {
-            return new GherkinScenarioParser(_stringStepRunner, TinyIoCContainer.Current.Resolve<ITinyMessengerHub>());
+            return new GherkinScenarioParser();
         }
 
         private StringStep NewStringStep(string step)

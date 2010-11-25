@@ -44,7 +44,7 @@
             IEnumerable<Feature> features;
             using (Stream stream = File.OpenRead(file))
             {
-                var scenarioTextParser = new GherkinScenarioParser(this._stringStepRunner, this._hub);
+                var scenarioTextParser = new GherkinScenarioParser();
                 features = scenarioTextParser.Parse(stream);
 
                 foreach (var scenario in features.SelectMany(feature => feature.Scenarios))

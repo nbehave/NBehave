@@ -13,12 +13,9 @@ namespace NBehave.Narrator.Framework
     using System.IO;
     using System.Linq;
     using Gherkin;
-    using NBehave.Narrator.Framework.Tiny;
 
     public class GherkinScenarioParser : IListener
     {
-        private readonly IStringStepRunner _stringStepRunner;
-        private readonly ITinyMessengerHub _hub;
         private readonly List<Feature> _features;
         private readonly LanguageService _languageService;
         private Feature _feature;
@@ -26,10 +23,8 @@ namespace NBehave.Narrator.Framework
         private ExampleColumns _exampleColumns;
         private bool _midExample;
 
-        public GherkinScenarioParser(IStringStepRunner stringStepRunner, ITinyMessengerHub hub)
+        public GherkinScenarioParser()
         {
-            _stringStepRunner = stringStepRunner;
-            _hub = hub;
             _languageService = new LanguageService();
             _scenario = new ScenarioWithSteps();
             _feature = new Feature();
