@@ -1,10 +1,10 @@
-﻿Feature: Support for scenario outlines
+﻿Feature: Support for examples
 	As a NBehave user
-	I want to be able to declare scenario outlines
+	I want to be able to declare examples
 	So that I can template my scenarios
 
-	Scenario: Running a feature file with a scenario section
-		Given this scenario containing scenario outline [col1]
+	Scenario: Running a feature file with a examples section
+		Given this scenario containing examples [col1]
 		When the scenario is executed [col2]
 		Then it should be templated and executed with each [row]
 

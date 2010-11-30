@@ -16,7 +16,7 @@
                 .New
                 .SetAssemblies(new[] { "NBehave.Narrator.Framework.Specifications.dll" })
                 .SetEventListener(EventListeners.NullEventListener())
-                .SetScenarioFiles(new[] { @"System.Specs\ScenarioOutlines\ScenarioOutlines.feature" });
+                .SetScenarioFiles(new[] { @"System.Specs\Examples\Examples.feature" });
         }
 
         protected override void Because()
@@ -34,7 +34,7 @@
     [ActionSteps]
     public class ScenarioOutlineSteps
     {
-        [Given("this scenario containing scenario outline $col1")]
+        [Given("this scenario containing examples $col1")]
         public void Given(int col1){}
 
         [When("the scenario is executed $col2")]

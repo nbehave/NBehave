@@ -19,7 +19,7 @@
                 .New
                 .SetAssemblies(new[] { "NBehave.Narrator.Framework.Specifications.dll" })
                 .SetEventListener(EventListeners.NullEventListener())
-                .SetScenarioFiles(new[] { @"System.Specs\ScenarioOutlines\ScenarioOutlinesWithPendingSteps.feature" });
+                .SetScenarioFiles(new[] { @"System.Specs\Examples\ExamplesWithPendingSteps.feature" });
         }
 
         protected override void Because()
