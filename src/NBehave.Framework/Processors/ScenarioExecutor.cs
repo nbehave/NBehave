@@ -66,22 +66,22 @@ namespace NBehave.Narrator.Framework.Processors
 
         public void Run(ScenarioWithSteps scenario)
         {
-            this._hub.Publish(new ScenarioCreated(this, scenario.Title));
+            this._hub.Publish(new ScenarioCreated(this, scenario));
             if (scenario.Examples.Any())
             {
                 RunExamples(scenario);
             }
             else
             {
-                RunScenario(scenario, scenario.Steps);
+                RunScenario(scenario);
             }
         }
 
-        private void RunScenario(ScenarioWithSteps scenario, IEnumerable<StringStep> stepsToRun)
+        private void RunScenario(ScenarioWithSteps scenario)
         {
             var scenarioResult = new ScenarioResult(scenario.Feature, scenario.Title);
             _stringStepRunner.BeforeScenario();
-            foreach (var step in stepsToRun)
+            foreach (var step in scenario.Steps)
             {
                 if (step is StringTableStep)
                 {

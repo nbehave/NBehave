@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace NBehave.Narrator.Framework.Processors
+﻿namespace NBehave.Narrator.Framework.Processors
 {
     using NBehave.Narrator.Framework.Tiny;
 

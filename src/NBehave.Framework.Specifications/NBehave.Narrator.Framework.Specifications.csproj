@@ -129,11 +129,12 @@
     <Compile Include="ScenarioResultsFixture.cs" />
     <Compile Include="ScenarioStepRunnerSpec.cs" />
     <Compile Include="System.Specs\Backgrounds\WhenRunningAScenarioWithABackgroundSection.cs" />
-    <Compile Include="System.Specs\ScenarioOutlines\WhenRunningAScenarioWithScenarioOutlinesButNoActionSteps.cs" />
+    <Compile Include="System.Specs\ExamplesWithTables\WhenRunningAScenarioWithExamples.cs" />
+    <Compile Include="System.Specs\Examples\WhenRunningAScenarioWithExamplesButNoActionSteps.cs" />
     <Compile Include="System.Specs\Scenarios\WhenRunningAScenarioWithArguments.cs" />
     <Compile Include="System.Specs\Scenarios\WhenRunningAScenario.cs" />
     <Compile Include="System.Specs\SystemTestContext.cs" />
-    <Compile Include="System.Specs\ScenarioOutlines\WhenRunningAScenarioWithScenarioOutlines.cs" />
+    <Compile Include="System.Specs\Examples\WhenRunningAScenarioWithExamples.cs" />
     <Compile Include="System.Specs\Tables\WhenRunningATableScenario.cs" />
     <Compile Include="TextRunnerSpec.cs" />
     <Compile Include="StoryRunnerFilterSpecs.cs" />
@@ -191,10 +192,13 @@
     <None Include="System.Specs\Backgrounds\Background.feature">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="System.Specs\ScenarioOutlines\ScenarioOutlinesWithPendingSteps.feature">
+    <None Include="System.Specs\ExamplesWithTables\ExamplesWithTables.feature">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="System.Specs\ScenarioOutlines\ScenarioOutlines.feature">
+    <None Include="System.Specs\Examples\ExamplesWithPendingSteps.feature">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="System.Specs\Examples\Examples.feature">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="System.Specs\Scenarios\ScenarioWithArguments.feature">

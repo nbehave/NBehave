@@ -50,7 +50,7 @@ namespace NBehave.Narrator.Framework
         {
             hub.Subscribe<FeatureCreated>(created => this.FeatureCreated(created.Content));
             hub.Subscribe<FeatureNarrative>(narrative => this.FeatureNarrative(narrative.Content));
-            hub.Subscribe<ScenarioCreated>(created => this.ScenarioCreated(created.Content));
+            hub.Subscribe<ScenarioCreated>(created => this.ScenarioCreated(created.Content.Title));
             hub.Subscribe<RunStarted>(started => this.RunStarted());
             hub.Subscribe<RunFinished>(finished => this.RunFinished());
             hub.Subscribe<ThemeStarted>(themeStarted => this.ThemeStarted(themeStarted.Content));
