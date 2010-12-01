@@ -110,7 +110,6 @@
     <Compile Include="DelegatingListener.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RemotableStoryRunner.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NBehave.Console.Remoting\NBehave.Console.Remoting.csproj">

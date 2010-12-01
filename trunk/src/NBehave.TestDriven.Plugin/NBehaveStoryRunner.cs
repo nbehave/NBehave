@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 
 using NBehave.Narrator.Framework;
+using NBehave.Narrator.Framework.Text;
 using TestDriven.Framework;
 
 //IF you change the namespace or the name of the class dont forget to update the installer.
@@ -11,7 +12,7 @@ namespace NBehave.TestDriven.Plugin
 {
     public class NBehaveStoryRunner : ITestRunner
     {
-        private TextRunner _runner;
+        private IRunner _runner;
 
         TestRunState ITestRunner.RunAssembly(ITestListener tddNetListener, Assembly assembly)
         {
@@ -32,7 +33,7 @@ namespace NBehave.TestDriven.Plugin
         private TestRunState Run(Assembly assembly, MemberInfo member, ITestListener tddNetListener)
         {
             var listener = new StoryRunnerEventListenerProxy(tddNetListener);
-            _runner = new TextRunner(listener);
+            _runner = RunnerFactory.CreateTextRunner(null, listener);
             
             var locator = new StoryLocator
                             {
@@ -46,9 +47,9 @@ namespace NBehave.TestDriven.Plugin
             
             _runner.Load(stories);
             _runner.StoryRunnerFilter = StoryRunnerFilter.GetFilter(member);
-            _runner.LoadAssembly(assembly);
+            _runner.LoadAssembly(assembly.CodeBase);
 
-            FeatureResults results = _runner.Run();
+            FeatureResults results = _runner.Run(new PlainTextOutput(Console.Out));
 
             return GetTestRunState(results);
         }

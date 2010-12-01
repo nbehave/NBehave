@@ -8,6 +8,7 @@ using System.Threading;
 using NBehave.Console.Remoting;
 using NBehave.Narrator.Framework;
 using NBehave.Narrator.Framework.EventListeners;
+using NBehave.Narrator.Framework.Text;
 
 namespace NBehave.Console
 {
@@ -78,54 +79,24 @@ namespace NBehave.Console
         private static FeatureResults SetupAndRunStories(ConsoleOptions options, PlainTextOutput output)
         {
             IEventListener listener = CreateEventListener(options);
-            IEventListener remotableListener = new DelegatingListener(listener);
 
-            string assemblyWithConfigFile = options.Parameters.Cast<string>()
-                                                .Where(path => File.Exists(path + ".config"))
-                                                .Select(path => path + ".config")
-                                                .FirstOrDefault();
+            var runner = RunnerFactory.CreateTextRunner(options.Parameters.Cast<string>(), listener);
 
-            RemotableStoryRunner runner;
-            if (assemblyWithConfigFile != null)
-            {
-                var configFileInfo = new FileInfo(assemblyWithConfigFile);
-                var ads = new AppDomainSetup
-                {
-                    ConfigurationFile = configFileInfo.Name,
-                    ApplicationBase = configFileInfo.DirectoryName //Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
-                };
-                AppDomain ad = AppDomain.CreateDomain("NBehave story runner", null, ads);
-
-                var bootstrapper = (AppDomainBootstrapper)ad.CreateInstanceFromAndUnwrap(typeof(AppDomainBootstrapper).Assembly.Location, typeof(AppDomainBootstrapper).FullName);
-                bootstrapper.InitializeDomain(new[] { Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), configFileInfo.DirectoryName });
-
-                runner = (RemotableStoryRunner)ad.CreateInstanceAndUnwrap(Assembly.GetExecutingAssembly().FullName, typeof(RemotableStoryRunner).FullName);
-            }
-            else
-            {
-                runner = new RemotableStoryRunner();
-            }
-            return runner.SetupAndRunStories(remotableListener, options.scenarioFiles, options.Parameters, options.dryRun, output);
-
-            /*IEventListener listener = CreateEventListener(options);
-            
-            var runner = new TextRunner(listener);
             runner.Load(options.scenarioFiles.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
             runner.IsDryRun = options.dryRun;
-
             foreach (string path in options.Parameters)
             {
                 try
                 {
                     runner.LoadAssembly(path);
                 }
-                catch (FileNotFoundException e)
+                catch (FileNotFoundException)
                 {
                     output.WriteLine(string.Format("File not found: {0}", path));
                 }
             }
 
-            return runner.Run();*/
+            return runner.Run(output);
         }
 
         private static void PrintTimeTaken(DateTime t0)

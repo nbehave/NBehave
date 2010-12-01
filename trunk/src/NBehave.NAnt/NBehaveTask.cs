@@ -6,6 +6,7 @@ using NAnt.Core.Attributes;
 using NAnt.Core.Types;
 using NBehave.Narrator.Framework;
 using NBehave.Narrator.Framework.EventListeners;
+using NBehave.Narrator.Framework.Text;
 using NAntCore = NAnt.Core;
 
 namespace NBehave.NAnt
@@ -50,7 +51,8 @@ namespace NBehave.NAnt
                                                                               TextOutputFile,
                                                                               XmlOutputFile);
 
-            var runner = new TextRunner(listener) { IsDryRun = DryRun };
+            var runner = RunnerFactory.CreateTextRunner(GetFileNames(ScenarioFiles), listener);
+            runner.IsDryRun = DryRun;
             runner.Load(GetFileNames(ScenarioFiles));
             LoadAssemblies(runner);
             FeatureResults results = runner.Run();
@@ -62,7 +64,7 @@ namespace NBehave.NAnt
                 FailBuildBasedOn(results);
         }
 
-        private void LoadAssemblies(RunnerBase runner)
+        private void LoadAssemblies(IRunner runner)
         {
             foreach (string path in TestAssemblies.FileNames)
                 runner.LoadAssembly(path);

@@ -25,7 +25,7 @@ namespace NBehave.Narrator.Framework
             EventListener = listener;
         }
 
-        public FeatureResults Run()
+        public FeatureResults Run(PlainTextOutput output)
         {
             var results = new FeatureResults();
 

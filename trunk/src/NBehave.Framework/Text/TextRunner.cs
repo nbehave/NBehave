@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Linq;
+using NBehave.Narrator.Framework.Text;
 
 namespace NBehave.Narrator.Framework
 {
-	public class TextRunner : RunnerBase
+	public class TextRunner : RunnerBase, IRunner
 	{
 		private readonly List<Feature> _features = new List<Feature>();
 		private readonly ActionStepFileLoader _actionStepFileLoader;
@@ -15,7 +15,7 @@ namespace NBehave.Narrator.Framework
 		
 		public ActionCatalog ActionCatalog { get; private set; }
 
-		public TextRunner(IEventListener eventListener)
+	    public TextRunner(IEventListener eventListener)
 			: base(eventListener)
 		{
 			ActionCatalog = new ActionCatalog();
@@ -80,5 +80,10 @@ namespace NBehave.Narrator.Framework
 			var features = _actionStepFileLoader.Load(stream);
 			_features.AddRange(features);
 		}
+
+        public FeatureResults Run()
+        {
+            return Run(null);
+        }
 	}
 }
