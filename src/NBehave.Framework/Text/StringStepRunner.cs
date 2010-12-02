@@ -52,8 +52,8 @@ namespace NBehave.Narrator.Framework
 
         void IStringStepRunner.OnCloseScenario()
         {
-            if (_lastAction != null)
-                _lastAction.ExecuteNotificationMethod(typeof(AfterScenarioAttribute));
+            //if (_lastAction != null)
+            //    _lastAction.ExecuteNotificationMethod(typeof(AfterScenarioAttribute));
         }
 
         void IStringStepRunner.BeforeScenario()

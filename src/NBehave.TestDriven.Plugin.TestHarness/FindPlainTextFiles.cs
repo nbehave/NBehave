@@ -28,6 +28,7 @@ namespace NBehave.TestDriven.Plugin.Tests
         {
             var assembly = Assembly.Load(assemblyname);
             Locator.RootLocation = Path.GetDirectoryName(assembly.Location);
+            _type = null;
         }
 
         [Given("a class $typename")]
@@ -57,7 +58,7 @@ namespace NBehave.TestDriven.Plugin.Tests
         public bool IsMatch(string fileName)
         {
             var fileInfo = new FileInfo(fileName);
-            return fileInfo.Directory.Name != "Harness";
+            return fileInfo.Directory.Name.ToLower() != "subdirectory";
         }
 
         public IFileMatcher FileMatcher

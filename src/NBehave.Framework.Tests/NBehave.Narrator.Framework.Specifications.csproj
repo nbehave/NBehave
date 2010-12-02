@@ -90,9 +90,9 @@
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="nunit.framework">
+    <Reference Include="nunit.framework, Version=2.5.7.10213, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\nunit.framework.dll</HintPath>
+      <HintPath>..\..\tools\nunit\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="Rhino.Mocks">
       <HintPath>..\..\lib\Rhino.Mocks.dll</HintPath>
@@ -114,6 +114,7 @@
     <Compile Include="ActionStepFileLoaderSpec.cs" />
     <Compile Include="ActionStepParserSpec.cs" />
     <Compile Include="ActionStepSpec.cs" />
+    <Compile Include="RemotableStoryRunnerSpec.cs" />
     <Compile Include="EventListeners\CodeGenEventListenerSpec.cs" />
     <Compile Include="EventListeners\MultiOutputEventListenerFixture.cs" />
     <Compile Include="EventListeners\XmlOutputEventListenerSpec.cs" />

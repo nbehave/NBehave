@@ -111,6 +111,9 @@
     <Compile Include="EventListeners\Xml\XmlOutputWriter.cs" />
     <Compile Include="MessageEventData.cs" />
     <Compile Include="ParameterConverter.cs" />
+    <Compile Include="Remoting\AppDomainBootstrapper.cs" />
+    <Compile Include="Remoting\DelegatingListener.cs" />
+    <Compile Include="Remoting\RemotableStoryRunner.cs" />
     <Compile Include="ScenarioExampleResult.cs" />
     <Compile Include="ScenarioMessage.cs" />
     <Compile Include="EventListeners\SummaryWriter.cs" />
@@ -122,9 +125,11 @@
     <Compile Include="Text\ActionStepFileLoader.cs" />
     <Compile Include="Text\IFileMatcher.cs" />
     <Compile Include="Text\IgnoreSpaceAndUnderScoreMatcher.cs" />
+    <Compile Include="Text\IRunner.cs" />
     <Compile Include="Text\IStringStepRunner.cs" />
     <Compile Include="Text\Language.cs" />
     <Compile Include="Text\MatchAllFiles.cs" />
+    <Compile Include="Text\RunnerFactory.cs" />
     <Compile Include="Text\StringStepRunner.cs" />
     <Compile Include="Text\ActionStepsAttribute.cs" />
     <Compile Include="EventArgs.cs" />

@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using NBehave.Narrator.Framework;
 using NBehave.Narrator.Framework.EventListeners;
+using NBehave.Narrator.Framework.Text;
 
 namespace NBehave.Console
 {
@@ -56,24 +58,7 @@ namespace NBehave.Console
                 }
             }
 
-            IEventListener listener = CreateEventListener(options);
-            var runner = new TextRunner(listener);
-            runner.Load(options.scenarioFiles.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
-            runner.IsDryRun = options.dryRun;
-
-            foreach (string path in options.Parameters)
-            {
-                try
-                {
-                    runner.LoadAssembly(path);
-                }
-                catch (FileNotFoundException e)
-                {
-                    output.WriteLine(string.Format("File not found: {0}", path));
-                }
-            }
-
-            FeatureResults results = runner.Run();
+            FeatureResults results = SetupAndRunStories(options, output);
             PrintTimeTaken(t0);
 
             if (options.dryRun)
@@ -87,6 +72,29 @@ namespace NBehave.Console
             }
 
             return result;
+        }
+
+        private static FeatureResults SetupAndRunStories(ConsoleOptions options, PlainTextOutput output)
+        {
+            IEventListener listener = CreateEventListener(options);
+
+            var runner = RunnerFactory.CreateTextRunner(options.Parameters.Cast<string>(), listener);
+
+            runner.Load(options.scenarioFiles.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
+            runner.IsDryRun = options.dryRun;
+            foreach (string path in options.Parameters)
+            {
+                try
+                {
+                    runner.LoadAssembly(path);
+                }
+                catch (FileNotFoundException)
+                {
+                    output.WriteLine(string.Format("File not found: {0}", path));
+                }
+            }
+
+            return runner.Run(output);
         }
 
         private static void PrintTimeTaken(DateTime t0)

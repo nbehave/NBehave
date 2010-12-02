@@ -5,7 +5,13 @@ namespace NBehave.Narrator.Framework
 {
     public class ScenarioStepRunner
     {
+        private readonly IStringStepRunner _stepRunner;
         private Feature _lastFeature;
+
+        public ScenarioStepRunner(IStringStepRunner stepRunner)
+        {
+            _stepRunner = stepRunner;
+        }
 
         public static event EventHandler<EventArgs<ScenarioResult>> ScenarioResultCreated;
 
@@ -21,7 +27,13 @@ namespace NBehave.Narrator.Framework
                 RaiseFeatureResultsEvent(scenarioResults);
                 allResults.Add(scenarioResults);
             }
+            HandleScenarioEnd();
             return allResults;
+        }
+
+        private void HandleScenarioEnd()
+        {
+            _stepRunner.OnCloseScenario();
         }
 
         private void NewFeature(ScenarioWithSteps scenario)

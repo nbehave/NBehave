@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using System.Xml;
 using NBehave.Narrator.Framework.EventListeners.Xml;
+using NBehave.Narrator.Framework.Text;
 using NUnit.Framework;
 
 namespace NBehave.Narrator.Framework.Specifications.EventListeners
@@ -18,7 +19,7 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
             var memStream = new MemoryStream();
             var listener = new XmlOutputEventListener(new XmlTextWriter(memStream, Encoding.UTF8));
             var runner = new TextRunner(listener);
-            runner.LoadAssembly(GetType().Assembly);
+            runner.LoadAssembly(GetType().Assembly.CodeBase);
             runner.Load(_feature.ToStream());
             runner.Run();
             _xmlDoc = new XmlDocument();

@@ -5,6 +5,7 @@ using System.Text;
 using System.Xml;
 using NBehave.Narrator.Framework.EventListeners;
 using NBehave.Narrator.Framework.EventListeners.Xml;
+using NBehave.Narrator.Framework.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Context = NUnit.Framework.TestFixtureAttribute;

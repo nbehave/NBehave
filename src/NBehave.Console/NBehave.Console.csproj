@@ -107,6 +107,7 @@
     </Compile>
     <Compile Include="CommandLineOptions.cs" />
     <Compile Include="ConsoleOptions.cs" />
+    <Compile Include="DelegatingListener.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

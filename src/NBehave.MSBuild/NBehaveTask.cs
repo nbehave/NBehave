@@ -5,6 +5,7 @@ using Microsoft.Build.Utilities;
 using NBehave.Narrator.Framework;
 using System.IO;
 using NBehave.Narrator.Framework.EventListeners;
+using NBehave.Narrator.Framework.Text;
 
 
 namespace NBehave.MSBuild
@@ -55,7 +56,8 @@ namespace NBehave.MSBuild
             IEventListener listener = EventListeners.CreateEventListenerUsing(msbuildLogWriter,
                                                                               TextOutputFile,
                                                                               XmlOutputFile);
-            var runner = new TextRunner(listener) { IsDryRun = DryRun };
+            var runner = RunnerFactory.CreateTextRunner(ScenarioFiles, listener);
+            runner.IsDryRun = DryRun;
             runner.Load(ScenarioFiles);
             LoadAssemblies(runner);
             FeatureResults = runner.Run();
@@ -72,7 +74,7 @@ namespace NBehave.MSBuild
             return true;
         }
 
-        private void LoadAssemblies(RunnerBase runner)
+        private void LoadAssemblies(IRunner runner)
         {
             foreach (string path in TestAssemblies)
                 runner.LoadAssembly(path);

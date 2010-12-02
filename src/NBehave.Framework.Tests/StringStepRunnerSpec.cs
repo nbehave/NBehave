@@ -118,7 +118,7 @@ namespace NBehave.Narrator.Framework.Specifications
             {
                 var actionStepText = new ActionStepText("something", "");
                 _runner.Run(actionStepText);
-                _runner.OnCloseScenario();
+                _runner.AfterScenario();
 
                 Assert.That(_beforeScenarioWasCalled);
                 Assert.That(_beforeStepWasCalled);

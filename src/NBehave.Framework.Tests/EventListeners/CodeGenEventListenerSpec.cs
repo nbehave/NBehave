@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using NBehave.Narrator.Framework.EventListeners;
+using NBehave.Narrator.Framework.Text;
 using NUnit.Framework;
 
 namespace NBehave.Narrator.Framework.Specifications.EventListeners

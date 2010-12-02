@@ -34,12 +34,7 @@ namespace NBehave.Narrator.Framework
                 || _isCharsAndNumbersOnly.IsMatch(regexOrTokenString))
                 return false;
             return true;
-        }
-
-        protected ActionStepAttribute(Regex actionMatch)
-        {
-            ActionMatch = actionMatch;
-            Type = actionMatch.ToString().GetFirstWord();
+            //Type = actionMatch.ToString().GetFirstWord();
         }
     }
 }

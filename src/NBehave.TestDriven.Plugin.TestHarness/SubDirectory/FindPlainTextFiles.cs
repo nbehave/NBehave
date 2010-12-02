@@ -26,6 +26,7 @@ namespace NBehave.TestDriven.Plugin.Tests.SubDirectory
         public void GivenAnAssembly(string assemblyname)
         {
             var assembly = Assembly.Load(assemblyname);
+            _type = null;
             Locator.RootLocation = Path.GetDirectoryName(assembly.Location);
         }
 

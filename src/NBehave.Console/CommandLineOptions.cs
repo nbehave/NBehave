@@ -70,7 +70,7 @@ namespace Codeblast
     // The CommandLineOptions members
     //
 
-    public abstract class CommandLineOptions
+    public abstract class CommandLineOptions : MarshalByRefObject
     {
         protected ArrayList _parameters;
         private readonly int _optionCount;

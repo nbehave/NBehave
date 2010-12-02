@@ -15,7 +15,7 @@ namespace NBehave.Narrator.Framework
             if (ActionExists(new ActionStepText(tokenString, "")))
                 return;
             var regex = GetRegexForActionKey(tokenString);
-            Add(new ActionMethodInfo(regex, action, methodInfo, null));
+			Add(new ActionMethodInfo(regex, action, methodInfo, null));
         }
 
         public void Add(ActionMethodInfo actionValue)
@@ -30,12 +30,12 @@ namespace NBehave.Narrator.Framework
 
         public bool ActionExists(ActionStepText actionStepText)
         {
-            return (FindMatchingAction(actionStepText) != null);
+			return (FindMatchingAction(actionStepText) != null);
         }
 
         public ActionMethodInfo GetAction(ActionStepText message)
         {
-            return FindMatchingAction(message);
+			return FindMatchingAction(message);
         }
 
         public string BuildMessage(string message, object[] parameters)
@@ -53,7 +53,7 @@ namespace NBehave.Narrator.Framework
             return resultString;
         }
 
-        private ActionMethodInfo FindMatchingAction(ActionStepText actionStepText)
+		private ActionMethodInfo FindMatchingAction(ActionStepText actionStepText)
         {
             string message = actionStepText.Step;
             ActionMethodInfo matchedAction = null;
