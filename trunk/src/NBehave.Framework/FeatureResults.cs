@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace NBehave.Narrator.Framework
 {
-    public class FeatureResults
+    public class FeatureResults : MarshalByRefObject
     {
         private readonly List<ScenarioResult> _scenarioResults = new List<ScenarioResult>();
 

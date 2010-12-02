@@ -114,6 +114,7 @@
     <Compile Include="ActionStepFileLoaderSpec.cs" />
     <Compile Include="ActionStepParserSpec.cs" />
     <Compile Include="ActionStepSpec.cs" />
+    <Compile Include="RemotableStoryRunnerSpec.cs" />
     <Compile Include="EventListeners\CodeGenEventListenerSpec.cs" />
     <Compile Include="EventListeners\MultiOutputEventListenerFixture.cs" />
     <Compile Include="EventListeners\XmlOutputEventListenerSpec.cs" />
