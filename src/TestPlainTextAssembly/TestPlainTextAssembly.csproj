@@ -84,18 +84,22 @@
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="nunit.framework, Version=2.5.7.10213, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+    <Reference Include="nunit.framework">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\tools\nunit\nunit.framework.dll</HintPath>
+      <HintPath>..\..\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Should.Core">
+      <HintPath>..\..\lib\should\Should.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Should.Fluent">
+      <HintPath>..\..\lib\should\Should.Fluent.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.configuration" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConfigFileActionSteps.cs" />
     <Compile Include="GreetingSystemActionSteps.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -103,10 +107,6 @@
     <ProjectReference Include="..\NBehave.Framework\NBehave.Narrator.Framework.csproj">
       <Project>{9C2E9E17-2A2C-4F6C-8072-D160A7EA9A51}</Project>
       <Name>NBehave.Narrator.Framework</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NBehave.Spec.NUnit\NBehave.Spec.NUnit.csproj">
-      <Project>{7BDFA147-A451-4FB0-8536-94EC1C52926E}</Project>
-      <Name>NBehave.Spec.NUnit</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

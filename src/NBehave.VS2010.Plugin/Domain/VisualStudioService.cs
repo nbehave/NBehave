@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
@@ -10,14 +9,16 @@ using NBehave.VS2010.Plugin.Contracts;
 namespace NBehave.VS2010.Plugin.Domain
 {
     [Export(typeof (IVisualStudioService))]
-    internal class VisualStudioService : IVisualStudioService
+    internal class VisualStudioService : IVisualStudioService, IPartImportsSatisfiedNotification
     {
-        private readonly DTE _dteService;
+        private DTE _dteService;
 
-        [ImportingConstructor]
-        public VisualStudioService(IServiceProvider serviceProvider)
+        [Import(AllowRecomposition = true)]
+        public IServiceProvider ServiceProvider { get; set; }
+
+        public void OnImportsSatisfied()
         {
-            _dteService = serviceProvider.GetService(typeof (SDTE)) as DTE;
+            _dteService = ServiceProvider.GetService(typeof(SDTE)) as DTE;
 
             if (_dteService == null)
                 throw new InvalidOperationException("Was not able to get the EnvDTE service.");

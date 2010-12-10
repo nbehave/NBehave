@@ -1,6 +1,7 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using NBehave.TestDriven.Plugin;
 using TestDriven.Framework;
 using NBehave.TestDriven.Plugin;
 

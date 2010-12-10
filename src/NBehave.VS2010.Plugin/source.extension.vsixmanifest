@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <Vsix xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="1.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2010">
   <Identifier Id="39b466a1-7b58-4a9d-91d1-010d05512884">
     <Name>NBehave</Name>
@@ -6,7 +7,9 @@
     <Version>0.5.0.0</Version>
     <Description xml:space="preserve">Allows execution of NBehave scenario files from within the IDE.  More information at http://www.nbehave.org.</Description>
     <Locale>1033</Locale>
-    <MoreInfoUrl>http://www.nbehave.org</MoreInfoUrl>
+    <MoreInfoUrl>
+      http://www.nbehave.org
+    </MoreInfoUrl>
     <InstalledByMsi>false</InstalledByMsi>
     <SupportedProducts>
       <VisualStudio Version="10.0">
@@ -21,6 +24,9 @@
     </Reference>
   </References>
   <Content>
-    <VsPackage>|%CurrentProject%;PkgdefProjectOutputGroup|</VsPackage>
+    <VsPackage>
+      |%CurrentProject%;PkgdefProjectOutputGroup|
+    </VsPackage>
+    <MefComponent>|%CurrentProject%|</MefComponent>
   </Content>
 </Vsix>

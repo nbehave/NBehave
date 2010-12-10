@@ -22,7 +22,7 @@ Story: Locating plain text specification in subdirectory (part 1)
 	
 	Scenario: Find files (should pass)
 		Given an assembly NBehave.TestDriven.Plugin.Tests
-		And a class NBehave.TestDriven.Plugin.Tests.Subdirectory.FindPlainTextFiles
+		And a class NBehave.TestDriven.Plugin.Tests.Harness.FindPlainTextFiles
 		When I look for text files
 		Then I should find 1 feature files
 		And I should find 0 story files

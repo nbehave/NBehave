@@ -12,7 +12,7 @@ namespace NBehave.Spec
         {
             if (implementation != null)
             {
-                string stepKey = currentScenarioStage + " " + step;
+                var stepKey = currentScenarioStage + " " + step;
                 if (_inlineImplementations.ContainsKey(stepKey))
                     _inlineImplementations.Remove(stepKey);
                 _inlineImplementations.Add(stepKey, implementation);
@@ -21,7 +21,7 @@ namespace NBehave.Spec
         
         public Action ResolveStep(ScenarioFragment currentScenarioStage, ActionStepText actionStep)
         {
-            string stepText = currentScenarioStage + " " + actionStep.Step;
+            var stepText = currentScenarioStage + " " + actionStep.Step;
             if (_inlineImplementations.ContainsKey(stepText))
             {
                 return _inlineImplementations[stepText];

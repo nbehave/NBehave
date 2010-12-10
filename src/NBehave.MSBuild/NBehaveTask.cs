@@ -1,15 +1,24 @@
-﻿using System;
-using System.Text;
-using Microsoft.Build.Framework;
-using Microsoft.Build.Utilities;
-using NBehave.Narrator.Framework;
-using System.IO;
-using NBehave.Narrator.Framework.EventListeners;
-using NBehave.Narrator.Framework.Text;
-
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="NBehaveTask.cs" company="NBehave">
+//   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
+// </copyright>
+// <summary>
+//   Defines the NBehaveTask type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace NBehave.MSBuild
 {
+    using System;
+    using System.IO;
+    using System.Text;
+
+    using Microsoft.Build.Framework;
+    using Microsoft.Build.Utilities;
+
+    using NBehave.Narrator.Framework;
+    using NBehave.Narrator.Framework.EventListeners;
+
     public class NBehaveTask : Task
     {
         public bool DryRun { get; set; }
@@ -53,31 +62,25 @@ namespace NBehave.MSBuild
 
             WriteHeaderInto(output);
 
-            IEventListener listener = EventListeners.CreateEventListenerUsing(msbuildLogWriter,
-                                                                              TextOutputFile,
-                                                                              XmlOutputFile);
+            var config = NBehaveConfiguration.New
+                .SetScenarioFiles(ScenarioFiles)
+                .SetDryRun(DryRun)
+                .SetAssemblies(TestAssemblies)
+                .SetEventListener(EventListeners.CreateEventListenerUsing(msbuildLogWriter, TextOutputFile, XmlOutputFile));
             var runner = RunnerFactory.CreateTextRunner(ScenarioFiles, listener);
-            runner.IsDryRun = DryRun;
-            runner.Load(ScenarioFiles);
-            LoadAssemblies(runner);
+
             FeatureResults = runner.Run();
 
             if (DryRun)
                 return true;
 
-            string message = logString.ToString();
+            var message = logString.ToString();
             Log.LogMessage(message);
 
             if (FailBuild && FailBuildBasedOn(FeatureResults))
                 return false;
 
             return true;
-        }
-
-        private void LoadAssemblies(IRunner runner)
-        {
-            foreach (string path in TestAssemblies)
-                runner.LoadAssembly(path);
         }
 
         private void WriteHeaderInto(PlainTextOutput output)
@@ -94,7 +97,7 @@ namespace NBehave.MSBuild
                 return false;
 
             var exceptionMessage = new StringBuilder();
-            foreach (ScenarioResult result in results.ScenarioResults)
+            foreach (var result in results.ScenarioResults)
             {
                 exceptionMessage.AppendLine(result.Message);
                 exceptionMessage.AppendLine(result.StackTrace);

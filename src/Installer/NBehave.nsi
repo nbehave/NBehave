@@ -39,7 +39,7 @@ Section ".Net 3.5 files" ;No components page, name is not important
 	SetOutPath $INSTDIR\v3.5
   
 	; Put file there
-	File "${FILES}\v3.5\NBehave-Console.exe"	
+	File "${FILES}\v3.5\**"
 	File "${FILES}\v3.5\NBehave.NAnt.dll"
 	File "${FILES}\v3.5\NBehave.MSBuild.dll"
 	File "${FILES}\v3.5\NBehave.Narrator.Framework.dll"
@@ -77,7 +77,7 @@ Section ".Net 4.0 files" ;No components page, name is not important
 	SetOutPath $INSTDIR\v4.0
   
 	; Put file there
-	File "${FILES}\v4.0\NBehave-Console.exe"	
+	File "${FILES}\v4.0\**"
 	File "${FILES}\v4.0\NBehave.NAnt.dll"
 	File "${FILES}\v4.0\NBehave.MSBuild.dll"
 	File "${FILES}\v4.0\NBehave.Narrator.Framework.dll"
@@ -115,7 +115,7 @@ Section "Visual Studio 2010 Plugin"
 
 	SetOutPath "$PROGRAMFILES\Microsoft Visual Studio 10.0\Common7\IDE\Extensions\NBehave"
 	
-	File "${PLUGIN}\extension.vsixmanifest"
+	File "${PLUGIN}\**"
 	File "${PLUGIN}\NBehave.VS2010.Plugin.dll"
 	File "${PLUGIN}\NBehave.VS2010.Plugin.pkgdef"
 
@@ -129,21 +129,21 @@ Section "Uninstall"
   DeleteRegKey HKLM SOFTWARE\NBehave\${VERSION}
   
   ; Remove v3.5 files and uninstaller
-  Delete $INSTDIR\v3.5\*.dll
+  Delete $INSTDIR\v3.5\**
   Delete $INSTDIR\v3.5\*.tdnet
   Delete $INSTDIR\v3.5\*.zip
   Delete $INSTDIR\v3.5\*.yml
   Delete $INSTDIR\v3.5\NBehave-Console.exe
   
   ; Remove v3.5 files and uninstaller
-  Delete $INSTDIR\v4.0\*.dll
+  Delete $INSTDIR\v4.0\**
   Delete $INSTDIR\v4.0\*.tdnet
   Delete $INSTDIR\v4.0\*.zip
   Delete $INSTDIR\v4.0\*.yml
   Delete $INSTDIR\v4.0\NBehave-Console.exe
 
   ; Remove VS2010 Plugin
-  Delete "$PROGRAMFILES\Microsoft Visual Studio 10.0\Common7\IDE\Extensions\NBehave\extension.vsixmanifest"
+  Delete "$PROGRAMFILES\Microsoft Visual Studio 10.0\Common7\IDE\Extensions\NBehave\**"
   Delete "$PROGRAMFILES\Microsoft Visual Studio 10.0\Common7\IDE\Extensions\NBehave\NBehave.VS2010.Plugin.dll"
   Delete "$PROGRAMFILES\Microsoft Visual Studio 10.0\Common7\IDE\Extensions\NBehave\NBehave.VS2010.Plugin.pkgdef"
   

@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.VS2010.Plugin", "NBehave.VS2010.Plugin\NBehave.VS2010.Plugin.csproj", "{E2EF537E-04C9-4804-9848-4205277D74AF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		ExpressionBlend|Any CPU = ExpressionBlend|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E2EF537E-04C9-4804-9848-4205277D74AF}.ExpressionBlend|Any CPU.ActiveCfg = ExpressionBlend|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

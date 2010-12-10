@@ -13,9 +13,9 @@ namespace NBehave.Examples.BowlingGame
 
         public int Score()
         {
-            int score = 0;
-            int frameIndex = 0;
-            for (int frame = 0; frame < 10; frame++)
+            var score = 0;
+            var frameIndex = 0;
+            for (var frame = 0; frame < 10; frame++)
             {
                 if (IsStrike(frameIndex))
                 {

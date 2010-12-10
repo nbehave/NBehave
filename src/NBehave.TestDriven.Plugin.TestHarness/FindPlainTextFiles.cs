@@ -58,7 +58,7 @@ namespace NBehave.TestDriven.Plugin.Tests
         public bool IsMatch(string fileName)
         {
             var fileInfo = new FileInfo(fileName);
-            return fileInfo.Directory.Name.ToLower() != "subdirectory";
+            return fileInfo.Directory.Name != "Harness";
         }
 
         public IFileMatcher FileMatcher

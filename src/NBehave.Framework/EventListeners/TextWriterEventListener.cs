@@ -1,31 +1,39 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="TextWriterEventListener.cs" company="NBehave">
+//   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
+// </copyright>
+// <summary>
+//   Defines the TextWriterEventListener type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace NBehave.Narrator.Framework.EventListeners
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+
     public class TextWriterEventListener : IEventListener, IDisposable
     {
         private readonly TextWriter _writer;
-        private bool _disposed;
+
         private readonly List<ScenarioResult> _allResults = new List<ScenarioResult>();
+
+        private bool _disposed;
 
         public TextWriterEventListener(TextWriter writer)
         {
             _writer = writer;
         }
 
-        #region IDisposable Members
-
         void IDisposable.Dispose()
         {
             Dispose(true);
         }
 
-        #endregion
-
         public void RunStarted()
-        { }
+        {
+        }
 
         public void FeatureCreated(string feature)
         {
@@ -51,18 +59,21 @@ namespace NBehave.Narrator.Framework.EventListeners
         public void ThemeStarted(string name)
         {
             if (string.IsNullOrEmpty(name) == false)
+            {
                 _writer.WriteLine("Theme: {0}", name);
+            }
         }
 
         public void ThemeFinished()
-        { }
+        {
+        }
 
         public void ScenarioResult(ScenarioResult result)
         {
             _allResults.Add(result);
             foreach (var actionStepResult in result.ActionStepResults)
             {
-                string msg = (actionStepResult.Result is Passed) ? "" : " - " + actionStepResult.Result.ToString().ToUpper();
+                var msg = (actionStepResult.Result is Passed) ? string.Empty : " - " + actionStepResult.Result.ToString().ToUpper();
                 _writer.WriteLine(actionStepResult.StringStep + msg);
             }
         }
@@ -70,7 +81,9 @@ namespace NBehave.Narrator.Framework.EventListeners
         protected virtual void Dispose(bool disposing)
         {
             if (_disposed)
+            {
                 return;
+            }
 
             if (disposing)
             {

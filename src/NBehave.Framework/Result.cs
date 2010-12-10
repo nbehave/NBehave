@@ -1,13 +1,19 @@
-using System;
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Result.cs" company="NBehave">
+//   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
+// </copyright>
+// <summary>
+//   Defines the ActionStepResult type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace NBehave.Narrator.Framework
 {
+    using System;
+
     [Serializable]
     public class ActionStepResult : Result
     {
-        public string StringStep { get; private set; }
-        public Result Result { get; private set; }
-
         public ActionStepResult(string stringStep, Result resultForActionStep)
             : base(resultForActionStep.Message)
         {
@@ -15,21 +21,29 @@ namespace NBehave.Narrator.Framework
             Result = resultForActionStep;
         }
 
+        public string StringStep { get; private set; }
+
+        public Result Result { get; private set; }
 
         public void MergeResult(Result stepResult)
         {
             if (stepResult is Passed)
+            {
                 return;
+            }
+
             if (stepResult is Pending && Result is Passed)
             {
                 Result = stepResult;
                 Message = stepResult.Message;
             }
+
             if (stepResult is Failed && (Result is Passed || Result is Pending))
             {
                 Result = stepResult;
                 Message = stepResult.Message;
             }
+
             if (Result == null)
             {
                 Result = stepResult;
@@ -43,7 +57,6 @@ namespace NBehave.Narrator.Framework
         }
     }
 
-    [Serializable]
     public class Passed : Result
     {
         public Passed()
@@ -52,7 +65,6 @@ namespace NBehave.Narrator.Framework
         }
     }
 
-    [Serializable]
     public class Failed : Result
     {
         public Exception Exception { get; private set; }
@@ -63,7 +75,6 @@ namespace NBehave.Narrator.Framework
         }
     }
 
-    [Serializable]
     public class Pending : Result
     {
         public Pending(string pendingReason)
@@ -72,19 +83,18 @@ namespace NBehave.Narrator.Framework
         }
     }
 
-    [Serializable]
-    public abstract class Result : MarshalByRefObject
+    public abstract class Result
     {
-        public string Message { get; protected set; }
-
         protected Result(string message)
         {
             Message = message;
         }
 
+        public string Message { get; protected set; }
+
         public override string ToString()
         {
-            return GetType().Name.Replace(typeof(Result).Name, "").ToLower();
+            return GetType().Name.Replace(typeof(Result).Name, string.Empty).ToLower();
         }
     }
 }

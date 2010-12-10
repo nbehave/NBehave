@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -180,7 +179,7 @@ namespace NBehave.Spec.MSTest
 
         public static void ShouldMatch(this string actual, string regexPattern, RegexOptions regexOptions)
         {
-            Regex r = new Regex(regexPattern, regexOptions);
+            var r = new Regex(regexPattern, regexOptions);
             ShouldMatch(actual, r);
         }
 

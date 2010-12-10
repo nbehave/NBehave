@@ -55,6 +55,7 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
     =================================================================================
     -->
   <Target Name="FindSourceVsixManifest">
+  
     <FindVsixManifest ItemsToConsider="@(None)">
       <Output TaskParameter="VsixManifest" ItemName="SourceVsixManifest"/>
     </FindVsixManifest>
@@ -370,7 +371,7 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
       Name="GetVsixDeploymentPath"
       Condition="'$(DeployExtension)'=='true'"
       DependsOnTargets="$(GetVsixDeploymentPathDependsOn)">
-
+	  
     <GetExtensionsPath SubPath="$(ExtensionsDeploymentSubPath)">
       <Output TaskParameter="LocalExtensionsPath" PropertyName="ExtensionsPath"/>
     </GetExtensionsPath>

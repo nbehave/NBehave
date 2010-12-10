@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
-using System.Collections;
 
 namespace NBehave.Spec.NUnit
 {
@@ -183,7 +183,7 @@ namespace NBehave.Spec.NUnit
 
         public static void ShouldMatch(this string actual, string regexPattern, RegexOptions regexOptions)
         {
-            Regex r = new Regex(regexPattern, regexOptions);
+            var r = new Regex(regexPattern, regexOptions);
             ShouldMatch(actual, r);
         }
 
@@ -279,7 +279,7 @@ namespace NBehave.Spec.NUnit
 
         public static Exception ShouldThrow<T>(this Action action)
         {
-            bool failed = false;
+            var failed = false;
             var ex = new Exception("");
             try
             {

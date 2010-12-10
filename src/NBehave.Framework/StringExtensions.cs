@@ -1,17 +1,29 @@
-﻿using System.Text.RegularExpressions;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="StringExtensions.cs" company="NBehave">
+//   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
+// </copyright>
+// <summary>
+//   Defines the StringExtensions type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace NBehave.Narrator.Framework
 {
+    using System.Text.RegularExpressions;
 
     public static class StringExtensions
     {
+        private static readonly Regex _whiteSpace = new Regex(@"\s", RegexOptions.Compiled);
+
         public static string ReplaceFirst(this string str, string toReplace, string replaceWith)
         {
-            int start = str.IndexOf(toReplace);
+            var start = str.IndexOf(toReplace);
             if (start < 0)
+            {
                 return str;
+            }
 
-            string newString = str.Remove(start, toReplace.Length);
+            var newString = str.Remove(start, toReplace.Length);
             return newString.Insert(start, replaceWith);
         }
 
@@ -21,16 +33,16 @@ namespace NBehave.Narrator.Framework
             return regex.Match(str).Value;
         }
 
-        private static readonly Regex _whiteSpace = new Regex(@"\s", RegexOptions.Compiled);
         public static string RemoveFirstWord(this string tokenString)
         {
             var tokenStringToMatch = tokenString.TrimStart();
-            Match firstWhiteSpace = _whiteSpace.Match(tokenStringToMatch);
+            var firstWhiteSpace = _whiteSpace.Match(tokenStringToMatch);
             if (firstWhiteSpace.Success)
             {
-                int posOfFirstSpace = firstWhiteSpace.Index;
+                var posOfFirstSpace = firstWhiteSpace.Index;
                 return tokenStringToMatch.Substring(posOfFirstSpace + 1).TrimStart(new[] { ' ', '\n', '\r', '\t' });
             }
+
             return tokenString;
         }
     }

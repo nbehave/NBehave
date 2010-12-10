@@ -1,9 +1,18 @@
-using System;
-using System.Collections.Generic;
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="FeatureResults.cs" company="NBehave">
+//   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
+// </copyright>
+// <summary>
+//   Defines the FeatureResults type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace NBehave.Narrator.Framework
 {
-    public class FeatureResults : MarshalByRefObject
+    using System;
+    using System.Collections.Generic;
+
+    public class FeatureResults
     {
         private readonly List<ScenarioResult> _scenarioResults = new List<ScenarioResult>();
 
@@ -44,7 +53,7 @@ namespace NBehave.Narrator.Framework
         {
             get
             {
-            	return _scenarioResults.ToArray();
+                return _scenarioResults.ToArray();
             }
         }
 

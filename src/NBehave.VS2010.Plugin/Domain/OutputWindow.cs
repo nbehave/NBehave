@@ -4,7 +4,7 @@ using NBehave.VS2010.Plugin.Contracts;
 
 namespace NBehave.VS2010.Plugin.Domain
 {
-    internal class OutputWindow : IOutputWindow
+    public class OutputWindow : IOutputWindow
     {
         private readonly IVsOutputWindowPane _outputWindowPane;
 

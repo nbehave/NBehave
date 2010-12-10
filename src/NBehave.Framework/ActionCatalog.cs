@@ -1,22 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text.RegularExpressions;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ActionCatalog.cs" company="NBehave">
+//   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
+// </copyright>
+// <summary>
+//   Defines the ActionCatalog type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace NBehave.Narrator.Framework
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text.RegularExpressions;
+
     public class ActionCatalog
     {
         private readonly List<ActionMethodInfo> _actions = new List<ActionMethodInfo>();
-
-        [Obsolete("Use Add(Regex actionMatch, object action)")]
-        public void Add(string tokenString, object action, MethodInfo methodInfo)
-        {
-            if (ActionExists(new ActionStepText(tokenString, "")))
-                return;
-            var regex = GetRegexForActionKey(tokenString);
-			Add(new ActionMethodInfo(regex, action, methodInfo, null));
-        }
 
         public void Add(ActionMethodInfo actionValue)
         {
@@ -25,27 +24,31 @@ namespace NBehave.Narrator.Framework
 
         public bool ActionExists(string text)
         {
-            return ActionExists(new ActionStepText(text, ""));
+            return ActionExists(new ActionStepText(text, string.Empty));
         }
 
         public bool ActionExists(ActionStepText actionStepText)
         {
-			return (FindMatchingAction(actionStepText) != null);
+            return FindMatchingAction(actionStepText) != null;
         }
 
         public ActionMethodInfo GetAction(ActionStepText message)
         {
-			return FindMatchingAction(message);
+            return FindMatchingAction(message);
         }
 
         public string BuildMessage(string message, object[] parameters)
         {
-            string resultString = message;
-            string[] tokens = GetTokensInMessage(message);
+            var resultString = message;
+            var tokens = GetTokensInMessage(message);
             if (tokens.Length > 0 && tokens.Length != parameters.Length)
-                throw new ArgumentException(string.Format("message has {0} tokens and there are {1} parameters", tokens.Length,
-                                                          parameters.Length));
-            for (int i = 0; i < tokens.Length; i++)
+            {
+                throw new ArgumentException(
+                    string.Format(
+                        "message has {0} tokens and there are {1} parameters", tokens.Length, parameters.Length));
+            }
+
+            for (var i = 0; i < tokens.Length; i++)
             {
                 resultString = resultString.Replace(tokens[i], parameters[i].ToString());
             }
@@ -53,14 +56,14 @@ namespace NBehave.Narrator.Framework
             return resultString;
         }
 
-		private ActionMethodInfo FindMatchingAction(ActionStepText actionStepText)
+        private ActionMethodInfo FindMatchingAction(ActionStepText actionStepText)
         {
-            string message = actionStepText.Step;
+            var message = actionStepText.Step;
             ActionMethodInfo matchedAction = null;
-            int lengthOfMatch = -1;
-            foreach (ActionMethodInfo action in _actions)
+            var lengthOfMatch = -1;
+            foreach (var action in _actions)
             {
-                Regex regex = action.ActionStepMatcher;
+                var regex = action.ActionStepMatcher;
                 var match = regex.Match(message);
                 if (match.Success)
                 {
@@ -72,6 +75,7 @@ namespace NBehave.Narrator.Framework
                     }
                 }
             }
+
             return matchedAction;
         }
 
@@ -89,12 +93,8 @@ namespace NBehave.Narrator.Framework
             {
                 tokens.Add(match.ToString());
             }
-            return tokens.ToArray();
-        }
 
-        private Regex GetRegexForActionKey(string actionKey)
-        {
-            return actionKey.AsRegex();
+            return tokens.ToArray();
         }
     }
 }

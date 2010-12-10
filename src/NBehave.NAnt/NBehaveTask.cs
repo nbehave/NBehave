@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using NAnt.Core;
@@ -6,11 +5,12 @@ using NAnt.Core.Attributes;
 using NAnt.Core.Types;
 using NBehave.Narrator.Framework;
 using NBehave.Narrator.Framework.EventListeners;
-using NBehave.Narrator.Framework.Text;
 using NAntCore = NAnt.Core;
 
 namespace NBehave.NAnt
 {
+    using System.Linq;
+
     [TaskName("nbehave")]
     public class NBehaveTask : Task
     {
@@ -47,35 +47,25 @@ namespace NBehave.NAnt
 
             WriteHeaderInto(output);
 
-            IEventListener listener = EventListeners.CreateEventListenerUsing(nantLogWriter,
+            var listener = EventListeners.CreateEventListenerUsing(nantLogWriter,
                                                                               TextOutputFile,
                                                                               XmlOutputFile);
 
-            var runner = RunnerFactory.CreateTextRunner(GetFileNames(ScenarioFiles), listener);
-            runner.IsDryRun = DryRun;
-            runner.Load(GetFileNames(ScenarioFiles));
-            LoadAssemblies(runner);
-            FeatureResults results = runner.Run();
+            var runner = NBehaveConfiguration
+                .New
+                .SetDryRun(DryRun)
+                .SetScenarioFiles(ScenarioFiles.FileNames.Cast<string>())
+                .SetAssemblies(TestAssemblies.FileNames.Cast<string>())
+                .SetEventListener(listener)
+                .Build();
+
+            var results = runner.Run();
 
             if (DryRun)
                 return;
 
             if (FailBuild)
                 FailBuildBasedOn(results);
-        }
-
-        private void LoadAssemblies(IRunner runner)
-        {
-            foreach (string path in TestAssemblies.FileNames)
-                runner.LoadAssembly(path);
-        }
-
-        private IEnumerable<string> GetFileNames(FileSet files)
-        {
-            foreach (var fileName in files.FileNames)
-            {
-                yield return fileName;
-            }
         }
 
         private void WriteHeaderInto(PlainTextOutput output)
@@ -91,7 +81,7 @@ namespace NBehave.NAnt
             if (results.NumberOfFailingScenarios == 0) return;
 
             var exceptionMessage = new StringBuilder();
-            foreach (ScenarioResult result in results.ScenarioResults)
+            foreach (var result in results.ScenarioResults)
             {
                 exceptionMessage.AppendLine(result.Message);
                 exceptionMessage.AppendLine(result.StackTrace);
