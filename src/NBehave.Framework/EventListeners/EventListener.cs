@@ -48,14 +48,14 @@ namespace NBehave.Narrator.Framework
 
         public virtual void Initialise(ITinyMessengerHub hub)
         {
-            hub.Subscribe<FeatureCreated>(created => this.FeatureCreated(created.Content));
-            hub.Subscribe<FeatureNarrative>(narrative => this.FeatureNarrative(narrative.Content));
-            hub.Subscribe<ScenarioCreated>(created => this.ScenarioCreated(created.Content.Title));
-            hub.Subscribe<RunStarted>(started => this.RunStarted());
-            hub.Subscribe<RunFinished>(finished => this.RunFinished());
-            hub.Subscribe<ThemeStarted>(themeStarted => this.ThemeStarted(themeStarted.Content));
-            hub.Subscribe<ThemeFinished>(themeFinished => this.ThemeFinished());
-            hub.Subscribe<ScenarioResultMessage>(message => this.ScenarioResult(message.Content));
+            hub.Subscribe<FeatureCreatedEvent>(created => this.FeatureCreated(created.Content));
+            hub.Subscribe<FeatureNarrativeEvent>(narrative => this.FeatureNarrative(narrative.Content));
+            hub.Subscribe<ScenarioCreatedEvent>(created => this.ScenarioCreated(created.Content.Title));
+            hub.Subscribe<RunStartedEvent>(started => this.RunStarted());
+            hub.Subscribe<RunFinishedEvent>(finished => this.RunFinished());
+            hub.Subscribe<ThemeStartedEvent>(themeStarted => this.ThemeStarted(themeStarted.Content));
+            hub.Subscribe<ThemeFinishedEvent>(themeFinished => this.ThemeFinished());
+            hub.Subscribe<ScenarioResultEvent>(message => this.ScenarioResult(message.Content));
         }
     }
 }

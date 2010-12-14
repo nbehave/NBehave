@@ -5,12 +5,23 @@ using NUnit.Framework;
 
 namespace NBehave.Narrator.Framework.Specifications.Text
 {
+    using NBehave.Narrator.Framework.Processors;
+    using NBehave.Narrator.Framework.Tiny;
+
+    using TinyIoC;
+
     [TestFixture]
     public abstract class ScenarioParserSpec
     {
         private GherkinScenarioParser CreateScenarioParser()
         {
-            return new GherkinScenarioParser();
+            TinyIoCContainer container = TinyIoCContainer.Current;
+            container.Register<ITinyMessengerHub, TinyMessengerHub>().AsSingleton();
+            container.RegisterMany<IModelBuilder>().AsSingleton();
+            this._hub = container.Resolve<ITinyMessengerHub>();
+            this._scenarios = new List<Scenario>();
+
+            return new GherkinScenarioParser(this._hub);
         }
 
         private StringStep NewStringStep(string step)
@@ -18,14 +29,15 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             return new StringStep(step, "filename");
         }
 
-        private IEnumerable<ScenarioWithSteps> _scenarios;
-        private IEnumerable<Feature> _feature;
+        private List<Scenario> _scenarios;
+
+        private ITinyMessengerHub _hub;
 
         protected void Parse(string scenario)
         {
             var parser = CreateScenarioParser();
-            _feature = parser.Parse(scenario.ToStream());
-            _scenarios = _feature.SelectMany(feature => feature.Scenarios);
+            this._hub.Subscribe<ScenarioBuilt>(built => this._scenarios.Add(built.Content));
+            parser.Parse(scenario);
         }
 
         [TestFixture]

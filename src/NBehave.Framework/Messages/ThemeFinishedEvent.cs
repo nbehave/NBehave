@@ -2,9 +2,9 @@
 {
     using NBehave.Narrator.Framework.Tiny;
 
-    public class ThemeFinished : TinyMessageBase
+    public class ThemeFinishedEvent : TinyMessageBase
     {
-        public ThemeFinished(object sender)
+        public ThemeFinishedEvent(object sender)
             : base(sender)
         {
         }

@@ -2,9 +2,9 @@
 {
     using NBehave.Narrator.Framework.Tiny;
 
-    public class ThemeStarted : GenericTinyMessage<string>
+    public class FeatureNarrativeEvent : GenericTinyMessage<string>
     {
-        public ThemeStarted(object sender, string content)
+        public FeatureNarrativeEvent(object sender, string content)
             : base(sender, content)
         {
         }

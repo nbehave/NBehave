@@ -1,9 +1,9 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ScenarioWithSteps.cs" company="NBehave">
+// <copyright file="Scenario.cs" company="NBehave">
 //   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
 // </copyright>
 // <summary>
-//   Defines the ScenarioWithSteps type.
+//   Defines the Scenario type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -12,17 +12,21 @@ namespace NBehave.Narrator.Framework
     using System.Collections.Generic;
     using System.Linq;
 
-    public class ScenarioWithSteps
+    public class Scenario
     {
         private readonly List<StringStep> _steps;
         private readonly List<Example> _examples;
 
         private string _source;
 
-        public ScenarioWithSteps()
+        public Scenario() : this(string.Empty)
+        {
+        }
+
+        public Scenario(string title)
         {
             Feature = new Feature();
-            Title = string.Empty;
+            Title = title;
             _steps = new List<StringStep>();
             _examples = new List<Example>();
         }
@@ -75,11 +79,6 @@ namespace NBehave.Narrator.Framework
         public void AddExamples(List<Example> examples)
         {
             _examples.AddRange(examples);
-        }
-
-        public void RemoveLastStep()
-        {
-            _steps.Remove(_steps.Last());
         }
     }
 }

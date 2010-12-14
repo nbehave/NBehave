@@ -13,11 +13,11 @@
             _hub = hub;
             this._featureResults = new FeatureResults(this);
 
-            _hub.Subscribe<ScenarioResultMessage>(this.OnScenarioResultRecieved);
-            _hub.Subscribe<ThemeFinished>(finished => OnThemeFinished());
+            _hub.Subscribe<ScenarioResultEvent>(this.OnScenarioResultRecieved);
+            _hub.Subscribe<ThemeFinishedEvent>(finished => OnThemeFinished());
         }
 
-        private void OnScenarioResultRecieved(ScenarioResultMessage message)
+        private void OnScenarioResultRecieved(ScenarioResultEvent message)
         {
             _featureResults.AddResult(message.Content);
         }

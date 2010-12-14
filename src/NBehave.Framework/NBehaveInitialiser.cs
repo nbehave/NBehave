@@ -1,8 +1,11 @@
 ﻿namespace NBehave.Narrator.Framework
 {
-    using System.Linq;
+    using System.Collections.Generic;
+
     using NBehave.Narrator.Framework.Processors;
     using NBehave.Narrator.Framework.Tiny;
+
+    using TinyIoC;
 
     public static class NBehaveInitialiser
     {
@@ -13,20 +16,12 @@
             container.Register<IStringStepRunner, StringStepRunner>().AsMultiInstance();
             container.Register<ITinyMessengerHub, TinyMessengerHub>().AsSingleton();
 
-            (from type in typeof(NBehaveInitialiser).Assembly.GetTypes()
-             where type.GetInterfaces().Contains(typeof(IMessageProcessor))
-             select container.Register(type).AsSingleton()).ToList();
-            
+            container.RegisterMany<IMessageProcessor>().AsSingleton();
+            container.RegisterMany<IModelBuilder>().AsSingleton();
+
             configuration.EventListener.Initialise(container.Resolve<ITinyMessengerHub>());
 
-            Compose<IMessageProcessor>(container);
-        }
-
-        private static void Compose<T>(TinyIoCContainer container)
-        {
-            (from type in typeof(NBehaveInitialiser).Assembly.GetTypes()
-             where type.GetInterfaces().Contains(typeof(T))
-             select container.Resolve(type)).ToList().Cast<T>();
+            container.Resolve<IEnumerable<IMessageProcessor>>();
         }
     }
 }

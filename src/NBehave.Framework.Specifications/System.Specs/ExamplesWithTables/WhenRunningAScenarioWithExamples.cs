@@ -4,8 +4,8 @@
 
     using NUnit.Framework;
 
-    [TestFixture, Ignore]
-    public class WhenRunningAScenarioWithScenarioOutlinesAndTables : SystemTestContext
+    [TestFixture]
+    public class WhenRunningAScenarioWithExamplesAndTables : SystemTestContext
     {
         private NBehaveConfiguration _config;
         private FeatureResults _results;
@@ -16,7 +16,7 @@
                 .New
                 .SetAssemblies(new[] { "NBehave.Narrator.Framework.Specifications.dll" })
                 .SetEventListener(EventListeners.NullEventListener())
-                .SetScenarioFiles(new[] { @"System.Specs\ScenarioOutlinesWithTables\ScenarioOutlinesWithTables.feature" });
+                .SetScenarioFiles(new[] { @"System.Specs\ExamplesWithTables\ExamplesWithTables.feature" });
         }
 
         protected override void Because()
@@ -32,7 +32,7 @@
     }
 
     [ActionSteps]
-    public class ScenarioOutlineWithTableSteps
+    public class ExamplesWithTableSteps
     {
         [Given("this scenario containing scenario outline and a table:")]
         public void Given(int left, int right){}

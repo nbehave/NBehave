@@ -12,6 +12,8 @@ namespace NBehave.Narrator.Framework
     using NBehave.Narrator.Framework.Messages;
     using NBehave.Narrator.Framework.Tiny;
 
+    using TinyIoC;
+
     public class TextRunner
     {
         private readonly NBehaveConfiguration _configuration;
@@ -33,11 +35,11 @@ namespace NBehave.Narrator.Framework
             
             try
             {
-                this._hub.Publish(new RunStarted(this));
+                this._hub.Publish(new RunStartedEvent(this));
             }
             finally
             {
-                this._hub.Publish(new RunFinished(this));
+                this._hub.Publish(new RunFinishedEvent(this));
             }
 
             container.Dispose();

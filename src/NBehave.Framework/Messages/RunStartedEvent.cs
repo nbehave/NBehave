@@ -4,9 +4,9 @@ namespace NBehave.Narrator.Framework.Messages
 {
     using NBehave.Narrator.Framework.Tiny;
 
-    public class RunStarted : TinyMessageBase
+    public class RunStartedEvent : TinyMessageBase
     {
-        public RunStarted(object sender)
+        public RunStartedEvent(object sender)
             : base(sender)
         {
         }

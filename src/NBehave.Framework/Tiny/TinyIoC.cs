@@ -16,7 +16,7 @@
 #region Preprocessor Directives
 // Uncomment this line if you want the container to automatically
 // register the TinyMessenger messenger/event aggregator
-// #define TINYMESSENGER
+//#define TINYMESSENGER
 
 // Preprocessor directives for enabling/disabling functionality
 // depending on platform features. If the platform has an appropriate
@@ -28,7 +28,7 @@
 // CompactFramework
 // By default does not support System.Linq.Expressions.
 // AppDomain object does not support enumerating all assemblies in the app domain.
-#if PocketPC
+#if PocketPC || WINDOWS_PHONE
 #undef EXPRESSIONS
 #undef APPDOMAIN_GETASSEMBLIES
 #undef UNBOUND_GENERICS_GETCONSTRUCTORS
@@ -39,17 +39,19 @@
 #endif
 #endregion
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Reflection;
+using System.Diagnostics;
 #if EXPRESSIONS
-
+using System.Linq.Expressions;
 #endif
 
-namespace NBehave.Narrator.Framework.Tiny
+namespace TinyIoC
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Reflection;
-    using System.Linq.Expressions;
+    using System.Collections.ObjectModel;
 
     #region SafeDictionary
     public class SafeDictionary<TKey, TValue> : IDisposable
@@ -458,7 +460,7 @@ namespace NBehave.Narrator.Framework.Tiny
         public void AutoRegister()
         {
 #if APPDOMAIN_GETASSEMBLIES
-            AutoRegisterInternal(AppDomain.CurrentDomain.GetAssemblies(), true);
+            AutoRegisterInternal(AppDomain.CurrentDomain.GetAssemblies().Where(a => !IsIgnoredAssembly(a)), true);
 #else
             AutoRegisterInternal(new Assembly[] {this.GetType().Assembly}, true);
 #endif
@@ -472,7 +474,7 @@ namespace NBehave.Narrator.Framework.Tiny
         public void AutoRegister(bool ignoreDuplicateImplementations)
         {
 #if APPDOMAIN_GETASSEMBLIES
-            AutoRegisterInternal(AppDomain.CurrentDomain.GetAssemblies(), ignoreDuplicateImplementations);
+            AutoRegisterInternal(AppDomain.CurrentDomain.GetAssemblies().Where(a => !IsIgnoredAssembly(a)), ignoreDuplicateImplementations);
 #else
             AutoRegisterInternal(new Assembly[] { this.GetType().Assembly }, ignoreDuplicateImplementations);
 #endif
@@ -522,19 +524,6 @@ namespace NBehave.Narrator.Framework.Tiny
         public void AutoRegister(IEnumerable<Assembly> assemblies, bool ignoreDuplicateImplementations)
         {
             AutoRegisterInternal(assemblies, ignoreDuplicateImplementations);
-        }
-
-        public RegisterOptions Register(Type type)
-        {
-            MethodInfo[] methodInfos = this.GetType()
-                .GetMethods(BindingFlags.Instance | BindingFlags.NonPublic);
-            var defaultObjectFactoryMethod =
-                methodInfos
-                    .Where(info => info.Name.StartsWith("GetDefaultObjectFactory"))
-                    .First()
-                    .MakeGenericMethod(type, type);
-
-            return RegisterInternal(type, type, string.Empty, (ObjectFactoryBase)defaultObjectFactoryMethod.Invoke(this, null));
         }
 
         /// <summary>
@@ -666,19 +655,20 @@ namespace NBehave.Narrator.Framework.Tiny
             return RegisterInternal(typeof(RegisterType), typeof(RegisterType), name, new DelegateFactory<RegisterType>(factory));
         }
 
+        /// <summary>
+        /// Creates/replaces a composable interface that has multiple implementations which are discovered at runtime
+        /// </summary>
+        /// <typeparam name="RegisterType">The composable interface that has multiple implementations</typeparam>
+        /// <returns>RegisterOptions for fluent API</returns>
+        public RegisterOptions RegisterMany<RegisterType>()
+            where RegisterType : class
+        {
+            return RegisterManyInternal(typeof(RegisterType), new CompositionFactoryWrapper<RegisterType>(typeof(MultiInstanceFactory<,>)));
+        }
+
         #endregion
 
         #region Resolution
-        /// <summary>
-        /// Attempts to resolve a type using default options.
-        /// </summary>
-        /// <param name="type">Type to resolve</param>
-        /// <returns>Instance of type</returns>
-        /// <exception cref="TinyIoCResolutionException">Unable to resolve the type.</exception>
-        public object Resolve(Type type)
-        {
-            return ResolveInternal(new TypeRegistration(type), NamedParameterOverloads.Default, ResolveOptions.Default);
-        }
 
         /// <summary>
         /// Attempts to resolve a type using default options.
@@ -689,7 +679,7 @@ namespace NBehave.Narrator.Framework.Tiny
         public ResolveType Resolve<ResolveType>()
             where ResolveType : class
         {
-            return ResolveInternal(new TypeRegistration(typeof(ResolveType)), NamedParameterOverloads.Default, ResolveOptions.Default) as ResolveType;
+            return this.ResolveInternal(new TypeRegistration(typeof(ResolveType)), NamedParameterOverloads.Default, ResolveOptions.Default) as ResolveType;
         }
 
         /// <summary>
@@ -1587,6 +1577,111 @@ namespace NBehave.Narrator.Framework.Tiny
                 }
             }
         }
+
+        /// <summary>
+        /// A factory that constructs enumerations of implementations for a given interfact.
+        /// </summary>
+        /// <typeparam name="RegisterType">The composable interface that has multiple implementations.</typeparam>
+        private class CompositionFactoryWrapper<RegisterType> : ObjectFactoryBase, IDisposable
+        {
+            private readonly ICollection<ObjectFactoryBase> _factories;
+            private readonly IEnumerable<Type> implementations;
+            private Type _factoryType;
+
+            public CompositionFactoryWrapper(Type factoryType)
+            {
+                this._factoryType = factoryType;
+
+                this._factories = new List<ObjectFactoryBase>();
+
+#if APPDOMAIN_GETASSEMBLIES
+                var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+#else
+                var assemblies = new Assembly[] { this.GetType().Assembly };
+#endif
+
+                var allTypes = assemblies.SelectMany(assembly => assembly.GetTypes());
+
+                implementations =
+                    (from type in allTypes
+                     where type.GetInterfaces().Contains(typeof(RegisterType))
+                        && type.IsClass
+                        && (!type.IsAbstract)
+                        && (!type.IsGenericTypeDefinition)
+                     select type);
+
+                foreach (var implementation in implementations)
+                {
+                    var factoryTypeForImplementatio = factoryType.MakeGenericType(typeof(RegisterType), implementation);
+                    _factories.Add((ObjectFactoryBase)Activator.CreateInstance(factoryTypeForImplementatio));
+                }
+            }
+
+            public override bool AssumeConstruction
+            {
+                get
+                {
+                    return true;
+                }
+            }
+
+            public override Type CreatesType
+            {
+                get
+                {
+                    return typeof(IEnumerable<>).MakeGenericType(typeof(RegisterType));
+                }
+            }
+
+            public override object GetObject(TinyIoCContainer container, NamedParameterOverloads parameters, ResolveOptions options)
+            {
+                var objects = new List<RegisterType>();
+
+                foreach (var factory in _factories)
+                {
+                    objects.Add((RegisterType)factory.GetObject(container, parameters, options));
+                }
+
+                return new ReadOnlyCollection<RegisterType>(objects);
+            }
+
+            public void Dispose()
+            {
+                foreach (var factory in _factories)
+                {
+                    if (factory is IDisposable)
+                    {
+                        ((IDisposable)factory).Dispose();
+                    }
+                }
+            }
+
+            public override ObjectFactoryBase MultiInstanceVariant
+            {
+                get
+                {
+                    if (this._factoryType != typeof(MultiInstanceFactory<,>))
+                    {
+                        return new CompositionFactoryWrapper<RegisterType>(typeof(MultiInstanceFactory<,>));
+                    }
+
+                    return this;
+                }
+            }
+
+            public override ObjectFactoryBase SingletonVariant
+            {
+                get
+                {
+                    if (this._factoryType != typeof(SingletonFactory<,>))
+                    {
+                        return new CompositionFactoryWrapper<RegisterType>(typeof(SingletonFactory<,>));
+                    }
+
+                    return this;
+                }
+            }
+        }
         #endregion
 
         #region Singleton Container
@@ -1724,21 +1819,48 @@ namespace NBehave.Narrator.Framework.Tiny
             }
         }
 
+        private bool IsIgnoredAssembly(Assembly assembly)
+        {
+            // TODO - find a better way to remove "system" assemblies from the auto registration
+            var ignoreChecks = new List<Func<Assembly, bool>>()
+            {
+                asm => asm.FullName.StartsWith("Microsoft.", StringComparison.InvariantCulture),
+                asm => asm.FullName.StartsWith("System.", StringComparison.InvariantCulture),
+                asm => asm.FullName.StartsWith("System,", StringComparison.InvariantCulture),
+                asm => asm.FullName.StartsWith("CR_ExtUnitTest", StringComparison.InvariantCulture),
+                asm => asm.FullName.StartsWith("mscorlib,", StringComparison.InvariantCulture),
+                asm => asm.FullName.StartsWith("CR_VSTest", StringComparison.InvariantCulture),
+                asm => asm.FullName.StartsWith("DevExpress.CodeRush", StringComparison.InvariantCulture),
+            };
+
+            foreach (var check in ignoreChecks)
+            {
+                if (check(assembly))
+                    return true;
+            }
+
+            return false;
+        }
+
         private bool IsIgnoredType(Type type)
         {
             // TODO - find a better way to remove "system" types from the auto registration
-            if (type.FullName.StartsWith("System.") || type.FullName.StartsWith("Microsoft."))
-                return true;
-
-            if (type.IsPrimitive)
-                return true;
-
+            var ignoreChecks = new List<Func<Type, bool>>()
+            {
+                t => t.FullName.StartsWith("System.", StringComparison.InvariantCulture),
+                t => t.FullName.StartsWith("Microsoft.", StringComparison.InvariantCulture),
+                t => t.IsPrimitive,
 #if !UNBOUND_GENERICS_GETCONSTRUCTORS
-            if (type.IsGenericTypeDefinition)
-                return true;
+                t => t.IsGenericTypeDefinition,
 #endif
-            if ((type.GetConstructors(BindingFlags.Instance | BindingFlags.Public).Length == 0) && !(type.IsInterface || type.IsAbstract))
-                return true;
+                t => (t.GetConstructors(BindingFlags.Instance | BindingFlags.Public).Length == 0) && !(t.IsInterface || t.IsAbstract),
+            };
+
+            foreach (var check in ignoreChecks)
+            {
+                if (check(type))
+                    return true;
+            }
 
             return false;
         }
@@ -1750,7 +1872,7 @@ namespace NBehave.Narrator.Framework.Tiny
 #if TINYMESSENGER
             // Only register the TinyMessenger singleton if we are the root container
             if (this._Parent == null)
-                this.Register<ITinyMessengerHub, TinyMessengerHub>();
+                this.Register<TinyMessenger.ITinyMessengerHub, TinyMessenger.TinyMessengerHub>();
 #endif
         }
 
@@ -1769,6 +1891,16 @@ namespace NBehave.Narrator.Framework.Tiny
 
             return AddUpdateRegistration(typeRegistration, factory);
         }
+
+        private RegisterOptions RegisterManyInternal(Type registerType, ObjectFactoryBase factory)
+        {
+            var compositeType = typeof(IEnumerable<>).MakeGenericType(registerType);
+
+            var typeRegistration = new TypeRegistration(compositeType);
+
+            return this.AddUpdateRegistration(typeRegistration, factory);
+        }
+
 
         private RegisterOptions AddUpdateRegistration(TypeRegistration typeRegistration, ObjectFactoryBase factory)
         {
@@ -2019,7 +2151,7 @@ namespace NBehave.Narrator.Framework.Tiny
             // method to do this.
             var resolveAllMethod = this.GetType().GetMethod("ResolveAll", BindingFlags.Public | BindingFlags.Instance);
             var genericResolveAllMethod = resolveAllMethod.MakeGenericMethod(type.GetGenericArguments()[0]);
-            return genericResolveAllMethod.Invoke(this, new object[] {});
+            return genericResolveAllMethod.Invoke(this, new object[] { });
         }
 
         private bool CanConstruct(ConstructorInfo ctor, NamedParameterOverloads parameters, ResolveOptions options)

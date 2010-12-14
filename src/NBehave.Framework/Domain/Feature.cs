@@ -21,7 +21,7 @@ namespace NBehave.Narrator.Framework
 
         public Feature(string title)
         {
-            this.Scenarios = new List<ScenarioWithSteps>();
+            this.Scenarios = new List<Scenario>();
             ExtractTitleAndNarrative(title);
         }
 
@@ -29,7 +29,7 @@ namespace NBehave.Narrator.Framework
 
         public string Narrative { get; set; }
 
-        public List<ScenarioWithSteps> Scenarios { get; private set; }
+        public List<Scenario> Scenarios { get; private set; }
 
         public bool HasTitle
         {
@@ -39,8 +39,9 @@ namespace NBehave.Narrator.Framework
             }
         }
 
-        public void AddScenario(ScenarioWithSteps scenario)
+        public void AddScenario(Scenario scenario)
         {
+            scenario.Feature = this;
             this.Scenarios.Add(scenario);
         }
 

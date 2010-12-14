@@ -10,6 +10,8 @@ namespace NBehave.Narrator.Framework.Specifications
     using NBehave.Narrator.Framework.Processors;
     using NBehave.Narrator.Framework.Tiny;
 
+    using TinyIoC;
+
     [TestFixture]
     public class ScenarioStepRunnerSpec
     {
@@ -17,9 +19,9 @@ namespace NBehave.Narrator.Framework.Specifications
         private ActionCatalog _actionCatalog;
         private StringStepRunner _stringStepRunner;
 
-        private ScenarioWithSteps CreateScenarioWithSteps()
+        private Scenario CreateScenarioWithSteps()
         {
-            return new ScenarioWithSteps();
+            return new Scenario();
         }
 
         public class WhenRunningAScenario : ScenarioStepRunnerSpec
@@ -118,7 +120,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 secondScenario.AddStep("Given something to count");
                 secondScenario.AddStep("Given something to count");
 
-                _runner.Run(new List<ScenarioWithSteps> { firstScenario, secondScenario });
+                _runner.Run(new List<Scenario> { firstScenario, secondScenario });
             }
 
             [Test]

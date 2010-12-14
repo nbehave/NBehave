@@ -2,9 +2,9 @@
 {
     using NBehave.Narrator.Framework.Tiny;
 
-    public class RunFinished : TinyMessageBase
+    public class ExitingExamples : TinyMessageBase
     {
-        public RunFinished(object sender)
+        public ExitingExamples(object sender)
             : base(sender)
         {
         }

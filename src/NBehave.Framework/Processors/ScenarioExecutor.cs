@@ -41,43 +41,38 @@ namespace NBehave.Narrator.Framework.Processors
         {
             if (_features == null || !_actionStepsLoaded) return;
 
-            _hub.Publish(new ThemeStarted(this, string.Empty));
+            _hub.Publish(new ThemeStartedEvent(this, string.Empty));
 
             
             foreach (var feature in _features)
             {
-                _hub.Publish(new FeatureCreated(this, feature.Title));
-                _hub.Publish(new FeatureNarrative(this, feature.Narrative));
+                _hub.Publish(new FeatureCreatedEvent(this, feature.Title));
+                _hub.Publish(new FeatureNarrativeEvent(this, feature.Narrative));
 
                 Run(feature.Scenarios);
             }
 
-            _hub.Publish(new ThemeFinished(this));
+            _hub.Publish(new ThemeFinishedEvent(this));
 
         }
 
-        public void Run(IEnumerable<ScenarioWithSteps> scenarios)
+        public void Run(IEnumerable<Scenario> scenarios)
         {
             foreach (var scenario in scenarios)
             {
-                this.Run(scenario);
+                this._hub.Publish(new ScenarioCreatedEvent(this, scenario));
+                if (scenario.Examples.Any())
+                {
+                    this.RunExamples(scenario);
+                }
+                else
+                {
+                    this.RunScenario(scenario);
+                }
             }
         }
 
-        public void Run(ScenarioWithSteps scenario)
-        {
-            this._hub.Publish(new ScenarioCreated(this, scenario));
-            if (scenario.Examples.Any())
-            {
-                RunExamples(scenario);
-            }
-            else
-            {
-                RunScenario(scenario);
-            }
-        }
-
-        private void RunScenario(ScenarioWithSteps scenario)
+        private void RunScenario(Scenario scenario)
         {
             var scenarioResult = new ScenarioResult(scenario.Feature, scenario.Title);
             _stringStepRunner.BeforeScenario();
@@ -100,10 +95,10 @@ namespace NBehave.Narrator.Framework.Processors
                 _stringStepRunner.AfterScenario();
             }
 
-            this._hub.Publish(new ScenarioResultMessage(this, scenarioResult));
+            this._hub.Publish(new ScenarioResultEvent(this, scenarioResult));
         }
 
-        private void RunExamples(ScenarioWithSteps scenario)
+        private void RunExamples(Scenario scenario)
         {
             var exampleResults = new ScenarioExampleResult(scenario.Feature, scenario.Title, scenario.Steps, scenario.Examples);
 
@@ -135,32 +130,7 @@ namespace NBehave.Narrator.Framework.Processors
                 exampleResults.AddResult(scenarioResult);
             }
 
-            this._hub.Publish(new ScenarioResultMessage(this, exampleResults));
-        }
-
-        private void InsertColumnValues(IEnumerable<StringStep> steps, Row example)
-        {
-            foreach (var step in steps)
-            {
-                foreach (var columnName in example.ColumnNames)
-                {
-                    var columnValue = example.ColumnValues[columnName].Trim();
-                    var replace = new Regex(string.Format(@"(\${0})|(\[{0}\])", columnName), RegexOptions.IgnoreCase);
-                    step.Step = replace.Replace(step.Step, columnValue);
-                }
-            }
-        }
-
-        private IEnumerable<StringStep> CloneSteps(ScenarioWithSteps scenario)
-        {
-            var clones = new List<StringStep>();
-            foreach (var step in scenario.Steps)
-            {
-                var s = new StringStep(step.Step, step.Source);
-                clones.Add(s);
-            }
-
-            return clones;
+            this._hub.Publish(new ScenarioResultEvent(this, exampleResults));
         }
 
         public void RunStringTableStep(StringTableStep stringStep)
@@ -180,6 +150,31 @@ namespace NBehave.Narrator.Framework.Processors
             }
 
             stringStep.StepResult = actionStepResult;
+        }
+
+        private void InsertColumnValues(IEnumerable<StringStep> steps, Row example)
+        {
+            foreach (var step in steps)
+            {
+                foreach (var columnName in example.ColumnNames)
+                {
+                    var columnValue = example.ColumnValues[columnName].Trim();
+                    var replace = new Regex(string.Format(@"(\${0})|(\[{0}\])", columnName), RegexOptions.IgnoreCase);
+                    step.Step = replace.Replace(step.Step, columnValue);
+                }
+            }
+        }
+
+        private IEnumerable<StringStep> CloneSteps(Scenario scenario)
+        {
+            var clones = new List<StringStep>();
+            foreach (var step in scenario.Steps)
+            {
+                var s = new StringStep(step.Step, step.Source);
+                clones.Add(s);
+            }
+
+            return clones;
         }
 
         private ActionStepResult GetNewActionStepResult(StringTableStep stringStep)

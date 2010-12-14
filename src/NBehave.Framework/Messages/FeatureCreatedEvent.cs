@@ -2,9 +2,9 @@
 {
     using NBehave.Narrator.Framework.Tiny;
 
-    public class ScenarioCreated : GenericTinyMessage<ScenarioWithSteps>
+    public class FeatureCreatedEvent : GenericTinyMessage<string>
     {
-        public ScenarioCreated(object sender, ScenarioWithSteps content)
+        public FeatureCreatedEvent(object sender, string content) 
             : base(sender, content)
         {
         }

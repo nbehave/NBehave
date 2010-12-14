@@ -19,7 +19,7 @@
             this._configuration = configuration;
             this._hub = hub;
 
-            this._hub.Subscribe<RunStarted>(started => this.Initialise());
+            this._hub.Subscribe<RunStartedEvent>(started => this.Initialise());
         }
 
         public void Initialise()

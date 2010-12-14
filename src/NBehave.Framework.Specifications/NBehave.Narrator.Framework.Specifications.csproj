@@ -18,7 +18,7 @@
     </SccAuxPath>
     <SccProvider>
     </SccProvider>
-    <SignAssembly>false</SignAssembly>
+    <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\NBehave.snk</AssemblyOriginatorKeyFile>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -142,7 +142,6 @@
     <Compile Include="IgnoreSpaceAndUnderScoreMatcherSpec.cs" />
     <Compile Include="RowSpec.cs" />
     <Compile Include="ScenarioParserSpec.cs" />
-    <Compile Include="StringExtension.cs" />
     <Compile Include="StringStepSpec.cs" />
   </ItemGroup>
   <ItemGroup>

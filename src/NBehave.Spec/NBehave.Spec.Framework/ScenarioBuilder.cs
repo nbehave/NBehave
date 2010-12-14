@@ -15,18 +15,18 @@ namespace NBehave.Spec
     {
         private object _stepHelper;
         private ScenarioDrivenSpecStepRunner _stepRunner;
-        private ScenarioWithSteps _scenario;
+        private Scenario _scenario;
         private readonly string _scenarioTitle;
 
         protected Feature Feature { get; private set; }
 
-        protected ScenarioWithSteps Scenario
+        protected Scenario Scenario
         {
             get
             {
                 if(_scenario == null)
                 {
-                    _scenario = new ScenarioWithSteps() { Title = _scenarioTitle };
+                    _scenario = new Scenario(_scenarioTitle);
                     Feature.AddScenario(Scenario);
                 }
                 return _scenario;

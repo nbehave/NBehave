@@ -8,9 +8,12 @@ namespace NBehave.Narrator.Framework.Specifications
 
     using NBehave.Narrator.Framework.Contracts;
     using NBehave.Narrator.Framework.Messages;
+    using NBehave.Narrator.Framework.Processors;
     using NBehave.Narrator.Framework.Tiny;
 
     using Rhino.Mocks;
+
+    using TinyIoC;
 
     [TestFixture]
     public class LoadAndParseScenarioFilesSpec
@@ -23,6 +26,9 @@ namespace NBehave.Narrator.Framework.Specifications
 
         private void CreateLoaderAndParser()
         {
+            TinyIoCContainer.Current.Register<ITinyMessengerHub, TinyMessengerHub>();
+            TinyIoCContainer.Current.RegisterMany<IModelBuilder>();
+
             this._hub = TinyIoCContainer.Current.Resolve<ITinyMessengerHub>();
             this._loadScenarioFiles = new LoadScenarioFiles(this._config, this._hub);
             this._parseScenarioFiles = new ParseScenarioFiles(this._hub);
