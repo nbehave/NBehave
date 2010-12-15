@@ -14,13 +14,11 @@ namespace NBehave.Narrator.Framework
     using System.IO;
     using Gherkin;
 
-    using NBehave.Narrator.Framework.Processors;
     using NBehave.Narrator.Framework.Tiny;
 
     public class GherkinScenarioParser : IListener
     {
         private readonly ITinyMessengerHub _hub;
-
         private readonly LanguageService _languageService;
 
         public GherkinScenarioParser(ITinyMessengerHub hub)
@@ -31,7 +29,7 @@ namespace NBehave.Narrator.Framework
 
         public void Parse(string file)
         {
-            _hub.Publish(new ParsingFile(this, file));
+            _hub.Publish(new ParsingFileStart(this, file));
 
             using (Stream stream = File.OpenRead(file))
             {
@@ -48,6 +46,8 @@ namespace NBehave.Narrator.Framework
                 var lexer = _languageService.GetLexer(scenarioText, this);
                 lexer.Scan(new StreamReader(ms));
             }
+
+            _hub.Publish(new ParsingFileEnd(this, file));
         }
 
         public void Feature(Token keyword, Token title)

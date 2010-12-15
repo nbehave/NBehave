@@ -111,7 +111,7 @@
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="ActionCatalog.cs" />
-    <Compile Include="Messages\ActionStepsLoaded.cs" />
+    <Compile Include="Processors\Messages\ActionStepsLoaded.cs" />
     <Compile Include="Processors\FeatureResultCollector.cs" />
     <Compile Include="Processors\ParseScenarioFiles.cs" />
     <Compile Include="Processors\LoadActionSteps.cs">
@@ -123,26 +123,26 @@
     <Compile Include="Configuration\NBehaveConfiguration.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Messages\ScenarioFilesLoaded.cs" />
+    <Compile Include="Processors\Messages\ScenarioFilesLoaded.cs" />
     <Compile Include="EventListeners\CodeGeneration\ActionStepCodeGenerator.cs" />
     <Compile Include="EventListeners\CodeGeneration\CodeGenEventListener.cs" />
     <Compile Include="EventListeners\ColorfulConsoleOutputEventListener.cs" />
     <Compile Include="Contracts\IMessengerHubAware.cs" />
-    <Compile Include="Messages\ScenarioCreatedEvent.cs" />
-    <Compile Include="Messages\FeatureNarrativeEvent.cs" />
-    <Compile Include="Messages\FeatureCreatedEvent.cs" />
-    <Compile Include="Messages\ThemeStartedEvent.cs" />
-    <Compile Include="Messages\RunFinishedEvent.cs" />
-    <Compile Include="Messages\ThemeFinishedEvent.cs" />
-    <Compile Include="Messages\ScenarioResultEvent.cs" />
+    <Compile Include="Processors\Messages\ScenarioCreatedEvent.cs" />
+    <Compile Include="Processors\Messages\FeatureNarrativeEvent.cs" />
+    <Compile Include="Processors\Messages\FeatureCreatedEvent.cs" />
+    <Compile Include="Processors\Messages\ThemeStartedEvent.cs" />
+    <Compile Include="Processors\Messages\RunFinishedEvent.cs" />
+    <Compile Include="Processors\Messages\ThemeFinishedEvent.cs" />
+    <Compile Include="Processors\Messages\ScenarioResultEvent.cs" />
     <Compile Include="EventListeners\Xml\EventReceived.cs" />
     <Compile Include="EventListeners\Xml\EventType.cs" />
     <Compile Include="EventListeners\Xml\StoryResultsEventReceived.cs" />
     <Compile Include="EventListeners\Xml\XmlOutputWriter.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Extensions\NBehaveConfigurationExtensions.cs" />
-    <Compile Include="Messages\RunStartedEvent.cs" />
-    <Compile Include="Messages\FeaturesLoaded.cs" />
+    <Compile Include="Processors\Messages\RunStartedEvent.cs" />
+    <Compile Include="Processors\Messages\FeaturesLoaded.cs" />
     <Compile Include="NBehaveInitialiser.cs" />
     <Compile Include="ParameterConverter.cs" />
     <Compile Include="Processors\IMessageProcessor.cs" />
@@ -184,8 +184,11 @@
     <Compile Include="Contracts\IMatchFiles.cs" />
     <Compile Include="Attributes\NotificationMethodAttribute.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="TextParsing\Messages\ParsingFileEnd.cs" />
+    <Compile Include="TextParsing\ModelBuilders\AbstracModelBuilder.cs" />
     <Compile Include="TextParsing\ModelBuilders\ExamplesBuilder.cs" />
     <Compile Include="TextParsing\ModelBuilders\FeatureBuilder.cs" />
+    <Compile Include="TextParsing\Messages\FeatureBuilt.cs" />
     <Compile Include="TextParsing\ModelBuilders\IModelBuilder.cs" />
     <Compile Include="TextParsing\Messages\ParsedBackground.cs" />
     <Compile Include="TextParsing\Messages\ParsedFeature.cs" />
@@ -195,10 +198,12 @@
     <Compile Include="TextParsing\Messages\ParsedTable.cs" />
     <Compile Include="TextParsing\ModelBuilders\InlineStepBuilder.cs" />
     <Compile Include="TextParsing\ModelBuilders\ScenarioBuilder.cs" />
+    <Compile Include="TextParsing\Messages\ScenarioBuilt.cs" />
+    <Compile Include="TextParsing\ModelBuilders\ScenarioMustHaveFeatureBuilder.cs" />
     <Compile Include="TextParsing\ModelBuilders\StepBuilder.cs" />
-    <Compile Include="TextParsing\Messages\ParsingFile.cs" />
+    <Compile Include="TextParsing\Messages\ParsingFileStart.cs" />
     <Compile Include="TextRunner.cs" />
-    <Compile Include="Messages\FeatureResults.cs" />
+    <Compile Include="Processors\Messages\FeatureResults.cs" />
     <Compile Include="StoryRunnerFilter.cs" />
     <Compile Include="Attributes\ThenAttribute.cs" />
     <Compile Include="Domain\Example.cs" />

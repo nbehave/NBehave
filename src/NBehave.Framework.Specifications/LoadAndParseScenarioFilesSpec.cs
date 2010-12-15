@@ -27,7 +27,8 @@ namespace NBehave.Narrator.Framework.Specifications
         private void CreateLoaderAndParser()
         {
             TinyIoCContainer.Current.Register<ITinyMessengerHub, TinyMessengerHub>();
-            TinyIoCContainer.Current.RegisterMany<IModelBuilder>();
+            TinyIoCContainer.Current.RegisterMany<IModelBuilder>().AsSingleton();
+            TinyIoCContainer.Current.Resolve<IEnumerable<IModelBuilder>>();
 
             this._hub = TinyIoCContainer.Current.Resolve<ITinyMessengerHub>();
             this._loadScenarioFiles = new LoadScenarioFiles(this._config, this._hub);

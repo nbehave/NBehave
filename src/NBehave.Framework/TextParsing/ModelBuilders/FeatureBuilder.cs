@@ -2,11 +2,12 @@
 {
     using NBehave.Narrator.Framework.Tiny;
 
-    public class FeatureBuilder : IModelBuilder
+    internal class FeatureBuilder : AbstracModelBuilder
     {
         private readonly ITinyMessengerHub _hub;
 
         public FeatureBuilder(ITinyMessengerHub hub)
+            : base(hub)
         {
             _hub = hub;
 

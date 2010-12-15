@@ -4,9 +4,9 @@
 
     using NBehave.Narrator.Framework.Tiny;
 
-    public class ParsingFile : GenericTinyMessage<string>
+    public class ParsingFileStart : GenericTinyMessage<string>
     {
-        public ParsingFile(object sender, string scenario)
+        public ParsingFileStart(object sender, string scenario)
             : base(sender, scenario)
         {
         }

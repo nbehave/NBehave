@@ -1,17 +1,19 @@
 ﻿namespace NBehave.Narrator.Framework.Processors
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
     using NBehave.Narrator.Framework.Tiny;
 
-    class InlineStepBuilder : IModelBuilder
+    class InlineStepBuilder : AbstracModelBuilder
     {
         private readonly ITinyMessengerHub _hub;
         private Scenario _scenario;
         private readonly Stack<ParsedStep> _lastStep = new Stack<ParsedStep>();
 
         public InlineStepBuilder(ITinyMessengerHub hub)
+            : base(hub)
         {
             _hub = hub;
 
@@ -49,6 +51,12 @@
 
                 stringTableStep.AddTableStep(new Row(exampleColumns, row));
             }
+        }
+
+        public override void Ending()
+        {
+            _scenario = null;
+            _lastStep.Clear();
         }
     }
 }

@@ -22,6 +22,7 @@
             configuration.EventListener.Initialise(container.Resolve<ITinyMessengerHub>());
 
             container.Resolve<IEnumerable<IMessageProcessor>>();
+            container.Resolve<IEnumerable<IModelBuilder>>();
         }
     }
 }
