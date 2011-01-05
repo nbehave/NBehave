@@ -27,7 +27,7 @@ namespace NBehave.Narrator.Framework.Specifications
         {
             _actionCatalog = new ActionCatalog();
             _stringStepRunner = new StringStepRunner(_actionCatalog); 
-            _runner = new ScenarioStepRunner(_stringStepRunner);
+            _runner = new ScenarioStepRunner();
         }
 
         public class When_running_a_scenario : ScenarioStepRunnerSpec

@@ -11,7 +11,8 @@ namespace NBehave.Narrator.Framework.Text
     {
         public static IRunner CreateTextRunner(IEnumerable<string> assemblyPaths, IEventListener listener)
         {
-            var assemblyWithConfigFile = assemblyPaths.Where(path => File.Exists(path + ".config"))
+            var assemblyWithConfigFile = assemblyPaths == null ? null :
+                                         assemblyPaths.Where(path => File.Exists(path + ".config"))
                                                       .Select(path => path + ".config")
                                                       .FirstOrDefault();
             if (assemblyWithConfigFile == null)

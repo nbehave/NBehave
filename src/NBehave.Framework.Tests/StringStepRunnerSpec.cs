@@ -112,7 +112,6 @@ namespace NBehave.Narrator.Framework.Specifications
                 Assert.That(_afterStepWasCalled);
                 Assert.That(!_afterScenarioWasCalled);
             }
-                _runner.AfterScenario();
         }
     }
 }
