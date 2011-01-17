@@ -22,7 +22,7 @@
                 });
         }
 
-        public override void Ending()
+        public override void Cleanup()
         {
             _feature = null;
         }

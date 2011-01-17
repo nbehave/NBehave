@@ -10,7 +10,7 @@
     {
         private readonly ITinyMessengerHub _hub;
         private Scenario _scenario;
-        private readonly Stack<ParsedStep> _lastStep = new Stack<ParsedStep>();
+        private readonly Queue<ParsedStep> _lastStep = new Queue<ParsedStep>();
 
         public InlineStepBuilder(ITinyMessengerHub hub)
             : base(hub)
@@ -18,7 +18,7 @@
             _hub = hub;
 
             _hub.Subscribe<ScenarioBuilt>(built => _scenario = built.Content);
-            _hub.Subscribe<ParsedStep>(message => _lastStep.Push(message));
+            _hub.Subscribe<ParsedStep>(message => _lastStep.Enqueue(message));
 
             _hub.Subscribe<ITinyMessage>(
                 anyMessage =>
@@ -33,7 +33,7 @@
 
         private void ExtractInlineTableStepsFromTable(ITinyMessage anyMessage)
         {
-            var stringTableStep = new StringTableStep(this._lastStep.Pop().Content, this._scenario.Source);
+            var stringTableStep = new StringTableStep(this._lastStep.Dequeue().Content, this._scenario.Source);
             this._scenario.AddStep(stringTableStep);
 
             foreach (var list in ((ParsedTable)anyMessage).Content)
@@ -53,7 +53,7 @@
             }
         }
 
-        public override void Ending()
+        public override void Cleanup()
         {
             _scenario = null;
             _lastStep.Clear();

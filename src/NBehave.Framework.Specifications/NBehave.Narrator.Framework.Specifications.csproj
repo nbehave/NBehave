@@ -131,6 +131,8 @@
     <Compile Include="System.Specs\Backgrounds\WhenRunningAScenarioWithABackgroundSection.cs" />
     <Compile Include="System.Specs\ExamplesWithTables\WhenRunningAScenarioWithExamples.cs" />
     <Compile Include="System.Specs\Examples\WhenRunningAScenarioWithExamplesButNoActionSteps.cs" />
+    <Compile Include="System.Specs\Scenarios\WhenRunningAScenarioWithAFailingStep.cs" />
+    <Compile Include="System.Specs\Scenarios\WhenRunningAScenarioWithoutAFeature.cs" />
     <Compile Include="System.Specs\Scenarios\WhenRunningAScenarioWithArguments.cs" />
     <Compile Include="System.Specs\Scenarios\WhenRunningAScenario.cs" />
     <Compile Include="System.Specs\SystemTestContext.cs" />
@@ -198,6 +200,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="System.Specs\Examples\Examples.feature">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="System.Specs\Scenarios\ScenarioWithFailingStep.feature">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="System.Specs\Scenarios\ScenarioWithoutFeature.feature">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="System.Specs\Scenarios\ScenarioWithArguments.feature">

@@ -12,11 +12,11 @@
         {
             _hub = hub;
 
-            _hub.Subscribe<ParsingFileStart>(start => this.Starting());
-            _hub.Subscribe<ParsingFileEnd>(start => this.Ending());
+            _hub.Subscribe<ModelBuilderInitialise>(start => this.Initialise());
+            _hub.Subscribe<ModelBuilderCleanup>(start => this.Cleanup());
         }
 
-        public virtual void Starting(){}
-        public virtual void Ending(){}
+        public virtual void Initialise(){}
+        public virtual void Cleanup(){}
     }
 }

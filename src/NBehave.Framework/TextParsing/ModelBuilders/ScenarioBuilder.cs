@@ -31,7 +31,7 @@
                     }, parsedScenario => _feature != null);
         }
 
-        public override void Ending()
+        public override void Cleanup()
         {
             _feature = null;
             _file = string.Empty;

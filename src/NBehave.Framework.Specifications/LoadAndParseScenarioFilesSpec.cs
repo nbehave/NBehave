@@ -38,34 +38,6 @@ namespace NBehave.Narrator.Framework.Specifications
         }
 
         [Test]
-        public void ShouldTreatEachFileAsAStory()
-        {
-            this._config = NBehaveConfiguration.New.SetScenarioFiles(new[]
-            {
-                TestFeatures.ScenariosWithoutFeature,
-                TestFeatures.ScenarioWithNoActionSteps
-            });
-
-            CreateLoaderAndParser();
-
-            Assert.That(_features.Count(), Is.EqualTo(2));
-        }
-
-        [Test]
-        public void ShouldHaveSourceSetOnStep()
-        {
-            this._config = NBehaveConfiguration.New.SetScenarioFiles(new[]
-            {
-                TestFeatures.ScenariosWithoutFeature,
-            });
-
-            CreateLoaderAndParser();
-
-            Assert.That(_features.First().Scenarios.First().Steps.First().Source, Is.Not.Null);
-            Assert.That(_features.First().Scenarios.First().Steps.First().Source, Is.Not.EqualTo(string.Empty));
-        }
-
-        [Test]
         public void ShouldBeAbleToUseRelativePathsWithDots()
         {
             this._config = NBehaveConfiguration.New.SetScenarioFiles(new[]

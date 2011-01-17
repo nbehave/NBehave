@@ -10,7 +10,7 @@
     {
         private readonly ITinyMessengerHub _hub;
         private Scenario _scenario;
-        private readonly Stack<ParsedStep> _lastStep = new Stack<ParsedStep>();
+        private readonly Queue<ParsedStep> _lastStep = new Queue<ParsedStep>();
 
         public StepBuilder(ITinyMessengerHub hub)
             : base(hub)
@@ -18,20 +18,20 @@
             _hub = hub;
 
             _hub.Subscribe<ScenarioBuilt>(built => _scenario = built.Content);
-            _hub.Subscribe<ParsedStep>(message => _lastStep.Push(message));
+            _hub.Subscribe<ParsedStep>(message => _lastStep.Enqueue(message));
 
             _hub.Subscribe<ITinyMessage>(
                 anyMessage =>
                 {
                     if (!(anyMessage is ParsedTable))
                     {
-                        _scenario.AddStep(_lastStep.Pop().Content);
+                        _scenario.AddStep(_lastStep.Dequeue().Content);
                     }
                 },
                 tinyMessage => _lastStep.Any());
         }
 
-        public override void Ending()
+        public override void Cleanup()
         {
             _scenario = null;
             _lastStep.Clear();

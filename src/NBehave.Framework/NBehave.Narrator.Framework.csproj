@@ -153,6 +153,8 @@
     <Compile Include="Domain\ActionMissingException.cs" />
     <Compile Include="Attributes\ActionStepAttribute.cs" />
     <Compile Include="Extensions\ActionStepConverterExtensions.cs" />
+    <Compile Include="TextParsing\Messages\ModelBuilderCleanup.cs" />
+    <Compile Include="TextParsing\Messages\ModelBuilderInitialise.cs" />
     <Compile Include="TextParsing\Messages\EnteringExamples.cs" />
     <Compile Include="TextParsing\Messages\ExitingExamples.cs" />
     <Compile Include="TextParsing\GherkinScenarioParser.cs" />

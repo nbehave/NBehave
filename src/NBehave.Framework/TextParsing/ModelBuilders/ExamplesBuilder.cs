@@ -43,7 +43,7 @@
             _midExample = false;
         }
 
-        public override void Ending()
+        public override void Cleanup()
         {
             _scenario = null;
             _midExample = false;

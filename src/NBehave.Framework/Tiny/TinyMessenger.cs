@@ -757,19 +757,44 @@ namespace NBehave.Narrator.Framework.Tiny
             lock (_SubscriptionsPadlock)
             {
                 List<SubscriptionItem> currentSubscriptions;
-                if (!_Subscriptions.TryGetValue(typeof(TMessage), out currentSubscriptions))
-                    return;
+                List<SubscriptionItem> globalSubscriptions;
+                
+                var currentResult = _Subscriptions.TryGetValue(typeof(TMessage), out currentSubscriptions);
+                var globalResult = _Subscriptions.TryGetValue(typeof(ITinyMessage), out globalSubscriptions);
 
-                currentlySubscribed = (from sub in currentSubscriptions
-                                       where sub.Subscription.ShouldAttemptDelivery(message)
-                                       select sub).ToList();
+                if(!globalResult && !currentResult) return;
+
+                IEnumerable<SubscriptionItem> subscriptions;
+
+                if (!globalResult)
+                {
+                    subscriptions = currentSubscriptions;
+                }
+                else if(!currentResult)
+                {
+                    subscriptions = globalSubscriptions;
+                }
+                else
+                {
+                    subscriptions = currentSubscriptions.Union(globalSubscriptions);
+                }
+
+                var subscriptionItems = from sub in subscriptions
+                                        where sub.Subscription.ShouldAttemptDelivery(message)
+                                        select sub;
+
+                
+                currentlySubscribed = subscriptionItems.ToList();
             }
 
             currentlySubscribed.ForEach(sub =>
             {
 //                try
 //                {
+                if(sub.Subscription.ShouldAttemptDelivery(message))
+                {
                     sub.Proxy.Deliver(message, sub.Subscription);
+                }
 //                }
 //                catch (Exception)
 //                {

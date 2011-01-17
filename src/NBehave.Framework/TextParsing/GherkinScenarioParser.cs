@@ -29,6 +29,7 @@ namespace NBehave.Narrator.Framework
 
         public void Parse(string file)
         {
+            _hub.Publish(new ModelBuilderInitialise(this));
             _hub.Publish(new ParsingFileStart(this, file));
 
             using (Stream stream = File.OpenRead(file))
@@ -48,6 +49,7 @@ namespace NBehave.Narrator.Framework
             }
 
             _hub.Publish(new ParsingFileEnd(this, file));
+            _hub.Publish(new ModelBuilderCleanup(this));
         }
 
         public void Feature(Token keyword, Token title)

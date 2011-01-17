@@ -26,7 +26,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 .New
                 .SetAssemblies(new[] { "TestPlainTextAssembly.dll" })
                 .SetEventListener(listener)
-                .SetScenarioFiles(new[] { TestFeatures.ScenariosWithoutFeature });
+                .SetScenarioFiles(new[] { TestFeatures.FeatureWithManyScenarios });
 
             return config;
         }
@@ -37,12 +37,14 @@ namespace NBehave.Narrator.Framework.Specifications
             [Test]
             public void ShouldFindGivenActionStepInAssembly()
             {
+                TinyIoCContainer tinyIoCContainer = TinyIoCContainer.Current;
+
                 var runner = this.CreateRunnerWithBasicConfiguration().Build();
                 runner.Run();
 
-                var actionCatalog = TinyIoCContainer.Current.Resolve<ActionCatalog>();
+                var actionCatalog = tinyIoCContainer.Resolve<ActionCatalog>();
 
-                Assert.That(actionCatalog.ActionExists("my name is Axel"), Is.True);
+                Assert.That(actionCatalog.ActionExists("my name is Morgan"), Is.True);
             }
 
             [Test]
@@ -64,7 +66,7 @@ namespace NBehave.Narrator.Framework.Specifications
 
                 var actionCatalog = TinyIoCContainer.Current.Resolve<ActionCatalog>();
 
-                Assert.That(actionCatalog.ActionExists("I should be greeted with “Hello, Axel!”"), Is.True);
+                Assert.That(actionCatalog.ActionExists("I should be greeted with “Hello, Morgan!”"), Is.True);
             }
         }
 
@@ -72,23 +74,6 @@ namespace NBehave.Narrator.Framework.Specifications
         public class WhenRunningPlainTextScenarios : TextRunnerSpec
         {
             private FeatureResults _result;
-
-            [Test]
-            public void ShouldRunScenariosInTextFile()
-            {
-                _result = this.CreateRunnerWithBasicConfiguration().Run();
-
-                Assert.That(_result.NumberOfPassingScenarios, Is.EqualTo(2));
-            }
-            
-            [Test]
-            public void ShouldGetResultOfRunningScenariosInTextFile()
-            {
-                _result = this.CreateRunnerWithBasicConfiguration().Run();
-
-                Assert.That(_result.NumberOfScenariosFound, Is.EqualTo(2));
-                Assert.That(_result.NumberOfPassingScenarios, Is.EqualTo(2));
-            }
 
             [Test]
             public void ShouldGetCorrectErrormessageFromFailedScenario()

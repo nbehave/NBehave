@@ -42,7 +42,6 @@ namespace NBehave.Narrator.Framework
                 this._hub.Publish(new RunFinishedEvent(this));
             }
 
-            container.Dispose();
             return results;
         }
     }
