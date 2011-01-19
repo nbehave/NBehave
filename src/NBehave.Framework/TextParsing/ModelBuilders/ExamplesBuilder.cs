@@ -24,10 +24,10 @@
 
         private void ExtractExamplesFromTable(ParsedTable table)
         {
-            foreach (var list in table.Content)
+            var exampleColumns = new ExampleColumns(table.Content.First().Select(token => token.Content.ToLower()));
+
+            foreach (var list in table.Content.Skip(1))
             {
-                var exampleColumns = new ExampleColumns(list.Select(token => token.Content.ToLower()));
-                            
                 var example = list.Select(token => token.Content);
 
                 var row = new Dictionary<string, string>();

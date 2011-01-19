@@ -5,6 +5,8 @@ using NUnit.Framework;
 
 namespace NBehave.Narrator.Framework.Specifications.Text
 {
+    using global::System.IO;
+
     using NBehave.Narrator.Framework.Processors;
     using NBehave.Narrator.Framework.Tiny;
 
@@ -18,6 +20,8 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             TinyIoCContainer container = TinyIoCContainer.Current;
             container.Register<ITinyMessengerHub, TinyMessengerHub>().AsSingleton();
             container.RegisterMany<IModelBuilder>().AsSingleton();
+            container.Resolve<IEnumerable<IModelBuilder>>();
+
             this._hub = container.Resolve<ITinyMessengerHub>();
             this._scenarios = new List<Scenario>();
 
@@ -35,9 +39,25 @@ namespace NBehave.Narrator.Framework.Specifications.Text
 
         protected void Parse(string scenario)
         {
+            if(!scenario.StartsWith("Feature"))
+            {
+                scenario = scenario.Insert(0, "Feature: Parsing feature files" + Environment.NewLine +
+                                              "    As a parser" + Environment.NewLine +
+                                              "    I want to be able to parse files" + Environment.NewLine +
+                                              "    So that I can build a domain model" + Environment.NewLine);
+            }
+
+
+            string tempFileName = Path.GetTempFileName();
+
+            using(var fileStream = new StreamWriter(File.Create(tempFileName)))
+            {
+                fileStream.Write(scenario);
+            }
+
             var parser = CreateScenarioParser();
             this._hub.Subscribe<ScenarioBuilt>(built => this._scenarios.Add(built.Content));
-            parser.Parse(scenario);
+            parser.Parse(tempFileName);
         }
 
         [TestFixture]
@@ -46,9 +66,11 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             [SetUp]
             public void Scenario()
             {
-                var scenario = "  Given numbers 1 and 2" + Environment.NewLine +
-                                  "  When I add the numbers" + Environment.NewLine +
-                                  "  Then the sum is 3";
+                var scenario =
+                               "Scenario: Adding numbers" + Environment.NewLine +
+                               "  Given numbers 1 and 2" + Environment.NewLine +
+                               "  When I add the numbers" + Environment.NewLine +
+                               "  Then the sum is 3";
 
                 Parse(scenario);
             }
@@ -261,7 +283,9 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             [SetUp]
             public void Scenario()
             {
-                var scenario = "  Given the following people exists:" + Environment.NewLine +
+                var scenario =
+                                  "Scenario: A scenario with an inline table" + Environment.NewLine +
+                                  "  Given the following people exists:" + Environment.NewLine +
                                   "  |Name          |Country|" + Environment.NewLine +
                                   "  |Morgan Persson|Sweden |" + Environment.NewLine +
                                   "  |Jimmy Nilsson |Sweden |" + Environment.NewLine +

@@ -10,31 +10,43 @@
     {
         private readonly ITinyMessengerHub _hub;
         private Scenario _scenario;
-        private readonly Queue<ParsedStep> _lastStep = new Queue<ParsedStep>();
 
         public StepBuilder(ITinyMessengerHub hub)
             : base(hub)
         {
             _hub = hub;
 
-            _hub.Subscribe<ScenarioBuilt>(built => _scenario = built.Content);
-            _hub.Subscribe<ParsedStep>(message => _lastStep.Enqueue(message));
-
-            _hub.Subscribe<ITinyMessage>(
-                anyMessage =>
+            Zip(_hub, (messageOne, messageTwo) =>
                 {
-                    if (!(anyMessage is ParsedTable))
+                    if(messageOne is ParsedStep && !(messageTwo is ParsedTable))
                     {
-                        _scenario.AddStep(_lastStep.Dequeue().Content);
+                        _scenario.AddStep((messageOne as ParsedStep).Content);
                     }
-                },
-                tinyMessage => _lastStep.Any());
+
+                    if (messageOne is ScenarioBuilt) 
+                        _scenario = (messageOne as ScenarioBuilt).Content;
+                    if (messageTwo is ScenarioBuilt)
+                        _scenario = (messageTwo as ScenarioBuilt).Content;
+                });
+        }
+
+        private void Zip(ITinyMessengerHub hub, Action<ITinyMessage, ITinyMessage> zipped)
+        {
+            var queue = new Queue<ITinyMessage>();
+            hub.Subscribe<ITinyMessage>(message =>
+                {
+                    queue.Enqueue(message);
+
+                    if (queue.Count == 2)
+                    {
+                        zipped(queue.Dequeue(), queue.Peek());
+                    }
+                });
         }
 
         public override void Cleanup()
         {
             _scenario = null;
-            _lastStep.Clear();
         }
     }
 }

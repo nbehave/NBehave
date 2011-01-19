@@ -1,8 +1,9 @@
 ﻿namespace NBehave.Narrator.Framework.Processors
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
+
+    using Gherkin;
 
     using NBehave.Narrator.Framework.Tiny;
 
@@ -18,17 +19,21 @@
             _hub = hub;
 
             _hub.Subscribe<ScenarioBuilt>(built => _scenario = built.Content);
-            _hub.Subscribe<ParsedStep>(message => _lastStep.Enqueue(message));
+            _hub.Subscribe<ParsedStep>(message => this._lastStep.Enqueue(message));
 
             _hub.Subscribe<ITinyMessage>(
                 anyMessage =>
                     {
-                        if (anyMessage is ParsedTable)
+                        if (anyMessage is ParsedTable && anyMessage != _lastStep.Peek())
                         {
                             ExtractInlineTableStepsFromTable(anyMessage);
                         }
+                        else
+                        {
+                            _lastStep.Dequeue();
+                        }
                     },
-                _lastStep.Any());
+                tinyMessage => _lastStep.Any());
         }
 
         private void ExtractInlineTableStepsFromTable(ITinyMessage anyMessage)
@@ -36,10 +41,12 @@
             var stringTableStep = new StringTableStep(this._lastStep.Dequeue().Content, this._scenario.Source);
             this._scenario.AddStep(stringTableStep);
 
-            foreach (var list in ((ParsedTable)anyMessage).Content)
-            {
-                var exampleColumns = new ExampleColumns(list.Select(token => token.Content.ToLower()));
+            IList<IList<Token>> content = ((ParsedTable)anyMessage).Content;
+            
+            var exampleColumns = new ExampleColumns(content.First().Select(token => token.Content.ToLower()));
 
+            foreach (var list in content.Skip(1))
+            {
                 var example = list.Select(token => token.Content);
 
                 var row = new Dictionary<string, string>();
