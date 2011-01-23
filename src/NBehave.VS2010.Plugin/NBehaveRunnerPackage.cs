@@ -1,16 +1,17 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Design;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Shell;
 using NBehave.VS2010.Plugin.Contracts;
-using NLog;
 
 namespace NBehave.VS2010.Plugin
 {
+    using Castle.MicroKernel.Registration;
+    using Castle.Windsor;
+
+    using NBehave.VS2010.Plugin.Configuration;
+    using NBehave.VS2010.Plugin.Domain;
+
     [PackageRegistration(UseManagedResourcesOnly = true)]
     [InstalledProductRegistration("#110", "#112", "0.5.0.0", IconResourceID = 400)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
@@ -21,39 +22,23 @@ namespace NBehave.VS2010.Plugin
     [ProvideService(typeof(IPluginLogger))] 
     public sealed class NBehaveRunnerPackage : Package
     {
-        [Export(typeof (IServiceProvider))]
-        public IServiceProvider ServiceProvider { get; set; }
-
-        [Export(typeof(IServiceContainer))]
-        public IServiceContainer ServiceContainer { get; set; }
-
-        [Export(typeof(CompositionContainer))]
-        public CompositionContainer Container { get; set; }
-
-        [ImportMany(AllowRecomposition = true)]
-        public IEnumerable<IStartUpTask> ComponentInitialisers { get; set; }
-
-        [Import(AllowRecomposition = true)]
-        public IPluginLogger Logger { get; set; }
-
         protected override void Initialize()
         {
             base.Initialize();
-            ServiceProvider = this;
-            ServiceContainer = this;
 
-            var catalog = new AssemblyCatalog(typeof (NBehaveRunnerPackage).Assembly);
-            Container = new CompositionContainer(catalog);
-            Container.ComposeParts(this);
-
-            foreach (var initialiser in ComponentInitialisers)
-            {
-                initialiser.Initialise();
-                Container.ComposeParts(initialiser);
-            }
-
-            AppDomain.CurrentDomain.UnhandledException += (sender, unhandledExceptionEventArgs)
-                => this.Logger.FatalException(("unhandled"), (Exception)unhandledExceptionEventArgs.ExceptionObject);
+            var container = new WindsorContainer();
+            container.Register(Component.For<IServiceProvider, IServiceContainer>().Instance(this).LifeStyle.Singleton);
+            container.Register(Component.For<IVisualStudioService>().ImplementedBy<VisualStudioService>().LifeStyle.Singleton);
+            
+            /*
+             * This is an ordered list.
+             */
+            container.Install(
+                new OutputWindowTask(),
+                new LoggingTask(),
+                new MenuCommandTask(),
+                new PublishCrossPackageServicesTask()
+                );
         }
     }
 }

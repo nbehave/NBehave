@@ -1,37 +1,34 @@
-﻿using System.ComponentModel.Composition;
-using System.ComponentModel.Composition.Hosting;
-using System.ComponentModel.Design;
+﻿using System.ComponentModel.Design;
 using NBehave.VS2010.Plugin.Contracts;
 
 namespace NBehave.VS2010.Plugin.Configuration
 {
-    [Export(typeof(IStartUpTask))]
-    public class PublishCrossPackageServicesTask : IStartUpTask
+    using Castle.MicroKernel.Registration;
+    using Castle.MicroKernel.SubSystems.Configuration;
+    using Castle.Windsor;
+
+    public class PublishCrossPackageServicesTask : IWindsorInstaller
     {
-        [Import(typeof(IServiceContainer))]
-        public IServiceContainer ServiceContainer { get; set; }
+        private void AddService<T>(IServiceContainer serviceContainer, IWindsorContainer windsorContainer)
+        {
+            serviceContainer.AddService(
+                typeof(T), 
+                (container, serviceType) => windsorContainer.Resolve<T>(), 
+                true);
+        }
 
-        [Import(typeof(CompositionContainer))]
-        public CompositionContainer CompositionContainer { get; set; }
-
-        public void Initialise()
+        public void Install(IWindsorContainer container, IConfigurationStore store)
         {
             /**
              * Don't forget to add a guid to the service interface, and add the 
              * ProvideService attribute to the Package class.
              */
 
-            AddService<IOutputWindow>();
-            AddService<IVisualStudioService>();
-            AddService<IPluginLogger>();
-        }
+            var serviceContainer = container.Resolve<IServiceContainer>();
 
-        private void AddService<T>()
-        {
-            ServiceContainer.AddService(
-                typeof(T), 
-                (container, serviceType) => CompositionContainer.GetExport<T>().Value, 
-                true);
+            this.AddService<IOutputWindow>(serviceContainer, container);
+            this.AddService<IVisualStudioService>(serviceContainer, container);
+            this.AddService<IPluginLogger>(serviceContainer, container);
         }
     }
 }

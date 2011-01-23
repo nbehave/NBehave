@@ -1,45 +1,42 @@
-﻿using System;
-using System.ComponentModel.Composition;
-using NBehave.VS2010.Plugin.Contracts;
-using NBehave.VS2010.Plugin.Domain;
-using NLog;
-using NLog.Config;
-using NLog.Targets;
-
-namespace NBehave.VS2010.Plugin.Configuration
+﻿namespace NBehave.VS2010.Plugin.Configuration
 {
-    [Export(typeof(IStartUpTask))]
-    public class LoggingTask : IStartUpTask
+    using Castle.MicroKernel.Registration;
+    using Castle.MicroKernel.SubSystems.Configuration;
+    using Castle.Windsor;
+    using NBehave.VS2010.Plugin.Contracts;
+    using NBehave.VS2010.Plugin.Domain;
+    using NLog;
+    using NLog.Config;
+    using NLog.Targets;
+
+    public class LoggingTask : IWindsorInstaller
     {
-        [Export(typeof(IPluginLogger))]
-        public IPluginLogger DefaultLogger { get; set; }
-
-        [Import(AllowRecomposition = true)]
-        public Lazy<IOutputWindow> OutputWindow { get; set; }
-
-        public void Initialise()
+        public void Install(IWindsorContainer container, IConfigurationStore store)
         {
-            LoggingConfiguration config = new LoggingConfiguration();
+            var outputWindow = container.Resolve<IOutputWindow>();
+            var config = new LoggingConfiguration();
 
-            OutputWindowTarget outputWindowTarget = new OutputWindowTarget(this.OutputWindow);
+            var outputWindowTarget = new OutputWindowTarget(outputWindow);
             outputWindowTarget.Layout = "${date:format=HH\\:MM\\:ss} ${logger} ${exception:ToString}";
             config.AddTarget("mail", outputWindowTarget);
 
-            LoggingRule rule1 = new LoggingRule("*", LogLevel.Fatal, outputWindowTarget);
+            var rule1 = new LoggingRule("*", LogLevel.Fatal, outputWindowTarget);
             config.LoggingRules.Add(rule1);
-            
+
             LogManager.Configuration = config;
 
-            DefaultLogger = new PluginLogger(LogManager.GetLogger("default"));
+            var pluginLogger = new PluginLogger(LogManager.GetLogger("default"));
+
+            container.Register(Component.For<IPluginLogger>().Instance(pluginLogger));
         }
     }
 
     [Target("OutputWindow")]
     internal sealed class OutputWindowTarget : TargetWithLayoutHeaderAndFooter
     {
-        private Lazy<IOutputWindow> _outputWindow;
+        private IOutputWindow _outputWindow;
 
-        public OutputWindowTarget(Lazy<IOutputWindow> outputWindow)
+        public OutputWindowTarget(IOutputWindow outputWindow)
         {
             this._outputWindow = outputWindow;
         }
@@ -65,7 +62,7 @@ namespace NBehave.VS2010.Plugin.Configuration
 
         private void Output(string s)
         {
-            _outputWindow.Value.WriteLine(s);
+            _outputWindow.WriteLine(s);
         }
 
         protected override void Write(LogEventInfo logEvent)

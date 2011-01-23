@@ -1,5 +1,4 @@
 using System;
-using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
 using EnvDTE;
@@ -8,23 +7,17 @@ using NBehave.VS2010.Plugin.Contracts;
 
 namespace NBehave.VS2010.Plugin.Domain
 {
-    [Export(typeof (IVisualStudioService))]
-    internal class VisualStudioService : IVisualStudioService, IPartImportsSatisfiedNotification
+    internal class VisualStudioService : IVisualStudioService
     {
-        private DTE _dteService;
+        private readonly DTE _dteService;
 
-        [Import(AllowRecomposition = true)]
-        public IServiceProvider ServiceProvider { get; set; }
-
-        public void OnImportsSatisfied()
+        public VisualStudioService(IServiceProvider serviceProvider)
         {
-            _dteService = ServiceProvider.GetService(typeof(SDTE)) as DTE;
-
+            _dteService = serviceProvider.GetService(typeof(SDTE)) as DTE;
+            
             if (_dteService == null)
                 throw new InvalidOperationException("Was not able to get the EnvDTE service.");
         }
-
-        #region IVisualStudioService Members
 
         public string GetAssemblyPath()
         {
@@ -65,7 +58,5 @@ namespace NBehave.VS2010.Plugin.Domain
                 _dteService.ActiveDocument.ProjectItem.ContainingProject.Properties.Item("TargetFrameworkMoniker");
             return (string) targetFramework.Value == ".NETFramework,Version=v4.0" ? "v4.0" : "V3.5";
         }
-
-        #endregion
     }
 }

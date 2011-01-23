@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition.Primitives;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using MEFedMVVM.ViewModelLocator;
@@ -30,11 +29,12 @@ namespace NBehave.VS2010.Plugin.Editor
 
         public void Initialise(ITextBuffer buffer)
         {
-//            AppDomain.CurrentDomain.UnhandledException +=
-//                (sender, unhandledExceptionEventArgs) => Debug.Assert(false, unhandledExceptionEventArgs.ToString());
-
             if (!buffer.Properties.ContainsProperty(typeof(GherkinFileClassifier)))
             {
+                var pluginLogger = ServiceProvider.GetService(typeof(IPluginLogger)) as IPluginLogger;
+
+                AppDomain.CurrentDomain.FirstChanceException += (sender, args) => { pluginLogger.FatalException("", args.Exception); };
+
                 var container = buffer.Properties.GetOrCreateSingletonProperty(() => new CompositionContainer(new AssemblyCatalog(typeof(GherkinFileEditorParser).Assembly)));
                 container.ComposeExportedValue(ClassificationRegistry);
                 container.ComposeParts();
@@ -43,6 +43,7 @@ namespace NBehave.VS2010.Plugin.Editor
 
                 var outputWindow = ServiceProvider.GetService(typeof(IOutputWindow)) as IOutputWindow;
                 var visualStudioService = ServiceProvider.GetService(typeof(IVisualStudioService)) as IVisualStudioService;
+                  
                 var scenarioRunner = new ScenarioRunner(outputWindow, visualStudioService);
 
                 GherkinFileClassifier fileClassifierForBuffer = buffer.Properties.GetOrCreateSingletonProperty(() => new GherkinFileClassifier(buffer));

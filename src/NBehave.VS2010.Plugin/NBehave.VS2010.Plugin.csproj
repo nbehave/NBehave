@@ -59,6 +59,12 @@
     <DefineConstants>TRACE;DEBUG</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Castle.Core">
+      <HintPath>..\..\lib\castle\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Windsor">
+      <HintPath>..\..\lib\castle\Castle.Windsor.dll</HintPath>
+    </Reference>
     <Reference Include="envdte, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>False</EmbedInteropTypes>
@@ -208,7 +214,6 @@
     <Compile Include="Domain\PluginLogger.cs" />
     <Compile Include="Domain\VisualStudioService.cs" />
     <Compile Include="Contracts\IOutputWindow.cs" />
-    <Compile Include="Contracts\IStartUpTask.cs" />
     <Compile Include="Editor\Domain\GherkinFileClassificationDefinitions.cs" />
     <Compile Include="Editor\Domain\GherkinFileClassifierFormats.cs" />
     <Compile Include="Editor\Domain\GherkinFileEditorClassifications.cs" />
