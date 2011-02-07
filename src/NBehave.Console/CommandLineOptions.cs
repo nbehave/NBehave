@@ -29,13 +29,14 @@
 // Gert Lombard (gert@codeblast.com)
 // James Newkirk (jim@nunit.org)
 
+namespace Codeblast
+{
 using System;
 using System.Collections;
 using System.Reflection;
+    using System.Collections;
 using System.Text;
 
-namespace Codeblast
-{
     //
     // The Attributes
     //

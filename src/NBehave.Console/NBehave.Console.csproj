@@ -110,6 +110,7 @@
     <Compile Include="CommandLineOptions.cs" />
     <Compile Include="ConsoleOptions.cs" />
     <Compile Include="NBehaveConsoleRunner.cs" />
+    <Compile Include="DelegatingListener.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

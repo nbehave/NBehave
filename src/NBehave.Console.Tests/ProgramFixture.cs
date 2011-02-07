@@ -6,6 +6,8 @@ using NBehave.Narrator.Framework.EventListeners;
 using NBehave.Narrator.Framework.EventListeners.Xml;
 using NUnit.Framework;
 using gen = System.Collections.Generic;
+using NBehave.Narrator.Framework.EventListeners;
+using NBehave.Narrator.Framework.EventListeners.Xml;
 
 namespace NBehave.Console.Tests
 {

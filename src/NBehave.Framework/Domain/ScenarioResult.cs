@@ -14,6 +14,7 @@ namespace NBehave.Narrator.Framework
     using System.Text;
 
     using NBehave.Narrator.Framework.Tiny;
+    [Serializable]
 
     public class ScenarioResult
     {

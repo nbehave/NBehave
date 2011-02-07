@@ -40,6 +40,22 @@ Section ".Net 3.5 files" ;No components page, name is not important
   
 	; Put file there
 	File "${FILES}\v3.5\**"
+	File "${FILES}\v3.5\NBehave.NAnt.dll"
+	File "${FILES}\v3.5\NBehave.MSBuild.dll"
+	File "${FILES}\v3.5\NBehave.Narrator.Framework.dll"
+	File "${FILES}\v3.5\NBehave.Narrator.Framework.dll.tdnet"
+	File "${FILES}\v3.5\NBehave.Spec.Framework.dll"
+	File "${FILES}\v3.5\NBehave.Spec.MbUnit.dll"
+	File "${FILES}\v3.5\NBehave.Spec.MSTest.dll"
+	File "${FILES}\v3.5\NBehave.Spec.NUnit.dll"
+	File "${FILES}\v3.5\NBehave.Spec.Xunit.dll"
+	File "${FILES}\v3.5\NBehave.TestDriven.Plugin.dll"
+	File "${FILES}\v3.5\Gallio.dll"
+	File "${FILES}\v3.5\MbUnit.dll"
+	File "${FILES}\v3.5\nunit.framework.dll"
+	File "${FILES}\v3.5\Rhino.Mocks.dll"
+	File "${FILES}\v3.5\xunit.dll"
+	File "${FILES}\v3.5\languages.yml"
 
 	; Write the installation path into the registry
 	WriteRegStr HKLM SOFTWARE\NBehave\${VERSION} "Install_Dir" "$INSTDIR"
@@ -62,6 +78,22 @@ Section ".Net 4.0 files" ;No components page, name is not important
   
 	; Put file there
 	File "${FILES}\v4.0\**"
+	File "${FILES}\v4.0\NBehave.NAnt.dll"
+	File "${FILES}\v4.0\NBehave.MSBuild.dll"
+	File "${FILES}\v4.0\NBehave.Narrator.Framework.dll"
+	File "${FILES}\v4.0\NBehave.Narrator.Framework.dll.tdnet"
+	File "${FILES}\v4.0\NBehave.Spec.Framework.dll"
+	File "${FILES}\v4.0\NBehave.Spec.MbUnit.dll"
+	File "${FILES}\v4.0\NBehave.Spec.MSTest.dll"
+	File "${FILES}\v4.0\NBehave.Spec.NUnit.dll"
+	File "${FILES}\v4.0\NBehave.Spec.Xunit.dll"
+	File "${FILES}\v4.0\NBehave.TestDriven.Plugin.dll"
+	File "${FILES}\v4.0\Gallio.dll"
+	File "${FILES}\v4.0\MbUnit.dll"
+	File "${FILES}\v4.0\nunit.framework.dll"
+	File "${FILES}\v4.0\Rhino.Mocks.dll"
+	File "${FILES}\v4.0\xunit.dll"
+	File "${FILES}\v4.0\languages.yml"
 
 	; Write the installation path into the registry
 	WriteRegStr HKLM SOFTWARE\NBehave\${VERSION} "Install_Dir" "$INSTDIR"
@@ -76,7 +108,7 @@ Section ".Net 4.0 files" ;No components page, name is not important
 SectionEnd
 
 Section "NBehave Example code"
-
+	File "${EXAMPLEFILES}\NBehave.Examples.zip"
 SectionEnd
 
 Section "Visual Studio 2010 Plugin"
@@ -84,6 +116,8 @@ Section "Visual Studio 2010 Plugin"
 	SetOutPath "$PROGRAMFILES\Microsoft Visual Studio 10.0\Common7\IDE\Extensions\NBehave"
 	
 	File "${PLUGIN}\**"
+	File "${PLUGIN}\NBehave.VS2010.Plugin.dll"
+	File "${PLUGIN}\NBehave.VS2010.Plugin.pkgdef"
 
 SectionEnd
 
@@ -96,12 +130,22 @@ Section "Uninstall"
   
   ; Remove v3.5 files and uninstaller
   Delete $INSTDIR\v3.5\**
+  Delete $INSTDIR\v3.5\*.tdnet
+  Delete $INSTDIR\v3.5\*.zip
+  Delete $INSTDIR\v3.5\*.yml
+  Delete $INSTDIR\v3.5\NBehave-Console.exe
   
   ; Remove v3.5 files and uninstaller
   Delete $INSTDIR\v4.0\**
+  Delete $INSTDIR\v4.0\*.tdnet
+  Delete $INSTDIR\v4.0\*.zip
+  Delete $INSTDIR\v4.0\*.yml
+  Delete $INSTDIR\v4.0\NBehave-Console.exe
 
   ; Remove VS2010 Plugin
   Delete "$PROGRAMFILES\Microsoft Visual Studio 10.0\Common7\IDE\Extensions\NBehave\**"
+  Delete "$PROGRAMFILES\Microsoft Visual Studio 10.0\Common7\IDE\Extensions\NBehave\NBehave.VS2010.Plugin.dll"
+  Delete "$PROGRAMFILES\Microsoft Visual Studio 10.0\Common7\IDE\Extensions\NBehave\NBehave.VS2010.Plugin.pkgdef"
   
   ; Remove uninstaller
   Delete $INSTDIR\uninstall.exe

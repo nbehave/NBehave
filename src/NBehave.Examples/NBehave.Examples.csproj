@@ -89,6 +89,18 @@
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NBehave.Narrator.Framework">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\build\Debug-3.5\NBehave\NBehave.Narrator.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="NBehave.Spec.Framework">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\build\Debug-3.5\NBehave\NBehave.Spec.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="NBehave.Spec.NUnit">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\build\Debug-3.5\NBehave\NBehave.Spec.NUnit.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\nunit.framework.dll</HintPath>

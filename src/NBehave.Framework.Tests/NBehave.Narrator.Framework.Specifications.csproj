@@ -95,7 +95,7 @@
     </Reference>
     <Reference Include="nunit.framework">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\nunit.framework.dll</HintPath>
+      <HintPath>..\..\tools\nunit\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="Rhino.Mocks">
       <HintPath>..\..\lib\Rhino.Mocks.dll</HintPath>
@@ -116,6 +116,8 @@
     <Compile Include="ActionStepCodeGeneratorSpec.cs" />
     <Compile Include="ActionStepFileLoaderSpec.cs" />
     <Compile Include="ActionStepParserSpec.cs" />
+    <Compile Include="ActionStepSpec.cs" />
+    <Compile Include="RemotableStoryRunnerSpec.cs" />
     <Compile Include="EventListeners\CodeGenEventListenerSpec.cs" />
     <Compile Include="EventListeners\MultiOutputEventListenerSpec.cs" />
     <Compile Include="EventListeners\XmlOutputEventListenerSpec.cs" />
@@ -123,12 +125,15 @@
     <Compile Include="ParameterConverterSpec.cs" />
     <Compile Include="StringExtensionsSpec.cs" />
     <Compile Include="StringStepRunnerSpec.cs" />
+    <Compile Include="EventListeners\XmlOutputEventListenerTestData.cs" />
     <Compile Include="EventListeners\XmlOutputWriterSpec.cs" />
     <Compile Include="SummaryWriterSpec.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScenarioResultsFixture.cs" />
     <Compile Include="ScenarioStepRunnerSpec.cs" />
     <Compile Include="TextRunnerSpec.cs" />
+    <Compile Include="StoryFixture.cs" />
+    <Compile Include="StoryResultsFixture.cs" />
     <Compile Include="StoryRunnerFilterSpecs.cs" />
     <Compile Include="Text\ActionStepAttributeSpec.cs" />
     <Compile Include="Text\IgnoreSpaceAndUnderScoreMatcherSpec.cs" />
@@ -139,6 +144,7 @@
     <Compile Include="Text\StringExtension.cs" />
     <Compile Include="Text\StringStepSpec.cs" />
     <Compile Include="Text\StringTableStepSpec.cs" />
+    <Compile Include="YmlParserSpec.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NBehave.Framework\NBehave.Narrator.Framework.csproj">
@@ -156,33 +162,21 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Features\FeatureInSwedish.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>GreetingSystem1.feature.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Features\ScenarioWithNoActionSteps.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>GreetingSystem1.feature.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Features\FeatureWithNewLineInGivenClause.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>GreetingSystem1.feature.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Features\FeatureNamedStory.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>GreetingSystem1.feature.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Features\ScenarioWithExamples.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>GreetingSystem1.feature.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Features\FeaturesAndScenarios.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>GreetingSystem1.feature.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Features\ScenariosWithoutFeature.feature">
@@ -194,6 +188,9 @@
     <None Include="Features\FeatureWithFailingStep.feature">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Text\TestData\" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

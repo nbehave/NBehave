@@ -1,4 +1,4 @@
-Story: Locating plain text specification (part 2)
+Story: Locating plain text specification in subdirectory (part 2)
 	As a user of TestDriven.Net
 	I need to locate the set of plain text specification files that relate to the assembly
 	So I can run the scenarios
@@ -15,7 +15,7 @@ Story: Locating plain text specification (part 2)
 		When I look for Something Ive not defined
 		Then I should not expect success or failure
 		
-Story: Locating plain text specification (part 1)
+Story: Locating plain text specification in subdirectory (part 1)
 	As a user of TestDriven.Net
 	I need to locate the set of plain text specification files that relate a class
 	So I can run the scenarios

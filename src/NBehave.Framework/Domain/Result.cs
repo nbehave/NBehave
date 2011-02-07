@@ -11,6 +11,7 @@ namespace NBehave.Narrator.Framework
 {
     using System;
 
+    [Serializable]
     public class ActionStepResult : Result
     {
         public ActionStepResult(string stringStep, Result resultForActionStep)

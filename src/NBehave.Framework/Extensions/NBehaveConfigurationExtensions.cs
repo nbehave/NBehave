@@ -11,9 +11,10 @@ namespace NBehave.Narrator.Framework
 {
     public static class NBehaveConfigurationExtensions
     {
-        public static TextRunner Build(this NBehaveConfiguration configuration)
+        public static IRunner Build(this NBehaveConfiguration configuration)
         {
-            return new TextRunner(configuration);
+            return RunnerFactory.CreateTextRunner(configuration);
+            //return new TextRunner(configuration);
         }
 
         public static FeatureResults Run(this NBehaveConfiguration configuration)

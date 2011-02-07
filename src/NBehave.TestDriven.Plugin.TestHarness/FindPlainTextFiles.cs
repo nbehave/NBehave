@@ -28,6 +28,7 @@ namespace NBehave.TestDriven.Plugin.Tests
         {
             var assembly = Assembly.Load(assemblyname);
             Locator.RootLocation = Path.GetDirectoryName(assembly.Location);
+            _type = null;
         }
 
         [Given("a class $typename")]

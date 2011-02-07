@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System;
+
 namespace NBehave.Narrator.Framework
 {
     using System.Collections.Generic;
@@ -14,7 +16,7 @@ namespace NBehave.Narrator.Framework
     /// <summary>
     /// Fluent configuration to declare settings for the text based scenario runner.
     /// </summary>
-    public class NBehaveConfiguration
+    public class NBehaveConfiguration : MarshalByRefObject
     {
         /// <summary>
         /// Gets a new instance of the configuration, used by the fluent interface 

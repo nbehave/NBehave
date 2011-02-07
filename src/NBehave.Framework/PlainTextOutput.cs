@@ -13,7 +13,7 @@ namespace NBehave.Narrator.Framework
     using System.IO;
     using System.Reflection;
 
-    public class PlainTextOutput
+    public class PlainTextOutput : MarshalByRefObject
     {
         private readonly TextWriter _writer;
 

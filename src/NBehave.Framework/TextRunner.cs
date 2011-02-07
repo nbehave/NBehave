@@ -14,7 +14,7 @@ namespace NBehave.Narrator.Framework
 
     using TinyIoC;
 
-    public class TextRunner
+    public class TextRunner : IRunner
     {
         private readonly NBehaveConfiguration _configuration;
         private ITinyMessengerHub _hub;
