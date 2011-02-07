@@ -84,7 +84,6 @@ Section ".Net 4.0 files" ;No components page, name is not important
 	File "${FILES}\v4.0\NBehave.Narrator.Framework.dll.tdnet"
 	File "${FILES}\v4.0\NBehave.Spec.Framework.dll"
 	File "${FILES}\v4.0\NBehave.Spec.MbUnit.dll"
-	File "${FILES}\v4.0\NBehave.Spec.MSTest9.dll"
 	File "${FILES}\v4.0\NBehave.Spec.MSTest10.dll"
 	File "${FILES}\v4.0\NBehave.Spec.NUnit.dll"
 	File "${FILES}\v4.0\NBehave.Spec.Xunit.dll"

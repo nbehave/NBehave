@@ -118,7 +118,6 @@
 			<arg value="NBehave.Console.Tests.dll" />
 			<arg value="NBehave.Spec.NUnit.Specs.dll" />
 			<arg value="NBehave.Spec.MbUnit.Specs.dll" />
-			<arg value="NBehave.Spec.MSTest9.Specs.dll" />
 			<arg value="NBehave.Spec.MSTest10.Specs.dll" />
 			<arg value="NBehave.Spec.Xunit.Specs.dll" />
 			<arg value="NBehave.Spec.Framework.Specification.dll" />
