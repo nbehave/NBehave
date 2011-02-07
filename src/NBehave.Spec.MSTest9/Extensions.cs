@@ -1,10 +1,9 @@
 using System;
 using System.Collections;
-using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace NBehave.Spec.MSTest
+namespace NBehave.Spec.MSTest9
 {
     public static class Extensions
     {

@@ -1,6 +1,6 @@
 ﻿﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace NBehave.Spec.MSTest
+namespace NBehave.Spec.MSTest10
 {
 	[TestClass]
 	public abstract class SpecBase<TContext> : Spec.SpecBase<TContext>

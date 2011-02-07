@@ -1,13 +1,12 @@
 using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NBehave.Narrator.Framework;
 using NBehave.Spec.Extensions;
-using Context = Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute;
-using Specification = Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute;
 
-namespace NBehave.Spec.MSTest.Specs
+namespace NBehave.Spec.MSTest9.Specs
 {
-    [Context]
-    public class ScenarioDrivenSpecBaseSpecs : ScenarioDrivenSpecBase
+    [TestClass]
+    public class ScenarioDrivenSpecBaseSpecs : MSTest9.ScenarioDrivenSpecBase
     {
         protected override Feature CreateFeature()
         {
@@ -18,13 +17,13 @@ namespace NBehave.Spec.MSTest.Specs
                 .SoThat("I can specify behaviour through scenarios");
         }
 
-        [Specification]
+        [TestMethod]
         public void should_populate_the_feature_narrative()
         {
             Feature.Narrative.ShouldEqual("As a developer, I want to specify a feature so that I can specify behaviour through scenarios");
         }
 
-        [Specification]
+        [TestMethod]
         public void should_execute_scenarios_implemented_inline()
         {
             string detail1 = null;
@@ -36,7 +35,7 @@ namespace NBehave.Spec.MSTest.Specs
                 .And("the implementation from When should be called",   () => detail2.ShouldNotBeNull());
         }
 
-        [Specification]
+        [TestMethod]
         public void should_call_notification_events_before_executing_inline_implementation()
         {
             string lastLoggedScenario = null;
