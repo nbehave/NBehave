@@ -37,8 +37,6 @@ using System.Reflection;
     using System.Collections;
 using System.Text;
 
-namespace Codeblast
-{
     //
     // The Attributes
     //

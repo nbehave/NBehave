@@ -10,6 +10,13 @@ using Rhino.Mocks;
 
 namespace NBehave.Narrator.Framework.Specifications
 {
+    public static class LocalConfigurationExtensions
+    {
+        public static TextRunner Build(this NBehaveConfiguration configuration)
+        {
+            return (TextRunner) NBehaveConfigurationExtensions.Build(configuration);
+        }
+    }
     [TestFixture]
     public class TextRunnerSpec
     {
@@ -320,8 +327,6 @@ namespace NBehave.Narrator.Framework.Specifications
         [TestFixture, ActionSteps]
         public class WhenRunningPlainTextScenarioInSwedish : TextRunnerSpec
         {
-            private TextRunner _runner;
-
             private readonly Stack<int> _numbers = new Stack<int>();
             private int _calcResult;
             private static bool _givenWasCalled;

@@ -96,7 +96,7 @@ namespace NBehave.Console
 
             try
             {
-                results = runner.Run();
+                results = config.Run();
             }
             catch (FileNotFoundException fileNotFoundException)
             {

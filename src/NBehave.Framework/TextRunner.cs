@@ -14,7 +14,7 @@ namespace NBehave.Narrator.Framework
     using System.Linq;
     using System.Reflection;
 
-    public class TextRunner
+    public class TextRunner : IRunner
     {
         private readonly NBehaveConfiguration _configuration;
 
@@ -68,12 +68,12 @@ namespace NBehave.Narrator.Framework
             return results;
         }
 
-        private void LoadAssembly(string assemblyPath)
+        public void LoadAssembly(string assemblyPath)
         {
             LoadAssembly(Assembly.LoadFrom(assemblyPath));
         }
 
-        private void Load(IEnumerable<string> fileLocations)
+        public void Load(IEnumerable<string> fileLocations)
         {
             _features.AddRange(_actionStepFileLoader.Load(fileLocations));
         }

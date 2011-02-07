@@ -119,8 +119,13 @@
     <Compile Include="EventListeners\Xml\StoryResultsEventReceived.cs" />
     <Compile Include="EventListeners\Xml\XmlOutputWriter.cs" />
     <Compile Include="Extensions\NBehaveConfigurationExtensions.cs" />
+    <Compile Include="IRunner.cs" />
     <Compile Include="NBehaveConfiguration.cs" />
     <Compile Include="ParameterConverter.cs" />
+    <Compile Include="Remoting\AppDomainBootstrapper.cs" />
+    <Compile Include="Remoting\DelegatingListener.cs" />
+    <Compile Include="Remoting\RemotableStoryRunner.cs" />
+    <Compile Include="RunnerFactory.cs" />
     <Compile Include="ScenarioExampleResult.cs" />
     <Compile Include="EventListeners\SummaryWriter.cs" />
     <Compile Include="Domain\ActionMethodInfo.cs" />
@@ -197,7 +202,9 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Text\" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

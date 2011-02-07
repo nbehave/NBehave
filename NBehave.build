@@ -2,8 +2,8 @@
 <project name="NBehave" default="test" xmlns="http://nant.sf.net/schemas/nant.xsd">
 	<property name="solution.dir" value="src" />
 	<property name="build.dir" value="build" />
-	<property name="test.dir.3.5" value ="${build.dir}\Debug-4.0\UnitTests" />
-	<property name="test.dir.4.0" value ="${build.dir}\Debug-3.5\UnitTests" />
+	<property name="test.dir.3.5" value ="${build.dir}\Debug-3.5\UnitTests" />
+	<property name="test.dir.4.0" value ="${build.dir}\Debug-4.0\UnitTests" />
 	<property name="company.name" value="${project::get-name()}"/>
 	<property name="project.fullversion" value="0.5.0.0" dynamic="true" />
 	<property name="project.config" value="release" />
@@ -96,15 +96,15 @@
 		
 		<exec program="nunit-console-x86.exe" basedir="tools\nunit" workingdir="${test.dir.3.5}">
 			<arg value="NBehave.Narrator.Framework.Specifications.dll" />
-			<arg value="NBehave.Console.Tests.dll" />
-			<arg value="NBehave.Spec.NUnit.Specs.dll" />
-			<arg value="NBehave.Spec.MbUnit.Specs.dll" />
-			<arg value="NBehave.Spec.MSTest.Specs.dll" />
-			<arg value="NBehave.Spec.Xunit.Specs.dll" />
-			<arg value="NBehave.Spec.Framework.Specification.dll" />
-			<arg value="NBehave.NAnt.Tests.dll" />
-			<arg value="NBehave.MSBuild.Tests.dll" />
-			<arg value="NBehave.TestDriven.Plugin.Specs.dll" />
+			<arg value="NBehave.Console.Specifications.dll" />
+			<arg value="NBehave.Spec.NUnit.Specifications.dll" />
+			<arg value="NBehave.Spec.MbUnit.Specifications.dll" />
+			<arg value="NBehave.Spec.MSTest.Specifications.dll" />
+			<arg value="NBehave.Spec.Xunit.Specifications.dll" />
+			<arg value="NBehave.Spec.Framework.Specifications.dll" />
+			<arg value="NBehave.NAnt.Specifications.dll" />
+			<arg value="NBehave.MSBuild.Specifications.dll" />
+			<arg value="NBehave.TestDriven.Plugin.Specifications.dll" />
 			<arg value="/xml:..\..\test-reports\UnitTests-3.5.xml" />
 		</exec>
 	</target>
@@ -114,15 +114,15 @@
 		
 		<exec program="nunit-console-x86.exe" basedir="tools\nunit" workingdir="${test.dir.4.0}">
 			<arg value="NBehave.Narrator.Framework.Specifications.dll" />
-			<arg value="NBehave.Console.Tests.dll" />
-			<arg value="NBehave.Spec.NUnit.Specs.dll" />
-			<arg value="NBehave.Spec.MbUnit.Specs.dll" />
-			<arg value="NBehave.Spec.MSTest.Specs.dll" />
-			<arg value="NBehave.Spec.Xunit.Specs.dll" />
-			<arg value="NBehave.Spec.Framework.Specification.dll" />
-			<arg value="NBehave.NAnt.Tests.dll" />
-			<arg value="NBehave.MSBuild.Tests.dll" />
-			<arg value="NBehave.TestDriven.Plugin.Specs.dll" />
+			<arg value="NBehave.Console.Specifications.dll" />
+			<arg value="NBehave.Spec.NUnit.Specifications.dll" />
+			<arg value="NBehave.Spec.MbUnit.Specifications.dll" />
+			<arg value="NBehave.Spec.MSTest.Specifications.dll" />
+			<arg value="NBehave.Spec.Xunit.Specifications.dll" />
+			<arg value="NBehave.Spec.Framework.Specifications.dll" />
+			<arg value="NBehave.NAnt.Specifications.dll" />
+			<arg value="NBehave.MSBuild.Specifications.dll" />
+			<arg value="NBehave.TestDriven.Plugin.Specifications.dll" />
 			<arg value="/xml:..\..\test-reports\UnitTests-4.0.xml" />
 		</exec>
 	</target>

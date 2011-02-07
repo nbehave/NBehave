@@ -67,7 +67,7 @@ namespace NBehave.MSBuild
                 .SetDryRun(DryRun)
                 .SetAssemblies(TestAssemblies)
                 .SetEventListener(EventListeners.CreateEventListenerUsing(msbuildLogWriter, TextOutputFile, XmlOutputFile));
-            var runner = RunnerFactory.CreateTextRunner(ScenarioFiles, listener);
+            var runner = RunnerFactory.CreateTextRunner(config);
 
             FeatureResults = runner.Run();
 
