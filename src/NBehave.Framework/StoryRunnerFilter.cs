@@ -7,12 +7,16 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System;
+using System.Runtime.Serialization;
+
 namespace NBehave.Narrator.Framework
 {
     using System.Reflection;
     using System.Text.RegularExpressions;
 
-    public class StoryRunnerFilter
+    [Serializable]
+    public class StoryRunnerFilter : ISerializable
     {
         private readonly Regex _namespaceFilter;
         private readonly Regex _classNameFilter;
@@ -92,6 +96,20 @@ namespace NBehave.Narrator.Framework
             }
 
             return "^" + value + "$";
+        }
+
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("n", _namespaceFilter);
+            info.AddValue("c", _classNameFilter);
+            info.AddValue("m", _methodNameFilter);
+        }
+
+        protected StoryRunnerFilter(SerializationInfo info, StreamingContext context)
+        {
+            _namespaceFilter = (Regex) info.GetValue("n", typeof (Regex));
+            _classNameFilter = (Regex) info.GetValue("c", typeof (Regex));
+            _methodNameFilter = (Regex) info.GetValue("m", typeof (Regex));
         }
     }
 }

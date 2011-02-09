@@ -6,9 +6,9 @@
 
     internal abstract class AbstracModelBuilder : IModelBuilder
     {
-        protected readonly ITinyMessengerHub _hub;
+        private readonly ITinyMessengerHub _hub;
 
-        public AbstracModelBuilder(ITinyMessengerHub hub)
+        protected AbstracModelBuilder(ITinyMessengerHub hub)
         {
             _hub = hub;
 

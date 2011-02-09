@@ -29,7 +29,29 @@ namespace NBehave.Narrator.Framework
                 return false;
             }
 
-            return (obj == this) || obj.ToString() == ToString();
+            return ReferenceEquals(obj, this) || obj.ToString() == ToString();
+        }
+
+        public bool Equals(StringStep other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return Equals(other.StepResult, StepResult);
+        }
+
+        public override int GetHashCode()
+        {
+            return (Step != null ? Step.GetHashCode() : 0);
+        }
+
+        public static bool operator ==(StringStep left, StringStep right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(StringStep left, StringStep right)
+        {
+            return !Equals(left, right);
         }
     }
 }

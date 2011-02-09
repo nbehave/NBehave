@@ -21,9 +21,19 @@ namespace NBehave.Narrator.Framework
             Result = resultForActionStep;
         }
 
-        public string StringStep { get; private set; }
+        private string _stringStep;
+        public string StringStep
+        {
+            get { return _stringStep; }
+            private set { _stringStep = value; }
+        }
 
-        public Result Result { get; private set; }
+        private Result _result;
+        public Result Result
+        {
+            get { return _result; }
+            private set { _result = value; }
+        }
 
         public void MergeResult(Result stepResult)
         {
@@ -57,6 +67,7 @@ namespace NBehave.Narrator.Framework
         }
     }
 
+    [Serializable]
     public class Passed : Result
     {
         public Passed()
@@ -65,9 +76,16 @@ namespace NBehave.Narrator.Framework
         }
     }
 
+    [Serializable]
     public class Failed : Result
     {
-        public Exception Exception { get; private set; }
+        private Exception _exception;
+        public Exception Exception
+        {
+            get { return _exception; }
+            private set { _exception = value; }
+        }
+
         public Failed(Exception exception)
             : base(exception.ToString())
         {
@@ -75,6 +93,7 @@ namespace NBehave.Narrator.Framework
         }
     }
 
+    [Serializable]
     public class Pending : Result
     {
         public Pending(string pendingReason)
@@ -83,6 +102,7 @@ namespace NBehave.Narrator.Framework
         }
     }
 
+    [Serializable]
     public abstract class Result
     {
         protected Result(string message)
@@ -90,7 +110,12 @@ namespace NBehave.Narrator.Framework
             Message = message;
         }
 
-        public string Message { get; protected set; }
+        private string _message;
+        public string Message
+        {
+            get { return _message; }
+            protected set { _message = value; }
+        }
 
         public override string ToString()
         {

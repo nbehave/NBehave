@@ -26,7 +26,7 @@
         {
             IEnumerable<string> files = this._configuration
                 .ScenarioFiles
-                .Select(this.GetFiles)
+                .Select(loc => this.GetFiles(loc))
                 .SelectMany(enumerable => enumerable);
 
             _hub.Publish(new ScenarioFilesLoaded(this, files));

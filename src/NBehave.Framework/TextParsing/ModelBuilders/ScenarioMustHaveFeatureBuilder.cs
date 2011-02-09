@@ -1,4 +1,6 @@
-﻿namespace NBehave.Narrator.Framework.Processors
+﻿using System.Runtime.Serialization;
+
+namespace NBehave.Narrator.Framework.Processors
 {
     using System;
 
@@ -7,11 +9,12 @@
     internal class ScenarioMustHaveFeatureBuilder : AbstracModelBuilder
     {
         private Feature _feature;
-        
+        private readonly ITinyMessengerHub _hub;
+ 
         public ScenarioMustHaveFeatureBuilder(ITinyMessengerHub hub)
             : base(hub)
         {
-
+            _hub = hub;
             _hub.Subscribe<FeatureBuilt>(built => _feature = built.Content);
             _hub.Subscribe<ParsedScenario>(scenario =>
                 {
@@ -28,13 +31,25 @@
         }
     }
 
+    [Serializable]
     internal class ScenarioMustHaveFeatureException : Exception
     {
-        private string _file;
+        private readonly string _file;
 
         public ScenarioMustHaveFeatureException(string file)
         {
             _file = file;
+        }
+
+        protected ScenarioMustHaveFeatureException(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+            _file = info.GetString("file");
+        }
+
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
+            info.AddValue("file", _file);
         }
 
         public override string Message

@@ -11,8 +11,6 @@ namespace NBehave.Narrator.Framework.EventListeners
 {
     using System;
 
-    using NBehave.Narrator.Framework.Tiny;
-
     public class MultiOutputEventListener : EventListener
     {
         private readonly EventListener[] _listeners;
@@ -65,14 +63,6 @@ namespace NBehave.Narrator.Framework.EventListeners
         public override void ScenarioResult(ScenarioResult result)
         {
             Invoke(l => l.ScenarioResult(result));
-        }
-
-        public override void Initialise(ITinyMessengerHub hub)
-        {
-            foreach (var listener in _listeners)
-            {
-                listener.Initialise(hub);
-            }
         }
 
         private void Invoke(Action<EventListener> f)

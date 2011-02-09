@@ -1,7 +1,6 @@
 using System;
 using NBehave.Narrator.Framework;
 using TestDriven.Framework;
-using NBehave.Narrator.Framework;
 
 namespace NBehave.TestDriven.Plugin
 {

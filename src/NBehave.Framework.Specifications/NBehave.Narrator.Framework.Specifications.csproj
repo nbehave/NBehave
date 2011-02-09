@@ -18,7 +18,7 @@
     </SccAuxPath>
     <SccProvider>
     </SccProvider>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>..\NBehave.snk</AssemblyOriginatorKeyFile>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -121,6 +121,7 @@
     <Compile Include="EventListeners\XmlOutputEventListenerSpec.cs" />
     <Compile Include="Features\TestFeatures.cs" />
     <Compile Include="ParameterConverterSpec.cs" />
+    <Compile Include="RemotableStoryRunnerSpec.cs" />
     <Compile Include="StringExtensionsSpec.cs" />
     <Compile Include="StringStepRunnerSpec.cs" />
     <Compile Include="EventListeners\XmlOutputWriterSpec.cs" />

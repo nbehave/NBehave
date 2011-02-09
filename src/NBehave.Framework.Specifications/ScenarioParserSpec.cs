@@ -398,7 +398,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             [Test]
             public void ShouldHaveAddedBackgroundGivenStepToFeature()
             {
-                Assert.That(_scenarios.First().Steps.First().Step, Is.EqualTo("Given this background section declaration"));
+                Assert.That(_scenarios.First().Steps.First().Step, Is.EqualTo("Given this scenario under the context of a background section"));
             }
 
             [Test]

@@ -8,6 +8,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
+using NBehave.Narrator.Framework.EventListeners;
 
 namespace NBehave.Narrator.Framework
 {
@@ -39,7 +40,7 @@ namespace NBehave.Narrator.Framework
 
         internal IEnumerable<string> Assemblies { get; set; }
 
-        internal EventListener EventListener { get; set; }
+        internal IEventListener EventListener { get; set; }
 
         internal StoryRunnerFilter Filter { get; set; }
 
@@ -70,7 +71,7 @@ namespace NBehave.Narrator.Framework
             return this;
         }
 
-        public NBehaveConfiguration SetEventListener(EventListener eventListener)
+        public NBehaveConfiguration SetEventListener(IEventListener eventListener)
         {
             this.EventListener = eventListener;
             return this;

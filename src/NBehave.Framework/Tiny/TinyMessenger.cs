@@ -33,12 +33,14 @@ namespace NBehave.Narrator.Framework.Tiny
     /// <summary>
     /// Base class for messages that provides weak refrence storage of the sender
     /// </summary>
+    [Serializable]
     public abstract class TinyMessageBase : ITinyMessage
     {
         /// <summary>
         /// Store a WeakReference to the sender just in case anyone is daft enough to
         /// keep the message around and prevent the sender from being collected.
         /// </summary>
+        [NonSerialized]
         private WeakReference _Sender;
         public object Sender
         {

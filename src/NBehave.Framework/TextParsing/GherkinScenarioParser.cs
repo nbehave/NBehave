@@ -45,7 +45,14 @@ namespace NBehave.Narrator.Framework
                 ms.Seek(0, SeekOrigin.Begin);
 
                 var lexer = _languageService.GetLexer(scenarioText, this);
-                lexer.Scan(new StreamReader(ms));
+                try
+                {
+                    lexer.Scan(new StreamReader(ms));
+                }
+                catch (LexingException ex)
+                {
+                    throw new LexingException("Error lexing file " + file, ex);
+                }
             }
 
             _hub.Publish(new ParsingFileEnd(this, file));

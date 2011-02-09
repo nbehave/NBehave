@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System;
+
 namespace NBehave.Narrator.Framework
 {
     using NBehave.Narrator.Framework.Messages;
@@ -14,7 +16,7 @@ namespace NBehave.Narrator.Framework
 
     using TinyIoC;
 
-    public class TextRunner : IRunner
+    public class TextRunner : MarshalByRefObject, IRunner
     {
         private readonly NBehaveConfiguration _configuration;
         private ITinyMessengerHub _hub;

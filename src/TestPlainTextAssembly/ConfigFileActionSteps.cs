@@ -1,6 +1,6 @@
 using System.Configuration;
-using NBehave.Spec.NUnit;
 using NBehave.Narrator.Framework;
+using Should.Fluent;
 
 namespace TestPlainTextAssembly
 {
@@ -23,7 +23,7 @@ namespace TestPlainTextAssembly
         [Then("the value should be $val")]
         public void ActionPerformed(string actionPerformed)
         {
-            _configValue.ShouldEqual(actionPerformed);
+            _configValue.Should().Equal(actionPerformed);
         }
     }
 }

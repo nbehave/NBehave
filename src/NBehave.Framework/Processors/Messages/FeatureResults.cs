@@ -7,6 +7,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Runtime.Remoting;
+using System.Runtime.Serialization;
+
 namespace NBehave.Narrator.Framework
 {
     using System;
@@ -14,6 +17,7 @@ namespace NBehave.Narrator.Framework
 
     using NBehave.Narrator.Framework.Tiny;
 
+    [Serializable]
     public class FeatureResults : TinyMessageBase
     {
         private readonly List<ScenarioResult> _scenarioResults = new List<ScenarioResult>();

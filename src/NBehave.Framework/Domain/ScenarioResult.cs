@@ -13,9 +13,7 @@ namespace NBehave.Narrator.Framework
     using System.Collections.Generic;
     using System.Text;
 
-    using NBehave.Narrator.Framework.Tiny;
     [Serializable]
-
     public class ScenarioResult
     {
         private readonly List<ActionStepResult> _actionStepResults;
@@ -30,9 +28,19 @@ namespace NBehave.Narrator.Framework
             _actionStepResults = new List<ActionStepResult>();
         }
 
-        public string FeatureTitle { get; private set; }
+        private string _featureTitle;
+        public string FeatureTitle
+        {
+            get { return _featureTitle; }
+            private set { _featureTitle = value; }
+        }
 
-        public string ScenarioTitle { get; private set; }
+        private string _scenarioTitle;
+        public string ScenarioTitle
+        {
+            get { return _scenarioTitle; }
+            private set { _scenarioTitle = value; }
+        }
 
         public Result Result
         {

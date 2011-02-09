@@ -16,7 +16,8 @@ namespace NBehave.TestDriven.Plugin
 
         TestRunState ITestRunner.RunMember(ITestListener tddNetListener, Assembly assembly, MemberInfo member)
         {
-            return Run(assembly, member, tddNetListener);            
+            //return Run(assembly, member, tddNetListener);      
+            return TestRunState.NoTests;
         }
 
         TestRunState ITestRunner.RunNamespace(ITestListener testListener, Assembly assembly, string ns)

@@ -18,7 +18,8 @@
 
             Zip(_hub, (messageOne, messageTwo) =>
                 {
-                    if(messageOne is ParsedStep && !(messageTwo is ParsedTable))
+                    //HACK: "_scenario == null" implies that the parsing is going wrong. It would be better to add some filter predicate to our message bus subscription.
+                    if(messageOne is ParsedStep && !(messageTwo is ParsedTable) && _scenario != null)
                     {
                         _scenario.AddStep((messageOne as ParsedStep).Content);
                     }

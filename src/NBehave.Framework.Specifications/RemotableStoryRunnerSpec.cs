@@ -5,8 +5,8 @@ using System.Text;
 using System.Xml;
 using NBehave.Narrator.Framework.EventListeners;
 using NBehave.Narrator.Framework.EventListeners.Xml;
+using NBehave.Narrator.Framework.Processors;
 using NBehave.Narrator.Framework.Remoting;
-using NBehave.Narrator.Framework.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
 using TestPlainTextAssembly;
@@ -18,22 +18,37 @@ namespace NBehave.Narrator.Framework.Specifications
     [Context]
     public class RemotableStoryRunnerSpec
     {
-        private FeatureResults RunAction(string actionStep, IRunner runner)
-        {
-            runner.Load((IEnumerable<string>) actionStep.ToStream());
-            return runner.Run();
-        }
+        private string _tempFileName;
 
         private IRunner CreateTextRunner(IEnumerable<string> assemblies)
+        {            
+            return CreateTextRunner(assemblies, null);
+        }
+
+         private IRunner CreateTextRunner(IEnumerable<string> assemblies, string scenarioText)
         {
             var writer = new StreamWriter(new MemoryStream());
             var listener = new TextWriterEventListener(writer);
-            return CreateTextRunner(assemblies, listener);
+            return CreateTextRunner(assemblies, listener, scenarioText);
         }
 
-        private IRunner CreateTextRunner(IEnumerable<string> assemblies, IEventListener listener)
+        private IRunner CreateTextRunner(IEnumerable<string> assemblies, IEventListener listener, string scenarioText)
         {
-            return RunnerFactory.CreateTextRunner(assemblies, listener);
+            var configuration = NBehaveConfiguration.New
+                                                    .SetAssemblies(assemblies)
+                                                    .SetEventListener(listener);
+
+            if(!String.IsNullOrEmpty(scenarioText))
+            {
+                // Configure the scenario to get run
+                _tempFileName = Path.GetTempFileName();
+                using (var fileStream = new StreamWriter(File.Create(_tempFileName)))
+                {
+                    fileStream.Write(scenarioText);
+                }
+                configuration.SetScenarioFiles(new [] {_tempFileName});
+            }
+            return RunnerFactory.CreateTextRunner(configuration);
         }
 
         private void SetupConfigFile()
@@ -45,6 +60,8 @@ namespace NBehave.Narrator.Framework.Specifications
         private void DeleteConfigFile()
         {
             File.Delete(Path.Combine(GetAssemblyLocation(), "TestPlainTextAssembly.dll.config"));
+            if(!String.IsNullOrEmpty(_tempFileName))
+                File.Delete(_tempFileName);
         }
 
         private string GetAssemblyLocation()
@@ -65,18 +82,12 @@ namespace NBehave.Narrator.Framework.Specifications
             {
                 SetupConfigFile();
                 _runner = CreateTextRunner(new[] { "TestPlainTextAssembly.dll" });
-                LoadAssembly();
             }
 
             [TearDown]
             public void TearDown()
             {
                 DeleteConfigFile();
-            }
-
-            private void LoadAssembly()
-            {
-                _runner.LoadAssembly("TestPlainTextAssembly.dll");
             }
 
             [Specification]
@@ -95,11 +106,48 @@ namespace NBehave.Narrator.Framework.Specifications
             [SetUp]
             public void SetUp()
             {
+                var scenarioText = "Feature: Config file support\r\n"+
+                                    "Scenario: Reading values from a config file\r\n" +
+                                    "Given an assembly with a matching configuration file\r\n" + 
+                                    "When the value of setting foo is read\r\n" + 
+                                    "Then the value should be bar";
                 SetupConfigFile();
-                _runner = CreateTextRunner(new[] { "TestPlainTextAssembly.dll" });
-                LoadAssembly();
+                _runner = CreateTextRunner(new[] { "TestPlainTextAssembly.dll" }, scenarioText);
 
-                LoadScenario();
+                _result = _runner.Run();
+
+            }
+
+            [TearDown]
+            public void TearDown()
+            {
+                DeleteConfigFile();
+            }
+            
+            [Specification]
+            public void Should_read_values_from_the_appropriate_config_file()
+            {
+                Assert.AreEqual(1, _result.NumberOfPassingScenarios);
+                Assert.AreEqual(0, _result.NumberOfFailingScenarios);
+            }
+        }
+
+        [Context]
+        public class When_running_failing_plain_text_scenarios_with_config_file : RemotableStoryRunnerSpec
+        {
+            private IRunner _runner;
+            private FeatureResults _result;
+
+            [SetUp]
+            public void SetUp()
+            {
+                var scenarioText = "Feature: Config file support\r\n" +
+                                    "Scenario: Reading values from a config file\r\n" +
+                                    "Given an assembly with a matching configuration file\r\n" +
+                                    "When the value of setting foo is read\r\n" +
+                                    "Then the value should be meeble";
+                SetupConfigFile();
+                _runner = CreateTextRunner(new[] { "TestPlainTextAssembly.dll" }, scenarioText);
 
                 _result = _runner.Run();
 
@@ -111,27 +159,41 @@ namespace NBehave.Narrator.Framework.Specifications
                 DeleteConfigFile();
             }
 
-            private void LoadScenario()
-            {
-                var ms = new MemoryStream();
-                var sr = new StreamWriter(ms);
-                sr.WriteLine("Given an assembly with a matching configuration file");
-                sr.WriteLine("When the value of setting foo is read");
-                sr.WriteLine("Then the value should be bar");
-                sr.Flush();
-                ms.Seek(0, SeekOrigin.Begin);
-                _runner.Load(ms);
-            }
-            
-            private void LoadAssembly()
-            {
-                _runner.LoadAssembly("TestPlainTextAssembly.dll");
-            }
-
             [Specification]
             public void Should_read_values_from_the_appropriate_config_file()
             {
-                Assert.AreEqual(1, _result.NumberOfPassingScenarios);
+                Assert.AreEqual(0, _result.NumberOfPassingScenarios);
+                Assert.AreEqual(1, _result.NumberOfFailingScenarios);
+            }
+        }
+
+        [Context]
+        public class When_running_text_scenarios_with_no_feature_and_config_file : RemotableStoryRunnerSpec
+        {
+            private IRunner _runner;
+            private FeatureResults _result;
+
+            [SetUp]
+            public void SetUp()
+            {
+                var scenarioText = "Scenario: Reading values from a config file\r\n" +
+                                    "Given an assembly with a matching configuration file\r\n" +
+                                    "When the value of setting foo is read\r\n" +
+                                    "Then the value should be bar";
+                SetupConfigFile();
+                _runner = CreateTextRunner(new[] { "TestPlainTextAssembly.dll" }, scenarioText);
+            }
+
+            [TearDown]
+            public void TearDown()
+            {
+                DeleteConfigFile();
+            }
+
+            [Specification, ExpectedException(typeof(ScenarioMustHaveFeatureException))]
+            public void Should_throw_appropriate_exception()
+            {
+                _result = _runner.Run();
             }
         }
 
@@ -149,11 +211,14 @@ namespace NBehave.Narrator.Framework.Specifications
                 var writer = new XmlTextWriter(new MemoryStream(), Encoding.UTF8);
                 var listener = new XmlOutputEventListener(writer);
 
-                SetupConfigFile();
-                _runner = CreateTextRunner(new[] { "TestPlainTextAssembly.dll" }, listener);
-                LoadAssembly();
+                var scenarioText = "Feature: " + StoryTitle + "\r\n" +
+                                    "Scenario: Reading values from a config file\r\n" +
+                                    "Given an assembly with a matching configuration file\r\n" +
+                                    "When the value of setting foo is read\r\n" +
+                                    "Then the value should be bar";
 
-                LoadScenario();
+                SetupConfigFile();
+                _runner = CreateTextRunner(new[] { "TestPlainTextAssembly.dll" }, listener, scenarioText);
 
                 _result = _runner.Run();
 
@@ -166,24 +231,6 @@ namespace NBehave.Narrator.Framework.Specifications
             public void TearDown()
             {
                 DeleteConfigFile();
-            }
-
-            private void LoadScenario()
-            {
-                var ms = new MemoryStream();
-                var sr = new StreamWriter(ms);
-                sr.WriteLine("Story: " + StoryTitle);
-                sr.WriteLine("Given an assembly with a matching configuration file");
-                sr.WriteLine("When the value of setting foo is read");
-                sr.WriteLine("Then the value should be bar");
-                sr.Flush();
-                ms.Seek(0, SeekOrigin.Begin);
-                _runner.Load(ms);
-            }
-
-            private void LoadAssembly()
-            {
-                _runner.LoadAssembly("TestPlainTextAssembly.dll");
             }
 
             [Specification]

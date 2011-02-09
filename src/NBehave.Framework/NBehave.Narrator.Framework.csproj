@@ -18,7 +18,7 @@
     </SccAuxPath>
     <SccProvider>
     </SccProvider>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>..\NBehave.snk</AssemblyOriginatorKeyFile>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -92,10 +92,12 @@
     <Reference Include="Gherkin">
       <HintPath>..\..\lib\Gherkin\Gherkin.dll</HintPath>
     </Reference>
-    <Reference Include="Should.Core">
+    <Reference Include="Should.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\should\Should.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Should.Fluent">
+    <Reference Include="Should.Fluent, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\should\Should.Fluent.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -111,6 +113,7 @@
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="ActionCatalog.cs" />
+    <Compile Include="EventListeners\IEventListener.cs" />
     <Compile Include="Processors\Messages\ActionStepsLoaded.cs" />
     <Compile Include="Processors\FeatureResultCollector.cs" />
     <Compile Include="Processors\ParseScenarioFiles.cs" />
@@ -127,7 +130,6 @@
     <Compile Include="EventListeners\CodeGeneration\ActionStepCodeGenerator.cs" />
     <Compile Include="EventListeners\CodeGeneration\CodeGenEventListener.cs" />
     <Compile Include="EventListeners\ColorfulConsoleOutputEventListener.cs" />
-    <Compile Include="Contracts\IMessengerHubAware.cs" />
     <Compile Include="Processors\Messages\ScenarioCreatedEvent.cs" />
     <Compile Include="Processors\Messages\FeatureNarrativeEvent.cs" />
     <Compile Include="Processors\Messages\FeatureCreatedEvent.cs" />
@@ -147,7 +149,6 @@
     <Compile Include="NBehaveInitialiser.cs" />
     <Compile Include="ParameterConverter.cs" />
     <Compile Include="Remoting\AppDomainBootstrapper.cs" />
-    <Compile Include="Remoting\DelegatingListener.cs" />
     <Compile Include="Processors\IMessageProcessor.cs" />
     <Compile Include="Processors\ScenarioExecutor.cs" />
     <Compile Include="Remoting\RemotableStoryRunner.cs" />
