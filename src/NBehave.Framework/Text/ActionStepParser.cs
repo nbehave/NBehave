@@ -83,6 +83,15 @@ namespace NBehave.Narrator.Framework
                 case 4:
                     action = GetActionForFourParameters(instance, methodInfo);
                     break;
+                case 5:
+                    action = GetActionForFiveParameters(instance, methodInfo);
+                    break;
+                case 6:
+                    action = GetActionForSixParameters(instance, methodInfo);
+                    break;
+                case 7:
+                    action = GetActionForSevenParameters(instance, methodInfo);
+                    break;
             }
             return action;
         }
@@ -135,6 +144,51 @@ namespace NBehave.Narrator.Framework
 				                  	ChangeType(methodInfo,b,1),
 				                  	ChangeType(methodInfo,c,2),
 				                  	ChangeType(methodInfo,d,3)
+				                  });
+            return action;
+        }
+
+        private object GetActionForFiveParameters(object instance, MethodInfo methodInfo)
+        {
+            Action<object, object, object, object, object> action = (a, b, c, d, e) =>
+                methodInfo.Invoke(instance, new[]
+				                  {
+				                  	ChangeType(methodInfo,a,0),
+				                  	ChangeType(methodInfo,b,1),
+				                  	ChangeType(methodInfo,c,2),
+				                  	ChangeType(methodInfo,d,3),
+				                  	ChangeType(methodInfo,e,4),
+				                  });
+            return action;
+        }
+
+        private object GetActionForSixParameters(object instance, MethodInfo methodInfo)
+        {
+            Action<object, object, object, object, object, object> action = (a, b, c, d, e, f) =>
+                methodInfo.Invoke(instance, new[]
+				                  {
+				                  	ChangeType(methodInfo,a,0),
+				                  	ChangeType(methodInfo,b,1),
+				                  	ChangeType(methodInfo,c,2),
+				                  	ChangeType(methodInfo,d,3),
+				                  	ChangeType(methodInfo,e,4),
+				                  	ChangeType(methodInfo,f,5),
+				                  });
+            return action;
+        }
+
+        private object GetActionForSevenParameters(object instance, MethodInfo methodInfo)
+        {
+            Action<object, object, object, object, object, object, object> action = (a, b, c, d, e, f, g) =>
+                methodInfo.Invoke(instance, new[]
+				                  {
+				                  	ChangeType(methodInfo,a,0),
+				                  	ChangeType(methodInfo,b,1),
+				                  	ChangeType(methodInfo,c,2),
+				                  	ChangeType(methodInfo,d,3),
+				                  	ChangeType(methodInfo,e,4),
+				                  	ChangeType(methodInfo,f,5),
+				                  	ChangeType(methodInfo,g,6)
 				                  });
             return action;
         }
