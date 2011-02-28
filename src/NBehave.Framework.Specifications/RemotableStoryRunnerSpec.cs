@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Xml;
 using NBehave.Narrator.Framework.EventListeners;
@@ -18,6 +19,20 @@ namespace NBehave.Narrator.Framework.Specifications
     [Context]
     public class RemotableStoryRunnerSpec
     {
+        [Specification]
+        public void RawDeserialization()
+        {
+            object o;
+            using(var fileStream = new FileStream("MyFile.bin", FileMode.Open, FileAccess.Read, FileShare.None))
+            {
+                o = new BinaryFormatter()
+                    .Deserialize(fileStream);
+            }
+
+            var result = o as ScenarioResult;
+            Assert.IsNotNull(result);
+        }
+
         private string _tempFileName;
 
         private IRunner CreateTextRunner(IEnumerable<string> assemblies)

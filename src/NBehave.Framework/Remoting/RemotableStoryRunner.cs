@@ -12,8 +12,6 @@ namespace NBehave.Narrator.Framework.Remoting
             _configuration = configuration;
         }
 
-        public IEventListener Listener { get; set; }
-
         public FeatureResults Run()
         {
             return new TextRunner(_configuration).Run();

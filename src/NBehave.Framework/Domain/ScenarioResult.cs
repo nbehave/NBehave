@@ -16,7 +16,7 @@ namespace NBehave.Narrator.Framework
     [Serializable]
     public class ScenarioResult
     {
-        private readonly List<ActionStepResult> _actionStepResults;
+        private List<ActionStepResult> _actionStepResults;
         private Result _result = new Passed();
         private string _message;
         private string _stackTrace;

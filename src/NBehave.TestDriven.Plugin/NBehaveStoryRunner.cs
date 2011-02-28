@@ -11,7 +11,8 @@ namespace NBehave.TestDriven.Plugin
     {
         TestRunState ITestRunner.RunAssembly(ITestListener tddNetListener, Assembly assembly)
         {
-            return Run(assembly, null, tddNetListener);            
+            return TestRunState.NoTests;
+            //return Run(assembly, null, tddNetListener);            
         }
 
         TestRunState ITestRunner.RunMember(ITestListener tddNetListener, Assembly assembly, MemberInfo member)
@@ -22,8 +23,10 @@ namespace NBehave.TestDriven.Plugin
 
         TestRunState ITestRunner.RunNamespace(ITestListener testListener, Assembly assembly, string ns)
         {
+            return TestRunState.NoTests;
+
             //TODO: Fix filter. ns is probably equal to NamespaceFilter in StoryRunnerFilter
-            return Run(assembly, null, testListener);      
+            //return Run(assembly, null, testListener);      
         }
 
         private TestRunState Run(Assembly assembly, MemberInfo member, ITestListener tddNetListener)

@@ -99,7 +99,7 @@
 			<arg value="NBehave.Console.Specifications.dll" />
 			<arg value="NBehave.Spec.NUnit.Specifications.dll" />
 			<arg value="NBehave.Spec.MbUnit.Specifications.dll" />
-			<arg value="NBehave.Spec.MSTest.Specifications.dll" />
+			<arg value="NBehave.Spec.MSTest9.Specifications.dll" />
 			<arg value="NBehave.Spec.Xunit.Specifications.dll" />
 			<arg value="NBehave.Spec.Framework.Specifications.dll" />
 			<arg value="NBehave.NAnt.Specifications.dll" />
@@ -117,7 +117,7 @@
 			<arg value="NBehave.Console.Specifications.dll" />
 			<arg value="NBehave.Spec.NUnit.Specifications.dll" />
 			<arg value="NBehave.Spec.MbUnit.Specifications.dll" />
-			<arg value="NBehave.Spec.MSTest.Specifications.dll" />
+			<arg value="NBehave.Spec.MSTest10.Specifications.dll" />
 			<arg value="NBehave.Spec.Xunit.Specifications.dll" />
 			<arg value="NBehave.Spec.Framework.Specifications.dll" />
 			<arg value="NBehave.NAnt.Specifications.dll" />

@@ -14,7 +14,6 @@ namespace NBehave.Narrator.Framework
         public static IRunner Build(this NBehaveConfiguration configuration)
         {
             return RunnerFactory.CreateTextRunner(configuration);
-            //return new TextRunner(configuration);
         }
 
         public static FeatureResults Run(this NBehaveConfiguration configuration)
