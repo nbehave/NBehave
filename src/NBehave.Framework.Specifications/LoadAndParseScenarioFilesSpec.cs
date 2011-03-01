@@ -13,8 +13,6 @@ namespace NBehave.Narrator.Framework.Specifications
 
     using Rhino.Mocks;
 
-    using TinyIoC;
-
     [TestFixture]
     public class LoadAndParseScenarioFilesSpec
     {

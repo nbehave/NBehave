@@ -8,8 +8,6 @@ namespace NBehave.Narrator.Framework
     using NBehave.Narrator.Framework.Processors;
     using NBehave.Narrator.Framework.Tiny;
 
-    using TinyIoC;
-
     public static class NBehaveInitialiser
     {
         public static void Initialise(TinyIoCContainer container, NBehaveConfiguration configuration)

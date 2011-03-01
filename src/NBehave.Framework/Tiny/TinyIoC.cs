@@ -42,16 +42,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Reflection;
-using System.Diagnostics;
-#if EXPRESSIONS
 using System.Linq.Expressions;
+using System.Collections.ObjectModel;
+#if EXPRESSIONS
+
 #endif
 
-namespace TinyIoC
+namespace NBehave.Narrator.Framework.Tiny
 {
-    using System.Collections.ObjectModel;
 
     #region SafeDictionary
     public class SafeDictionary<TKey, TValue> : IDisposable

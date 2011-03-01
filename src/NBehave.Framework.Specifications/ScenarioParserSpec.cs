@@ -10,8 +10,6 @@ namespace NBehave.Narrator.Framework.Specifications.Text
     using NBehave.Narrator.Framework.Processors;
     using NBehave.Narrator.Framework.Tiny;
 
-    using TinyIoC;
-
     [TestFixture]
     public abstract class ScenarioParserSpec
     {

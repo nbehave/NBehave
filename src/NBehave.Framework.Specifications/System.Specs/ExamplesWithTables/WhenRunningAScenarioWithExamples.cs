@@ -1,4 +1,6 @@
-﻿namespace NBehave.Narrator.Framework.Specifications.System.Specs
+﻿using Should.Fluent;
+
+namespace NBehave.Narrator.Framework.Specifications.System.Specs
 {
     using NBehave.Narrator.Framework.EventListeners;
 
@@ -34,13 +36,23 @@
     [ActionSteps]
     public class ExamplesWithTableSteps
     {
+        private int _left;
+        private int _right;
+
         [Given("this scenario containing scenario outline and a table:")]
-        public void Given(int left, int right){}
+        public void Given(int left, int right)
+        {
+            _left = left;
+            _right = right;
+        }
 
         [When("the tabled scenario outline is executed")]
         public void When(){}
 
         [Then("the table should be templated into the scenario outline and executed with each row:")]
-        public void Then(int sum){}
+        public void Then(int sum)
+        {
+            sum.Should().Equal(_left + _right);
+        }
     }
 }

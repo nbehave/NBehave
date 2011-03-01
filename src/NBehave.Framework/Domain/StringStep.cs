@@ -36,7 +36,7 @@ namespace NBehave.Narrator.Framework
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return Equals(other.StepResult, StepResult);
+            return Equals(other.Step, Step);
         }
 
         public override int GetHashCode()

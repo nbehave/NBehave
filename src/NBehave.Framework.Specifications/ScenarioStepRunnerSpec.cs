@@ -10,8 +10,6 @@ namespace NBehave.Narrator.Framework.Specifications
     using NBehave.Narrator.Framework.Processors;
     using NBehave.Narrator.Framework.Tiny;
 
-    using TinyIoC;
-
     [TestFixture]
     public class ScenarioStepRunnerSpec
     {

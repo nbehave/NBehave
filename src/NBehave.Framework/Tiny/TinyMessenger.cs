@@ -12,6 +12,8 @@
 // FITNESS FOR A PARTICULAR PURPOSE.
 //===============================================================================
 
+using System.Diagnostics;
+
 namespace NBehave.Narrator.Framework.Tiny
 {
     using System;
@@ -755,6 +757,7 @@ namespace NBehave.Narrator.Framework.Tiny
             if (message == null)
                 throw new ArgumentNullException("message");
 
+            //Debug.WriteLine("TinyMessenger.PublishInternal: Publishing message type " + typeof(TMessage).Name);
             List<SubscriptionItem> currentlySubscribed;
             lock (_SubscriptionsPadlock)
             {

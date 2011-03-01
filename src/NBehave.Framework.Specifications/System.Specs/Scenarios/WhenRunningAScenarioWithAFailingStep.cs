@@ -1,4 +1,7 @@
-﻿namespace NBehave.Narrator.Framework.Specifications.System.Specs
+﻿using Should.Fluent;
+using Should.Fluent.Model;
+
+namespace NBehave.Narrator.Framework.Specifications.System.Specs
 {
     using global::System.Collections.Generic;
     using global::System.Linq;
@@ -47,7 +50,7 @@
         [Then("the failing scenario should display an error message")]
         public void Then()
         {
-            Assert.Fail();
+            1.Should().Equal(2);
         }
     }
 }

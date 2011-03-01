@@ -161,6 +161,20 @@ namespace NBehave.Narrator.Framework.Processors
                     var columnValue = example.ColumnValues[columnName].Trim();
                     var replace = new Regex(string.Format(@"(\${0})|(\[{0}\])", columnName), RegexOptions.IgnoreCase);
                     step.Step = replace.Replace(step.Step, columnValue);
+                    
+                    if(step is StringTableStep)
+                    {
+                        var tableSteps = ((StringTableStep) step).TableSteps;
+                        foreach (var row in tableSteps)
+                        {
+                            var newValues = row.ColumnValues.ToDictionary(pair => pair.Key, pair => replace.Replace(pair.Value, columnValue));
+                            row.ColumnValues.Clear();
+                            foreach (var pair in newValues)
+                            {
+                                row.ColumnValues.Add(pair.Key, pair.Value);
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -170,8 +184,23 @@ namespace NBehave.Narrator.Framework.Processors
             var clones = new List<StringStep>();
             foreach (var step in scenario.Steps)
             {
-                var s = new StringStep(step.Step, step.Source);
-                clones.Add(s);
+                if (step is StringTableStep)
+                {
+                    var clone = new StringTableStep(step.Step, step.Source);
+                    var tableSteps = ((StringTableStep) step).TableSteps;
+                    foreach (var tableStep in tableSteps)
+                    {
+                        var clonedValues = tableStep.ColumnValues.ToDictionary(pair => pair.Key, pair => pair.Value);
+                        var clonedNames = new ExampleColumns(tableStep.ColumnNames);
+                        var clonedRow = new Row(clonedNames, clonedValues);
+                        clone.AddTableStep(clonedRow);
+                    }
+                    clones.Add(clone);
+                }
+                else
+                {
+                    clones.Add(new StringStep(step.Step, step.Source));
+                }
             }
 
             return clones;

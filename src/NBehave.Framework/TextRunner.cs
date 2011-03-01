@@ -14,8 +14,6 @@ namespace NBehave.Narrator.Framework
     using NBehave.Narrator.Framework.Messages;
     using NBehave.Narrator.Framework.Tiny;
 
-    using TinyIoC;
-
     public class TextRunner : MarshalByRefObject, IRunner
     {
         private readonly NBehaveConfiguration _configuration;

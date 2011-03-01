@@ -12,8 +12,6 @@ namespace NBehave.Narrator.Framework.Specifications
 {
     using NBehave.Narrator.Framework.Tiny;
 
-    using TinyIoC;
-
     public static class LocalConfigurationExtensions
     {
         public static TextRunner Build(this NBehaveConfiguration configuration)
