@@ -396,13 +396,15 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             [Test]
             public void ShouldHaveAddedBackgroundGivenStepToFeature()
             {
-                Assert.That(_scenarios.First().Steps.First().Step, Is.EqualTo("Given this scenario under the context of a background section"));
+                var background = _scenarios.First().Feature.Background;
+                Assert.That(background.Steps.First().Step, Is.EqualTo("Given this background section declaration"));
             }
 
             [Test]
             public void ShouldHaveAddedBackgroundAndStepToFeature()
             {
-                Assert.That(_scenarios.First().Steps.Skip(1).First().Step, Is.EqualTo("And this one"));
+                var background = _scenarios.First().Feature.Background;
+                Assert.That(background.Steps.Skip(1).First().Step, Is.EqualTo("And this one"));
             }
         }
     }

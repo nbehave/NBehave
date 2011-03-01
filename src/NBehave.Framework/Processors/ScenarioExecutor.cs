@@ -76,7 +76,8 @@ namespace NBehave.Narrator.Framework.Processors
         {
             var scenarioResult = new ScenarioResult(scenario.Feature, scenario.Title);
             _stringStepRunner.BeforeScenario();
-            foreach (var step in scenario.Steps)
+            var stepsToRun = scenario.Feature.Background.Steps.Union(scenario.Steps);
+            foreach (var step in stepsToRun)
             {
                 if (step is StringTableStep)
                 {

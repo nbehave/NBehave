@@ -23,9 +23,10 @@ namespace NBehave.Narrator.Framework
         {
             this.Scenarios = new List<Scenario>();
             ExtractTitleAndNarrative(title);
+            Background = new Scenario();
         }
 
-        public string Title { get; set; }
+        public string Title { get; private set; }
 
         public string Narrative { get; set; }
 
@@ -59,5 +60,12 @@ namespace NBehave.Narrator.Framework
                 Narrative = String.Empty;
             }
         }
+
+        public void AddBackground(Scenario scenario)
+        {
+            Background = scenario;
+        }
+
+        public Scenario Background { get; private set; }
     }
 }

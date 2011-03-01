@@ -159,6 +159,7 @@
     <Compile Include="Domain\ActionMissingException.cs" />
     <Compile Include="Attributes\ActionStepAttribute.cs" />
     <Compile Include="Extensions\ActionStepConverterExtensions.cs" />
+    <Compile Include="TextParsing\Messages\BackgroundBuilt.cs" />
     <Compile Include="TextParsing\Messages\ModelBuilderCleanup.cs" />
     <Compile Include="TextParsing\Messages\ModelBuilderInitialise.cs" />
     <Compile Include="TextParsing\Messages\EnteringExamples.cs" />
@@ -194,6 +195,7 @@
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="TextParsing\Messages\ParsingFileEnd.cs" />
     <Compile Include="TextParsing\ModelBuilders\AbstracModelBuilder.cs" />
+    <Compile Include="TextParsing\ModelBuilders\BackgroundBuilder.cs" />
     <Compile Include="TextParsing\ModelBuilders\ExamplesBuilder.cs" />
     <Compile Include="TextParsing\ModelBuilders\FeatureBuilder.cs" />
     <Compile Include="TextParsing\Messages\FeatureBuilt.cs" />

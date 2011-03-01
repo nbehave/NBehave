@@ -10,6 +10,7 @@
     {
         private readonly ITinyMessengerHub _hub;
         private Scenario _scenario;
+        private Scenario _background;
 
         public StepBuilder(ITinyMessengerHub hub)
             : base(hub)
@@ -18,16 +19,27 @@
 
             Zip(_hub, (messageOne, messageTwo) =>
                 {
-                    //HACK: "_scenario == null" implies that the parsing is going wrong. It would be better to add some filter predicate to our message bus subscription.
-                    if(messageOne is ParsedStep && !(messageTwo is ParsedTable) && _scenario != null)
+                    if(messageOne is ParsedStep && !(messageTwo is ParsedTable))
                     {
-                        _scenario.AddStep((messageOne as ParsedStep).Content);
+                        //"_scenario == null" implies that we are parsing the background steps
+                        if (_scenario == null)
+                        {
+                            _background.AddStep((messageOne as ParsedStep).Content);
+                        }
+                        else
+                        {
+                            _scenario.AddStep((messageOne as ParsedStep).Content);
+                        }
                     }
 
                     if (messageOne is ScenarioBuilt) 
                         _scenario = (messageOne as ScenarioBuilt).Content;
                     if (messageTwo is ScenarioBuilt)
                         _scenario = (messageTwo as ScenarioBuilt).Content;
+                    if (messageOne is BackgroundBuilt)
+                        _background = (messageOne as BackgroundBuilt).Content;
+                    if (messageTwo is BackgroundBuilt)
+                        _background = (messageTwo as BackgroundBuilt).Content;
                 });
         }
 
