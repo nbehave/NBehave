@@ -23,9 +23,17 @@ namespace NBehave.Narrator.Framework
         {
         }
 
-        public Scenario(string title)
+        public Scenario(string title) : this(title, new Feature())
         {
             Feature = new Feature();
+            Title = title;
+            _steps = new List<StringStep>();
+            _examples = new List<Example>();
+        }
+
+        public Scenario(string title, Feature feature)
+        {
+            Feature = feature;
             Title = title;
             _steps = new List<StringStep>();
             _examples = new List<Example>();
