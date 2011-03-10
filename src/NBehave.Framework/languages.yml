@@ -4,7 +4,7 @@
 #
 # If  a keyword has multiple aliases, seperate them with a |
 #
-# If your langugae isnt here, add it yourself or grab Cucumbers languages.yml file, it works for NBehave ;-)
+# If your language isnt here, add it yourself or grab Cucumbers languages.yml file, it works for NBehave ;-)
 #
 "en":
   name: English
