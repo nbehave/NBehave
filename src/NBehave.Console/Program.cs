@@ -7,6 +7,7 @@ using System.Threading;
 using NBehave.Narrator.Framework;
 using NBehave.Narrator.Framework.EventListeners;
 using NBehave.Narrator.Framework.Text;
+using System.Reflection;
 
 namespace NBehave.Console
 {
@@ -42,7 +43,7 @@ namespace NBehave.Console
 
             if (options.waitForDebugger)
             {
-                int countdown = 5000;
+                int countdown = 15000;
                 int waitTime = 200;
 
                 while (!Debugger.IsAttached && countdown >= 0)
@@ -58,8 +59,9 @@ namespace NBehave.Console
                 }
             }
 
-            FeatureResults results = SetupAndRunStories(options, output);
-            PrintTimeTaken(t0);
+            var m = new Program();
+            FeatureResults results = m.SetupAndRunStories(options, output);
+            m.PrintTimeTaken(t0);
 
             if (options.dryRun)
                 return 0;
@@ -74,10 +76,13 @@ namespace NBehave.Console
             return result;
         }
 
-        private static FeatureResults SetupAndRunStories(ConsoleOptions options, PlainTextOutput output)
+        string _currentAssemblyPath = ".";
+        private FeatureResults SetupAndRunStories(ConsoleOptions options, PlainTextOutput output)
         {
             IEventListener listener = CreateEventListener(options);
 
+            var d = AppDomain.CurrentDomain;
+            d.AssemblyResolve += AsmResolve;
             var runner = RunnerFactory.CreateTextRunner(options.Parameters.Cast<string>(), listener);
 
             runner.Load(options.scenarioFiles.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
@@ -86,6 +91,8 @@ namespace NBehave.Console
             {
                 try
                 {
+                    var p = Path.GetDirectoryName(Path.GetFullPath(path));
+                    _currentAssemblyPath = p;
                     runner.LoadAssembly(path);
                 }
                 catch (FileNotFoundException)
@@ -97,19 +104,34 @@ namespace NBehave.Console
             return runner.Run(output);
         }
 
-        private static void PrintTimeTaken(DateTime t0)
+        private Assembly AsmResolve(object sender, ResolveEventArgs args)
+        {
+            var name = args.Name.Split(new char[] { ',' })[0].Trim() + ".dll";
+            var f = Path.Combine(_currentAssemblyPath, name);
+            return Assembly.LoadFrom(f);
+        }
+
+        private static string GetPath(Assembly assembly)
+        {
+            string directory = Path.GetDirectoryName((new System.Uri(assembly.CodeBase)).LocalPath);
+            var path = Path.Combine(directory, "languages.yml");
+            return path;
+        }
+
+        private void PrintTimeTaken(DateTime t0)
         {
             double timeTaken = DateTime.Now.Subtract(t0).TotalSeconds;
             if (timeTaken >= 60)
             {
                 int totalMinutes = Convert.ToInt32(Math.Floor(timeTaken / 60));
-                System.Console.WriteLine("Time Taken {0}m {1:0.#}s", totalMinutes, timeTaken - 60);
+                int seconds = Convert.ToInt32(timeTaken - totalMinutes * 60.0);
+                System.Console.WriteLine("Time Taken {0}m {1:0.#}s", totalMinutes, seconds);
             }
             else
                 System.Console.WriteLine("Time Taken {0:0.#}s", timeTaken);
         }
 
-        public static IEventListener CreateEventListener(ConsoleOptions options)
+        public IEventListener CreateEventListener(ConsoleOptions options)
         {
             var eventListeners = new List<IEventListener>();
             if (options.HasStoryOutput)
