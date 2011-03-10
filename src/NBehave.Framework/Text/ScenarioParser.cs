@@ -30,7 +30,7 @@ namespace NBehave.Narrator.Framework
         {
             string language = ActionStep.DefaultLanguage;
             string trimmed = scenarioText.TrimStart(_whiteSpaceChars);
-            var lang = new Regex(@"^# language:\s+(?<language>\w+)\s+");
+            var lang = new Regex(@"^#\s*language:\s*(?<language>\w+)\s+", RegexOptions.IgnoreCase);
             var matches = lang.Match(trimmed);
             if (matches.Success)
                 language = matches.Groups["language"].Value;
@@ -73,7 +73,7 @@ namespace NBehave.Narrator.Framework
                 }
                 scenarioText = RemoveStep(scenarioText, step);
             }
-            
+
             return scenarios.Select(s => s.Feature)
                             .Distinct();
         }
@@ -202,8 +202,15 @@ namespace NBehave.Narrator.Framework
 
         private string RemoveStep(string scenarioText, string step)
         {
-            int idx = scenarioText.IndexOf(step);
-            return scenarioText.Remove(0, step.Length + idx);
+            var rows = step.Split(new char[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+            var newScenario = scenarioText;
+            foreach (var row in rows)
+            {
+                int idx = newScenario.IndexOf(row);
+                if (idx < 0) idx = 0;
+                newScenario = newScenario.Remove(0, row.Length + idx);
+            }
+            return newScenario;
         }
 
         private string GetNextStep(string scenario)
@@ -222,10 +229,10 @@ namespace NBehave.Narrator.Framework
                 actionRow = BuildActionStep(actionRows, firstActionWordRow, secondActionWordRow);
             return actionRow;
         }
-        
+
         private string[] RemoveComments(string[] rows)
         {
-        	return rows.Where(_=>_.TrimStart().StartsWith("#") == false).ToArray();
+            return rows.Where(_ => _.TrimStart().StartsWith("#") == false).ToArray();
         }
 
         private string BuildActionStep(string[] rows, int startRow, int endRow)
