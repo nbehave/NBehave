@@ -201,9 +201,9 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             public void Scenario()
             {
                 string scenario = "Feature: Calculator" + Environment.NewLine +
-                              	   "Scenario: Adding numbers" + Environment.NewLine +
+                                   "Scenario: Adding numbers" + Environment.NewLine +
                                   "  Given numbers 1 and 2" + Environment.NewLine +
-                				  "  # a comment" + Environment.NewLine +
+                                  "  # a comment" + Environment.NewLine +
                                   "  When I add the numbers" + Environment.NewLine +
                                   "  Then the sum is 3" + Environment.NewLine +
                                   Environment.NewLine +
@@ -299,7 +299,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             {
                 var step = _step.TableSteps.First();
                 CollectionAssert.Contains(step.ColumnNames, "name");
-                Assert.That(step.ColumnValues["name"], Is.Not.Null); 
+                Assert.That(step.ColumnValues["name"], Is.Not.Null);
             }
 
             [Test]
@@ -351,6 +351,56 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             public void feature_2_should_be_referenced_by_scenario_2()
             {
                 Assert.That(_scenarios.Skip(1).First().Feature.Title, Is.EqualTo("Calculator 2"));
+            }
+        }
+
+
+        public class Scenario_scenario_with_example_table_and_only_newline : ScenarioParserSpec
+        {
+            [SetUp]
+            public void Scenario()
+            {
+                string scenario = "Scenario: Adding numbers" + Environment.NewLine +
+                                  "  Given numbers [left] and [right]" + Environment.NewLine +
+                                  "  When I add the numbers" + Environment.NewLine +
+                                  "  Then the sum is [sum]" + Environment.NewLine +
+                                  Environment.NewLine +
+                                  "Examples:\n" +
+                                  "|left|right|sum|\n" +
+                                  "|1|2|3|\n" +
+                                  "|2|3|5\n";
+
+                Parse(scenario);
+            }
+
+            [Test]
+            public void Scenario_should_have_two_examples()
+            {
+                Assert.That(_scenarios.First().Examples.Count(), Is.EqualTo(2));
+            }
+
+            [Test]
+            public void should_find_3_steps()
+            {
+                Assert.That(_scenarios.First().Steps.Count(), Is.EqualTo(3));
+            }
+
+            [Test]
+            public void Should_have_a_scenario_Title()
+            {
+                Assert.That(_scenarios.First().Title, Is.EqualTo("Adding numbers"));
+            }
+
+            [Test]
+            public override void Should_have_given_step()
+            {
+                CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("  Given numbers [left] and [right]"));
+            }
+
+            [Test]
+            public override void Should_have_then_step()
+            {
+                CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("  Then the sum is [sum]"));
             }
         }
     }
