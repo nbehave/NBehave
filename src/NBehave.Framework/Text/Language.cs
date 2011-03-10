@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 
 namespace NBehave.Narrator.Framework
 {
@@ -46,8 +47,18 @@ namespace NBehave.Narrator.Framework
 
         private static string GetFullFileName()
         {
-            string directory = Path.GetDirectoryName((new System.Uri(typeof(YmlEntry).Assembly.CodeBase)).LocalPath);
-            return Path.Combine(directory, "languages.yml");
+            var path = GetPath(typeof(YmlEntry).Assembly);
+            if (File.Exists(path))
+                return path;
+            path = GetPath(Assembly.GetExecutingAssembly());
+            return path;
+        }
+
+        private static string GetPath(Assembly assembly)
+        {
+            string directory = Path.GetDirectoryName((new System.Uri(assembly.CodeBase)).LocalPath);
+            var path = Path.Combine(directory, "languages.yml");
+            return path;
         }
     }
 }
