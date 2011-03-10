@@ -172,7 +172,8 @@
 	</target>
 
 	<target name="dist" depends="dist.examples">
-
+		<copy file="${solution.dir}\xsl\NBehaveResults.xsl" todir="${build.dir}\dist\v3.5" />
+		<copy file="${solution.dir}\xsl\NBehaveResults.xsl" todir="${build.dir}\dist\v4.0" />
 		<zip zipfile="${build.dir}\NBehave_${project.fullversion}.zip">
 			<fileset basedir="${build.dir}\dist">
 				<include name="**\*" />
