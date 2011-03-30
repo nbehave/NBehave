@@ -88,6 +88,15 @@ namespace NBehave.Narrator.Framework.Specifications
             }
 
             [Test]
+            public void ShouldGetEnumParameter()
+            {
+                Action<AttributeTargets> action = value => { };
+                _actionCatalog.Add(new ActionMethodInfo(new Regex(@"an enum (?<value>\w+)"), action, action.Method, "Given"));
+                var values = _parameterConverter.GetParametersForActionStepText(new ActionStepText("an enum Assembly", ""));
+                Assert.That(values[0], Is.TypeOf(typeof(AttributeTargets)));
+            }
+
+            [Test]
             public void ShouldGetMultilineValueAsString()
             {
                 Action<object> action = value => { };

@@ -79,6 +79,11 @@ namespace NBehave.Narrator.Framework
                 return CreateList(strParam, paramType.ParameterType);
             }
 
+            if (paramType.ParameterType.IsEnum)
+            {
+                return Enum.Parse(paramType.ParameterType, strParam);
+            }
+
             return Convert.ChangeType(strParam, paramType.ParameterType);
         }
 
