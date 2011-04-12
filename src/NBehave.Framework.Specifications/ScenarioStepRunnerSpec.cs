@@ -102,6 +102,8 @@ namespace NBehave.Narrator.Framework.Specifications
             [TestFixtureSetUp]
             public void Setup()
             {
+                NBehaveInitialiser.Initialise(TinyIoCContainer.Current, NBehaveConfiguration.New.SetEventListener(Framework.EventListeners.EventListeners.NullEventListener())); 
+
                 _actionCatalog = new ActionCatalog();
                 _stringStepRunner = new StringStepRunner(_actionCatalog);
                 _runner = new ScenarioExecutor(TinyIoCContainer.Current.Resolve<ITinyMessengerHub>(), _stringStepRunner);

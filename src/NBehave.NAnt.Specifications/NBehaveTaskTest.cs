@@ -9,7 +9,7 @@ namespace NBehave.NAnt.Tests
         [Test]
         public void Execute_tests_in_test_build_script()
         {
-            var project = new Project("NBehaveTestScript.build", Level.Debug, 1);
+            var project = new Project("NBehaveTestScript.build", Level.Info, 1);
             Assert.IsTrue(project.Run(), "Something went wrong executing the test script.  Check log.");
         }
     }
