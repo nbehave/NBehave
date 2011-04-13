@@ -9,6 +9,9 @@ namespace NBehave.Console
         [Option(Short = "sf", Description = "Scenario files(s) to run. Ex: scenarioFiles:scenario1.txt;scenario2.txt")]
         public string scenarioFiles;
 
+        [Option(Short = "con", Description = "story output to console")]
+        public bool console;
+
         [Option(Short = "x", Description = "Xml file to receive story output")]
         public string xml;
 

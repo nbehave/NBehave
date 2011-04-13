@@ -113,13 +113,6 @@ namespace NBehave.Console
             return null;
         }
 
-        private static string GetPath(Assembly assembly)
-        {
-            string directory = Path.GetDirectoryName((new System.Uri(assembly.CodeBase)).LocalPath);
-            var path = Path.Combine(directory, "languages.yml");
-            return path;
-        }
-
         private void PrintTimeTaken(DateTime t0)
         {
             double timeTaken = DateTime.Now.Subtract(t0).TotalSeconds;
@@ -140,6 +133,8 @@ namespace NBehave.Console
                 eventListeners.Add(EventListeners.FileOutputEventListener(options.storyOutput));
             if (options.HasStoryXmlOutput)
                 eventListeners.Add(EventListeners.XmlWriterEventListener(options.xml));
+            if (options.console)
+                eventListeners.Add(new ColorfulConsoleOutputEventListener());
             if (eventListeners.Count == 0)
                 eventListeners.Add(new ColorfulConsoleOutputEventListener());
             if (options.codegen)
