@@ -108,7 +108,9 @@ namespace NBehave.Console
         {
             var name = args.Name.Split(new char[] { ',' })[0].Trim() + ".dll";
             var f = Path.Combine(_currentAssemblyPath, name);
-            return Assembly.LoadFrom(f);
+            if (File.Exists(f))
+                return Assembly.LoadFrom(f);
+            return null;
         }
 
         private static string GetPath(Assembly assembly)
