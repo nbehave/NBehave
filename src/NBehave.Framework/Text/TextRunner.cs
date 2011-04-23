@@ -66,8 +66,7 @@ namespace NBehave.Narrator.Framework
 
 		private ScenarioStepRunner CreateScenarioStepRunner()
 		{
-			var scenarioStepRunner = new ScenarioStepRunner(_stringStepRunner);
-			return scenarioStepRunner;
+		    return new ScenarioStepRunner();
 		}
 
 		public void Load(IEnumerable<string> fileLocations)

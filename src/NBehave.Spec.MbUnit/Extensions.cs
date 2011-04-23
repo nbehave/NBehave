@@ -35,7 +35,7 @@ namespace NBehave.Spec.MbUnit
 
         public static void ShouldBeAssignableFrom(this object actual, Type expected)
         {
-            Assert.IsAssignableFrom(expected, actual);
+            Assert.IsAssignableFrom(expected, actual.GetType());
         }
 
         public static void ShouldBeEmpty(this string value)
@@ -176,7 +176,7 @@ namespace NBehave.Spec.MbUnit
 
         public static void ShouldNotBeAssignableFrom(this object actual, Type expected)
         {
-            Assert.IsNotAssignableFrom(expected, actual);
+            Assert.IsNotAssignableFrom(expected, actual.GetType());
         }
 
         public static void ShouldNotBeEmpty(this string value)

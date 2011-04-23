@@ -111,8 +111,8 @@ namespace NBehave.Narrator.Framework.Specifications
                 Assert.That(!_afterScenarioWasCalled);
             }
 
-            [Test]
-            public void CompletingAScenarioShouldCallAllAttributedMethods()
+            [Specification]
+            public void Completing_a_scenario_should_call_all_attributed_methods()
             {
                 var actionStepText = new ActionStepText("something", "");
                 _runner.Run(actionStepText);

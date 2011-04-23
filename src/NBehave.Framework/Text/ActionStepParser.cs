@@ -83,6 +83,15 @@ namespace NBehave.Narrator.Framework
                 case 4:
                     action = GetActionForFourParameters(instance, methodInfo);
                     break;
+                case 5:
+                    action = GetActionForFiveParameters(instance, methodInfo);
+                    break;
+                case 6:
+                    action = GetActionForSixParameters(instance, methodInfo);
+                    break;
+                case 7:
+                    action = GetActionForSevenParameters(instance, methodInfo);
+                    break;
             }
             return action;
         }
@@ -97,9 +106,9 @@ namespace NBehave.Narrator.Framework
         {
             Action<object> action = a =>
                 methodInfo.Invoke(instance, new[]
-				                  {
-				                  	ChangeType(methodInfo, a, 0),
-				                  });
+                                  {
+                                    ChangeType(methodInfo, a, 0),
+                                  });
             return action;
         }
 
@@ -107,10 +116,10 @@ namespace NBehave.Narrator.Framework
         {
             Action<object, object> action = (a, b) =>
                 methodInfo.Invoke(instance, new[]
-				                  {
-				                  	ChangeType(methodInfo,a,0),
-				                  	ChangeType(methodInfo,b,1),
-				                  });
+                                  {
+                                    ChangeType(methodInfo,a,0),
+                                    ChangeType(methodInfo,b,1),
+                                  });
             return action;
         }
 
@@ -118,11 +127,11 @@ namespace NBehave.Narrator.Framework
         {
             Action<object, object, object> action = (a, b, c) =>
                 methodInfo.Invoke(instance, new[]
-				                  {
-				                  	ChangeType(methodInfo,a,0),
-				                  	ChangeType(methodInfo,b,1),
-				                  	ChangeType(methodInfo,c,2),
-				                  });
+                                  {
+                                    ChangeType(methodInfo,a,0),
+                                    ChangeType(methodInfo,b,1),
+                                    ChangeType(methodInfo,c,2),
+                                  });
             return action;
         }
 
@@ -130,12 +139,60 @@ namespace NBehave.Narrator.Framework
         {
             Action<object, object, object, object> action = (a, b, c, d) =>
                 methodInfo.Invoke(instance, new[]
-				                  {
-				                  	ChangeType(methodInfo,a,0),
-				                  	ChangeType(methodInfo,b,1),
-				                  	ChangeType(methodInfo,c,2),
-				                  	ChangeType(methodInfo,d,3)
-				                  });
+                                  {
+                                    ChangeType(methodInfo,a,0),
+                                    ChangeType(methodInfo,b,1),
+                                    ChangeType(methodInfo,c,2),
+                                    ChangeType(methodInfo,d,3)
+                                  });
+            return action;
+        }
+
+        public delegate void Action<T1, T2, T3, T4, T5>(T1 p1, T2 p2, T3 p3, T4 p4, T5 p5);
+        private object GetActionForFiveParameters(object instance, MethodInfo methodInfo)
+        {
+            ActionStepParser.Action<object, object, object, object, object> action = (a, b, c, d, e) =>
+                methodInfo.Invoke(instance, new[]
+                                  {
+                                    ChangeType(methodInfo,a,0),
+                                    ChangeType(methodInfo,b,1),
+                                    ChangeType(methodInfo,c,2),
+                                    ChangeType(methodInfo,d,3),
+                                    ChangeType(methodInfo,e,4),
+                                  });
+            return action;
+        }
+
+        public delegate void Action<T1, T2, T3, T4, T5, T6>(T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6);
+        private object GetActionForSixParameters(object instance, MethodInfo methodInfo)
+        {
+            ActionStepParser.Action<object, object, object, object, object, object> action = (a, b, c, d, e, f) =>
+                methodInfo.Invoke(instance, new[]
+                                  {
+                                    ChangeType(methodInfo,a,0),
+                                    ChangeType(methodInfo,b,1),
+                                    ChangeType(methodInfo,c,2),
+                                    ChangeType(methodInfo,d,3),
+                                    ChangeType(methodInfo,e,4),
+                                    ChangeType(methodInfo,f,5),
+                                  });
+            return action;
+        }
+
+        public delegate void Action<T1, T2, T3, T4, T5, T6, T7>(T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7);
+        private object GetActionForSevenParameters(object instance, MethodInfo methodInfo)
+        {
+            ActionStepParser.Action<object, object, object, object, object, object, object> action = (a, b, c, d, e, f, g) =>
+                methodInfo.Invoke(instance, new[]
+                                  {
+                                    ChangeType(methodInfo,a,0),
+                                    ChangeType(methodInfo,b,1),
+                                    ChangeType(methodInfo,c,2),
+                                    ChangeType(methodInfo,d,3),
+                                    ChangeType(methodInfo,e,4),
+                                    ChangeType(methodInfo,f,5),
+                                    ChangeType(methodInfo,g,6)
+                                  });
             return action;
         }
 

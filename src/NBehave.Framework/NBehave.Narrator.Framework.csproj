@@ -232,9 +232,7 @@
     <None Include="..\NBehave.snk">
       <Link>NBehave.snk</Link>
     </None>
-    <None Include="languages.yml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <EmbeddedResource Include="Resource\languages.yml" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

@@ -58,7 +58,7 @@ namespace NBehave.Console.Tests
             IEventListener listener = null;
             try
             {
-                listener = Program.CreateEventListener(options);
+                listener = new Program().CreateEventListener(options);
                 var multiOutputEventListener = (MultiOutputEventListener)listener;
                 Assert.That(multiOutputEventListener.Listeners[0], Is.TypeOf(typeof(ColorfulConsoleOutputEventListener)));
             }
@@ -77,7 +77,7 @@ namespace NBehave.Console.Tests
             IEventListener listener = null;
             try
             {
-                listener = Program.CreateEventListener(options);
+                listener = new Program().CreateEventListener(options);
                 var multiOutputEventListener = (MultiOutputEventListener)listener;
                 Assert.That(multiOutputEventListener.Listeners[0], Is.TypeOf(typeof(TextWriterEventListener)));
             }
@@ -96,7 +96,7 @@ namespace NBehave.Console.Tests
             IEventListener listener = null;
             try
             {
-                listener = Program.CreateEventListener(options);
+                listener = new Program().CreateEventListener(options);
                 var multiOutputEventListener = (MultiOutputEventListener)listener;
                 Assert.That(multiOutputEventListener.Listeners[0], Is.TypeOf(typeof(XmlOutputEventListener)));
             }
@@ -118,7 +118,7 @@ namespace NBehave.Console.Tests
             IEventListener listener = null;
             try
             {
-                listener = Program.CreateEventListener(options);
+                listener = new Program().CreateEventListener(options);
                 var multiOutputEventListener = (MultiOutputEventListener)listener;
                 Assert.That(multiOutputEventListener.Listeners.Count(), Is.EqualTo(2));
             }
