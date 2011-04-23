@@ -9,7 +9,7 @@ using NBehave.VS2010.Plugin.Contracts;
 namespace NBehave.VS2010.Plugin
 {
     [PackageRegistration(UseManagedResourcesOnly = true)]
-    [InstalledProductRegistration("#110", "#112", "0.5.0.0", IconResourceID = 400)]
+    [InstalledProductRegistration("#110", "#112", "0.5.1.0", IconResourceID = 400)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [Guid(Identifiers.PackageGuidString)]
     public sealed class NBehaveRunnerPackage : Package

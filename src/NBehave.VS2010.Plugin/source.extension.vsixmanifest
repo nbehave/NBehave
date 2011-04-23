@@ -3,7 +3,7 @@
   <Identifier Id="39b466a1-7b58-4a9d-91d1-010d05512884">
     <Name>NBehave</Name>
     <Author>Naeem Khedarun</Author>
-    <Version>0.5.0.0</Version>
+    <Version>0.5.1.0</Version>
     <Description xml:space="preserve">Allows execution of NBehave scenario files from within the IDE.  More information at http://www.nbehave.org.</Description>
     <Locale>1033</Locale>
     <MoreInfoUrl>http://www.nbehave.org</MoreInfoUrl>
