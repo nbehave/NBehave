@@ -8,7 +8,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using TestPlainTextAssembly;
 
-namespace NBehave.MSBuild.Tests
+namespace NBehave.MSBuild.Specifications
 {
     [TestFixture]
     public class NBehaveTaskTest

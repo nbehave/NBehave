@@ -174,7 +174,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 DeleteConfigFile();
             }
 
-            [Specification]
+            [Specification, Ignore("This test crashes the R# test runner")]
             public void Should_read_values_from_the_appropriate_config_file()
             {
                 //WARNING: This test crashes the R# test runner, v 5.1.3000.12 anyway

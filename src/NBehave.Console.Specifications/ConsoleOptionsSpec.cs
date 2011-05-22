@@ -1,6 +1,6 @@
 using NUnit.Framework;
 
-namespace NBehave.Console.Tests
+namespace NBehave.Console.Specifications
 {
     [TestFixture]
     public class ConsoleOptionsSpec

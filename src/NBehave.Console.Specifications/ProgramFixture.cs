@@ -5,9 +5,8 @@ using NBehave.Narrator.Framework;
 using NBehave.Narrator.Framework.EventListeners;
 using NBehave.Narrator.Framework.EventListeners.Xml;
 using NUnit.Framework;
-using gen = System.Collections.Generic;
 
-namespace NBehave.Console.Tests
+namespace NBehave.Console.Specifications
 {
     [TestFixture]
     public class ProgramFixture

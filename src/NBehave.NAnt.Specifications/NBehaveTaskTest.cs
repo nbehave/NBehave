@@ -1,7 +1,7 @@
 using NAnt.Core;
 using NUnit.Framework;
 
-namespace NBehave.NAnt.Tests
+namespace NBehave.NAnt.Specifications
 {
     [TestFixture]
     public class NBehaveTaskTest
