@@ -93,7 +93,7 @@
     <Reference Include="Gherkin">
       <HintPath>..\..\lib\Gherkin\Gherkin.dll</HintPath>
     </Reference>
-     <Reference Include="nunit.framework">
+    <Reference Include="nunit.framework">
       <HintPath>..\..\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="Rhino.Mocks">
@@ -103,7 +103,9 @@
     <Reference Include="Should.Core">
       <HintPath>..\..\lib\should\Should.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Should.Fluent, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="Should.Fluent, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\lib\should\Should.Fluent.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -151,7 +153,7 @@
     <Compile Include="StringStepSpec.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NBehave.Framework\NBehave.Narrator.Framework.csproj">
+    <ProjectReference Include="..\NBehave.Narrator.Framework\NBehave.Narrator.Framework.csproj">
       <Project>{9C2E9E17-2A2C-4F6C-8072-D160A7EA9A51}</Project>
       <Name>NBehave.Narrator.Framework</Name>
     </ProjectReference>

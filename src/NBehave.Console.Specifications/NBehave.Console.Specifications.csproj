@@ -90,7 +90,7 @@
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
   </PropertyGroup>
   <ItemGroup>
-     <Reference Include="nunit.framework">
+    <Reference Include="nunit.framework">
       <HintPath>..\..\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="Should.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -119,7 +119,7 @@
       <Project>{2162701A-70E9-4659-B17C-DEBA72C175D4}</Project>
       <Name>NBehave.Console</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NBehave.Framework\NBehave.Narrator.Framework.csproj">
+    <ProjectReference Include="..\NBehave.Narrator.Framework\NBehave.Narrator.Framework.csproj">
       <Project>{9C2E9E17-2A2C-4F6C-8072-D160A7EA9A51}</Project>
       <Name>NBehave.Narrator.Framework</Name>
     </ProjectReference>
