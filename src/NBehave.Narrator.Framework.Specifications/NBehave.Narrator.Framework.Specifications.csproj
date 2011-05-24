@@ -163,6 +163,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Features\FeatureWithCommentOnLastRow.feature">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Features\FeatureWithLowerCaseSteps.feature">
+      <LastGenOutput>GreetingSystem1.feature.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Features\FeatureInSwedish.feature">
       <LastGenOutput>GreetingSystem1.feature.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

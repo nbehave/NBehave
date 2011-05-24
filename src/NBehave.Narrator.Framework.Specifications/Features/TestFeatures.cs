@@ -2,6 +2,8 @@
 {
     public static class TestFeatures
     {
+        public const string FeatureWithCommentOnLastRow = "Features\\FeatureWithCommentOnLastRow.feature";
+        public const string FeatureWithLowerCaseSteps = "Features\\FeatureWithLowerCaseSteps.feature";
         public const string FeatureWithNewLineInGivenClause = "Features\\FeatureWithNewLineInGivenClause.feature";
         public const string FeatureWithManyScenarios = "Features\\FeatureWithManyScenarios.feature";
         public const string FeatureWithFailingStep = "Features\\FeatureWithFailingStep.feature";

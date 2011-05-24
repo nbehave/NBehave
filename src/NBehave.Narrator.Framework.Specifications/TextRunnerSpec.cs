@@ -6,7 +6,6 @@ using NBehave.Narrator.Framework.EventListeners;
 using NBehave.Narrator.Framework.EventListeners.Xml;
 using NBehave.Narrator.Framework.Specifications.Features;
 using NUnit.Framework;
-using Rhino.Mocks;
 
 namespace NBehave.Narrator.Framework.Specifications
 {
@@ -19,6 +18,7 @@ namespace NBehave.Narrator.Framework.Specifications
             return (TextRunner) NBehaveConfigurationExtensions.Build(configuration);
         }
     }
+
     [TestFixture]
     public class TextRunnerSpec
     {
@@ -155,7 +155,25 @@ namespace NBehave.Narrator.Framework.Specifications
                 _result = this.CreateRunnerWithBasicConfiguration().SetScenarioFiles(
                     new[] { @"Features\\Feature*.feature" }).Run();
 
-                Assert.That(_result.NumberOfPassingScenarios, Is.EqualTo(4));
+                Assert.That(_result.NumberOfPassingScenarios, Is.EqualTo(6));
+            }
+
+            [Test]
+            public void Should_not_crash_when_steps_are_written_in_lower_case()
+            {
+                _result = this.CreateRunnerWithBasicConfiguration().SetScenarioFiles(
+                    new[] { TestFeatures.FeatureWithLowerCaseSteps }).Run();
+
+                Assert.That(_result.NumberOfPassingScenarios, Is.EqualTo(1));
+            }
+
+            [Test]
+            public void Should_not_crash_when_feature_file_ends_with_comment()
+            {
+                _result = this.CreateRunnerWithBasicConfiguration().SetScenarioFiles(
+                    new[] { TestFeatures.FeatureWithCommentOnLastRow }).Run();
+
+                Assert.That(_result.NumberOfPassingScenarios, Is.EqualTo(1));
             }
         }
 
