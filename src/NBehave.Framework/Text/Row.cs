@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 namespace NBehave.Narrator.Framework
 {
+    [Serializable]
     public class Row
     {
         public Dictionary<string, string> ColumnValues { get; private set; }
@@ -14,6 +15,9 @@ namespace NBehave.Narrator.Framework
             ColumnNames = columnNames;
             ColumnValues = columnValues;
         }
+
+        protected Row()
+        {}
 
         public string ColumnNamesToString()
         {

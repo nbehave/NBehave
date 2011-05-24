@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.IO;
+using NUnit.Framework;
 using System.Collections.Generic;
 
 namespace NBehave.Narrator.Framework.Specifications.Text
@@ -37,6 +38,17 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             var rowAsString = _row.ColumnValuesToString();
             var expected = "|a really wide column value|";
             Assert.That(rowAsString, Is.EqualTo(expected));
+        }
+
+
+        [Test]
+        public void ShouldBeSerializable()
+        {
+            var e = new Row(new ExampleColumns(new[] { "a" }), new Dictionary<string, string> { { "a", "a" } });
+            var ser = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+            using (var ms = new MemoryStream())
+                ser.Serialize(ms, e);
+            Assert.IsTrue(true, "Serialization succeded");
         }
     }
 }

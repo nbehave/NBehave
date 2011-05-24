@@ -132,6 +132,8 @@
     <Compile Include="StoryResultsFixture.cs" />
     <Compile Include="StoryRunnerFilterSpecs.cs" />
     <Compile Include="Text\ActionStepAttributeSpec.cs" />
+    <Compile Include="Text\ExampleColumnsSpec.cs" />
+    <Compile Include="Text\ExampleSpec.cs" />
     <Compile Include="Text\IgnoreSpaceAndUnderScoreMatcherSpec.cs" />
     <Compile Include="Text\RowSpec.cs" />
     <Compile Include="Text\ScenarioExampleResultSpec.cs" />
