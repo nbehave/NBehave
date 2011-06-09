@@ -28,7 +28,7 @@ namespace NBehave.Narrator.Framework
         {
             var language = DefaultLanguage;
             var trimmed = scenarioText.TrimStart(_whiteSpaceChars);
-            var lang = new Regex(@"^# language:\s+(?<language>\w+)\s+");
+            var lang = new Regex(@"^#\s*language:\s*(?<language>\w+)\s+");
             var matches = lang.Match(trimmed);
             if (matches.Success)
             {
