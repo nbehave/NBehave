@@ -83,10 +83,11 @@ namespace NBehave.Console
                 }
             }
 
+            var assemblies = options.Parameters.ToArray().Select(assembly => assembly).Cast<string>().ToList();
             var config = NBehaveConfiguration.New
                 .SetScenarioFiles(options.scenarioFiles.Split(new[] {';'}, StringSplitOptions.RemoveEmptyEntries))
                 .SetDryRun(options.dryRun)
-                .SetAssemblies(options.Parameters.ToArray().Select(assembly => assembly).Cast<string>())
+                .SetAssemblies(assemblies)
                 .SetEventListener(CreateEventListener(options));
 
             var runner = new TextRunner(config);
