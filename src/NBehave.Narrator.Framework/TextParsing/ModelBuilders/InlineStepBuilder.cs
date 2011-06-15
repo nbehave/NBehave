@@ -1,11 +1,10 @@
-﻿namespace NBehave.Narrator.Framework.Processors
+﻿using System.Collections.Generic;
+using System.Linq;
+using Gherkin;
+using NBehave.Narrator.Framework.Tiny;
+
+namespace NBehave.Narrator.Framework.Processors
 {
-    using System.Collections.Generic;
-    using System.Linq;
-
-    using Gherkin;
-
-    using NBehave.Narrator.Framework.Tiny;
 
     class InlineStepBuilder : AbstracModelBuilder
     {
@@ -19,31 +18,32 @@
             _hub = hub;
 
             _hub.Subscribe<ScenarioBuilt>(built => _scenario = built.Content);
-            _hub.Subscribe<ParsedStep>(message => this._lastStep.Enqueue(message));
+            _hub.Subscribe<ParsedStep>(message => _lastStep.Enqueue(message));
 
             _hub.Subscribe<ITinyMessage>(
                 anyMessage =>
+                {
+                    if (anyMessage is ParsedTable && anyMessage != _lastStep.Peek())
                     {
-                        if (anyMessage is ParsedTable && anyMessage != _lastStep.Peek())
-                        {
-                            ExtractInlineTableStepsFromTable(anyMessage);
-                        }
-                        else
-                        {
-                            _lastStep.Dequeue();
-                        }
-                    },
+                        ExtractInlineTableStepsFromTable(anyMessage);
+                    }
+                    else
+                    {
+                        _lastStep.Dequeue();
+                    }
+                },
                 tinyMessage => _lastStep.Any());
         }
 
         private void ExtractInlineTableStepsFromTable(ITinyMessage anyMessage)
         {
-            var stringTableStep = new StringTableStep(this._lastStep.Dequeue().Content, this._scenario.Source);
-            this._scenario.AddStep(stringTableStep);
+            var stringTableStep = new StringTableStep(_lastStep.Dequeue().Content, _scenario.Source);
+            _scenario.AddStep(stringTableStep);
 
             IList<IList<Token>> content = ((ParsedTable)anyMessage).Content;
-            
-            var exampleColumns = new ExampleColumns(content.First().Select(token => token.Content.ToLower()));
+
+            var columns = content.First().Select(token => new ExampleColumn(token.Content));
+            var exampleColumns = new ExampleColumns(columns);
 
             foreach (var list in content.Skip(1))
             {
@@ -53,7 +53,7 @@
 
                 for (int i = 0; i < example.Count(); i++)
                 {
-                    row.Add(exampleColumns[i], example.ElementAt(i));
+                    row.Add(exampleColumns[i].Name, example.ElementAt(i));
                 }
 
                 stringTableStep.AddTableStep(new Row(exampleColumns, row));

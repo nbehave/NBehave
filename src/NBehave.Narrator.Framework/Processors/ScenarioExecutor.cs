@@ -131,7 +131,7 @@ namespace NBehave.Narrator.Framework.Processors
                 exampleResults.AddResult(scenarioResult);
             }
 
-            this._hub.Publish(new ScenarioResultEvent(this, exampleResults));
+            _hub.Publish(new ScenarioResultEvent(this, exampleResults));
         }
 
         public void RunStringTableStep(StringTableStep stringStep)
@@ -159,7 +159,7 @@ namespace NBehave.Narrator.Framework.Processors
             {
                 foreach (var columnName in example.ColumnNames)
                 {
-                    var columnValue = example.ColumnValues[columnName].Trim();
+                    var columnValue = example.ColumnValues[columnName.Name].TrimWhiteSpaceChars();
                     var replace = new Regex(string.Format(@"(\${0})|(\[{0}\])", columnName), RegexOptions.IgnoreCase);
                     step.Step = replace.Replace(step.Step, columnValue);
                     

@@ -13,7 +13,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
         {
             const string colName = "colName";
             const string colValue = "a really wide column value";
-            var columnNames = new ExampleColumns { colName };
+            var columnNames = new ExampleColumns { new ExampleColumn(colName) };
             var columnValues = new Dictionary<string, string>
             {
                 { "colName" , colValue }
@@ -22,12 +22,12 @@ namespace NBehave.Narrator.Framework.Specifications.Text
         }
 
         [Test]
-        public void ShouldMakeColumnHeadersAsWideAsWidestRowForColumn()
+        public void Should_use_formatted_column()
         {
-      
+
 
             var rowAsString = _row.ColumnNamesToString();
-            const string expected = "|colName                   |";
+            const string expected = "| colName |";
             Assert.That(rowAsString, Is.EqualTo(expected));
         }
 
@@ -35,7 +35,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
         public void ShouldMakeColumnValuesToString()
         {
             var rowAsString = _row.ColumnValuesToString();
-            const string expected = "|a really wide column value|";
+            const string expected = "| a really wide column value |";
             Assert.That(rowAsString, Is.EqualTo(expected));
         }
     }

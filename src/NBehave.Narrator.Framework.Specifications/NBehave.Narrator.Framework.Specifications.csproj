@@ -119,6 +119,7 @@
     </Compile>
     <Compile Include="ActionCatalogSpec.cs" />
     <Compile Include="ActionStepCodeGeneratorSpec.cs" />
+    <Compile Include="EventListeners\ColorfulConsoleOutputEventListenerSpec.cs" />
     <Compile Include="LoadAndParseScenarioFilesSpec.cs" />
     <Compile Include="ActionStepParserSpec.cs" />
     <Compile Include="EventListeners\CodeGenEventListenerSpec.cs" />

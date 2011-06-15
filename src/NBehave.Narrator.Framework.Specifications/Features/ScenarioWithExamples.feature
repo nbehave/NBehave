@@ -9,6 +9,6 @@ Scenario: SC1
   Then you should see [strOut]
 	
   Examples:
-  |str|strOut|
-  |xyz|xyz   |
-  |abc|abc   |
+  | str | strOut |
+  | xyz | xyz    |
+  | abc | abc    |

@@ -11,13 +11,13 @@ namespace NBehave.Narrator.Framework
 {
     using System.Collections.Generic;
 
-    public class ExampleColumns : List<string>
+    public class ExampleColumns : List<ExampleColumn>
     {
         public ExampleColumns()
         {
         }
 
-        public ExampleColumns(IEnumerable<string> columns)
+        public ExampleColumns(IEnumerable<ExampleColumn> columns)
             : base(columns)
         {
         }

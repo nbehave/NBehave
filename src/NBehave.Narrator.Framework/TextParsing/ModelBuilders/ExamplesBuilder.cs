@@ -1,10 +1,9 @@
-﻿namespace NBehave.Narrator.Framework.Processors
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using NBehave.Narrator.Framework.Tiny;
 
-    using NBehave.Narrator.Framework.Tiny;
+namespace NBehave.Narrator.Framework.Processors
+{
 
     internal class ExamplesBuilder : AbstracModelBuilder
     {
@@ -18,26 +17,24 @@
             _hub = hub;
 
             _hub.Subscribe<ScenarioBuilt>(built => _scenario = built.Content);
-            _hub.Subscribe<EnteringExamples>(examples => this._midExample = true);
-            _hub.Subscribe<ParsedTable>(this.ExtractExamplesFromTable, parsedTable => _midExample);
+            _hub.Subscribe<EnteringExamples>(examples => _midExample = true);
+            _hub.Subscribe<ParsedTable>(ExtractExamplesFromTable, parsedTable => _midExample);
         }
 
         private void ExtractExamplesFromTable(ParsedTable table)
         {
-            var exampleColumns = new ExampleColumns(table.Content.First().Select(token => token.Content.ToLower()));
+            var columns = table.Content.First().Select(token => new ExampleColumn(token.Content));
+            var exampleColumns = new ExampleColumns(columns);
 
             foreach (var list in table.Content.Skip(1))
             {
                 var example = list.Select(token => token.Content);
-
                 var row = new Dictionary<string, string>();
 
                 for (int i = 0; i < example.Count(); i++)
-                {
-                    row.Add(exampleColumns[i], example.ElementAt(i));
-                }
+                    row.Add(exampleColumns[i].Name.ToLower(), example.ElementAt(i));
 
-                this._scenario.AddExamples(new List<Example> { new Example(exampleColumns, row) });
+                _scenario.AddExamples(new List<Example> { new Example(exampleColumns, row) });
             }
 
             _midExample = false;

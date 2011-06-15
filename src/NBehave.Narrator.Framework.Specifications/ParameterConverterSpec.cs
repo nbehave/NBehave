@@ -110,9 +110,9 @@ namespace NBehave.Narrator.Framework.Specifications
             [Test]
             public void ShouldGetMultilineValueAsArrayOfStrings()
             {
-//                object paramReceived = null;
+                //                object paramReceived = null;
                 Action<string[]> actionStep = p => { };
-//                Action<object> action = value => { paramReceived = value; };
+                //                Action<object> action = value => { paramReceived = value; };
                 _actionCatalog.Add(new ActionMethodInfo(new Regex(@"a string\s+(?<value>(\w+,?\s*)+)"), actionStep, actionStep.Method, "Given"));
                 const string multiLineValue = "one, two";
                 var actionString = "a string " + Environment.NewLine + multiLineValue;
@@ -167,9 +167,9 @@ namespace NBehave.Narrator.Framework.Specifications
 
             public void ShouldGetMultilineValueAsGenericCollectionOfIntegers<T>() where T : IEnumerable<int>
             {
-//                object paramReceived = null;
+                //                object paramReceived = null;
                 Action<T> actionStep = p => { };
-//                Action<object> action = value => { paramReceived = value; };
+                //                Action<object> action = value => { paramReceived = value; };
                 _actionCatalog.Add(new ActionMethodInfo(new Regex(@"a list of integers (?<value>(\d+,?\s*)+)"), actionStep, actionStep.Method, "Given"));
                 const string multiLineValue = "1, 2, 5";
                 const string actionString = "a list of integers " + multiLineValue;
@@ -190,7 +190,7 @@ namespace NBehave.Narrator.Framework.Specifications
             {
                 Action<string> action = name => { };
                 _actionCatalog.Add(new ActionMethodInfo("I have a name".AsRegex(), action, action.Method, null));
-                var row = new Row(new ExampleColumns(new[] { "name" }), new Dictionary<string, string> { { "name", "Morgan" } });
+                var row = new Row(new ExampleColumns(new[] { new ExampleColumn("name") }), new Dictionary<string, string> { { "name", "Morgan" } });
                 var values = _parameterConverter.GetParametersForActionStepText(new ActionStepText("I have a name", ""), row);
 
                 Assert.That(values.Length, Is.EqualTo(1));

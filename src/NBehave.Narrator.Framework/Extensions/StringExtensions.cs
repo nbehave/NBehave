@@ -13,7 +13,14 @@ namespace NBehave.Narrator.Framework
 
     public static class StringExtensions
     {
+        public static char[] WhiteSpaceChars = new[] { ' ', '\n', '\r', '\t' };
+
         private static readonly Regex _whiteSpace = new Regex(@"\s", RegexOptions.Compiled);
+
+        public static string TrimWhiteSpaceChars(this string str)
+        {
+            return str.Trim(WhiteSpaceChars);
+        }
 
         public static string ReplaceFirst(this string str, string toReplace, string replaceWith)
         {
@@ -40,7 +47,7 @@ namespace NBehave.Narrator.Framework
             if (firstWhiteSpace.Success)
             {
                 var posOfFirstSpace = firstWhiteSpace.Index;
-                return tokenStringToMatch.Substring(posOfFirstSpace + 1).TrimStart(new[] { ' ', '\n', '\r', '\t' });
+                return tokenStringToMatch.Substring(posOfFirstSpace + 1).TrimStart(WhiteSpaceChars);
             }
 
             return tokenString;

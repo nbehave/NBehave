@@ -37,7 +37,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
 
         protected void Parse(string scenario)
         {
-            if(!scenario.StartsWith("Feature"))
+            if (!scenario.StartsWith("Feature"))
             {
                 scenario = scenario.Insert(0, "Feature: Parsing feature files" + Environment.NewLine +
                                               "    As a parser" + Environment.NewLine +
@@ -48,7 +48,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
 
             string tempFileName = Path.GetTempFileName();
 
-            using(var fileStream = new StreamWriter(File.Create(tempFileName)))
+            using (var fileStream = new StreamWriter(File.Create(tempFileName)))
             {
                 fileStream.Write(scenario);
             }
@@ -314,9 +314,9 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             [Test]
             public void TableStepColumnNamesShouldBeStoredInLowerCase()
             {
-                var step = this._givenStep.TableSteps.First();
-                CollectionAssert.Contains(step.ColumnNames, "name");
-                Assert.That(step.ColumnValues["name"], Is.Not.Null); 
+                var step = _givenStep.TableSteps.First();
+                CollectionAssert.Contains(step.ColumnNames, new ExampleColumn("Name"));
+                Assert.That(step.ColumnValues["Name"], Is.Not.Null);
             }
 
             [Test]

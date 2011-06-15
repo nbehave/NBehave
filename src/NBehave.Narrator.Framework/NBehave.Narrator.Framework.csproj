@@ -113,6 +113,8 @@
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="ActionCatalog.cs" />
+    <Compile Include="Domain\ColumnValues.cs" />
+    <Compile Include="Domain\ExampleColumn.cs" />
     <Compile Include="EventListeners\IEventListener.cs" />
     <Compile Include="Processors\Messages\ActionStepsLoaded.cs" />
     <Compile Include="Processors\FeatureResultCollector.cs" />

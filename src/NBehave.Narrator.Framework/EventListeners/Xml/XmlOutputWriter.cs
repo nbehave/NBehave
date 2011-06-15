@@ -32,56 +32,54 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
                        where e.EventType == EventType.RunStart
                        select e).First();
 
-            this.Writer.WriteStartElement("results");
+            Writer.WriteStartElement("results");
             var assemblyString = typeof(XmlOutputEventListener).AssemblyQualifiedName.Split(new[] { ',' });
-            this.Writer.WriteAttributeString("name", assemblyString[1]);
-            this.Writer.WriteAttributeString("version", assemblyString[2]);
-            this.Writer.WriteAttributeString("date", evt.Time.ToShortDateString());
-            this.Writer.WriteAttributeString("time", evt.Time.ToShortTimeString());
-            this.Writer.WriteAttributeString("themes", this.CountThemes().ToString());
-            this.Writer.WriteAttributeString("stories", this.CountStories().ToString());
+            Writer.WriteAttributeString("name", assemblyString[1]);
+            Writer.WriteAttributeString("version", assemblyString[2]);
+            Writer.WriteAttributeString("date", evt.Time.ToShortDateString());
+            Writer.WriteAttributeString("time", evt.Time.ToShortTimeString());
+            Writer.WriteAttributeString("themes", this.CountThemes().ToString());
+            Writer.WriteAttributeString("stories", this.CountStories().ToString());
 
-            this.Writer.WriteAttributeString("scenarios", this.CountScenarios().ToString());
-            this.Writer.WriteAttributeString("scenariosFailed", this.CountFailingScenarios().ToString());
-            this.Writer.WriteAttributeString("scenariosPending", this.CountPendingScenarios().ToString());
+            Writer.WriteAttributeString("scenarios", this.CountScenarios().ToString());
+            Writer.WriteAttributeString("scenariosFailed", this.CountFailingScenarios().ToString());
+            Writer.WriteAttributeString("scenariosPending", this.CountPendingScenarios().ToString());
 
             foreach (var e in this.EventsReceived.Where(e => e.EventType == EventType.ThemeStarted))
-            {
                 DoTheme(e);
-            }
 
-            this.DoRunFinished();
+            DoRunFinished();
         }
 
         public void DoTheme(EventReceived evt)
         {
-            var events = this.EventsOf(evt, EventType.ThemeFinished);
+            var events = EventsOf(evt, EventType.ThemeFinished);
             var themeTitle = evt.Message;
-            this.WriteStartElement("theme", themeTitle, events.Last().Time.Subtract(events.First().Time));
-            this.Writer.WriteAttributeString("stories", events.Where(e => e.EventType == EventType.FeatureCreated).Count().ToString());
-            this.Writer.WriteAttributeString("scenarios", events.Where(e => e.EventType == EventType.ScenarioCreated).Count().ToString());
-            this.Writer.WriteAttributeString("scenariosFailed", CountFailingScenarios(events).ToString());
-            this.Writer.WriteAttributeString("scenariosPending", this.CountPendingScenarios(events).ToString());
-            this.Writer.WriteStartElement("stories");
+            WriteStartElement("theme", themeTitle, events.Last().Time.Subtract(events.First().Time));
+            Writer.WriteAttributeString("stories", events.Where(e => e.EventType == EventType.FeatureCreated).Count().ToString());
+            Writer.WriteAttributeString("scenarios", events.Where(e => e.EventType == EventType.ScenarioCreated).Count().ToString());
+            Writer.WriteAttributeString("scenariosFailed", CountFailingScenarios(events).ToString());
+            Writer.WriteAttributeString("scenariosPending", this.CountPendingScenarios(events).ToString());
+            Writer.WriteStartElement("stories");
             foreach (var e in events.Where(x => x.EventType == EventType.FeatureCreated))
             {
                 DoStory(themeTitle, e);
             }
 
-            this.Writer.WriteEndElement();
-            this.Writer.WriteEndElement();
+            Writer.WriteEndElement();
+            Writer.WriteEndElement();
         }
 
         public void DoStory(string theme, EventReceived evt)
         {
-            var events = this.EventsOf(evt, EventType.FeatureCreated);
+            var events = EventsOf(evt, EventType.FeatureCreated);
             var featureTitle = evt.Message;
-            this.WriteStartElement("story", featureTitle, events.Last().Time.Subtract(events.First().Time));
+            WriteStartElement("story", featureTitle, events.Last().Time.Subtract(events.First().Time));
             var scenarioResultsForFeature = GetScenarioResultsForFeature(featureTitle, events);
 
-            this.WriteStoryDataAttributes(scenarioResultsForFeature);
-            this.WriteStoryNarrative(events);
-            this.Writer.WriteStartElement("scenarios");
+            WriteStoryDataAttributes(scenarioResultsForFeature);
+            WriteStoryNarrative(events);
+            Writer.WriteStartElement("scenarios");
             foreach (var e in events.Where(evts => evts.EventType == EventType.ScenarioCreated))
             {
                 var scenarioTitle = e.Message;
@@ -90,13 +88,11 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
                                             && r.FeatureTitle == featureTitle
                                       select r).FirstOrDefault();
                 if (scenarioResult != null)
-                {
                     DoScenario(e, scenarioResult);
-                }
             }
 
-            this.Writer.WriteEndElement();
-            this.Writer.WriteEndElement();
+            Writer.WriteEndElement();
+            Writer.WriteEndElement();
         }
 
         public void DoScenario(EventReceived evt, ScenarioResult scenarioResult)
@@ -104,40 +100,34 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
             var events = from e in this.EventsOf(evt, EventType.ScenarioCreated)
                          where e.EventType == EventType.ScenarioCreated
                          select e;
-            this.WriteStartElement("scenario", evt.Message, events.Last().Time.Subtract(events.First().Time));
+            WriteStartElement("scenario", evt.Message, events.Last().Time.Subtract(events.First().Time));
 
-            this.Writer.WriteAttributeString("outcome", scenarioResult.Result.ToString());
+            Writer.WriteAttributeString("outcome", scenarioResult.Result.ToString());
             if (IsPendingAndNoActionStepsResults(scenarioResult))
-            {
-                this.CreatePendingSteps(evt, scenarioResult);
-            }
+                CreatePendingSteps(evt, scenarioResult);
 
             foreach (var step in scenarioResult.ActionStepResults)
-            {
                 DoActionStep(step);
-            }
 
-            this.DoExamplesInScenario(scenarioResult as ScenarioExampleResult);
-            this.Writer.WriteEndElement();
+            DoExamplesInScenario(scenarioResult as ScenarioExampleResult);
+            Writer.WriteEndElement();
         }
 
         public void DoActionStep(ActionStepResult result)
         {
-            this.Writer.WriteStartElement("actionStep");
-            this.Writer.WriteAttributeString("name", result.StringStep);
-            this.Writer.WriteAttributeString("outcome", result.Result.ToString());
+            Writer.WriteStartElement("actionStep");
+            Writer.WriteAttributeString("name", result.StringStep);
+            Writer.WriteAttributeString("outcome", result.Result.ToString());
             if (result.Result.GetType() == typeof(Failed))
-            {
-                this.Writer.WriteElementString("failure", result.Message);
-            }
+                Writer.WriteElementString("failure", result.Message);
 
-            this.Writer.WriteEndElement();
+            Writer.WriteEndElement();
         }
 
         private void DoRunFinished()
         {
-            this.Writer.WriteEndElement(); // </results>
-            this.Writer.Flush();
+            Writer.WriteEndElement(); // </results>
+            Writer.Flush();
         }
 
         private void DoExamplesInScenario(ScenarioExampleResult scenarioExampleResult)
@@ -147,47 +137,47 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
                 return;
             }
 
-            this.Writer.WriteStartElement("examples");
-            this.Writer.WriteStartElement("columnNames");
+            Writer.WriteStartElement("examples");
+            Writer.WriteStartElement("columnNames");
 
             foreach (var columnName in scenarioExampleResult.Examples.First().ColumnNames)
             {
-                this.Writer.WriteStartElement("columnName");
-                this.Writer.WriteString(columnName);
-                this.Writer.WriteEndElement();
+                Writer.WriteStartElement("columnName");
+                Writer.WriteString(columnName.Name);
+                Writer.WriteEndElement();
             }
 
-            this.Writer.WriteEndElement();
+            Writer.WriteEndElement();
 
             var scenarioResults = scenarioExampleResult.ExampleResults.ToArray();
             var idx = 0;
             foreach (var example in scenarioExampleResult.Examples)
             {
-                this.Writer.WriteStartElement("example");
-                this.Writer.WriteStartAttribute("outcome");
-                this.Writer.WriteString(scenarioResults[idx++].Result.ToString());
-                this.Writer.WriteEndAttribute();
+                Writer.WriteStartElement("example");
+                Writer.WriteStartAttribute("outcome");
+                Writer.WriteString(scenarioResults[idx++].Result.ToString());
+                Writer.WriteEndAttribute();
                 foreach (var columnName in example.ColumnNames)
                 {
-                    this.Writer.WriteStartElement("column");
-                    this.Writer.WriteStartAttribute("columnName");
-                    this.Writer.WriteString(columnName);
-                    this.Writer.WriteEndAttribute();
-                    this.Writer.WriteString(example.ColumnValues[columnName]);
-                    this.Writer.WriteEndElement();
+                    Writer.WriteStartElement("column");
+                    Writer.WriteStartAttribute("columnName");
+                    Writer.WriteString(columnName.Name);
+                    Writer.WriteEndAttribute();
+                    Writer.WriteString(example.ColumnValues[columnName.Name]);
+                    Writer.WriteEndElement();
                 }
 
-                this.Writer.WriteEndElement();
+                Writer.WriteEndElement();
             }
 
-            this.Writer.WriteEndElement();
+            Writer.WriteEndElement();
         }
 
         private IEnumerable<ScenarioResult> GetScenarioResultsForFeature(string featureTitle, IEnumerable<EventReceived> eventsReceived)
         {
             var featureResults = from e in eventsReceived
-                                  where e.EventType == EventType.ScenarioResult
-                                  select e as ScenarioResultEventReceived;
+                                 where e.EventType == EventType.ScenarioResult
+                                 select e as ScenarioResultEventReceived;
             var scenarioResultsForFeature = from e in featureResults
                                             where e.ScenarioResult.FeatureTitle == featureTitle
                                             select e.ScenarioResult;
@@ -221,9 +211,7 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
             {
                 Writer.WriteStartElement("narrative");
                 foreach (var row in featureMessages)
-                {
                     Writer.WriteString(row + Environment.NewLine);
-                }
 
                 Writer.WriteEndElement();
             }
@@ -244,9 +232,9 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
 
         private void WriteStartElement(string elementName, string attributeName, TimeSpan timeTaken)
         {
-            this.Writer.WriteStartElement(elementName);
-            this.Writer.WriteAttributeString("name", attributeName);
-            this.Writer.WriteAttributeString("time", timeTaken.TotalSeconds.ToString());
+            Writer.WriteStartElement(elementName);
+            Writer.WriteAttributeString("name", attributeName);
+            Writer.WriteAttributeString("time", timeTaken.TotalSeconds.ToString());
         }
 
         private void CreatePendingSteps(EventReceived evt, ScenarioResult scenarioResult)
@@ -290,19 +278,19 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
 
         private int CountPendingScenarios()
         {
-            return this.CountPendingScenarios(this.EventsReceived);
+            return CountPendingScenarios(EventsReceived);
         }
 
         private int CountPendingScenarios(IEnumerable<EventReceived> events)
         {
-            var scenarioResults = this.GetScenarioResults(events, s => s.GetType() == typeof(Pending));
+            var scenarioResults = GetScenarioResults(events, s => s.GetType() == typeof(Pending));
 
             return scenarioResults.Count();
         }
 
         private int CountEventsOfType(EventType eventType)
         {
-            var themes = from e in this.EventsReceived
+            var themes = from e in EventsReceived
                          where e.EventType == eventType
                          select e;
             return themes.Count();
@@ -318,18 +306,18 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
 
         private IEnumerable<EventReceived> EventsOf(EventReceived startEvent, EventType endWithEvent)
         {
-            var idxStart = this.EventsReceived.IndexOf(startEvent);
+            var idxStart = EventsReceived.IndexOf(startEvent);
             var idxEnd = idxStart;
             var events = new List<EventReceived>();
             do
             {
-                events.Add(this.EventsReceived[idxEnd]);
+                events.Add(EventsReceived[idxEnd]);
                 idxEnd++;
             }
-            while (idxEnd < this.EventsReceived.Count && this.EventsReceived[idxEnd].EventType != endWithEvent);
-            if (idxEnd < this.EventsReceived.Count)
+            while (idxEnd < EventsReceived.Count && EventsReceived[idxEnd].EventType != endWithEvent);
+            if (idxEnd < EventsReceived.Count)
             {
-                events.Add(this.EventsReceived[idxEnd]);
+                events.Add(EventsReceived[idxEnd]);
             }
 
             return events;

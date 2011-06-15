@@ -30,7 +30,7 @@
         [Test]
         public void AllStepsShouldPass()
         {
-            IEnumerable<ActionStepResult> enumerable = this._results.ScenarioResults.SelectMany(result => result.ActionStepResults);
+            IEnumerable<ActionStepResult> enumerable = _results.ScenarioResults.SelectMany(result => result.ActionStepResults);
             IEnumerable<Result> results = enumerable.Select(stepResult => stepResult.Result);
 
             foreach (var result in results)

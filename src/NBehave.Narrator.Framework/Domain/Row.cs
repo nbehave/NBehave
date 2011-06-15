@@ -18,44 +18,32 @@ namespace NBehave.Narrator.Framework
         public Row(ExampleColumns columnNames, Dictionary<string, string> columnValues)
         {
             ColumnNames = columnNames;
-            ColumnValues = columnValues;
+            ColumnValues = new ColumnValues(columnValues);
         }
 
-        public Dictionary<string, string> ColumnValues { get; private set; }
+        public ColumnValues ColumnValues { get; private set; }
 
         public ExampleColumns ColumnNames { get; private set; }
 
         public string ColumnNamesToString()
         {
-            var columnWidths = GetColumnWidths();
-            return ValuesToString(s => s.PadRight(columnWidths[s]));
+            return ValuesToString(_ => _.Name);
         }
 
         public string ColumnValuesToString()
         {
-            return ValuesToString(s => ColumnValues[s]);
+            return ValuesToString(s => ColumnValues[s.Name]);
         }
 
-        private Dictionary<string, int> GetColumnWidths()
-        {
-            var widths = new Dictionary<string, int>();
-            foreach (var column in ColumnNames)
-            {
-                widths.Add(column, ColumnValues[column].Length);
-            }
-
-            return widths;
-        }
-
-        private string ValuesToString(Func<string, string> getValue)
+        private string ValuesToString(Func<ExampleColumn, string> getValue)
         {
             var step = new StringBuilder();
             foreach (var columnName in ColumnNames)
             {
-                step.Append("|" + getValue(columnName));
+                step.Append("| " + getValue(columnName));
             }
 
-            step.Append("|");
+            step.Append(" |");
             return step.ToString();
         }
     }
