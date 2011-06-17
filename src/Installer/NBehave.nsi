@@ -132,17 +132,16 @@ Section "Uninstall"
   Delete $INSTDIR\v3.5\**
   Delete $INSTDIR\v3.5\*.tdnet
   Delete $INSTDIR\v3.5\*.zip
-  Delete $INSTDIR\v3.5\*.yml
   Delete $INSTDIR\v3.5\NBehave-Console.exe
   Delete $INSTDIR\v3.5\NBehaveResults.xsl
   
-  ; Remove v3.5 files and uninstaller
+  ; Remove v4.0 files and uninstaller
   Delete $INSTDIR\v4.0\**
   Delete $INSTDIR\v4.0\*.tdnet
   Delete $INSTDIR\v4.0\*.zip
-  Delete $INSTDIR\v4.0\*.yml
   Delete $INSTDIR\v4.0\NBehave-Console.exe
-  Delete $INSTDIR\v3.5\NBehaveResults.xsl
+  Delete $INSTDIR\v4.0\NBehave-Console-x86.exe
+  Delete $INSTDIR\v4.0\NBehaveResults.xsl
 
   ; Remove VS2010 Plugin
   Delete "$PROGRAMFILES\Microsoft Visual Studio 10.0\Common7\IDE\Extensions\NBehave\**"
