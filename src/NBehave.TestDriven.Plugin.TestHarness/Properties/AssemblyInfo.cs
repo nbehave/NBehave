@@ -3,7 +3,6 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using NBehave.TestDriven.Plugin;
 using TestDriven.Framework;
-using NBehave.TestDriven.Plugin;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information

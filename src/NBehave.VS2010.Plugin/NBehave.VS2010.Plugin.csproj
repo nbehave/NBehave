@@ -59,12 +59,6 @@
     <DefineConstants>TRACE;DEBUG</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Castle.Core">
-      <HintPath>..\..\lib\castle\Castle.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Castle.Windsor">
-      <HintPath>..\..\lib\castle\Castle.Windsor.dll</HintPath>
-    </Reference>
     <Reference Include="envdte, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>False</EmbedInteropTypes>
@@ -206,6 +200,7 @@
     <Compile Include="Configuration\MenuCommandTask.cs" />
     <Compile Include="Configuration\OutputWindowTask.cs" />
     <Compile Include="Configuration\PublishCrossPackageServicesTask.cs" />
+    <Compile Include="Tiny\TinyIoCContainerExtension.cs" />
     <Compile Include="Contracts\IVisualStudioService.cs" />
     <Compile Include="Contracts\IPluginLogger.cs" />
     <Compile Include="Domain\PluginLogger.cs" />

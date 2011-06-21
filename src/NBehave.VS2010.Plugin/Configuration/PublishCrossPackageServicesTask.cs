@@ -1,23 +1,22 @@
 ﻿using System.ComponentModel.Design;
+using NBehave.Narrator.Framework.Tiny;
 using NBehave.VS2010.Plugin.Contracts;
+using NBehave.VS2010.Plugin.Tiny;
 
 namespace NBehave.VS2010.Plugin.Configuration
 {
-    using Castle.MicroKernel.Registration;
-    using Castle.MicroKernel.SubSystems.Configuration;
-    using Castle.Windsor;
-
-    public class PublishCrossPackageServicesTask : IWindsorInstaller
+    public class PublishCrossPackageServicesTask : ITinyIocInstaller
     {
-        private void AddService<T>(IServiceContainer serviceContainer, IWindsorContainer windsorContainer)
+        private void AddService<T>(IServiceContainer serviceContainer, TinyIoCContainer iocContainer)
+            where T : class
         {
             serviceContainer.AddService(
-                typeof(T), 
-                (container, serviceType) => windsorContainer.Resolve<T>(), 
+                typeof(T),
+                (container, serviceType) => iocContainer.Resolve<T>(),
                 true);
         }
 
-        public void Install(IWindsorContainer container, IConfigurationStore store)
+        public void Install(TinyIoCContainer container)
         {
             /**
              * Don't forget to add a guid to the service interface, and add the 
@@ -26,9 +25,9 @@ namespace NBehave.VS2010.Plugin.Configuration
 
             var serviceContainer = container.Resolve<IServiceContainer>();
 
-            this.AddService<IOutputWindow>(serviceContainer, container);
-            this.AddService<IVisualStudioService>(serviceContainer, container);
-            this.AddService<IPluginLogger>(serviceContainer, container);
+            AddService<IOutputWindow>(serviceContainer, container);
+            AddService<IVisualStudioService>(serviceContainer, container);
+            AddService<IPluginLogger>(serviceContainer, container);
         }
     }
 }

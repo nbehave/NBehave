@@ -1,35 +1,33 @@
 using System;
 using System.ComponentModel.Design;
 using Microsoft.VisualStudio.Shell;
+using NBehave.Narrator.Framework.Tiny;
 using NBehave.VS2010.Plugin.Contracts;
 using NBehave.VS2010.Plugin.Domain;
+using NBehave.VS2010.Plugin.Tiny;
 
 namespace NBehave.VS2010.Plugin.Configuration
 {
-    using Castle.MicroKernel.Registration;
-    using Castle.MicroKernel.SubSystems.Configuration;
-    using Castle.Windsor;
-
-    internal class MenuCommandTask : IWindsorInstaller
+    internal class MenuCommandTask : ITinyIocInstaller
     {
+        private IOutputWindow _outputWindow;
         private IServiceProvider _serviceProvider;
         private IVisualStudioService _visualStudioService;
-        private IOutputWindow _outputWindow;
 
-        public void Install(IWindsorContainer container, IConfigurationStore store)
+        public void Install(TinyIoCContainer container)
         {
-            this._serviceProvider = container.Resolve<IServiceProvider>();
-            this._visualStudioService = container.Resolve<IVisualStudioService>();
-            this._outputWindow = container.Resolve<IOutputWindow>();
+            _serviceProvider = container.Resolve<IServiceProvider>();
+            _visualStudioService = container.Resolve<IVisualStudioService>();
+            _outputWindow = container.Resolve<IOutputWindow>();
 
-            var mcs = this._serviceProvider.GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
+            var mcs = _serviceProvider.GetService(typeof (IMenuCommandService)) as OleMenuCommandService;
             if (mcs == null) return;
 
-            var menuCommandId = new CommandID((Identifiers.CommandGroupGuid), (int)Identifiers.RunCommandId);
+            var menuCommandId = new CommandID((Identifiers.CommandGroupGuid), (int) Identifiers.RunCommandId);
             var menuItem = new MenuCommand(RunCommandOnClick, menuCommandId);
             mcs.AddCommand(menuItem);
 
-            var debugCommandId = new CommandID((Identifiers.CommandGroupGuid), (int)Identifiers.DebugCommandId);
+            var debugCommandId = new CommandID((Identifiers.CommandGroupGuid), (int) Identifiers.DebugCommandId);
             var debugItem = new MenuCommand(DebugCommandOnClick, debugCommandId);
             mcs.AddCommand(debugItem);
         }
@@ -48,12 +46,12 @@ namespace NBehave.VS2010.Plugin.Configuration
         {
             try
             {
-                var runner = new ScenarioRunner(this._outputWindow, this._visualStudioService);
+                var runner = new ScenarioRunner(_outputWindow, _visualStudioService);
                 runner.Run(debug);
             }
             catch (Exception exception)
             {
-                this._outputWindow.WriteLine(exception.ToString());
+                _outputWindow.WriteLine(exception.ToString());
             }
         }
     }
