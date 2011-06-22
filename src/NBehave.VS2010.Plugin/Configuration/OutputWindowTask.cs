@@ -1,17 +1,15 @@
 using System;
 using Microsoft.VisualStudio.Shell.Interop;
+using NBehave.Narrator.Framework.Tiny;
 using NBehave.VS2010.Plugin.Contracts;
 using NBehave.VS2010.Plugin.Domain;
+using NBehave.VS2010.Plugin.Tiny;
 
 namespace NBehave.VS2010.Plugin.Configuration
 {
-    using Castle.MicroKernel.Registration;
-    using Castle.MicroKernel.SubSystems.Configuration;
-    using Castle.Windsor;
-
-    internal class OutputWindowTask : IWindsorInstaller
+    internal class OutputWindowTask : ITinyIocInstaller
     {
-        public void Install(IWindsorContainer container, IConfigurationStore store)
+        public void Install(TinyIoCContainer container)
         {
             var serviceProvider = container.Resolve<IServiceProvider>();
             var pane = (IVsOutputWindow)serviceProvider.GetService(typeof(SVsOutputWindow));
@@ -23,7 +21,7 @@ namespace NBehave.VS2010.Plugin.Configuration
             pane.GetPane(myGuidList, out outputWindowPane);
 
             var outputWindow = new OutputWindow(outputWindowPane);
-            container.Register(Component.For<IOutputWindow>().Instance(outputWindow));
+            container.Register<IOutputWindow>(outputWindow);
         }
     }
 }

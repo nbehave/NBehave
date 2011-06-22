@@ -109,6 +109,12 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\lib\Tiny\TinyIoC.cs">
+      <Link>Tiny\TinyIoC.cs</Link>
+    </Compile>
+    <Compile Include="..\..\lib\Tiny\TinyMessenger.cs">
+      <Link>Tiny\TinyMessenger.cs</Link>
+    </Compile>
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
@@ -227,8 +233,6 @@
     <Compile Include="Domain\StringTableStep.cs" />
     <Compile Include="Attributes\WhenAttribute.cs" />
     <Compile Include="Domain\TypeOfStep.cs" />
-    <Compile Include="Tiny\TinyIoC.cs" />
-    <Compile Include="Tiny\TinyMessenger.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\NBehave.snk">

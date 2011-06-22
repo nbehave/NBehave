@@ -1,17 +1,16 @@
-﻿namespace NBehave.VS2010.Plugin.Configuration
-{
-    using Castle.MicroKernel.Registration;
-    using Castle.MicroKernel.SubSystems.Configuration;
-    using Castle.Windsor;
-    using NBehave.VS2010.Plugin.Contracts;
-    using NBehave.VS2010.Plugin.Domain;
-    using NLog;
-    using NLog.Config;
-    using NLog.Targets;
+﻿using NBehave.Narrator.Framework.Tiny;
+using NBehave.VS2010.Plugin.Contracts;
+using NBehave.VS2010.Plugin.Domain;
+using NBehave.VS2010.Plugin.Tiny;
+using NLog;
+using NLog.Config;
+using NLog.Targets;
 
-    public class LoggingTask : IWindsorInstaller
+namespace NBehave.VS2010.Plugin.Configuration
+{
+    public class LoggingTask : ITinyIocInstaller
     {
-        public void Install(IWindsorContainer container, IConfigurationStore store)
+        public void Install(TinyIoCContainer container)
         {
             var outputWindow = container.Resolve<IOutputWindow>();
             var config = new LoggingConfiguration();
@@ -26,27 +25,25 @@
             LogManager.Configuration = config;
 
             var pluginLogger = new PluginLogger(LogManager.GetLogger("default"));
-
-            container.Register(Component.For<IPluginLogger>().Instance(pluginLogger));
+            container.Register<IPluginLogger>(pluginLogger);
         }
     }
 
     [Target("OutputWindow")]
     internal sealed class OutputWindowTarget : TargetWithLayoutHeaderAndFooter
     {
-        private IOutputWindow _outputWindow;
+        private readonly IOutputWindow _outputWindow;
 
         public OutputWindowTarget(IOutputWindow outputWindow)
         {
-            this._outputWindow = outputWindow;
+            _outputWindow = outputWindow;
         }
 
-        // Methods
         protected override void CloseTarget()
         {
-            if (base.Footer != null)
+            if (Footer != null)
             {
-                this.Output(base.Footer.Render(LogEventInfo.CreateNullEvent()));
+                Output(Footer.Render(LogEventInfo.CreateNullEvent()));
             }
             base.CloseTarget();
         }
@@ -54,9 +51,9 @@
         protected override void InitializeTarget()
         {
             base.InitializeTarget();
-            if (base.Header != null)
+            if (Header != null)
             {
-                this.Output(base.Header.Render(LogEventInfo.CreateNullEvent()));
+                Output(Header.Render(LogEventInfo.CreateNullEvent()));
             }
         }
 
@@ -67,7 +64,7 @@
 
         protected override void Write(LogEventInfo logEvent)
         {
-            this.Output(this.Layout.Render(logEvent));
+            Output(Layout.Render(logEvent));
         }
     }
 }

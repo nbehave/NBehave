@@ -37,7 +37,14 @@
 		<delete file="${build.dir}/Debug-3.5/NBehave/NBehave-Console.exe.config" />
 	</target>
 
-	<target name="compile-4.0">
+	<target name="compile-4.0" depends="clean-compile-4.0">
+		<exec program="${environment::get-folder-path('System')}\..\Microsoft.NET\Framework\v4.0.30319\msbuild.exe"
+		      commandline="/property:Configuration=AutomatedDebug-4.0 /v:m /p:TargetFrameworkVersion=v4.0 /toolsversion:4.0 src\NBehave.sln" />
+	</target>
+
+	<target name="clean-compile-4.0">
+		<exec program="${environment::get-folder-path('System')}\..\Microsoft.NET\Framework\v4.0.30319\msbuild.exe"
+		      commandline="/property:Configuration=AutomatedDebug-4.0 /v:m /p:TargetFrameworkVersion=v4.0 /toolsversion:4.0 /t:Clean src\NBehave.sln" />
 		<delete if="${directory::exists(build.dir)}">
 			<fileset>
 				<include name="${build.dir}/Debug-4.0/NBehave/*.dll" />
@@ -46,8 +53,6 @@
 				<include name="src\**\obj\**\*.*" />
 			</fileset>
 		</delete>
-		<exec program="${environment::get-folder-path('System')}\..\Microsoft.NET\Framework\v4.0.30319\msbuild.exe"
-		      commandline="/property:Configuration=AutomatedDebug-4.0 /v:m /p:TargetFrameworkVersion=v4.0 /toolsversion:4.0 src\NBehave.sln" />
 	</target>
 	
 	<target name="compile-console-4.0-x86">
