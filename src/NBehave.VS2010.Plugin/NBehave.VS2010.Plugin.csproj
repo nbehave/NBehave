@@ -312,7 +312,7 @@
     <VsSDKInstall>$(SolutionDir)..\tools\vs2010.sdk\</VsSDKInstall>
     <VsSDKIncludes>$(VsSDKInstall)inc\</VsSDKIncludes>
     <VsixSchemaPath>$(VsSDKInstall)VSIXManifestSchema.xsd</VsixSchemaPath>
-    <DeployExtension>true</DeployExtension>
+    <DeployExtension>false</DeployExtension>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- Condition to allow blend to open project -->
