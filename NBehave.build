@@ -133,7 +133,7 @@
 			<arg value="NBehave.TestDriven.Plugin.Specifications.dll" />
 			<arg value="/xml:..\..\test-reports\UnitTests-3.5.xml" />
 		</exec>
-		<echo message="##teamcity[importData type='nunit' path='..\..\test-reports\UnitTests-3-5.xml']" />
+		<echo message="##teamcity[importData type='nunit' path='${build.dir}\test-reports\UnitTests-3-5.xml']" />
 	</target>
 
 	<target name="run-unit-tests-4.0">
@@ -152,7 +152,7 @@
 			<arg value="NBehave.TestDriven.Plugin.Specifications.dll" />
 			<arg value="/xml:..\..\test-reports\UnitTests-4.0.xml" />
 		</exec>
-		<echo message="##teamcity[importData type='nunit' path='..\..\test-reports\UnitTests-4.0.xml']" />
+		<echo message="##teamcity[importData type='nunit' path='${build.dir}\test-reports\UnitTests-4.0.xml']" />
 	</target>
 
 	<target name="run-unit-tests-with-coverage">
