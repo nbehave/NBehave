@@ -12,6 +12,8 @@
     <AssemblyName>NBehave.ReSharper.Plugin</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <SignAssembly>false</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\NBehave.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -30,36 +32,54 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'AutomatedDebug-3.5|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\..\build\Debug-3.5\NBehave\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;AUTODEBUG</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'AutomatedDebug-4.0|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\..\build\Debug-4.0\NBehave\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;AUTODEBUG</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>    
   <ItemGroup>
     <Reference Include="JetBrains.Platform.ReSharper.ComponentModel">
-      <HintPath>..\..\..\..\Program Files (x86)\JetBrains\ReSharper\v6.0\Bin\JetBrains.Platform.ReSharper.ComponentModel.dll</HintPath>
+      <HintPath>..\..\lib\ReSharper\JetBrains.Platform.ReSharper.ComponentModel.dll</HintPath>
     </Reference>
     <Reference Include="JetBrains.Platform.ReSharper.Metadata">
-      <HintPath>..\..\..\..\Program Files (x86)\JetBrains\ReSharper\v6.0\Bin\JetBrains.Platform.ReSharper.Metadata.dll</HintPath>
+      <HintPath>..\..\lib\ReSharper\JetBrains.Platform.ReSharper.Metadata.dll</HintPath>
     </Reference>
     <Reference Include="JetBrains.Platform.ReSharper.ProjectModel">
-      <HintPath>..\..\..\..\Program Files (x86)\JetBrains\ReSharper\v6.0\Bin\JetBrains.Platform.ReSharper.ProjectModel.dll</HintPath>
+      <HintPath>..\..\lib\ReSharper\JetBrains.Platform.ReSharper.ProjectModel.dll</HintPath>
     </Reference>
     <Reference Include="JetBrains.Platform.ReSharper.Shell">
-      <HintPath>..\..\..\..\Program Files (x86)\JetBrains\ReSharper\v6.0\Bin\JetBrains.Platform.ReSharper.Shell.dll</HintPath>
+      <HintPath>..\..\lib\ReSharper\JetBrains.Platform.ReSharper.Shell.dll</HintPath>
     </Reference>
     <Reference Include="JetBrains.Platform.ReSharper.UI">
-      <HintPath>..\..\..\..\Program Files (x86)\JetBrains\ReSharper\v6.0\Bin\JetBrains.Platform.ReSharper.UI.dll</HintPath>
+      <HintPath>..\..\lib\ReSharper\JetBrains.Platform.ReSharper.UI.dll</HintPath>
     </Reference>
     <Reference Include="JetBrains.Platform.ReSharper.Util">
-      <HintPath>..\..\..\..\Program Files (x86)\JetBrains\ReSharper\v6.0\Bin\JetBrains.Platform.ReSharper.Util.dll</HintPath>
+      <HintPath>..\..\lib\ReSharper\JetBrains.Platform.ReSharper.Util.dll</HintPath>
     </Reference>
     <Reference Include="JetBrains.ReSharper.Features.Common">
-      <HintPath>..\..\..\..\Program Files (x86)\JetBrains\ReSharper\v6.0\Bin\JetBrains.ReSharper.Features.Common.dll</HintPath>
+      <HintPath>..\..\lib\ReSharper\JetBrains.ReSharper.Features.Common.dll</HintPath>
     </Reference>
     <Reference Include="JetBrains.ReSharper.Psi">
-      <HintPath>..\..\..\..\Program Files (x86)\JetBrains\ReSharper\v6.0\Bin\JetBrains.ReSharper.Psi.dll</HintPath>
+      <HintPath>..\..\lib\ReSharper\JetBrains.ReSharper.Psi.dll</HintPath>
     </Reference>
     <Reference Include="JetBrains.ReSharper.TaskRunnerFramework">
-      <HintPath>..\..\..\..\Program Files (x86)\JetBrains\ReSharper\v6.0\Bin\JetBrains.ReSharper.TaskRunnerFramework.dll</HintPath>
+      <HintPath>..\..\lib\ReSharper\JetBrains.ReSharper.TaskRunnerFramework.dll</HintPath>
     </Reference>
     <Reference Include="JetBrains.ReSharper.UnitTestFramework">
-      <HintPath>..\..\..\..\Program Files (x86)\JetBrains\ReSharper\v6.0\Bin\JetBrains.ReSharper.UnitTestFramework.dll</HintPath>
+      <HintPath>..\..\lib\ReSharper\JetBrains.ReSharper.UnitTestFramework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
