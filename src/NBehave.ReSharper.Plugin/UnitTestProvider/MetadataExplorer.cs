@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
@@ -47,7 +48,8 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
             var validExtensions = new NBehaveConfiguration().FeatureFileExtensions;
             var featureFiles = _project
                 .GetAllProjectFiles()
-                .Where(_ => validExtensions.Any(e => _.Name.EndsWith(e, StringComparison.CurrentCultureIgnoreCase)));
+                .Where(_ => validExtensions.Any(e => e.Equals(Path.GetExtension(_.Name), StringComparison.CurrentCultureIgnoreCase)))
+                .ToList();
             return featureFiles;
         }
 
@@ -64,7 +66,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
                    && !method.IsAbstract
                    && method.GetAccessRights() == AccessRights.PUBLIC
                    && !method.TypeParameters.Any()
-                   && HasAnyAttributeOrDerivedAttribute(method, attributeChecker, new[] {ActionStepsAttribute, ActionStepAttribute});
+                   && HasAnyAttributeOrDerivedAttribute(method, attributeChecker, new[] { ActionStepsAttribute, ActionStepAttribute });
         }
 
         public static bool IsActionStepsClass(ITypeElement typeElement, out bool isAbstract, UnitTestAttributeCache attributeChecker)
@@ -73,7 +75,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
             var @class = typeElement as IClass;
             if (@class == null)
                 return false;
-            var modifiersOwner = (IModifiersOwner) typeElement;
+            var modifiersOwner = (IModifiersOwner)typeElement;
             isAbstract = modifiersOwner.IsAbstract;
             AccessRights accessRights = modifiersOwner.GetAccessRights();
             if (accessRights != AccessRights.PUBLIC)

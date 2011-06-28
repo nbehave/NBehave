@@ -49,16 +49,16 @@ namespace NBehave.Narrator.Framework
             return this;
         }
 
-        public string[] FeatureFileExtensions
+        public IEnumerable<string> FeatureFileExtensions
         {
             get
             {
                 return new[]
                            {
-                               "feature",
-                               "story",
-                               "specification",
-                               "egenskap"
+                               ".feature",
+                               ".story",
+                               ".specification",
+                               ".egenskap"
                            };
             }
         }
