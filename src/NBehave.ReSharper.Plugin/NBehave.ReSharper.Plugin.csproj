@@ -49,7 +49,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>    
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="JetBrains.Platform.ReSharper.ComponentModel">
       <HintPath>..\..\lib\ReSharper\JetBrains.Platform.ReSharper.ComponentModel.dll</HintPath>
@@ -107,6 +107,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resource\nbehave.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="__ReadMe__.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
