@@ -1,11 +1,8 @@
-﻿using Should.Fluent;
+﻿using NUnit.Framework;
+using Should.Fluent;
 
 namespace NBehave.Narrator.Framework.Specifications.System.Specs
 {
-    using NBehave.Narrator.Framework.EventListeners;
-
-    using NUnit.Framework;
-
     [TestFixture]
     public class WhenRunningAScenarioWithExamplesAndTables : SystemTestContext
     {
@@ -16,20 +13,20 @@ namespace NBehave.Narrator.Framework.Specifications.System.Specs
         {
             _config = NBehaveConfiguration
                 .New
-                .SetAssemblies(new[] { "NBehave.Narrator.Framework.Specifications.dll" })
-                .SetEventListener(EventListeners.NullEventListener())
-                .SetScenarioFiles(new[] { @"System.Specs\ExamplesWithTables\ExamplesWithTables.feature" });
+                .SetAssemblies(new[] {"NBehave.Narrator.Framework.Specifications.dll"})
+                .SetEventListener(Framework.EventListeners.EventListeners.NullEventListener())
+                .SetScenarioFiles(new[] {@"System.Specs\ExamplesWithTables\ExamplesWithTables.feature"});
         }
 
         protected override void Because()
         {
-            this._results = this._config.Run();
+            _results = _config.Build().Run();
         }
 
         [Test]
         public void AllStepsShouldPass()
         {
-            Assert.That(this._results.NumberOfPassingScenarios, Is.EqualTo(1)); 
+            Assert.That(_results.NumberOfPassingScenarios, Is.EqualTo(1));
         }
     }
 
@@ -47,7 +44,9 @@ namespace NBehave.Narrator.Framework.Specifications.System.Specs
         }
 
         [When("the tabled scenario outline is executed")]
-        public void When(){}
+        public void When()
+        {
+        }
 
         [Then("the table should be templated into the scenario outline and executed with each row:")]
         public void Then(int sum)

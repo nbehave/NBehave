@@ -9,7 +9,7 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
     [TestFixture]
     public class ColorfulConsoleOutputEventListenerSpec
     {
-        private string[] _feature = new[] { TestFeatures.ScenarioWithExamples };
+        private readonly string[] _feature = new[] {TestFeatures.ScenarioWithExamples};
         private string _output;
         private TextWriter _originalConsoleOut;
 
@@ -24,8 +24,9 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
             NBehaveConfiguration
                 .New
                 .SetScenarioFiles(_feature)
-                .SetAssemblies(new[] { GetType().Assembly.Location })
+                .SetAssemblies(new[] {GetType().Assembly.Location})
                 .SetEventListener(listener)
+                .Build()
                 .Run();
             writer.Flush();
             output.Seek(0, SeekOrigin.Begin);

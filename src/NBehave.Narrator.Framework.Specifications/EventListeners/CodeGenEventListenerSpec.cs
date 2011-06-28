@@ -20,8 +20,9 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
             NBehaveConfiguration
                 .New
                 .SetEventListener(listener)
-                .SetAssemblies(new[] { GetType().Assembly.Location })
-                .SetScenarioFiles(new[] { TestFeatures.FeaturesAndScenarios })
+                .SetAssemblies(new[] {GetType().Assembly.Location})
+                .SetScenarioFiles(new[] {TestFeatures.FeaturesAndScenarios})
+                .Build()
                 .Run();
 
             _output = output.ToString();

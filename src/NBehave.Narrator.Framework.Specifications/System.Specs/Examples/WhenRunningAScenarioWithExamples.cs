@@ -1,9 +1,7 @@
-﻿namespace NBehave.Narrator.Framework.Specifications.System.Specs
+﻿using NUnit.Framework;
+
+namespace NBehave.Narrator.Framework.Specifications.System.Specs
 {
-    using NBehave.Narrator.Framework.EventListeners;
-
-    using NUnit.Framework;
-
     [TestFixture]
     public class WhenRunningAScenarioWithScenarioOutlines : SystemTestContext
     {
@@ -14,20 +12,20 @@
         {
             _config = NBehaveConfiguration
                 .New
-                .SetAssemblies(new[] { "NBehave.Narrator.Framework.Specifications.dll" })
-                .SetEventListener(EventListeners.NullEventListener())
-                .SetScenarioFiles(new[] { @"System.Specs\Examples\Examples.feature" });
+                .SetAssemblies(new[] {"NBehave.Narrator.Framework.Specifications.dll"})
+                .SetEventListener(Framework.EventListeners.EventListeners.NullEventListener())
+                .SetScenarioFiles(new[] {@"System.Specs\Examples\Examples.feature"});
         }
 
         protected override void Because()
         {
-            this._results = this._config.Run();
+            _results = _config.Build().Run();
         }
 
         [Test]
         public void AllStepsShouldPass()
         {
-            Assert.That(this._results.NumberOfPassingScenarios, Is.EqualTo(1)); 
+            Assert.That(_results.NumberOfPassingScenarios, Is.EqualTo(1));
         }
     }
 
@@ -35,12 +33,18 @@
     public class ScenarioOutlineSteps
     {
         [Given("this scenario containing examples $col1")]
-        public void Given(int col1){}
+        public void Given(int col1)
+        {
+        }
 
         [When("the scenario is executed $col2")]
-        public void When(int col2){}
+        public void When(int col2)
+        {
+        }
 
         [Then("it should be templated and executed with each $row")]
-        public void Then(int row){}
+        public void Then(int row)
+        {
+        }
     }
 }

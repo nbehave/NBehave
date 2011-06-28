@@ -1,12 +1,9 @@
-﻿namespace NBehave.Narrator.Framework.Specifications.System.Specs
+﻿using System.Collections.Generic;
+using System.Linq;
+using NUnit.Framework;
+
+namespace NBehave.Narrator.Framework.Specifications.System.Specs
 {
-    using global::System.Collections.Generic;
-    using global::System.Linq;
-
-    using NBehave.Narrator.Framework.EventListeners;
-
-    using NUnit.Framework;
-
     [TestFixture]
     public class WhenRunningAScenarioWithABackgroundSection : SystemTestContext
     {
@@ -17,25 +14,25 @@
         {
             _config = NBehaveConfiguration
                 .New
-                .SetAssemblies(new[] { "NBehave.Narrator.Framework.Specifications.dll" })
-                .SetEventListener(EventListeners.NullEventListener())
-                .SetScenarioFiles(new[] { @"System.Specs\Backgrounds\Background.feature" });
+                .SetAssemblies(new[] {"NBehave.Narrator.Framework.Specifications.dll"})
+                .SetEventListener(Framework.EventListeners.EventListeners.NullEventListener())
+                .SetScenarioFiles(new[] {@"System.Specs\Backgrounds\Background.feature"});
         }
 
         protected override void Because()
         {
-            this._results = this._config.Run();
+            _results = _config.Build().Run();
         }
 
         [Test]
         public void AllStepsShouldPass()
         {
-            IEnumerable<ActionStepResult> enumerable = this._results.ScenarioResults.SelectMany(result => result.ActionStepResults);
+            IEnumerable<ActionStepResult> enumerable = _results.ScenarioResults.SelectMany(result => result.ActionStepResults);
             IEnumerable<Result> results = enumerable.Select(stepResult => stepResult.Result);
 
             foreach (var result in results)
             {
-                Assert.That(result, Is.TypeOf(typeof(Passed)), result.Message);
+                Assert.That(result, Is.TypeOf(typeof (Passed)), result.Message);
             }
         }
     }
@@ -43,7 +40,7 @@
     [ActionSteps]
     public class ScenarioStepsForBackground
     {
-        private int callCount = 0;
+        private int callCount;
 
         [Given("this background section declaration")]
         public void FirstGiven()

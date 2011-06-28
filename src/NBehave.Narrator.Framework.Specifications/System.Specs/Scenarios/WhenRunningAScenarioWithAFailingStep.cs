@@ -1,15 +1,8 @@
-﻿using Should.Fluent;
-using Should.Fluent.Model;
+﻿using NUnit.Framework;
+using Should.Fluent;
 
 namespace NBehave.Narrator.Framework.Specifications.System.Specs
 {
-    using global::System.Collections.Generic;
-    using global::System.Linq;
-
-    using NBehave.Narrator.Framework.EventListeners;
-
-    using NUnit.Framework;
-
     [TestFixture]
     public class WhenRunningAScenarioWithAFailingStep : SystemTestContext
     {
@@ -20,14 +13,14 @@ namespace NBehave.Narrator.Framework.Specifications.System.Specs
         {
             _config = NBehaveConfiguration
                 .New
-                .SetAssemblies(new[] { "NBehave.Narrator.Framework.Specifications.dll" })
-                .SetEventListener(EventListeners.NullEventListener())
-                .SetScenarioFiles(new[] { @"System.Specs\Scenarios\ScenarioWithFailingStep.feature" });
+                .SetAssemblies(new[] {"NBehave.Narrator.Framework.Specifications.dll"})
+                .SetEventListener(Framework.EventListeners.EventListeners.NullEventListener())
+                .SetScenarioFiles(new[] {@"System.Specs\Scenarios\ScenarioWithFailingStep.feature"});
         }
 
         protected override void Because()
         {
-            this._results = this._config.Run();
+            _results = _config.Build().Run();
         }
 
         [Test]
@@ -42,10 +35,14 @@ namespace NBehave.Narrator.Framework.Specifications.System.Specs
     public class ScenarioStepsWithFailingStep
     {
         [Given("this failing scenario")]
-        public void Given() { }
+        public void Given()
+        {
+        }
 
         [When("this failing scenario is executed")]
-        public void When() { }
+        public void When()
+        {
+        }
 
         [Then("the failing scenario should display an error message")]
         public void Then()

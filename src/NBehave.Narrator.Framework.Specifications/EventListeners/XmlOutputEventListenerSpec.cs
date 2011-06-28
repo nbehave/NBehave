@@ -23,8 +23,9 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
             NBehaveConfiguration
                 .New
                 .SetScenarioFiles(_feature)
-                .SetAssemblies(new[] { GetType().Assembly.Location })
+                .SetAssemblies(new[] {GetType().Assembly.Location})
                 .SetEventListener(listener)
+                .Build()
                 .Run();
 
             _xmlDoc = new XmlDocument();
@@ -37,7 +38,7 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
         {
             public override void Setup()
             {
-                _feature = new[] { TestFeatures.FeaturesAndScenarios };
+                _feature = new[] {TestFeatures.FeaturesAndScenarios};
                 base.Setup();
             }
 
@@ -166,8 +167,9 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
                 NBehaveConfiguration
                     .New
                     .SetScenarioFiles(_feature)
-                    .SetAssemblies(new[]{GetType().Assembly.Location})
+                    .SetAssemblies(new[] {GetType().Assembly.Location})
                     .SetEventListener(listener)
+                    .Build()
                     .Run();
 
                 memStream.Seek(0, 0);
@@ -190,7 +192,7 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
         {
             public override void Setup()
             {
-                _feature = new[] { TestFeatures.ScenarioWithExamples };
+                _feature = new[] {TestFeatures.ScenarioWithExamples};
                 base.Setup();
             }
 
@@ -236,15 +238,18 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
 
         [Given(@"a string $str")]
         public void AString(string str)
-        { }
+        {
+        }
 
         [When(@"string is ecco'ed")]
         public void EcchoString()
-        { }
+        {
+        }
 
         [Then(@"you should see $strOut")]
         public void StringOut(string strOut)
-        { }
+        {
+        }
 
         [Given(@"something$")]
         [Given(@"something x$")]

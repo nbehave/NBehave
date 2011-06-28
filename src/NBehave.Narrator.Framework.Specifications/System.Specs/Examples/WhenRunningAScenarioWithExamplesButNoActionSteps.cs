@@ -1,12 +1,9 @@
-﻿namespace NBehave.Narrator.Framework.Specifications.System.Specs
+﻿using System.Collections.Generic;
+using System.Linq;
+using NUnit.Framework;
+
+namespace NBehave.Narrator.Framework.Specifications.System.Specs
 {
-    using global::System.Collections.Generic;
-    using global::System.Linq;
-
-    using NBehave.Narrator.Framework.EventListeners;
-
-    using NUnit.Framework;
-
     [TestFixture]
     public class WhenRunningAScenarioWithScenarioOutlinesButNoActionSteps : SystemTestContext
     {
@@ -17,21 +14,21 @@
         {
             _config = NBehaveConfiguration
                 .New
-                .SetAssemblies(new[] { "NBehave.Narrator.Framework.Specifications.dll" })
-                .SetEventListener(EventListeners.NullEventListener())
-                .SetScenarioFiles(new[] { @"System.Specs\Examples\ExamplesWithPendingSteps.feature" });
+                .SetAssemblies(new[] {"NBehave.Narrator.Framework.Specifications.dll"})
+                .SetEventListener(Framework.EventListeners.EventListeners.NullEventListener())
+                .SetScenarioFiles(new[] {@"System.Specs\Examples\ExamplesWithPendingSteps.feature"});
         }
 
         protected override void Because()
         {
-            this._results = this._config.Run();
+            _results = _config.Build().Run();
         }
 
         [Test]
         public void ItShouldMarkAllResultsAsPending()
         {
-            IEnumerable<Result> enumerable = this._results.ScenarioResults.First().ActionStepResults.Select(result => result.Result).ToList();
-            CollectionAssert.AllItemsAreInstancesOfType(enumerable, typeof(Pending));
+            IEnumerable<Result> enumerable = _results.ScenarioResults.First().ActionStepResults.Select(result => result.Result).ToList();
+            CollectionAssert.AllItemsAreInstancesOfType(enumerable, typeof (Pending));
         }
     }
 }

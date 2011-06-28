@@ -5,6 +5,7 @@ using NBehave.Narrator.Framework;
 using TestDriven.Framework;
 
 //IF you change the namespace or the name of the class dont forget to update the installer.
+
 namespace NBehave.TestDriven.Plugin
 {
     public class NBehaveStoryRunner : ITestRunner
@@ -32,21 +33,22 @@ namespace NBehave.TestDriven.Plugin
         private TestRunState Run(Assembly assembly, MemberInfo member, ITestListener tddNetListener)
         {
             var locator = new StoryLocator
-            {
-                RootLocation = Path.GetDirectoryName(assembly.Location)
-            };
+                              {
+                                  RootLocation = Path.GetDirectoryName(assembly.Location)
+                              };
 
             var type = member as Type;
             var stories = (type == null)
-                                      ? locator.LocateAllStories()
-                                      : locator.LocateStoriesMatching(type);
+                              ? locator.LocateAllStories()
+                              : locator.LocateStoriesMatching(type);
 
             var results = NBehaveConfiguration
                 .New
                 .SetEventListener(new StoryRunnerEventListenerProxy(tddNetListener))
                 .SetScenarioFiles(stories)
-                .SetAssemblies(new[] { assembly.Location })
+                .SetAssemblies(new[] {assembly.Location})
                 .SetFilter(StoryRunnerFilter.GetFilter(member))
+                .Build()
                 .Run();
 
             return GetTestRunState(results);

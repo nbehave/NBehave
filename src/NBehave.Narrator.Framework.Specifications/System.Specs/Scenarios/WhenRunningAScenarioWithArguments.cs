@@ -1,9 +1,7 @@
-﻿namespace NBehave.Narrator.Framework.Specifications.System.Specs
+﻿using NUnit.Framework;
+
+namespace NBehave.Narrator.Framework.Specifications.System.Specs
 {
-    using NBehave.Narrator.Framework.EventListeners;
-
-    using NUnit.Framework;
-
     [TestFixture]
     public class WhenRunningAScenarioWithArguments : SystemTestContext
     {
@@ -14,20 +12,20 @@
         {
             _config = NBehaveConfiguration
                 .New
-                .SetAssemblies(new[] { "NBehave.Narrator.Framework.Specifications.dll" })
-                .SetEventListener(EventListeners.NullEventListener())
-                .SetScenarioFiles(new[] { @"System.Specs\Scenarios\ScenarioWithArguments.feature" });
+                .SetAssemblies(new[] {"NBehave.Narrator.Framework.Specifications.dll"})
+                .SetEventListener(Framework.EventListeners.EventListeners.NullEventListener())
+                .SetScenarioFiles(new[] {@"System.Specs\Scenarios\ScenarioWithArguments.feature"});
         }
 
         protected override void Because()
         {
-            this._results = this._config.Run();
+            _results = _config.Build().Run();
         }
 
         [Test]
         public void AllStepsShouldPass()
         {
-            Assert.That(this._results.NumberOfPassingScenarios, Is.EqualTo(1)); 
+            Assert.That(_results.NumberOfPassingScenarios, Is.EqualTo(1));
         }
     }
 

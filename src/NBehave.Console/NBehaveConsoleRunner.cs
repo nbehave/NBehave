@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NBehaveConsoleRunner.cs" company="NBehave">
-//   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
-// </copyright>
-// <summary>
-//   Defines the NBehaveConsoleRunner type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -96,7 +87,7 @@ namespace NBehave.Console
 
             try
             {
-                results = config.Run();
+                results = config.Build().Run();
             }
             catch (FileNotFoundException fileNotFoundException)
             {
