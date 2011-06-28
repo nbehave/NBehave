@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.TaskRunnerFramework;
@@ -48,7 +49,8 @@ namespace NBehave.ReSharper.Plugin
         public override IEnumerable<IProjectFile> GetProjectFiles()
         {
             IProject project = GetProject();
-            return project.GetAllProjectFiles();
+            var files = project.GetAllProjectFiles().Where(_ => _.Location.FullPath == _featureFile);
+            return files.ToList();
         }
 
         public override string GetPresentation()
@@ -59,7 +61,7 @@ namespace NBehave.ReSharper.Plugin
 
         public override UnitTestElementDisposition GetDisposition()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public override IDeclaredElement GetDeclaredElement()
@@ -73,21 +75,6 @@ namespace NBehave.ReSharper.Plugin
             return o != null
                    && _featureFile == o._featureFile;
         }
-
-        //public bool Equals(NBehaveScenarioTestElement other)
-        //{
-        //    if (ReferenceEquals(null, other)) return false;
-        //    if (ReferenceEquals(this, other)) return true;
-        //    return Equals(other._featureFile, _featureFile) && Equals(other._projectFile, _projectFile) && Equals(other._assemblyOutFile, _assemblyOutFile);
-        //}
-
-        //public override bool Equals(object obj)
-        //{
-        //    if (ReferenceEquals(null, obj)) return false;
-        //    if (ReferenceEquals(this, obj)) return true;
-        //    if (obj.GetType() != typeof (NBehaveScenarioTestElement)) return false;
-        //    return Equals((NBehaveScenarioTestElement) obj);
-        //}
 
         public override int GetHashCode()
         {
