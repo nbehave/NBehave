@@ -7,8 +7,9 @@ using JetBrains.ReSharper.TaskRunnerFramework;
 using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.ReSharper.UnitTestFramework.AttributeChecker;
 using JetBrains.UI;
+using NBehave.ReSharper.Plugin.UnitTestRunner;
 
-namespace NBehave.ReSharper.Plugin
+namespace NBehave.ReSharper.Plugin.UnitTestProvider
 {
     [UnitTestProvider]
     public class TestProvider : IUnitTestProvider

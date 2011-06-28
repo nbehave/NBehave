@@ -5,7 +5,7 @@ using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.TreeModels;
 using JetBrains.UI.TreeView;
 
-namespace NBehave.ReSharper.Plugin.Presenter
+namespace NBehave.ReSharper.Plugin.UnitTestProvider
 {
     public class TestTreePresenter : TreeModelBrowserPresenter
     {
@@ -40,7 +40,7 @@ namespace NBehave.ReSharper.Plugin.Presenter
             if (IsNodeParentNatural(modelNode, value))
             {
                 //item.RichText = value.TypeName.ShortName;
-                item.RichText = value.TypeName.ToString();
+                item.RichText = value.TypeName + " !! ";
                 return;
             }
             if (string.IsNullOrEmpty(value.TypeName.GetNamespaceName()))

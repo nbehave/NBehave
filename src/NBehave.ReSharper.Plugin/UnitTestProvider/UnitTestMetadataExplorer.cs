@@ -2,7 +2,7 @@ using JetBrains.Metadata.Reader.API;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.UnitTestFramework;
 
-namespace NBehave.ReSharper.Plugin
+namespace NBehave.ReSharper.Plugin.UnitTestProvider
 {
     [MetadataUnitTestExplorer]
     public class UnitTestMetadataExplorer : IUnitTestMetadataExplorer

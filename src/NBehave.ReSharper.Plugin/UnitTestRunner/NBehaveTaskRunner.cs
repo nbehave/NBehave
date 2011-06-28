@@ -1,9 +1,9 @@
 using System;
 using System.IO;
 using JetBrains.ReSharper.TaskRunnerFramework;
-using NBehave.ReSharper.Plugin.Task;
+using NBehave.ReSharper.Plugin.UnitTestProvider;
 
-namespace NBehave.ReSharper.Plugin
+namespace NBehave.ReSharper.Plugin.UnitTestRunner
 {
     public class NBehaveTaskRunner : RecursiveRemoteTaskRunner
     {
@@ -72,7 +72,10 @@ namespace NBehave.ReSharper.Plugin
             Log(string.Format("Task: {0}", current.RemoteTask.GetType().Name));
             var asmTask = current.RemoteTask as AssemblyLoadTask;
             if (asmTask != null)
-                Log("AssemblyLoadTask");
+            {
+
+                Log(string.Format("AssemblyLoadTask: {0}", asmTask.AssemblyCodeBase));
+            }
 
             var featureTask = current.RemoteTask as FeatureTask;
             if (featureTask != null)

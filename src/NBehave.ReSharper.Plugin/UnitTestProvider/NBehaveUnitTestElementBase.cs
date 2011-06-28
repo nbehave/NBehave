@@ -3,7 +3,7 @@ using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.UnitTestFramework;
 
-namespace NBehave.ReSharper.Plugin
+namespace NBehave.ReSharper.Plugin.UnitTestProvider
 {
     public abstract class NBehaveUnitTestElementBase : IUnitTestElement
     {

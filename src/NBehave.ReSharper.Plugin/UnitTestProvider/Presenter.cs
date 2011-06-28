@@ -3,7 +3,7 @@ using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.TreeModels;
 using JetBrains.UI.TreeView;
 
-namespace NBehave.ReSharper.Plugin.Presenter
+namespace NBehave.ReSharper.Plugin.UnitTestProvider
 {
     [UnitTestPresenter]
     public class Presenter : IUnitTestPresenter

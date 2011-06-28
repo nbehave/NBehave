@@ -8,7 +8,7 @@ using JetBrains.ReSharper.Psi.Util;
 using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.ReSharper.UnitTestFramework.AttributeChecker;
 
-namespace NBehave.ReSharper.Plugin
+namespace NBehave.ReSharper.Plugin.UnitTestProvider
 {
     public class MetadataExplorer
     {

@@ -4,11 +4,10 @@ using System.IO;
 using System.Linq;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
-using JetBrains.ReSharper.TaskRunnerFramework;
 using JetBrains.ReSharper.UnitTestFramework;
-using NBehave.ReSharper.Plugin.Task;
+using NBehave.ReSharper.Plugin.UnitTestRunner;
 
-namespace NBehave.ReSharper.Plugin
+namespace NBehave.ReSharper.Plugin.UnitTestProvider
 {
     public class NBehaveScenarioTestElement : NBehaveUnitTestElementBase
     {
@@ -39,7 +38,6 @@ namespace NBehave.ReSharper.Plugin
         {
             var list = new List<UnitTestTask>
 			{
-				new UnitTestTask(null, new AssemblyLoadTask(_assemblyOutFile)), 
                 new UnitTestTask(this, new AssemblyTask(_assemblyOutFile)),
 				new UnitTestTask(this, new FeatureTask(_featureFile))
 			};

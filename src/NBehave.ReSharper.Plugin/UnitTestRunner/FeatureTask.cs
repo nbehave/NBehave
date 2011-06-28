@@ -2,7 +2,7 @@ using System;
 using System.Xml;
 using JetBrains.ReSharper.TaskRunnerFramework;
 
-namespace NBehave.ReSharper.Plugin.Task
+namespace NBehave.ReSharper.Plugin.UnitTestRunner
 {
     [Serializable]
     public class FeatureTask : RemoteTask, IEquatable<FeatureTask>
