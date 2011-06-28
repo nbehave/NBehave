@@ -50,6 +50,11 @@ namespace NBehave.Narrator.Framework.EventListeners
             return new NullEventListener();
         }
 
+        public static EventListener ColorfulConsoleOutputEventListener()
+        {
+            return new ColorfulConsoleOutputEventListener();
+        }
+
         public static EventListener FileOutputEventListener(string outputPath)
         {
             return new TextWriterEventListener(File.CreateText(outputPath));

@@ -39,8 +39,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
         {
             if (IsNodeParentNatural(modelNode, value))
             {
-                //item.RichText = value.TypeName.ShortName;
-                item.RichText = value.TypeName + " !! ";
+                item.RichText = value.TypeName.ToString();
                 return;
             }
             if (string.IsNullOrEmpty(value.TypeName.GetNamespaceName()))

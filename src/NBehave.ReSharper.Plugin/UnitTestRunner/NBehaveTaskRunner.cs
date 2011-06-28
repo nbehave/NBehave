@@ -1,6 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using JetBrains.ReSharper.TaskRunnerFramework;
+using NBehave.Narrator.Framework;
+using NBehave.Narrator.Framework.EventListeners;
 using NBehave.ReSharper.Plugin.UnitTestProvider;
 
 namespace NBehave.ReSharper.Plugin.UnitTestRunner
@@ -8,7 +12,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
     public class NBehaveTaskRunner : RecursiveRemoteTaskRunner
     {
         public const string RunnerId = TestProvider.NBehaveId;
-        private Action<string> Log = s => File.AppendAllText(@"C:\Temp\rs.log", s + Environment.NewLine);
+        private readonly Action<string> Log = s => File.AppendAllText(@"C:\Temp\rs.log", s + Environment.NewLine);
         private TaskResult _finish;
 
         public NBehaveTaskRunner(IRemoteTaskServer server)
@@ -41,39 +45,52 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
             Log("NBehaveTaskRunner ExecuteRecursive");
             LogTask(node);
 
-            //var assemblyTask = node.RemoteTask as FeatureTask;
-            //if (assemblyTask == null)
-            //{
-            //    _finish = TaskResult.Error;
-            //    return;
-            //}
-            foreach (var current in node.Children)
-            {
-                LogTask(current);
+            var assemblies = Assemblies(node);
+            var featureFiles = FeatureFiles(node);
 
-                //Getfiles in that project
-                //var files = Directory.GetFiles(Path.GetDirectoryName(asmTask.AssemblyLocation), "*.feature");
-                //add to some list
-            }
+            TextWriter writer = new StringWriter();
+            EventListener codeGenListener = new CodeGenEventListener(writer);
+            var evtListener = new MultiOutputEventListener(codeGenListener, EventListeners.ColorfulConsoleOutputEventListener());
+            var config = NBehaveConfiguration
+                .New
+                .SetAssemblies(assemblies)
+                .SetEventListener(evtListener)
+                .SetScenarioFiles(featureFiles);
 
-            //Where is nbehave?
-            //string directoryName = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath);
-            //using (var asmLoader = new AssemblyLoader())
-            //{
-            //    asmLoader.RegisterAssembly(Assembly.LoadFrom(Path.Combine(directoryName, "NBehave.Narrator.Framework")));
-            //}
-            //throw new ApplicationException("ExecuteRecursive was actually called!!");
+            var runner = config.Build();
+            runner.Run();
+
+            writer.Flush();
+            var toImplement = writer.ToString();
+            Console.WriteLine(toImplement);
+        }
+
+        private static IEnumerable<string> Assemblies(TaskExecutionNode node)
+        {
+            var assemblies = node.Children
+                .Where(_ => _.RemoteTask is AssemblyTask)
+                .Select(_ => ((AssemblyTask) _.RemoteTask).AssemblyFile)
+                .Distinct();
+            return assemblies;
+        }
+
+        private static IEnumerable<string> FeatureFiles(TaskExecutionNode node)
+        {
+            var featureFiles = node.Children
+                .Where(_ => _.RemoteTask is FeatureTask)
+                .Select(_ => ((FeatureTask) _.RemoteTask).FeatureFile)
+                .Distinct();
+            return featureFiles;
         }
 
         private void LogTask(TaskExecutionNode current)
         {
             Log(string.Format("Node: {0}", current.GetType().Name));
-            
+
             Log(string.Format("Task: {0}", current.RemoteTask.GetType().Name));
             var asmTask = current.RemoteTask as AssemblyLoadTask;
             if (asmTask != null)
             {
-
                 Log(string.Format("AssemblyLoadTask: {0}", asmTask.AssemblyCodeBase));
             }
 
