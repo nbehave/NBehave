@@ -23,7 +23,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
 
         public void ExploreAssembly(IProject project, IMetadataAssembly assembly, UnitTestElementConsumer consumer)
         {
-            new MetadataExplorer(_provider, project, consumer).ExploreAssembly(assembly);
+            new MetadataExplorer(_provider, project, consumer).ExploreProject();
         }
     }
 }

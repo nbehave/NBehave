@@ -1,36 +1,26 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NBehaveConfiguration.cs" company="NBehave">
-//   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
-// </copyright>
-// <summary>
-//   Defines the NBehaveConfiguration type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-using System;
+﻿using System;
+using System.Collections.Generic;
 using NBehave.Narrator.Framework.EventListeners;
 
 namespace NBehave.Narrator.Framework
 {
-    using System.Collections.Generic;
-
     /// <summary>
-    /// Fluent configuration to declare settings for the text based scenario runner.
+    ///   Fluent configuration to declare settings for the text based scenario runner.
     /// </summary>
     public class NBehaveConfiguration : MarshalByRefObject
     {
         /// <summary>
-        /// Gets a new instance of the configuration, used by the fluent interface 
-        /// to return a new instance of the configuration.
+        ///   Gets a new instance of the configuration, used by the fluent interface 
+        ///   to return a new instance of the configuration.
         /// </summary>
         public static NBehaveConfiguration New
         {
             get
             {
                 return new NBehaveConfiguration
-                {
-                    Filter = new StoryRunnerFilter()
-                };
+                           {
+                               Filter = new StoryRunnerFilter()
+                           };
             }
         }
 
@@ -45,41 +35,55 @@ namespace NBehave.Narrator.Framework
         internal StoryRunnerFilter Filter { get; set; }
 
         /// <summary>
-        /// Sets a value indicating whether the action steps should be executed or not.
+        ///   Sets a value indicating whether the action steps should be executed or not.
         /// </summary>
-        /// <param name="dryRun">
-        /// True to execute action steps, false to skip execution.
+        /// <param name = "dryRun">
+        ///   True to execute action steps, false to skip execution.
         /// </param>
         /// <returns>
-        /// The configuration object to resume the fluent interface.
+        ///   The configuration object to resume the fluent interface.
         /// </returns>
-        public NBehaveConfiguration SetDryRun(bool dryRun) 
+        public NBehaveConfiguration SetDryRun(bool dryRun)
         {
-            this.IsDryRun = dryRun;
+            IsDryRun = dryRun;
             return this;
+        }
+
+        public string[] FeatureFileExtensions
+        {
+            get
+            {
+                return new[]
+                           {
+                               "feature",
+                               "story",
+                               "specification",
+                               "egenskap"
+                           };
+            }
         }
 
         public NBehaveConfiguration SetScenarioFiles(IEnumerable<string> scenarioFiles)
         {
-            this.ScenarioFiles = scenarioFiles;
+            ScenarioFiles = scenarioFiles;
             return this;
         }
 
         public NBehaveConfiguration SetAssemblies(IEnumerable<string> assemblies)
         {
-            this.Assemblies = assemblies;
+            Assemblies = assemblies;
             return this;
         }
 
         public NBehaveConfiguration SetEventListener(IEventListener eventListener)
         {
-            this.EventListener = eventListener;
+            EventListener = eventListener;
             return this;
         }
 
         public NBehaveConfiguration SetFilter(StoryRunnerFilter filter)
         {
-            this.Filter = filter;
+            Filter = filter;
             return this;
         }
     }

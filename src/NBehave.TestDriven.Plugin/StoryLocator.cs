@@ -2,21 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using NBehave.Narrator.Framework;
 
 namespace NBehave.TestDriven.Plugin
 {
     public class StoryLocator : IDirectoryVisitor
     {
         private readonly List<string> _locatedStories = new List<string>();
-
-        private static readonly string[] Extensions = new[]
-                                                          {
-                                                              "*.feature",
-                                                              "*.story",
-                                                              "*.specification",
-                                                              "*.egenskap"
-                                                          };
-
+        private static readonly string[] Extensions = new NBehaveConfiguration().FeatureFileExtensions.Select(_ => "*." + _).ToArray();
         private IDirectoryWalker _directoryWalker = new DirectoryWalker();
 
         public string RootLocation { get; set; }

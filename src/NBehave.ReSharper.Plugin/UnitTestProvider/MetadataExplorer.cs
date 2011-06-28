@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using JetBrains.Metadata.Reader.API;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.Util;
 using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.ReSharper.UnitTestFramework.AttributeChecker;
+using NBehave.Narrator.Framework;
 
 namespace NBehave.ReSharper.Plugin.UnitTestProvider
 {
@@ -14,7 +14,6 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
     {
         private static readonly IClrTypeName ActionStepsAttribute = new ClrTypeName("NBehave.Narrator.Framework.ActionStepsAttribute");
         private static readonly IClrTypeName ActionStepAttribute = new ClrTypeName("NBehave.Narrator.Framework.ActionStepAttribute");
-        private readonly UnitTestAttributeCache _attributeCache;
         private readonly TestProvider _testProvider;
         private readonly UnitTestElementConsumer _consumer;
         private readonly IProject _project;
@@ -26,16 +25,30 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
             _consumer = consumer;
             _project = project;
             _projectEnvoy = new ProjectModelElementEnvoy(_project);
-            _attributeCache = project.GetSolution().GetComponent<UnitTestAttributeCache>();
         }
 
-        public void ExploreAssembly(IMetadataAssembly assembly)
+        public void ExploreProject()
         {
-            var features = new List<NBehaveScenarioTestElement>();
-            foreach (IMetadataTypeInfo current2 in assembly.GetTypes())
-                features.AddRange(ExploreType(current2));
-            features = features.Distinct(_ => _.Id).ToList();
+            var featureFiles = GetFeatureFilesFromProject();
+
+            var features = featureFiles
+                .Select(feature =>
+                            {
+                                //TODO: feature.Name is NOT a ClrTypeName !
+                                var clrType = new ClrTypeName(feature.Name);
+                                return new NBehaveScenarioTestElement(feature, _testProvider, _projectEnvoy, clrType);
+                            })
+                .ToList();
             BindFeatures(features);
+        }
+
+        private IEnumerable<IProjectFile> GetFeatureFilesFromProject()
+        {
+            var validExtensions = new NBehaveConfiguration().FeatureFileExtensions;
+            var featureFiles = _project
+                .GetAllProjectFiles()
+                .Where(_ => validExtensions.Any(e => _.Name.EndsWith(e, StringComparison.CurrentCultureIgnoreCase)));
+            return featureFiles;
         }
 
         private void BindFeatures(IEnumerable<NBehaveScenarioTestElement> features)
@@ -44,64 +57,14 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
                 _consumer(feature);
         }
 
-        private IEnumerable<NBehaveScenarioTestElement> ExploreType(IMetadataTypeInfo type)
-        {
-            var files = new List<NBehaveScenarioTestElement>();
-            if (IsActionStepsClass(type))
-            {
-                //TODO: see StoryLocator for file extensions to find
-                var featureFiles = _project.GetAllProjectFiles().Where(_ => _.Name.EndsWith(".feature", StringComparison.CurrentCultureIgnoreCase)).ToList();
-                foreach (IProjectFile feature in featureFiles)
-                {
-                    //TODO: feature.Name is NOT a ClrTypeName !
-                    var clrType = new ClrTypeName(feature.Name);
-                    var f = new NBehaveScenarioTestElement(feature, _testProvider, _projectEnvoy, clrType);
-                    files.Add(f);
-                }
-            }
-            return files;
-        }
-
-        private bool IsActionStepsClass(IMetadataTypeInfo typeInfo)
-        {
-            if (typeInfo.IsAbstract)
-            {
-                if (typeInfo.GetMethods().Any(method => !method.IsAbstract && !method.IsStatic))
-                {
-                    return false;
-                }
-            }
-            return HasActionStepsAttribute(typeInfo, ActionStepsAttribute)
-                || typeInfo.GetMethods().Any(IsActionStepMethod);
-
-        }
-
-        private bool HasActionStepsAttribute(IMetadataTypeInfo typeInfo, IClrTypeName attribute)
-        {
-            if (HasAttributeOrDerivedAttribute(typeInfo, attribute))
-            {
-                return true;
-            }
-            IMetadataClassType @base = typeInfo.Base;
-            return @base != null && HasActionStepsAttribute(@base.Type, attribute);
-        }
-
-        private bool IsActionStepMethod(IMetadataMethod method)
-        {
-            return !method.IsAbstract
-                && method.IsPublic
-                && method.GenericArguments.Length == 0
-                && (HasAttributeOrDerivedAttribute(method, ActionStepAttribute));
-        }
-
         public static bool IsActionStepMethod(ITypeMember element, UnitTestAttributeCache attributeChecker)
         {
             var method = element as IMethod;
             return method != null
-                && !method.IsAbstract
-                && method.GetAccessRights() == AccessRights.PUBLIC
-                && !method.TypeParameters.Any()
-                && HasAnyAttributeOrDerivedAttribute(method, attributeChecker, new[] { ActionStepsAttribute, ActionStepAttribute});
+                   && !method.IsAbstract
+                   && method.GetAccessRights() == AccessRights.PUBLIC
+                   && !method.TypeParameters.Any()
+                   && HasAnyAttributeOrDerivedAttribute(method, attributeChecker, new[] {ActionStepsAttribute, ActionStepAttribute});
         }
 
         public static bool IsActionStepsClass(ITypeElement typeElement, out bool isAbstract, UnitTestAttributeCache attributeChecker)
@@ -110,7 +73,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
             var @class = typeElement as IClass;
             if (@class == null)
                 return false;
-            var modifiersOwner = (IModifiersOwner)typeElement;
+            var modifiersOwner = (IModifiersOwner) typeElement;
             isAbstract = modifiersOwner.IsAbstract;
             AccessRights accessRights = modifiersOwner.GetAccessRights();
             if (accessRights != AccessRights.PUBLIC)
@@ -122,12 +85,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
                        .GetAllSuperClasses()
                        .Select(superType => superType.GetTypeElement()))
                        .Any(superClass => superClass != null && HasAttributeOrDerivedAttribute(superClass, ActionStepsAttribute, attributeChecker))
-                       || typeElement.GetMembers().Any(member => IsActionStepMethod(member, attributeChecker));
-        }
-
-        private bool HasAttributeOrDerivedAttribute(IMetadataEntity entity, IClrTypeName attributeClrName)
-        {
-            return attributeClrName != null && _attributeCache.HasAttributeOrDerivedAttribute(entity, attributeClrName);
+                   || typeElement.GetMembers().Any(member => IsActionStepMethod(member, attributeChecker));
         }
 
         private static bool HasAttributeOrDerivedAttribute(IAttributesOwner member, IClrTypeName attribute, UnitTestAttributeCache attributeChecker)

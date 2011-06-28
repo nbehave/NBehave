@@ -5,6 +5,7 @@ using System.Linq;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.UnitTestFramework;
+using JetBrains.UI.RichText;
 using NBehave.ReSharper.Plugin.UnitTestRunner;
 
 namespace NBehave.ReSharper.Plugin.UnitTestProvider
@@ -38,7 +39,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
         {
             var list = new List<UnitTestTask>
 			{
-                new UnitTestTask(this, new AssemblyTask(_assemblyOutFile)),
+                new UnitTestTask(null, new AssemblyTask(_assemblyOutFile)),
 				new UnitTestTask(this, new FeatureTask(_featureFile))
 			};
             return list;
@@ -53,18 +54,20 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
 
         public override string GetPresentation()
         {
-            var f = File.ReadAllText(_featureFile);
-            return f;
+            return ShortName;
+            //var f = File.ReadAllText(_featureFile);
+            //return f;
         }
 
         public override UnitTestElementDisposition GetDisposition()
         {
-            throw new NotImplementedException();
+            //Denna metod anropas om man tex trycker på enter på en nod.
+            return null;
         }
 
         public override IDeclaredElement GetDeclaredElement()
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public override bool Equals(IUnitTestElement other)
