@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Xml;
 using JetBrains.ProjectModel;
@@ -19,22 +17,11 @@ namespace NBehave.ReSharper.Plugin
 
         private readonly UnitTestElementComparer _unitTestElementComparer = new UnitTestElementComparer(new[]
                                                                                             {
-	                                                                                            typeof(NBehaveScenarioTestElement), 
+	                                                                                            typeof(NBehaveScenarioTestElement) 
                                                                                             });
 
         private readonly ISolution _soultion;
         private readonly UnitTestAttributeCache _unitTestAttributeCache;
-        private UnitTestManager _manager;
-
-        private UnitTestManager Manager
-        {
-            get
-            {
-                if (_manager == null)
-                    _manager = Solution.GetComponent<UnitTestManager>();
-                return _manager;
-            }
-        }
 
         public TestProvider(ISolution solution, UnitTestAttributeCache unitTestAttributeCache)
         {
@@ -167,35 +154,6 @@ namespace NBehave.ReSharper.Plugin
         public IUnitTestElement DeserializeElement(XmlElement parent, IUnitTestElement parentElement)
         {
             return null;
-        }
-
-        public IUnitTestElement GetOrCreateFixture(ClrTypeName id, IProject project, ProjectModelElementEnvoy projectEnvoy, string assemblyPath, NBehaveScenarioTestElement parent)
-        {
-            IUnitTestElement elementById = Manager.GetElementById(project, id.FullName);
-            if (elementById != null)
-            {
-                if (parent != null)
-                    elementById.Parent = parent;
-
-                elementById.State = UnitTestElementState.Valid;
-                RemoveInvalidNBehaveElements(elementById);
-                var scenarioTestElement = elementById as NBehaveScenarioTestElement;
-                //if (scenarioTestElement != null)
-                //    scenarioTestElement.AssemblyLocation = assemblyPath;
-                return scenarioTestElement;
-            }
-            //return new NBehaveScenarioTestElement(this, id.FullName, projectEnvoy, id);
-            return null;
-        }
-
-        private void RemoveInvalidNBehaveElements(IUnitTestElement elementById)
-        {
-            List<IUnitTestElement> list = (elementById.Children.Where(child => child.State == UnitTestElementState.Invalid && child is NBehaveScenarioTestElement)).ToList();
-            foreach (IUnitTestElement current in list)
-            {
-                current.Parent = null;
-                Manager.RemoveElement(current);
-            }
         }
     }
 }

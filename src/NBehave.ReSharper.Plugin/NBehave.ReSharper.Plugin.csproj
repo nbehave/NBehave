@@ -100,7 +100,8 @@
     <Compile Include="Presenter\Presenter.cs" />
     <Compile Include="Presenter\TestTreePresenter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Task\RunScenarioTask.cs" />
+    <Compile Include="Task\AssemblyTask.cs" />
+    <Compile Include="Task\FeatureTask.cs" />
     <Compile Include="TestProvider.cs" />
     <Compile Include="TestProviderSettings.cs" />
     <Compile Include="UnitTestMetadataExplorer.cs" />

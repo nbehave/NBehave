@@ -40,8 +40,8 @@ namespace NBehave.ReSharper.Plugin
             var list = new List<UnitTestTask>
 			{
 				new UnitTestTask(null, new AssemblyLoadTask(_assemblyOutFile)), 
-                //new UnitTestTask(this, new NBehaveAssemblySetTask(_assemblyOutFile)),
-				new UnitTestTask(this, new RunScenarioTask(_featureFile))
+                new UnitTestTask(this, new AssemblyTask(_assemblyOutFile)),
+				new UnitTestTask(this, new FeatureTask(_featureFile))
 			};
             return list;
         }

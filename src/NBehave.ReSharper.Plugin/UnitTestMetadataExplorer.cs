@@ -15,6 +15,7 @@ namespace NBehave.ReSharper.Plugin
                 return _provider;
             }
         }
+
         public UnitTestMetadataExplorer(TestProvider provider)
         {
             _provider = provider;
