@@ -13,7 +13,8 @@ namespace NBehave.TestDriven.Plugin
                                                           {
                                                               "*.feature",
                                                               "*.story",
-                                                              "*.specification"
+                                                              "*.specification",
+                                                              "*.egenskap"
                                                           };
 
         private IDirectoryWalker _directoryWalker = new DirectoryWalker();
