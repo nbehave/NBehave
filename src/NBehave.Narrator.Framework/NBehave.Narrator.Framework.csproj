@@ -123,6 +123,7 @@
     <Compile Include="Domain\ExampleColumn.cs" />
     <Compile Include="EventListeners\FailSpecResultEventListener.cs" />
     <Compile Include="EventListeners\IEventListener.cs" />
+    <Compile Include="Extensions\StoryRunnerFilterExtensions.cs" />
     <Compile Include="Processors\Messages\ActionStepsLoaded.cs" />
     <Compile Include="Processors\FeatureResultCollector.cs" />
     <Compile Include="Processors\ParseScenarioFiles.cs" />

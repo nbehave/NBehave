@@ -122,6 +122,7 @@
     <Compile Include="EventListeners\ColorfulConsoleOutputEventListenerSpec.cs" />
     <Compile Include="EmbeddedRunnerSpec.cs" />
     <Compile Include="EventListeners\FailSpecResultEventListenerSpec.cs" />
+    <Compile Include="Extensions\StoryRunnerFilterExtensionsSpec.cs" />
     <Compile Include="LoadAndParseScenarioFilesSpec.cs" />
     <Compile Include="ActionStepParserSpec.cs" />
     <Compile Include="EventListeners\CodeGenEventListenerSpec.cs" />
