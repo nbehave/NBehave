@@ -120,6 +120,8 @@
     <Compile Include="ActionCatalogSpec.cs" />
     <Compile Include="ActionStepCodeGeneratorSpec.cs" />
     <Compile Include="EventListeners\ColorfulConsoleOutputEventListenerSpec.cs" />
+    <Compile Include="EmbeddedRunnerSpec.cs" />
+    <Compile Include="EventListeners\FailSpecResultEventListenerSpec.cs" />
     <Compile Include="LoadAndParseScenarioFilesSpec.cs" />
     <Compile Include="ActionStepParserSpec.cs" />
     <Compile Include="EventListeners\CodeGenEventListenerSpec.cs" />
@@ -164,6 +166,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Features\FeatureWithPendingStep.feature">
+      <LastGenOutput>GreetingSystem1.feature.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Features\FeatureWithCommentOnLastRow.feature">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

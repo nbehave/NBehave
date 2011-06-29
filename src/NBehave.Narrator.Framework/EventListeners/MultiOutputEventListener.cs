@@ -13,14 +13,14 @@ namespace NBehave.Narrator.Framework.EventListeners
 
     public class MultiOutputEventListener : EventListener
     {
-        private readonly EventListener[] _listeners;
+        private readonly IEventListener[] _listeners;
 
-        public MultiOutputEventListener(params EventListener[] listeners)
+        public MultiOutputEventListener(params IEventListener[] listeners)
         {
             _listeners = listeners;
         }
 
-        public EventListener[] Listeners
+        public IEventListener[] Listeners
         {
             get { return _listeners; }
         }
@@ -65,7 +65,7 @@ namespace NBehave.Narrator.Framework.EventListeners
             Invoke(l => l.ScenarioResult(result));
         }
 
-        private void Invoke(Action<EventListener> f)
+        private void Invoke(Action<IEventListener> f)
         {
             foreach (var listener in _listeners)
             {

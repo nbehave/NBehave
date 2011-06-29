@@ -1,6 +1,6 @@
 ﻿Feature: Feature with failing step
 	As a nbehave user
-	I was to be able to have a failing step
+	I want to be able to have a failing step
 	So that I can make write code to make it pass
 
 	Scenario: scenario with failing step

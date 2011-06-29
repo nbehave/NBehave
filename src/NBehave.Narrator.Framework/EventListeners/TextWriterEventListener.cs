@@ -91,7 +91,7 @@ namespace NBehave.Narrator.Framework.EventListeners
 
         private void WriteSummary()
         {
-            var summaryWriter = new SummaryWriter(Console.Out);
+            var summaryWriter = new SummaryWriter(_writer);
             summaryWriter.WriteCompleteSummary(_allResults);
         }
     }

@@ -121,6 +121,7 @@
     <Compile Include="ActionCatalog.cs" />
     <Compile Include="Domain\ColumnValues.cs" />
     <Compile Include="Domain\ExampleColumn.cs" />
+    <Compile Include="EventListeners\FailSpecResultEventListener.cs" />
     <Compile Include="EventListeners\IEventListener.cs" />
     <Compile Include="Processors\Messages\ActionStepsLoaded.cs" />
     <Compile Include="Processors\FeatureResultCollector.cs" />
@@ -167,6 +168,7 @@
     <Compile Include="Domain\ActionMissingException.cs" />
     <Compile Include="Attributes\ActionStepAttribute.cs" />
     <Compile Include="Extensions\ActionStepConverterExtensions.cs" />
+    <Compile Include="EmbeddedRunner.cs" />
     <Compile Include="TextParsing\Messages\BackgroundBuilt.cs" />
     <Compile Include="TextParsing\Messages\ModelBuilderCleanup.cs" />
     <Compile Include="TextParsing\Messages\ModelBuilderInitialise.cs" />
