@@ -85,7 +85,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
 
         private void ParsedFeature(ParsedFeature obj)
         {
-            var element = new NBehaveFeatureTestElement(obj.Content, FeatureFile, _testProvider, _projectModel, null);
+            var element = new NBehaveFeatureTestElement(obj.Content, FeatureFile, _testProvider, _projectModel);
             AddToElements(element);
             _currentFeature = element;
         }

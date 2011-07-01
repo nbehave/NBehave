@@ -3,147 +3,112 @@ using System.Collections.Generic;
 using System.Linq;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using NBehave.Narrator.Framework;
-using NBehave.Narrator.Framework.Tiny;
 
 namespace NBehave.ReSharper.Plugin.UnitTestRunner
 {
-    public class NBehaveTaskRunnerListener : EventListener, IDisposable
+    public class NBehaveTaskRunnerListener : EventListener
     {
-        private readonly List<KeyValuePair<TinyMessageSubscriptionToken, Type>> _hubSubscriberTokens = new List<KeyValuePair<TinyMessageSubscriptionToken, Type>>();
-        private readonly ITinyMessengerHub _hub;
-        private readonly IEnumerable<TaskExecutionNode> _nodes;
-        private readonly IRemoteTaskServer _server;
-        private bool _disposed;
+        private enum SignalState
+        {
+            NotStarted,
+            Started,
+            Finished
+        }
 
-        private string _currentFeatureFile = string.Empty;
-        private string _currentScenario = string.Empty;
-        private string _currentStep = string.Empty;
-        private readonly List<RemoteTask> _currentTasks = new List<RemoteTask>();
+        private class TaskState
+        {
+            public RemoteTask Task { get; private set; }
+            public SignalState State { get; set; }
+
+            public TaskState(RemoteTask task)
+            {
+                Task = task;
+                State = SignalState.NotStarted;
+            }
+        }
+
+        private readonly Dictionary<Type, List<TaskState>> _nodes = new Dictionary<Type, List<TaskState>>();
+        private readonly IRemoteTaskServer _server;
+
         private readonly List<ScenarioResult> _scenarioResults = new List<ScenarioResult>();
 
-        public NBehaveTaskRunnerListener(ITinyMessengerHub hub, IEnumerable<TaskExecutionNode> nodes, IRemoteTaskServer server)
+        public NBehaveTaskRunnerListener(IEnumerable<TaskExecutionNode> nodes, IRemoteTaskServer server)
         {
-            _hub = hub;
-            _nodes = nodes;
             _server = server;
-            AddSubscriptions();
+            AddNodes(nodes);
         }
+
+        private void AddNodes(IEnumerable<TaskExecutionNode> nodes)
+        {
+            foreach (var task in nodes.AllTasks())
+            {
+                var nodeType = task.GetType();
+                if (_nodes.ContainsKey(nodeType) == false)
+                    _nodes.Add(nodeType, new List<TaskState>());
+                _nodes[nodeType].Add(new TaskState(task));
+            }
+        }
+
+        public IEnumerable<ScenarioResult> ScenarioResults { get { return _scenarioResults; } }
+
 
         public override void ScenarioResult(ScenarioResult result)
         {
-            //Find results to _currentTasks, remove thos found
-            // OR iterate through results, find tasts and update them. (Remove all methods below this one)
             _scenarioResults.Add(result);
-        }
-
-        private void AddSubscriptions()
-        {
-            Subscribe<ParsingFileStart>(ParsingFileStart);
-            Subscribe<ParsedFeature>(ParsedFeature);
-            Subscribe<ParsedScenario>(ParsedScenario);
-            Subscribe<ParsedStep>(ParsedStep);
-            Subscribe<ParsingFileEnd>(ParsingFileEnd);
-        }
-
-        private void ParsingFileStart(ParsingFileStart obj)
-        {
-            _currentTasks.Clear();
-            _currentFeatureFile = obj.Content;
-        }
-
-        private void ParsedFeature(ParsedFeature obj)
-        {
-            //signal step end & scenario end (unless first)
-
-            //FeateTask kanske ska ha namnet på featuren också?
-
-            _currentFeatureFile = obj.Content;
-            var node = _nodes
-                .Where(_ => _.RemoteTask is FeatureTask)
-                .Select(_ => new { Task = _.RemoteTask as FeatureTask, Node = _ })
-                .Where(_ => _.Task.FeatureFile == _currentFeatureFile)
-                .Select(_ => _.Task)
-                .FirstOrDefault();
-            SignalTaskStarting(node);
-        }
-
-        private void ParsedScenario(ParsedScenario obj)
-        {
-            //signal step end & scenario end (unless first)
-            _currentScenario = obj.Content;
-
-            var node = _nodes
-                .Where(_ => _.RemoteTask is NBehaveScenarioTask)
-                .Select(_ => new { Task = _.RemoteTask as NBehaveScenarioTask, Node = _ })
-                .Where(_ => _.Task.FeatureFile == _currentFeatureFile && _.Task.Scenario == _currentScenario)
-                .Select(_ => _.Task)
-                .FirstOrDefault();
-            SignalTaskStarting(node);
-        }
-
-        private void ParsedStep(ParsedStep obj)
-        {
-            //signal step end (unless first)
-            _currentStep = obj.Content;
-            var node = _nodes
-                .Where(_ => _.RemoteTask is NBehaveStepTask)
-                .Select(_ => new { Task = _.RemoteTask as NBehaveStepTask, Node = _ })
-                .Where(_ => _.Task.FeatureFile == _currentFeatureFile && _.Task.Scenario == _currentScenario && _.Task.Step == _currentStep)
-                .Select(_ => _.Task)
-                .FirstOrDefault();
-            SignalTaskStarting(node);
-        }
-
-        private void SignalTaskStarting(RemoteTask task)
-        {
-            if (task == null)
+            List<TaskState> nodes;
+            if (_nodes.TryGetValue(typeof(NBehaveScenarioTask), out nodes) == false)
                 return;
-            _currentTasks.Add(task);
-            _server.TaskStarting(task);
+            var scenario = nodes
+                .FirstOrDefault(_ => ((NBehaveScenarioTask)_.Task).Scenario == result.ScenarioTitle && _.State == SignalState.NotStarted);
+            if (scenario == null)
+                return;
+
+            NotifyResharperOfStepResults(result);
+            NotifyResharperOfScenarioResult(result, scenario);
         }
 
-        private void ParsingFileEnd(ParsingFileEnd obj)
+        private void NotifyResharperOfScenarioResult(ScenarioResult result, TaskState scenario)
         {
-            //signal step end & scenario end & feature end
-            _currentFeatureFile = string.Empty;
+            NotifyResharperOfTaskResult(result.Result, result.Message, scenario);
         }
 
-        private void Subscribe<T>(Action<T> subscriber) where T : class, ITinyMessage
+        private void NotifyResharperOfStepResults(ScenarioResult result)
         {
-            var token = _hub.Subscribe(subscriber);
-            _hubSubscriberTokens.Add(new KeyValuePair<TinyMessageSubscriptionToken, Type>(token, typeof(T)));
-        }
-
-        private void RemoveSubscriptions()
-        {
-            lock (_hubSubscriberTokens)
+            foreach (var step in result.ActionStepResults)
             {
-                foreach (var tokenPair in _hubSubscriberTokens)
-                {
-                    var token = tokenPair.Key;
-                    var type = tokenPair.Value;
-                    _hub.Unsubscribe(token, type);
-                }
-                _hubSubscriberTokens.Clear();
+                List<TaskState> nodes;
+                if (_nodes.TryGetValue(typeof(NBehaveStepTask), out nodes) == false)
+                    continue;
+                TaskState node = nodes.FirstOrDefault(_ => ((NBehaveStepTask)_.Task).Scenario == result.ScenarioTitle && _.State == SignalState.NotStarted);
+                if (node == null)
+                    continue;
+
+                NotifyResharperOfTaskResult(step.Result, step.Message, node);
             }
         }
 
-        public void Dispose()
+        private void NotifyResharperOfTaskResult(Result result, string resultMessage, TaskState scenario)
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            TaskResult taskResult = GetTaskResult(result);
+            _server.TaskStarting(scenario.Task);
+            scenario.State = SignalState.Started;
+            if (taskResult == TaskResult.Error)
+                _server.TaskException(scenario.Task, new[] { new TaskException(((Failed)result).Exception) });
+            if (taskResult == TaskResult.Skipped)
+                _server.TaskExplain(scenario.Task, "TODO: have to raise this after all features are finished");
+            scenario.State = SignalState.Finished;
+            _server.TaskFinished(scenario.Task, resultMessage, taskResult);
         }
 
-        protected virtual void Dispose(bool disposing)
+        private TaskResult GetTaskResult(Result result)
         {
-            if (disposing)
-            {
-                if (!_disposed)
-                {
-                    _disposed = true;
-                    RemoveSubscriptions();
-                }
-            }
+            if (result is Passed)
+                return TaskResult.Success;
+            if (result is Failed)
+                return TaskResult.Error;
+            if (result is Pending)
+                return TaskResult.Skipped;
+            return TaskResult.Inconclusive;
         }
     }
 }

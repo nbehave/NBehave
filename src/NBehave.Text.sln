@@ -25,6 +25,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.TestDriven.Plugin",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.ReSharper.Plugin", "NBehave.ReSharper.Plugin\NBehave.ReSharper.Plugin.csproj", "{AA9C7D40-A49C-4522-938B-BD1A99EE3E78}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.ReSharper.Plugin.Specifications", "NBehave.ReSharper.Plugin.Specifications\NBehave.ReSharper.Plugin.Specifications.csproj", "{669A1BF0-7EFB-4E95-999B-532F62C95B03}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ReSharper.plugin", "ReSharper.plugin", "{688D0FA3-D01C-40AB-B521-55B314BF1A4F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		AutomatedDebug-3.5|Any CPU = AutomatedDebug-3.5|Any CPU
@@ -218,6 +222,26 @@ Global
 		{AA9C7D40-A49C-4522-938B-BD1A99EE3E78}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{AA9C7D40-A49C-4522-938B-BD1A99EE3E78}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{AA9C7D40-A49C-4522-938B-BD1A99EE3E78}.Release|x86.ActiveCfg = Release|Any CPU
+		{669A1BF0-7EFB-4E95-999B-532F62C95B03}.AutomatedDebug-3.5|Any CPU.ActiveCfg = Debug|Any CPU
+		{669A1BF0-7EFB-4E95-999B-532F62C95B03}.AutomatedDebug-3.5|Any CPU.Build.0 = Debug|Any CPU
+		{669A1BF0-7EFB-4E95-999B-532F62C95B03}.AutomatedDebug-3.5|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{669A1BF0-7EFB-4E95-999B-532F62C95B03}.AutomatedDebug-3.5|Mixed Platforms.Build.0 = Debug|Any CPU
+		{669A1BF0-7EFB-4E95-999B-532F62C95B03}.AutomatedDebug-3.5|x86.ActiveCfg = Debug|Any CPU
+		{669A1BF0-7EFB-4E95-999B-532F62C95B03}.AutomatedDebug-4.0|Any CPU.ActiveCfg = Debug|Any CPU
+		{669A1BF0-7EFB-4E95-999B-532F62C95B03}.AutomatedDebug-4.0|Any CPU.Build.0 = Debug|Any CPU
+		{669A1BF0-7EFB-4E95-999B-532F62C95B03}.AutomatedDebug-4.0|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{669A1BF0-7EFB-4E95-999B-532F62C95B03}.AutomatedDebug-4.0|Mixed Platforms.Build.0 = Debug|Any CPU
+		{669A1BF0-7EFB-4E95-999B-532F62C95B03}.AutomatedDebug-4.0|x86.ActiveCfg = Debug|Any CPU
+		{669A1BF0-7EFB-4E95-999B-532F62C95B03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{669A1BF0-7EFB-4E95-999B-532F62C95B03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{669A1BF0-7EFB-4E95-999B-532F62C95B03}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{669A1BF0-7EFB-4E95-999B-532F62C95B03}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{669A1BF0-7EFB-4E95-999B-532F62C95B03}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{669A1BF0-7EFB-4E95-999B-532F62C95B03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{669A1BF0-7EFB-4E95-999B-532F62C95B03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{669A1BF0-7EFB-4E95-999B-532F62C95B03}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{669A1BF0-7EFB-4E95-999B-532F62C95B03}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{669A1BF0-7EFB-4E95-999B-532F62C95B03}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -230,6 +254,8 @@ Global
 		{2162701A-70E9-4659-B17C-DEBA72C175D4} = {324DF465-63AB-40F3-905A-259C56D3224B}
 		{E2EF537E-04C9-4804-9848-4205277D74AF} = {F0FE6340-3B43-4A3B-83D3-D51622BAC3F3}
 		{534FD760-E694-481E-B215-419018D1210F} = {F0FE6340-3B43-4A3B-83D3-D51622BAC3F3}
+		{AA9C7D40-A49C-4522-938B-BD1A99EE3E78} = {688D0FA3-D01C-40AB-B521-55B314BF1A4F}
+		{669A1BF0-7EFB-4E95-999B-532F62C95B03} = {688D0FA3-D01C-40AB-B521-55B314BF1A4F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		CodeStyleEnforcer_Active = 0

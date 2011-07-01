@@ -116,6 +116,7 @@
     <Compile Include="UnitTestProvider\UnitTestMetadataExplorer.cs" />
     <Compile Include="UnitTestRunner\NBehaveTaskRunnerListener.cs" />
     <Compile Include="UnitTestRunner\RichTextEventListener.cs" />
+    <Compile Include="UnitTestRunner\TaskExecutionNodeExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resource\nbehave.png" />

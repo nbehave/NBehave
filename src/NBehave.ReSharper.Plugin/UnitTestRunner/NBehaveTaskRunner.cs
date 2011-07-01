@@ -1,20 +1,16 @@
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using JetBrains.UI.RichText;
 using NBehave.Narrator.Framework;
 using NBehave.Narrator.Framework.EventListeners;
-using NBehave.Narrator.Framework.Tiny;
 using NBehave.ReSharper.Plugin.UnitTestProvider;
 
 namespace NBehave.ReSharper.Plugin.UnitTestRunner
 {
     public class NBehaveTaskRunner : RecursiveRemoteTaskRunner
     {
-        private static ITinyMessengerHub _hub;
         public const string RunnerId = TestProvider.NBehaveId;
 
         public NBehaveTaskRunner(IRemoteTaskServer server)
@@ -42,28 +38,28 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
             if (asm == null)
                 return;
             var assemblies = new[] { asm.AssemblyFile };
-            using (var listener = new NBehaveTaskRunnerListener(_hub, node.Children, Server))
+            var listener = new NBehaveTaskRunnerListener(node.Children, Server);
+
+            foreach (var childNode in node.Children)
             {
-                foreach (var childNode in node.Children)
-                {
-                    var task = childNode.RemoteTask as FeatureTask;
-                    if (task == null)
-                        continue;
+                var task = childNode.RemoteTask as FeatureTask;
+                if (task == null)
+                    continue;
 
-                    Server.TaskStarting(task);
-                    var codegenWriter = new StringWriter();
-                    var codeGenListener = new CodeGenEventListener(codegenWriter);
-                    var text = new RichText();
-                    var textWriter = new RichTextEventListener(text);
-                    var evtListener = new MultiOutputEventListener(codeGenListener, textWriter, listener);
-                    Server.TaskProgress(task, "Running...");
-                    var runner = InitializeNBehaveRun(new[] {task.FeatureFile}, assemblies, evtListener);
+                Server.TaskStarting(task);
+                var codegenWriter = new StringWriter();
+                var codeGenListener = new CodeGenEventListener(codegenWriter);
+                var text = new RichText();
+                var textWriter = new RichTextEventListener(text);
+                var evtListener = new MultiOutputEventListener(codeGenListener, textWriter, listener);
+                Server.TaskProgress(task, "Running...");
+                var runner = InitializeNBehaveRun(new[] { task.FeatureFile }, assemblies, evtListener);
 
-                    var results = runner.Run();
-                    var taskResult = GetTaskResult(results);
-                    codegenWriter.Flush();
-                    PublishResults(results, codegenWriter, task, text, taskResult);
-                }
+                var results = runner.Run();
+                var featureResult = listener.ScenarioResults;
+                var taskResult = GetTaskResult(results);
+                codegenWriter.Flush();
+                PublishResults(results, codegenWriter, task, text, taskResult);
             }
         }
 
@@ -108,10 +104,6 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
                 .SetScenarioFiles(featureFiles);
 
             var runner = config.Build();
-            var container = TinyIoCContainer.Current;
-            NBehaveInitialiser.Initialise(container, config);
-            _hub = container.Resolve<ITinyMessengerHub>();
-
             return runner;
         }
     }

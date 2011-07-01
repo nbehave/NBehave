@@ -37,7 +37,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
             if (other == null)
                 return false;
             if (ReferenceEquals(this, other)) return true;
-            return base.Equals(other) && Equals(other.AssemblyFile, AssemblyFile);
+            return other.AssemblyFile == AssemblyFile;
         }
 
         public override bool Equals(object obj)

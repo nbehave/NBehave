@@ -14,17 +14,17 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
         private readonly IList<IUnitTestElement> _children = new List<IUnitTestElement>();
         private NBehaveUnitTestElementBase _parent;
         private readonly IEnumerable<UnitTestElementCategory> _categories = new List<UnitTestElementCategory>(UnitTestElementCategory.Uncategorized);
+        private IProject _project;
 
         public string FeatureFile { get; private set; }
         public string ProjectFile { get; private set; }
-        public string AssemblyOutFile { get; private set; }
+        public string AssemblyOutFile { get { return _project.GetOutputAssemblyFile().Location.FullPath; } }
 
         protected NBehaveUnitTestElementBase(IProjectFile featureFile, TestProvider testProvider, string id, ProjectModelElementEnvoy pointer, NBehaveUnitTestElementBase parent)
         {
             FeatureFile = featureFile.Location.FullPath;
-            var project = featureFile.GetProject();
-            ProjectFile = project.Name;
-            AssemblyOutFile = project.GetOutputAssemblyFile().Location.FullPath;
+            _project = featureFile.GetProject();
+            ProjectFile = _project.Name;
 
             _testProvider = testProvider;
             _id = id;
