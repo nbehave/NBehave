@@ -99,7 +99,6 @@
     </Compile>
     <Compile Include="UnitTestProvider\GherkinFileParser.cs" />
     <Compile Include="UnitTestProvider\MetadataExplorer.cs" />
-    <Compile Include="UnitTestProvider\NBehaveFeatureFileTestElement.cs" />
     <Compile Include="UnitTestProvider\NBehaveFeatureTestElement.cs" />
     <Compile Include="UnitTestProvider\NBehaveScenarioTestElement.cs" />
     <Compile Include="UnitTestProvider\NBehaveStepTestElement.cs" />
@@ -110,8 +109,8 @@
     <Compile Include="UnitTestProvider\Presenter.cs" />
     <Compile Include="UnitTestProvider\TestTreePresenter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UnitTestRunner\AssemblyTask.cs" />
-    <Compile Include="UnitTestRunner\FeatureTask.cs" />
+    <Compile Include="UnitTestRunner\NBehaveAssemblyTask.cs" />
+    <Compile Include="UnitTestRunner\NBehaveFeatureTask.cs" />
     <Compile Include="UnitTestProvider\TestProvider.cs" />
     <Compile Include="UnitTestProvider\UnitTestMetadataExplorer.cs" />
     <Compile Include="UnitTestRunner\NBehaveTaskRunnerListener.cs" />

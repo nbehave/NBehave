@@ -9,15 +9,15 @@ namespace NBehave.ReSharper.Plugin.Specifications
         [Test]
         public void Should_see_same_instance_as_equal()
         {
-            var a = new AssemblyTask(@"X:\Project\bin\debug\project.dll");
+            var a = new NBehaveAssemblyTask(@"X:\Project\bin\debug\project.dll");
             Assert.AreEqual(a, a);
         }
 
         [Test]
         public void Should_see_two_different_instances_with_same_feature_as_equal()
         {
-            var a = new AssemblyTask(@"X:\Project\bin\debug\project.dll");
-            var b = new AssemblyTask(@"X:\Project\bin\debug\project.dll");
+            var a = new NBehaveAssemblyTask(@"X:\Project\bin\debug\project.dll");
+            var b = new NBehaveAssemblyTask(@"X:\Project\bin\debug\project.dll");
             Assert.AreEqual(a, b);
         }
     }
@@ -28,15 +28,15 @@ namespace NBehave.ReSharper.Plugin.Specifications
         [Test]
         public void Should_see_same_instance_as_equal()
         {
-            var a = new FeatureTask(@"X:\Project\someFeature.feature");
+            var a = new NBehaveFeatureTask(@"X:\Project\someFeature.feature");
             Assert.AreEqual(a, a);
         }
 
         [Test]
         public void Should_see_two_different_instances_with_same_feature_as_equal()
         {
-            var a = new FeatureTask(@"X:\Project\someFeature.feature");
-            var b = new FeatureTask(@"X:\Project\someFeature.feature");
+            var a = new NBehaveFeatureTask(@"X:\Project\someFeature.feature");
+            var b = new NBehaveFeatureTask(@"X:\Project\someFeature.feature");
             Assert.AreEqual(a, b);
         }
     }

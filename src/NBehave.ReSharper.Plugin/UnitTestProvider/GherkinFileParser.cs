@@ -111,8 +111,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
 
         private void AddToElements(NBehaveUnitTestElementBase element)
         {
-            //if (element.Parent == null)
-                _elements.Add(element);
+            _elements.Add(element);
         }
 
         private NBehaveUnitTestElementBase GetParent(params NBehaveUnitTestElementBase[] elements)

@@ -37,16 +37,6 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
             get { return _id; }
         }
 
-        public ClrTypeName TypeName
-        {
-            get
-            {
-                var typeName = new ClrTypeName(GetType().Name + "." + ShortName);
-
-                return typeName;
-            }
-        }
-
         public abstract string ShortName { get; }
 
         public UnitTestElementState State { get; set; }

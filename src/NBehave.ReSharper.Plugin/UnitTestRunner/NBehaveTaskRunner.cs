@@ -34,7 +34,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
 
         public override void ExecuteRecursive(TaskExecutionNode node)
         {
-            var asm = node.RemoteTask as AssemblyTask;
+            var asm = node.RemoteTask as NBehaveAssemblyTask;
             if (asm == null)
                 return;
             var assemblies = new[] { asm.AssemblyFile };
@@ -42,7 +42,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
 
             foreach (var childNode in node.Children)
             {
-                var task = childNode.RemoteTask as FeatureTask;
+                var task = childNode.RemoteTask as NBehaveFeatureTask;
                 if (task == null)
                     continue;
 
@@ -63,7 +63,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
             }
         }
 
-        private void PublishResults(FeatureResults results, StringWriter codegenWriter, FeatureTask task, RichText text, TaskResult taskResult)
+        private void PublishResults(FeatureResults results, StringWriter codegenWriter, NBehaveFeatureTask task, RichText text, TaskResult taskResult)
         {
             Server.TaskOutput(task, text.Text, TaskOutputType.STDOUT);
             string taskResultMessage = "";

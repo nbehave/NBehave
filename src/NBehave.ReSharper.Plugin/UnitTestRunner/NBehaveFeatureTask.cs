@@ -5,15 +5,15 @@ using JetBrains.ReSharper.TaskRunnerFramework;
 namespace NBehave.ReSharper.Plugin.UnitTestRunner
 {
     [Serializable]
-    public class FeatureTask : RemoteTask, IEquatable<FeatureTask>
+    public class NBehaveFeatureTask : RemoteTask, IEquatable<NBehaveFeatureTask>
     {
-        public FeatureTask(XmlElement element)
+        public NBehaveFeatureTask(XmlElement element)
             : base(element)
         {
             FeatureFile = GetXmlAttribute(element, "featureFile");
         }
 
-        public FeatureTask(string featureFeatureFile)
+        public NBehaveFeatureTask(string featureFeatureFile)
             : base(NBehaveTaskRunner.RunnerId)
         {
             FeatureFile = featureFeatureFile;
@@ -34,15 +34,15 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
 
         public override bool Equals(object obj)
         {
-            return this == obj || Equals(obj as FeatureTask);
+            return this == obj || Equals(obj as NBehaveFeatureTask);
         }
 
         public override bool Equals(RemoteTask other)
         {
-            return Equals(other as FeatureTask);
+            return Equals(other as NBehaveFeatureTask);
         }
 
-        public bool Equals(FeatureTask task)
+        public bool Equals(NBehaveFeatureTask task)
         {
             return task != null
                    && FeatureFile == task.FeatureFile;

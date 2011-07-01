@@ -5,9 +5,9 @@ using JetBrains.ReSharper.TaskRunnerFramework;
 namespace NBehave.ReSharper.Plugin.UnitTestRunner
 {
     [Serializable]
-    public class AssemblyTask : RemoteTask, IEquatable<AssemblyTask>
+    public class NBehaveAssemblyTask : RemoteTask, IEquatable<NBehaveAssemblyTask>
     {
-        public AssemblyTask(XmlElement element)
+        public NBehaveAssemblyTask(XmlElement element)
             : base(element)
         {
             AssemblyFile = GetXmlAttribute(element, "assemblyFile");
@@ -15,7 +15,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
 
         public string AssemblyFile { get; private set; }
 
-        public AssemblyTask(string pathToAssembly)
+        public NBehaveAssemblyTask(string pathToAssembly)
             : base(NBehaveTaskRunner.RunnerId)
         {
             AssemblyFile = pathToAssembly;
@@ -32,7 +32,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
             get { return true; }
         }
 
-        public bool Equals(AssemblyTask other)
+        public bool Equals(NBehaveAssemblyTask other)
         {
             if (other == null)
                 return false;
@@ -42,7 +42,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as AssemblyTask);
+            return Equals(obj as NBehaveAssemblyTask);
         }
 
         public override int GetHashCode()
