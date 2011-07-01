@@ -1,20 +1,10 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="EventListeners.cs" company="NBehave">
-//   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
-// </copyright>
-// <summary>
-//   Defines the EventListeners type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+using System.IO;
+using System.Text;
+using System.Xml;
+using NBehave.Narrator.Framework.EventListeners.Xml;
 
 namespace NBehave.Narrator.Framework.EventListeners
 {
-    using System.IO;
-    using System.Text;
-    using System.Xml;
-
-    using NBehave.Narrator.Framework.EventListeners.Xml;
-
     public static class EventListeners
     {
         public static EventListener CreateEventListenerUsing(TextWriter writer, string textWriterFile, string xmlWriterFile)
@@ -67,7 +57,7 @@ namespace NBehave.Narrator.Framework.EventListeners
 
         public static EventListener XmlWriterEventListener(Stream stream)
         {
-            var settings = new XmlWriterSettings { Encoding = Encoding.UTF8, Indent = true };
+            var settings = new XmlWriterSettings {Encoding = Encoding.UTF8, Indent = true};
             var writer = XmlWriter.Create(stream, settings);
             return new XmlOutputEventListener(writer);
         }
@@ -84,7 +74,7 @@ namespace NBehave.Narrator.Framework.EventListeners
 
         private static bool Blank(this string value)
         {
-            return value == null ? true : string.IsNullOrEmpty(value.Trim());
+            return string.IsNullOrEmpty((value ?? "").Trim());
         }
 
         private static bool NotBlank(this string value)

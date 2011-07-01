@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using NBehave.Narrator.Framework;
+using NBehave.Narrator.Framework.EventListeners;
 
 namespace NBehave.ReSharper.Plugin.UnitTestRunner
 {
@@ -31,10 +32,14 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
         private readonly IRemoteTaskServer _server;
 
         private readonly List<ScenarioResult> _scenarioResults = new List<ScenarioResult>();
+        private readonly CodeGenEventListener _codeGeneration;
 
-        public NBehaveTaskRunnerListener(IEnumerable<TaskExecutionNode> nodes, IRemoteTaskServer server)
+        public NBehaveTaskRunnerListener(IEnumerable<TaskExecutionNode> nodes,
+            IRemoteTaskServer server,
+            CodeGenEventListener codeGeneration)
         {
             _server = server;
+            _codeGeneration = codeGeneration;
             AddNodes(nodes);
         }
 
@@ -48,9 +53,6 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
                 _nodes[nodeType].Add(new TaskState(task));
             }
         }
-
-        public IEnumerable<ScenarioResult> ScenarioResults { get { return _scenarioResults; } }
-
 
         public override void ScenarioResult(ScenarioResult result)
         {
@@ -69,7 +71,8 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
 
         private void NotifyResharperOfScenarioResult(ScenarioResult result, TaskState scenario)
         {
-            NotifyResharperOfTaskResult(result.Result, result.Message, scenario);
+            var a = new ActionStepResult(result.ScenarioTitle, result.Result);
+            NotifyResharperOfTaskResult(result, a, scenario);
         }
 
         private void NotifyResharperOfStepResults(ScenarioResult result)
@@ -83,21 +86,33 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
                 if (node == null)
                     continue;
 
-                NotifyResharperOfTaskResult(step.Result, step.Message, node);
+                NotifyResharperOfTaskResult(result, step, node);
             }
         }
 
-        private void NotifyResharperOfTaskResult(Result result, string resultMessage, TaskState scenario)
+        private void NotifyResharperOfTaskResult(ScenarioResult scenarioResult, ActionStepResult result, TaskState taskState)
         {
-            TaskResult taskResult = GetTaskResult(result);
-            _server.TaskStarting(scenario.Task);
-            scenario.State = SignalState.Started;
+            TaskResult taskResult = GetTaskResult(result.Result);
+            _server.TaskStarting(taskState.Task);
+            taskState.State = SignalState.Started;
             if (taskResult == TaskResult.Error)
-                _server.TaskException(scenario.Task, new[] { new TaskException(((Failed)result).Exception) });
-            if (taskResult == TaskResult.Skipped)
-                _server.TaskExplain(scenario.Task, "TODO: have to raise this after all features are finished");
-            scenario.State = SignalState.Finished;
-            _server.TaskFinished(scenario.Task, resultMessage, taskResult);
+                _server.TaskException(taskState.Task, new[] { new TaskException(((Failed)result.Result).Exception) });
+            if (taskResult == TaskResult.Inconclusive)
+            {
+                var code = GetCodeForPendingStep(scenarioResult, result);
+                var msg = (code == null) ? "" : string.Format("The step can be implemented with:{0}{0}{1}", Environment.NewLine, code.Code);
+                _server.TaskExplain(taskState.Task, msg);
+            }
+            taskState.State = SignalState.Finished;
+            _server.TaskFinished(taskState.Task, result.Message, taskResult);
+        }
+
+        private CodeGenStep GetCodeForPendingStep(ScenarioResult result, ActionStepResult step)
+        {
+            return _codeGeneration.PendingSteps
+                .FirstOrDefault(_ => _.Feature == result.FeatureTitle
+                                     && _.Scenario == result.ScenarioTitle
+                                     && _.Step == step.StringStep);
         }
 
         private TaskResult GetTaskResult(Result result)
@@ -107,8 +122,8 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
             if (result is Failed)
                 return TaskResult.Error;
             if (result is Pending)
-                return TaskResult.Skipped;
-            return TaskResult.Inconclusive;
+                return TaskResult.Inconclusive;
+            return TaskResult.Skipped;
         }
     }
 }

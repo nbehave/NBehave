@@ -1,26 +1,22 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CodeGenEventListener.cs" company="NBehave">
-//   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
-// </copyright>
-// <summary>
-//   Defines the CodeGenEventListener type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
 
 namespace NBehave.Narrator.Framework.EventListeners
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Text;
-
     public class CodeGenEventListener : EventListener
     {
         private readonly ActionStepCodeGenerator _actionStepCodeGenerator;
         private readonly TextWriter _writer;
         private readonly TextWriter _bufferWriter;
         private bool _firstPendingStep = true;
+        private readonly List<CodeGenStep> _pendingSteps = new List<CodeGenStep>();
+
+        public CodeGenEventListener()
+            : this(new StringWriter(new StringBuilder()))
+        { }
 
         public CodeGenEventListener(TextWriter writer)
         {
@@ -29,9 +25,11 @@ namespace NBehave.Narrator.Framework.EventListeners
             _actionStepCodeGenerator = new ActionStepCodeGenerator();
         }
 
+        public IEnumerable<CodeGenStep> PendingSteps { get { return _pendingSteps; } }
+
         public override void RunFinished()
         {
-            if (this._firstPendingStep == false)
+            if (_firstPendingStep == false)
             {
                 _bufferWriter.Flush();
                 _writer.Write(_bufferWriter.ToString());
@@ -49,15 +47,16 @@ namespace NBehave.Narrator.Framework.EventListeners
                 lastStep = DetermineTypeOfStep(validNames, actionStepResult, lastStep);
                 if (actionStepResult.Result is Pending)
                 {
-                    if (this._firstPendingStep)
+                    if (_firstPendingStep)
                     {
                         WriteStart();
-                        this._firstPendingStep = false;
+                        _firstPendingStep = false;
                     }
 
                     var code = _actionStepCodeGenerator.GenerateMethodFor(actionStepResult.StringStep, lastStep);
                     _bufferWriter.WriteLine(string.Empty);
                     _bufferWriter.WriteLine(code);
+                    _pendingSteps.Add(new CodeGenStep(result.FeatureTitle, result.ScenarioTitle, actionStepResult.StringStep, code));
                 }
             }
         }
@@ -75,6 +74,28 @@ namespace NBehave.Narrator.Framework.EventListeners
         {
             _bufferWriter.WriteLine(string.Empty);
             _bufferWriter.WriteLine("You could implement pending steps with these snippets:");
+        }
+
+        public override string ToString()
+        {
+            _writer.Flush();
+            return _writer.ToString();
+        }
+    }
+
+    public class CodeGenStep
+    {
+        public string Feature { get; private set; }
+        public string Scenario { get; private set; }
+        public string Step { get; private set; }
+        public string Code { get; private set; }
+
+        public CodeGenStep(string feature, string scenario, string step, string code)
+        {
+            Feature = feature;
+            Scenario = scenario;
+            Step = step;
+            Code = code;
         }
     }
 }

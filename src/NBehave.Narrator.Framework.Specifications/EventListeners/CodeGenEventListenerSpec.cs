@@ -1,4 +1,5 @@
 using System.IO;
+using System.Linq;
 using System.Text;
 using NBehave.Narrator.Framework.EventListeners;
 using NBehave.Narrator.Framework.Specifications.Features;
@@ -10,26 +11,36 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
     public class CodeGenEventListenerSpec
     {
         private string _output;
+        private CodeGenEventListener _listener;
 
         [SetUp]
         public virtual void SetUp()
         {
-            TextWriter output = new StringWriter(new StringBuilder());
-            EventListener listener = new CodeGenEventListener(output);
+            _listener = new CodeGenEventListener();
 
             NBehaveConfiguration
                 .New
-                .SetEventListener(listener)
-                .SetAssemblies(new[] {GetType().Assembly.Location})
-                .SetScenarioFiles(new[] {TestFeatures.FeaturesAndScenarios})
+                .SetEventListener(_listener)
+                .SetAssemblies(new[] { GetType().Assembly.Location })
+                .SetScenarioFiles(new[] { TestFeatures.FeaturesAndScenarios })
                 .Build()
                 .Run();
 
-            _output = output.ToString();
+            _output = _listener.ToString();
         }
 
         public class WhenRunningWithCodegen : CodeGenEventListenerSpec
         {
+            [Test]
+            public void Should_put_each_pending_step_in_dictionary()
+            {
+                Assert.Greater(_listener.PendingSteps.Count(), 2);
+                var step = _listener.PendingSteps.FirstOrDefault(_ => _.Step == "Given something pending");
+                Assert.IsNotNull(step);
+                Assert.AreEqual("S1", step.Feature);
+                Assert.AreEqual("Pending scenario", step.Scenario);
+            }
+
             [Test]
             public void ShouldGenerateCodeForStepGivenSomethingPending()
             {

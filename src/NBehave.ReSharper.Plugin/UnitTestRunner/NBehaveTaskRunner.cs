@@ -1,8 +1,6 @@
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using JetBrains.ReSharper.TaskRunnerFramework;
-using JetBrains.UI.RichText;
 using NBehave.Narrator.Framework;
 using NBehave.Narrator.Framework.EventListeners;
 using NBehave.ReSharper.Plugin.UnitTestProvider;
@@ -38,7 +36,8 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
             if (asm == null)
                 return;
             var assemblies = new[] { asm.AssemblyFile };
-            var listener = new NBehaveTaskRunnerListener(node.Children, Server);
+            var codeGenListener = new CodeGenEventListener();
+            var listener = new NBehaveTaskRunnerListener(node.Children, Server, codeGenListener);
 
             foreach (var childNode in node.Children)
             {
@@ -47,33 +46,26 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
                     continue;
 
                 Server.TaskStarting(task);
-                var codegenWriter = new StringWriter();
-                var codeGenListener = new CodeGenEventListener(codegenWriter);
-                var text = new RichText();
-                var textWriter = new RichTextEventListener(text);
-                var evtListener = new MultiOutputEventListener(codeGenListener, textWriter, listener);
+                var evtListener = new MultiOutputEventListener(codeGenListener, listener);
                 Server.TaskProgress(task, "Running...");
                 var runner = InitializeNBehaveRun(new[] { task.FeatureFile }, assemblies, evtListener);
 
                 var results = runner.Run();
-                var featureResult = listener.ScenarioResults;
-                var taskResult = GetTaskResult(results);
-                codegenWriter.Flush();
-                PublishResults(results, codegenWriter, task, text, taskResult);
+                PublishResults(results, task);
             }
         }
 
-        private void PublishResults(FeatureResults results, StringWriter codegenWriter, NBehaveFeatureTask task, RichText text, TaskResult taskResult)
+        private void PublishResults(FeatureResults results, NBehaveFeatureTask task)
         {
-            Server.TaskOutput(task, text.Text, TaskOutputType.STDOUT);
+            Server.TaskOutput(task, "", TaskOutputType.STDOUT);
+            var taskResult = GetTaskResult(results);
             string taskResultMessage = "";
             if (taskResult == TaskResult.Skipped)
                 taskResultMessage = "Skipped";
             if (taskResult == TaskResult.Inconclusive)
             {
                 taskResultMessage = "Pending";
-                var toImplement = codegenWriter.ToString();
-                Server.TaskExplain(task, toImplement);
+                Server.TaskExplain(task, "See pending step(s) for more information");
             }
             if (taskResult == TaskResult.Error)
             {
