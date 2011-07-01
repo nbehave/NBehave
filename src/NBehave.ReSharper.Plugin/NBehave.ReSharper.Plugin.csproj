@@ -51,6 +51,10 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Gherkin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=65cc5a3983d6ff12, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Gherkin\Gherkin.dll</HintPath>
+    </Reference>
     <Reference Include="JetBrains.Platform.ReSharper.ComponentModel">
       <HintPath>..\..\lib\ReSharper\JetBrains.Platform.ReSharper.ComponentModel.dll</HintPath>
     </Reference>
@@ -93,8 +97,14 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="UnitTestProvider\GherkinFileParser.cs" />
     <Compile Include="UnitTestProvider\MetadataExplorer.cs" />
+    <Compile Include="UnitTestProvider\NBehaveFeatureFileTestElement.cs" />
+    <Compile Include="UnitTestProvider\NBehaveFeatureTestElement.cs" />
     <Compile Include="UnitTestProvider\NBehaveScenarioTestElement.cs" />
+    <Compile Include="UnitTestProvider\NBehaveStepTestElement.cs" />
+    <Compile Include="UnitTestRunner\NBehaveScenarioTask.cs" />
+    <Compile Include="UnitTestRunner\NBehaveStepTask.cs" />
     <Compile Include="UnitTestRunner\NBehaveTaskRunner.cs" />
     <Compile Include="UnitTestProvider\NBehaveUnitTestElementBase.cs" />
     <Compile Include="UnitTestProvider\Presenter.cs" />
@@ -104,6 +114,7 @@
     <Compile Include="UnitTestRunner\FeatureTask.cs" />
     <Compile Include="UnitTestProvider\TestProvider.cs" />
     <Compile Include="UnitTestProvider\UnitTestMetadataExplorer.cs" />
+    <Compile Include="UnitTestRunner\NBehaveTaskRunnerListener.cs" />
     <Compile Include="UnitTestRunner\RichTextEventListener.cs" />
   </ItemGroup>
   <ItemGroup>

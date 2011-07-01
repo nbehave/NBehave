@@ -6,41 +6,41 @@ using NBehave.ReSharper.Plugin.UnitTestRunner;
 
 namespace NBehave.ReSharper.Plugin.UnitTestProvider
 {
-    public class NBehaveScenarioTestElement : NBehaveUnitTestElementBase
+    public class NBehaveStepTestElement : NBehaveUnitTestElementBase
     {
-        private readonly string _scenario;
+        private readonly string _step;
 
-        public NBehaveScenarioTestElement(string scenario, IProjectFile featureFile, TestProvider testProvider, ProjectModelElementEnvoy projectModel,
-                                          NBehaveUnitTestElementBase parent)
-            : base(featureFile, testProvider, parent.Id + "/" + scenario, projectModel, parent)
+        public NBehaveStepTestElement(string step, IProjectFile featureFile, TestProvider testProvider, ProjectModelElementEnvoy projectModel, NBehaveUnitTestElementBase parent)
+            : base(featureFile, testProvider, parent.Id + "/" + step, projectModel, parent)
         {
-            _scenario = scenario;
+            _step = step;
         }
 
         public override string ShortName
         {
-            get { return Scenario; }
+            get { return Step; }
         }
 
         public override string Kind
         {
-            get { return "NBehave scenario"; }
+            get { return "NBehave step"; }
         }
 
-        public string Scenario
+        public string Step
         {
-            get { return _scenario; }
+            get { return _step; }
         }
 
         public override string GetPresentation()
         {
-            return Scenario;
+            return Step;
         }
 
         public override IList<UnitTestTask> GetTaskSequence(IEnumerable<IUnitTestElement> explicitElements)
         {
             var taskSequence = (Parent != null) ? Parent.GetTaskSequence(explicitElements) : new List<UnitTestTask>();
-            taskSequence.Add(new UnitTestTask(this, new NBehaveScenarioTask(FeatureFile, _scenario)));
+            string scenario = (Parent is NBehaveScenarioTestElement) ? ((NBehaveScenarioTestElement)Parent).Scenario : "";
+            taskSequence.Add(new UnitTestTask(this, new NBehaveStepTask(FeatureFile, scenario, _step)));
             return taskSequence;
         }
 
@@ -55,29 +55,29 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
             return null;
         }
 
-        public bool Equals(NBehaveScenarioTestElement other)
+        public bool Equals(NBehaveStepTestElement other)
         {
             if (other == null)
                 return false;
             if (ReferenceEquals(this, other)) return true;
-            return base.Equals(other) && Equals(other._scenario, _scenario);
+            return base.Equals(other) && Equals(other._step, _step);
         }
 
         public override bool Equals(IUnitTestElement other)
         {
-            return Equals(other as NBehaveScenarioTestElement);
+            return Equals(other as NBehaveStepTestElement);
         }
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as NBehaveScenarioTestElement);
+            return Equals(obj as NBehaveStepTestElement);
         }
 
         public override int GetHashCode()
         {
             unchecked
             {
-                return (base.GetHashCode() * 397) ^ _scenario.GetHashCode();
+                return (base.GetHashCode() * 397) ^ _step.GetHashCode();
             }
         }
     }

@@ -81,13 +81,12 @@ namespace NBehave.Console
                 .SetAssemblies(assemblies)
                 .SetEventListener(CreateEventListener(options));
 
-            var runner = new TextRunner(config);
-
             FeatureResults results;
 
             try
             {
-                results = config.Build().Run();
+                IRunner runner = config.Build();
+                results = runner.Run();
             }
             catch (FileNotFoundException fileNotFoundException)
             {

@@ -13,12 +13,13 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
 {
     public class MetadataExplorer
     {
-        private static readonly IClrTypeName ActionStepsAttribute = new ClrTypeName("NBehave.Narrator.Framework.ActionStepsAttribute");
-        private static readonly IClrTypeName ActionStepAttribute = new ClrTypeName("NBehave.Narrator.Framework.ActionStepAttribute");
+        private static readonly IClrTypeName ActionStepsAttribute = new ClrTypeName(typeof(ActionStepsAttribute).FullName);
+        private static readonly IClrTypeName ActionStepAttribute = new ClrTypeName(typeof(ActionStepAttribute).FullName);
         private readonly TestProvider _testProvider;
         private readonly UnitTestElementConsumer _consumer;
         private readonly IProject _project;
         private readonly ProjectModelElementEnvoy _projectEnvoy;
+        private GherkinFileParser _gherkinParser;
 
         public MetadataExplorer(TestProvider provider, IProject project, UnitTestElementConsumer consumer)
         {
@@ -30,17 +31,10 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
 
         public void ExploreProject()
         {
-            var featureFiles = GetFeatureFilesFromProject();
-
-            var features = featureFiles
-                .Select(feature =>
-                            {
-                                //TODO: feature.Name is NOT a ClrTypeName !
-                                var clrType = new ClrTypeName(feature.Name);
-                                return new NBehaveScenarioTestElement(feature, _testProvider, _projectEnvoy, clrType);
-                            })
-                .ToList();
-            BindFeatures(features);
+            var featureFiles = GetFeatureFilesFromProject().ToList();
+            _gherkinParser = new GherkinFileParser(_project.GetOutputAssemblyFile(), featureFiles, _testProvider, _projectEnvoy);
+            var elements = _gherkinParser.ParseFilesToElements(featureFiles).ToList();
+            BindFeatures(elements);
         }
 
         private IEnumerable<IProjectFile> GetFeatureFilesFromProject()
@@ -53,7 +47,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
             return featureFiles;
         }
 
-        private void BindFeatures(IEnumerable<NBehaveScenarioTestElement> features)
+        private void BindFeatures(IEnumerable<NBehaveUnitTestElementBase> features)
         {
             foreach (var feature in features)
                 _consumer(feature);

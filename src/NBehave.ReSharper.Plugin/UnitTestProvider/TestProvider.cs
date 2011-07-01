@@ -18,7 +18,10 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
 
         private readonly UnitTestElementComparer _unitTestElementComparer = new UnitTestElementComparer(new[]
                                                                                             {
-	                                                                                            typeof(NBehaveScenarioTestElement) 
+	                                                                                            //typeof(NBehaveFeatureFileTestElement) ,
+	                                                                                            typeof(NBehaveFeatureTestElement) ,
+	                                                                                            typeof(NBehaveScenarioTestElement) ,
+	                                                                                            typeof(NBehaveStepTestElement)
                                                                                             });
 
         private readonly ISolution _soultion;
@@ -60,6 +63,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
 
         public bool IsElementOfKind(IDeclaredElement declaredElement, UnitTestElementKind elementKind)
         {
+            throw new ApplicationException("IsElementOfKind");
             switch (elementKind)
             {
                 case UnitTestElementKind.Unknown:
@@ -87,6 +91,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
 
         public bool IsElementOfKind(IUnitTestElement element, UnitTestElementKind elementKind)
         {
+            throw new ApplicationException("IsElementOfKind");
             switch (elementKind)
             {
                 case UnitTestElementKind.Unknown:
@@ -95,7 +100,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
                     }
                 case UnitTestElementKind.Test:
                     {
-                        return element is NBehaveScenarioTestElement;
+                        return element is NBehaveStepTestElement;
                     }
                 case UnitTestElementKind.TestContainer:
                     {
@@ -103,7 +108,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
                     }
                 case UnitTestElementKind.TestStuff:
                     {
-                        return element is NBehaveUnitTestElementBase;
+                        return element is NBehaveFeatureTestElement;
                     }
                 default:
                     {

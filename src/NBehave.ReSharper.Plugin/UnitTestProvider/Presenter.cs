@@ -12,7 +12,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
 
         public void Present(IUnitTestElement element, IPresentableItem item, TreeModelNode node, PresentationState state)
         {
-            if (element is NBehaveScenarioTestElement)
+            if (element is NBehaveUnitTestElementBase)
                 _treePresenter.UpdateItem(element, node, item, state);
         }
     }

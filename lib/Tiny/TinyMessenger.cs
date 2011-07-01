@@ -152,9 +152,9 @@ namespace NBehave.Narrator.Framework.Tiny
 
                 if (hub != null)
                 {
-                    var unsubscribeMethod = typeof(ITinyMessengerHub).GetMethod("Unsubscribe", new Type[] {typeof(TinyMessageSubscriptionToken)});
+                    var unsubscribeMethod = typeof(ITinyMessengerHub).GetMethod("Unsubscribe", new Type[] { typeof(TinyMessageSubscriptionToken) });
                     unsubscribeMethod = unsubscribeMethod.MakeGenericMethod(_MessageType);
-                    unsubscribeMethod.Invoke(hub, new object[] {this});
+                    unsubscribeMethod.Invoke(hub, new object[] { this });
                 }
             }
 
@@ -366,6 +366,15 @@ namespace NBehave.Narrator.Framework.Tiny
         /// <typeparam name="TMessage">Type of message</typeparam>
         /// <param name="subscriptionToken">Subscription token received from Subscribe</param>
         void Unsubscribe<TMessage>(TinyMessageSubscriptionToken subscriptionToken) where TMessage : class, ITinyMessage;
+
+        /// <summary>
+        /// Unsubscribe from a particular message type.
+        /// 
+        /// Does not throw an exception if the subscription is not found.
+        /// </summary>
+        /// <param name="subscriptionToken">Subscription token received from Subscribe</param>
+        /// <param name="typeOfMessage">Type of message</param>
+        void Unsubscribe(TinyMessageSubscriptionToken subscriptionToken, Type typeOfMessage); 
 
         /// <summary>
         /// Publish a message to any subscribers
@@ -663,6 +672,18 @@ namespace NBehave.Narrator.Framework.Tiny
         }
 
         /// <summary>
+        /// Unsubscribe from a particular message type.
+        /// 
+        /// Does not throw an exception if the subscription is not found.
+        /// </summary>
+        /// <param name="subscriptionToken">Subscription token received from Subscribe</param>
+        /// <param name="typeOfMessage">Type of message</param>
+        public void Unsubscribe(TinyMessageSubscriptionToken subscriptionToken, Type typeOfMessage) 
+        {
+            RemoveSubscriptionInternal(subscriptionToken, typeOfMessage);
+        }
+
+        /// <summary>
         /// Publish a message to any subscribers
         /// </summary>
         /// <typeparam name="TMessage">Type of message</typeparam>
@@ -734,13 +755,18 @@ namespace NBehave.Narrator.Framework.Tiny
         private void RemoveSubscriptionInternal<TMessage>(TinyMessageSubscriptionToken subscriptionToken)
                 where TMessage : class, ITinyMessage
         {
+            RemoveSubscriptionInternal(subscriptionToken, typeof(TMessage));
+        }
+
+        private void RemoveSubscriptionInternal(TinyMessageSubscriptionToken subscriptionToken, Type typeOfMessage)
+        {
             if (subscriptionToken == null)
                 throw new ArgumentNullException("subscriptionToken");
 
             lock (_SubscriptionsPadlock)
             {
                 List<SubscriptionItem> currentSubscriptions;
-                if (!_Subscriptions.TryGetValue(typeof(TMessage), out currentSubscriptions))
+                if (!_Subscriptions.TryGetValue(typeOfMessage, out currentSubscriptions))
                     return;
 
                 var currentlySubscribed = (from sub in currentSubscriptions
@@ -750,6 +776,7 @@ namespace NBehave.Narrator.Framework.Tiny
                 currentlySubscribed.ForEach(sub => currentSubscriptions.Remove(sub));
             }
         }
+
 
         private void PublishInternal<TMessage>(TMessage message)
                 where TMessage : class, ITinyMessage
@@ -763,11 +790,11 @@ namespace NBehave.Narrator.Framework.Tiny
             {
                 List<SubscriptionItem> currentSubscriptions;
                 List<SubscriptionItem> globalSubscriptions;
-                
+
                 var currentResult = _Subscriptions.TryGetValue(typeof(TMessage), out currentSubscriptions);
                 var globalResult = _Subscriptions.TryGetValue(typeof(ITinyMessage), out globalSubscriptions);
 
-                if(!globalResult && !currentResult) return;
+                if (!globalResult && !currentResult) return;
 
                 IEnumerable<SubscriptionItem> subscriptions;
 
@@ -775,7 +802,7 @@ namespace NBehave.Narrator.Framework.Tiny
                 {
                     subscriptions = currentSubscriptions;
                 }
-                else if(!currentResult)
+                else if (!currentResult)
                 {
                     subscriptions = globalSubscriptions;
                 }
@@ -788,24 +815,24 @@ namespace NBehave.Narrator.Framework.Tiny
                                         where sub.Subscription.ShouldAttemptDelivery(message)
                                         select sub;
 
-                
+
                 currentlySubscribed = subscriptionItems.ToList();
             }
 
             currentlySubscribed.ForEach(sub =>
             {
-//                try
-//                {
-                if(sub.Subscription.ShouldAttemptDelivery(message))
+                //                try
+                //                {
+                if (sub.Subscription.ShouldAttemptDelivery(message))
                 {
                     sub.Proxy.Deliver(message, sub.Subscription);
                 }
-//                }
-//                catch (Exception)
-//                {
-                    // Ignore any errors and carry on
-                    // TODO - add to a list of erroring subs and remove them?
-//                }
+                //                }
+                //                catch (Exception)
+                //                {
+                // Ignore any errors and carry on
+                // TODO - add to a list of erroring subs and remove them?
+                //                }
             });
         }
 

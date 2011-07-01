@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.UnitTestFramework;
@@ -9,17 +10,24 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
     {
         private readonly TestProvider _testProvider;
         private readonly string _id;
-        private readonly ClrTypeName _typeName;
         private readonly ProjectModelElementEnvoy _projectModel;
         private readonly IList<IUnitTestElement> _children = new List<IUnitTestElement>();
         private NBehaveUnitTestElementBase _parent;
         private readonly IEnumerable<UnitTestElementCategory> _categories = new List<UnitTestElementCategory>(UnitTestElementCategory.Uncategorized);
 
-        protected NBehaveUnitTestElementBase(TestProvider testProvider, string id, ClrTypeName typeName, ProjectModelElementEnvoy pointer, NBehaveUnitTestElementBase parent)
+        public string FeatureFile { get; private set; }
+        public string ProjectFile { get; private set; }
+        public string AssemblyOutFile { get; private set; }
+
+        protected NBehaveUnitTestElementBase(IProjectFile featureFile, TestProvider testProvider, string id, ProjectModelElementEnvoy pointer, NBehaveUnitTestElementBase parent)
         {
+            FeatureFile = featureFile.Location.FullPath;
+            var project = featureFile.GetProject();
+            ProjectFile = project.Name;
+            AssemblyOutFile = project.GetOutputAssemblyFile().Location.FullPath;
+
             _testProvider = testProvider;
             _id = id;
-            _typeName = typeName;
             _projectModel = pointer;
             Parent = parent;
         }
@@ -29,8 +37,16 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
             get { return _id; }
         }
 
-        public ClrTypeName TypeName { get { return _typeName; } }
-        
+        public ClrTypeName TypeName
+        {
+            get
+            {
+                var typeName = new ClrTypeName(GetType().Name + "." + ShortName);
+
+                return typeName;
+            }
+        }
+
         public abstract string ShortName { get; }
 
         public UnitTestElementState State { get; set; }
@@ -79,6 +95,14 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
 
         public abstract IList<UnitTestTask> GetTaskSequence(IEnumerable<IUnitTestElement> explicitElements);
 
+
+        public virtual IEnumerable<IProjectFile> GetProjectFiles()
+        {
+            IProject project = GetProject();
+            var files = project.GetAllProjectFiles().Where(_ => _.Location.FullPath == FeatureFile);
+            return files.ToList();
+        }
+
         public IProject GetProject()
         {
             return _projectModel.GetValidProjectElement() as IProject;
@@ -88,14 +112,13 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
 
         public UnitTestNamespace GetNamespace()
         {
-            return new UnitTestNamespace(_typeName.GetNamespaceName());
+            //Features dont have namespaces
+            return new UnitTestNamespace(Id);
         }
 
         public abstract UnitTestElementDisposition GetDisposition();
 
         public abstract IDeclaredElement GetDeclaredElement();
-
-        public abstract IEnumerable<IProjectFile> GetProjectFiles();
 
         private void AppendChild(IUnitTestElement element)
         {
@@ -107,11 +130,28 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
             _children.Add(element);
         }
 
-        public abstract bool Equals(IUnitTestElement other);
-
         public override string ToString()
         {
             return Id;
+        }
+
+        public abstract bool Equals(IUnitTestElement other);
+
+        protected bool Equals(NBehaveUnitTestElementBase other)
+        {
+            if (other == null)
+                return false;
+            return Equals(other._id, _id);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as NBehaveUnitTestElementBase);
+        }
+
+        public override int GetHashCode()
+        {
+            return _id.GetHashCode();
         }
     }
 }
