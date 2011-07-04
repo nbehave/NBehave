@@ -82,7 +82,9 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
                 List<TaskState> nodes;
                 if (_nodes.TryGetValue(typeof(NBehaveStepTask), out nodes) == false)
                     continue;
-                TaskState node = nodes.FirstOrDefault(_ => ((NBehaveStepTask)_.Task).Scenario == result.ScenarioTitle && _.State == SignalState.NotStarted);
+                TaskState node = nodes.FirstOrDefault(_ => ((NBehaveStepTask)_.Task).Scenario == result.ScenarioTitle
+                    && ((NBehaveStepTask)_.Task).Step == step.StringStep
+                    && _.State == SignalState.NotStarted);
                 if (node == null)
                     continue;
 
