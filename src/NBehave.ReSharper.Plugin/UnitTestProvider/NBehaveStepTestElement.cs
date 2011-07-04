@@ -10,15 +10,17 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
     {
         private readonly string _step;
 
+        private readonly string _identity;
         public NBehaveStepTestElement(string step, IProjectFile featureFile, TestProvider testProvider, ProjectModelElementEnvoy projectModel, NBehaveUnitTestElementBase parent)
             : base(featureFile, testProvider, parent.Id + "/" + step, projectModel, parent)
         {
             _step = step;
+            _identity = IdentityGenerator.NextValue().ToString().PadLeft(9, '0');
         }
 
         public override string ShortName
         {
-            get { return Step; }
+            get { return _identity + ": " + Step; }
         }
 
         public override string Kind

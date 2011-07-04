@@ -16,6 +16,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
             : base(featureFile, testProvider, featureFile.Location.FullPath + "/" + featureTitle, projectModel, null)
         {
             _featureTitle = featureTitle;
+            IdentityGenerator.Reset();
         }
 
         public string Feature { get { return _featureTitle; } }

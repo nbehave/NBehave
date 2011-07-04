@@ -98,6 +98,7 @@
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="UnitTestProvider\GherkinFileParser.cs" />
+    <Compile Include="UnitTestProvider\IdentityGenerator.cs" />
     <Compile Include="UnitTestProvider\MetadataExplorer.cs" />
     <Compile Include="UnitTestProvider\NBehaveFeatureTestElement.cs" />
     <Compile Include="UnitTestProvider\NBehaveScenarioTestElement.cs" />

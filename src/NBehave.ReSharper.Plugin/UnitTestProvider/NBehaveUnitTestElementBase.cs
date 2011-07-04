@@ -14,7 +14,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
         private readonly IList<IUnitTestElement> _children = new List<IUnitTestElement>();
         private NBehaveUnitTestElementBase _parent;
         private readonly IEnumerable<UnitTestElementCategory> _categories = new List<UnitTestElementCategory>(UnitTestElementCategory.Uncategorized);
-        private IProject _project;
+        private readonly IProject _project;
 
         public string FeatureFile { get; private set; }
         public string ProjectFile { get; private set; }
