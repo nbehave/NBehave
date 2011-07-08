@@ -9,14 +9,29 @@ namespace NBehave.Narrator.Framework
 {
     public static class EmbeddedRunner
     {
-        public static void Execute(this string featureFile, params IEventListener[] eventListeners)
+        public static void ExecuteText(this string featureText, params IEventListener[] eventListeners)
         {
             var stackTrace = new StackTrace();
             Type type = stackTrace.GetFrame(1).GetMethod().DeclaringType;
-            featureFile.Execute(type.Assembly, eventListeners);
+            featureText.ExecuteText(type.Assembly, eventListeners);
         }
 
-        public static void Execute(this string featureFile, Assembly assembly, params IEventListener[] eventListenersArg)
+
+        public static void ExecuteText(this string featureText, Assembly assembly, params IEventListener[] eventListeners)
+        {
+            var file = Path.GetTempFileName();
+            File.WriteAllText(file, featureText);
+            file.ExecuteFile(assembly, eventListeners);
+        }
+
+        public static void ExecuteFile(this string featureFile, params IEventListener[] eventListeners)
+        {
+            var stackTrace = new StackTrace();
+            Type type = stackTrace.GetFrame(1).GetMethod().DeclaringType;
+            featureFile.ExecuteFile(type.Assembly, eventListeners);
+        }
+
+        public static void ExecuteFile(this string featureFile, Assembly assembly, params IEventListener[] eventListenersArg)
         {
             var multiEventListener = AddEventListeners(eventListenersArg);
             var assemblyPath = new Uri(assembly.CodeBase).LocalPath;
