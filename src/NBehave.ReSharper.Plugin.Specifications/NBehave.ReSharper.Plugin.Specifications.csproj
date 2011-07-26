@@ -59,14 +59,14 @@
   </PropertyGroup>  
   <ItemGroup>
     <Reference Include="JetBrains.Platform.ReSharper.ProjectModel">
-      <HintPath>..\..\lib\ReSharper\JetBrains.Platform.ReSharper.ProjectModel.dll</HintPath>
+      <HintPath>..\..\lib\ReSharper\6.0\JetBrains.Platform.ReSharper.ProjectModel.dll</HintPath>
     </Reference>
     <Reference Include="JetBrains.Platform.ReSharper.Util">
-      <HintPath>..\..\lib\ReSharper\JetBrains.Platform.ReSharper.Util.dll</HintPath>
+      <HintPath>..\..\lib\ReSharper\6.0\JetBrains.Platform.ReSharper.Util.dll</HintPath>
     </Reference>
     <Reference Include="JetBrains.ReSharper.TaskRunnerFramework, Version=6.0.2202.688, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL" />
     <Reference Include="JetBrains.ReSharper.UnitTestFramework">
-      <HintPath>..\..\lib\ReSharper\JetBrains.ReSharper.UnitTestFramework.dll</HintPath>
+      <HintPath>..\..\lib\ReSharper\6.0\JetBrains.ReSharper.UnitTestFramework.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\lib\nunit.framework.dll</HintPath>
