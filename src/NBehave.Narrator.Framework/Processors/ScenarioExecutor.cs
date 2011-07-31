@@ -1,17 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using NBehave.Narrator.Framework.Contracts;
+using NBehave.Narrator.Framework.Messages;
+using NBehave.Narrator.Framework.Tiny;
 
 namespace NBehave.Narrator.Framework.Processors
 {
-    using System;
-    using System.Linq;
-    using System.Text;
-    using System.Text.RegularExpressions;
-
-    using NBehave.Narrator.Framework.Contracts;
-    using NBehave.Narrator.Framework.Messages;
-    using NBehave.Narrator.Framework.Tiny;
-
-    public class ScenarioExecutor : IMessageProcessor 
+    public class ScenarioExecutor : IMessageProcessor
     {
         private readonly ITinyMessengerHub _hub;
         private readonly IStringStepRunner _stringStepRunner;
@@ -25,16 +23,16 @@ namespace NBehave.Narrator.Framework.Processors
             _stringStepRunner = stringStepRunner;
 
             _hub.Subscribe<FeaturesLoaded>(loaded =>
-                {
-                    _features = loaded.Content;
-                    this.OnRunStarted();
-                });
+                                               {
+                                                   _features = loaded.Content;
+                                                   OnRunStarted();
+                                               });
 
             _hub.Subscribe<ActionStepsLoaded>(stepsLoaded =>
-                {
-                    _actionStepsLoaded = true;
-                    this.OnRunStarted();
-                });
+                                                  {
+                                                      _actionStepsLoaded = true;
+                                                      OnRunStarted();
+                                                  });
         }
 
         private void OnRunStarted()
@@ -43,7 +41,6 @@ namespace NBehave.Narrator.Framework.Processors
 
             _hub.Publish(new ThemeStartedEvent(this, string.Empty));
 
-            
             foreach (var feature in _features)
             {
                 _hub.Publish(new FeatureCreatedEvent(this, feature.Title));
@@ -53,21 +50,20 @@ namespace NBehave.Narrator.Framework.Processors
             }
 
             _hub.Publish(new ThemeFinishedEvent(this));
-
         }
 
         public void Run(IEnumerable<Scenario> scenarios)
         {
             foreach (var scenario in scenarios)
             {
-                this._hub.Publish(new ScenarioCreatedEvent(this, scenario));
+                _hub.Publish(new ScenarioCreatedEvent(this, scenario));
                 if (scenario.Examples.Any())
                 {
-                    this.RunExamples(scenario);
+                    RunExamples(scenario);
                 }
                 else
                 {
-                    this.RunScenario(scenario);
+                    RunScenario(scenario);
                 }
             }
         }
@@ -81,13 +77,13 @@ namespace NBehave.Narrator.Framework.Processors
             {
                 if (step is StringTableStep)
                 {
-                    RunStringTableStep((StringTableStep)step);
+                    RunStringTableStep((StringTableStep) step);
                 }
                 else if (step is StringStep)
                 {
-                    step.StepResult = _stringStepRunner.Run(step);                    
+                    step.StepResult = _stringStepRunner.Run(step);
                 }
-                
+
                 scenarioResult.AddActionStepResult(step.StepResult);
             }
 
@@ -96,7 +92,7 @@ namespace NBehave.Narrator.Framework.Processors
                 _stringStepRunner.AfterScenario();
             }
 
-            this._hub.Publish(new ScenarioResultEvent(this, scenarioResult));
+            _hub.Publish(new ScenarioResultEvent(this, scenarioResult));
         }
 
         private void RunExamples(Scenario scenario)
@@ -114,7 +110,7 @@ namespace NBehave.Narrator.Framework.Processors
                 {
                     if (step is StringTableStep)
                     {
-                        RunStringTableStep((StringTableStep)step);
+                        RunStringTableStep((StringTableStep) step);
                     }
                     else if (step is StringStep)
                     {
@@ -162,8 +158,8 @@ namespace NBehave.Narrator.Framework.Processors
                     var columnValue = example.ColumnValues[columnName.Name].TrimWhiteSpaceChars();
                     var replace = new Regex(string.Format(@"(\${0})|(\[{0}\])", columnName), RegexOptions.IgnoreCase);
                     step.Step = replace.Replace(step.Step, columnValue);
-                    
-                    if(step is StringTableStep)
+
+                    if (step is StringTableStep)
                     {
                         var tableSteps = ((StringTableStep) step).TableSteps;
                         foreach (var row in tableSteps)
