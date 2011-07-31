@@ -2,14 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using NBehave.Narrator.Framework.Processors;
+using NBehave.Narrator.Framework.Tiny;
 using NUnit.Framework;
-
 
 namespace NBehave.Narrator.Framework.Specifications
 {
-    using NBehave.Narrator.Framework.Processors;
-    using NBehave.Narrator.Framework.Tiny;
-
     [TestFixture]
     public class ScenarioStepRunnerSpec
     {
@@ -24,43 +22,53 @@ namespace NBehave.Narrator.Framework.Specifications
 
         public class WhenRunningAScenario : ScenarioStepRunnerSpec
         {
+            private ITinyMessengerHub _hub;
+            private ScenarioResult _scenarioResult;
+            private TinyMessageSubscriptionToken _subscription;
+
             [SetUp]
             public void SetUp()
             {
                 _actionCatalog = new ActionCatalog();
                 _stringStepRunner = new StringStepRunner(_actionCatalog);
-                _runner = new ScenarioExecutor(TinyIoCContainer.Current.Resolve<ITinyMessengerHub>(), _stringStepRunner);
+                _hub = new TinyMessengerHub();
+                _subscription = _hub.Subscribe<ScenarioResultEvent>(_ => _scenarioResult = _.Content);
+                _runner = new ScenarioExecutor(_hub, _stringStepRunner);
             }
 
-//            [Test]
-//            public void ShouldHaveResultForEachStep()
-//            {
-//                Action<string> action = name => Assert.AreEqual("Morgan", name);
-//                _actionCatalog.Add(new ActionMethodInfo(new Regex(@"my name is (?<name>\w+)"), action, action.Method, "Given"));
-//
-//                var scenario = CreateScenarioWithSteps();
-//                scenario.AddStep("Given my name is Axel");
-//                scenario.AddStep("And my name is Morgan");
-//                var scenarioResult = _runner.Run(new[] { scenario }).First();
-//
-//                Assert.AreEqual(2, scenarioResult.ActionStepResults.Count());
-//            }
-//
-//            [Test]
-//            public void ShouldHaveDifferentResultForEachStep()
-//            {
-//                Action<string> action = name => Assert.AreEqual("Morgan", name);
-//                _actionCatalog.Add(new ActionMethodInfo(new Regex(@"my name is (?<name>\w+)"), action, action.Method, "Given"));
-//
-//                var scenario = CreateScenarioWithSteps();
-//                scenario.AddStep("Given my name is Morgan");
-//                scenario.AddStep("Given my name is Axel");
-//                var scenarioResult = _runner.Run(new[] { scenario }).First();
-//
-//
-//                Assert.That(scenarioResult.ActionStepResults.First().Result, Is.TypeOf(typeof(Passed)));
-//                Assert.That(scenarioResult.ActionStepResults.Last().Result, Is.TypeOf(typeof(Failed)));
-//            }
+            [TearDown]
+            public void Cleanup()
+            {
+                _hub.Unsubscribe<ScenarioResultEvent>(_subscription);
+            }
+
+            [Test]
+            public void ShouldHaveResultForEachStep()
+            {
+                Action<string> action = name => Assert.AreEqual("Morgan", name);
+                _actionCatalog.Add(new ActionMethodInfo(new Regex(@"my name is (?<name>\w+)"), action, action.Method, "Given"));
+
+                var scenario = CreateScenarioWithSteps();
+                scenario.AddStep("Given my name is Axel");
+                scenario.AddStep("And my name is Morgan");
+                _runner.Run(new[] {scenario});
+                Assert.AreEqual(2, _scenarioResult.ActionStepResults.Count());
+            }
+
+            [Test]
+            public void ShouldHaveDifferentResultForEachStep()
+            {
+                Action<string> action = name => Assert.AreEqual("Morgan", name);
+                _actionCatalog.Add(new ActionMethodInfo(new Regex(@"my name is (?<name>\w+)"), action, action.Method, "Given"));
+
+                var scenario = CreateScenarioWithSteps();
+                scenario.AddStep("Given my name is Morgan");
+                scenario.AddStep("Given my name is Axel");
+                _runner.Run(new[] {scenario});
+
+                Assert.That(_scenarioResult.ActionStepResults.First().Result, Is.TypeOf(typeof (Passed)));
+                Assert.That(_scenarioResult.ActionStepResults.Last().Result, Is.TypeOf(typeof (Failed)));
+            }
         }
 
         [ActionSteps, TestFixture]
@@ -73,7 +81,8 @@ namespace NBehave.Narrator.Framework.Specifications
 
             [Given(@"something$")]
             public void GivenSomething()
-            { }
+            {
+            }
 
             [BeforeScenario]
             public void OnBeforeScenario()
@@ -102,7 +111,7 @@ namespace NBehave.Narrator.Framework.Specifications
             [TestFixtureSetUp]
             public void Setup()
             {
-                NBehaveInitialiser.Initialise(TinyIoCContainer.Current, NBehaveConfiguration.New.SetEventListener(Framework.EventListeners.EventListeners.NullEventListener())); 
+                NBehaveInitialiser.Initialise(TinyIoCContainer.Current, NBehaveConfiguration.New.SetEventListener(Framework.EventListeners.EventListeners.NullEventListener()));
 
                 _actionCatalog = new ActionCatalog();
                 _stringStepRunner = new StringStepRunner(_actionCatalog);
@@ -120,7 +129,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 secondScenario.AddStep("Given something to count");
                 secondScenario.AddStep("Given something to count");
 
-                _runner.Run(new List<Scenario> { firstScenario, secondScenario });
+                _runner.Run(new List<Scenario> {firstScenario, secondScenario});
             }
 
             [Test]
