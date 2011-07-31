@@ -14,6 +14,13 @@ namespace NBehave.Console
     /// </summary>
     public class NBehaveConsoleRunner
     {
+        private class ReturnCode
+        {
+            public const int InvalidArguments = -1;
+            public const int FileNotFound = -2;
+            public const int AttachDebuggerTimeout = -3;
+        }
+
         /// <summary>
         ///   NBehave-Console [inputfiles] [options]
         ///   Runs a set of NBehave stories from the console
@@ -53,24 +60,16 @@ namespace NBehave.Console
             {
                 System.Console.Error.WriteLine("fatal error: invalid arguments");
                 options.Help();
-                return 2;
+                return ReturnCode.InvalidArguments;
             }
 
             if (options.waitForDebugger)
             {
-                var countdown = 15000;
-                const int waitTime = 200;
-
-                while (!Debugger.IsAttached && countdown >= 0)
-                {
-                    Thread.Sleep(waitTime);
-                    countdown -= waitTime;
-                }
-
+                WaitForDebuggerToAttach();
                 if (!Debugger.IsAttached)
                 {
                     output.WriteLine("fatal error: timeout while waiting for debugger to attach");
-                    return 2;
+                    return ReturnCode.AttachDebuggerTimeout;
                 }
             }
 
@@ -91,7 +90,7 @@ namespace NBehave.Console
             catch (FileNotFoundException fileNotFoundException)
             {
                 System.Console.WriteLine(string.Format("File not found: {0}", fileNotFoundException.FileName));
-                return 2;
+                return ReturnCode.FileNotFound;
             }
 
             PrintTimeTaken(t0);
@@ -101,14 +100,25 @@ namespace NBehave.Console
                 return 0;
             }
 
-            var result = results.NumberOfFailingScenarios > 0 ? 2 : 0;
             if (options.pause)
             {
                 System.Console.WriteLine("Press any key to exit");
                 System.Console.ReadKey();
             }
 
-            return result;
+            return results.NumberOfFailingScenarios;
+        }
+
+        private static void WaitForDebuggerToAttach()
+        {
+            var countdown = 15000;
+            const int waitTime = 200;
+
+            while (!Debugger.IsAttached && countdown >= 0)
+            {
+                Thread.Sleep(waitTime);
+                countdown -= waitTime;
+            }
         }
 
         private static void PrintTimeTaken(DateTime t0)
