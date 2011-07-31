@@ -6,13 +6,12 @@ using NUnit.Framework;
 namespace NBehave.Narrator.Framework.Specifications
 {
     [TestFixture]
-    public class StringStepRunnerSpec
+    public abstract class StringStepRunnerSpec
     {
         private IStringStepRunner _runner;
         private ActionCatalog _actionCatalog;
 
-        [SetUp]
-        public void SetUp()
+        public virtual void Setup()
         {
             _actionCatalog = new ActionCatalog();
             _runner = new StringStepRunner(_actionCatalog);
@@ -88,7 +87,7 @@ namespace NBehave.Narrator.Framework.Specifications
             [SetUp]
             public void Setup()
             {
-                SetUp();
+                base.Setup();
 
                 Action action = GivenSomething;
                 _actionCatalog.Add(new ActionMethodInfo(new Regex(@"something"), action, action.Method, "Given", this));
@@ -122,6 +121,39 @@ namespace NBehave.Narrator.Framework.Specifications
                 Assert.That(_beforeStepWasCalled);
                 Assert.That(_afterStepWasCalled);
                 Assert.That(_afterScenarioWasCalled);
+            }
+        }
+
+
+        [TestFixture, ActionSteps]
+        public class When_AfterStep_throws_exception : StringStepRunnerSpec
+        {
+            [SetUp]
+            public void Setup()
+            {
+                base.Setup();
+
+                Action action = GivenSomething;
+                _actionCatalog.Add(new ActionMethodInfo(new Regex(@"something"), action, action.Method, "Given", this));
+            }
+
+            [Test]
+            public void RunningAStepShouldCallMostAttributedMethods()
+            {
+                var actionStepText = new ActionStepText("something", "");
+                var result = _runner.Run(actionStepText);
+                Assert.That(result.Result, Is.InstanceOf<Failed>());
+                Assert.That(result.Message, Is.StringContaining("ArgumentNullException"));
+            }
+
+            [Given(@"When_AfterStep_throws_exception$")]
+            public void GivenSomething()
+            { }
+
+            [AfterStep]
+            public void AfterStep()
+            {
+                throw new ArgumentNullException("AfterScenario");
             }
 
         }
