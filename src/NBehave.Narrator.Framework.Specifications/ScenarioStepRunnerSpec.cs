@@ -15,12 +15,13 @@ namespace NBehave.Narrator.Framework.Specifications
         private ActionCatalog _actionCatalog;
         private StringStepRunner _stringStepRunner;
 
-        private Scenario CreateScenarioWithSteps()
+        private Scenario CreateScenario()
         {
             return new Scenario();
         }
 
-        public class WhenRunningAScenario : ScenarioStepRunnerSpec
+        [TestFixture]
+        public class When_running_a_scenario : ScenarioStepRunnerSpec
         {
             private ITinyMessengerHub _hub;
             private ScenarioResult _scenarioResult;
@@ -48,10 +49,10 @@ namespace NBehave.Narrator.Framework.Specifications
                 Action<string> action = name => Assert.AreEqual("Morgan", name);
                 _actionCatalog.Add(new ActionMethodInfo(new Regex(@"my name is (?<name>\w+)"), action, action.Method, "Given"));
 
-                var scenario = CreateScenarioWithSteps();
+                var scenario = CreateScenario();
                 scenario.AddStep("Given my name is Axel");
                 scenario.AddStep("And my name is Morgan");
-                _runner.Run(new[] {scenario});
+                _runner.Run(new[] { scenario });
                 Assert.AreEqual(2, _scenarioResult.ActionStepResults.Count());
             }
 
@@ -61,18 +62,18 @@ namespace NBehave.Narrator.Framework.Specifications
                 Action<string> action = name => Assert.AreEqual("Morgan", name);
                 _actionCatalog.Add(new ActionMethodInfo(new Regex(@"my name is (?<name>\w+)"), action, action.Method, "Given"));
 
-                var scenario = CreateScenarioWithSteps();
+                var scenario = CreateScenario();
                 scenario.AddStep("Given my name is Morgan");
                 scenario.AddStep("Given my name is Axel");
-                _runner.Run(new[] {scenario});
+                _runner.Run(new[] { scenario });
 
-                Assert.That(_scenarioResult.ActionStepResults.First().Result, Is.TypeOf(typeof (Passed)));
-                Assert.That(_scenarioResult.ActionStepResults.Last().Result, Is.TypeOf(typeof (Failed)));
+                Assert.That(_scenarioResult.ActionStepResults.First().Result, Is.TypeOf(typeof(Passed)));
+                Assert.That(_scenarioResult.ActionStepResults.Last().Result, Is.TypeOf(typeof(Failed)));
             }
         }
 
         [ActionSteps, TestFixture]
-        public class WhenRunningManyScenariosAndClassWithActionStepsImplementsNotificationAttributes : ScenarioStepRunnerSpec
+        public class When_running_many_scenarios_and_class_with_ActionSteps_implements_NotificationMethodAttributes : ScenarioStepRunnerSpec
         {
             private int _timesBeforeScenarioWasCalled;
             private int _timesBeforeStepWasCalled;
@@ -120,16 +121,16 @@ namespace NBehave.Narrator.Framework.Specifications
                 Action action = GivenSomething;
                 _actionCatalog.Add(new ActionMethodInfo(new Regex(@"something to count$"), action, action.Method, "Given", this));
 
-                var firstScenario = CreateScenarioWithSteps();
+                var firstScenario = CreateScenario();
 
                 firstScenario.AddStep("Scenario: One");
                 firstScenario.AddStep("Given something to count");
-                var secondScenario = CreateScenarioWithSteps();
+                var secondScenario = CreateScenario();
                 secondScenario.AddStep("Scenario: Two");
                 secondScenario.AddStep("Given something to count");
                 secondScenario.AddStep("Given something to count");
 
-                _runner.Run(new List<Scenario> {firstScenario, secondScenario});
+                _runner.Run(new List<Scenario> { firstScenario, secondScenario });
             }
 
             [Test]
@@ -154,6 +155,59 @@ namespace NBehave.Narrator.Framework.Specifications
             public void ShouldCallAfterStepOncePerStep()
             {
                 Assert.That(_timesAfterStepWasCalled, Is.EqualTo(3));
+            }
+        }
+
+        [ActionSteps, TestFixture]
+        public class When_running_a_scenariothat_throws_exception_in_AfterScenario : ScenarioStepRunnerSpec
+        {
+            private ITinyMessengerHub _hub;
+            private ScenarioResult _scenarioResult;
+
+            [Given(@"something")]
+            public void GivenSomething()
+            {
+            }
+
+            [AfterScenario]
+            public void OnAfterScenario()
+            {
+                throw new ApplicationException("AfterScenario failed");
+            }
+
+            [TestFixtureSetUp]
+            public void Setup()
+            {
+                NBehaveInitialiser.Initialise(TinyIoCContainer.Current, NBehaveConfiguration.New.SetEventListener(Framework.EventListeners.EventListeners.NullEventListener()));
+
+                _actionCatalog = new ActionCatalog();
+                _stringStepRunner = new StringStepRunner(_actionCatalog);
+                _hub = TinyIoCContainer.Current.Resolve<ITinyMessengerHub>();
+                _hub.Subscribe<ScenarioResultEvent>(_ => _scenarioResult = _.Content);
+                _runner = new ScenarioExecutor(_hub, _stringStepRunner);
+
+                Action action = GivenSomething;
+                _actionCatalog.Add(new ActionMethodInfo(new Regex(@"something$"), action, action.Method, "Given", this));
+
+                var scenario = CreateScenario();
+                scenario.AddStep("Given something");
+
+                _runner.Run(new List<Scenario> { scenario });
+            }
+            
+            [Test]
+            public void Should_set_scenario_as_failed()
+            {
+                Assert.That(_scenarioResult.Result, Is.InstanceOf<Failed>());
+            }
+
+            [Test]
+            public void Should_not_fail_any_steps()
+            {
+                foreach (var stepResult in _scenarioResult.ActionStepResults)
+                {
+                    Assert.That(stepResult, Is.Not.InstanceOf<Failed>());
+                }
             }
         }
     }

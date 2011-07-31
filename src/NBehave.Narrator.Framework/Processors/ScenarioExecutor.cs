@@ -77,7 +77,7 @@ namespace NBehave.Narrator.Framework.Processors
             {
                 if (step is StringTableStep)
                 {
-                    RunStringTableStep((StringTableStep) step);
+                    RunStringTableStep((StringTableStep)step);
                 }
                 else if (step is StringStep)
                 {
@@ -86,12 +86,7 @@ namespace NBehave.Narrator.Framework.Processors
 
                 scenarioResult.AddActionStepResult(step.StepResult);
             }
-
-            if (scenario.Steps.Any())
-            {
-                _stringStepRunner.AfterScenario();
-            }
-
+            ExecuteAfterScenario(scenario, scenarioResult);
             _hub.Publish(new ScenarioResultEvent(this, scenarioResult));
         }
 
@@ -110,7 +105,7 @@ namespace NBehave.Narrator.Framework.Processors
                 {
                     if (step is StringTableStep)
                     {
-                        RunStringTableStep((StringTableStep) step);
+                        RunStringTableStep((StringTableStep)step);
                     }
                     else if (step is StringStep)
                     {
@@ -118,16 +113,26 @@ namespace NBehave.Narrator.Framework.Processors
                     }
                     scenarioResult.AddActionStepResult(step.StepResult);
                 }
+                ExecuteAfterScenario(scenario, scenarioResult);
+                exampleResults.AddResult(scenarioResult);
+            }
+            _hub.Publish(new ScenarioResultEvent(this, exampleResults));
+        }
 
-                if (scenario.Steps.Any())
+        private void ExecuteAfterScenario(Scenario scenario, ScenarioResult scenarioResult)
+        {
+            if (scenario.Steps.Any())
+            {
+                try
                 {
                     _stringStepRunner.AfterScenario();
                 }
-
-                exampleResults.AddResult(scenarioResult);
+                catch (Exception e)
+                {
+                    if (!scenarioResult.HasFailedSteps())
+                        scenarioResult.Fail(e);
+                }
             }
-
-            _hub.Publish(new ScenarioResultEvent(this, exampleResults));
         }
 
         public void RunStringTableStep(StringTableStep stringStep)
@@ -161,7 +166,7 @@ namespace NBehave.Narrator.Framework.Processors
 
                     if (step is StringTableStep)
                     {
-                        var tableSteps = ((StringTableStep) step).TableSteps;
+                        var tableSteps = ((StringTableStep)step).TableSteps;
                         foreach (var row in tableSteps)
                         {
                             var newValues = row.ColumnValues.ToDictionary(pair => pair.Key, pair => replace.Replace(pair.Value, columnValue));
@@ -184,7 +189,7 @@ namespace NBehave.Narrator.Framework.Processors
                 if (step is StringTableStep)
                 {
                     var clone = new StringTableStep(step.Step, step.Source);
-                    var tableSteps = ((StringTableStep) step).TableSteps;
+                    var tableSteps = ((StringTableStep)step).TableSteps;
                     foreach (var tableStep in tableSteps)
                     {
                         var clonedValues = tableStep.ColumnValues.ToDictionary(pair => pair.Key, pair => pair.Value);

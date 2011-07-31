@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Linq;
+
 namespace NBehave.Narrator.Framework
 {
     using System;
@@ -16,7 +18,7 @@ namespace NBehave.Narrator.Framework
     [Serializable]
     public class ScenarioResult
     {
-        private List<ActionStepResult> _actionStepResults;
+        private readonly List<ActionStepResult> _actionStepResults;
         private Result _result = new Passed();
         private string _message;
         private string _stackTrace;
@@ -142,6 +144,11 @@ namespace NBehave.Narrator.Framework
             }
 
             return builder.ToString();
+        }
+
+        public bool HasFailedSteps()
+        {
+            return _actionStepResults.Any(_ => _.Result is Failed);
         }
     }
 }

@@ -136,7 +136,7 @@
     <Compile Include="EventListeners\XmlOutputWriterSpec.cs" />
     <Compile Include="SummaryWriterSpec.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ScenarioResultsFixture.cs" />
+    <Compile Include="ScenarioResultSpec.cs" />
     <Compile Include="ScenarioStepRunnerSpec.cs" />
     <Compile Include="System.Specs\Backgrounds\WhenRunningAScenarioWithABackgroundSection.cs" />
     <Compile Include="System.Specs\ExamplesWithTables\WhenRunningAScenarioWithExamples.cs" />

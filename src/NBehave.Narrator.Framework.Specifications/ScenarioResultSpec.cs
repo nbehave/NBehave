@@ -4,7 +4,7 @@ using NUnit.Framework;
 namespace NBehave.Narrator.Framework.Specifications
 {
     [TestFixture]
-    public class ScenarioResultsFixture
+    public class ScenarioResultSpec
     {
         private ScenarioResult _results;
 
@@ -31,8 +31,7 @@ namespace NBehave.Narrator.Framework.Specifications
             _results.Fail(outer);
 
             Assert.That(_results.Result, Is.TypeOf(typeof(Failed)));
-            Assert.That(_results.Message,
-                        Is.EqualTo("System.Exception : Outer\r\n  ----> System.ApplicationException : Inner"));
+            Assert.That(_results.Message, Is.EqualTo("System.Exception : Outer\r\n  ----> System.ApplicationException : Inner"));
         }
 
         [Test]
@@ -100,6 +99,26 @@ namespace NBehave.Narrator.Framework.Specifications
 
             var expected = "not done" + Environment.NewLine + "System.Exception : bad thing happened!";
             Assert.That(_results.Message, Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void HasFailedSteps_should_report_failed_if_at_least_one_step_failed()
+        {
+            var passed = new ActionStepResult("Foo", new Passed());
+            _results.AddActionStepResult(passed);
+            var failed = new ActionStepResult("Foo", new Failed(new Exception()));
+            _results.AddActionStepResult(failed);
+            Assert.IsTrue(_results.HasFailedSteps());
+        }
+
+        [Test]
+        public void HasFailedSteps_should_return_false_if_no_failed_steps()
+        {
+            var passed = new ActionStepResult("Foo", new Passed());
+            _results.AddActionStepResult(passed);
+            var pending = new ActionStepResult("Bar", new Pending("yadda"));
+            _results.AddActionStepResult(pending);
+            Assert.IsFalse(_results.HasFailedSteps());
         }
     }
 }

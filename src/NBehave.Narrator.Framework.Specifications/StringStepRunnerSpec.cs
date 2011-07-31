@@ -20,6 +20,12 @@ namespace NBehave.Narrator.Framework.Specifications
         [TestFixture]
         public class WhenRunningPlainTextScenarios : StringStepRunnerSpec
         {
+            [SetUp]
+            public override void Setup()
+            {
+                base.Setup();
+            }
+
             [Test]
             public void ShouldInvokeActionGivenATokenString()
             {
@@ -85,7 +91,7 @@ namespace NBehave.Narrator.Framework.Specifications
             }
 
             [SetUp]
-            public void Setup()
+            public override void Setup()
             {
                 base.Setup();
 
@@ -124,12 +130,11 @@ namespace NBehave.Narrator.Framework.Specifications
             }
         }
 
-
         [TestFixture, ActionSteps]
         public class When_AfterStep_throws_exception : StringStepRunnerSpec
         {
             [SetUp]
-            public void Setup()
+            public override void Setup()
             {
                 base.Setup();
 
