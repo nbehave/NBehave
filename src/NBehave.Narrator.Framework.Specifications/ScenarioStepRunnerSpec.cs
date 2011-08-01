@@ -159,7 +159,7 @@ namespace NBehave.Narrator.Framework.Specifications
         }
 
         [ActionSteps, TestFixture]
-        public class When_running_a_scenariothat_throws_exception_in_AfterScenario : ScenarioStepRunnerSpec
+        public class When_running_a_scenario_that_throws_exception_in_AfterScenario : ScenarioStepRunnerSpec
         {
             private ITinyMessengerHub _hub;
             private ScenarioResult _scenarioResult;
@@ -195,6 +195,59 @@ namespace NBehave.Narrator.Framework.Specifications
                 _runner.Run(new List<Scenario> { scenario });
             }
             
+            [Test]
+            public void Should_set_scenario_as_failed()
+            {
+                Assert.That(_scenarioResult.Result, Is.InstanceOf<Failed>());
+            }
+
+            [Test]
+            public void Should_not_fail_any_steps()
+            {
+                foreach (var stepResult in _scenarioResult.ActionStepResults)
+                {
+                    Assert.That(stepResult, Is.Not.InstanceOf<Failed>());
+                }
+            }
+        }
+
+        [TestFixture]
+        public class When_running_a_scenario_that_throws_exception_in_BeforeScenario : ScenarioStepRunnerSpec
+        {
+            private ITinyMessengerHub _hub;
+            private ScenarioResult _scenarioResult;
+
+            [Given(@"something")]
+            public void GivenSomething()
+            {
+            }
+
+            [BeforeScenario]
+            public void OnBeforeScenario()
+            {
+                throw new ApplicationException("OnBeforeScenario failed");
+            }
+
+            [TestFixtureSetUp]
+            public void Setup()
+            {
+                NBehaveInitialiser.Initialise(TinyIoCContainer.Current, NBehaveConfiguration.New.SetEventListener(Framework.EventListeners.EventListeners.NullEventListener()));
+
+                _actionCatalog = new ActionCatalog();
+                _stringStepRunner = new StringStepRunner(_actionCatalog);
+                _hub = TinyIoCContainer.Current.Resolve<ITinyMessengerHub>();
+                _hub.Subscribe<ScenarioResultEvent>(_ => _scenarioResult = _.Content);
+                _runner = new ScenarioExecutor(_hub, _stringStepRunner);
+
+                Action action = GivenSomething;
+                _actionCatalog.Add(new ActionMethodInfo(new Regex(@"something$"), action, action.Method, "Given", this));
+
+                var scenario = CreateScenario();
+                scenario.AddStep("Given something");
+
+                _runner.Run(new List<Scenario> { scenario });
+            }
+
             [Test]
             public void Should_set_scenario_as_failed()
             {
