@@ -131,6 +131,7 @@
 			<arg value="NBehave.NAnt.Specifications.dll" />
 			<arg value="NBehave.MSBuild.Specifications.dll" />
 			<arg value="NBehave.TestDriven.Plugin.Specifications.dll" />
+      <arg value="NBehave.ReSharper.Plugin.Specifications.dll" />
 			<arg value="/xml:..\..\test-reports\UnitTests-3.5.xml" />
 		</exec>
 		<echo message="##teamcity[importData type='nunit' path='${build.dir}\test-reports\UnitTests-3.5.xml']" />
@@ -150,7 +151,8 @@
 			<arg value="NBehave.NAnt.Specifications.dll" />
 			<arg value="NBehave.MSBuild.Specifications.dll" />
 			<arg value="NBehave.TestDriven.Plugin.Specifications.dll" />
-			<arg value="/xml:..\..\test-reports\UnitTests-4.0.xml" />
+      <arg value="NBehave.ReSharper.Plugin.Specifications.dll" />
+      <arg value="/xml:..\..\test-reports\UnitTests-4.0.xml" />
 		</exec>
 		<echo message="##teamcity[importData type='nunit' path='${build.dir}\test-reports\UnitTests-4.0.xml']" />
 	</target>
