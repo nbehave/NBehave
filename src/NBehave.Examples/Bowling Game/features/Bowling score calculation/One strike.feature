@@ -1,4 +1,6 @@
-﻿Scenario: One Strike
+﻿Feature: A Game of Bowling
+
+Scenario: One Strike
 
 	Given a game of bowling
 	When I roll one strike

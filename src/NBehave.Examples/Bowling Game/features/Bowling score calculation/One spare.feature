@@ -1,4 +1,6 @@
-﻿Scenario: One Spare
+﻿Feature: A Game of Bowling
+
+Scenario: One Spare
 
 	Given a game of bowling
 	When I roll one spare

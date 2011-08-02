@@ -1,4 +1,6 @@
-﻿Scenario: Empty game
+﻿Feature: Game of life
+
+Scenario: Empty game
 
 Given a new game: 5 by 5
 Then the grid should be
