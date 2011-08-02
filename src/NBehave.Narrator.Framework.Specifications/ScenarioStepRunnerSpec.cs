@@ -9,32 +9,39 @@ using NUnit.Framework;
 namespace NBehave.Narrator.Framework.Specifications
 {
     [TestFixture]
-    public class ScenarioStepRunnerSpec
+    public abstract class ScenarioStepRunnerSpec
     {
         private ScenarioExecutor _runner;
         private ActionCatalog _actionCatalog;
         private StringStepRunner _stringStepRunner;
+        private ITinyMessengerHub _hub;
 
         private Scenario CreateScenario()
         {
             return new Scenario();
         }
 
+        private void Init()
+        {
+            NBehaveInitialiser.Initialise(TinyIoCContainer.Current, NBehaveConfiguration.New.SetEventListener(Framework.EventListeners.EventListeners.NullEventListener()));
+            _hub = TinyIoCContainer.Current.Resolve<ITinyMessengerHub>();
+            _actionCatalog = TinyIoCContainer.Current.Resolve<ActionCatalog>();
+
+            _stringStepRunner = new StringStepRunner(_actionCatalog, _hub);
+            _runner = new ScenarioExecutor(_hub, _stringStepRunner);
+        }
+
         [TestFixture]
         public class When_running_a_scenario : ScenarioStepRunnerSpec
         {
-            private ITinyMessengerHub _hub;
             private ScenarioResult _scenarioResult;
             private TinyMessageSubscriptionToken _subscription;
 
             [SetUp]
             public void SetUp()
             {
-                _actionCatalog = new ActionCatalog();
-                _stringStepRunner = new StringStepRunner(_actionCatalog);
-                _hub = new TinyMessengerHub();
+                Init();
                 _subscription = _hub.Subscribe<ScenarioResultEvent>(_ => _scenarioResult = _.Content);
-                _runner = new ScenarioExecutor(_hub, _stringStepRunner);
             }
 
             [TearDown]
@@ -112,12 +119,7 @@ namespace NBehave.Narrator.Framework.Specifications
             [TestFixtureSetUp]
             public void Setup()
             {
-                NBehaveInitialiser.Initialise(TinyIoCContainer.Current, NBehaveConfiguration.New.SetEventListener(Framework.EventListeners.EventListeners.NullEventListener()));
-
-                _actionCatalog = new ActionCatalog();
-                _stringStepRunner = new StringStepRunner(_actionCatalog);
-                _runner = new ScenarioExecutor(TinyIoCContainer.Current.Resolve<ITinyMessengerHub>(), _stringStepRunner);
-
+                Init();
                 Action action = GivenSomething;
                 _actionCatalog.Add(new ActionMethodInfo(new Regex(@"something to count$"), action, action.Method, "Given", this));
 
@@ -161,8 +163,8 @@ namespace NBehave.Narrator.Framework.Specifications
         [ActionSteps, TestFixture]
         public class When_running_a_scenario_that_throws_exception_in_AfterScenario : ScenarioStepRunnerSpec
         {
-            private ITinyMessengerHub _hub;
             private ScenarioResult _scenarioResult;
+            private TinyMessageSubscriptionToken _subscription;
 
             [Given(@"something")]
             public void GivenSomething()
@@ -178,13 +180,8 @@ namespace NBehave.Narrator.Framework.Specifications
             [TestFixtureSetUp]
             public void Setup()
             {
-                NBehaveInitialiser.Initialise(TinyIoCContainer.Current, NBehaveConfiguration.New.SetEventListener(Framework.EventListeners.EventListeners.NullEventListener()));
-
-                _actionCatalog = new ActionCatalog();
-                _stringStepRunner = new StringStepRunner(_actionCatalog);
-                _hub = TinyIoCContainer.Current.Resolve<ITinyMessengerHub>();
-                _hub.Subscribe<ScenarioResultEvent>(_ => _scenarioResult = _.Content);
-                _runner = new ScenarioExecutor(_hub, _stringStepRunner);
+                Init();
+                _subscription = _hub.Subscribe<ScenarioResultEvent>(_ => _scenarioResult = _.Content);
 
                 Action action = GivenSomething;
                 _actionCatalog.Add(new ActionMethodInfo(new Regex(@"something$"), action, action.Method, "Given", this));
@@ -194,7 +191,13 @@ namespace NBehave.Narrator.Framework.Specifications
 
                 _runner.Run(new List<Scenario> { scenario });
             }
-            
+
+            [TearDown]
+            public void Cleanup()
+            {
+                _hub.Unsubscribe<ScenarioResultEvent>(_subscription);
+            }
+
             [Test]
             public void Should_set_scenario_as_failed()
             {
@@ -214,8 +217,8 @@ namespace NBehave.Narrator.Framework.Specifications
         [TestFixture]
         public class When_running_a_scenario_that_throws_exception_in_BeforeScenario : ScenarioStepRunnerSpec
         {
-            private ITinyMessengerHub _hub;
             private ScenarioResult _scenarioResult;
+            private TinyMessageSubscriptionToken _subscription;
 
             [Given(@"something")]
             public void GivenSomething()
@@ -231,13 +234,8 @@ namespace NBehave.Narrator.Framework.Specifications
             [TestFixtureSetUp]
             public void Setup()
             {
-                NBehaveInitialiser.Initialise(TinyIoCContainer.Current, NBehaveConfiguration.New.SetEventListener(Framework.EventListeners.EventListeners.NullEventListener()));
-
-                _actionCatalog = new ActionCatalog();
-                _stringStepRunner = new StringStepRunner(_actionCatalog);
-                _hub = TinyIoCContainer.Current.Resolve<ITinyMessengerHub>();
-                _hub.Subscribe<ScenarioResultEvent>(_ => _scenarioResult = _.Content);
-                _runner = new ScenarioExecutor(_hub, _stringStepRunner);
+                Init();
+                _subscription = _hub.Subscribe<ScenarioResultEvent>(_ => _scenarioResult = _.Content);
 
                 Action action = GivenSomething;
                 _actionCatalog.Add(new ActionMethodInfo(new Regex(@"something$"), action, action.Method, "Given", this));
@@ -248,6 +246,11 @@ namespace NBehave.Narrator.Framework.Specifications
                 _runner.Run(new List<Scenario> { scenario });
             }
 
+            [TearDown]
+            public void Cleanup()
+            {
+                _hub.Unsubscribe<ScenarioResultEvent>(_subscription);
+            }
             [Test]
             public void Should_set_scenario_as_failed()
             {

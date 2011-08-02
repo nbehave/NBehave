@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Text.RegularExpressions;
+using NBehave.Narrator.Framework.Tiny;
 using NUnit.Framework;
-
+using Rhino.Mocks;
 
 namespace NBehave.Narrator.Framework.Specifications
 {
@@ -10,11 +11,13 @@ namespace NBehave.Narrator.Framework.Specifications
     {
         private IStringStepRunner _runner;
         private ActionCatalog _actionCatalog;
+        private ITinyMessengerHub _hub;
 
         public virtual void Setup()
         {
             _actionCatalog = new ActionCatalog();
-            _runner = new StringStepRunner(_actionCatalog);
+            _hub = MockRepository.GenerateStub<ITinyMessengerHub>();
+            _runner = new StringStepRunner(_actionCatalog, _hub);
         }
 
         [TestFixture]
@@ -51,6 +54,24 @@ namespace NBehave.Narrator.Framework.Specifications
             {
                 var result = _runner.Run(new ActionStepText("Given this doesnt exist", ""));
                 Assert.That(result.Result, Is.TypeOf(typeof(Pending)));
+            }
+
+            [Test]
+            public void Should_raise_StepStartedEvent_before_invoking_Step()
+            {
+                Action<string> action = name => _hub.AssertWasCalled(_ => _.Publish<StepStartedEvent>(null), o => o.IgnoreArguments());
+                _actionCatalog.Add(new ActionMethodInfo(new Regex(@"my name is (?<name>\w+)"), action, action.Method, "Given"));
+                _runner.Run(new ActionStepText("Given my name is Morgan", ""));
+                _hub.AssertWasCalled(_ => _.Publish<StepStartedEvent>(null), o => o.IgnoreArguments().Repeat.Once());
+            }
+
+            [Test]
+            public void Should_raise_StepFinishedEvent_after_invoking_Step()
+            {
+                Action<string> action = name => _hub.AssertWasNotCalled(_ => _.Publish<StepFinishedEvent>(null), o => o.IgnoreArguments());
+                _actionCatalog.Add(new ActionMethodInfo(new Regex(@"my name is (?<name>\w+)"), action, action.Method, "Given"));
+                _runner.Run(new ActionStepText("Given my name is Morgan", ""));
+                _hub.AssertWasCalled(_ => _.Publish<StepFinishedEvent>(null), o => o.IgnoreArguments().Repeat.Once());
             }
         }
 

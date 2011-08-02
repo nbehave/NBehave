@@ -124,8 +124,15 @@
     <Compile Include="EventListeners\FailSpecResultEventListener.cs" />
     <Compile Include="EventListeners\IEventListener.cs" />
     <Compile Include="Extensions\StoryRunnerFilterExtensions.cs" />
+    <Compile Include="FeatureContext.cs" />
+    <Compile Include="NBehaveContext.cs" />
+    <Compile Include="Processors\ContextHandler.cs" />
     <Compile Include="Processors\Messages\ActionStepsLoaded.cs" />
     <Compile Include="Processors\FeatureResultCollector.cs" />
+    <Compile Include="Processors\Messages\FeatureFinishedEvent.cs" />
+    <Compile Include="Processors\Messages\ScenarioFinishedEvent.cs" />
+    <Compile Include="Processors\Messages\StepStartedEvent.cs" />
+    <Compile Include="Processors\Messages\StepFinishedEvent.cs" />
     <Compile Include="Processors\ParseScenarioFiles.cs" />
     <Compile Include="Processors\LoadActionSteps.cs">
       <SubType>Code</SubType>
@@ -140,9 +147,9 @@
     <Compile Include="EventListeners\CodeGeneration\ActionStepCodeGenerator.cs" />
     <Compile Include="EventListeners\CodeGeneration\CodeGenEventListener.cs" />
     <Compile Include="EventListeners\ColorfulConsoleOutputEventListener.cs" />
-    <Compile Include="Processors\Messages\ScenarioCreatedEvent.cs" />
+    <Compile Include="Processors\Messages\ScenarioStartedEvent.cs" />
     <Compile Include="Processors\Messages\FeatureNarrativeEvent.cs" />
-    <Compile Include="Processors\Messages\FeatureCreatedEvent.cs" />
+    <Compile Include="Processors\Messages\FeatureStartedEvent.cs" />
     <Compile Include="Processors\Messages\ThemeStartedEvent.cs" />
     <Compile Include="Processors\Messages\RunFinishedEvent.cs" />
     <Compile Include="Processors\Messages\ThemeFinishedEvent.cs" />
@@ -163,6 +170,7 @@
     <Compile Include="Processors\ScenarioExecutor.cs" />
     <Compile Include="Remoting\RemotableStoryRunner.cs" />
     <Compile Include="RunnerFactory.cs" />
+    <Compile Include="ScenarioContext.cs" />
     <Compile Include="ScenarioExampleResult.cs" />
     <Compile Include="EventListeners\SummaryWriter.cs" />
     <Compile Include="Domain\ActionMethodInfo.cs" />
@@ -170,6 +178,7 @@
     <Compile Include="Attributes\ActionStepAttribute.cs" />
     <Compile Include="Extensions\ActionStepConverterExtensions.cs" />
     <Compile Include="EmbeddedRunner.cs" />
+    <Compile Include="StepContext.cs" />
     <Compile Include="TextParsing\Messages\BackgroundBuilt.cs" />
     <Compile Include="TextParsing\Messages\ModelBuilderCleanup.cs" />
     <Compile Include="TextParsing\Messages\ModelBuilderInitialise.cs" />

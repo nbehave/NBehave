@@ -132,7 +132,7 @@
     <Compile Include="ParameterConverterSpec.cs" />
     <Compile Include="Processors\ContextHandlerSpec.cs" />
     <Compile Include="RemotableStoryRunnerSpec.cs" />
-    <Compile Include="ScenarioContextImplSpec.cs" />
+    <Compile Include="ScenarioContextSpec.cs" />
     <Compile Include="StringExtensionsSpec.cs" />
     <Compile Include="StringStepRunnerSpec.cs" />
     <Compile Include="EventListeners\XmlOutputWriterSpec.cs" />

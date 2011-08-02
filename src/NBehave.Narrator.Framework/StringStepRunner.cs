@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using NBehave.Narrator.Framework.Tiny;
+
 namespace NBehave.Narrator.Framework
 {
     using System;
@@ -18,10 +20,12 @@ namespace NBehave.Narrator.Framework
         private ActionMethodInfo _lastAction;
 
         private bool _isFirstStepInScenario = true;
+        private readonly ITinyMessengerHub _hub;
 
-        public StringStepRunner(ActionCatalog actionCatalog)
+        public StringStepRunner(ActionCatalog actionCatalog, ITinyMessengerHub hub)
         {
             ActionCatalog = actionCatalog;
+            _hub = hub;
             ParameterConverter = new ParameterConverter(ActionCatalog);
         }
 
@@ -116,12 +120,24 @@ namespace NBehave.Narrator.Framework
 
             var info = ActionCatalog.GetAction(actionStep);
 
+            PublishStepStartedEvent(actionStep);
             BeforeEachScenario(info);
             BeforeEachStep(info);
             RunStep(info, getParametersForActionStepText);
             AfterEachStep(info);
+            PublishStepFinishedEvent(actionStep);
 
             _lastAction = info;
+        }
+
+        private void PublishStepStartedEvent(ActionStepText actionStep)
+        {
+            _hub.Publish(new StepStartedEvent(this, actionStep.Step));
+        }
+
+        private void PublishStepFinishedEvent(ActionStepText actionStep)
+        {
+            _hub.Publish(new StepFinishedEvent(this, actionStep.Step));
         }
 
         private void RunStep(ActionMethodInfo info, Func<object[]> getParametersForActionStepText)

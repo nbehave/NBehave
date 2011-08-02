@@ -43,7 +43,7 @@ namespace NBehave.Narrator.Framework.Processors
 
             foreach (var feature in _features)
             {
-                _hub.Publish(new FeatureCreatedEvent(this, feature.Title));
+                _hub.Publish(new FeatureStartedEvent(this, feature.Title));
                 _hub.Publish(new FeatureNarrativeEvent(this, feature.Narrative));
 
                 Run(feature.Scenarios);
@@ -57,7 +57,7 @@ namespace NBehave.Narrator.Framework.Processors
         {
             foreach (var scenario in scenarios)
             {
-                _hub.Publish(new ScenarioCreatedEvent(this, scenario));
+                _hub.Publish(new ScenarioStartedEvent(this, scenario));
                 if (scenario.Examples.Any())
                 {
                     RunExamples(scenario);
