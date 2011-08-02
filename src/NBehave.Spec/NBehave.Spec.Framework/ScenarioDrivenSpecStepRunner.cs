@@ -45,7 +45,7 @@ namespace NBehave.Spec
         {
             var stepText = actionStep.Step;
 
-            var stepImplementation = _resolvers.Select(resolver => resolver.ResolveStep(CurrentScenarioStage, actionStep))
+            var stepImplementation = _resolvers.Select(resolver => resolver.ResolveStep(actionStep))
                                                   .Where(action => action != null)
                                                   .FirstOrDefault();
             if (stepImplementation == null)

@@ -23,8 +23,7 @@ namespace NBehave.Examples.Calculator_table
         {
             Feature.AddScenario()
                 .WithHelperObject<AddNumbers>()
-                .Given("a calculator")
-                .And("I have entered 1 into the calculator")
+                .Given("I have entered 1 into the calculator")
                 .And("I have entered 1 into the calculator")
                 .When("I add the numbers")
                 .Then("the sum should be 2");

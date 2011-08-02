@@ -3,7 +3,7 @@ using NUnit.Framework;
 namespace NBehave.Narrator.Framework.Specifications
 {
     [TestFixture]
-    public class ActionStepParserSpec
+    public abstract class ActionStepParserSpec
     {
         private ActionStepParser _actionStepParser;
         private ActionCatalog _actionCatalog;
@@ -72,7 +72,7 @@ namespace NBehave.Narrator.Framework.Specifications
             [Test]
             public void ShouldFindGivenStepWithGivenAttribute()
             {
-                var actionStepToFind = new ActionStepText("using GivenAttribute with no regex", "file");
+                var actionStepToFind = new ActionStepText("Given using GivenAttribute with no regex", "file");
                 var action = _actionCatalog.GetAction(actionStepToFind);
                 Assert.That(action.ActionType, Is.EqualTo("Given"));
                 Assert.That(action.ActionStepMatcher.ToString(), Is.EqualTo(@"^using\s+GivenAttribute\s+with\s+no\s+regex\s*$"));
@@ -81,7 +81,7 @@ namespace NBehave.Narrator.Framework.Specifications
             [Test]
             public void ShouldFindWhenStepWithWhenAttribute()
             {
-                var actionStepToFind = new ActionStepText("using WhenAttribute with no regex", "file");
+                var actionStepToFind = new ActionStepText("Given using WhenAttribute with no regex", "file");
                 var action = _actionCatalog.GetAction(actionStepToFind);
                 Assert.That(action.ActionType, Is.EqualTo("When"));
                 Assert.That(action.ActionStepMatcher.ToString(), Is.EqualTo(@"^using\s+WhenAttribute\s+with\s+no\s+regex\s*$"));
@@ -90,7 +90,7 @@ namespace NBehave.Narrator.Framework.Specifications
             [Test]
             public void ShouldFindThenStepWithThenAttribute()
             {
-                var actionStepToFind = new ActionStepText("using ThenAttribute with no regex", "file");
+                var actionStepToFind = new ActionStepText("Given using ThenAttribute with no regex", "file");
                 var action = _actionCatalog.GetAction(actionStepToFind);
                 Assert.That(action.ActionType, Is.EqualTo("Then"));
                 Assert.That(action.ActionStepMatcher.ToString(), Is.EqualTo(@"^using\s+ThenAttribute\s+with\s+no\s+regex\s*$"));
@@ -119,7 +119,7 @@ namespace NBehave.Narrator.Framework.Specifications
             [Test]
             public void ShouldMatchParametersInTokenStringToMethodParameters()
             {
-                var action = _actionCatalog.GetAction(new ActionStepText("a method with tokenstring and two parameters, one int value 42 plus text thistext", ""));
+                var action = _actionCatalog.GetAction(new ActionStepText("Given a method with tokenstring and two parameters, one int value 42 plus text thistext", ""));
 
                 Assert.That(action.ParameterInfo.GetLength(0), Is.EqualTo(2));
                 Assert.That(action.ParameterInfo[0].ParameterType.Name, Is.EqualTo(typeof(int).Name));
@@ -129,7 +129,7 @@ namespace NBehave.Narrator.Framework.Specifications
             [Test]
             public void ShouldFindGivenStepWithGivenAttribute()
             {
-                var actionStepToFind = new ActionStepText("a method with tokenstring and two parameters, one int value 42 plus text thistext", "file");
+                var actionStepToFind = new ActionStepText("Given a method with tokenstring and two parameters, one int value 42 plus text thistext", "file");
                 var action = _actionCatalog.GetAction(actionStepToFind);
                 Assert.That(action.ActionType, Is.EqualTo("Given"));
                 Assert.That(action.ActionStepMatcher.ToString(), Is.EqualTo(@"^a\s+method\s+with\s+tokenstring\s+and\s+two\s+parameters,\s+one\s+int\s+value\s+(?<intParam>.+)\s+plus\s+text\s+(?<stringParam>.+)\s*$"));
@@ -138,16 +138,15 @@ namespace NBehave.Narrator.Framework.Specifications
             [Test]
             public void ShouldFindGivenWithEmbeddedParam()
             {
-                var actionStepToFind = new ActionStepText("a method with \"embedded\" parameter like \"this\" should work", "file");
+                var actionStepToFind = new ActionStepText("Given a method with \"embedded\" parameter like \"this\" should work", "file");
                 var action = _actionCatalog.GetAction(actionStepToFind);
                 Assert.That(action, Is.Not.Null);
             }
 
-
             [Test]
             public void ShouldMatchShortTextAgainstTheRestrictedLengthParameter()
             {
-                var actionStepToFind = new ActionStepText("a length restriction on the \"txt\" should work", "file");
+                var actionStepToFind = new ActionStepText("Given a length restriction on the \"txt\" should work", "file");
                 var action = _actionCatalog.GetAction(actionStepToFind);
                 Assert.That(action, Is.Not.Null);
             }
@@ -155,7 +154,7 @@ namespace NBehave.Narrator.Framework.Specifications
             [Test]
             public void ShouldNotMatchLongTextAgainstTheRestrictedLengthParameter()
             {
-                var actionStepToFind = new ActionStepText("a length restriction on the \"supplied value\" should work", "file");
+                var actionStepToFind = new ActionStepText("Given a length restriction on the \"supplied value\" should work", "file");
                 var action = _actionCatalog.GetAction(actionStepToFind);
                 Assert.That(action, Is.Null);
             }
@@ -185,7 +184,7 @@ namespace NBehave.Narrator.Framework.Specifications
             [Test]
             public void ShouldMatchFilename()
             {
-                var actionStepText = new ActionStepText("something", FileNameToMatch);
+                var actionStepText = new ActionStepText("Given something", FileNameToMatch);
                 Assert.IsTrue(_actionCatalog.ActionExists(actionStepText));
             }
 
@@ -226,7 +225,7 @@ namespace NBehave.Narrator.Framework.Specifications
             [Test]
             public void ShouldFindActionUsingFirstActionStepAttributeMatch()
             {
-                var action = _actionCatalog.GetAction(new ActionStepText("one abstract", ""));
+                var action = _actionCatalog.GetAction(new ActionStepText("Given one abstract", ""));
                 Assert.That(action, Is.Not.Null);
             }
         }

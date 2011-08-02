@@ -18,15 +18,11 @@ namespace NBehave.Spec
                 _inlineImplementations.Add(stepKey, implementation);
             }
         }
-        
-        public Action ResolveStep(ScenarioFragment currentScenarioStage, ActionStepText actionStep)
+
+        public Action ResolveStep(ActionStepText actionStep)
         {
-            var stepText = currentScenarioStage + " " + actionStep.Step;
-            if (_inlineImplementations.ContainsKey(stepText))
-            {
-                return _inlineImplementations[stepText];
-            }
-            return null;
+            Action step;
+            return _inlineImplementations.TryGetValue(actionStep.Step, out step) ? step : null;
         }
 
         public Action ResolveOnCloseScenario()

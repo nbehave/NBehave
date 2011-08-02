@@ -27,7 +27,7 @@ namespace NBehave.Narrator.Framework
         {
             var action = _actionCatalog.GetAction(actionStepText);
             var paramNames = GetParameterNames(action);
-            var match = action.ActionStepMatcher.Match(actionStepText.Step);
+            var match = action.ActionStepMatcher.Match(actionStepText.MatchableStep);
             Func<int, string> getValues = i => match.Groups[paramNames[i]].Value;
 
             return GetParametersForActionStepText(action, paramNames, getValues);

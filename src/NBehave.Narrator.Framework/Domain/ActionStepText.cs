@@ -17,7 +17,19 @@ namespace NBehave.Narrator.Framework
             Source = source;
         }
 
-        public string Step { get; set; }
+        private string _matchableStep;
+        public string MatchableStep { get { return _matchableStep; } }
+
+        private string _step;
+        public string Step
+        {
+            get { return _step; }
+            set
+            {
+                _step = value;
+                _matchableStep = value.RemoveFirstWord();
+            }
+        }
 
         public string Source { get; set; }
 

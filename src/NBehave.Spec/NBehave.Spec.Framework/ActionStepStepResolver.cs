@@ -20,7 +20,7 @@ namespace NBehave.Spec
             _parameterConverter = new ParameterConverter(_actionCatalog);
         }
 
-        public Action ResolveStep(ScenarioFragment currentScenarioStage, ActionStepText actionStep)
+        public Action ResolveStep(ActionStepText actionStep)
         {
             var actionMethodInfo = _actionCatalog.GetAction(actionStep);
             if (actionMethodInfo == null)

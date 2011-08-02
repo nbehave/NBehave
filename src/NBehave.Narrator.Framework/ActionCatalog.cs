@@ -19,12 +19,7 @@ namespace NBehave.Narrator.Framework
         {
             _actions.Add(actionValue);
         }
-
-        public bool ActionExists(string text)
-        {
-            return ActionExists(new ActionStepText(text, string.Empty));
-        }
-
+        
         public bool ActionExists(ActionStepText actionStepText)
         {
             return FindMatchingAction(actionStepText) != null;
@@ -37,13 +32,12 @@ namespace NBehave.Narrator.Framework
 
         private ActionMethodInfo FindMatchingAction(ActionStepText actionStepText)
         {
-            var message = actionStepText.Step;
             ActionMethodInfo matchedAction = null;
             var lengthOfMatch = -1;
             foreach (var action in _actions)
             {
                 var regex = action.ActionStepMatcher;
-                var match = regex.Match(message);
+                var match = regex.Match(actionStepText.MatchableStep);
                 if (match.Success)
                 {
                     if (MatchesFileName(action, actionStepText)

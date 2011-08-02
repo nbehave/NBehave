@@ -10,12 +10,12 @@ namespace NBehave.Spec.Framework.Specification
         public void Should_allow_specified_step_implementations()
         {
             var stepRunner = new ScenarioDrivenSpecStepRunner(null);
-            
+
             var didRun = false;
 
             stepRunner.RegisterImplementation("change my flag", () => didRun = true);
 
-            stepRunner.Run(new ActionStepText("change my flag", null));
+            stepRunner.Run(new ActionStepText("Given change my flag", null));
 
             Assert.IsTrue(didRun);
         }
@@ -29,7 +29,7 @@ namespace NBehave.Spec.Framework.Specification
                                      CurrentScenarioStage = ScenarioFragment.When
                                  };
 
-            stepRunner.Run(new ActionStepText("using reflection to obtain a step", null));
+            stepRunner.Run(new ActionStepText("When using reflection to obtain a step", null));
 
             Assert.IsTrue(helper.HasRun);
         }
@@ -43,7 +43,7 @@ namespace NBehave.Spec.Framework.Specification
                 CurrentScenarioStage = ScenarioFragment.When
             };
 
-            stepRunner.Run(new ActionStepText("using attributes to obtain a step", null));
+            stepRunner.Run(new ActionStepText("Given using attributes to obtain a step", null));
 
             Assert.That(helper.StepResult, Is.EqualTo(1));
         }
@@ -57,7 +57,7 @@ namespace NBehave.Spec.Framework.Specification
                 CurrentScenarioStage = ScenarioFragment.When
             };
 
-            stepRunner.Run(new ActionStepText("setting result via regex capture to 12", null));
+            stepRunner.Run(new ActionStepText("Given setting result via regex capture to 12", null));
 
             Assert.That(helper.StepResult, Is.EqualTo(12));
         }

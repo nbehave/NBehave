@@ -11,32 +11,22 @@ namespace NBehave.Narrator.Framework
 {
     public class StringStep : ActionStepText
     {
-        public StringStep(string step, string fromFile) : base(step, fromFile)
-        {
-        }
+        public StringStep(string step, string fromFile)
+            : base(step, fromFile)
+        { }
 
         public StepResult StepResult { get; set; }
 
-        public override string ToString()
-        {
-            return Step;
-        }
-
         public override bool Equals(object obj)
         {
-            if (obj == null || obj as StringStep == null)
-            {
-                return false;
-            }
-
-            return ReferenceEquals(obj, this) || obj.ToString() == ToString();
+            return Equals(obj as StringStep);
         }
 
         public bool Equals(StringStep other)
         {
-            if (ReferenceEquals(null, other)) return false;
-            if (ReferenceEquals(this, other)) return true;
-            return Equals(other.Step, Step);
+            if (other == null)
+                return false;
+            return (ReferenceEquals(this, other)) || other.MatchableStep == MatchableStep;
         }
 
         public override int GetHashCode()

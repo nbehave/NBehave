@@ -40,11 +40,10 @@ namespace NBehave.Narrator.Framework
 
         public StepResult Run(ActionStepText actionStep, Row row)
         {
-            var actionStepToUse = new ActionStepText(actionStep.Step.RemoveFirstWord(), actionStep.Source);
             var result = new StepResult(actionStep.Step, new Passed());
             try
             {
-                if (!ActionCatalog.ActionExists(actionStepToUse))
+                if (!ActionCatalog.ActionExists(actionStep))
                 {
                     var pendReason = string.Format("No matching Action found for \"{0}\"", actionStep);
                     result = new StepResult(actionStep.Step, new Pending(pendReason));
@@ -52,13 +51,9 @@ namespace NBehave.Narrator.Framework
                 else
                 {
                     if (row == null)
-                    {
-                        RunStep(actionStepToUse);
-                    }
+                        RunStep(actionStep);
                     else
-                    {
-                        RunStep(actionStepToUse, row);
-                    }
+                        RunStep(actionStep, row);
                 }
             }
             catch (Exception e)
@@ -99,10 +94,10 @@ namespace NBehave.Narrator.Framework
             return actionType;
         }
 
-        private void RunStep(ActionStepText actionStepToUse)
+        private void RunStep(ActionStepText actionStep)
         {
-            Func<object[]> getParameters = () => ParameterConverter.GetParametersForActionStepText(actionStepToUse);
-            RunStep(actionStepToUse, getParameters);
+            Func<object[]> getParameters = () => ParameterConverter.GetParametersForActionStepText(actionStep);
+            RunStep(actionStep, getParameters);
         }
 
         private void RunStep(ActionStepText actionStep, Row row)
@@ -113,11 +108,6 @@ namespace NBehave.Narrator.Framework
 
         private void RunStep(ActionStepText actionStep, Func<object[]> getParametersForActionStepText)
         {
-            if (ActionCatalog.ActionExists(actionStep) == false)
-            {
-                throw new ArgumentException(string.Format("cannot find step string '{0}'", actionStep));
-            }
-
             var info = ActionCatalog.GetAction(actionStep);
 
             PublishStepStartedEvent(actionStep);

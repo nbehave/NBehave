@@ -25,17 +25,16 @@ namespace NBehave.Spec.Extensions
         public static IEnumerable<IGrouping<Scenario, StringStep>> FindPendingSteps(this Feature feature)
         {
             return feature.Scenarios
-                           .Select(scenario => new 
-                                               {
-                                                    scenario,
-                                                    pendingSteps = scenario.Steps
-                                                                           .Where(step => step.StepResult.Result is Pending)
-                                               })
-                           .Where(scenarioStruct => scenarioStruct.pendingSteps.Count() > 0)
-                           .Select(scenarioStruct => new GroupingStructure<Scenario, StringStep>(
-                                                                     scenarioStruct.scenario, 
-                                                                     scenarioStruct.pendingSteps))
-                           .Cast<IGrouping<Scenario, StringStep>>();
+                .Select(scenario => new 
+                                        {
+                                            scenario,
+                                            pendingSteps = scenario.Steps
+                                        .Where(step => step.StepResult.Result is Pending)
+                                        })
+                .Where(scenarioStruct => scenarioStruct.pendingSteps.Count() > 0)
+                .Select(scenarioStruct => new GroupingStructure<Scenario, StringStep>(
+                                              scenarioStruct.scenario, 
+                                              scenarioStruct.pendingSteps));
         }
     }
 

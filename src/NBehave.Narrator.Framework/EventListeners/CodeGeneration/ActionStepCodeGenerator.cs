@@ -25,12 +25,8 @@ namespace NBehave.Narrator.Framework
             var attrib = step.ToString();
             var attribute = string.Format("[{0}(\"{1}\")]{2}", attrib, actionStepParameterized, Environment.NewLine);
             var methodName = ExtractMethodName(attrib + " " + actionStepParameterized);
-            var methodSignature = string.Format(
-                "public void {0}({1}){2}",
-                methodName.Replace(' ', '_'),
-                GetParameters(actionStep),
-                " ");
-            string methodBody = "{ throw new System.NotImplementedException(); }";
+            var methodSignature = string.Format("public void {0}({1}){2}", methodName.Replace(' ', '_'), GetParameters(actionStep), " ");
+            const string methodBody = "{ throw new System.NotImplementedException(); }";
             return attribute + methodSignature + Environment.NewLine + methodBody;
         }
 
@@ -38,7 +34,7 @@ namespace NBehave.Narrator.Framework
         {
             var numberOfParameters = 0;
             var parameters = string.Empty;
-            var words = SplitStringToWords(ref row);
+            var words = SplitStringToWords(row);
 
             foreach (var word in words)
             {
@@ -69,7 +65,7 @@ namespace NBehave.Narrator.Framework
         {
             var actionStep = string.Empty;
             var paramNumber = 1;
-            var words = SplitStringToWords(ref row);
+            var words = SplitStringToWords(row);
             foreach (var word in words)
             {
                 if (IsParameter(word))
@@ -86,7 +82,7 @@ namespace NBehave.Narrator.Framework
             return actionStep.Substring(0, actionStep.Length - 1);
         }
 
-        private IEnumerable<string> SplitStringToWords(ref string row)
+        private IEnumerable<string> SplitStringToWords(string row)
         {
             row = TrimRow(row).RemoveFirstWord();
             var words = row.Split(_whiteSpaces, StringSplitOptions.RemoveEmptyEntries);

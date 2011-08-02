@@ -1,4 +1,3 @@
-using System;
 using NBehave.Narrator.Framework;
 using NBehave.Spec.Extensions;
 using NBehave.Spec.NUnit;
@@ -34,6 +33,8 @@ namespace NUnit.SpecBase_Specifications
                 .When("the scenario is executed", () => detail2 = "implementation")
                 .Then("the implementation from Given should be called", () => detail1.ShouldNotBeNull())
                 .And("the implementation from When should be called", () => detail2.ShouldNotBeNull());
+            Assert.IsNotNull(detail1);
+            Assert.IsNotNull(detail2);
         }
     }
 }

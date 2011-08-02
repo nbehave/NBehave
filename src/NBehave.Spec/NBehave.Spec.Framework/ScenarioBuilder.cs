@@ -60,7 +60,8 @@ namespace NBehave.Spec
             if(Scenario.Steps.Count() == 0)
                 StepRunner.BeforeScenario();
 
-            var stringStringStep = new StringStep(step, Scenario.Source);
+            string stringStep = string.Format("{0} {1}", currentStage, step);
+            var stringStringStep = new StringStep(stringStep, Scenario.Source);
             Scenario.AddStep(stringStringStep);
 
             stringStringStep.StepResult = StepRunner.Run(stringStringStep);

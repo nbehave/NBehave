@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace NBehave.Narrator.Framework.Specifications
 {
     [TestFixture]
-    public class ActionCatalogSpec
+    public abstract class ActionCatalogSpec
     {
         private MethodInfo GetDummyParameterInfo()
         {
@@ -29,7 +29,7 @@ namespace NBehave.Narrator.Framework.Specifications
                     null);
                 
                 catalog.Add(action);
-                var actionExists = catalog.ActionExists("my savings account balance is 500");
+                var actionExists = catalog.ActionExists("Given my savings account balance is 500".AsActionStepText(""));
 
                 Assert.That(actionExists, Is.True);
             }
@@ -46,7 +46,7 @@ namespace NBehave.Narrator.Framework.Specifications
                     null);
 
                 catalog.Add(action);
-                var actionExists = catalog.ActionExists("my\tsavings account balance is 500");
+                var actionExists = catalog.ActionExists("Given my\tsavings account balance is 500".AsActionStepText(""));
 
                 Assert.That(actionExists, Is.True);
             }
@@ -64,7 +64,7 @@ namespace NBehave.Narrator.Framework.Specifications
 
                 catalog.Add(action);
 
-                var actionResult = catalog.GetAction(new ActionStepText("my savings account balance is 500", ""));
+                var actionResult = catalog.GetAction(new ActionStepText("Given my savings account balance is 500", ""));
 
                 Assert.That(actionResult, Is.Not.Null);
             }
@@ -83,7 +83,7 @@ namespace NBehave.Narrator.Framework.Specifications
 
                 catalog.Add(actionMethodInfo);
 
-                var actionFetched = catalog.GetAction(new ActionStepText("I have 20 euros on my cash account", ""));
+                var actionFetched = catalog.GetAction(new ActionStepText("Given I have 20 euros on my cash account", ""));
 
                 Assert.That(actionFetched, Is.Not.Null);
             }
@@ -111,7 +111,7 @@ namespace NBehave.Narrator.Framework.Specifications
 
             private void BecauseOf()
             {
-                var actionText = new ActionStepText("abc def", "somestory.story");
+                var actionText = new ActionStepText("Given abc def", "somestory.story");
                 var action = _actionCatalog.GetAction(actionText);
                 (action.Action as Action).Invoke();
             }

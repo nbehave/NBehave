@@ -6,12 +6,10 @@
 //   Defines the Scenario type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+using System.Collections.Generic;
 
 namespace NBehave.Narrator.Framework
 {
-    using System.Collections.Generic;
-    using System.Linq;
-
     public class Scenario
     {
         private readonly List<StringStep> _steps;
@@ -84,7 +82,7 @@ namespace NBehave.Narrator.Framework
             _steps.Add(step);
         }
 
-        public void AddExamples(List<Example> examples)
+        public void AddExamples(IEnumerable<Example> examples)
         {
             _examples.AddRange(examples);
         }
