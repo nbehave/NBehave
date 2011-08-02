@@ -133,7 +133,7 @@ namespace NBehave.Narrator.Framework
             var sum = 0;
             foreach (var result in featureResults.ScenarioResults)
             {
-                var count = from r in result.ActionStepResults
+                var count = from r in result.StepResults
                               where r.Result.GetType() == typeOfStep
                               select r;
                 sum += count.Count();

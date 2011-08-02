@@ -42,7 +42,7 @@ namespace NBehave.Narrator.Framework.EventListeners
         {
             var lastStep = TypeOfStep.Given;
             var validNames = Enum.GetNames(typeof(TypeOfStep)).ToList();
-            foreach (var actionStepResult in result.ActionStepResults)
+            foreach (var actionStepResult in result.StepResults)
             {
                 lastStep = DetermineTypeOfStep(validNames, actionStepResult, lastStep);
                 if (actionStepResult.Result is Pending)
@@ -61,11 +61,11 @@ namespace NBehave.Narrator.Framework.EventListeners
             }
         }
 
-        private TypeOfStep DetermineTypeOfStep(List<string> validNames, ActionStepResult actionStepResult, TypeOfStep lastStep)
+        private TypeOfStep DetermineTypeOfStep(List<string> validNames, StepResult stepResult, TypeOfStep lastStep)
         {
-            if (validNames.Contains(actionStepResult.StringStep.GetFirstWord()))
+            if (validNames.Contains(stepResult.StringStep.GetFirstWord()))
             {
-                lastStep = (TypeOfStep)Enum.Parse(typeof(TypeOfStep), actionStepResult.StringStep.GetFirstWord(), true);
+                lastStep = (TypeOfStep)Enum.Parse(typeof(TypeOfStep), stepResult.StringStep.GetFirstWord(), true);
             }
             return lastStep;
         }

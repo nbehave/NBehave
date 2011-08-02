@@ -11,9 +11,9 @@ namespace NBehave.Narrator.Framework
 {
     public interface IStringStepRunner
     {
-        ActionStepResult Run(ActionStepText actionStep);
+        StepResult Run(ActionStepText actionStep);
 
-        ActionStepResult Run(ActionStepText actionStep, Row row);
+        StepResult Run(ActionStepText actionStep, Row row);
 
         void OnCloseScenario();
 

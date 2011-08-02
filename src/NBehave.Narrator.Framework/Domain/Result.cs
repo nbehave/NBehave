@@ -3,7 +3,7 @@
 //   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
 // </copyright>
 // <summary>
-//   Defines the ActionStepResult type.
+//   Defines the StepResult type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -12,9 +12,9 @@ namespace NBehave.Narrator.Framework
     using System;
 
     [Serializable]
-    public class ActionStepResult : Result
+    public class StepResult : Result
     {
-        public ActionStepResult(string stringStep, Result resultForActionStep)
+        public StepResult(string stringStep, Result resultForActionStep)
             : base(resultForActionStep.Message)
         {
             StringStep = stringStep;

@@ -17,10 +17,10 @@ namespace NBehave.Narrator.Framework.Specifications
 			var results = new FeatureResults(this);
 			var feature = new Feature("feature title");
 			var scenarioResult = new ScenarioResult(feature, "scenario title");
-			scenarioResult.AddActionStepResult(new ActionStepResult("a", new Passed()));
-			scenarioResult.AddActionStepResult(new ActionStepResult("b", new Passed()));
-			scenarioResult.AddActionStepResult(new ActionStepResult("c", new Pending("pending reason")));
-			scenarioResult.AddActionStepResult(new ActionStepResult("d", new Failed(new Exception("why it failed"))));
+            scenarioResult.AddActionStepResult(new StepResult("a", new Passed()));
+            scenarioResult.AddActionStepResult(new StepResult("b", new Passed()));
+            scenarioResult.AddActionStepResult(new StepResult("c", new Pending("pending reason")));
+            scenarioResult.AddActionStepResult(new StepResult("d", new Failed(new Exception("why it failed"))));
 			results.AddResult(scenarioResult);
 			
 			_output.WriteSummaryResults(results);

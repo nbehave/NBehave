@@ -18,7 +18,7 @@ namespace NBehave.Narrator.Framework
     [Serializable]
     public class ScenarioResult
     {
-        private readonly List<ActionStepResult> _actionStepResults;
+        private readonly List<StepResult> _actionStepResults;
         private Result _result = new Passed();
         private string _message;
         private string _stackTrace;
@@ -27,7 +27,7 @@ namespace NBehave.Narrator.Framework
         {
             FeatureTitle = feature.Title;
             ScenarioTitle = scenarioTitle;
-            _actionStepResults = new List<ActionStepResult>();
+            _actionStepResults = new List<StepResult>();
         }
 
         private string _featureTitle;
@@ -59,12 +59,12 @@ namespace NBehave.Narrator.Framework
             get { return _stackTrace; }
         }
 
-        public IEnumerable<ActionStepResult> ActionStepResults
+        public IEnumerable<StepResult> StepResults
         {
             get { return _actionStepResults; }
         }
 
-        public virtual void AddActionStepResult(ActionStepResult actionStepResult)
+        public virtual void AddActionStepResult(StepResult actionStepResult)
         {
             _actionStepResults.Add(actionStepResult);
             MergeResult(actionStepResult);
@@ -84,7 +84,7 @@ namespace NBehave.Narrator.Framework
             _result = new Pending(_message);
         }
 
-        protected void MergeResult(ActionStepResult actionStepResult)
+        protected void MergeResult(StepResult actionStepResult)
         {
             var newResult = actionStepResult.Result;
             if (newResult.GetType() == typeof(Failed))

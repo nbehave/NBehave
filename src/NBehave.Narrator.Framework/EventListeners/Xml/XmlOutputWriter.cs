@@ -97,23 +97,24 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
 
         public void DoScenario(EventReceived evt, ScenarioResult scenarioResult)
         {
-            var events = from e in this.EventsOf(evt, EventType.ScenarioCreated)
+            var events = from e in EventsOf(evt, EventType.ScenarioCreated)
                          where e.EventType == EventType.ScenarioCreated
                          select e;
             WriteStartElement("scenario", evt.Message, events.Last().Time.Subtract(events.First().Time));
 
             Writer.WriteAttributeString("outcome", scenarioResult.Result.ToString());
+
             if (IsPendingAndNoActionStepsResults(scenarioResult))
                 CreatePendingSteps(evt, scenarioResult);
 
-            foreach (var step in scenarioResult.ActionStepResults)
+            foreach (var step in scenarioResult.StepResults)
                 DoActionStep(step);
 
             DoExamplesInScenario(scenarioResult as ScenarioExampleResult);
             Writer.WriteEndElement();
         }
 
-        public void DoActionStep(ActionStepResult result)
+        public void DoActionStep(StepResult result)
         {
             Writer.WriteStartElement("actionStep");
             Writer.WriteAttributeString("name", result.StringStep);
@@ -199,7 +200,7 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
 
         private bool IsPendingAndNoActionStepsResults(ScenarioResult scenarioResult)
         {
-            return scenarioResult.Result.GetType() == typeof(Pending) && (scenarioResult.ActionStepResults.Count() == 0);
+            return scenarioResult.Result.GetType() == typeof(Pending) && (scenarioResult.StepResults.Count() == 0);
         }
 
         private void WriteStoryNarrative(IEnumerable<EventReceived> events)
@@ -243,10 +244,7 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
                               where e.EventType == EventType.ScenarioCreated
                               select e;
             foreach (var step in actionSteps)
-            {
-                scenarioResult.AddActionStepResult(
-                    new ActionStepResult(step.Message, new Pending(scenarioResult.Message)));
-            }
+                scenarioResult.AddActionStepResult(new StepResult(step.Message, new Pending(scenarioResult.Message)));
         }
 
         private int CountThemes()

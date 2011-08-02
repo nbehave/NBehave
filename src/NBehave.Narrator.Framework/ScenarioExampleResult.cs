@@ -33,18 +33,14 @@ namespace NBehave.Narrator.Framework
 
         public IEnumerable<Example> Examples { get; private set; }
 
-        public override void AddActionStepResult(ActionStepResult actionStepResult)
+        public override void AddActionStepResult(StepResult stepResult)
         {
-            MergeResult(actionStepResult);
-            var step = ActionStepResults.FirstOrDefault(s => s.StringStep == actionStepResult.StringStep);
+            MergeResult(stepResult);
+            var step = StepResults.FirstOrDefault(s => s.StringStep == stepResult.StringStep);
             if (step == null)
-            {
-                base.AddActionStepResult(actionStepResult);
-            }
+                base.AddActionStepResult(stepResult);
             else
-            {
-                step.MergeResult(actionStepResult);
-            }
+                MergeStepResult(stepResult, step);
         }
 
         public void AddResult(ScenarioResult exampleResult)
@@ -57,21 +53,26 @@ namespace NBehave.Narrator.Framework
         {
             foreach (var stringStep in stringSteps)
             {
-                AddActionStepResult(new ActionStepResult(stringStep.Step, new Passed()));
+                AddActionStepResult(new StepResult(stringStep.Step, new Passed()));
             }
         }
 
         private void UpdateStepResults(ScenarioResult result)
         {
-            var actionStepResults = ActionStepResults.ToArray();
+            var actionStepResults = StepResults.ToArray();
 
             var idx = 0;
-            foreach (var stepResult in result.ActionStepResults)
+            foreach (var stepResult in result.StepResults)
             {
                 var step = actionStepResults[idx++];
-                step.MergeResult(stepResult.Result);
+                MergeStepResult(stepResult, step);
                 MergeResult(stepResult);
             }
+        }
+
+        private static void MergeStepResult(StepResult stepResult, StepResult steptoMergeInto)
+        {
+            steptoMergeInto.MergeResult(stepResult.Result);
         }
     }
 }

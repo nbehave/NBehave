@@ -63,7 +63,7 @@ namespace NBehave.Narrator.Framework.EventListeners
         public override void ScenarioResult(ScenarioResult result)
         {
             _allResults.Add(result);
-            foreach (var actionStepResult in result.ActionStepResults)
+            foreach (var actionStepResult in result.StepResults)
             {
                 var msg = (actionStepResult.Result is Passed) ? string.Empty : " - " + actionStepResult.Result.ToString().ToUpper();
                 _writer.WriteLine(actionStepResult.StringStep + msg);

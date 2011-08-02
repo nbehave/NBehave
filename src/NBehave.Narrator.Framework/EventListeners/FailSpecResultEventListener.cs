@@ -19,7 +19,7 @@ namespace NBehave.Narrator.Framework.EventListeners
             {
                 errors.Append(string.Format("Scenario {0} failed", failedScenario.ScenarioTitle));
                 errors.Append(Environment.NewLine);
-                foreach (var error in failedScenario.ActionStepResults.Where(_ => _.Result is Failed))
+                foreach (var error in failedScenario.StepResults.Where(_ => _.Result is Failed))
                 {
                     errors.AppendLine(string.Format("Step '{0}' failed with result:", error.StringStep));
                     errors.AppendLine(error.Result.Message);

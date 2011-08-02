@@ -47,6 +47,7 @@ namespace NBehave.Narrator.Framework.Processors
                 _hub.Publish(new FeatureNarrativeEvent(this, feature.Narrative));
 
                 Run(feature.Scenarios);
+                _hub.Publish(new FeatureFinishedEvent(this, feature.Title));
             }
 
             _hub.Publish(new ThemeFinishedEvent(this));
@@ -65,6 +66,7 @@ namespace NBehave.Narrator.Framework.Processors
                 {
                     RunScenario(scenario);
                 }
+                _hub.Publish(new ScenarioFinishedEvent(this, scenario));
             }
         }
 
@@ -208,10 +210,10 @@ namespace NBehave.Narrator.Framework.Processors
             return clones;
         }
 
-        private ActionStepResult GetNewActionStepResult(StringTableStep stringStep)
+        private StepResult GetNewActionStepResult(StringTableStep stringStep)
         {
             var fullStep = CreateStepText(stringStep);
-            return new ActionStepResult(fullStep, new Passed());
+            return new StepResult(fullStep, new Passed());
         }
 
         private string CreateStepText(StringTableStep stringStep)

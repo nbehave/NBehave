@@ -53,7 +53,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 scenario.AddStep("Given my name is Axel");
                 scenario.AddStep("And my name is Morgan");
                 _runner.Run(new[] { scenario });
-                Assert.AreEqual(2, _scenarioResult.ActionStepResults.Count());
+                Assert.AreEqual(2, _scenarioResult.StepResults.Count());
             }
 
             [Test]
@@ -67,8 +67,8 @@ namespace NBehave.Narrator.Framework.Specifications
                 scenario.AddStep("Given my name is Axel");
                 _runner.Run(new[] { scenario });
 
-                Assert.That(_scenarioResult.ActionStepResults.First().Result, Is.TypeOf(typeof(Passed)));
-                Assert.That(_scenarioResult.ActionStepResults.Last().Result, Is.TypeOf(typeof(Failed)));
+                Assert.That(_scenarioResult.StepResults.First().Result, Is.TypeOf(typeof(Passed)));
+                Assert.That(_scenarioResult.StepResults.Last().Result, Is.TypeOf(typeof(Failed)));
             }
         }
 
@@ -204,7 +204,7 @@ namespace NBehave.Narrator.Framework.Specifications
             [Test]
             public void Should_not_fail_any_steps()
             {
-                foreach (var stepResult in _scenarioResult.ActionStepResults)
+                foreach (var stepResult in _scenarioResult.StepResults)
                 {
                     Assert.That(stepResult, Is.Not.InstanceOf<Failed>());
                 }
@@ -257,7 +257,7 @@ namespace NBehave.Narrator.Framework.Specifications
             [Test]
             public void Should_not_fail_any_steps()
             {
-                foreach (var stepResult in _scenarioResult.ActionStepResults)
+                foreach (var stepResult in _scenarioResult.StepResults)
                 {
                     Assert.That(stepResult, Is.Not.InstanceOf<Failed>());
                 }

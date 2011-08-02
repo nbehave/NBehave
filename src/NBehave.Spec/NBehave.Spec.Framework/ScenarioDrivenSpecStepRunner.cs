@@ -41,7 +41,7 @@ namespace NBehave.Spec
             _inlineImplementations.RegisterImplementation(CurrentScenarioStage, step, implementation);
         }
 
-        public ActionStepResult Run(ActionStepText actionStep)
+        public StepResult Run(ActionStepText actionStep)
         {
             var stepText = actionStep.Step;
 
@@ -50,22 +50,22 @@ namespace NBehave.Spec
                                                   .FirstOrDefault();
             if (stepImplementation == null)
             {
-                return new ActionStepResult(stepText, new Pending("No implementation located"));
+                return new StepResult(stepText, new Pending("No implementation located"));
             }
 
             try
             {
                 stepImplementation();
-                return new ActionStepResult(stepText, new Passed());
+                return new StepResult(stepText, new Passed());
             }
             catch (Exception ex)
             {
                 var realException = FindUsefulException(ex);
-                return new ActionStepResult(stepText, new Failed(realException));
+                return new StepResult(stepText, new Failed(realException));
             }
         }
 
-        public ActionStepResult Run(ActionStepText actionStep, Row row)
+        public StepResult Run(ActionStepText actionStep, Row row)
         {
             throw new NotSupportedException("NBehave.Spec does not support example-driven scenarios");
         }

@@ -15,7 +15,7 @@ namespace NBehave.Narrator.Framework
         {
         }
 
-        public ActionStepResult StepResult { get; set; }
+        public StepResult StepResult { get; set; }
 
         public override string ToString()
         {

@@ -71,13 +71,13 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
 
         private void NotifyResharperOfScenarioResult(ScenarioResult result, TaskState scenario)
         {
-            var a = new ActionStepResult(result.ScenarioTitle, result.Result);
+            var a = new StepResult(result.ScenarioTitle, result.Result);
             NotifyResharperOfTaskResult(result, a, scenario);
         }
 
         private void NotifyResharperOfStepResults(ScenarioResult result)
         {
-            foreach (var step in result.ActionStepResults)
+            foreach (var step in result.StepResults)
             {
                 List<TaskState> nodes;
                 if (_nodes.TryGetValue(typeof(NBehaveStepTask), out nodes) == false)
@@ -92,7 +92,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
             }
         }
 
-        private void NotifyResharperOfTaskResult(ScenarioResult scenarioResult, ActionStepResult result, TaskState taskState)
+        private void NotifyResharperOfTaskResult(ScenarioResult scenarioResult, StepResult result, TaskState taskState)
         {
             TaskResult taskResult = GetTaskResult(result.Result);
             _server.TaskStarting(taskState.Task);
@@ -109,7 +109,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
             _server.TaskFinished(taskState.Task, result.Message, taskResult);
         }
 
-        private CodeGenStep GetCodeForPendingStep(ScenarioResult result, ActionStepResult step)
+        private CodeGenStep GetCodeForPendingStep(ScenarioResult result, StepResult step)
         {
             return _codeGeneration.PendingSteps
                 .FirstOrDefault(_ => _.Feature == result.FeatureTitle

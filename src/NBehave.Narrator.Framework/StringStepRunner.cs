@@ -29,21 +29,21 @@ namespace NBehave.Narrator.Framework
 
         private ParameterConverter ParameterConverter { get; set; }
 
-        public ActionStepResult Run(ActionStepText actionStep)
+        public StepResult Run(ActionStepText actionStep)
         {
             return (this as IStringStepRunner).Run(actionStep, null);
         }
 
-        public ActionStepResult Run(ActionStepText actionStep, Row row)
+        public StepResult Run(ActionStepText actionStep, Row row)
         {
             var actionStepToUse = new ActionStepText(actionStep.Step.RemoveFirstWord(), actionStep.Source);
-            var result = new ActionStepResult(actionStep.Step, new Passed());
+            var result = new StepResult(actionStep.Step, new Passed());
             try
             {
                 if (!ActionCatalog.ActionExists(actionStepToUse))
                 {
                     var pendReason = string.Format("No matching Action found for \"{0}\"", actionStep);
-                    result = new ActionStepResult(actionStep.Step, new Pending(pendReason));
+                    result = new StepResult(actionStep.Step, new Pending(pendReason));
                 }
                 else
                 {
@@ -60,7 +60,7 @@ namespace NBehave.Narrator.Framework
             catch (Exception e)
             {
                 var realException = FindUsefulException(e);
-                result = new ActionStepResult(actionStep.Step, new Failed(realException));
+                result = new StepResult(actionStep.Step, new Failed(realException));
             }
 
             return result;

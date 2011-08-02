@@ -55,7 +55,7 @@ namespace NBehave.Narrator.Framework.EventListeners
                 {
                     failureText.AppendLine(string.Format("Feature: {0}", failedActionStepResult.FeatureTitle));
                     failureText.AppendLine(string.Format("  Scenario: {0}", failedActionStepResult.ScenarioTitle));
-                    foreach (var actionStepResult in failedActionStepResult.ActionStepResults)
+                    foreach (var actionStepResult in failedActionStepResult.StepResults)
                     {
                         if (actionStepResult.Result is Failed)
                         {
@@ -74,7 +74,7 @@ namespace NBehave.Narrator.Framework.EventListeners
         {
             WriteColorString("Scenario: " + scenarioResult.ScenarioTitle + " - " + scenarioResult.Result.ToString().ToUpper(), GetColorForResult(scenarioResult.Result));
             _allResults.Add(scenarioResult);
-            foreach (var stepResult in scenarioResult.ActionStepResults)
+            foreach (var stepResult in scenarioResult.StepResults)
             {
                 WriteColorString(
                     stepResult.StringStep + " - " + stepResult.Result.ToString().ToUpper(),
