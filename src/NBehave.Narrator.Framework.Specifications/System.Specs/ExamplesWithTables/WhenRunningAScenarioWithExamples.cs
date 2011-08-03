@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.IO;
+using NUnit.Framework;
 using Should.Fluent;
 
 namespace NBehave.Narrator.Framework.Specifications.System.Specs
@@ -13,7 +14,7 @@ namespace NBehave.Narrator.Framework.Specifications.System.Specs
         {
             _config = NBehaveConfiguration
                 .New
-                .SetAssemblies(new[] {"NBehave.Narrator.Framework.Specifications.dll"})
+                .SetAssemblies(new[] {Path.GetFileName(GetType().Assembly.Location)})
                 .SetEventListener(Framework.EventListeners.EventListeners.NullEventListener())
                 .SetScenarioFiles(new[] {@"System.Specs\ExamplesWithTables\ExamplesWithTables.feature"});
         }

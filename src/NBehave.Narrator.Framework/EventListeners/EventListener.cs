@@ -14,7 +14,7 @@ namespace NBehave.Narrator.Framework
 {
     public abstract class EventListener : MarshalByRefObject, IEventListener
     {
-        public virtual void FeatureCreated(string feature)
+        public virtual void FeatureStarted(string feature)
         {
         }
 
@@ -22,7 +22,7 @@ namespace NBehave.Narrator.Framework
         {
         }
 
-        public virtual void ScenarioCreated(string scenarioTitle)
+        public virtual void ScenarioStarted(string scenarioTitle)
         {
         }
 

@@ -9,7 +9,6 @@ using NBehave.Narrator.Framework.EventListeners.Xml;
 using NBehave.Narrator.Framework.Processors;
 using NBehave.Narrator.Framework.Remoting;
 using NUnit.Framework;
-using Rhino.Mocks;
 using TestPlainTextAssembly;
 using Context = NUnit.Framework.TestFixtureAttribute;
 using Specification = NUnit.Framework.TestAttribute;
@@ -19,7 +18,7 @@ namespace NBehave.Narrator.Framework.Specifications
     [Context]
     public class RemotableStoryRunnerSpec
     {
-        [Specification,Ignore("This test crashes the R# test runner")]
+        [Explicit("This test crashes the R# test runner")]
         public void RawDeserialization()
         {
             object o;
@@ -174,7 +173,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 DeleteConfigFile();
             }
 
-            [Specification, Ignore("This test crashes the R# test runner")]
+            [Explicit("This test crashes the R# test runner")]
             public void Should_read_values_from_the_appropriate_config_file()
             {
                 //WARNING: This test crashes the R# test runner, v 5.1.3000.12 anyway
@@ -277,8 +276,6 @@ namespace NBehave.Narrator.Framework.Specifications
 
                 Assert.That(scenarioNodes.Count, Is.EqualTo(1));
             }
-
         }
-
     }
 }

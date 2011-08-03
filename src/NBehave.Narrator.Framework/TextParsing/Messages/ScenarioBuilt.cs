@@ -2,7 +2,7 @@
 {
     using NBehave.Narrator.Framework.Tiny;
 
-    internal class ScenarioBuilt : GenericTinyMessage<Scenario>
+    public class ScenarioBuilt : GenericTinyMessage<Scenario>
     {
         public ScenarioBuilt(object sender, Scenario scenario)
             : base(sender, scenario)

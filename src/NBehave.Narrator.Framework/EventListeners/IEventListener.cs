@@ -2,13 +2,13 @@
 {
     public interface IEventListener
     {
-        void FeatureCreated(string feature);
-        void FeatureNarrative(string message);
-        void ScenarioCreated(string scenarioTitle);
         void RunStarted();
-        void RunFinished();
         void ThemeStarted(string name);
-        void ThemeFinished();
+        void FeatureStarted(string feature);
+        void FeatureNarrative(string message);
+        void ScenarioStarted(string scenarioTitle);
         void ScenarioResult(ScenarioResult result);
+        void ThemeFinished();
+        void RunFinished();
     }
 }

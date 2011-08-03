@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using NUnit.Framework;
 
@@ -14,7 +15,7 @@ namespace NBehave.Narrator.Framework.Specifications.System.Specs
         {
             _config = NBehaveConfiguration
                 .New
-                .SetAssemblies(new[] {"NBehave.Narrator.Framework.Specifications.dll"})
+                .SetAssemblies(new[] {Path.GetFileName(GetType().Assembly.Location)})
                 .SetEventListener(Framework.EventListeners.EventListeners.NullEventListener())
                 .SetScenarioFiles(new[] {@"System.Specs\Backgrounds\Background.feature"});
         }

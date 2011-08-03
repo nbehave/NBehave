@@ -46,7 +46,7 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
             _eventsReceived.Add(new EventReceived(string.Empty, EventType.ThemeFinished));
         }
 
-        public override void FeatureCreated(string feature)
+        public override void FeatureStarted(string feature)
         {
             _eventsReceived.Add(new EventReceived(feature, EventType.FeatureCreated));
         }
@@ -56,7 +56,7 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
             _eventsReceived.Add(new EventReceived(message, EventType.FeatureNarrative));
         }
 
-        public override void ScenarioCreated(string scenario)
+        public override void ScenarioStarted(string scenario)
         {
             _eventsReceived.Add(new EventReceived(scenario, EventType.ScenarioCreated));
         }

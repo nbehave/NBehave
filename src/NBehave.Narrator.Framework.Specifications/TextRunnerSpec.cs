@@ -338,7 +338,7 @@ namespace NBehave.Narrator.Framework.Specifications
             public void SetUp()
             {
                 _featureResults = CreateRunnerWithBasicConfiguration()
-                    .SetAssemblies(new[] {"NBehave.Narrator.Framework.Specifications.dll"})
+                    .SetAssemblies(new[] {Path.GetFileName(GetType().Assembly.Location)})
                     .SetScenarioFiles(new[] {TestFeatures.FeatureInSwedish})
                     .Build()
                     .Run();

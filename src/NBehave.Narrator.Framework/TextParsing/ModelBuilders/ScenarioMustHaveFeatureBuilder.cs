@@ -1,28 +1,26 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
+using NBehave.Narrator.Framework.Tiny;
 
 namespace NBehave.Narrator.Framework.Processors
 {
-    using System;
-
-    using NBehave.Narrator.Framework.Tiny;
-
     internal class ScenarioMustHaveFeatureBuilder : AbstracModelBuilder
     {
         private Feature _feature;
         private readonly ITinyMessengerHub _hub;
- 
+
         public ScenarioMustHaveFeatureBuilder(ITinyMessengerHub hub)
             : base(hub)
         {
             _hub = hub;
             _hub.Subscribe<FeatureBuilt>(built => _feature = built.Content);
             _hub.Subscribe<ParsedScenario>(scenario =>
+            {
+                if (_feature == null)
                 {
-                    if (_feature == null)
-                    {
-                        throw new ScenarioMustHaveFeatureException(scenario.Content);
-                    }
-                });
+                    throw new ScenarioMustHaveFeatureException(scenario.Content);
+                }
+            });
         }
 
         public override void Cleanup()
@@ -32,7 +30,7 @@ namespace NBehave.Narrator.Framework.Processors
     }
 
     [Serializable]
-    internal class ScenarioMustHaveFeatureException : Exception
+    public class ScenarioMustHaveFeatureException : Exception
     {
         private readonly string _file;
 
@@ -41,7 +39,8 @@ namespace NBehave.Narrator.Framework.Processors
             _file = file;
         }
 
-        protected ScenarioMustHaveFeatureException(SerializationInfo info, StreamingContext context) : base(info, context)
+        protected ScenarioMustHaveFeatureException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
         {
             _file = info.GetString("file");
         }
@@ -54,10 +53,7 @@ namespace NBehave.Narrator.Framework.Processors
 
         public override string Message
         {
-            get
-            {
-                return string.Format("A scenario has been parsed that does not have a feature defined. Please add a feature to this scenario in the file: {0}.", _file);
-            }
+            get { return string.Format("A scenario has been parsed that does not have a feature defined. Please add a feature to this scenario in the file: {0}.", _file); }
         }
     }
 }

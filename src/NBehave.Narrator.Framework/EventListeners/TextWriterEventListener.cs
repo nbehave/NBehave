@@ -31,7 +31,7 @@ namespace NBehave.Narrator.Framework.EventListeners
             Dispose(true);
         }
 
-        public override void FeatureCreated(string feature)
+        public override void FeatureStarted(string feature)
         {
             _writer.WriteLine("Feature: {0}", feature);
         }
@@ -41,7 +41,7 @@ namespace NBehave.Narrator.Framework.EventListeners
             _writer.WriteLine(message);
         }
 
-        public override void ScenarioCreated(string scenarioTitle)
+        public override void ScenarioStarted(string scenarioTitle)
         {
             _writer.WriteLine("Scenario: {0}", scenarioTitle);
         }

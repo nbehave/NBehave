@@ -43,9 +43,9 @@ namespace NBehave.Narrator.Framework
         /// </remarks>
         private static void RegisterEventListener(IEventListener listener, ITinyMessengerHub hub)
         {
-            hub.Subscribe<FeatureStartedEvent>(created => listener.FeatureCreated(created.Content));
+            hub.Subscribe<FeatureStartedEvent>(created => listener.FeatureStarted(created.Content));
             hub.Subscribe<FeatureNarrativeEvent>(narrative => listener.FeatureNarrative(narrative.Content));
-            hub.Subscribe<ScenarioStartedEvent>(created => listener.ScenarioCreated(created.Content.Title));
+            hub.Subscribe<ScenarioStartedEvent>(created => listener.ScenarioStarted(created.Content.Title));
             hub.Subscribe<RunStartedEvent>(started => listener.RunStarted());
             hub.Subscribe<RunFinishedEvent>(finished => listener.RunFinished());
             hub.Subscribe<ThemeStartedEvent>(themeStarted => listener.ThemeStarted(themeStarted.Content));

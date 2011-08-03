@@ -24,15 +24,15 @@ namespace NBehave.Narrator.Framework
             }
         }
 
-        internal IEnumerable<string> ScenarioFiles { get; set; }
+        public IEnumerable<string> ScenarioFiles { get; set; }
 
-        internal bool IsDryRun { get; set; }
+        public bool IsDryRun { get; set; }
 
-        internal IEnumerable<string> Assemblies { get; set; }
+        public IEnumerable<string> Assemblies { get; set; }
 
-        internal IEventListener EventListener { get; set; }
+        public IEventListener EventListener { get; set; }
 
-        internal StoryRunnerFilter Filter { get; set; }
+        public StoryRunnerFilter Filter { get; set; }
 
         /// <summary>
         ///   Sets a value indicating whether the action steps should be executed or not.

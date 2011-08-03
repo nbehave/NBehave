@@ -25,9 +25,9 @@ namespace NBehave.Narrator.Framework.EventListeners
             get { return _listeners; }
         }
 
-        public override void FeatureCreated(string feature)
+        public override void FeatureStarted(string feature)
         {
-            Invoke(l => l.FeatureCreated(feature));
+            Invoke(l => l.FeatureStarted(feature));
         }
 
         public override void FeatureNarrative(string message)
@@ -35,9 +35,9 @@ namespace NBehave.Narrator.Framework.EventListeners
             Invoke(l => l.FeatureNarrative(message));
         }
 
-        public override void ScenarioCreated(string scenarioTitle)
+        public override void ScenarioStarted(string scenarioTitle)
         {
-            Invoke(l => l.ScenarioCreated(scenarioTitle));
+            Invoke(l => l.ScenarioStarted(scenarioTitle));
         }
 
         public override void RunStarted()

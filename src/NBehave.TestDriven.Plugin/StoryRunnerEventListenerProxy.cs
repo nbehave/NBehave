@@ -20,7 +20,7 @@ namespace NBehave.TestDriven.Plugin
             _listener.WriteLine(string.Format("Theme : {0}", name), Category.Output);
         }
 
-        public override void FeatureCreated(string feature)
+        public override void FeatureStarted(string feature)
         {
             _listener.WriteLine("\tFeature: " + feature, Category.Output);
         }

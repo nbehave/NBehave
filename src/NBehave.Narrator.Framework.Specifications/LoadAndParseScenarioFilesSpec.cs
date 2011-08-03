@@ -1,18 +1,12 @@
 using System.Collections.Generic;
-using NBehave.Narrator.Framework.Specifications.Features;
+using NBehave.Narrator.Framework.Contracts;
+using NBehave.Narrator.Framework.Messages;
+using NBehave.Narrator.Framework.Processors;
+using NBehave.Narrator.Framework.Tiny;
 using NUnit.Framework;
 
 namespace NBehave.Narrator.Framework.Specifications
 {
-    using global::System.Linq;
-
-    using NBehave.Narrator.Framework.Contracts;
-    using NBehave.Narrator.Framework.Messages;
-    using NBehave.Narrator.Framework.Processors;
-    using NBehave.Narrator.Framework.Tiny;
-
-    using Rhino.Mocks;
-
     [TestFixture]
     public class LoadAndParseScenarioFilesSpec
     {
@@ -28,20 +22,20 @@ namespace NBehave.Narrator.Framework.Specifications
             TinyIoCContainer.Current.RegisterMany<IModelBuilder>().AsSingleton();
             TinyIoCContainer.Current.Resolve<IEnumerable<IModelBuilder>>();
 
-            this._hub = TinyIoCContainer.Current.Resolve<ITinyMessengerHub>();
-            this._loadScenarioFiles = new LoadScenarioFiles(this._config, this._hub);
-            this._parseScenarioFiles = new ParseScenarioFiles(this._hub);
-            this._hub.Subscribe<FeaturesLoaded>(loaded => this._features = loaded.Content);
-            this._loadScenarioFiles.Initialise();
+            _hub = TinyIoCContainer.Current.Resolve<ITinyMessengerHub>();
+            _loadScenarioFiles = new LoadScenarioFiles(_config, _hub);
+            _parseScenarioFiles = new ParseScenarioFiles(_hub);
+            _hub.Subscribe<FeaturesLoaded>(loaded => _features = loaded.Content);
+            _loadScenarioFiles.Initialise();
         }
 
         [Test]
         public void ShouldBeAbleToUseRelativePathsWithDots()
         {
-            this._config = NBehaveConfiguration.New.SetScenarioFiles(new[]
-            {
-                @"..\*.*"
-            });
+            _config = NBehaveConfiguration.New.SetScenarioFiles(new[]
+                                                                    {
+                                                                        @"..\*.*"
+                                                                    });
 
             CreateLoaderAndParser();
 

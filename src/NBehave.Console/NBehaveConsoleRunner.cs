@@ -134,7 +134,7 @@ namespace NBehave.Console
                 System.Console.WriteLine("Time Taken {0:0.#}s", timeTaken);
         }
 
-        internal static EventListener CreateEventListener(ConsoleOptions options)
+        public static EventListener CreateEventListener(ConsoleOptions options)
         {
             var eventListeners = new List<EventListener>();
             if (options.HasStoryOutput)

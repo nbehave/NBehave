@@ -18,7 +18,7 @@ namespace NBehave.Narrator.Framework.EventListeners
     {
         private List<ScenarioResult> _allResults = new List<ScenarioResult>();
 
-        public override void FeatureCreated(string feature)
+        public override void FeatureStarted(string feature)
         {
             if (string.IsNullOrEmpty(feature))
             {

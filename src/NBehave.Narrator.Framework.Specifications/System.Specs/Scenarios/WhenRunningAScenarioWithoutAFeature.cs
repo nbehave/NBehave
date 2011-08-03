@@ -1,4 +1,5 @@
-﻿using NBehave.Narrator.Framework.Processors;
+﻿using System.IO;
+using NBehave.Narrator.Framework.Processors;
 using NUnit.Framework;
 
 namespace NBehave.Narrator.Framework.Specifications.System.Specs
@@ -12,11 +13,12 @@ namespace NBehave.Narrator.Framework.Specifications.System.Specs
 
         protected override void EstablishContext()
         {
+            var asm = Path.GetFileName(GetType().Assembly.Location);
             _config = NBehaveConfiguration
                 .New
-                .SetAssemblies(new[] {"NBehave.Narrator.Framework.Specifications.dll"})
+                .SetAssemblies(new[] { Path.GetFileName(GetType().Assembly.Location) })
                 .SetEventListener(Framework.EventListeners.EventListeners.NullEventListener())
-                .SetScenarioFiles(new[] {@"System.Specs\Scenarios\ScenarioWithoutFeature.feature"});
+                .SetScenarioFiles(new[] { @"System.Specs\Scenarios\ScenarioWithoutFeature.feature" });
         }
 
         protected override void Because()

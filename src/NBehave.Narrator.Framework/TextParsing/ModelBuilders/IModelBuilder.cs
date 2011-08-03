@@ -1,6 +1,6 @@
 ﻿namespace NBehave.Narrator.Framework.Processors
 {
-    internal interface IModelBuilder
+    public interface IModelBuilder
     {
     }
 }
