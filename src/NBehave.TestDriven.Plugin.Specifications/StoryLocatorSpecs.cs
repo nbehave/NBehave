@@ -1,6 +1,6 @@
 ﻿using System.IO;
+using NBehave.Fluent.Extensions;
 using NBehave.Narrator.Framework;
-using NBehave.Spec.Extensions;
 using NBehave.Spec.NUnit;
 using NUnit.Framework;
 using Rhino.Mocks;

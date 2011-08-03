@@ -118,9 +118,9 @@
       <Project>{7BDFA147-A451-4FB0-8536-94EC1C52926E}</Project>
       <Name>NBehave.Spec.NUnit</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NBehave.Spec\NBehave.Spec.Framework\NBehave.Spec.Framework.csproj">
+    <ProjectReference Include="..\NBehave.Fluent.Framework\NBehave.Fluent.Framework.csproj">
       <Project>{87B1B4CA-3EF7-44EB-BF48-5A472E26F1B0}</Project>
-      <Name>NBehave.Spec.Framework</Name>
+      <Name>NBehave.Fluent.Framework</Name>
     </ProjectReference>
     <ProjectReference Include="..\NBehave.TestDriven.Plugin\NBehave.TestDriven.Plugin.csproj">
       <Project>{E2F5DC64-F661-459E-AC9C-1435FE9DFAA7}</Project>

@@ -1,7 +1,7 @@
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NBehave.Fluent.Extensions;
 using NBehave.Narrator.Framework;
-using NBehave.Spec.Extensions;
 
 namespace NBehave.Spec.MSTest10.Specifications
 {

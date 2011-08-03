@@ -1,7 +1,7 @@
 using System;
 using MbUnit.Framework;
+using NBehave.Fluent.Extensions;
 using NBehave.Narrator.Framework;
-using NBehave.Spec.Extensions;
 
 namespace NBehave.Spec.MbUnit.Specs
 {

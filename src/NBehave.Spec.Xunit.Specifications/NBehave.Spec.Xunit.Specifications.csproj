@@ -107,9 +107,9 @@
       <Project>{AB99C5F4-1C74-4263-B79A-C8569D9561FD}</Project>
       <Name>NBehave.Spec.Xunit</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NBehave.Spec\NBehave.Spec.Framework\NBehave.Spec.Framework.csproj">
+    <ProjectReference Include="..\NBehave.Fluent.Framework\NBehave.Fluent.Framework.csproj">
       <Project>{87B1B4CA-3EF7-44EB-BF48-5A472E26F1B0}</Project>
-      <Name>NBehave.Spec.Framework</Name>
+      <Name>NBehave.Fluent.Framework</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

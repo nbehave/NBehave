@@ -100,9 +100,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NBehave.Spec\NBehave.Spec.Framework\NBehave.Spec.Framework.csproj">
+    <ProjectReference Include="..\NBehave.Fluent.Framework\NBehave.Fluent.Framework.csproj">
       <Project>{87B1B4CA-3EF7-44EB-BF48-5A472E26F1B0}</Project>
-      <Name>NBehave.Spec.Framework</Name>
+      <Name>NBehave.Fluent.Framework</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

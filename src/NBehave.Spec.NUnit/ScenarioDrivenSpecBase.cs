@@ -3,7 +3,7 @@ using NUnit.Framework;
 namespace NBehave.Spec.NUnit
 {
     [TestFixture]
-    public abstract class ScenarioDrivenSpecBase : Spec.ScenarioDrivenSpecBase
+    public abstract class ScenarioDrivenSpecBase : Fluent.ScenarioDrivenSpecBase
     {
         [TestFixtureSetUp]
         public override void MainSetup()

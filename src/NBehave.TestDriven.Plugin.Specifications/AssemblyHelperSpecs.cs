@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using NBehave.Fluent.Extensions;
 using NBehave.Narrator.Framework;
-using NBehave.Spec.Extensions;
 using NBehave.Spec.NUnit;
 using NUnit.Framework;
 

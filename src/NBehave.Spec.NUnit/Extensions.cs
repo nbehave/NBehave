@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Text.RegularExpressions;
+using NBehave.Fluent;
 using NUnit.Framework;
 
 namespace NBehave.Spec.NUnit

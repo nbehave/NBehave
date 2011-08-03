@@ -3,7 +3,7 @@
 namespace NBehave.Spec.MbUnit
 {
 	[TestFixture]
-	public abstract class SpecBase : Spec.SpecBase
+	public abstract class SpecBase : Fluent.SpecBase
 	{
 		[FixtureSetUp]
 		public override void MainSetup()

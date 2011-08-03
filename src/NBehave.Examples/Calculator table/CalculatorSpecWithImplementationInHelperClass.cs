@@ -1,6 +1,6 @@
 using NBehave.Examples.Calculator_table.Steps;
 using NBehave.Narrator.Framework;
-using NBehave.Spec.Extensions;
+using NBehave.Fluent.Extensions;
 using NBehave.Spec.NUnit;
 using NUnit.Framework;
 

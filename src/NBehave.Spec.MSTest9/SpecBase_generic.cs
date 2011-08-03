@@ -3,7 +3,7 @@
 namespace NBehave.Spec.MSTest9
 {
 	[TestClass]
-	public abstract class SpecBase<TContext> : Spec.SpecBase<TContext>
+	public abstract class SpecBase<TContext> : Fluent.SpecBase<TContext>
 	{
         [TestInitialize]
 		public override void MainSetup()

@@ -2,7 +2,7 @@
 
 namespace NBehave.Spec.Xunit
 {
-	public abstract class SpecBase<TContext> : Spec.SpecBase<TContext>, IDisposable
+	public abstract class SpecBase<TContext> : Fluent.SpecBase<TContext>, IDisposable
 	{
 		protected SpecBase()
         {

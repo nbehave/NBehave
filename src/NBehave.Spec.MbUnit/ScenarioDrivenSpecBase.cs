@@ -3,7 +3,7 @@ using MbUnit.Framework;
 namespace NBehave.Spec.MbUnit
 {
     [TestFixture]
-    public abstract class ScenarioDrivenSpecBase : Spec.ScenarioDrivenSpecBase
+    public abstract class ScenarioDrivenSpecBase : Fluent.ScenarioDrivenSpecBase
     {
         [FixtureSetUp]
         public override void MainSetup()

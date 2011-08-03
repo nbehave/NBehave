@@ -2,7 +2,7 @@ using System;
 
 namespace NBehave.Spec.Xunit
 {
-    public abstract class ScenarioDrivenSpecBase : Spec.ScenarioDrivenSpecBase, IDisposable
+    public abstract class ScenarioDrivenSpecBase : Fluent.ScenarioDrivenSpecBase, IDisposable
     {
         protected ScenarioDrivenSpecBase()
         {

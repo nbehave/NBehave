@@ -56,7 +56,7 @@
     <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
-  </PropertyGroup>  
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="JetBrains.Platform.ReSharper.ProjectModel">
       <HintPath>..\..\lib\ReSharper\6.0\JetBrains.Platform.ReSharper.ProjectModel.dll</HintPath>
@@ -64,7 +64,9 @@
     <Reference Include="JetBrains.Platform.ReSharper.Util">
       <HintPath>..\..\lib\ReSharper\6.0\JetBrains.Platform.ReSharper.Util.dll</HintPath>
     </Reference>
-    <Reference Include="JetBrains.ReSharper.TaskRunnerFramework, Version=6.0.2202.688, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL" />
+    <Reference Include="JetBrains.ReSharper.TaskRunnerFramework, Version=6.0.2202.688, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>..\..\lib\ReSharper\6.0\JetBrains.ReSharper.TaskRunnerFramework.dll</HintPath>
+    </Reference>
     <Reference Include="JetBrains.ReSharper.UnitTestFramework">
       <HintPath>..\..\lib\ReSharper\6.0\JetBrains.ReSharper.UnitTestFramework.dll</HintPath>
     </Reference>
