@@ -1,6 +1,6 @@
 using System;
 
-namespace NBehave.Fluent
+namespace NBehave.Spec
 {
     public interface IActionSpecification<T>
     {

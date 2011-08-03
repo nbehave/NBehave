@@ -1,6 +1,6 @@
 ﻿using Rhino.Mocks;
 
-namespace NBehave.Fluent
+namespace NBehave.Spec
 {
 	public abstract class SpecBase<TContext>
 	{
@@ -25,12 +25,6 @@ namespace NBehave.Fluent
 			where TType : class
 		{
 			return MockRepository.GenerateMock<TType>();
-		}
-
-		protected TType CreateStub<TType>()
-			where TType : class
-		{
-			return MockRepository.GenerateStub<TType>();
 		}
 	}
 }

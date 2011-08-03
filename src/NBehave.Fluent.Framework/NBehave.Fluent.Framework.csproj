@@ -103,7 +103,6 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="ActionSpecification.cs" />
     <Compile Include="ActionStepStepResolver.cs" />
     <Compile Include="DictionaryStepResolver.cs" />
     <Compile Include="Extensions\FeatureExtensions.cs" />
@@ -121,14 +120,8 @@
     <Compile Include="ScenarioBuilder.cs" />
     <Compile Include="ScenarioDrivenSpecBase.cs" />
     <Compile Include="ScenarioDrivenSpecStepRunner.cs" />
-    <Compile Include="SpecBase.cs" />
-    <Compile Include="IActionSpecification.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SpecBase_generic.cs" />
     <Compile Include="StoryBuilder.cs" />
-    <Compile Include="ThrowingAction.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

@@ -1,4 +1,4 @@
-namespace NBehave.Fluent
+namespace NBehave.Spec
 {
 	public delegate void ThrowingAction();
 }

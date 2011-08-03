@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using MbUnit.Framework;
-using NBehave.Fluent;
+using NBehave.Spec;
 
 namespace NBehave.Spec.MbUnit
 {

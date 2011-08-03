@@ -84,6 +84,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\MSTest9\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll</HintPath>
     </Reference>
+    <Reference Include="Rhino.Mocks, Version=3.6.0.0, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Rhino.Mocks.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -92,6 +96,21 @@
   <ItemGroup>
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\nbehave.spec\ActionSpecification.cs">
+      <Link>Base\ActionSpecification.cs</Link>
+    </Compile>
+    <Compile Include="..\nbehave.spec\IActionSpecification.cs">
+      <Link>Base\IActionSpecification.cs</Link>
+    </Compile>
+    <Compile Include="..\nbehave.spec\SpecBase.cs">
+      <Link>Base\SpecBase.cs</Link>
+    </Compile>
+    <Compile Include="..\nbehave.spec\SpecBase_generic.cs">
+      <Link>Base\SpecBase_generic.cs</Link>
+    </Compile>
+    <Compile Include="..\nbehave.spec\ThrowingAction.cs">
+      <Link>Base\ThrowingAction.cs</Link>
     </Compile>
     <Compile Include="ScenarioDrivenSpecBase.cs" />
     <Compile Include="SpecBase_generic.cs" />

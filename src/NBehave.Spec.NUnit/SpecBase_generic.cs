@@ -3,7 +3,7 @@
 namespace NBehave.Spec.NUnit
 {
 	[TestFixture]
-	public abstract class SpecBase<TContext> : Fluent.SpecBase<TContext>
+    public abstract class SpecBase<TContext> : Spec.SpecBase<TContext>
 	{
         [TestFixtureSetUp]
         public override void MainSetup()

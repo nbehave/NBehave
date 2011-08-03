@@ -98,6 +98,21 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="..\nbehave.spec\ActionSpecification.cs">
+      <Link>Base\ActionSpecification.cs</Link>
+    </Compile>
+    <Compile Include="..\nbehave.spec\IActionSpecification.cs">
+      <Link>Base\IActionSpecification.cs</Link>
+    </Compile>
+    <Compile Include="..\nbehave.spec\SpecBase.cs">
+      <Link>Base\SpecBase.cs</Link>
+    </Compile>
+    <Compile Include="..\nbehave.spec\SpecBase_generic.cs">
+      <Link>Base\SpecBase_generic.cs</Link>
+    </Compile>
+    <Compile Include="..\nbehave.spec\ThrowingAction.cs">
+      <Link>Base\ThrowingAction.cs</Link>
+    </Compile>
     <Compile Include="ScenarioDrivenSpecBase.cs" />
     <Compile Include="SpecBase.cs" />
     <Compile Include="Extensions.cs" />
