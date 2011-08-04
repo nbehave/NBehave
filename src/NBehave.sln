@@ -167,7 +167,6 @@ Global
 		{32745321-6BAF-46A1-B3C4-E82CBA663F55}.AutomatedDebug-3.5|x86.ActiveCfg = AutomatedDebug-3.5|Any CPU
 		{32745321-6BAF-46A1-B3C4-E82CBA663F55}.AutomatedDebug-4.0|Any CPU.ActiveCfg = AutomatedDebug-4.0|Any CPU
 		{32745321-6BAF-46A1-B3C4-E82CBA663F55}.AutomatedDebug-4.0|Mixed Platforms.ActiveCfg = AutomatedDebug-4.0|Any CPU
-		{32745321-6BAF-46A1-B3C4-E82CBA663F55}.AutomatedDebug-4.0|Mixed Platforms.Build.0 = AutomatedDebug-4.0|Any CPU
 		{32745321-6BAF-46A1-B3C4-E82CBA663F55}.AutomatedDebug-4.0|x86.ActiveCfg = AutomatedDebug-4.0|Any CPU
 		{32745321-6BAF-46A1-B3C4-E82CBA663F55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{32745321-6BAF-46A1-B3C4-E82CBA663F55}.Debug|Any CPU.Build.0 = Debug|Any CPU
@@ -498,7 +497,6 @@ Global
 		{E2EF537E-04C9-4804-9848-4205277D74AF}.Release|x86.ActiveCfg = Release|Any CPU
 		{F26CF076-F485-4F68-ACCA-71B7C1896938}.AutomatedDebug-3.5|Any CPU.ActiveCfg = AutomatedDebug-3.5|Any CPU
 		{F26CF076-F485-4F68-ACCA-71B7C1896938}.AutomatedDebug-3.5|Mixed Platforms.ActiveCfg = AutomatedDebug-3.5|Any CPU
-		{F26CF076-F485-4F68-ACCA-71B7C1896938}.AutomatedDebug-3.5|Mixed Platforms.Build.0 = AutomatedDebug-3.5|Any CPU
 		{F26CF076-F485-4F68-ACCA-71B7C1896938}.AutomatedDebug-3.5|x86.ActiveCfg = AutomatedDebug-3.5|Any CPU
 		{F26CF076-F485-4F68-ACCA-71B7C1896938}.AutomatedDebug-4.0|Any CPU.ActiveCfg = AutomatedDebug-4.0|Any CPU
 		{F26CF076-F485-4F68-ACCA-71B7C1896938}.AutomatedDebug-4.0|Any CPU.Build.0 = AutomatedDebug-4.0|Any CPU
