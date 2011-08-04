@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NBehave.Narrator.Framework;
 
-namespace NBehave.Fluent.Extensions
+namespace NBehave.Fluent.Framework.Extensions
 {
     public static class FeatureExtensions
     {

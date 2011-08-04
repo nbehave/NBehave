@@ -8,7 +8,7 @@
     <ProjectGuid>{87B1B4CA-3EF7-44EB-BF48-5A472E26F1B0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NBehave.Fluent</RootNamespace>
+    <RootNamespace>NBehave.Fluent.Framework</RootNamespace>
     <AssemblyName>NBehave.Fluent.Framework</AssemblyName>
     <SccProjectName>
     </SccProjectName>
@@ -90,6 +90,19 @@
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Gallio">
+      <HintPath>..\..\lib\Gallio.dll</HintPath>
+    </Reference>
+    <Reference Include="MbUnit">
+      <HintPath>..\..\lib\MbUnit.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\MSTest10\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\lib\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="Rhino.Mocks">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\Rhino.Mocks.dll</HintPath>
@@ -97,6 +110,9 @@
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="xunit">
+      <HintPath>..\..\lib\xunit.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -116,12 +132,16 @@
     <Compile Include="IStepResolver.cs" />
     <Compile Include="IThenFragment.cs" />
     <Compile Include="IWhenFragment.cs" />
+    <Compile Include="MbUnit\ScenarioDrivenSpecBase.cs" />
+    <Compile Include="MSTest\ScenarioDrivenSpecBase.cs" />
+    <Compile Include="NUnit\ScenarioDrivenSpecBase.cs" />
     <Compile Include="ReflectedMethodStepResolver.cs" />
     <Compile Include="ScenarioBuilder.cs" />
     <Compile Include="ScenarioDrivenSpecBase.cs" />
     <Compile Include="ScenarioDrivenSpecStepRunner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StoryBuilder.cs" />
+    <Compile Include="Xunit\ScenarioDrivenSpecBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

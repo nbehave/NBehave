@@ -1,8 +1,8 @@
 using System;
 
-namespace NBehave.Spec.Xunit
+namespace NBehave.Fluent.Framework.Xunit
 {
-    public abstract class ScenarioDrivenSpecBase : Fluent.ScenarioDrivenSpecBase, IDisposable
+    public abstract class ScenarioDrivenSpecBase : Framework.ScenarioDrivenSpecBase, IDisposable
     {
         protected ScenarioDrivenSpecBase()
         {

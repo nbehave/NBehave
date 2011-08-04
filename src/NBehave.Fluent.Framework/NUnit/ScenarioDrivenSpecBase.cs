@@ -1,9 +1,9 @@
 using NUnit.Framework;
 
-namespace NBehave.Spec.NUnit
+namespace NBehave.Fluent.Framework.NUnit
 {
     [TestFixture]
-    public abstract class ScenarioDrivenSpecBase : Fluent.ScenarioDrivenSpecBase
+    public abstract class ScenarioDrivenSpecBase : Framework.ScenarioDrivenSpecBase
     {
         [TestFixtureSetUp]
         public override void MainSetup()

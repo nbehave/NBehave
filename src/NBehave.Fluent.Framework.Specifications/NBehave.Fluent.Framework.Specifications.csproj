@@ -91,6 +91,16 @@
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Gallio">
+      <HintPath>..\..\lib\Gallio.dll</HintPath>
+    </Reference>
+    <Reference Include="MbUnit">
+      <HintPath>..\..\lib\MbUnit.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\MSTest10\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\lib\nunit.framework.dll</HintPath>
     </Reference>
@@ -100,12 +110,19 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="xunit">
+      <HintPath>..\..\lib\xunit.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MbUnit_ScenarioDrivenSpecBaseSpecs.cs" />
+    <Compile Include="MsTest_ScenarioDrivenSpecBaseSpecs.cs" />
+    <Compile Include="NUnit_ScenarioDrivenSpecBaseSpecs.cs" />
     <Compile Include="ScenarioBuilderSpec.cs" />
     <Compile Include="ScenarioDrivenSpecBaseSpecs.cs" />
     <Compile Include="ScenarioDrivenSpecStepRunnerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="XUnit_ScenarioDrivenSpecBaseSpecs.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NBehave.Narrator.Framework\NBehave.Narrator.Framework.csproj">

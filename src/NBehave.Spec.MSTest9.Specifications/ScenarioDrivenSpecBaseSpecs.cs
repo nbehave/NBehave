@@ -1,6 +1,6 @@
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NBehave.Fluent.Extensions;
+using NBehave.Fluent.Framework.Extensions;
 using NBehave.Narrator.Framework;
 
 namespace NBehave.Spec.MSTest9.Specifications

@@ -1,9 +1,9 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace NBehave.Spec.MSTest10
+namespace NBehave.Fluent.Framework.MSTest
 {
     [TestClass]
-    public abstract class ScenarioDrivenSpecBase : Fluent.ScenarioDrivenSpecBase
+    public abstract class ScenarioDrivenSpecBase : Framework.ScenarioDrivenSpecBase
     {
         [TestInitialize]
         public override void MainSetup()

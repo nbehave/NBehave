@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Text.RegularExpressions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NBehave.Fluent;
 
 namespace NBehave.Spec.MSTest10
 {

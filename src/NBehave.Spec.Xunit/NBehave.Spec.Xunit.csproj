@@ -111,7 +111,7 @@
     <Compile Include="..\nbehave.spec\ThrowingAction.cs">
       <Link>Base\ThrowingAction.cs</Link>
     </Compile>
-    <Compile Include="ScenarioDrivenSpecBase.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="SpecBase_generic.cs" />
     <Compile Include="SpecBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

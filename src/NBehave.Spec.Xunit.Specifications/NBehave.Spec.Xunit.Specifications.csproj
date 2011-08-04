@@ -94,22 +94,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExtensionsSpecs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ScenarioDrivenSpecBaseSpecs.cs" />
     <Compile Include="SpecBaseSpecs.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NBehave.Narrator.Framework\NBehave.Narrator.Framework.csproj">
-      <Project>{9C2E9E17-2A2C-4F6C-8072-D160A7EA9A51}</Project>
-      <Name>NBehave.Narrator.Framework</Name>
-    </ProjectReference>
     <ProjectReference Include="..\NBehave.Spec.Xunit\NBehave.Spec.Xunit.csproj">
       <Project>{AB99C5F4-1C74-4263-B79A-C8569D9561FD}</Project>
       <Name>NBehave.Spec.Xunit</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NBehave.Fluent.Framework\NBehave.Fluent.Framework.csproj">
-      <Project>{87B1B4CA-3EF7-44EB-BF48-5A472E26F1B0}</Project>
-      <Name>NBehave.Fluent.Framework</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -1,11 +1,11 @@
 using System;
 using System.Linq;
 using System.Text;
-using NBehave.Fluent.Extensions;
+using NBehave.Fluent.Framework.Extensions;
 using NBehave.Narrator.Framework;
 using Rhino.Mocks;
 
-namespace NBehave.Fluent
+namespace NBehave.Fluent.Framework
 {
     public abstract class ScenarioDrivenSpecBase
     {

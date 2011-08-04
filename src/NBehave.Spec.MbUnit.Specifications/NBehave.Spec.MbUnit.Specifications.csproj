@@ -101,7 +101,6 @@
   <ItemGroup>
     <Compile Include="ExtensionsSpecs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ScenarioDrivenSpecBaseSpecs.cs" />
     <Compile Include="SpecBaseSpecs.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -112,10 +111,6 @@
     <ProjectReference Include="..\NBehave.Spec.MbUnit\NBehave.Spec.MbUnit.csproj">
       <Project>{FB62C290-3C9C-4CE7-A798-E2BE3A1F12EA}</Project>
       <Name>NBehave.Spec.MbUnit</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NBehave.Fluent.Framework\NBehave.Fluent.Framework.csproj">
-      <Project>{87B1B4CA-3EF7-44EB-BF48-5A472E26F1B0}</Project>
-      <Name>NBehave.Fluent.Framework</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

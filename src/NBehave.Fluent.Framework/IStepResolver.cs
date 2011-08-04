@@ -1,7 +1,7 @@
 using System;
 using NBehave.Narrator.Framework;
 
-namespace NBehave.Fluent
+namespace NBehave.Fluent.Framework
 {
     public interface IStepResolver
     {

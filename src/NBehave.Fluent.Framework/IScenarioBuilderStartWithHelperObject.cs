@@ -1,4 +1,4 @@
-namespace NBehave.Fluent
+namespace NBehave.Fluent.Framework
 {
     public interface IScenarioBuilderStartWithHelperObject : IScenarioBuilderStart
     {

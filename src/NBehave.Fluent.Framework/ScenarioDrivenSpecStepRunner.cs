@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using NBehave.Narrator.Framework;
 
-namespace NBehave.Fluent
+namespace NBehave.Fluent.Framework
 {
     public class ScenarioDrivenSpecStepRunner : IStringStepRunner
     {

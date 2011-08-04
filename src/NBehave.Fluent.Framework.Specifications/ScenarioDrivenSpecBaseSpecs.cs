@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using NBehave.Fluent.Extensions;
+using NBehave.Fluent.Framework.Extensions;
 using NBehave.Narrator.Framework;
 using NUnit.Framework;
 

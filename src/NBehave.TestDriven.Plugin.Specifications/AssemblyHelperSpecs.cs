@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using NBehave.Fluent.Extensions;
+using NBehave.Fluent.Framework.Extensions;
+using NBehave.Fluent.Framework.NUnit;
 using NBehave.Narrator.Framework;
 using NBehave.Spec.NUnit;
 using NUnit.Framework;
@@ -29,13 +30,13 @@ namespace NBehave.TestDriven.Plugin.Specs
         }
 
         [Test]
-        public void should_correctly_parse_NBehave_Spec_NUnit()
+        public void should_correctly_parse_NBehave_Fluent_Framework()
         {
-            Feature.AddScenario("Parsing NBehave.Spec.NUnit")
+            Feature.AddScenario("Parsing NBehave.Fluent.Framework")
                 .WithHelperObject<AssemblyHelperSpecSteps>()
-                .Given("A reference to the NBehave.Spec.NUnit assembly")
+                .Given("A reference to the NBehave.Fluent.Framework assembly")
                 .When("We deduce the root namespace")
-                .Then("It should be NBehave.Spec.NUnit")
+                .Then("It should be NBehave.Fluent.Framework")
                 ;
         }
     }
@@ -52,8 +53,8 @@ namespace NBehave.TestDriven.Plugin.Specs
             _assembly = typeof(ScenarioResult).Assembly;
         }
 
-        [Given("A reference to the NBehave.Spec.NUnit assembly")]
-        public void ReferenceNBehaveSpecNUnitAssembly()
+        [Given("A reference to the NBehave.Fluent.Framework assembly")]
+        public void ReferenceNBehaveFluentFrameworkAssembly()
         {
             _assembly = typeof(ScenarioDrivenSpecBase).Assembly;
         }

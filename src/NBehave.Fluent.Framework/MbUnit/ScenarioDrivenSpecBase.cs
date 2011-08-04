@@ -1,9 +1,9 @@
 using MbUnit.Framework;
 
-namespace NBehave.Spec.MbUnit
+namespace NBehave.Fluent.Framework.MbUnit
 {
     [TestFixture]
-    public abstract class ScenarioDrivenSpecBase : Fluent.ScenarioDrivenSpecBase
+    public abstract class ScenarioDrivenSpecBase : Framework.ScenarioDrivenSpecBase
     {
         [FixtureSetUp]
         public override void MainSetup()

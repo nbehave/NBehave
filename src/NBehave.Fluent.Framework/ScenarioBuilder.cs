@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using NBehave.Narrator.Framework;
 
-namespace NBehave.Fluent
+namespace NBehave.Fluent.Framework
 {
     public enum ScenarioFragment
     {

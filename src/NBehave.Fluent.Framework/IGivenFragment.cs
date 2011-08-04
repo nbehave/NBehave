@@ -1,6 +1,6 @@
 using System;
 
-namespace NBehave.Fluent
+namespace NBehave.Fluent.Framework
 {
     public interface IGivenFragment : IScenarioFragmentBase<IGivenFragment>
     {

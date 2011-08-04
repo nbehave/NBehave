@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using NBehave.Narrator.Framework;
 
-namespace NBehave.Fluent
+namespace NBehave.Fluent.Framework
 {
     public class DictionaryStepResolver : IStepResolver
     {

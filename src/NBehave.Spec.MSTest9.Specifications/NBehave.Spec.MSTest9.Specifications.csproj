@@ -101,6 +101,10 @@
     <Compile Include="SpecBaseSpecs.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\NBehave.Fluent.Framework\NBehave.Fluent.Framework.csproj">
+      <Project>{87B1B4CA-3EF7-44EB-BF48-5A472E26F1B0}</Project>
+      <Name>NBehave.Fluent.Framework</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NBehave.Narrator.Framework\NBehave.Narrator.Framework.csproj">
       <Project>{9C2E9E17-2A2C-4F6C-8072-D160A7EA9A51}</Project>
       <Name>NBehave.Narrator.Framework</Name>
@@ -108,10 +112,6 @@
     <ProjectReference Include="..\NBehave.Spec.MSTest9\NBehave.Spec.MSTest9.csproj">
       <Project>{32745321-6BAF-46A1-B3C4-E82CBA663F55}</Project>
       <Name>NBehave.Spec.MSTest9</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NBehave.Fluent.Framework\NBehave.Fluent.Framework.csproj">
-      <Project>{87B1B4CA-3EF7-44EB-BF48-5A472E26F1B0}</Project>
-      <Name>NBehave.Fluent.Framework</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

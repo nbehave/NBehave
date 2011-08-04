@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
-using NUnit.Framework;
+using Xunit;
 
-namespace NBehave.Spec.NUnit
+namespace NBehave.Spec.Xunit
 {
     public static class Extensions
     {
@@ -24,16 +26,28 @@ namespace NBehave.Spec.NUnit
         public static void ShouldApproximatelyEqual<T>(this T actual, T expected, T delta)
         {
             if (typeof(T) != typeof(decimal) && typeof(T) != typeof(double) && typeof(T) != typeof(float))
-                Assert.Fail("type (T) must be float, double or decimal");
+                throw new ArgumentException("type (T) must be float, double or decimal");
 
             if (typeof(T) == typeof(decimal))
-                Assert.AreEqual(Decimal.ToDouble(Convert.ToDecimal(expected)),
-                                Decimal.ToDouble(Convert.ToDecimal(actual)),
-                                Decimal.ToDouble(Convert.ToDecimal(delta)));
+            {
+                double low = Decimal.ToDouble(Convert.ToDecimal(actual)) - Decimal.ToDouble(Convert.ToDecimal(delta));
+                double high = Decimal.ToDouble(Convert.ToDecimal(actual)) + Decimal.ToDouble(Convert.ToDecimal(delta));
+                Assert.InRange(Decimal.ToDouble(Convert.ToDecimal(expected)),
+                               low,
+                               high);
+            }
             if (typeof(T) == typeof(double))
-                Assert.AreEqual(Convert.ToDouble(expected), Convert.ToDouble(actual), Convert.ToDouble(delta));
+            {
+                double low = Convert.ToDouble(actual) - Convert.ToDouble(delta);
+                double high = Convert.ToDouble(actual) + Convert.ToDouble(delta);
+                Assert.InRange(Convert.ToDouble(expected), low, high);
+            }
             if (typeof(T) == typeof(float))
-                Assert.AreEqual(Convert.ToSingle(expected), Convert.ToSingle(actual), Convert.ToSingle(delta));
+            {
+                float low = Convert.ToSingle(actual) - Convert.ToSingle(delta);
+                float high = Convert.ToSingle(actual) + Convert.ToSingle(delta);
+                Assert.InRange(Convert.ToSingle(expected), low, high);
+            }
         }
 
         public static void ShouldBeAssignableFrom<TExpectedType>(this Object actual)
@@ -43,48 +57,49 @@ namespace NBehave.Spec.NUnit
 
         public static void ShouldBeAssignableFrom(this object actual, Type expected)
         {
-            Assert.That(actual, Is.AssignableFrom(expected));
+            Assert.IsAssignableFrom(expected, actual);
         }
 
         public static void ShouldBeEmpty(this string value)
         {
-            Assert.That(value, Is.Empty);
+            Assert.Empty(value);
         }
 
         public static void ShouldBeEmpty(this IEnumerable collection)
         {
-            Assert.That(collection, Is.Empty);
+            Assert.Empty(collection);
         }
 
         public static void ShouldBeEqualTo(this ICollection actual, ICollection expected)
         {
-            CollectionAssert.AreEqual(expected, actual);
+            Assert.Equal(expected.Count, actual.Count);
+            var actualList = new ArrayList(actual);
+            var expectedList = new ArrayList(expected);
+            for (int i = 0; i < actualList.Count; i++)
+                Assert.Equal(expectedList[i], actualList[i]);
         }
 
         public static void ShouldBeEquivalentTo(this ICollection actual, ICollection expected)
         {
-            CollectionAssert.AreEquivalent(expected, actual);
+            Assert.Equal(expected.Count, actual.Count);
+            var expectedList = new ArrayList(expected);
+            foreach (var actualItem in actual)
+                Assert.True(expectedList.Contains(actualItem));
         }
 
         public static void ShouldBeFalse(this bool condition)
         {
-            Assert.That(condition, Is.False);
+            Assert.False(condition);
         }
 
         public static void ShouldBeGreaterThan(this IComparable arg1, IComparable arg2)
         {
-            Assert.That(arg1, Is.GreaterThan(arg2));
+            Assert.True(arg1.CompareTo(arg2) == 1, string.Format("Expected {0} > {1}", arg1, arg2));
         }
 
         public static void ShouldBeGreaterThanOrEqualTo(this IComparable arg1, IComparable arg2)
         {
-            Assert.That(arg1, Is.GreaterThanOrEqualTo(arg2));
-        }
-
-        [Obsolete("Use ShouldBeInstanceOfType")]
-        public static void ShouldBeInstanceOf<TExpectedType>(this object actual)
-        {
-            actual.ShouldBeInstanceOfType(typeof(TExpectedType));
+            Assert.True(arg1.CompareTo(arg2) >= 0, string.Format("Expected {0} >= {1}", arg1, arg2));
         }
 
         public static void ShouldBeInstanceOfType<TExpectedType>(this object actual)
@@ -94,91 +109,68 @@ namespace NBehave.Spec.NUnit
 
         public static void ShouldBeInstanceOfType(this object actual, Type expected)
         {
-            Assert.That(actual, Is.InstanceOf(expected));
+            Assert.IsType(expected, actual);
         }
 
         public static void ShouldBeLessThan(this IComparable arg1, IComparable arg2)
         {
-            Assert.That(arg1, Is.LessThan(arg2));
+            Assert.True(arg1.CompareTo(arg2) == -1, string.Format("Expected {0} < {1}", arg1, arg2));
         }
 
         public static void ShouldBeLessThanOrEqualTo(this IComparable arg1, IComparable arg2)
         {
-            Assert.That(arg1, Is.LessThanOrEqualTo(arg2));
+            Assert.True(arg1.CompareTo(arg2) <= 0, string.Format("Expected {0} <= {1}", arg1, arg2));
         }
 
         public static void ShouldBeNaN(this double value)
         {
-            Assert.That(value, Is.NaN);
+            Assert.True(double.IsNaN(value), "Expected value to be NaN");
         }
 
         public static void ShouldBeNull(this object value)
         {
-            Assert.That(value, Is.Null);
+            Assert.Null(value);
         }
 
         public static void ShouldBeTheSameAs<T>(this T actual, T expected) where T : class
         {
-            Assert.That(actual, Is.SameAs(expected));
+            Assert.Same(expected, actual);
         }
 
         public static void ShouldBeThrownBy(this Type exceptionType, ThrowingAction action)
         {
-            Exception e = null;
-
-            try
-            {
-                action.Invoke();
-            }
-            catch (Exception ex)
-            {
-                e = ex;
-            }
-
-            e.ShouldNotBeNull();
-            e.ShouldBeInstanceOfType(exceptionType);
-
+            Assert.ThrowsDelegate a = action.Invoke;
+            Assert.Throws(exceptionType, a);
         }
 
         public static void ShouldBeTrue(this bool condition)
         {
-            Assert.That(condition, Is.True);
-        }
-
-        public static void ShouldContain(this ICollection actual, object expected)
-        {
-            Assert.Contains(expected, actual);
+            Assert.True(condition);
         }
 
         public static void ShouldContain(this string actual, string expected)
         {
-            StringAssert.Contains(expected, actual);
+            Assert.Contains(expected, actual);
         }
 
-        public static void ShouldContain(this IEnumerable actual, object expected)
+        public static void ShouldContain<T>(this IEnumerable<T> actual, T expected)
         {
-
-            var lst = new ArrayList();
-            foreach (var o in actual)
-            {
-                lst.Add(o);
-            }
-            ShouldContain(lst, expected);
+            Assert.Contains(expected, actual);
         }
 
         public static void ShouldEndWith(this string value, string substring)
         {
-            StringAssert.EndsWith(substring, value);
+            Assert.True((value.EndsWith(substring)), string.Format("Expected '{0}' to end with '{1}", value, substring));
         }
 
         public static void ShouldEqual<T>(this T actual, T expected)
         {
-            Assert.That(actual, Is.EqualTo(expected));
+            Assert.Equal(expected, actual);
         }
 
         public static void ShouldMatch(this string value, Regex pattern)
         {
-            Assert.IsTrue(pattern.IsMatch(value), string.Format("string \"{0}\" does not match pattern {1}", value, pattern));
+            Assert.True(pattern.IsMatch(value), string.Format("string \"{0}\" does not match pattern {1}", value, pattern));
         }
 
         public static void ShouldMatch(this string actual, string regexPattern, RegexOptions regexOptions)
@@ -194,33 +186,44 @@ namespace NBehave.Spec.NUnit
 
         public static void ShouldNotBeAssignableFrom(this object actual, Type expected)
         {
-            Assert.That(actual, Is.Not.AssignableFrom(expected));
+            try
+            {
+                Assert.IsAssignableFrom(expected, actual);
+                Assert.False(true, string.Format("Object of type {0} should not be assignable from type '{1}'", actual.GetType(), expected));
+            }
+            catch (Exception e)
+            { }
         }
 
         public static void ShouldNotBeEmpty(this string value)
         {
-            Assert.That(value, Is.Not.Empty);
+            Assert.NotEmpty(value);
         }
 
         public static void ShouldNotBeEmpty(this ICollection collection)
         {
-            Assert.That(collection, Is.Not.Empty);
+            Assert.NotEmpty(collection);
         }
 
         public static void ShouldNotBeEqualTo(this ICollection actual, ICollection expected)
         {
-            CollectionAssert.AreNotEqual(expected, actual);
+            var actualList = new ArrayList(actual);
+            var expectedList = new ArrayList(expected);
+            bool areEqual = true;
+            for (int i = 0; i < actualList.Count && areEqual; i++)
+                areEqual = expectedList[i] == actualList[i];
+            areEqual = areEqual && expected.Count == actual.Count;
+            Assert.False(areEqual, "collections are equal");
         }
 
         public static void ShouldNotBeEquivalentTo(this ICollection actual, ICollection expected)
         {
-            CollectionAssert.AreNotEquivalent(expected, actual);
-        }
-
-        [Obsolete("Use ShouldNotBeInstanceOfType")]
-        public static void ShouldNotBeInstanceOf<TExpectedType>(this object actual)
-        {
-            actual.ShouldNotBeInstanceOfType(typeof(TExpectedType));
+            bool areEqual = true;
+            var expectedList = new ArrayList(expected);
+            foreach (var actualItem in actual)
+                areEqual = areEqual && expectedList.Contains(actualItem);
+            areEqual = areEqual && expected.Count == actual.Count;
+            Assert.False(areEqual, "collections are equivalent to each other");
         }
 
         public static void ShouldNotBeInstanceOfType<TExpectedType>(this object actual)
@@ -230,51 +233,51 @@ namespace NBehave.Spec.NUnit
 
         public static void ShouldNotBeInstanceOfType(this object actual, Type expected)
         {
-            Assert.That(actual, Is.Not.InstanceOf(expected));
+            Assert.IsNotType(expected, actual);
         }
 
         public static void ShouldNotBeNull(this object value)
         {
-            Assert.That(value, Is.Not.Null);
+            Assert.NotNull(value);
         }
 
         public static void ShouldNotBeTheSameAs(this object actual, object notExpected)
         {
-            Assert.That(actual, Is.Not.SameAs(notExpected));
+            Assert.NotSame(notExpected, actual);
         }
 
-        public static void ShouldNotContain(this IEnumerable list, object expected)
+        public static void ShouldNotContain<T>(this IEnumerable<T> list, T notExpected)
         {
-            Assert.That(list, Is.Not.Contains(expected));
+            Assert.DoesNotContain(notExpected, list);
         }
 
-        public static void ShouldNotContain(this string actual, string expected)
+        public static void ShouldNotContain(this string actual, string notExpected)
         {
-            Assert.IsTrue(actual.IndexOf(expected) == -1, string.Format("{0} should not contain {1}", actual, expected));
+            Assert.DoesNotContain(notExpected, actual);
         }
 
         public static void ShouldNotEqual<T>(this T actual, T notExpected)
         {
-            Assert.That(actual, Is.Not.EqualTo(notExpected));
+            Assert.NotEqual(notExpected, actual);
         }
 
         public static void ShouldNotMatch(this string value, Regex pattern)
         {
-            Assert.IsTrue(pattern.IsMatch(value) == false, string.Format("string \"{0}\" should not match pattern {1}", value, pattern));
+            Assert.True(pattern.IsMatch(value) == false, string.Format("string \"{0}\" should not match pattern {1}", value, pattern));
         }
 
         public static void ShouldStartWith(this string value, string substring)
         {
-            StringAssert.StartsWith(substring, value);
+            Assert.True((value.StartsWith(substring)), string.Format("Expected '{0}' to start with '{1}", value, substring));
         }
 
         public static IActionSpecification<T> ShouldThrow<T>(this T value, Type exception)
         {
             return new ActionSpecification<T>(value, e =>
-            {
-                e.ShouldNotBeNull();
-                e.ShouldBeInstanceOfType(exception);
-            });
+                                                         {
+                                                             e.ShouldNotBeNull();
+                                                             e.ShouldBeInstanceOfType(exception);
+                                                         });
         }
 
         public static Exception ShouldThrow<T>(this Action action)
@@ -292,7 +295,7 @@ namespace NBehave.Spec.NUnit
                 ex = e;
             }
             if (failed)
-                Assert.Fail(string.Format("Exception of type <{0}> expected but no exception occurred", typeof(T)));
+                Assert.False(failed, string.Format("Exception of type <{0}> expected but no exception occurred", typeof(T)));
             return ex;
         }
 

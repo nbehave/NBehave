@@ -11,7 +11,7 @@ namespace NBehave.TestDriven.Plugin
             var splitNamespaces = assembly.GetTypes()
                 .Where(type => type.IsPublic)
                 .Select(type => type.Namespace)
-                .Where(ns => ns != "NBehave.Spec")
+                .Distinct()
                 .Select(ns => ns.Split('.'))
                 .ToArray();
 
