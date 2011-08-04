@@ -92,10 +92,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Gallio">
-      <HintPath>..\..\lib\Gallio.dll</HintPath>
+      <HintPath>..\..\lib\MbUnit\Gallio.dll</HintPath>
     </Reference>
     <Reference Include="MbUnit">
-      <HintPath>..\..\lib\MbUnit.dll</HintPath>
+      <HintPath>..\..\lib\MbUnit\MbUnit.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
