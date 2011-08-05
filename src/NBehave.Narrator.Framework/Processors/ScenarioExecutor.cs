@@ -74,22 +74,17 @@ namespace NBehave.Narrator.Framework.Processors
         {
             var scenarioResult = new ScenarioResult(scenario.Feature, scenario.Title);
             _stringStepRunner.BeforeScenario();
-            var stepsToRun = scenario.Feature.Background.Steps.Concat(scenario.Steps);
-            foreach (var step in stepsToRun)
-            {
-                if (step is StringTableStep)
-                {
-                    RunStringTableStep((StringTableStep)step);
-                }
-                else if (step is StringStep)
-                {
-                    step.StepResult = _stringStepRunner.Run(step);
-                }
-
-                scenarioResult.AddActionStepResult(step.StepResult);
-            }
+            var backgroundResults = RunBackground(scenario.Feature.Background);
+            scenarioResult.AddActionStepResults(backgroundResults);
+            var stepResults = RunSteps(scenario.Steps);
+            scenarioResult.AddActionStepResults(stepResults);
             ExecuteAfterScenario(scenario, scenarioResult);
             _hub.Publish(new ScenarioResultEvent(this, scenarioResult));
+        }
+
+        private IEnumerable<StepResult> RunBackground(Scenario background)
+        {
+            return RunSteps(background.Steps);
         }
 
         private void RunExamples(Scenario scenario)
@@ -103,22 +98,26 @@ namespace NBehave.Narrator.Framework.Processors
 
                 var scenarioResult = new ScenarioResult(scenario.Feature, scenario.Title);
                 _stringStepRunner.BeforeScenario();
-                foreach (var step in steps)
-                {
-                    if (step is StringTableStep)
-                    {
-                        RunStringTableStep((StringTableStep)step);
-                    }
-                    else if (step is StringStep)
-                    {
-                        step.StepResult = _stringStepRunner.Run(step);
-                    }
-                    scenarioResult.AddActionStepResult(step.StepResult);
-                }
+                var stepResults = RunSteps(steps);
+                scenarioResult.AddActionStepResults(stepResults);
                 ExecuteAfterScenario(scenario, scenarioResult);
                 exampleResults.AddResult(scenarioResult);
             }
             _hub.Publish(new ScenarioResultEvent(this, exampleResults));
+        }
+
+        private IEnumerable<StepResult> RunSteps(IEnumerable<StringStep> stepsToRun)
+        {
+            var stepResults = new List<StepResult>();
+            foreach (var step in stepsToRun)
+            {
+                if (step is StringTableStep)
+                    RunStringTableStep((StringTableStep)step);
+                else if (step is StringStep)
+                    step.StepResult = _stringStepRunner.Run(step);
+                stepResults.Add(step.StepResult);
+            }
+            return stepResults;
         }
 
         private void ExecuteAfterScenario(Scenario scenario, ScenarioResult scenarioResult)
@@ -137,7 +136,7 @@ namespace NBehave.Narrator.Framework.Processors
             }
         }
 
-        public void RunStringTableStep(StringTableStep stringStep)
+        private void RunStringTableStep(StringTableStep stringStep)
         {
             var actionStepResult = GetNewActionStepResult(stringStep);
             var hasParamsInStep = HasParametersInStep(stringStep.Step);

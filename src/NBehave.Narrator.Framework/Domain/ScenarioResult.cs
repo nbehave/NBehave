@@ -64,6 +64,14 @@ namespace NBehave.Narrator.Framework
             get { return _actionStepResults; }
         }
 
+        public virtual void AddActionStepResults(IEnumerable<StepResult> stepResults)
+        {
+            foreach (var stepResult in stepResults)
+            {
+                AddActionStepResult(stepResult);
+            }
+        }
+
         public virtual void AddActionStepResult(StepResult actionStepResult)
         {
             _actionStepResults.Add(actionStepResult);
