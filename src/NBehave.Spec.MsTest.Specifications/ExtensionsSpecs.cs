@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NUnit.Framework;
 
-namespace NBehave.Spec.MSTest9.Specifications
+namespace NBehave.Spec.MSTest.Specifications
 {
     [TestFixture]
     public class When_using_BDD_style_language_for_boolean_assertions

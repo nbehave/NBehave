@@ -28,7 +28,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.Spec.Xunit.Specific
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.Spec.Xunit", "NBehave.Spec.Xunit\NBehave.Spec.Xunit.csproj", "{AB99C5F4-1C74-4263-B79A-C8569D9561FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.Spec.MSTest9", "NBehave.Spec.MSTest9\NBehave.Spec.MSTest9.csproj", "{32745321-6BAF-46A1-B3C4-E82CBA663F55}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.Spec.MSTest", "NBehave.Spec.MSTest\NBehave.Spec.MSTest.csproj", "{32745321-6BAF-46A1-B3C4-E82CBA663F55}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.Fluent.Framework", "NBehave.Fluent.Framework\NBehave.Fluent.Framework.csproj", "{87B1B4CA-3EF7-44EB-BF48-5A472E26F1B0}"
 EndProject
@@ -64,7 +64,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.VS2010.Plugin", "NB
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "VS2010.plugin", "VS2010.plugin", "{F0FE6340-3B43-4A3B-83D3-D51622BAC3F3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.Spec.MSTest9.Specifications", "NBehave.Spec.MSTest9.Specifications\NBehave.Spec.MSTest9.Specifications.csproj", "{EAD364F3-9162-46EE-83AA-5E938FE126FA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.Spec.MSTest.Specifications", "NBehave.Spec.MSTest.Specifications\NBehave.Spec.MSTest.Specifications.csproj", "{EAD364F3-9162-46EE-83AA-5E938FE126FA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.Examples", "NBehave.Examples\NBehave.Examples.csproj", "{5CBAFACF-8BD9-46FB-A0BC-276EDE593186}"
 EndProject
@@ -163,6 +163,7 @@ Global
 		{32745321-6BAF-46A1-B3C4-E82CBA663F55}.AutomatedDebug-3.5|x86.ActiveCfg = AutomatedDebug-3.5|Any CPU
 		{32745321-6BAF-46A1-B3C4-E82CBA663F55}.AutomatedDebug-4.0|Any CPU.ActiveCfg = AutomatedDebug-4.0|Any CPU
 		{32745321-6BAF-46A1-B3C4-E82CBA663F55}.AutomatedDebug-4.0|Mixed Platforms.ActiveCfg = AutomatedDebug-4.0|Any CPU
+		{32745321-6BAF-46A1-B3C4-E82CBA663F55}.AutomatedDebug-4.0|Mixed Platforms.Build.0 = AutomatedDebug-4.0|Any CPU
 		{32745321-6BAF-46A1-B3C4-E82CBA663F55}.AutomatedDebug-4.0|x86.ActiveCfg = AutomatedDebug-4.0|Any CPU
 		{32745321-6BAF-46A1-B3C4-E82CBA663F55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{32745321-6BAF-46A1-B3C4-E82CBA663F55}.Debug|Any CPU.Build.0 = Debug|Any CPU
@@ -498,6 +499,7 @@ Global
 		{EAD364F3-9162-46EE-83AA-5E938FE126FA}.AutomatedDebug-3.5|x86.ActiveCfg = AutomatedDebug-3.5|Any CPU
 		{EAD364F3-9162-46EE-83AA-5E938FE126FA}.AutomatedDebug-4.0|Any CPU.ActiveCfg = AutomatedDebug-4.0|Any CPU
 		{EAD364F3-9162-46EE-83AA-5E938FE126FA}.AutomatedDebug-4.0|Mixed Platforms.ActiveCfg = AutomatedDebug-4.0|Any CPU
+		{EAD364F3-9162-46EE-83AA-5E938FE126FA}.AutomatedDebug-4.0|Mixed Platforms.Build.0 = AutomatedDebug-4.0|Any CPU
 		{EAD364F3-9162-46EE-83AA-5E938FE126FA}.AutomatedDebug-4.0|x86.ActiveCfg = AutomatedDebug-4.0|Any CPU
 		{EAD364F3-9162-46EE-83AA-5E938FE126FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EAD364F3-9162-46EE-83AA-5E938FE126FA}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU

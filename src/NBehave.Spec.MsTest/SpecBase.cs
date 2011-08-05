@@ -1,6 +1,6 @@
 ﻿﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace NBehave.Spec.MSTest9
+namespace NBehave.Spec.MSTest
 {
 	[TestClass]
     public abstract class SpecBase : Spec.SpecBase

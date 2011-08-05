@@ -125,7 +125,7 @@
 			<arg value="NBehave.Console.Specifications.dll" />
 			<arg value="NBehave.Spec.NUnit.Specifications.dll" />
 			<arg value="NBehave.Spec.MbUnit.Specifications.dll" />
-			<arg value="NBehave.Spec.MSTest9.Specifications.dll" />
+			<arg value="NBehave.Spec.MSTest.Specifications.dll" />
 			<arg value="NBehave.Spec.Xunit.Specifications.dll" />
 			<arg value="NBehave.Fluent.Framework.Specifications.dll" />
 			<arg value="NBehave.NAnt.Specifications.dll" />
@@ -139,13 +139,14 @@
 
 	<target name="run-unit-tests-4.0">
 		<mkdir dir="${build.dir}\test-reports" />
+    <copy file="${build.dir}\..\lib\MSTest10\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll" todir="${test.dir.4.0}" />
 
-		<exec program="nunit-console-x86.exe" basedir="tools\nunit" workingdir="${test.dir.4.0}">
+    <exec program="nunit-console-x86.exe" basedir="tools\nunit" workingdir="${test.dir.4.0}">
 			<arg value="NBehave.Narrator.Framework.Specifications.dll" />
 			<arg value="NBehave.Console.Specifications.dll" />
 			<arg value="NBehave.Spec.NUnit.Specifications.dll" />
 			<arg value="NBehave.Spec.MbUnit.Specifications.dll" />
-			<arg value="NBehave.Spec.MSTest10.Specifications.dll" />
+			<arg value="NBehave.Spec.MSTest.Specifications.dll" />
 			<arg value="NBehave.Spec.Xunit.Specifications.dll" />
 			<arg value="NBehave.Fluent.Framework.Specifications.dll" />
 			<arg value="NBehave.NAnt.Specifications.dll" />
@@ -171,7 +172,7 @@
       <arg value="NBehave.Console.Specifications.dll" />
       <arg value="NBehave.Spec.NUnit.Specifications.dll" />
       <arg value="NBehave.Spec.MbUnit.Specifications.dll" />
-      <arg value="NBehave.Spec.MSTest10.Specifications.dll" />
+      <arg value="NBehave.Spec.MSTest.Specifications.dll" />
       <arg value="NBehave.Spec.Xunit.Specifications.dll" />
       <arg value="NBehave.Fluent.Framework.Specifications.dll" />
       <arg value="NBehave.NAnt.Specifications.dll" />
