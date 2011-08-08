@@ -1,18 +1,17 @@
-# C:\Users\father\Desktop\Projects\nbehave\lib\Gherkin\gherkin.dll C:\Users\father\Desktop\Projects\nbehave\lib\ikvm\IKVM.OpenJDK.Core.dll C:\Users\father\Desktop\Projects\nbehave\lib\Gherkin\json-simple.dll" exited with code 1.
-
 $arguments = @(
 	#'/internalize',
-	'/Closed',
+	'/closed',
 	'/copyattrs',
 	'/allowMultiple'
 	'/allowDup',
-	'/lib:..\ikvm',
+	#'/lib:.\ikvm',
 	'/keyfile:..\..\src\nbehave.snk',
-	'/out:gherkin-2.2.7.merged.dll',
-	'gherkin.dll',
-	'json-simple.dll',
-	'..\ikvm\ikvm.openjdk.core.dll',
-	'..\ikvm\ikvm.runtime.dll'
+	'/out:gherkin.dll',
+	'gherkin-2.4.5.signed.dll',
+	#'ikvm.openjdk.core.dll',
+	#'ikvm.runtime.dll',
+	'net.iharder-base64.dll',
+	'com.googlecode.json-simple-json-simple.dll'
 )
 
 ..\..\tools\ilmerge\ilmerge.exe $arguments
