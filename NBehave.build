@@ -277,7 +277,7 @@
 		</zip>
 	</target>
 
-	<target name="dist.binaries" depends="dist.vsplugin">
+	<target name="dist.binaries" depends="dist.vsplugin, dist.resharper">
 		<copy todir="${build.dir}\dist\v3.5">
 			<fileset basedir="${build.dir}\Debug-3.5\NBehave">
 				<include name="**\NBehave*"/>
@@ -288,6 +288,7 @@
 				<include name="nunit.framework.dll" />
 				<include name="Rhino.Mocks.dll" />
 				<include name="xunit.dll" />
+        <include name="IKVM.*.dll" />
 			</fileset>
 		</copy>
 		<copy todir="${build.dir}\dist\v4.0">
@@ -300,21 +301,26 @@
 				<include name="nunit.framework.dll" />
 				<include name="Rhino.Mocks.dll" />
 				<include name="xunit.dll" />
-			</fileset>
+        <include name="IKVM.*.dll" />
+      </fileset>
 		</copy>
 	</target>
 
 	<target name="dist.vsplugin">
-		<copy todir="${build.dir}\plugin">
+		<copy todir="${build.dir}\dist\v4.0\VSplugin">
 			<fileset basedir="${build.dir}\Debug-4.0\VSPlugin">
 				<include name="**\NBehave*"/>
 				<exclude name="**\*.pdb" />
 				<exclude name="**\*.vsix" />
 				<include name="extension.vsixmanifest" />
-			</fileset>
+        <include name="Gherkin.dll" />
+        <include name="IKVM.OpenJDK.Core.dll" />
+        <include name="IKVM.OpenJDK.Util.dll" />
+        <include name="IKVM.Runtime.dll" />
+      </fileset>
 		</copy>
 		<xmlpoke
-			file="${build.dir}\plugin\extension.vsixmanifest"
+			file="${build.dir}\dist\v4.0\VSplugin\extension.vsixmanifest"
 			value="true"
 			xpath="/vsx:Vsix/vsx:Identifier/vsx:InstalledByMsi">
 			<namespaces>
@@ -322,7 +328,7 @@
 			</namespaces>
 		</xmlpoke>
 		<xmlpoke
-			file="${build.dir}\plugin\extension.vsixmanifest"
+			file="${build.dir}\dist\v4.0\VSplugin\extension.vsixmanifest"
 			value="${project.fullversion}"
 			xpath="/vsx:Vsix/vsx:Identifier/vsx:Version">
 			<namespaces>
@@ -331,6 +337,36 @@
 		</xmlpoke>
 	</target>
 
+  <target name="dist.resharper" depends="dist.resharper-3.5, dist.resharper-4.0">
+  </target>
+
+  <target name="dist.resharper-3.5">
+    <copy todir="${build.dir}\dist\v3.5\resharper">
+      <fileset basedir="${build.dir}\Debug-3.5\ReSharper">
+        <include name="**\NBehave*"/>
+        <exclude name="**\*.pdb" />
+        <exclude name="**\*.vsix" />
+        <include name="Gherkin.dll" />
+        <include name="IKVM.OpenJDK.Core.dll" />
+        <include name="IKVM.OpenJDK.Util.dll" />
+        <include name="IKVM.Runtime.dll" />
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="dist.resharper-4.0">
+    <copy todir="${build.dir}\dist\v4.0\resharper">
+      <fileset basedir="${build.dir}\Debug-4.0\ReSharper">
+        <include name="**\NBehave*"/>
+        <exclude name="**\*.pdb" />
+        <exclude name="**\*.vsix" />
+        <include name="Gherkin.dll" />
+        <include name="IKVM.OpenJDK.Core.dll" />
+        <include name="IKVM.OpenJDK.Util.dll" />
+        <include name="IKVM.Runtime.dll" />
+      </fileset>
+    </copy>
+  </target>
 </project>
 
 

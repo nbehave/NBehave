@@ -2,7 +2,8 @@
 	!define VERSION "0.0.0"
 !endif
 !define FILES "..\..\Build\dist"
-!define PLUGIN "..\..\Build\plugin"
+!define PLUGIN "..\..\Build\dist\v4.0\VSplugin"
+!define RESHARPER_PLUGIN "..\..\Build\dist\v3.5\resharper"
 !define EXAMPLEFILES "..\..\Build"
 ; The name of the installer
 Name "NBehave"
@@ -40,6 +41,7 @@ Section ".Net 3.5 files" ;No components page, name is not important
   
 	; Put file there
 	File "${FILES}\v3.5\**"
+	File "${FILES}\v3.5\NBehave.Gherkin.dll"
 	File "${FILES}\v3.5\NBehave.NAnt.dll"
 	File "${FILES}\v3.5\NBehave.MSBuild.dll"
 	File "${FILES}\v3.5\NBehave.Narrator.Framework.dll"
@@ -55,6 +57,9 @@ Section ".Net 3.5 files" ;No components page, name is not important
 	File "${FILES}\v3.5\nunit.framework.dll"
 	File "${FILES}\v3.5\Rhino.Mocks.dll"
 	File "${FILES}\v3.5\xunit.dll"
+	File "${FILES}\v3.5\IKVM.OpenJDK.Core.dll"
+	File "${FILES}\v3.5\IKVM.OpenJDK.Util.dll"
+	File "${FILES}\v3.5\IKVM.Runtime.dll"
 	File "..\xsl\NBehaveResults.xsl"
 
 	; Write the installation path into the registry
@@ -78,6 +83,7 @@ Section ".Net 4.0 files" ;No components page, name is not important
   
 	; Put file there
 	File "${FILES}\v4.0\**"
+	File "${FILES}\v4.0\NBehave.Gherkin.dll"
 	File "${FILES}\v4.0\NBehave.NAnt.dll"
 	File "${FILES}\v4.0\NBehave.MSBuild.dll"
 	File "${FILES}\v4.0\NBehave.Narrator.Framework.dll"
@@ -93,6 +99,9 @@ Section ".Net 4.0 files" ;No components page, name is not important
 	File "${FILES}\v4.0\nunit.framework.dll"
 	File "${FILES}\v4.0\Rhino.Mocks.dll"
 	File "${FILES}\v4.0\xunit.dll"
+	File "${FILES}\v4.0\IKVM.OpenJDK.Core.dll"
+	File "${FILES}\v4.0\IKVM.OpenJDK.Util.dll"
+	File "${FILES}\v4.0\IKVM.Runtime.dll"
 	File "..\xsl\NBehaveResults.xsl"
 
 	; Write the installation path into the registry
@@ -119,6 +128,12 @@ Section "Visual Studio 2010 Plugin"
 	File "${PLUGIN}\NBehave.VS2010.Plugin.dll"
 	File "${PLUGIN}\NBehave.VS2010.Plugin.pkgdef"
 
+SectionEnd
+
+Section "ReSharper 6.0 Plugin"
+	SetOutPath "$PROGRAMFILES\JetBrains\ReSharper\v6.0\Bin"
+	
+	File "${RESHARPER_PLUGIN}\**"
 SectionEnd
 
 ; Uninstaller
