@@ -7,24 +7,22 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+using System.IO;
+using NBehave.Gherkin;
+using NBehave.Narrator.Framework.Tiny;
+
 namespace NBehave.Narrator.Framework
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using Gherkin;
-
-    using NBehave.Narrator.Framework.Tiny;
 
     public class GherkinScenarioParser : IListener
     {
         private readonly ITinyMessengerHub _hub;
-        private readonly LanguageService _languageService;
 
         public GherkinScenarioParser(ITinyMessengerHub hub)
         {
             _hub = hub;
-            _languageService = new LanguageService();
         }
 
         public void Parse(string file)
@@ -32,36 +30,16 @@ namespace NBehave.Narrator.Framework
             _hub.Publish(new ModelBuilderInitialise(this));
             _hub.Publish(new ParsingFileStart(this, file));
 
-            using (Stream stream = File.OpenRead(file))
-            {
-                var reader = new StreamReader(stream);
-                var scenarioText = reader.ReadToEnd();
-
-                // We write a new stream just to remove \r
-                var ms = new MemoryStream();
-                var sr = new StreamWriter(ms);
-                sr.Write(scenarioText.Replace("\r", string.Empty));
-                sr.Flush();
-                ms.Seek(0, SeekOrigin.Begin);
-
-                var lexer = _languageService.GetLexer(scenarioText, this);
-                try
-                {
-                    lexer.Scan(new StreamReader(ms));
-                }
-                catch (LexingException ex)
-                {
-                    throw new LexingException("Error lexing file " + file, ex);
-                }
-            }
-
+            var content = File.ReadAllText(file);
+            var gherkinParser = new Parser(this);
+            gherkinParser.Scan(content);
             _hub.Publish(new ParsingFileEnd(this, file));
             _hub.Publish(new ModelBuilderCleanup(this));
         }
 
-        public void Feature(Token keyword, Token title)
+        public void Feature(Token keyword, Token title, Token narrative)
         {
-            var titleAndNarrative = title.Content;
+            var titleAndNarrative = title.Content + Environment.NewLine + narrative.Content;
             _hub.Publish(new ParsedFeature(this, titleAndNarrative));
         }
 
@@ -76,15 +54,15 @@ namespace NBehave.Narrator.Framework
             _hub.Publish(new EnteringExamples(this));
         }
 
-        public void Step(Token keyword, Token name, StepKind stepKind)
+        public void Step(Token keyword, Token name)
         {
             string stepText = string.Format("{0}{1}", keyword.Content, name.Content);
             _hub.Publish(new ParsedStep(this, stepText));
         }
 
-        public void Table(IList<IList<Token>> rows, Position tablePosition)
+        public void Table(IList<IList<Token>> columns, LineInFile tableRow)
         {
-            _hub.Publish(new ParsedTable(this, rows));
+            _hub.Publish(new ParsedTable(this, columns));
         }
 
         public void Background(Token keyword, Token name)
@@ -95,6 +73,7 @@ namespace NBehave.Narrator.Framework
 
         public void ScenarioOutline(Token keyword, Token name)
         {
+            //TODO: publish as Scenario?
             string scenarioOutlineTitle = name.Content;
             _hub.Publish(new ParsedScenarioOutline(this, scenarioOutlineTitle));
         }
@@ -107,11 +86,7 @@ namespace NBehave.Narrator.Framework
         {
         }
 
-        public void PythonString(Token content)
-        {
-        }
-
-        public void SyntaxError(string state, string @event, IEnumerable<string> legalEvents, Position position)
+        public void SyntaxError(string state, string @event, IEnumerable<string> legalEvents, LineInFile lineInFile)
         {
         }
 

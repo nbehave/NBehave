@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using NBehave.Narrator.Framework.Processors;
+using NBehave.Narrator.Framework.Tiny;
 using NUnit.Framework;
 
 namespace NBehave.Narrator.Framework.Specifications.Text
 {
-    using global::System.IO;
-
-    using NBehave.Narrator.Framework.Processors;
-    using NBehave.Narrator.Framework.Tiny;
-
     [TestFixture]
     public abstract class ScenarioParserSpec
     {
@@ -20,10 +18,10 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             container.RegisterMany<IModelBuilder>().AsSingleton();
             container.Resolve<IEnumerable<IModelBuilder>>();
 
-            this._hub = container.Resolve<ITinyMessengerHub>();
-            this._scenarios = new List<Scenario>();
+            _hub = container.Resolve<ITinyMessengerHub>();
+            _scenarios = new List<Scenario>();
 
-            return new GherkinScenarioParser(this._hub);
+            return new GherkinScenarioParser(_hub);
         }
 
         private StringStep NewStringStep(string step)
@@ -35,7 +33,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
 
         private ITinyMessengerHub _hub;
 
-        protected void Parse(string scenario)
+        private void Parse(string scenario)
         {
             if (!scenario.StartsWith("Feature"))
             {
@@ -45,7 +43,6 @@ namespace NBehave.Narrator.Framework.Specifications.Text
                                               "    So that I can build a domain model" + Environment.NewLine);
             }
 
-
             string tempFileName = Path.GetTempFileName();
 
             using (var fileStream = new StreamWriter(File.Create(tempFileName)))
@@ -54,7 +51,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             }
 
             var parser = CreateScenarioParser();
-            this._hub.Subscribe<ScenarioBuilt>(built => this._scenarios.Add(built.Content));
+            _hub.Subscribe<ScenarioBuilt>(built => _scenarios.Add(built.Content));
             parser.Parse(tempFileName);
         }
 
@@ -65,10 +62,10 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             public void Scenario()
             {
                 var scenario =
-                               "Scenario: Adding numbers" + Environment.NewLine +
-                               "  Given numbers 1 and 2" + Environment.NewLine +
-                               "  When I add the numbers" + Environment.NewLine +
-                               "  Then the sum is 3";
+                    "Scenario: Adding numbers" + Environment.NewLine +
+                    "  Given numbers 1 and 2" + Environment.NewLine +
+                    "  When I add the numbers" + Environment.NewLine +
+                    "  Then the sum is 3";
 
                 Parse(scenario);
             }
@@ -98,9 +95,9 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             public void Scenario()
             {
                 var scenario = "Scenario: Adding numbers" + Environment.NewLine +
-                                  "  Given numbers 1 and 2" + Environment.NewLine +
-                                  "  When I add the numbers" + Environment.NewLine +
-                                  "  Then the sum is 3";
+                               "  Given numbers 1 and 2" + Environment.NewLine +
+                               "  When I add the numbers" + Environment.NewLine +
+                               "  Then the sum is 3";
 
                 Parse(scenario);
             }
@@ -124,14 +121,14 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             public void Scenario()
             {
                 var scenario = "Scenario: Adding numbers" + Environment.NewLine +
-                                  "  Given numbers 1 and 2" + Environment.NewLine +
-                                  "  When I add the numbers" + Environment.NewLine +
-                                  "  Then the sum is 3" + Environment.NewLine +
-                                  Environment.NewLine +
-                                  "Scenario: Adding numbers again" + Environment.NewLine +
-                                  "  Given numbers 3 and 5" + Environment.NewLine +
-                                  "  When I add the numbers" + Environment.NewLine +
-                                  "  Then the sum is 8";
+                               "  Given numbers 1 and 2" + Environment.NewLine +
+                               "  When I add the numbers" + Environment.NewLine +
+                               "  Then the sum is 3" + Environment.NewLine +
+                               Environment.NewLine +
+                               "Scenario: Adding numbers again" + Environment.NewLine +
+                               "  Given numbers 3 and 5" + Environment.NewLine +
+                               "  When I add the numbers" + Environment.NewLine +
+                               "  Then the sum is 8";
 
                 Parse(scenario);
             }
@@ -156,15 +153,15 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             public void Scenario()
             {
                 var scenario = "Feature: Calculator" + Environment.NewLine +
-                                  "Scenario: Adding numbers" + Environment.NewLine +
-                                  "  Given numbers 1 and 2" + Environment.NewLine +
-                                  "  When I add the numbers" + Environment.NewLine +
-                                  "  Then the sum is 3" + Environment.NewLine +
-                                  Environment.NewLine +
-                                  "Scenario: Adding numbers again" + Environment.NewLine +
-                                  "  Given numbers 3 and 5" + Environment.NewLine +
-                                  "  When I add the numbers" + Environment.NewLine +
-                                  "  Then the sum is 8";
+                               "Scenario: Adding numbers" + Environment.NewLine +
+                               "  Given numbers 1 and 2" + Environment.NewLine +
+                               "  When I add the numbers" + Environment.NewLine +
+                               "  Then the sum is 3" + Environment.NewLine +
+                               Environment.NewLine +
+                               "Scenario: Adding numbers again" + Environment.NewLine +
+                               "  Given numbers 3 and 5" + Environment.NewLine +
+                               "  When I add the numbers" + Environment.NewLine +
+                               "  Then the sum is 8";
 
                 Parse(scenario);
             }
@@ -188,17 +185,17 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             public void Scenario()
             {
                 var scenario = "Feature: Calculator" + Environment.NewLine +
-                                  "  This is the narrative" + Environment.NewLine +
-                                  "  This is second row of narrative" + Environment.NewLine +
-                                  "Scenario: Adding numbers" + Environment.NewLine +
-                                  "  Given numbers 1 and 2" + Environment.NewLine +
-                                  "  When I add the numbers" + Environment.NewLine +
-                                  "  Then the sum is 3" + Environment.NewLine +
-                                  Environment.NewLine +
-                                  "Scenario: Adding numbers again" + Environment.NewLine +
-                                  "  Given numbers 3 and 5" + Environment.NewLine +
-                                  "  When I add the numbers" + Environment.NewLine +
-                                  "  Then the sum is 8";
+                               "  This is the narrative" + Environment.NewLine +
+                               "  This is second row of narrative" + Environment.NewLine +
+                               "Scenario: Adding numbers" + Environment.NewLine +
+                               "  Given numbers 1 and 2" + Environment.NewLine +
+                               "  When I add the numbers" + Environment.NewLine +
+                               "  Then the sum is 3" + Environment.NewLine +
+                               Environment.NewLine +
+                               "Scenario: Adding numbers again" + Environment.NewLine +
+                               "  Given numbers 3 and 5" + Environment.NewLine +
+                               "  When I add the numbers" + Environment.NewLine +
+                               "  Then the sum is 8";
 
                 Parse(scenario);
             }
@@ -207,8 +204,8 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             public void ShouldHaveNarrative()
             {
                 Assert.That(_scenarios.First().Feature.Narrative, Is.EqualTo(
-                                                                 "This is the narrative" + Environment.NewLine +
-                                                                 "This is second row of narrative"));
+                    "This is the narrative" + Environment.NewLine +
+                    "This is second row of narrative"));
             }
 
             [Test]
@@ -230,14 +227,14 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             public void Scenario()
             {
                 var scenario = "Scenario: Adding numbers" + Environment.NewLine +
-                                  "  Given numbers [left] and [right]" + Environment.NewLine +
-                                  "  When I add the numbers" + Environment.NewLine +
-                                  "  Then the sum is [sum]" + Environment.NewLine +
-                                  Environment.NewLine +
-                                  "Examples:" + Environment.NewLine +
-                                  "|left|right|sum|" + Environment.NewLine +
-                                  "|1|2|3|" + Environment.NewLine +
-                                  "|2|3|5|";
+                               "  Given numbers [left] and [right]" + Environment.NewLine +
+                               "  When I add the numbers" + Environment.NewLine +
+                               "  Then the sum is [sum]" + Environment.NewLine +
+                               Environment.NewLine +
+                               "Examples:" + Environment.NewLine +
+                               "|left|right|sum|" + Environment.NewLine +
+                               "|1|2|3|" + Environment.NewLine +
+                               "|2|3|5|";
 
                 Parse(scenario);
             }
@@ -282,33 +279,33 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             public void Scenario()
             {
                 var scenario =
-                                  "Scenario: A scenario with an inline table" + Environment.NewLine +
-                                  "  Given the following people exists:" + Environment.NewLine +
-                                  "  |Name          |Country|" + Environment.NewLine +
-                                  "  |Morgan Persson|Sweden |" + Environment.NewLine +
-                                  "  |Jimmy Nilsson |Sweden |" + Environment.NewLine +
-                                  "  |Jimmy bogard  |USA    |" + Environment.NewLine +
-                                  "  When I search for people in sweden" + Environment.NewLine +
-                                  "  Then I should get:" + Environment.NewLine +
-                                  "  |Name          |" + Environment.NewLine +
-                                  "  |Morgan Persson|" + Environment.NewLine +
-                                  "  |Jimmy Nilsson |";
+                    "Scenario: A scenario with an inline table" + Environment.NewLine +
+                    "  Given the following people exists:" + Environment.NewLine +
+                    "  |Name          |Country|" + Environment.NewLine +
+                    "  |Morgan Persson|Sweden |" + Environment.NewLine +
+                    "  |Jimmy Nilsson |Sweden |" + Environment.NewLine +
+                    "  |Jimmy bogard  |USA    |" + Environment.NewLine +
+                    "  When I search for people in sweden" + Environment.NewLine +
+                    "  Then I should get:" + Environment.NewLine +
+                    "  |Name          |" + Environment.NewLine +
+                    "  |Morgan Persson|" + Environment.NewLine +
+                    "  |Jimmy Nilsson |";
 
                 Parse(scenario);
-                this._givenStep = _scenarios.First().Steps.First() as StringTableStep;
-                this._thenStep = _scenarios.First().Steps.Last() as StringTableStep;
+                _givenStep = _scenarios.First().Steps.First() as StringTableStep;
+                _thenStep = _scenarios.First().Steps.Last() as StringTableStep;
             }
 
             [Test]
             public void GivenStepShouldHaveThreeTableSteps()
             {
-                Assert.That(this._givenStep.TableSteps.Count(), Is.EqualTo(3));
+                Assert.That(_givenStep.TableSteps.Count(), Is.EqualTo(3));
             }
 
             [Test]
             public void ThenStepShouldHaveTwoTableSteps()
             {
-                Assert.That(this._thenStep.TableSteps.Count(), Is.EqualTo(2));
+                Assert.That(_thenStep.TableSteps.Count(), Is.EqualTo(2));
             }
 
             [Test]
@@ -344,16 +341,16 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             public void Scenario()
             {
                 var scenario = "Feature: Calculator 1" + Environment.NewLine +
-                                  "Scenario: Adding numbers 1" + Environment.NewLine +
-                                  "  Given numbers 1 and 2" + Environment.NewLine +
-                                  "  When I add the numbers" + Environment.NewLine +
-                                  "  Then the sum is 3" + Environment.NewLine +
-                                  "" + Environment.NewLine +
-                                  "Feature: Calculator 2" + Environment.NewLine +
-                                  "Scenario: Adding numbers 2" + Environment.NewLine +
-                                  "  Given numbers 1 and 2" + Environment.NewLine +
-                                  "  When I add the numbers" + Environment.NewLine +
-                                  "  Then the sum is 3";
+                               "Scenario: Adding numbers 1" + Environment.NewLine +
+                               "  Given numbers 1 and 2" + Environment.NewLine +
+                               "  When I add the numbers" + Environment.NewLine +
+                               "  Then the sum is 3" + Environment.NewLine +
+                               "" + Environment.NewLine +
+                               "Feature: Calculator 2" + Environment.NewLine +
+                               "Scenario: Adding numbers 2" + Environment.NewLine +
+                               "  Given numbers 1 and 2" + Environment.NewLine +
+                               "  When I add the numbers" + Environment.NewLine +
+                               "  Then the sum is 3";
 
                 Parse(scenario);
             }

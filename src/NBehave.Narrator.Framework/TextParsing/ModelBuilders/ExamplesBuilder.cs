@@ -4,12 +4,11 @@ using NBehave.Narrator.Framework.Tiny;
 
 namespace NBehave.Narrator.Framework.Processors
 {
-
     internal class ExamplesBuilder : AbstracModelBuilder
     {
         private readonly ITinyMessengerHub _hub;
         private Scenario _scenario;
-        private bool _midExample;
+        private bool _listenToParsedTable;
 
         public ExamplesBuilder(ITinyMessengerHub hub)
             : base(hub)
@@ -17,13 +16,16 @@ namespace NBehave.Narrator.Framework.Processors
             _hub = hub;
 
             _hub.Subscribe<ScenarioBuilt>(built => _scenario = built.Content);
-            _hub.Subscribe<EnteringExamples>(examples => _midExample = true);
-            _hub.Subscribe<ParsedTable>(ExtractExamplesFromTable, parsedTable => _midExample);
+            _hub.Subscribe<EnteringExamples>(_ => _listenToParsedTable = true);
+            _hub.Subscribe<ParsedTable>(ExtractExamplesFromTable, _ => _listenToParsedTable);
         }
 
         private void ExtractExamplesFromTable(ParsedTable table)
         {
-            var columns = table.Content.First().Select(token => new ExampleColumn(token.Content));
+            if (!_listenToParsedTable)
+                return;
+
+            var columns = table.Content.First().Select(token => new ExampleColumn(token.Content)).ToList();
             var exampleColumns = new ExampleColumns(columns);
 
             foreach (var list in table.Content.Skip(1))
@@ -36,14 +38,13 @@ namespace NBehave.Narrator.Framework.Processors
 
                 _scenario.AddExamples(new List<Example> { new Example(exampleColumns, row) });
             }
-
-            _midExample = false;
+            _listenToParsedTable = false;
         }
 
         public override void Cleanup()
         {
+            _listenToParsedTable = false;
             _scenario = null;
-            _midExample = false;
         }
     }
 }

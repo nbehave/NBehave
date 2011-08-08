@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
-using Gherkin;
 using Microsoft.VisualStudio.Text;
-using NBehave.Narrator.Framework;
+using NBehave.Gherkin;
 using NBehave.VS2010.Plugin.Editor.Domain;
 
 namespace NBehave.VS2010.Plugin.Editor
@@ -52,7 +51,7 @@ namespace NBehave.VS2010.Plugin.Editor
 
             _snapshot = textBuffer.CurrentSnapshot;
 
-            IObservable<IEvent<TextContentChangedEventArgs>> fromEvent = 
+            IObservable<IEvent<TextContentChangedEventArgs>> fromEvent =
                 Observable.FromEvent<TextContentChangedEventArgs>(
                     handler => textBuffer.Changed += handler,
                     handler => textBuffer.Changed -= handler);
@@ -70,11 +69,10 @@ namespace NBehave.VS2010.Plugin.Editor
 
             try
             {
-                var languageService = new LanguageService();
-                ILexer lexer = languageService.GetLexer(snapshot.GetText(), this);
-                lexer.Scan(new StringReader(snapshot.GetText()));
+                var parser = new Parser(this);
+                parser.Scan(new StringReader(snapshot.GetText()));
             }
-            catch (LexingException) { }
+            catch (Exception) { }
             finally
             {
                 _isParsing.OnNext(false);
@@ -86,27 +84,17 @@ namespace NBehave.VS2010.Plugin.Editor
             Parse(_snapshot);
         }
 
-        public void Feature(Token keyword, Token title)
+        public void Feature(Token keyword, Token title, Token narrative)
         {
-            string featureTitle, description;
-            if (title.Content.Contains(Environment.NewLine))
-            {
-                var lineBreakPosn = title.Content.IndexOf(Environment.NewLine);
-                featureTitle = title.Content.Substring(0, lineBreakPosn);
-                description = title.Content.Substring(lineBreakPosn + Environment.NewLine.Length);
-            }
-            else
-            {
-                featureTitle = title.Content;
-                description = String.Empty;
-            }
+            string featureTitle = title.Content;
+            string description = narrative.Content;
 
             _parserEvents.OnNext(new ParserEvent(ParserEventType.Feature)
             {
                 Keyword = keyword.Content,
                 Title = featureTitle,
                 Description = description,
-                Line = keyword.Position.Line,
+                Line = keyword.LineInFile.Line,
                 Snapshot = _snapshot
             });
         }
@@ -117,11 +105,10 @@ namespace NBehave.VS2010.Plugin.Editor
             {
                 Keyword = keyword.Content,
                 Title = name.Content,
-                Line = keyword.Position.Line,
+                Line = keyword.LineInFile.Line,
                 Snapshot = _snapshot
             });
         }
-
 
         public void Examples(Token keyword, Token name)
         {
@@ -129,23 +116,23 @@ namespace NBehave.VS2010.Plugin.Editor
             {
                 Keyword = keyword.Content,
                 Name = name.Content,
-                Line = keyword.Position.Line,
+                Line = keyword.LineInFile.Line,
                 Snapshot = _snapshot
             });
         }
 
-        public void Step(Token keyword, Token name, StepKind stepKind)
+        public void Step(Token keyword, Token name)
         {
             _parserEvents.OnNext(new ParserEvent(ParserEventType.Step)
             {
                 Keyword = keyword.Content,
                 Text = name.Content,
-                Line = keyword.Position.Line,
+                Line = keyword.LineInFile.Line,
                 Snapshot = _snapshot
             });
         }
 
-        public void Table(IList<IList<Token>> rows, Position tablePosition)
+        public void Table(IList<IList<Token>> rows, LineInFile tablePosition)
         {
             _parserEvents.OnNext(new ParserEvent(ParserEventType.Table)
             {
@@ -162,7 +149,7 @@ namespace NBehave.VS2010.Plugin.Editor
             {
                 Keyword = keyword.Content,
                 Name = name.Content,
-                Line = keyword.Position.Line,
+                Line = keyword.LineInFile.Line,
                 Snapshot = _snapshot
             });
         }
@@ -173,7 +160,7 @@ namespace NBehave.VS2010.Plugin.Editor
             {
                 Keyword = keyword.Content,
                 Name = name.Content,
-                Line = keyword.Position.Line,
+                Line = keyword.LineInFile.Line,
                 Snapshot = _snapshot
             });
         }
@@ -183,7 +170,7 @@ namespace NBehave.VS2010.Plugin.Editor
             _parserEvents.OnNext(new ParserEvent(ParserEventType.Comment)
             {
                 Comment = content.Content,
-                Line = content.Position.Line,
+                Line = content.LineInFile.Line,
                 Snapshot = _snapshot
             });
         }
@@ -193,22 +180,12 @@ namespace NBehave.VS2010.Plugin.Editor
             _parserEvents.OnNext(new ParserEvent(ParserEventType.Tag)
             {
                 Name = name.Content,
-                Line = name.Position.Line,
+                Line = name.LineInFile.Line,
                 Snapshot = _snapshot
             });
         }
 
-        public void PythonString(Token pyString)
-        {
-            _parserEvents.OnNext(new ParserEvent(ParserEventType.PyString)
-            {
-                PythonString = pyString.Content,
-                Line = pyString.Position.Line,
-                Snapshot = _snapshot
-            });
-        }
-
-        public void SyntaxError(string state, string @event, IEnumerable<string> legalEvents, Position position)
+        public void SyntaxError(string state, string @event, IEnumerable<string> legalEvents, LineInFile lineInFile)
         {
         }
 

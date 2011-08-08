@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Gherkin;
+using NBehave.Gherkin;
 using NBehave.Narrator.Framework.Tiny;
 
 namespace NBehave.Narrator.Framework.Processors
 {
-
     class InlineStepBuilder : AbstracModelBuilder
     {
         private readonly ITinyMessengerHub _hub;
@@ -16,7 +15,6 @@ namespace NBehave.Narrator.Framework.Processors
             : base(hub)
         {
             _hub = hub;
-
             _hub.Subscribe<ScenarioBuilt>(built => _scenario = built.Content);
             _hub.Subscribe<ParsedStep>(message => _lastStep.Enqueue(message));
 
