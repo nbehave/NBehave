@@ -84,7 +84,10 @@ namespace NBehave.Narrator.Framework.Processors
 
         private IEnumerable<StepResult> RunBackground(Scenario background)
         {
-            return RunSteps(background.Steps);
+            return RunSteps(background.Steps)
+                .Select(_ => new BackgroundStepResult(background.Title, _))
+                .Cast<StepResult>()
+                .ToList();
         }
 
         private void RunExamples(Scenario scenario)

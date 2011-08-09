@@ -72,22 +72,29 @@ namespace NBehave.Narrator.Framework.EventListeners
 
         public override void ScenarioResult(ScenarioResult scenarioResult)
         {
+            WriteBackground(scenarioResult);
             WriteColorString("Scenario: " + scenarioResult.ScenarioTitle + " - " + scenarioResult.Result.ToString().ToUpper(), GetColorForResult(scenarioResult.Result));
             _allResults.Add(scenarioResult);
             foreach (var stepResult in scenarioResult.StepResults)
             {
-                WriteColorString(
-                    stepResult.StringStep + " - " + stepResult.Result.ToString().ToUpper(),
+                WriteColorString("  " + stepResult.StringStep + " - " + stepResult.Result.ToString().ToUpper(),
                     GetColorForResult(stepResult.Result));
             }
 
             DoExamplesInScenario(scenarioResult as ScenarioExampleResult);
         }
 
+        private void WriteBackground(ScenarioResult scenarioResult)
+        {
+            var backgroundSteps = scenarioResult.StepResults.Where(_ => _ is BackgroundStepResult).Cast<BackgroundStepResult>().ToList();
+            if (backgroundSteps.Any())
+                new BackgroundWriter(Console.Out).Write(backgroundSteps);
+        }
+
         private void WriteSummary()
         {
             var summaryWriter = new SummaryWriter(Console.Out);
-            summaryWriter.WriteCompleteSummary(this._allResults);
+            summaryWriter.WriteCompleteSummary(_allResults);
         }
 
         private void DoExamplesInScenario(ScenarioExampleResult scenarioExampleResult)

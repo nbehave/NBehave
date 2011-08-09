@@ -17,7 +17,7 @@ namespace NBehave.Narrator.Framework
         {
             _writer.WriteLine("Background: " + backgroundSteps.First().BackgroundTitle);
             foreach (var step in backgroundSteps)
-                _writer.WriteLine(step.Message);
+                _writer.WriteLine("  " + step.StringStep);
         }
     }
 }
