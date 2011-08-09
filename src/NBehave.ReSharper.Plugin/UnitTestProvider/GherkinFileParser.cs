@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using JetBrains.ProjectModel;
 using JetBrains.ProjectModel.Model2.Assemblies.Interfaces;
+using JetBrains.ReSharper.UnitTestFramework;
 using NBehave.Narrator.Framework;
 using NBehave.Narrator.Framework.EventListeners;
 using NBehave.Narrator.Framework.Tiny;
@@ -12,7 +13,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
     public class GherkinFileParser
     {
         private readonly ITinyMessengerHub _hub;
-        private readonly TestProvider _testProvider;
+        private readonly IUnitTestProvider _testProvider;
         private readonly ProjectModelElementEnvoy _projectModel;
         private List<NBehaveUnitTestElementBase> _elements;
 
@@ -22,7 +23,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
         private readonly Dictionary<string, IProjectFile> _featureFiles = new Dictionary<string, IProjectFile>();
         private readonly List<KeyValuePair<TinyMessageSubscriptionToken, Type>> _hubSubscriberTokens = new List<KeyValuePair<TinyMessageSubscriptionToken, Type>>();
 
-        public GherkinFileParser(IAssemblyFile assembly, IEnumerable<IProjectFile> featureFiles, TestProvider testProvider, ProjectModelElementEnvoy projectModel)
+        public GherkinFileParser(IAssemblyFile assembly, IEnumerable<IProjectFile> featureFiles, IUnitTestProvider testProvider, ProjectModelElementEnvoy projectModel)
         {
             _testProvider = testProvider;
             _projectModel = projectModel;
@@ -58,6 +59,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
         {
             Subscribe<ParsingFileStart>(ParsingFileStart);
             Subscribe<ParsedFeature>(ParsedFeature);
+            Subscribe<ParsedScenario>(ParsedBackground);
             Subscribe<ParsedScenario>(ParsedScenario);
             Subscribe<ParsedStep>(ParsedStep);
         }
@@ -97,6 +99,12 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
             _currentScenario = element;
         }
 
+        private void ParsedBackground(ParsedScenario obj)
+        {
+            var element = new NBehaveScenarioTestElement(obj.Content, FeatureFile, _testProvider, _projectModel, GetParent(_currentFeature));
+            AddToElements(element);
+            _currentScenario = element;
+        }
 
         private void ParsedStep(ParsedStep obj)
         {

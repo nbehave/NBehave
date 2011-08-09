@@ -12,7 +12,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
     {
         private readonly string _featureTitle;
 
-        public NBehaveFeatureTestElement(string featureTitle, IProjectFile featureFile, TestProvider testProvider, ProjectModelElementEnvoy projectModel)
+        public NBehaveFeatureTestElement(string featureTitle, IProjectFile featureFile, IUnitTestProvider testProvider, ProjectModelElementEnvoy projectModel)
             : base(featureFile, testProvider, featureFile.Location.FullPath + "/" + featureTitle, projectModel, null)
         {
             _featureTitle = featureTitle;

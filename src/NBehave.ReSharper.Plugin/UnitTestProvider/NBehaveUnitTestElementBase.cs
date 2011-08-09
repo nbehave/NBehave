@@ -8,7 +8,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
 {
     public abstract class NBehaveUnitTestElementBase : IUnitTestElement
     {
-        private readonly TestProvider _testProvider;
+        private readonly IUnitTestProvider _testProvider;
         private readonly string _id;
         private readonly ProjectModelElementEnvoy _projectModel;
         private readonly IList<IUnitTestElement> _children = new List<IUnitTestElement>();
@@ -20,7 +20,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
         public string ProjectFile { get; private set; }
         public string AssemblyOutFile { get { return _project.GetOutputAssemblyFile().Location.FullPath; } }
 
-        protected NBehaveUnitTestElementBase(IProjectFile featureFile, TestProvider testProvider, string id, ProjectModelElementEnvoy pointer, NBehaveUnitTestElementBase parent)
+        protected NBehaveUnitTestElementBase(IProjectFile featureFile, IUnitTestProvider testProvider, string id, ProjectModelElementEnvoy pointer, NBehaveUnitTestElementBase parent)
         {
             FeatureFile = featureFile.Location.FullPath;
             _project = featureFile.GetProject();

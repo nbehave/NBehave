@@ -11,7 +11,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
         private readonly string _step;
 
         private readonly string _identity;
-        public NBehaveStepTestElement(string step, IProjectFile featureFile, TestProvider testProvider, ProjectModelElementEnvoy projectModel, NBehaveUnitTestElementBase parent)
+        public NBehaveStepTestElement(string step, IProjectFile featureFile, IUnitTestProvider testProvider, ProjectModelElementEnvoy projectModel, NBehaveUnitTestElementBase parent)
             : base(featureFile, testProvider, parent.Id + "/" + step, projectModel, parent)
         {
             _step = step;

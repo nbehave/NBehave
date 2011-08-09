@@ -10,7 +10,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
     {
         private readonly string _scenario;
 
-        public NBehaveScenarioTestElement(string scenario, IProjectFile featureFile, TestProvider testProvider, ProjectModelElementEnvoy projectModel,
+        public NBehaveScenarioTestElement(string scenario, IProjectFile featureFile, IUnitTestProvider testProvider, ProjectModelElementEnvoy projectModel,
                                           NBehaveUnitTestElementBase parent)
             : base(featureFile, testProvider, parent.Id + "/" + scenario, projectModel, parent)
         {
