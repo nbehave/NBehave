@@ -213,7 +213,6 @@
     <Compile Include="TextParsing\Messages\ParsedBackground.cs" />
     <Compile Include="TextParsing\Messages\ParsedFeature.cs" />
     <Compile Include="TextParsing\Messages\ParsedScenario.cs" />
-    <Compile Include="TextParsing\Messages\ParsedScenarioOutline.cs" />
     <Compile Include="TextParsing\Messages\ParsedStep.cs" />
     <Compile Include="TextParsing\Messages\ParsedTable.cs" />
     <Compile Include="TextParsing\ModelBuilders\InlineStepBuilder.cs" />

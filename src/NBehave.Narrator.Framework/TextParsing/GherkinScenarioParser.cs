@@ -15,7 +15,6 @@ using NBehave.Narrator.Framework.Tiny;
 
 namespace NBehave.Narrator.Framework
 {
-
     public class GherkinScenarioParser : IListener
     {
         private readonly ITinyMessengerHub _hub;
@@ -69,13 +68,6 @@ namespace NBehave.Narrator.Framework
         {
             string backgroundTitle = name.Content;
             _hub.Publish(new ParsedBackground(this, backgroundTitle));
-        }
-
-        public void ScenarioOutline(Token keyword, Token name)
-        {
-            //TODO: publish as Scenario?
-            string scenarioOutlineTitle = name.Content;
-            _hub.Publish(new ParsedScenarioOutline(this, scenarioOutlineTitle));
         }
 
         public void Comment(Token comment)
