@@ -5,6 +5,8 @@ using System.Linq;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.UnitTestFramework;
 using NBehave.Narrator.Framework;
+using NBehave.Narrator.Framework.Messages;
+using NBehave.Narrator.Framework.Tiny;
 
 namespace NBehave.ReSharper.Plugin.UnitTestProvider
 {
@@ -13,28 +15,46 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
         private readonly TestProvider _testProvider;
         private readonly UnitTestElementConsumer _consumer;
         private readonly IProject _project;
-        private readonly ProjectModelElementEnvoy _projectEnvoy;
-        private GherkinFileParser _gherkinParser;
+        private readonly ProjectModelElementEnvoy _projectModel;
+        private readonly IFeatureRunner _featureRunner;
+        private readonly ISolution _solution;
+        private readonly ITinyMessengerHub _hub;
 
-        public MetadataExplorer(TestProvider provider, IProject project, UnitTestElementConsumer consumer)
+        public MetadataExplorer(TestProvider provider, ISolution solution, IProject project, UnitTestElementConsumer consumer)
         {
+            Initialiser.Initialise();
             _testProvider = provider;
             _consumer = consumer;
             _project = project;
-            _projectEnvoy = new ProjectModelElementEnvoy(_project);
+            _solution = solution;
+            _projectModel = new ProjectModelElementEnvoy(_project);
+            _hub = TinyIoCContainer.Current.Resolve<ITinyMessengerHub>();
+            _featureRunner = TinyIoCContainer.Current.Resolve<IFeatureRunner>();
         }
 
         public void ExploreProject()
         {
-            var featureFiles = GetFeatureFilesFromProject().ToList();
-            _gherkinParser = new GherkinFileParser(_project.GetOutputAssemblyFile(), featureFiles, _testProvider, _projectEnvoy);
-            var elements = _gherkinParser.ParseFilesToElements(featureFiles).ToList();
-            BindFeatures(elements);
+            var featureFiles = GetFeatureFilesFromProject()
+                .Select(_ => _.Location.FullPath)
+                .ToList();
+
+            IEnumerable<Feature> features = null;
+            var featuresLoadedSubscription = _hub.Subscribe<FeaturesLoaded>(_ => features = _.Content);
+            try
+            {
+                _featureRunner.DryRun(featureFiles);
+                var elements = new FeatureMapper(_testProvider, _projectModel, _solution).MapFeatures(features);
+                BindFeatures(elements);
+            }
+            finally
+            {
+                _hub.Unsubscribe<FeaturesLoaded>(featuresLoadedSubscription);
+            }
         }
 
         private IEnumerable<IProjectFile> GetFeatureFilesFromProject()
         {
-            var validExtensions = new NBehaveConfiguration().FeatureFileExtensions;
+            var validExtensions = NBehaveConfiguration.FeatureFileExtensions;
             var featureFiles = _project
                 .GetAllProjectFiles()
                 .Where(_ => validExtensions.Any(e => e.Equals(Path.GetExtension(_.Name), StringComparison.CurrentCultureIgnoreCase)))

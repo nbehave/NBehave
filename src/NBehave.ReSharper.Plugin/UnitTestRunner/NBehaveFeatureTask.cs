@@ -1,5 +1,6 @@
 using System;
 using System.Xml;
+using JetBrains.ProjectModel;
 using JetBrains.ReSharper.TaskRunnerFramework;
 
 namespace NBehave.ReSharper.Plugin.UnitTestRunner
@@ -13,12 +14,14 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
             FeatureFile = GetXmlAttribute(element, "featureFile");
         }
 
-        public NBehaveFeatureTask(string featureFeatureFile)
+        public NBehaveFeatureTask(string featureTitle, IProjectFile featureFile)
             : base(NBehaveTaskRunner.RunnerId)
         {
-            FeatureFile = featureFeatureFile;
+            FeatureFile = featureFile.Location.FullPath;
+            FeatureTitle = featureTitle;
         }
 
+        public string FeatureTitle { get; private set; }
         public string FeatureFile { get; private set; }
 
         public override bool IsMeaningfulTask
@@ -30,6 +33,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
         {
             base.SaveXml(element);
             SetXmlAttribute(element, "featureFile", FeatureFile);
+            SetXmlAttribute(element, "featureTitle", FeatureTitle);
         }
 
         public override bool Equals(object obj)
@@ -45,6 +49,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
         public bool Equals(NBehaveFeatureTask task)
         {
             return task != null
+                   && FeatureTitle == task.FeatureTitle
                    && FeatureFile == task.FeatureFile;
         }
 

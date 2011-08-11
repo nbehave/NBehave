@@ -1,5 +1,6 @@
 using System;
 using System.Xml;
+using JetBrains.ProjectModel;
 using JetBrains.ReSharper.TaskRunnerFramework;
 
 namespace NBehave.ReSharper.Plugin.UnitTestRunner
@@ -16,10 +17,10 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
 
         }
 
-        public NBehaveStepTask(string featureFile, string scenario, string step)
+        public NBehaveStepTask(IProjectFile featureFile, string scenario, string step)
             : base(NBehaveTaskRunner.RunnerId)
         {
-            FeatureFile = featureFile;
+            FeatureFile = featureFile.Location.FullPath;
             Scenario = scenario;
             Step = step;
         }

@@ -6,16 +6,16 @@ using JetBrains.ReSharper.TaskRunnerFramework;
 namespace NBehave.ReSharper.Plugin.UnitTestRunner
 {
     [Serializable]
-    public class NBehaveScenarioTask : RemoteTask, IEquatable<NBehaveScenarioTask>
+    public class NBehaveBackgroundTask : RemoteTask, IEquatable<NBehaveBackgroundTask>
     {
-        public NBehaveScenarioTask(XmlElement element)
+        public NBehaveBackgroundTask(XmlElement element)
             : base(element)
         {
             FeatureFile = GetXmlAttribute(element, "featureFile");
             Scenario = GetXmlAttribute(element, "scenario");
         }
 
-        public NBehaveScenarioTask(IProjectFile featureFile, string scenario)
+        public NBehaveBackgroundTask(IProjectFile featureFile, string scenario)
             : base(NBehaveTaskRunner.RunnerId)
         {
             FeatureFile = featureFile.Location.FullPath;
@@ -44,10 +44,10 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
 
         public override bool Equals(RemoteTask other)
         {
-            return Equals(other as NBehaveScenarioTask);
+            return Equals(other as NBehaveBackgroundTask);
         }
 
-        public virtual bool Equals(NBehaveScenarioTask task)
+        public virtual bool Equals(NBehaveBackgroundTask task)
         {
             return task != null
                    && FeatureFile == task.FeatureFile

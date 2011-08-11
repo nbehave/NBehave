@@ -3,17 +3,22 @@ using System.Linq;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using NBehave.Narrator.Framework;
 using NBehave.Narrator.Framework.EventListeners;
+using NBehave.Narrator.Framework.Tiny;
 using NBehave.ReSharper.Plugin.UnitTestProvider;
 
 namespace NBehave.ReSharper.Plugin.UnitTestRunner
 {
     public class NBehaveTaskRunner : RecursiveRemoteTaskRunner
     {
+        private NBehaveConfiguration _config;
+        private IFeatureRunner _runner;
+        private ITinyMessengerHub _hub;
         public const string RunnerId = TestProvider.NBehaveId;
 
         public NBehaveTaskRunner(IRemoteTaskServer server)
             : base(server)
-        { }
+        {
+        }
 
         public override TaskResult Start(TaskExecutionNode node)
         {
@@ -32,71 +37,46 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
 
         public override void ExecuteRecursive(TaskExecutionNode node)
         {
+            Initialiser.Initialise();
+            _config = TinyIoCContainer.Current.Resolve<NBehaveConfiguration>();
+            _runner = TinyIoCContainer.Current.Resolve<IFeatureRunner>();
+            _hub = TinyIoCContainer.Current.Resolve<ITinyMessengerHub>();
             var asm = node.RemoteTask as NBehaveAssemblyTask;
             if (asm == null)
                 return;
             var assemblies = new[] { asm.AssemblyFile };
+            var files = node.Children.Select(_ => ((NBehaveFeatureTask)_.RemoteTask).FeatureFile).Distinct().ToList();
             var codeGenListener = new CodeGenEventListener();
             var listener = new NBehaveTaskRunnerListener(node.Children, Server, codeGenListener);
 
-            foreach (var childNode in node.Children)
+            var featureTasks = new List<NBehaveFeatureTask>();
+            foreach (var featureNode in node.Children)
             {
-                var task = childNode.RemoteTask as NBehaveFeatureTask;
-                if (task == null)
-                    continue;
-
+                var task = featureNode.RemoteTask as NBehaveFeatureTask;
+                featureTasks.Add(task);
                 Server.TaskStarting(task);
-                var evtListener = new MultiOutputEventListener(codeGenListener, listener);
                 Server.TaskProgress(task, "Running...");
-                var runner = InitializeNBehaveRun(new[] { task.FeatureFile }, assemblies, evtListener);
-
-                var results = runner.Run();
-                PublishResults(results, task);
             }
+            var evtListener = new MultiOutputEventListener(codeGenListener, listener);
+            ModifyConfig(files, assemblies, evtListener);
+            Run(featureTasks);
         }
 
-        private void PublishResults(FeatureResults results, NBehaveFeatureTask task)
+        private void Run(IEnumerable<NBehaveFeatureTask> tasks)
         {
-            Server.TaskOutput(task, "", TaskOutputType.STDOUT);
-            var taskResult = GetTaskResult(results);
-            string taskResultMessage = "";
-            if (taskResult == TaskResult.Skipped)
-                taskResultMessage = "Skipped";
-            if (taskResult == TaskResult.Inconclusive)
+            using (var publisher = new ResultPublisher(Server, _hub))
             {
-                taskResultMessage = "Pending";
-                Server.TaskExplain(task, "See pending step(s) for more information");
+                _runner.Run(_config.ScenarioFiles);
+                publisher.PublishResults(tasks);
             }
-            if (taskResult == TaskResult.Error)
-            {
-                var firstFailure = results.ScenarioResults.First(_ => _.Result is Failed);
-                var result = (Failed)firstFailure.Result;
-                taskResultMessage = result.Exception.Message;
-                var te = new TaskException(result.Exception);
-                Server.TaskException(task, new[] { te });
-            }
-            Server.TaskFinished(task, taskResultMessage, taskResult);
         }
 
-        private TaskResult GetTaskResult(FeatureResults results)
+        private void ModifyConfig(IEnumerable<string> featureFiles, IEnumerable<string> assemblies, EventListener evtListener)
         {
-            var taskResult = (results.NumberOfScenariosFound > 0) ? TaskResult.Skipped : TaskResult.Exception;
-            taskResult = (results.NumberOfPassingScenarios > 0) ? TaskResult.Success : taskResult;
-            taskResult = (results.NumberOfPendingScenarios > 0) ? TaskResult.Inconclusive : taskResult;
-            taskResult = (results.NumberOfFailingScenarios > 0) ? TaskResult.Error : taskResult;
-            return taskResult;
-        }
-
-        private static IRunner InitializeNBehaveRun(IEnumerable<string> featureFiles, IEnumerable<string> assemblies, EventListener evtListener)
-        {
-            var config = NBehaveConfiguration
-                .New
+            _config
                 .SetAssemblies(assemblies)
                 .SetEventListener(evtListener)
                 .SetScenarioFiles(featureFiles);
-
-            var runner = config.Build();
-            return runner;
         }
     }
 }

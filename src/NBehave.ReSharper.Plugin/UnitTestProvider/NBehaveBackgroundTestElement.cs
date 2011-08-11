@@ -6,41 +6,35 @@ using NBehave.ReSharper.Plugin.UnitTestRunner;
 
 namespace NBehave.ReSharper.Plugin.UnitTestProvider
 {
-    public class NBehaveScenarioTestElement : NBehaveUnitTestElementBase
+    public class NBehaveBackgroundTestElement : NBehaveUnitTestElementBase
     {
         private readonly string _scenario;
 
-        public NBehaveScenarioTestElement(string scenario, IProjectFile featureFile, IUnitTestProvider testProvider, ProjectModelElementEnvoy projectModel,
-                                          NBehaveUnitTestElementBase parent)
-            : base(featureFile, testProvider, parent.Id + "/" + scenario, projectModel, parent)
+        public NBehaveBackgroundTestElement(string scenario, IProjectFile featureFile, IUnitTestProvider testProvider, ProjectModelElementEnvoy projectModel, NBehaveUnitTestElementBase parent)
+            : base(featureFile, testProvider, parent.Id + "/Background" , projectModel, parent)
         {
             _scenario = scenario;
         }
 
         public override string ShortName
         {
-            get { return Scenario; }
+            get { return "Background to " + _scenario; }
         }
 
         public override string Kind
         {
-            get { return "NBehave scenario"; }
-        }
-
-        public string Scenario
-        {
-            get { return _scenario; }
+            get { return "Background"; }
         }
 
         public override string GetPresentation()
         {
-            return Scenario;
+            return ShortName;
         }
 
         public override IList<UnitTestTask> GetTaskSequence(IEnumerable<IUnitTestElement> explicitElements)
         {
             var taskSequence = (Parent != null) ? Parent.GetTaskSequence(explicitElements) : new List<UnitTestTask>();
-            taskSequence.Add(new UnitTestTask(this, new NBehaveScenarioTask(FeatureFile, _scenario)));
+            taskSequence.Add(new UnitTestTask(this, new NBehaveBackgroundTask(FeatureFile, _scenario)));
             return taskSequence;
         }
 
@@ -55,7 +49,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
             return null;
         }
 
-        private bool Equals(NBehaveScenarioTestElement other)
+        private bool Equals(NBehaveBackgroundTestElement other)
         {
             if (other == null)
                 return false;
@@ -65,12 +59,12 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
 
         public override bool Equals(IUnitTestElement other)
         {
-            return Equals(other as NBehaveScenarioTestElement);
+            return Equals(other as NBehaveBackgroundTestElement);
         }
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as NBehaveScenarioTestElement);
+            return Equals(obj as NBehaveBackgroundTestElement);
         }
 
         public override int GetHashCode()

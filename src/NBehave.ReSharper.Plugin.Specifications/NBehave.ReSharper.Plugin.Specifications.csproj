@@ -61,6 +61,7 @@
     <Reference Include="JetBrains.Platform.ReSharper.ProjectModel">
       <HintPath>..\..\lib\ReSharper\6.0\JetBrains.Platform.ReSharper.ProjectModel.dll</HintPath>
     </Reference>
+    <Reference Include="JetBrains.Platform.ReSharper.Shell, Version=6.0.2202.688, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL" />
     <Reference Include="JetBrains.Platform.ReSharper.Util">
       <HintPath>..\..\lib\ReSharper\6.0\JetBrains.Platform.ReSharper.Util.dll</HintPath>
     </Reference>
@@ -84,7 +85,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Features\Features.cs" />
     <Compile Include="FeatureTaskSpecs.cs" />
+    <Compile Include="FeatureRunnerSpecs.cs" />
+    <Compile Include="NBehaveBackgroundScenarioTestElementSpecs.cs" />
     <Compile Include="NBehaveFeatureTestElementSpecs.cs" />
     <Compile Include="NBehaveScenarioTestElementSpecs.cs" />
     <Compile Include="NBehaveStepTestElementSpecs.cs" />
@@ -92,10 +96,20 @@
     <Compile Include="ResharperStubs.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\NBehave.Narrator.Framework\NBehave.Narrator.Framework.csproj">
+      <Project>{9C2E9E17-2A2C-4F6C-8072-D160A7EA9A51}</Project>
+      <Name>NBehave.Narrator.Framework</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NBehave.ReSharper.Plugin\NBehave.ReSharper.Plugin.csproj">
       <Project>{AA9C7D40-A49C-4522-938B-BD1A99EE3E78}</Project>
       <Name>NBehave.ReSharper.Plugin %28NBehave.ReSharper.Plugin\NBehave.ReSharper.Plugin%29</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\NBehave.Narrator.Framework.Specifications\System.Specs\Scenarios\Scenario.feature">
+      <Link>Features\Scenario.feature</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

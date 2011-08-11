@@ -8,6 +8,8 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
     public class UnitTestMetadataExplorer : IUnitTestMetadataExplorer
     {
         private readonly TestProvider _provider;
+        private readonly ISolution _solution;
+
         public IUnitTestProvider Provider
         {
             get
@@ -16,14 +18,15 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
             }
         }
 
-        public UnitTestMetadataExplorer(TestProvider provider)
+        public UnitTestMetadataExplorer(TestProvider provider, ISolution solution)
         {
             _provider = provider;
+            _solution = solution;
         }
 
         public void ExploreAssembly(IProject project, IMetadataAssembly assembly, UnitTestElementConsumer consumer)
         {
-            new MetadataExplorer(_provider, project, consumer).ExploreProject();
+            new MetadataExplorer(_provider, _solution, project, consumer).ExploreProject();
         }
     }
 }

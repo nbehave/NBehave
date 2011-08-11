@@ -16,15 +16,16 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
         private readonly IEnumerable<UnitTestElementCategory> _categories = new List<UnitTestElementCategory>(UnitTestElementCategory.Uncategorized);
         private readonly IProject _project;
 
-        public string FeatureFile { get; private set; }
-        public string ProjectFile { get; private set; }
+        public IProjectFile FeatureFile { get; private set; }
+        //public string ProjectFile { get; private set; }
         public string AssemblyOutFile { get { return _project.GetOutputAssemblyFile().Location.FullPath; } }
 
         protected NBehaveUnitTestElementBase(IProjectFile featureFile, IUnitTestProvider testProvider, string id, ProjectModelElementEnvoy pointer, NBehaveUnitTestElementBase parent)
         {
-            FeatureFile = featureFile.Location.FullPath;
+            FeatureFile = featureFile;
+            //FeatureFile = featureFile.Location.FullPath;
             _project = featureFile.GetProject();
-            ProjectFile = _project.Name;
+            //ProjectFile = _project.Name;
 
             _testProvider = testProvider;
             _id = id;
@@ -89,7 +90,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
         public virtual IEnumerable<IProjectFile> GetProjectFiles()
         {
             IProject project = GetProject();
-            var files = project.GetAllProjectFiles().Where(_ => _.Location.FullPath == FeatureFile);
+            var files = project.GetAllProjectFiles().Where(_ => _.Location.FullPath == FeatureFile.Location.FullPath);
             return files.ToList();
         }
 

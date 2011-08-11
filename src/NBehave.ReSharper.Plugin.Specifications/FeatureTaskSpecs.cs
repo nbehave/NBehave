@@ -1,5 +1,8 @@
+using JetBrains.ProjectModel;
+using JetBrains.Util;
 using NBehave.ReSharper.Plugin.UnitTestRunner;
 using NUnit.Framework;
+using Rhino.Mocks;
 
 namespace NBehave.ReSharper.Plugin.Specifications
 {
@@ -28,15 +31,21 @@ namespace NBehave.ReSharper.Plugin.Specifications
         [Test]
         public void Should_see_same_instance_as_equal()
         {
-            var a = new NBehaveFeatureTask(@"X:\Project\someFeature.feature");
+            var projFile = MockRepository.GenerateStub<IProjectFile>();
+            projFile.Stub(_ => _.Location).Return(new FileSystemPath(@"X:\Project\someFeature.feature"));
+            var a = new NBehaveFeatureTask("someFeature", projFile);
             Assert.AreEqual(a, a);
         }
 
         [Test]
         public void Should_see_two_different_instances_with_same_feature_as_equal()
         {
-            var a = new NBehaveFeatureTask(@"X:\Project\someFeature.feature");
-            var b = new NBehaveFeatureTask(@"X:\Project\someFeature.feature");
+            var aFile = MockRepository.GenerateStub<IProjectFile>();
+            aFile.Stub(_ => _.Location).Return(new FileSystemPath(@"X:\Project\someFeature.feature"));
+            var a = new NBehaveFeatureTask("someFeature", aFile);
+            var bFile = MockRepository.GenerateStub<IProjectFile>();
+            bFile.Stub(_ => _.Location).Return(new FileSystemPath(@"X:\Project\someFeature.feature"));
+            var b = new NBehaveFeatureTask("someFeature", bFile);
             Assert.AreEqual(a, b);
         }
     }
@@ -47,15 +56,21 @@ namespace NBehave.ReSharper.Plugin.Specifications
         [Test]
         public void Should_see_same_instance_as_equal()
         {
-            var a = new NBehaveScenarioTask(@"X:\Project\someFeature.feature", "scenario");
+            var projFile = MockRepository.GenerateStub<IProjectFile>();
+            projFile.Stub(_ => _.Location).Return(new FileSystemPath(@"X:\Project\someFeature.feature"));
+            var a = new NBehaveScenarioTask(projFile, "scenario");
             Assert.AreEqual(a, a);
         }
 
         [Test]
         public void Should_see_two_different_instances_with_same_feature_as_equal()
         {
-            var a = new NBehaveScenarioTask(@"X:\Project\someFeature.feature", "scenario");
-            var b = new NBehaveScenarioTask(@"X:\Project\someFeature.feature", "scenario");
+            var aFile = MockRepository.GenerateStub<IProjectFile>();
+            aFile.Stub(_ => _.Location).Return(new FileSystemPath(@"X:\Project\someFeature.feature"));
+            var a = new NBehaveScenarioTask(aFile, "scenario");
+            var bFile = MockRepository.GenerateStub<IProjectFile>();
+            bFile.Stub(_ => _.Location).Return(new FileSystemPath(@"X:\Project\someFeature.feature"));
+            var b = new NBehaveScenarioTask(bFile, "scenario");
             Assert.AreEqual(a, b);
         }
     }
@@ -66,15 +81,21 @@ namespace NBehave.ReSharper.Plugin.Specifications
         [Test]
         public void Should_see_same_instance_as_equal()
         {
-            var a = new NBehaveStepTask(@"X:\Project\someFeature.feature", "scenario", "step");
+            var projFile = MockRepository.GenerateStub<IProjectFile>();
+            projFile.Stub(_ => _.Location).Return(new FileSystemPath(@"X:\Project\someFeature.feature"));
+            var a = new NBehaveStepTask(projFile, "scenario", "step");
             Assert.AreEqual(a, a);
         }
 
         [Test]
         public void Should_see_two_different_instances_with_same_feature_as_equal()
         {
-            var a = new NBehaveStepTask(@"X:\Project\someFeature.feature", "scenario", "step");
-            var b = new NBehaveStepTask(@"X:\Project\someFeature.feature", "scenario", "step");
+            var aFile = MockRepository.GenerateStub<IProjectFile>();
+            aFile.Stub(_ => _.Location).Return(new FileSystemPath(@"X:\Project\someFeature.feature"));
+            var a = new NBehaveStepTask(aFile, "scenario", "step");
+            var bFile = MockRepository.GenerateStub<IProjectFile>();
+            bFile.Stub(_ => _.Location).Return(new FileSystemPath(@"X:\Project\someFeature.feature"));
+            var b = new NBehaveStepTask(bFile, "scenario", "step");
             Assert.AreEqual(a, b);
         }
     }

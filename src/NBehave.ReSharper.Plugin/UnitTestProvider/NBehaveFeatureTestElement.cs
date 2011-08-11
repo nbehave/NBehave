@@ -46,7 +46,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
             var list = new List<UnitTestTask>
                                        {
                                            new UnitTestTask(null, new NBehaveAssemblyTask(AssemblyOutFile)),
-                                           new UnitTestTask(this, new NBehaveFeatureTask(FeatureFile))
+                                           new UnitTestTask(this, new NBehaveFeatureTask(Feature, FeatureFile))
                                        };
             return list;
         }

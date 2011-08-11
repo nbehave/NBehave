@@ -1,17 +1,24 @@
+using System.Collections.Generic;
+using System.Linq;
 using JetBrains.CommonControls;
 using JetBrains.ReSharper.Features.Common.TreePsiBrowser;
+using JetBrains.ReSharper.TaskRunnerFramework;
 using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.TreeModels;
 using JetBrains.UI.TreeView;
+using NBehave.Narrator.Framework;
 
 namespace NBehave.ReSharper.Plugin.UnitTestProvider
 {
     public class TestTreePresenter : TreeModelBrowserPresenter
     {
+        private readonly Dictionary<NBehaveFeatureTestElement, TreeModelNode> _treeModels = new Dictionary<NBehaveFeatureTestElement, TreeModelNode>();
+
         public TestTreePresenter()
         {
             Present(new PresentationCallback<TreeModelNode, IPresentableItem, NBehaveFeatureTestElement>(PresentFeature));
             Present(new PresentationCallback<TreeModelNode, IPresentableItem, NBehaveScenarioTestElement>(PresentScenario));
+            Present(new PresentationCallback<TreeModelNode, IPresentableItem, NBehaveBackgroundTestElement>(PresentBackgroundScenario));
             Present(new PresentationCallback<TreeModelNode, IPresentableItem, NBehaveStepTestElement>(PresentStep));
         }
 
@@ -40,12 +47,33 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
         }
 
         private void PresentFeature(NBehaveFeatureTestElement value, IPresentableItem item, TreeModelNode modelNode, PresentationState state)
-        { }
+        {
+            TreeModelNode parentModel;
+            if (_treeModels.TryGetValue(value, out parentModel) == false)
+            {
+                parentModel = modelNode.Parent;
+                _treeModels.Add(value, parentModel);
+            }
+        }
 
         private void PresentScenario(NBehaveScenarioTestElement value, IPresentableItem item, TreeModelNode modelNode, PresentationState state)
+        {
+        }
+
+        private void PresentBackgroundScenario(NBehaveBackgroundTestElement value, IPresentableItem item, TreeModelNode structureelement, PresentationState state)
         { }
 
         private void PresentStep(NBehaveStepTestElement value, IPresentableItem item, TreeModelNode modelNode, PresentationState state)
         { }
+
+        private TaskResult GetTaskResult(IEnumerable<ScenarioResult> results)
+        {
+            var taskResult = (results.Any()) ? TaskResult.Skipped : TaskResult.Exception;
+            taskResult = (results.Any(_ => _.Result is Passed)) ? TaskResult.Success : taskResult;
+            taskResult = (results.Any(_ => _.Result is Pending)) ? TaskResult.Inconclusive : taskResult;
+            taskResult = (results.Any(_ => _.Result is Failed)) ? TaskResult.Error : taskResult;
+            return taskResult;
+        }
+
     }
 }

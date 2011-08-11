@@ -44,6 +44,7 @@ namespace NBehave.TestDriven.Plugin
 
             var results = NBehaveConfiguration
                 .New
+                .DontIsolateInAppDomain()
                 .SetEventListener(new StoryRunnerEventListenerProxy(tddNetListener))
                 .SetScenarioFiles(stories)
                 .SetAssemblies(new[] {assembly.Location})
