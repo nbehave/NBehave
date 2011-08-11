@@ -15,24 +15,26 @@ namespace NBehave.Narrator.Framework
         /// </summary>
         public static NBehaveConfiguration New
         {
-            get
-            {
-                return new NBehaveConfiguration
-                           {
-                               Filter = new StoryRunnerFilter()
-                           };
-            }
+            get { return new NBehaveConfiguration(); }
+        }
+
+        private NBehaveConfiguration()
+            : this(true)
+        { }
+
+        protected NBehaveConfiguration(bool createAppDomain)
+        {
+            CreateAppDomain = createAppDomain;
+            Filter = new StoryRunnerFilter();
         }
 
         public IEnumerable<string> ScenarioFiles { get; set; }
-
         public bool IsDryRun { get; set; }
-
         public IEnumerable<string> Assemblies { get; set; }
-
         public IEventListener EventListener { get; set; }
-
         public StoryRunnerFilter Filter { get; set; }
+        public bool CreateAppDomain { get; protected set; }
+
 
         /// <summary>
         ///   Sets a value indicating whether the action steps should be executed or not.
@@ -49,7 +51,7 @@ namespace NBehave.Narrator.Framework
             return this;
         }
 
-        public IEnumerable<string> FeatureFileExtensions
+        public static IEnumerable<string> FeatureFileExtensions
         {
             get
             {
@@ -84,6 +86,12 @@ namespace NBehave.Narrator.Framework
         public NBehaveConfiguration SetFilter(StoryRunnerFilter filter)
         {
             Filter = filter;
+            return this;
+        }
+
+        public NBehaveConfiguration DontIsolateInAppDomain()
+        {
+            CreateAppDomain = false;
             return this;
         }
     }

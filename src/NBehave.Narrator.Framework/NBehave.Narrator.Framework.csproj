@@ -118,6 +118,8 @@
     <Compile Include="FeatureContext.cs" />
     <Compile Include="NBehaveContext.cs" />
     <Compile Include="Processors\ContextHandler.cs" />
+    <Compile Include="Processors\EventProcessor.cs" />
+    <Compile Include="Processors\IScenarioRunner.cs" />
     <Compile Include="Processors\Messages\ActionStepsLoaded.cs" />
     <Compile Include="Processors\FeatureResultCollector.cs" />
     <Compile Include="Processors\Messages\FeatureFinishedEvent.cs" />
@@ -156,13 +158,14 @@
     <Compile Include="Processors\Messages\FeaturesLoaded.cs" />
     <Compile Include="NBehaveInitialiser.cs" />
     <Compile Include="ParameterConverter.cs" />
+    <Compile Include="Processors\ScenarioRunner.cs" />
     <Compile Include="Remoting\AppDomainBootstrapper.cs" />
     <Compile Include="Processors\IMessageProcessor.cs" />
     <Compile Include="Processors\ScenarioExecutor.cs" />
     <Compile Include="Remoting\RemotableStoryRunner.cs" />
     <Compile Include="RunnerFactory.cs" />
     <Compile Include="ScenarioContext.cs" />
-    <Compile Include="ScenarioExampleResult.cs" />
+    <Compile Include="Domain\ScenarioExampleResult.cs" />
     <Compile Include="EventListeners\SummaryWriter.cs" />
     <Compile Include="Domain\ActionMethodInfo.cs" />
     <Compile Include="Domain\ActionMissingException.cs" />
@@ -182,7 +185,6 @@
     <Compile Include="MatchAllFiles.cs" />
     <Compile Include="StringStepRunner.cs" />
     <Compile Include="Attributes\ActionStepsAttribute.cs" />
-    <Compile Include="Domain\EventArgs.cs" />
     <Compile Include="ActionStepParser.cs" />
     <Compile Include="EventListeners\EventListeners.cs" />
     <Compile Include="EventListeners\MultiOutputEventListener.cs" />

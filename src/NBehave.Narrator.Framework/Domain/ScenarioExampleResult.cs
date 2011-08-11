@@ -7,11 +7,14 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System;
+
 namespace NBehave.Narrator.Framework
 {
     using System.Collections.Generic;
     using System.Linq;
 
+    [Serializable]
     public class ScenarioExampleResult : ScenarioResult
     {
         private readonly List<ScenarioResult> _exampleRowResult = new List<ScenarioResult>();

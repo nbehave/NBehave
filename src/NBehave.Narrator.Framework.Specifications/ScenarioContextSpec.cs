@@ -1,4 +1,3 @@
-using NBehave.Narrator.Framework.Tiny;
 using NUnit.Framework;
 
 namespace NBehave.Narrator.Framework.Specifications
@@ -9,8 +8,7 @@ namespace NBehave.Narrator.Framework.Specifications
         [SetUp]
         public void Initialize()
         {
-            NBehaveInitialiser.Initialise(TinyIoCContainer.Current, new NBehaveConfiguration());
-           
+            NBehaveInitialiser.Initialise(NBehaveConfiguration.New);
         }
 
         [Test]

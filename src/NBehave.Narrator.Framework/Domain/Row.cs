@@ -6,13 +6,14 @@
 //   Defines the Row type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace NBehave.Narrator.Framework
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
 
+    [Serializable]
     public class Row
     {
         public Row(ExampleColumns columnNames, Dictionary<string, string> columnValues)

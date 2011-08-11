@@ -6,11 +6,12 @@
 //   Defines the ExampleColumns type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+using System;
+using System.Collections.Generic;
 
 namespace NBehave.Narrator.Framework
 {
-    using System.Collections.Generic;
-
+    [Serializable]
     public class ExampleColumns : List<ExampleColumn>
     {
         public ExampleColumns()

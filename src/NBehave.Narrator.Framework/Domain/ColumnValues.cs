@@ -1,8 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace NBehave.Narrator.Framework
 {
+    [Serializable]
     public class ColumnValues : IEnumerable<KeyValuePair<string, string>>
     {
         private readonly Dictionary<string, string> _values = new Dictionary<string, string>();

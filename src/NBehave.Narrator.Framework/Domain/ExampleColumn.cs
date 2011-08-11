@@ -2,6 +2,7 @@
 
 namespace NBehave.Narrator.Framework
 {
+    [Serializable]
     public class ExampleColumn : IEquatable<ExampleColumn>
     {
         public string Name { get; private set; }

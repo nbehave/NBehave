@@ -10,23 +10,15 @@ using NUnit.Framework;
 
 namespace NBehave.Narrator.Framework.Specifications
 {
-    public static class LocalConfigurationExtensions
-    {
-        public static TextRunner Build(this NBehaveConfiguration configuration)
-        {
-            return (TextRunner) NBehaveConfigurationExtensions.Build(configuration);
-        }
-    }
-
     [TestFixture]
     public class TextRunnerSpec
     {
-        protected NBehaveConfiguration CreateRunnerWithBasicConfiguration()
+        private NBehaveConfiguration CreateRunnerWithBasicConfiguration()
         {
             var writer = new StreamWriter(new MemoryStream());
             var listener = new TextWriterEventListener(writer);
 
-            var config = NBehaveConfiguration
+            var config = ConfigurationNoAppDomain
                 .New
                 .SetAssemblies(new[] {"TestPlainTextAssembly.dll"})
                 .SetEventListener(listener)
@@ -230,6 +222,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 _result = CreateRunnerWithBasicConfiguration()
                     .SetEventListener(listener)
                     .SetScenarioFiles(new[] {TestFeatures.FeatureWithManyScenarios})
+                    .DontIsolateInAppDomain()
                     .Build()
                     .Run();
 

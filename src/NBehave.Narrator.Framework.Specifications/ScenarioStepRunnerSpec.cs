@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NBehave.Narrator.Framework.Processors;
@@ -11,7 +10,7 @@ namespace NBehave.Narrator.Framework.Specifications
     [TestFixture]
     public abstract class ScenarioStepRunnerSpec
     {
-        private ScenarioExecutor _runner;
+        private IScenarioRunner _runner;
         private ActionCatalog _actionCatalog;
         private StringStepRunner _stringStepRunner;
         private ITinyMessengerHub _hub;
@@ -23,12 +22,20 @@ namespace NBehave.Narrator.Framework.Specifications
 
         private void Init()
         {
-            NBehaveInitialiser.Initialise(TinyIoCContainer.Current, NBehaveConfiguration.New.SetEventListener(Framework.EventListeners.EventListeners.NullEventListener()));
+            NBehaveInitialiser.Initialise(ConfigurationNoAppDomain.New.SetEventListener(Framework.EventListeners.EventListeners.NullEventListener()));
             _hub = TinyIoCContainer.Current.Resolve<ITinyMessengerHub>();
             _actionCatalog = TinyIoCContainer.Current.Resolve<ActionCatalog>();
 
             _stringStepRunner = new StringStepRunner(_actionCatalog, _hub);
-            _runner = new ScenarioExecutor(_hub, _stringStepRunner);
+            _runner = new ScenarioRunner(_hub, _stringStepRunner);
+        }
+
+        private void RunScenarios(params Scenario[] scenarios)
+        {
+            var feature = new Feature("yadday yadda");
+            foreach (var s in scenarios)
+                feature.AddScenario(s);
+            _runner.Run(feature);
         }
 
         [TestFixture]
@@ -59,7 +66,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 var scenario = CreateScenario();
                 scenario.AddStep("Given my name is Axel");
                 scenario.AddStep("And my name is Morgan");
-                _runner.Run(new[] { scenario });
+                RunScenarios(scenario);
                 Assert.AreEqual(2, _scenarioResult.StepResults.Count());
             }
 
@@ -72,7 +79,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 var scenario = CreateScenario();
                 scenario.AddStep("Given my name is Morgan");
                 scenario.AddStep("Given my name is Axel");
-                _runner.Run(new[] { scenario });
+                RunScenarios(scenario);
 
                 Assert.That(_scenarioResult.StepResults.First().Result, Is.TypeOf(typeof(Passed)));
                 Assert.That(_scenarioResult.StepResults.Last().Result, Is.TypeOf(typeof(Failed)));
@@ -132,7 +139,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 secondScenario.AddStep("Given something to count");
                 secondScenario.AddStep("Given something to count");
 
-                _runner.Run(new List<Scenario> { firstScenario, secondScenario });
+                RunScenarios(firstScenario, secondScenario);
             }
 
             [Test]
@@ -189,7 +196,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 var scenario = CreateScenario();
                 scenario.AddStep("Given something");
 
-                _runner.Run(new List<Scenario> { scenario });
+                RunScenarios(scenario);
             }
 
             [TearDown]
@@ -243,7 +250,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 var scenario = CreateScenario();
                 scenario.AddStep("Given something");
 
-                _runner.Run(new List<Scenario> { scenario });
+                RunScenarios(scenario);
             }
 
             [TearDown]

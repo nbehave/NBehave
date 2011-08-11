@@ -20,7 +20,7 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
             var memStream = new MemoryStream();
             var listener = new XmlOutputEventListener(new XmlTextWriter(memStream, Encoding.UTF8));
 
-            NBehaveConfiguration
+            ConfigurationNoAppDomain
                 .New
                 .SetScenarioFiles(_feature)
                 .SetAssemblies(new[] {GetType().Assembly.Location})
@@ -164,7 +164,7 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
                 var memStream = new MemoryStream();
                 var listener = Framework.EventListeners.EventListeners.XmlWriterEventListener(memStream);
 
-                NBehaveConfiguration
+                ConfigurationNoAppDomain
                     .New
                     .SetScenarioFiles(_feature)
                     .SetAssemblies(new[] {GetType().Assembly.Location})

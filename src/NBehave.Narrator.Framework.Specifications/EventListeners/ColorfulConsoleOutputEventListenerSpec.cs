@@ -21,7 +21,7 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
             _originalConsoleOut = Console.Out;
             Console.SetOut(writer);
             var listener = new ColorfulConsoleOutputEventListener();
-            NBehaveConfiguration
+            ConfigurationNoAppDomain
                 .New
                 .SetScenarioFiles(_feature)
                 .SetAssemblies(new[] {GetType().Assembly.Location})

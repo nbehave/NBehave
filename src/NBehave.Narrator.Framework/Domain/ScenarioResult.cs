@@ -30,19 +30,8 @@ namespace NBehave.Narrator.Framework
             _actionStepResults = new List<StepResult>();
         }
 
-        private string _featureTitle;
-        public string FeatureTitle
-        {
-            get { return _featureTitle; }
-            private set { _featureTitle = value; }
-        }
-
-        private string _scenarioTitle;
-        public string ScenarioTitle
-        {
-            get { return _scenarioTitle; }
-            private set { _scenarioTitle = value; }
-        }
+        public string FeatureTitle { get; private set; }
+        public string ScenarioTitle { get; private set; }
 
         public Result Result
         {

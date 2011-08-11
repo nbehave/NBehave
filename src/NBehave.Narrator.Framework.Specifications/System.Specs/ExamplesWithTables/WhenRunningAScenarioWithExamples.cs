@@ -12,7 +12,7 @@ namespace NBehave.Narrator.Framework.Specifications.System.Specs
 
         protected override void EstablishContext()
         {
-            _config = NBehaveConfiguration
+            _config = ConfigurationNoAppDomain
                 .New
                 .SetAssemblies(new[] {Path.GetFileName(GetType().Assembly.Location)})
                 .SetEventListener(Framework.EventListeners.EventListeners.NullEventListener())

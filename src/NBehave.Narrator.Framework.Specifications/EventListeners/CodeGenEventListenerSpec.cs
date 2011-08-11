@@ -1,6 +1,4 @@
-using System.IO;
 using System.Linq;
-using System.Text;
 using NBehave.Narrator.Framework.EventListeners;
 using NBehave.Narrator.Framework.Specifications.Features;
 using NUnit.Framework;
@@ -18,7 +16,7 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
         {
             _listener = new CodeGenEventListener();
 
-            NBehaveConfiguration
+            ConfigurationNoAppDomain
                 .New
                 .SetEventListener(_listener)
                 .SetAssemblies(new[] { GetType().Assembly.Location })

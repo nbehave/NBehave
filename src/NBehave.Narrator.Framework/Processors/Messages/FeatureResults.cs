@@ -6,25 +6,19 @@
 //   Defines the FeatureResults type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
-using System.Runtime.Remoting;
-using System.Runtime.Serialization;
+using System;
+using System.Collections.Generic;
+using NBehave.Narrator.Framework.Tiny;
 
 namespace NBehave.Narrator.Framework
 {
-    using System;
-    using System.Collections.Generic;
-
-    using NBehave.Narrator.Framework.Tiny;
-
     [Serializable]
     public class FeatureResults : TinyMessageBase
     {
         private readonly List<ScenarioResult> _scenarioResults = new List<ScenarioResult>();
 
         public FeatureResults(object sender) : base(sender)
-        {
-        }
+        { }
 
         public int NumberOfScenariosFound
         {

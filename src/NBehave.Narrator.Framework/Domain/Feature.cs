@@ -15,21 +15,25 @@ namespace NBehave.Narrator.Framework
     public class Feature
     {
         public Feature()
-            : this(string.Empty)
+            : this(string.Empty, string.Empty)
         {
         }
 
         public Feature(string title)
+            :this(title,string.Empty)
+        { }
+
+        public Feature(string title, string source)
         {
-            this.Scenarios = new List<Scenario>();
+            Source = source;
+            Scenarios = new List<Scenario>();
             ExtractTitleAndNarrative(title);
             Background = new Scenario(String.Empty, this);
         }
 
         public string Title { get; private set; }
-
         public string Narrative { get; set; }
-
+        public string Source { get; private set; }
         public List<Scenario> Scenarios { get; private set; }
 
         public bool HasTitle

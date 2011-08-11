@@ -1,5 +1,4 @@
 using System;
-using NBehave.Narrator.Framework.EventListeners;
 
 namespace NBehave.Narrator.Framework.Remoting
 {

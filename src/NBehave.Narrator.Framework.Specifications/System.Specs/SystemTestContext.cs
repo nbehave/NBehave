@@ -1,24 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using NBehave.Narrator.Framework.Specifications.Features;
+using NUnit.Framework;
 
 namespace NBehave.Narrator.Framework.Specifications.System.Specs
 {
-    using global::System.IO;
-
-    using NBehave.Narrator.Framework.EventListeners;
-    using NBehave.Narrator.Framework.Specifications.Features;
-
-    using NUnit.Framework;
-
     public class SystemTestContext
     {
         [SetUp]
         public void SetUp()
         {
-            this.EstablishContext();
-            this.Because();
+            EstablishContext();
+            Because();
         }
 
         protected virtual void Because()
@@ -31,11 +22,11 @@ namespace NBehave.Narrator.Framework.Specifications.System.Specs
 
         protected NBehaveConfiguration CreateRunnerWithBasicConfiguration()
         {
-            var config = NBehaveConfiguration
+            var config = ConfigurationNoAppDomain
                 .New
-                .SetAssemblies(new[] { "TestPlainTextAssembly.dll" })
-                .SetEventListener(EventListeners.NullEventListener())
-                .SetScenarioFiles(new[] { TestFeatures.ScenariosWithoutFeature });
+                .SetAssemblies(new[] {"TestPlainTextAssembly.dll"})
+                .SetEventListener(Framework.EventListeners.EventListeners.NullEventListener())
+                .SetScenarioFiles(new[] {TestFeatures.ScenariosWithoutFeature});
 
             return config;
         }

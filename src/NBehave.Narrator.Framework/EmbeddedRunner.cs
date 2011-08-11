@@ -16,7 +16,6 @@ namespace NBehave.Narrator.Framework
             featureText.ExecuteText(type.Assembly, eventListeners);
         }
 
-
         public static void ExecuteText(this string featureText, Assembly assembly, params IEventListener[] eventListeners)
         {
             var file = Path.GetTempFileName();
@@ -40,7 +39,8 @@ namespace NBehave.Narrator.Framework
                 .New
                 .SetAssemblies(new[] { assemblyPath })
                 .SetEventListener(multiEventListener)
-                .SetScenarioFiles(new[] { absolutePathToFeature });
+                .SetScenarioFiles(new[] { absolutePathToFeature })
+                .DontIsolateInAppDomain();
             var runner = config.Build();
             runner.Run();
         }

@@ -54,8 +54,8 @@ namespace NBehave.NAnt
             var runner = NBehaveConfiguration
                 .New
                 .SetDryRun(DryRun)
-                .SetScenarioFiles(ScenarioFiles.FileNames.Cast<string>())
-                .SetAssemblies(TestAssemblies.FileNames.Cast<string>())
+                .SetScenarioFiles(ScenarioFiles.FileNames.Cast<string>().ToList())
+                .SetAssemblies(TestAssemblies.FileNames.Cast<string>().ToList())
                 .SetEventListener(listener)
                 .Build();
 

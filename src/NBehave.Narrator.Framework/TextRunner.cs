@@ -1,19 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TextRunner.cs" company="NBehave">
-//   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
-// </copyright>
-// <summary>
-//   Defines the TextRunner type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-using System;
+﻿using System;
+using NBehave.Narrator.Framework.Messages;
+using NBehave.Narrator.Framework.Tiny;
 
 namespace NBehave.Narrator.Framework
 {
-    using NBehave.Narrator.Framework.Messages;
-    using NBehave.Narrator.Framework.Tiny;
-
     public class TextRunner : MarshalByRefObject, IRunner
     {
         private readonly NBehaveConfiguration _configuration;
@@ -26,20 +16,19 @@ namespace NBehave.Narrator.Framework
 
         public FeatureResults Run()
         {
-            var container = TinyIoCContainer.Current;
-            NBehaveInitialiser.Initialise(container, _configuration);
-            _hub = container.Resolve<ITinyMessengerHub>();
+            NBehaveInitialiser.Initialise(_configuration);
+            _hub = TinyIoCContainer.Current.Resolve<ITinyMessengerHub>();
 
             FeatureResults results = null;
             _hub.Subscribe<FeatureResults>(featureResults => results = featureResults);
-            
+
             try
             {
-                this._hub.Publish(new RunStartedEvent(this));
+                _hub.Publish(new RunStartedEvent(this));
             }
             finally
             {
-                this._hub.Publish(new RunFinishedEvent(this));
+                _hub.Publish(new RunFinishedEvent(this));
             }
 
             return results;

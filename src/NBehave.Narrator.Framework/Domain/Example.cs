@@ -6,12 +6,12 @@
 //   Defines the Example type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
+using System;
+using System.Collections.Generic;
 
 namespace NBehave.Narrator.Framework
 {
-    using System.Collections.Generic;
-
+    [Serializable]
     public class Example : Row
     {
         public Example(ExampleColumns columnNames, Dictionary<string, string> columnValues)

@@ -32,7 +32,7 @@ namespace NBehave.Narrator.Framework.Specifications
         [Test]
         public void ShouldBeAbleToUseRelativePathsWithDots()
         {
-            _config = NBehaveConfiguration.New.SetScenarioFiles(new[]
+            _config = ConfigurationNoAppDomain.New.SetScenarioFiles(new[]
                                                                     {
                                                                         @"..\*.*"
                                                                     });

@@ -6,18 +6,18 @@
 //   Defines the NBehaveTask type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+using System;
+using System.IO;
+using System.Text;
+
+using Microsoft.Build.Framework;
+using Microsoft.Build.Utilities;
+
+using NBehave.Narrator.Framework;
+using NBehave.Narrator.Framework.EventListeners;
 
 namespace NBehave.MSBuild
 {
-    using System;
-    using System.IO;
-    using System.Text;
-
-    using Microsoft.Build.Framework;
-    using Microsoft.Build.Utilities;
-
-    using NBehave.Narrator.Framework;
-    using NBehave.Narrator.Framework.EventListeners;
 
     public class NBehaveTask : Task
     {
@@ -63,6 +63,7 @@ namespace NBehave.MSBuild
             WriteHeaderInto(output);
 
             var config = NBehaveConfiguration.New
+                .DontIsolateInAppDomain()
                 .SetScenarioFiles(ScenarioFiles)
                 .SetDryRun(DryRun)
                 .SetAssemblies(TestAssemblies)
