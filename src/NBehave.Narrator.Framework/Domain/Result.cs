@@ -103,6 +103,15 @@ namespace NBehave.Narrator.Framework
     }
 
     [Serializable]
+    public class PendingBecauseOfPreviousFailedStep : Result
+    {
+        public PendingBecauseOfPreviousFailedStep(string message) 
+            : base(message)
+        {
+        }
+    }
+
+    [Serializable]
     public abstract class Result
     {
         protected Result(string message)

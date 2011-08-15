@@ -73,18 +73,31 @@ namespace NBehave.Narrator.Framework.Processors
 
         private IEnumerable<StepResult> RunSteps(IEnumerable<StringStep> stepsToRun)
         {
+            var failedStep = false;
             var stepResults = new List<StepResult>();
             foreach (var step in stepsToRun)
             {
+                if (failedStep)
+                {
+                    step.StepResult = new StepResult(step.Step, new PendingBecauseOfPreviousFailedStep("Previous step has failed"));
+                    stepResults.Add(step.StepResult);
+                    continue;
+                }
+
                 if (step is StringTableStep)
                     RunStringTableStep((StringTableStep)step);
-                else if (step is StringStep)
+                else 
                     step.StepResult = _stringStepRunner.Run(step);
+
+                if (step.StepResult.Result is Failed)
+                {
+                    failedStep = true;
+                }
                 stepResults.Add(step.StepResult);
             }
             return stepResults;
         }
-
+       
         private void ExecuteAfterScenario(Scenario scenario, ScenarioResult scenarioResult)
         {
             if (scenario.Steps.Any())

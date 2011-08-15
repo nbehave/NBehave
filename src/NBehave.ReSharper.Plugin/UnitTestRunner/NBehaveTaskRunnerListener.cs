@@ -105,6 +105,10 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
                 var msg = (code == null) ? "" : string.Format("The step can be implemented with:{0}{0}{1}", Environment.NewLine, code.Code);
                 _server.TaskExplain(taskState.Task, msg);
             }
+            if(taskResult == TaskResult.Skipped)
+            {
+                _server.TaskExplain(taskState.Task, result.Message);
+            }
             taskState.State = SignalState.Finished;
             _server.TaskFinished(taskState.Task, result.Message, taskResult);
         }

@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NBehave.Narrator.Framework.Processors;
 using NBehave.Narrator.Framework.Tiny;
 using NUnit.Framework;
+using Should.Core.Exceptions;
 
 namespace NBehave.Narrator.Framework.Specifications
 {
@@ -271,6 +273,47 @@ namespace NBehave.Narrator.Framework.Specifications
                 {
                     Assert.That(stepResult, Is.Not.InstanceOf<Failed>());
                 }
+            }
+        }
+
+        [TestFixture]
+        public class When_running_a_scenario_that_has_a_failing_given_step : ScenarioStepRunnerSpec
+        {
+            private TinyMessageSubscriptionToken _subscription;
+            private ScenarioResult _scenarioResult;
+
+            [SetUp]
+            public void SetUp()
+            {
+                Init();
+                _subscription = _hub.Subscribe<ScenarioResultEvent>(_ => _scenarioResult = _.Content);
+
+                Action given = () => { throw new NotImplementedException(); };
+                Action when = () => { };
+                Action then = () => { };
+
+                _actionCatalog.Add(new ActionMethodInfo(new Regex(@"something$"), given, given.Method, "Given", this));
+                _actionCatalog.Add(new ActionMethodInfo(new Regex(@"this$"), when, when.Method, "When", this));
+                _actionCatalog.Add(new ActionMethodInfo(new Regex(@"that happens$"), when, when.Method, "Then", this));
+
+                var scenario = CreateScenario();
+                scenario.AddStep("Given something");
+                scenario.AddStep("When this");
+                scenario.AddStep("Then that happens");
+                RunScenarios(scenario);
+            }
+
+            [TearDown]
+            public void Cleanup()
+            {
+                _hub.Unsubscribe<ScenarioResultEvent>(_subscription);
+            }
+            [Test]
+            public void Should_mark_all_following_steps_as_pending()
+            {
+                Assert.That(_scenarioResult.StepResults.ElementAt(0).Result, Is.InstanceOf<Failed>());
+                Assert.That(_scenarioResult.StepResults.ElementAt(1).Result, Is.InstanceOf<PendingBecauseOfPreviousFailedStep>());
+                Assert.That(_scenarioResult.StepResults.ElementAt(2).Result, Is.InstanceOf<PendingBecauseOfPreviousFailedStep>());
             }
         }
     }
