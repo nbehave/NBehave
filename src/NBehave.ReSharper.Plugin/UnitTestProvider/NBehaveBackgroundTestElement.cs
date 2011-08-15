@@ -26,6 +26,11 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
             get { return "Background"; }
         }
 
+        public string Scenario
+        {
+            get { return _scenario; }
+        }
+
         public override string GetPresentation()
         {
             return ShortName;

@@ -34,9 +34,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
         private readonly List<ScenarioResult> _scenarioResults = new List<ScenarioResult>();
         private readonly CodeGenEventListener _codeGeneration;
 
-        public NBehaveTaskRunnerListener(IEnumerable<TaskExecutionNode> nodes,
-            IRemoteTaskServer server,
-            CodeGenEventListener codeGeneration)
+        public NBehaveTaskRunnerListener(IEnumerable<TaskExecutionNode> nodes, IRemoteTaskServer server, CodeGenEventListener codeGeneration)
         {
             _server = server;
             _codeGeneration = codeGeneration;
@@ -60,13 +58,38 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
             List<TaskState> nodes;
             if (_nodes.TryGetValue(typeof(NBehaveScenarioTask), out nodes) == false)
                 return;
-            var scenario = nodes
-                .FirstOrDefault(_ => ((NBehaveScenarioTask)_.Task).Scenario == result.ScenarioTitle && _.State == SignalState.NotStarted);
+            var scenario = GetTaskNodesNotStarted<NBehaveScenarioTask>()
+                .FirstOrDefault(_ => ((NBehaveScenarioTask)_.Task).Scenario == result.ScenarioTitle);
             if (scenario == null)
                 return;
 
             NotifyResharperOfStepResults(result);
             NotifyResharperOfScenarioResult(result, scenario);
+            NotifyResharperOfBackgroundResult(result);
+        }
+
+        private void NotifyResharperOfBackgroundResult(ScenarioResult scenarioResult)
+        {
+            var backgroundTasks = GetTaskNodesNotStarted<NBehaveBackgroundTask>()
+                .Where(_ => ((NBehaveBackgroundTask)_.Task).Scenario == scenarioResult.ScenarioTitle);
+            var backgroundResult = GetBackgroundStepResult(scenarioResult);
+            foreach (var backgroundTask in backgroundTasks)
+            {
+                backgroundTask.State = SignalState.Finished;
+                NotifyResharperOfTaskResult(scenarioResult, backgroundResult, backgroundTask);
+            }
+        }
+
+        private BackgroundStepResult GetBackgroundStepResult(ScenarioResult scenarioResult)
+        {
+            var results = scenarioResult.StepResults.Where(_ => _ is BackgroundStepResult).Cast<BackgroundStepResult>();
+            var backgroundResult = results.First();
+            foreach (var result in results)
+            {
+                backgroundResult = (result.Result is Failed) ? result : backgroundResult;
+                backgroundResult = (result.Result is Pending && backgroundResult is Passed) ? result : backgroundResult;
+            }
+            return backgroundResult;
         }
 
         private void NotifyResharperOfScenarioResult(ScenarioResult result, TaskState scenario)
@@ -82,9 +105,9 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
                 List<TaskState> nodes;
                 if (_nodes.TryGetValue(typeof(NBehaveStepTask), out nodes) == false)
                     continue;
-                TaskState node = nodes.FirstOrDefault(_ => ((NBehaveStepTask)_.Task).Scenario == result.ScenarioTitle
-                    && ((NBehaveStepTask)_.Task).Step == step.StringStep
-                    && _.State == SignalState.NotStarted);
+                TaskState node = GetTaskNodesNotStarted<NBehaveStepTask>()
+                    .FirstOrDefault(_ => ((NBehaveStepTask)_.Task).Scenario == result.ScenarioTitle
+                        && ((NBehaveStepTask)_.Task).Step == step.StringStep);
                 if (node == null)
                     continue;
 
@@ -111,6 +134,13 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
             }
             taskState.State = SignalState.Finished;
             _server.TaskFinished(taskState.Task, result.Message, taskResult);
+        }
+
+        private IEnumerable<TaskState> GetTaskNodesNotStarted<T>()
+        {
+            if (_nodes.ContainsKey(typeof(T)) == false)
+                return new List<TaskState>();
+            return _nodes[typeof(T)].Where(_ => _.State == SignalState.NotStarted);
         }
 
         private CodeGenStep GetCodeForPendingStep(ScenarioResult result, StepResult step)

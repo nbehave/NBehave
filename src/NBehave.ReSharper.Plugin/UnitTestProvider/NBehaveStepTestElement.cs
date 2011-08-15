@@ -11,6 +11,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
         private readonly string _step;
 
         private readonly string _identity;
+
         public NBehaveStepTestElement(string step, IProjectFile featureFile, IUnitTestProvider testProvider, ProjectModelElementEnvoy projectModel, NBehaveUnitTestElementBase parent)
             : base(featureFile, testProvider, parent.Id + "/" + step, projectModel, parent)
         {
@@ -41,7 +42,8 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
         public override IList<UnitTestTask> GetTaskSequence(IEnumerable<IUnitTestElement> explicitElements)
         {
             var taskSequence = (Parent != null) ? Parent.GetTaskSequence(explicitElements) : new List<UnitTestTask>();
-            string scenario = (Parent is NBehaveScenarioTestElement) ? ((NBehaveScenarioTestElement)Parent).Scenario : "";
+            string scenario = (Parent is NBehaveBackgroundTestElement) ? ((NBehaveBackgroundTestElement)Parent).Scenario : "";
+            scenario = (Parent is NBehaveScenarioTestElement) ? ((NBehaveScenarioTestElement)Parent).Scenario : scenario;
             taskSequence.Add(new UnitTestTask(this, new NBehaveStepTask(FeatureFile, scenario, _step)));
             return taskSequence;
         }
