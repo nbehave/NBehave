@@ -28,7 +28,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 Action<int> action = accountBalance => { };
 
                 _actionCatalog.Add(new ActionMethodInfo("I have $amount euros on my cash account".AsRegex(), action, action.Method, null));
-                var values = _parameterConverter.GetParametersForActionStepText(new ActionStepText("Given I have 20 euros on my cash account", ""));
+                var values = _parameterConverter.GetParametersForStep(new StringStep("Given I have 20 euros on my cash account", ""));
 
                 Assert.That(values.Length, Is.EqualTo(1));
                 Assert.That(values[0].GetType(), Is.EqualTo(typeof(int)));
@@ -39,7 +39,7 @@ namespace NBehave.Narrator.Framework.Specifications
             {
                 Action<string> action = someAction => { };
                 _actionCatalog.Add(new ActionMethodInfo("I have a board like this\n$board".AsRegex(), action, action.Method, null));
-                var values = _parameterConverter.GetParametersForActionStepText(new ActionStepText("Given I have a board like this\nxo \n x \no x", ""));
+                var values = _parameterConverter.GetParametersForStep(new StringStep("Given I have a board like this\nxo \n x \no x", ""));
 
                 Assert.That(values.Length, Is.EqualTo(1));
                 Assert.That(values[0], Is.EqualTo("xo \n x \no x"));
@@ -51,8 +51,8 @@ namespace NBehave.Narrator.Framework.Specifications
                 Action<string> action = someAction => { };
                 _actionCatalog.Add(new ActionMethodInfo("$value something".AsRegex(), action, action.Method, null));
                 _actionCatalog.Add(new ActionMethodInfo("$value something".AsRegex(), action, action.Method, null));
-                var givenValue = _parameterConverter.GetParametersForActionStepText(new ActionStepText("Given 20 something", ""));
-                var andValue = _parameterConverter.GetParametersForActionStepText(new ActionStepText("And 20 something", ""));
+                var givenValue = _parameterConverter.GetParametersForStep(new StringStep("Given 20 something", ""));
+                var andValue = _parameterConverter.GetParametersForStep(new StringStep("And 20 something", ""));
 
                 Assert.That(givenValue.Length, Is.EqualTo(1));
                 Assert.That(andValue.Length, Is.EqualTo(1));
@@ -63,7 +63,7 @@ namespace NBehave.Narrator.Framework.Specifications
             {
                 Action<string> action = someAction => { };
                 _actionCatalog.Add(new ActionMethodInfo("$value something".AsRegex(), action, action.Method, null));
-                var givenValue = _parameterConverter.GetParametersForActionStepText(new ActionStepText("Given -20 something", ""));
+                var givenValue = _parameterConverter.GetParametersForStep(new StringStep("Given -20 something", ""));
 
                 Assert.That(givenValue.Length, Is.EqualTo(1));
                 Assert.That(givenValue.First(), Is.EqualTo("-20"));
@@ -74,7 +74,7 @@ namespace NBehave.Narrator.Framework.Specifications
             {
                 Action<int> action = value => { };
                 _actionCatalog.Add(new ActionMethodInfo(new Regex(@"an int (?<value>\d+)"), action, action.Method, "Given"));
-                var values = _parameterConverter.GetParametersForActionStepText(new ActionStepText("Given an int 42", ""));
+                var values = _parameterConverter.GetParametersForStep(new StringStep("Given an int 42", ""));
                 Assert.That(values[0], Is.TypeOf(typeof(int)));
             }
 
@@ -83,7 +83,7 @@ namespace NBehave.Narrator.Framework.Specifications
             {
                 Action<decimal> action = value => { };
                 _actionCatalog.Add(new ActionMethodInfo(new Regex(@"a decimal (?<value>\d+)"), action, action.Method, "Given"));
-                var values = _parameterConverter.GetParametersForActionStepText(new ActionStepText("Given a decimal 42", ""));
+                var values = _parameterConverter.GetParametersForStep(new StringStep("Given a decimal 42", ""));
                 Assert.That(values[0], Is.TypeOf(typeof(decimal)));
             }
 
@@ -92,7 +92,7 @@ namespace NBehave.Narrator.Framework.Specifications
             {
                 Action<AttributeTargets> action = value => { };
                 _actionCatalog.Add(new ActionMethodInfo(new Regex(@"an enum (?<value>\w+)"), action, action.Method, "Given"));
-                var values = _parameterConverter.GetParametersForActionStepText(new ActionStepText("Given an enum Assembly", ""));
+                var values = _parameterConverter.GetParametersForStep(new StringStep("Given an enum Assembly", ""));
                 Assert.That(values[0], Is.TypeOf(typeof(AttributeTargets)));
             }
 
@@ -103,7 +103,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 _actionCatalog.Add(new ActionMethodInfo(new Regex(@"a string\s+(?<value>(\w+\s+)*)"), action, action.Method, "Given"));
                 var multiLineValue = "one" + Environment.NewLine + "two";
                 var actionString = "Given a string " + multiLineValue;
-                var values = _parameterConverter.GetParametersForActionStepText(new ActionStepText(actionString, ""));
+                var values = _parameterConverter.GetParametersForStep(new StringStep(actionString, ""));
                 Assert.That(values[0], Is.TypeOf(typeof(string)));
             }
 
@@ -116,7 +116,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 _actionCatalog.Add(new ActionMethodInfo(new Regex(@"a string\s+(?<value>(\w+,?\s*)+)"), actionStep, actionStep.Method, "Given"));
                 const string multiLineValue = "one, two";
                 var actionString = "Given a string " + Environment.NewLine + multiLineValue;
-                var values = _parameterConverter.GetParametersForActionStepText(new ActionStepText(actionString, ""));
+                var values = _parameterConverter.GetParametersForStep(new StringStep(actionString, ""));
                 Assert.That(values[0], Is.TypeOf(typeof(string[])));
                 var arr = (string[])values[0];
                 Assert.AreEqual("one", arr[0]);
@@ -131,7 +131,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 _actionCatalog.Add(new ActionMethodInfo(new Regex(@"a string\s+(?<value>(\w+,?\s*)+)"), action, action.Method, "Given"));
                 var multiLineValue = "one,two," + Environment.NewLine;
                 var actionString = "Given a string " + Environment.NewLine + multiLineValue;
-                var values = _parameterConverter.GetParametersForActionStepText(new ActionStepText(actionString, ""));
+                var values = _parameterConverter.GetParametersForStep(new StringStep(actionString, ""));
                 Assert.That((values[0] as string[]), Is.EqualTo(new[] { "one", "two" }));
             }
 
@@ -173,7 +173,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 _actionCatalog.Add(new ActionMethodInfo(new Regex(@"a list of integers (?<value>(\d+,?\s*)+)"), actionStep, actionStep.Method, "Given"));
                 const string multiLineValue = "1, 2, 5";
                 const string actionString = "Given a list of integers " + multiLineValue;
-                var values = _parameterConverter.GetParametersForActionStepText(new ActionStepText(actionString, ""));
+                var values = _parameterConverter.GetParametersForStep(new StringStep(actionString, ""));
                 Assert.That(values[0], Is.AssignableTo(typeof(T)));
                 var arr = (T)values[0];
                 Assert.AreEqual(1, arr.First());
@@ -191,7 +191,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 Action<string> action = name => { };
                 _actionCatalog.Add(new ActionMethodInfo("I have a name".AsRegex(), action, action.Method, null));
                 var row = new Row(new ExampleColumns(new[] { new ExampleColumn("name") }), new Dictionary<string, string> { { "name", "Morgan" } });
-                var values = _parameterConverter.GetParametersForActionStepText(new ActionStepText("Given I have a name", ""), row);
+                var values = _parameterConverter.GetParametersForStep(new StringStep("Given I have a name", ""), row);
 
                 Assert.That(values.Length, Is.EqualTo(1));
                 Assert.That(values[0].GetType(), Is.EqualTo(typeof(string)));

@@ -64,7 +64,7 @@ namespace NBehave.Narrator.Framework.Specifications
 
                 catalog.Add(action);
 
-                var actionResult = catalog.GetAction(new ActionStepText("Given my savings account balance is 500", ""));
+                var actionResult = catalog.GetAction(new StringStep("Given my savings account balance is 500", ""));
 
                 Assert.That(actionResult, Is.Not.Null);
             }
@@ -83,7 +83,7 @@ namespace NBehave.Narrator.Framework.Specifications
 
                 catalog.Add(actionMethodInfo);
 
-                var actionFetched = catalog.GetAction(new ActionStepText("Given I have 20 euros on my cash account", ""));
+                var actionFetched = catalog.GetAction(new StringStep("Given I have 20 euros on my cash account", ""));
 
                 Assert.That(actionFetched, Is.Not.Null);
             }
@@ -111,7 +111,7 @@ namespace NBehave.Narrator.Framework.Specifications
 
             private void BecauseOf()
             {
-                var actionText = new ActionStepText("Given abc def", "somestory.story");
+                var actionText = new StringStep("Given abc def", "somestory.story");
                 var action = _actionCatalog.GetAction(actionText);
                 (action.Action as Action).Invoke();
             }

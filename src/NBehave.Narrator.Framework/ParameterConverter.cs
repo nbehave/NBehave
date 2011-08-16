@@ -23,32 +23,32 @@ namespace NBehave.Narrator.Framework
             _actionCatalog = actionCatalog;
         }
 
-        public object[] GetParametersForActionStepText(ActionStepText actionStepText)
+        public object[] GetParametersForStep(StringStep stringStep)
         {
-            var action = _actionCatalog.GetAction(actionStepText);
+            var action = _actionCatalog.GetAction(stringStep);
             var paramNames = GetParameterNames(action);
-            var match = action.ActionStepMatcher.Match(actionStepText.MatchableStep);
+            var match = action.ActionStepMatcher.Match(stringStep.MatchableStep);
             Func<int, string> getValues = i => match.Groups[paramNames[i]].Value;
 
-            return GetParametersForActionStepText(action, paramNames, getValues);
+            return GetParametersForStep(action, paramNames, getValues);
         }
 
-        public object[] GetParametersForActionStepText(ActionStepText actionStepText, Row row)
+        public object[] GetParametersForStep(StringStep stringStep, Row row)
         {
-            var action = _actionCatalog.GetAction(actionStepText);
+            var action = _actionCatalog.GetAction(stringStep);
             var paramNames = action.ParameterInfo.Select(a => a.Name).ToList();
             Func<int, string> getValues = i => row.ColumnValues[paramNames[i]];
 
-            return GetParametersForActionStepText(action, paramNames, getValues);
+            return GetParametersForStep(action, paramNames, getValues);
         }
 
-        public object CreateGeneric(Type generic, Type innerType)
+        private object CreateGeneric(Type generic, Type innerType)
         {
             var specificType = generic.MakeGenericType(new[] { innerType });
             return Activator.CreateInstance(specificType, null);
         }
 
-        private object[] GetParametersForActionStepText(ActionMethodInfo action, ICollection<string> paramNames, Func<int, string> getValue)
+        private object[] GetParametersForStep(ActionMethodInfo action, ICollection<string> paramNames, Func<int, string> getValue)
         {
             var args = action.ParameterInfo;
             var values = new object[args.Length];

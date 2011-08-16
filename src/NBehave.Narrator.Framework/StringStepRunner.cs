@@ -33,12 +33,12 @@ namespace NBehave.Narrator.Framework
 
         private ParameterConverter ParameterConverter { get; set; }
 
-        public StepResult Run(ActionStepText actionStep)
+        public StepResult Run(StringStep actionStep)
         {
             return (this as IStringStepRunner).Run(actionStep, null);
         }
 
-        public StepResult Run(ActionStepText actionStep, Row row)
+        public StepResult Run(StringStep actionStep, Row row)
         {
             var result = new StepResult(actionStep, new Passed());
             try
@@ -94,19 +94,19 @@ namespace NBehave.Narrator.Framework
             return actionType;
         }
 
-        private void RunStep(ActionStepText actionStep)
+        private void RunStep(StringStep actionStep)
         {
-            Func<object[]> getParameters = () => ParameterConverter.GetParametersForActionStepText(actionStep);
+            Func<object[]> getParameters = () => ParameterConverter.GetParametersForStep(actionStep);
             RunStep(actionStep, getParameters);
         }
 
-        private void RunStep(ActionStepText actionStep, Row row)
+        private void RunStep(StringStep actionStep, Row row)
         {
-            Func<object[]> getParameters = () => ParameterConverter.GetParametersForActionStepText(actionStep, row);
+            Func<object[]> getParameters = () => ParameterConverter.GetParametersForStep(actionStep, row);
             RunStep(actionStep, getParameters);
         }
 
-        private void RunStep(ActionStepText actionStep, Func<object[]> getParametersForActionStepText)
+        private void RunStep(StringStep actionStep, Func<object[]> getParametersForActionStepText)
         {
             var info = ActionCatalog.GetAction(actionStep);
 
@@ -120,12 +120,12 @@ namespace NBehave.Narrator.Framework
             _lastAction = info;
         }
 
-        private void PublishStepStartedEvent(ActionStepText actionStep)
+        private void PublishStepStartedEvent(StringStep actionStep)
         {
             _hub.Publish(new StepStartedEvent(this, actionStep.Step));
         }
 
-        private void PublishStepFinishedEvent(ActionStepText actionStep)
+        private void PublishStepFinishedEvent(StringStep actionStep)
         {
             _hub.Publish(new StepFinishedEvent(this, actionStep.Step));
         }

@@ -20,27 +20,27 @@ namespace NBehave.Narrator.Framework
             _actions.Add(actionValue);
         }
         
-        public bool ActionExists(ActionStepText actionStepText)
+        public bool ActionExists(StringStep stringStep)
         {
-            return FindMatchingAction(actionStepText) != null;
+            return FindMatchingAction(stringStep) != null;
         }
 
-        public ActionMethodInfo GetAction(ActionStepText message)
+        public ActionMethodInfo GetAction(StringStep message)
         {
             return FindMatchingAction(message);
         }
 
-        private ActionMethodInfo FindMatchingAction(ActionStepText actionStepText)
+        private ActionMethodInfo FindMatchingAction(StringStep stringStep)
         {
             ActionMethodInfo matchedAction = null;
             var lengthOfMatch = -1;
             foreach (var action in _actions)
             {
                 var regex = action.ActionStepMatcher;
-                var match = regex.Match(actionStepText.MatchableStep);
+                var match = regex.Match(stringStep.MatchableStep);
                 if (match.Success)
                 {
-                    if (MatchesFileName(action, actionStepText)
+                    if (MatchesFileName(action, stringStep)
                         && match.Value.Length > lengthOfMatch)
                     {
                         lengthOfMatch = match.Value.Length;
@@ -52,9 +52,9 @@ namespace NBehave.Narrator.Framework
             return matchedAction;
         }
 
-        private bool MatchesFileName(ActionMethodInfo action, ActionStepText actionStepText)
+        private bool MatchesFileName(ActionMethodInfo action, StringStep stringStep)
         {
-            return action.MatchesFileName(actionStepText.Source);
+            return action.MatchesFileName(stringStep.Source);
         }
     }
 }

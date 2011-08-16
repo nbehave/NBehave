@@ -5,14 +5,14 @@ namespace NBehave.Narrator.Framework
     [Serializable]
     public class StepResult : Result
     {
-        public StepResult(ActionStepText stringStep, Result resultForActionStep)
+        public StepResult(StringStep stringStep, Result resultForActionStep)
             : base(resultForActionStep.Message)
         {
             StringStep = stringStep;
             Result = resultForActionStep;
         }
 
-        public ActionStepText StringStep { get; private set; }
+        public StringStep StringStep { get; private set; }
         public Result Result { get; private set; }
 
         public void MergeResult(Result stepResult)

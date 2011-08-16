@@ -19,10 +19,10 @@ namespace NBehave.Fluent.Framework
             }
         }
 
-        public Action ResolveStep(ActionStepText actionStep)
+        public Action ResolveStep(StringStep stringStep)
         {
             Action step;
-            return _inlineImplementations.TryGetValue(actionStep.Step, out step) ? step : null;
+            return _inlineImplementations.TryGetValue(stringStep.Step, out step) ? step : null;
         }
 
         public Action ResolveOnCloseScenario()

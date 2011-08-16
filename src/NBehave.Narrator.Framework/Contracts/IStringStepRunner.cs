@@ -11,14 +11,11 @@ namespace NBehave.Narrator.Framework
 {
     public interface IStringStepRunner
     {
-        StepResult Run(ActionStepText actionStep);
-
-        StepResult Run(ActionStepText actionStep, Row row);
-
+        StepResult Run(StringStep step);
+        StepResult Run(StringStep step, Row row);
+        
         void OnCloseScenario();
-
         void BeforeScenario();
-
         void AfterScenario();
     }
 }

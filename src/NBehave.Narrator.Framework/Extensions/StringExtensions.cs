@@ -41,7 +41,7 @@ namespace NBehave.Narrator.Framework
             return tokenString;
         }
 
-        public static ActionStepText AsActionStepText(this string text, string source)
+        public static StringStep AsActionStepText(this string text, string source)
         {
             return new StringStep(text, source);
         }

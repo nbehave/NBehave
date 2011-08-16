@@ -8,15 +8,46 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
+using System.Linq;
 
 namespace NBehave.Narrator.Framework
 {
     [Serializable]
-    public class StringStep : ActionStepText
+    public class StringStep 
     {
-        public StringStep(string step, string fromFile)
-            : base(step, fromFile)
-        { }
+        public StringStep(string step, string source)
+        {
+            Step = step;
+            Source = source;
+        }
+
+        private string _matchableStep;
+        public string MatchableStep { get { return _matchableStep; } }
+
+        private string _step;
+        public string Step
+        {
+            get { return _step; }
+            set
+            {
+                _step = value;
+                _matchableStep = value.RemoveFirstWord();
+            }
+        }
+
+        public string Source { get; set; }
+
+        public TypeOfStep TypeOfStep
+        {
+            get
+            {
+                var validNames = Enum.GetNames(typeof(TypeOfStep)).ToList();
+                var firstWord = Step.GetFirstWord();
+                if (validNames.Contains(firstWord))
+                    return (TypeOfStep)Enum.Parse(typeof(TypeOfStep), firstWord, true);
+                return TypeOfStep.Unknown;
+            }
+        }
 
         public StepResult StepResult { get; set; }
 
@@ -45,6 +76,11 @@ namespace NBehave.Narrator.Framework
         public static bool operator !=(StringStep left, StringStep right)
         {
             return !Equals(left, right);
+        }
+
+        public override string ToString()
+        {
+            return Step;
         }
     }
 }

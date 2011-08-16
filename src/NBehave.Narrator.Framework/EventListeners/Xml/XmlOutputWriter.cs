@@ -244,7 +244,7 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
                               where e.EventType == EventType.ScenarioCreated
                               select e;
             foreach (var step in actionSteps)
-                scenarioResult.AddActionStepResult(new StepResult(new ActionStepText(step.Message, "lost it"), new Pending(scenarioResult.Message)));
+                scenarioResult.AddActionStepResult(new StepResult(new StringStep(step.Message, "lost it"), new Pending(scenarioResult.Message)));
         }
 
         private int CountThemes()

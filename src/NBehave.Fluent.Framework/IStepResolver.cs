@@ -5,7 +5,7 @@ namespace NBehave.Fluent.Framework
 {
     public interface IStepResolver
     {
-        Action ResolveStep(ActionStepText actionStep);
+        Action ResolveStep(StringStep stringStep);
         Action ResolveOnCloseScenario();
         Action ResolveOnBeforeScenario();
         Action ResolveOnAfterScenario();

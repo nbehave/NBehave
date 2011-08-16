@@ -35,7 +35,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 var wasCalled = false;
                 Action<string> action = name => { wasCalled = true; };
                 _actionCatalog.Add(new ActionMethodInfo(new Regex(@"my name is (?<name>\w+)"), action, action.Method, "Given"));
-                _runner.Run(new ActionStepText("Given my name is Morgan", ""));
+                _runner.Run(new StringStep("Given my name is Morgan", ""));
                 Assert.IsTrue(wasCalled, "Action was not called");
             }
 
@@ -45,14 +45,14 @@ namespace NBehave.Narrator.Framework.Specifications
                 var actual = string.Empty;
                 Action<string> action = name => { actual = name; };
                 _actionCatalog.Add(new ActionMethodInfo(new Regex(@"my name is (?<name>\w+)"), action, action.Method, "Given"));
-                _runner.Run(new ActionStepText("Given my name is Morgan", ""));
+                _runner.Run(new StringStep("Given my name is Morgan", ""));
                 Assert.That(actual, Is.EqualTo("Morgan"));
             }
 
             [Test]
             public void ShouldReturnPendingIfActionGivenInTokenStringDoesntExist()
             {
-                var result = _runner.Run(new ActionStepText("Given this doesnt exist", ""));
+                var result = _runner.Run(new StringStep("Given this doesnt exist", ""));
                 Assert.That(result.Result, Is.TypeOf(typeof(Pending)));
             }
 
@@ -61,7 +61,7 @@ namespace NBehave.Narrator.Framework.Specifications
             {
                 Action<string> action = name => _hub.AssertWasCalled(_ => _.Publish<StepStartedEvent>(null), o => o.IgnoreArguments());
                 _actionCatalog.Add(new ActionMethodInfo(new Regex(@"my name is (?<name>\w+)"), action, action.Method, "Given"));
-                _runner.Run(new ActionStepText("Given my name is Morgan", ""));
+                _runner.Run(new StringStep("Given my name is Morgan", ""));
                 _hub.AssertWasCalled(_ => _.Publish<StepStartedEvent>(null), o => o.IgnoreArguments().Repeat.Once());
             }
 
@@ -70,7 +70,7 @@ namespace NBehave.Narrator.Framework.Specifications
             {
                 Action<string> action = name => _hub.AssertWasNotCalled(_ => _.Publish<StepFinishedEvent>(null), o => o.IgnoreArguments());
                 _actionCatalog.Add(new ActionMethodInfo(new Regex(@"my name is (?<name>\w+)"), action, action.Method, "Given"));
-                _runner.Run(new ActionStepText("Given my name is Morgan", ""));
+                _runner.Run(new StringStep("Given my name is Morgan", ""));
                 _hub.AssertWasCalled(_ => _.Publish<StepFinishedEvent>(null), o => o.IgnoreArguments().Repeat.Once());
             }
         }
@@ -128,7 +128,7 @@ namespace NBehave.Narrator.Framework.Specifications
             [Test]
             public void RunningAStepShouldCallMostAttributedMethods()
             {
-                var actionStepText = new ActionStepText("something", "");
+                var actionStepText = new StringStep("something", "");
                 _runner.Run(actionStepText);
 
                 Assert.That(_beforeScenarioWasCalled);
@@ -140,7 +140,7 @@ namespace NBehave.Narrator.Framework.Specifications
             [Test]
             public void CompletingAScenarioShouldCallAllAttributedMethods()
             {
-                var actionStepText = new ActionStepText("something", "");
+                var actionStepText = new StringStep("something", "");
                 _runner.Run(actionStepText);
                 _runner.OnCloseScenario();
 
@@ -166,7 +166,7 @@ namespace NBehave.Narrator.Framework.Specifications
             [Test]
             public void RunningAStepShouldCallMostAttributedMethods()
             {
-                var actionStepText = new ActionStepText("something", "");
+                var actionStepText = new StringStep("something", "");
                 var result = _runner.Run(actionStepText);
                 Assert.That(result.Result, Is.InstanceOf<Failed>());
                 Assert.That(result.Message, Is.StringContaining("ArgumentNullException"));

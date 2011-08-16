@@ -17,8 +17,8 @@ namespace NBehave.Narrator.Framework
 
         private readonly List<Row> _tableSteps = new List<Row>();
 
-        public StringTableStep(string step, string fromFile)
-            : base(step, fromFile)
+        public StringTableStep(string step, string source)
+            : base(step, source)
         {
         }
 

@@ -198,7 +198,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Domain\Result.cs" />
     <Compile Include="Domain\ScenarioResult.cs" />
-    <Compile Include="Domain\ActionStepText.cs" />
     <Compile Include="Attributes\AfterScenarioAttribute.cs" />
     <Compile Include="Attributes\AfterStepAttribute.cs" />
     <Compile Include="Attributes\BeforeScenarioAttribute.cs" />

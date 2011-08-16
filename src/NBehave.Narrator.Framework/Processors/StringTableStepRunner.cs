@@ -36,7 +36,7 @@ namespace NBehave.Narrator.Framework.Processors
 
         private StepResult GetNewActionStepResult(StringTableStep stringStep)
         {
-            var fullStep = new ActionStepText(CreateStepText(stringStep), stringStep.Source);
+            var fullStep = new StringStep(CreateStepText(stringStep), stringStep.Source);
             return new StepResult(fullStep, new Passed());
         }
 

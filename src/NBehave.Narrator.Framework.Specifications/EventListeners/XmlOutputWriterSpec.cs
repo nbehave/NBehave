@@ -19,9 +19,9 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
             EstablishContext();
         }
 
-        private ActionStepText Step(string step)
+        private StringStep Step(string step)
         {
-            return new ActionStepText(step, "");
+            return new StringStep(step, "");
         }
 
         private Result Passed { get { return new Passed(); } }

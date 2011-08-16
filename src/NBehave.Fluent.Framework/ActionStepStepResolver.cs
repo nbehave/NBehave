@@ -20,13 +20,13 @@ namespace NBehave.Fluent.Framework
             _parameterConverter = new ParameterConverter(_actionCatalog);
         }
 
-        public Action ResolveStep(ActionStepText actionStep)
+        public Action ResolveStep(StringStep stringStep)
         {
-            var actionMethodInfo = _actionCatalog.GetAction(actionStep);
+            var actionMethodInfo = _actionCatalog.GetAction(stringStep);
             if (actionMethodInfo == null)
                 return null;
 
-            var parameters = _parameterConverter.GetParametersForActionStepText(actionStep);
+            var parameters = _parameterConverter.GetParametersForStep(stringStep);
             return () =>
                        {
                            actionMethodInfo.ExecuteNotificationMethod(typeof(BeforeStepAttribute));

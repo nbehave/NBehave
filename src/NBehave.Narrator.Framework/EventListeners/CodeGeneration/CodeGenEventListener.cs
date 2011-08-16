@@ -76,7 +76,7 @@ namespace NBehave.Narrator.Framework.EventListeners
         public string Step { get; private set; }
         public string Code { get; private set; }
 
-        public CodeGenStep(string feature, string scenario, ActionStepText step, string code)
+        public CodeGenStep(string feature, string scenario, StringStep step, string code)
         {
             Feature = feature;
             Scenario = scenario;

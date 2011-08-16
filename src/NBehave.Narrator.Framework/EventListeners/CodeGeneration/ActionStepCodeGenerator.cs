@@ -19,7 +19,7 @@ namespace NBehave.Narrator.Framework
         private readonly char[] _whiteSpaces = new[] { ' ', '\n', '\r', '\t' };
         private TypeOfStep _lastTypeOfStep = TypeOfStep.Given;
 
-        public string GenerateMethodFor(ActionStepText step)
+        public string GenerateMethodFor(StringStep step)
         {
             return GenerateMethodFor(step.Step, DetermineTypeOfStep(step));
         }
@@ -35,7 +35,7 @@ namespace NBehave.Narrator.Framework
             return attribute + methodSignature + Environment.NewLine + methodBody;
         }
 
-        private TypeOfStep DetermineTypeOfStep(ActionStepText stringStep)
+        private TypeOfStep DetermineTypeOfStep(StringStep stringStep)
         {
             var step = stringStep.TypeOfStep;
             step= (step == TypeOfStep.Unknown) ? _lastTypeOfStep : step;
