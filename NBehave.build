@@ -225,10 +225,12 @@
 			</fileset>
 		</copy>
 		<copy todir="${examplesdest.dir}\lib">
-			<fileset basedir="${build.dir}\dist">
+			<fileset basedir="${build.dir}\dist\v3.5">
 				<include name="NBehave*.*" />
 				<include name="nunit.framework.dll" />
-			</fileset>
+        <include name="Gallio.dll" />
+        <include name="IKVM.*.dll" />
+      </fileset>
 		</copy>
 		<copy todir="${examplesdest.dir}\lib" flatten="true" file="tools\nant\tasks\net\NAnt.Contrib.Tasks.dll" />
 
