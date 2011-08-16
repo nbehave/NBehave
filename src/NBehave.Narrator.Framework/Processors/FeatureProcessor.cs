@@ -5,17 +5,17 @@ using NBehave.Narrator.Framework.Tiny;
 
 namespace NBehave.Narrator.Framework.Processors
 {
-    public class ScenarioExecutor : IMessageProcessor
+    public class FeatureProcessor : IMessageProcessor
     {
         private readonly ITinyMessengerHub _hub;
         private IEnumerable<Feature> _features;
         private bool _actionStepsLoaded;
-        private readonly IScenarioRunner _scenarioRunner;
+        private readonly IFeatureRunner _featureRunner;
 
-        public ScenarioExecutor(ITinyMessengerHub hub, IScenarioRunner scenarioRunner)
+        public FeatureProcessor(ITinyMessengerHub hub, IFeatureRunner featureRunner)
         {
             _hub = hub;
-            _scenarioRunner = scenarioRunner;
+            _featureRunner = featureRunner;
 
             _hub.Subscribe<FeaturesLoaded>(loaded =>
                                                {
@@ -41,7 +41,7 @@ namespace NBehave.Narrator.Framework.Processors
                 _hub.Publish(new FeatureStartedEvent(this, feature.Title));
                 _hub.Publish(new FeatureNarrativeEvent(this, feature.Narrative));
 
-                _scenarioRunner.Run(feature);
+                _featureRunner.Run(feature);
                 _hub.Publish(new FeatureFinishedEvent(this, feature.Title));
             }
 

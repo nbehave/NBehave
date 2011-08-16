@@ -103,7 +103,6 @@
     <Compile Include="UnitTestProvider\NBehaveFeatureTestElement.cs" />
     <Compile Include="UnitTestProvider\NBehaveScenarioTestElement.cs" />
     <Compile Include="UnitTestProvider\NBehaveStepTestElement.cs" />
-    <Compile Include="ScenarioRunner.cs" />
     <Compile Include="UnitTestRunner\NBehaveBackgroundTask.cs" />
     <Compile Include="UnitTestRunner\NBehaveScenarioTask.cs" />
     <Compile Include="UnitTestRunner\NBehaveStepTask.cs" />

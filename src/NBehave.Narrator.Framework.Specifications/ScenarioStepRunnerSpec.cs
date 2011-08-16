@@ -1,18 +1,16 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NBehave.Narrator.Framework.Processors;
 using NBehave.Narrator.Framework.Tiny;
 using NUnit.Framework;
-using Should.Core.Exceptions;
 
 namespace NBehave.Narrator.Framework.Specifications
 {
     [TestFixture]
     public abstract class ScenarioStepRunnerSpec
     {
-        private IScenarioRunner _runner;
+        private IFeatureRunner _runner;
         private ActionCatalog _actionCatalog;
         private StringStepRunner _stringStepRunner;
         private ITinyMessengerHub _hub;
@@ -29,7 +27,7 @@ namespace NBehave.Narrator.Framework.Specifications
             _actionCatalog = TinyIoCContainer.Current.Resolve<ActionCatalog>();
 
             _stringStepRunner = new StringStepRunner(_actionCatalog, _hub);
-            _runner = new ScenarioRunner(_hub, _stringStepRunner);
+            _runner = new FeatureRunner(_hub, _stringStepRunner);
         }
 
         private void RunScenarios(params Scenario[] scenarios)

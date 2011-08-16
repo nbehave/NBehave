@@ -11,7 +11,7 @@ namespace NBehave.Narrator.Framework
         public static void Initialise(NBehaveConfiguration configuration)
         {
             TinyIoCContainer container = TinyIoCContainer.Current;
-            container.Register<IScenarioRunner, ScenarioRunner>();
+            container.Register<IFeatureRunner, FeatureRunner>();
             CommonInitializer.Initialise(container, configuration);
             if (configuration.CreateAppDomain)
                 RegisterEventListener(configuration.EventListener, container.Resolve<ITinyMessengerHub>());

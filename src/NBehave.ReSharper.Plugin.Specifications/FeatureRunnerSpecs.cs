@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using NBehave.Narrator.Framework.Messages;
 using NBehave.Narrator.Framework.Tiny;
-using NBehave.ReSharper.Plugin.UnitTestProvider;
 using NUnit.Framework;
 
 namespace NBehave.ReSharper.Plugin.Specifications

@@ -1,6 +1,6 @@
 namespace NBehave.Narrator.Framework.Processors
 {
-    public interface IScenarioRunner
+    public interface IFeatureRunner
     {
         void Run(Feature feature);
     }

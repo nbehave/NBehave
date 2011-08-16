@@ -5,12 +5,12 @@ using NBehave.Narrator.Framework.Tiny;
 
 namespace NBehave.Narrator.Framework.Processors
 {
-    public class ScenarioRunner : IScenarioRunner
+    public class FeatureRunner : IFeatureRunner
     {
         private readonly ITinyMessengerHub _hub;
         private readonly IStringStepRunner _stringStepRunner;
 
-        public ScenarioRunner(ITinyMessengerHub hub, IStringStepRunner stringStepRunner)
+        public FeatureRunner(ITinyMessengerHub hub, IStringStepRunner stringStepRunner)
         {
             _hub = hub;
             _stringStepRunner = stringStepRunner;
