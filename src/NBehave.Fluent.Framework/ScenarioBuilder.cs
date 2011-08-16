@@ -26,7 +26,7 @@ namespace NBehave.Fluent.Framework
             {
                 if(_scenario == null)
                 {
-                    _scenario = new Scenario(_scenarioTitle);
+                    _scenario = new Scenario(_scenarioTitle, "");
                     Feature.AddScenario(Scenario);
                 }
                 return _scenario;

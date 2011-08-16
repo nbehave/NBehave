@@ -120,6 +120,7 @@
     <Compile Include="NBehaveContext.cs" />
     <Compile Include="Processors\ContextHandler.cs" />
     <Compile Include="Processors\EventProcessor.cs" />
+    <Compile Include="Processors\ExampleRunner.cs" />
     <Compile Include="Processors\IScenarioRunner.cs" />
     <Compile Include="Processors\Messages\ActionStepsLoaded.cs" />
     <Compile Include="Processors\FeatureResultCollector.cs" />

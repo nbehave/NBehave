@@ -28,7 +28,7 @@ namespace NBehave.Narrator.Framework
             Source = source;
             Scenarios = new List<Scenario>();
             ExtractTitleAndNarrative(title);
-            Background = new Scenario(String.Empty, this);
+            Background = new Scenario(String.Empty, string.Empty, this);
         }
 
         public string Title { get; private set; }

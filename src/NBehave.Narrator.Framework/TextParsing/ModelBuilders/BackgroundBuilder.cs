@@ -1,10 +1,8 @@
-﻿namespace NBehave.Narrator.Framework.Processors
+﻿using NBehave.Narrator.Framework.Tiny;
+
+namespace NBehave.Narrator.Framework.Processors
 {
-    using System;
-
-    using NBehave.Narrator.Framework.Tiny;
-
-    class BackgroundBuilder : AbstracModelBuilder
+    public class BackgroundBuilder : AbstracModelBuilder
     {
         private readonly ITinyMessengerHub _hub;
         private Feature _feature;
@@ -16,15 +14,11 @@
             _hub = hub;
 
             _hub.Subscribe<FeatureBuilt>(built => _feature = built.Content);
-            _hub.Subscribe<ParsingFileStart>(file => this._file = file.Content);
+            _hub.Subscribe<ParsingFileStart>(file => _file = file.Content);
             _hub.Subscribe<ParsedBackground>(
                 message =>
                     {
-                        var scenario = new Scenario(message.Content)
-                            {
-                                Source = this._file
-                            };
-
+                        var scenario = new Scenario(message.Content, _file);
                         _feature.AddBackground(scenario);
 
                         _hub.Publish(new BackgroundBuilt(this, scenario));

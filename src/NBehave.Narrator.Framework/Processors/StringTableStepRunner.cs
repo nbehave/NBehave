@@ -15,7 +15,7 @@ namespace NBehave.Narrator.Framework.Processors
             _stringStepRunner = stringStepRunner;
         }
 
-        public void RunStringTableStep(StringTableStep stringStep)
+        public StepResult RunStringTableStep(StringTableStep stringStep)
         {
             var actionStepResult = GetNewActionStepResult(stringStep);
             var hasParamsInStep = HasParametersInStep(stringStep.Step);
@@ -31,7 +31,7 @@ namespace NBehave.Narrator.Framework.Processors
                 actionStepResult.MergeResult(result.Result);
             }
 
-            stringStep.StepResult = actionStepResult;
+            return actionStepResult;
         }
 
         private StepResult GetNewActionStepResult(StringTableStep stringStep)
@@ -73,6 +73,5 @@ namespace NBehave.Narrator.Framework.Processors
             }
             return new StringStep(stringStep, step.Source);
         }
-
     }
 }

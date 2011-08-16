@@ -9,6 +9,7 @@
 
 using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace NBehave.Narrator.Framework
 {
@@ -28,14 +29,15 @@ namespace NBehave.Narrator.Framework
         public string Step
         {
             get { return _step; }
-            set
+            private set
             {
                 _step = value;
                 _matchableStep = value.RemoveFirstWord();
             }
         }
 
-        public string Source { get; set; }
+        public string Source { get; private set; }
+        public StepResult StepResult { get; set; }
 
         public TypeOfStep TypeOfStep
         {
@@ -49,7 +51,23 @@ namespace NBehave.Narrator.Framework
             }
         }
 
-        public StepResult StepResult { get; set; }
+
+        public virtual StringStep BuildStep(Row values)
+        {
+            var template = Step;
+            foreach (var columnName in values.ColumnNames)
+            {
+                var columnValue = values.ColumnValues[columnName.Name].TrimWhiteSpaceChars();
+                var replace = BuildColumnValueReplaceRegex(columnName);
+                template = replace.Replace(template, columnValue);
+            }
+            return new StringStep(template, Source);
+        }
+
+        protected static Regex BuildColumnValueReplaceRegex(ExampleColumn columnName)
+        {
+            return new Regex(string.Format(@"(\${0})|(\[{0}\])", columnName), RegexOptions.IgnoreCase);
+        }
 
         public override bool Equals(object obj)
         {

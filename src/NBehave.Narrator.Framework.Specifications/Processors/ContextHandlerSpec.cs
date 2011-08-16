@@ -67,7 +67,7 @@ namespace NBehave.Narrator.Framework.Specifications.Processors
             public void Should_update_scenarioContext_with_info_from_ScenarioCreated()
             {
                 const string scenarioTitle = "scenario title";
-                var content = new Scenario(scenarioTitle, new Feature("ignored"));
+                var content = new Scenario(scenarioTitle, "", new Feature("ignored"));
                 InvokeEvent(new ScenarioStartedEvent(this, content));
                 Assert.That(_scenarioContext.ScenarioTitle, Is.EqualTo(scenarioTitle));
             }
@@ -78,7 +78,7 @@ namespace NBehave.Narrator.Framework.Specifications.Processors
                 const string featureTitle = "feature title";
                 InvokeEvent(new FeatureStartedEvent(this, featureTitle));
                 const string scenarioTitle = "scenario title";
-                var content = new Scenario(scenarioTitle, new Feature("ignored"));
+                var content = new Scenario(scenarioTitle, "", new Feature("ignored"));
                 InvokeEvent(new ScenarioStartedEvent(this, content));
                 Assert.That(_scenarioContext.FeatureContext, Is.SameAs(_featureContext));
             }
@@ -88,7 +88,7 @@ namespace NBehave.Narrator.Framework.Specifications.Processors
             {
                 _scenarioContext["Foo"] = "Bar";
                 const string scenarioTitle = "scenario title";
-                var content = new Scenario(scenarioTitle, new Feature("ignored"));
+                var content = new Scenario(scenarioTitle, "", new Feature("ignored"));
                 InvokeEvent(new ScenarioFinishedEvent(this, content));
                 Assert.That(_scenarioContext.Values.Count, Is.EqualTo(0));
             }
@@ -111,7 +111,7 @@ namespace NBehave.Narrator.Framework.Specifications.Processors
                 const string featureTitle = "feature title";
                 InvokeEvent(new FeatureStartedEvent(this, featureTitle));
                 const string scenarioTitle = "scenario title";
-                var content = new Scenario(scenarioTitle, new Feature("ignored"));
+                var content = new Scenario(scenarioTitle, "", new Feature("ignored"));
                 InvokeEvent(new ScenarioStartedEvent(this, content));
                 const string step = "Given something";
                 InvokeEvent(new StepStartedEvent(this, step));
