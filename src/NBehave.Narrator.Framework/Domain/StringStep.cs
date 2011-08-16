@@ -7,8 +7,11 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System;
+
 namespace NBehave.Narrator.Framework
 {
+    [Serializable]
     public class StringStep : ActionStepText
     {
         public StringStep(string step, string fromFile)
@@ -26,7 +29,7 @@ namespace NBehave.Narrator.Framework
         {
             if (other == null)
                 return false;
-            return (ReferenceEquals(this, other)) || other.MatchableStep == MatchableStep;
+            return (ReferenceEquals(this, other)) || (other.MatchableStep == MatchableStep && other.Source == Source);
         }
 
         public override int GetHashCode()

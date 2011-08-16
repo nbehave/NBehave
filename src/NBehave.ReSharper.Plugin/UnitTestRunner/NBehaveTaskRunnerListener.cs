@@ -94,8 +94,8 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
 
         private void NotifyResharperOfScenarioResult(ScenarioResult result, TaskState scenario)
         {
-            var a = new StepResult(result.ScenarioTitle, result.Result);
-            NotifyResharperOfTaskResult(result, a, scenario);
+            var stepResult = new StepResult(result.ScenarioTitle.AsActionStepText(""), result.Result);
+            NotifyResharperOfTaskResult(result, stepResult, scenario);
         }
 
         private void NotifyResharperOfStepResults(ScenarioResult result)
@@ -107,7 +107,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
                     continue;
                 TaskState node = GetTaskNodesNotStarted<NBehaveStepTask>()
                     .FirstOrDefault(_ => ((NBehaveStepTask)_.Task).Scenario == result.ScenarioTitle
-                        && ((NBehaveStepTask)_.Task).Step == step.StringStep);
+                        && ((NBehaveStepTask)_.Task).Step == step.StringStep.Step);
                 if (node == null)
                     continue;
 
@@ -148,7 +148,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
             return _codeGeneration.PendingSteps
                 .FirstOrDefault(_ => _.Feature == result.FeatureTitle
                                      && _.Scenario == result.ScenarioTitle
-                                     && _.Step == step.StringStep);
+                                     && _.Step == step.StringStep.Step);
         }
 
         private TaskResult GetTaskResult(Result result)

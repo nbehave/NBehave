@@ -26,12 +26,13 @@ namespace NBehave.Narrator.Framework.Specifications.Text
 
         private StringStep NewStringStep(string step)
         {
-            return new StringStep(step, "filename");
+            return new StringStep(step, _featureFileName);
         }
 
         private List<Scenario> _scenarios;
 
         private ITinyMessengerHub _hub;
+        private string _featureFileName;
 
         private void Parse(string scenario)
         {
@@ -43,16 +44,16 @@ namespace NBehave.Narrator.Framework.Specifications.Text
                                               "    So that I can build a domain model" + Environment.NewLine);
             }
 
-            string tempFileName = Path.GetTempFileName();
+            _featureFileName = Path.GetTempFileName();
 
-            using (var fileStream = new StreamWriter(File.Create(tempFileName)))
+            using (var fileStream = new StreamWriter(File.Create(_featureFileName)))
             {
                 fileStream.Write(scenario);
             }
 
             var parser = CreateScenarioParser();
             _hub.Subscribe<ScenarioBuilt>(built => _scenarios.Add(built.Content));
-            parser.Parse(tempFileName);
+            parser.Parse(_featureFileName);
         }
 
         [TestFixture]

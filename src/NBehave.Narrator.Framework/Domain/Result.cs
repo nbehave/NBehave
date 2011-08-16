@@ -6,67 +6,10 @@
 //   Defines the StepResult type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+using System;
 
 namespace NBehave.Narrator.Framework
 {
-    using System;
-
-    [Serializable]
-    public class StepResult : Result
-    {
-        public StepResult(string stringStep, Result resultForActionStep)
-            : base(resultForActionStep.Message)
-        {
-            StringStep = stringStep;
-            Result = resultForActionStep;
-        }
-
-        private string _stringStep;
-        public string StringStep
-        {
-            get { return _stringStep; }
-            private set { _stringStep = value; }
-        }
-
-        private Result _result;
-        public Result Result
-        {
-            get { return _result; }
-            private set { _result = value; }
-        }
-
-        public void MergeResult(Result stepResult)
-        {
-            if (stepResult is Passed)
-            {
-                return;
-            }
-
-            if (stepResult is Pending && Result is Passed)
-            {
-                Result = stepResult;
-                Message = stepResult.Message;
-            }
-
-            if (stepResult is Failed && (Result is Passed || Result is Pending))
-            {
-                Result = stepResult;
-                Message = stepResult.Message;
-            }
-
-            if (Result == null)
-            {
-                Result = stepResult;
-                Message = stepResult.Message;
-            }
-        }
-
-        public override string ToString()
-        {
-            return Result.ToString();
-        }
-    }
-
     [Serializable]
     public class Passed : Result
     {

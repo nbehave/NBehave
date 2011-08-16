@@ -56,7 +56,7 @@ namespace NBehave.Narrator.Framework
         {
             foreach (var stringStep in stringSteps)
             {
-                AddActionStepResult(new StepResult(stringStep.Step, new Passed()));
+                AddActionStepResult(new StepResult(stringStep, new Passed()));
             }
         }
 

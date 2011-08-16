@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 
 namespace NBehave.Narrator.Framework.EventListeners
@@ -40,11 +38,8 @@ namespace NBehave.Narrator.Framework.EventListeners
 
         public override void ScenarioResult(ScenarioResult result)
         {
-            var lastStep = TypeOfStep.Given;
-            var validNames = Enum.GetNames(typeof(TypeOfStep)).ToList();
             foreach (var actionStepResult in result.StepResults)
             {
-                lastStep = DetermineTypeOfStep(validNames, actionStepResult, lastStep);
                 if (actionStepResult.Result is Pending)
                 {
                     if (_firstPendingStep)
@@ -53,21 +48,12 @@ namespace NBehave.Narrator.Framework.EventListeners
                         _firstPendingStep = false;
                     }
 
-                    var code = _actionStepCodeGenerator.GenerateMethodFor(actionStepResult.StringStep, lastStep);
+                    var code = _actionStepCodeGenerator.GenerateMethodFor(actionStepResult.StringStep);
                     _bufferWriter.WriteLine(string.Empty);
                     _bufferWriter.WriteLine(code);
                     _pendingSteps.Add(new CodeGenStep(result.FeatureTitle, result.ScenarioTitle, actionStepResult.StringStep, code));
                 }
             }
-        }
-
-        private TypeOfStep DetermineTypeOfStep(List<string> validNames, StepResult stepResult, TypeOfStep lastStep)
-        {
-            if (validNames.Contains(stepResult.StringStep.GetFirstWord()))
-            {
-                lastStep = (TypeOfStep)Enum.Parse(typeof(TypeOfStep), stepResult.StringStep.GetFirstWord(), true);
-            }
-            return lastStep;
         }
 
         private void WriteStart()
@@ -90,11 +76,11 @@ namespace NBehave.Narrator.Framework.EventListeners
         public string Step { get; private set; }
         public string Code { get; private set; }
 
-        public CodeGenStep(string feature, string scenario, string step, string code)
+        public CodeGenStep(string feature, string scenario, ActionStepText step, string code)
         {
             Feature = feature;
             Scenario = scenario;
-            Step = step;
+            Step = step.Step;
             Code = code;
         }
     }

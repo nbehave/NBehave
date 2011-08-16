@@ -74,7 +74,7 @@ namespace NBehave.Narrator.Framework
             _result = new Failed(exception);
         }
 
-        public void Pend(string reason, string step)
+        public void Pend(string reason)
         {
             AddToCurrentMessage(reason);
 
@@ -93,7 +93,7 @@ namespace NBehave.Narrator.Framework
             if (newResult.GetType() == typeof(Pending) && _result.GetType() != typeof(Failed))
             {
                 _result = newResult;
-                Pend(newResult.Message, actionStepResult.StringStep);
+                Pend(newResult.Message);
             }
         }
 

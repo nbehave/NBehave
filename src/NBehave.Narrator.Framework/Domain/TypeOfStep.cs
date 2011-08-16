@@ -13,6 +13,7 @@ namespace NBehave.Narrator.Framework
     {
         Given, 
         When, 
-        Then
+        Then,
+        Unknown
     }
 }

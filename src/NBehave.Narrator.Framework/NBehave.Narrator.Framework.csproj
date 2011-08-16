@@ -111,6 +111,7 @@
     <Compile Include="Domain\BackgroundStepResult.cs" />
     <Compile Include="Domain\ColumnValues.cs" />
     <Compile Include="Domain\ExampleColumn.cs" />
+    <Compile Include="Domain\StepResult.cs" />
     <Compile Include="EventListeners\BackgroundWriter.cs" />
     <Compile Include="EventListeners\FailSpecResultEventListener.cs" />
     <Compile Include="EventListeners\IEventListener.cs" />
@@ -159,6 +160,7 @@
     <Compile Include="NBehaveInitialiser.cs" />
     <Compile Include="ParameterConverter.cs" />
     <Compile Include="Processors\ScenarioRunner.cs" />
+    <Compile Include="Processors\StringTableStepRunner.cs" />
     <Compile Include="Remoting\AppDomainBootstrapper.cs" />
     <Compile Include="Processors\IMessageProcessor.cs" />
     <Compile Include="Processors\ScenarioExecutor.cs" />

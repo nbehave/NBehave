@@ -19,6 +19,13 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
             EstablishContext();
         }
 
+        private ActionStepText Step(string step)
+        {
+            return new ActionStepText(step, "");
+        }
+
+        private Result Passed { get { return new Passed(); } }
+
         protected virtual void EstablishContext()
         {
             var memStream = new MemoryStream();
@@ -26,7 +33,7 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
 
             var story = new Feature("StoryTitle");
             var scenarioResult = new ScenarioResult(story, "ScenarioTitle");
-            var actionStepResult = new StepResult("Given Foo", new Passed());
+            var actionStepResult = new StepResult(Step("Given Foo"), Passed);
             scenarioResult.AddActionStepResult(actionStepResult);
 
             var eventsReceived = new List<EventReceived>
@@ -54,7 +61,7 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
                 var memStream = new MemoryStream();
                 var xmlWriter = new XmlTextWriter(memStream, Encoding.UTF8);
                 _xmlOutputWriter = new XmlOutputWriter(xmlWriter, new List<EventReceived>());
-                var result = new StepResult("Given Foo", new Passed());
+                var result = new StepResult(Step("Given Foo"), Passed);
                 _xmlOutputWriter.DoActionStep(result);
                 xmlWriter.Flush();
                 _xmlDoc = new XmlDocument();
@@ -96,11 +103,11 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
 
                 var feature = new Feature("FeatureTitle");
                 var scenarioResult = new ScenarioResult(feature, "ScenarioTitle");
-                var actionStepResult1 = new StepResult("Given a", new Passed());
+                var actionStepResult1 = new StepResult(Step("Given a"), Passed);
                 scenarioResult.AddActionStepResult(actionStepResult1);
-                var actionStepResult2 = new StepResult("When b", new Passed());
+                var actionStepResult2 = new StepResult(Step("When b"), Passed);
                 scenarioResult.AddActionStepResult(actionStepResult2);
-                var actionStepResult3 = new StepResult("Then c", new Passed());
+                var actionStepResult3 = new StepResult(Step("Then c"), Passed);
                 scenarioResult.AddActionStepResult(actionStepResult3);
 
                 var eventsReceived = new List<EventReceived>
@@ -158,11 +165,11 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
 
                 var feature = new Feature("FeatureTitle");
                 var scenarioResult = new ScenarioResult(feature, "ScenarioTitle");
-                var actionStepResult1 = new StepResult("Given a", new Passed());
+                var actionStepResult1 = new StepResult(Step("Given a"), Passed);
                 scenarioResult.AddActionStepResult(actionStepResult1);
-                var actionStepResult2 = new StepResult("When b", new Passed());
+                var actionStepResult2 = new StepResult(Step("When b"), Passed);
                 scenarioResult.AddActionStepResult(actionStepResult2);
-                var actionStepResult3 = new StepResult("Then c", new Passed());
+                var actionStepResult3 = new StepResult(Step("Then c"), Passed);
                 scenarioResult.AddActionStepResult(actionStepResult3);
 
                 var eventsReceived = new List<EventReceived>
@@ -230,11 +237,11 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
 
                 var feature = new Feature("FeatureTitle");
                 var scenarioResult = new ScenarioResult(feature, "ScenarioTitle");
-                var actionStepResult1 = new StepResult("Given a", new Passed());
+                var actionStepResult1 = new StepResult(Step("Given a"), Passed);
                 scenarioResult.AddActionStepResult(actionStepResult1);
-                var actionStepResult2 = new StepResult("When b", new Passed());
+                var actionStepResult2 = new StepResult(Step("When b"), Passed);
                 scenarioResult.AddActionStepResult(actionStepResult2);
-                var actionStepResult3 = new StepResult("Then c", new Passed());
+                var actionStepResult3 = new StepResult(Step("Then c"), Passed);
                 scenarioResult.AddActionStepResult(actionStepResult3);
 
                 var eventsReceived = new List<EventReceived>
@@ -325,11 +332,11 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
             {
                 var feature = new Feature("First feature");
                 var scenarioResult = new ScenarioResult(feature, "ScenarioTitle");
-                var actionStepResult1 = new StepResult("Given a", new Passed());
+                var actionStepResult1 = new StepResult(Step("Given a"), Passed);
                 scenarioResult.AddActionStepResult(actionStepResult1);
-                var actionStepResult2 = new StepResult("When b", new Passed());
+                var actionStepResult2 = new StepResult(Step("When b"), Passed);
                 scenarioResult.AddActionStepResult(actionStepResult2);
-                var actionStepResult3 = new StepResult("Then c", new Passed());
+                var actionStepResult3 = new StepResult(Step("Then c"), Passed);
                 scenarioResult.AddActionStepResult(actionStepResult3);
 
                 var eventsReceived = new List<EventReceived>
@@ -346,11 +353,11 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
             {
                 var feature = new Feature("Second story");
                 var scenarioResult = new ScenarioResult(feature, "ScenarioTitle");
-                var actionStepResult1 = new StepResult("Given a", new Passed());
+                var actionStepResult1 = new StepResult(Step("Given a"), Passed);
                 scenarioResult.AddActionStepResult(actionStepResult1);
-                var actionStepResult2 = new StepResult("When b", new Passed());
+                var actionStepResult2 = new StepResult(Step("When b"), Passed);
                 scenarioResult.AddActionStepResult(actionStepResult2);
-                var actionStepResult3 = new StepResult("Then c", new Passed());
+                var actionStepResult3 = new StepResult(Step("Then c"), Passed);
                 scenarioResult.AddActionStepResult(actionStepResult3);
 
                 var eventsReceived = new List<EventReceived>

@@ -43,25 +43,21 @@ namespace NBehave.Fluent.Framework
 
         public StepResult Run(ActionStepText actionStep)
         {
-            var stepText = actionStep.Step;
-
             var stepImplementation = _resolvers.Select(resolver => resolver.ResolveStep(actionStep))
                                                   .Where(action => action != null)
                                                   .FirstOrDefault();
             if (stepImplementation == null)
-            {
-                return new StepResult(stepText, new Pending("No implementation located"));
-            }
+                return new StepResult(actionStep, new Pending("No implementation located"));
 
             try
             {
                 stepImplementation();
-                return new StepResult(stepText, new Passed());
+                return new StepResult(actionStep, new Passed());
             }
             catch (Exception ex)
             {
                 var realException = FindUsefulException(ex);
-                return new StepResult(stepText, new Failed(realException));
+                return new StepResult(actionStep, new Failed(realException));
             }
         }
 

@@ -16,10 +16,15 @@ namespace NBehave.Narrator.Framework
     public class ActionStepCodeGenerator
     {
         private readonly Regex _stringRegex = new Regex(@"^('|"").+('|"")$");
-
         private readonly char[] _whiteSpaces = new[] { ' ', '\n', '\r', '\t' };
+        private TypeOfStep _lastTypeOfStep = TypeOfStep.Given;
 
-        public string GenerateMethodFor(string actionStep, TypeOfStep step)
+        public string GenerateMethodFor(ActionStepText step)
+        {
+            return GenerateMethodFor(step.Step, DetermineTypeOfStep(step));
+        }
+
+        private string GenerateMethodFor(string actionStep, TypeOfStep step)
         {
             var actionStepParameterized = ParameterizeActionStep(actionStep);
             var attrib = step.ToString();
@@ -28,6 +33,14 @@ namespace NBehave.Narrator.Framework
             var methodSignature = string.Format("public void {0}({1}){2}", methodName.Replace(' ', '_'), GetParameters(actionStep), " ");
             const string methodBody = "{ throw new System.NotImplementedException(); }";
             return attribute + methodSignature + Environment.NewLine + methodBody;
+        }
+
+        private TypeOfStep DetermineTypeOfStep(ActionStepText stringStep)
+        {
+            var step = stringStep.TypeOfStep;
+            step= (step == TypeOfStep.Unknown) ? _lastTypeOfStep : step;
+            _lastTypeOfStep = step;
+            return step;
         }
 
         private string GetParameters(string row)

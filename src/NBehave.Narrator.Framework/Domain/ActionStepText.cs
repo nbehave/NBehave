@@ -7,8 +7,12 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System;
+using System.Linq;
+
 namespace NBehave.Narrator.Framework
 {
+    [Serializable]
     public class ActionStepText
     {
         public ActionStepText(string text, string source)
@@ -32,6 +36,18 @@ namespace NBehave.Narrator.Framework
         }
 
         public string Source { get; set; }
+
+        public TypeOfStep TypeOfStep
+        {
+            get
+            {
+                var validNames = Enum.GetNames(typeof(TypeOfStep)).ToList();
+                var firstWord = Step.GetFirstWord();
+                if (validNames.Contains(firstWord))
+                    return (TypeOfStep)Enum.Parse(typeof(TypeOfStep), firstWord, true);
+                return TypeOfStep.Unknown;
+            }
+        }
 
         public override string ToString()
         {

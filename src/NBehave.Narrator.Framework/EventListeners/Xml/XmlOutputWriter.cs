@@ -117,7 +117,7 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
         public void DoActionStep(StepResult result)
         {
             Writer.WriteStartElement("actionStep");
-            Writer.WriteAttributeString("name", result.StringStep);
+            Writer.WriteAttributeString("name", result.StringStep.Step);
             Writer.WriteAttributeString("outcome", result.Result.ToString());
             if (result.Result.GetType() == typeof(Failed))
                 Writer.WriteElementString("failure", result.Message);
@@ -244,7 +244,7 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
                               where e.EventType == EventType.ScenarioCreated
                               select e;
             foreach (var step in actionSteps)
-                scenarioResult.AddActionStepResult(new StepResult(step.Message, new Pending(scenarioResult.Message)));
+                scenarioResult.AddActionStepResult(new StepResult(new ActionStepText(step.Message, "lost it"), new Pending(scenarioResult.Message)));
         }
 
         private int CountThemes()

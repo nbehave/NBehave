@@ -3,25 +3,29 @@ using NUnit.Framework;
 namespace NBehave.Narrator.Framework.Specifications
 {
     [TestFixture]
-    public class ActionStepCodeGeneratorSpec
+    public abstract class ActionStepCodeGeneratorSpec
     {
         private ActionStepCodeGenerator _codeGen;
+        private string _generatedCode;
+
+        private string StepText { get; set; }
 
         [SetUp]
         public virtual void GivenTheseConditions()
         {
             _codeGen = new ActionStepCodeGenerator();
+            _generatedCode = _codeGen.GenerateMethodFor(new StringStep(StepText, "a.feature"));
         }
+
 
         [TestFixture]
         public class WhenAddingAMethodWithNoParameters : ActionStepCodeGeneratorSpec
         {
-            private string _generatedCode;
 
             public override void GivenTheseConditions()
             {
+                StepText = "Given some stuff";
                 base.GivenTheseConditions();
-                _generatedCode = _codeGen.GenerateMethodFor("Given some stuff", TypeOfStep.Given);
             }
 
             [Test]
@@ -46,12 +50,10 @@ namespace NBehave.Narrator.Framework.Specifications
         [TestFixture]
         public class WhenAddingAMethodThatStartWithAnd : ActionStepCodeGeneratorSpec
         {
-            private string _generatedCode;
-
             public override void GivenTheseConditions()
             {
+                StepText = "And some stuff";
                 base.GivenTheseConditions();
-                _generatedCode = _codeGen.GenerateMethodFor("And some stuff", TypeOfStep.Given);
             }
 
             [Test]
@@ -75,12 +77,10 @@ namespace NBehave.Narrator.Framework.Specifications
         [TestFixture]
         public class WhenAddingAMethodWithAnIntegerParameter : ActionStepCodeGeneratorSpec
         {
-            private string _generatedCode;
-
             public override void GivenTheseConditions()
             {
+                StepText = "Given 10 choices";
                 base.GivenTheseConditions();
-                _generatedCode = _codeGen.GenerateMethodFor("Given 10 choices", TypeOfStep.Given);
             }
 
             [Test]
@@ -99,12 +99,10 @@ namespace NBehave.Narrator.Framework.Specifications
         [TestFixture]
         public class WhenAddingAMethodWithAStringParameter : ActionStepCodeGeneratorSpec
         {
-            private string _generatedCode;
-
             public override void GivenTheseConditions()
             {
+                StepText = "Given 'astring'";
                 base.GivenTheseConditions();
-                _generatedCode = _codeGen.GenerateMethodFor("Given 'astring'", TypeOfStep.Given);
             }
 
             [Test]
@@ -123,12 +121,10 @@ namespace NBehave.Narrator.Framework.Specifications
         [TestFixture]
         public class WhenAddingAMethodWithAApostrofInStep : ActionStepCodeGeneratorSpec
         {
-            private string _generatedCode;
-
             public override void GivenTheseConditions()
             {
+                StepText = "Given I'm using a special char";
                 base.GivenTheseConditions();
-                _generatedCode = _codeGen.GenerateMethodFor("Given I'm using a special char", TypeOfStep.Given);
             }
 
             [Test]
@@ -147,12 +143,10 @@ namespace NBehave.Narrator.Framework.Specifications
         [TestFixture]
         public class WhenAddingAMethodMoreThanOneParameter : ActionStepCodeGeneratorSpec
         {
-            private string _generatedCode;
-
             public override void GivenTheseConditions()
             {
+                StepText = "When 2 for 2";
                 base.GivenTheseConditions();
-                _generatedCode = _codeGen.GenerateMethodFor("When 2 for 2", TypeOfStep.When);
             }
 
             [Test]

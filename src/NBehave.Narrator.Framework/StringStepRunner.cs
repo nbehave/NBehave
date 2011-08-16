@@ -40,13 +40,13 @@ namespace NBehave.Narrator.Framework
 
         public StepResult Run(ActionStepText actionStep, Row row)
         {
-            var result = new StepResult(actionStep.Step, new Passed());
+            var result = new StepResult(actionStep, new Passed());
             try
             {
                 if (!ActionCatalog.ActionExists(actionStep))
                 {
                     var pendReason = string.Format("No matching Action found for \"{0}\"", actionStep);
-                    result = new StepResult(actionStep.Step, new Pending(pendReason));
+                    result = new StepResult(actionStep, new Pending(pendReason));
                 }
                 else
                 {
@@ -59,7 +59,7 @@ namespace NBehave.Narrator.Framework
             catch (Exception e)
             {
                 var realException = FindUsefulException(e);
-                result = new StepResult(actionStep.Step, new Failed(realException));
+                result = new StepResult(actionStep, new Failed(realException));
             }
 
             return result;

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using NBehave.Narrator.Framework.Tiny;
 
@@ -11,7 +10,6 @@ namespace NBehave.Narrator.Framework.Processors
     {
         private readonly ITinyMessengerHub _hub;
         private readonly IStringStepRunner _stringStepRunner;
-        private readonly Regex _hasParamsInStep = new Regex(@"\[\w+\]");
 
         public ScenarioRunner(ITinyMessengerHub hub, IStringStepRunner stringStepRunner)
         {
@@ -79,7 +77,7 @@ namespace NBehave.Narrator.Framework.Processors
             {
                 if (failedStep)
                 {
-                    step.StepResult = new StepResult(step.Step, new PendingBecauseOfPreviousFailedStep("Previous step has failed"));
+                    step.StepResult = new StepResult(step, new PendingBecauseOfPreviousFailedStep("Previous step has failed"));
                     stepResults.Add(step.StepResult);
                     continue;
                 }
@@ -116,21 +114,8 @@ namespace NBehave.Narrator.Framework.Processors
 
         private void RunStringTableStep(StringTableStep stringStep)
         {
-            var actionStepResult = GetNewActionStepResult(stringStep);
-            var hasParamsInStep = HasParametersInStep(stringStep.Step);
-            foreach (var row in stringStep.TableSteps)
-            {
-                StringStep step = stringStep;
-                if (hasParamsInStep)
-                {
-                    step = InsertParametersToStep(stringStep, row);
-                }
-
-                var result = _stringStepRunner.Run(step, row);
-                actionStepResult.MergeResult(result.Result);
-            }
-
-            stringStep.StepResult = actionStepResult;
+            var r = new StringTableStepRunner(_stringStepRunner);
+            r.RunStringTableStep(stringStep);
         }
 
         private void InsertColumnValues(IEnumerable<StringStep> steps, Row example)
@@ -185,46 +170,6 @@ namespace NBehave.Narrator.Framework.Processors
             }
 
             return clones;
-        }
-
-        private StepResult GetNewActionStepResult(StringTableStep stringStep)
-        {
-            var fullStep = CreateStepText(stringStep);
-            return new StepResult(fullStep, new Passed());
-        }
-
-        private string CreateStepText(StringTableStep stringStep)
-        {
-            var step = new StringBuilder(stringStep.Step + Environment.NewLine);
-            step.Append(stringStep.TableSteps.First().ColumnNamesToString() + Environment.NewLine);
-            foreach (var row in stringStep.TableSteps)
-            {
-                step.Append(row.ColumnValuesToString() + Environment.NewLine);
-            }
-
-            RemoveLastNewLine(step);
-            return step.ToString();
-        }
-
-        private void RemoveLastNewLine(StringBuilder step)
-        {
-            step.Remove(step.Length - Environment.NewLine.Length, Environment.NewLine.Length);
-        }
-
-        private bool HasParametersInStep(string step)
-        {
-            return _hasParamsInStep.IsMatch(step);
-        }
-
-        private StringStep InsertParametersToStep(StringTableStep step, Row row)
-        {
-            var stringStep = step.Step;
-            foreach (var column in row.ColumnValues)
-            {
-                var replceWithValue = new Regex(string.Format(@"\[{0}\]", column.Key), RegexOptions.IgnoreCase);
-                stringStep = replceWithValue.Replace(stringStep, column.Value);
-            }
-            return new StringStep(stringStep, step.Source);
         }
     }
 }
