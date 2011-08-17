@@ -147,5 +147,10 @@ namespace NBehave.Narrator.Framework
         {
             return _actionStepResults.Any(_ => _.Result is Failed);
         }
+    
+        public bool HasBackgroundResults()
+        {
+            return StepResults.Any(_ => _ is BackgroundStepResult);
+        }
     }
 }

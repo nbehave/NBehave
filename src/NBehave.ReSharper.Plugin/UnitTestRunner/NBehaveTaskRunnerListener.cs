@@ -70,6 +70,9 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
 
         private void NotifyResharperOfBackgroundResult(ScenarioResult scenarioResult)
         {
+            if (scenarioResult.HasBackgroundResults() == false)
+                return;
+
             var backgroundTasks = GetTaskNodesNotStarted<NBehaveBackgroundTask>()
                 .Where(_ => ((NBehaveBackgroundTask)_.Task).Scenario == scenarioResult.ScenarioTitle);
             var backgroundResult = GetBackgroundStepResult(scenarioResult);
@@ -128,7 +131,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
                 var msg = (code == null) ? "" : string.Format("The step can be implemented with:{0}{0}{1}", Environment.NewLine, code.Code);
                 _server.TaskExplain(taskState.Task, msg);
             }
-            if(taskResult == TaskResult.Skipped)
+            if (taskResult == TaskResult.Skipped)
             {
                 _server.TaskExplain(taskState.Task, result.Message);
             }

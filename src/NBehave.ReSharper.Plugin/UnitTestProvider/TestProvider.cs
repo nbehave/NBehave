@@ -18,6 +18,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
         private readonly UnitTestElementComparer _unitTestElementComparer = new UnitTestElementComparer(new[]
                                                                                             {
 	                                                                                            typeof(NBehaveFeatureTestElement) ,
+	                                                                                            typeof(NBehaveBackgroundTestElement) ,
 	                                                                                            typeof(NBehaveScenarioTestElement) ,
 	                                                                                            typeof(NBehaveStepTestElement)
                                                                                             });
