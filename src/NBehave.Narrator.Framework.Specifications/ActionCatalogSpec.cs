@@ -29,7 +29,7 @@ namespace NBehave.Narrator.Framework.Specifications
                     null);
                 
                 catalog.Add(action);
-                var actionExists = catalog.ActionExists("Given my savings account balance is 500".AsActionStepText(""));
+                var actionExists = catalog.ActionExists("Given my savings account balance is 500".AsStringStep(""));
 
                 Assert.That(actionExists, Is.True);
             }
@@ -46,7 +46,7 @@ namespace NBehave.Narrator.Framework.Specifications
                     null);
 
                 catalog.Add(action);
-                var actionExists = catalog.ActionExists("Given my\tsavings account balance is 500".AsActionStepText(""));
+                var actionExists = catalog.ActionExists("Given my\tsavings account balance is 500".AsStringStep(""));
 
                 Assert.That(actionExists, Is.True);
             }

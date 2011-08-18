@@ -86,7 +86,7 @@ namespace NBehave.Narrator.Framework.Specifications
             }
         }
 
-        [ActionSteps, TestFixture]
+        [TestFixture]
         public class When_running_many_scenarios_and_class_with_ActionSteps_implements_NotificationMethodAttributes : ScenarioStepRunnerSpec
         {
             private int _timesBeforeScenarioWasCalled;
@@ -167,7 +167,7 @@ namespace NBehave.Narrator.Framework.Specifications
             }
         }
 
-        [ActionSteps, TestFixture]
+        [TestFixture]
         public class When_running_a_scenario_that_throws_exception_in_AfterScenario : ScenarioStepRunnerSpec
         {
             private ScenarioResult _scenarioResult;
@@ -312,6 +312,63 @@ namespace NBehave.Narrator.Framework.Specifications
                 Assert.That(_scenarioResult.StepResults.ElementAt(0).Result, Is.InstanceOf<Failed>());
                 Assert.That(_scenarioResult.StepResults.ElementAt(1).Result, Is.InstanceOf<PendingBecauseOfPreviousFailedStep>());
                 Assert.That(_scenarioResult.StepResults.ElementAt(2).Result, Is.InstanceOf<PendingBecauseOfPreviousFailedStep>());
+            }
+        }
+
+
+        [TestFixture]
+        public class When_running_a_scenario_with_implemented_steps_and_one_step_calls_pend : ScenarioStepRunnerSpec
+        {
+            private ScenarioResult _scenarioResult;
+            private TinyMessageSubscriptionToken _subscription;
+
+            [Given(@"something")]
+            public void GivenSomething()
+            {
+            }
+
+            [Given(@"pend me")]
+            public void PendThisStep()
+            {
+                Step.Pend("some reason");
+            }
+
+            [TestFixtureSetUp]
+            public void Setup()
+            {
+                Init();
+                _subscription = _hub.Subscribe<ScenarioResultEvent>(_ => _scenarioResult = _.Content);
+
+                Action action = GivenSomething;
+                _actionCatalog.Add(new ActionMethodInfo(new Regex(@"something$"), action, action.Method, "Given", this));
+                Action pendAction = PendThisStep;
+                _actionCatalog.Add(new ActionMethodInfo(new Regex(@"pend me$"), pendAction, action.Method, "Given", this));
+
+                var scenario = CreateScenario();
+                scenario.AddStep("Given something");
+                scenario.AddStep("And pend me");
+
+                RunScenarios(scenario);
+            }
+
+            [TearDown]
+            public void Cleanup()
+            {
+                _hub.Unsubscribe<ScenarioResultEvent>(_subscription);
+            }
+
+            [Test]
+            public void Should_set_scenario_as_Pending()
+            {
+                Assert.That(_scenarioResult.Result, Is.InstanceOf<Pending>());
+            }
+
+            [Test]
+            public void Should_set_step_pend_me_as_pending()
+            {
+                Assert.AreEqual(1, _scenarioResult.StepResults.Count(_ => _.StringStep.StepResult.Result is Pending));
+                var stepResult = _scenarioResult.StepResults.FirstOrDefault(_ => _.StringStep.StepResult.Result is Pending);
+                Assert.That("And pend me", Is.EqualTo(stepResult.StringStep.Step));
             }
         }
     }

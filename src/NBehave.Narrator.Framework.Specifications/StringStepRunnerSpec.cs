@@ -52,8 +52,9 @@ namespace NBehave.Narrator.Framework.Specifications
             [Test]
             public void ShouldReturnPendingIfActionGivenInTokenStringDoesntExist()
             {
-                var result = _runner.Run(new StringStep("Given this doesnt exist", ""));
-                Assert.That(result.Result, Is.TypeOf(typeof(Pending)));
+                var step = new StringStep("Given this doesnt exist", "");
+                _runner.Run(step);
+                Assert.That(step.StepResult.Result, Is.TypeOf(typeof(PendingNotImplemented)));
             }
 
             [Test]
@@ -166,10 +167,10 @@ namespace NBehave.Narrator.Framework.Specifications
             [Test]
             public void RunningAStepShouldCallMostAttributedMethods()
             {
-                var actionStepText = new StringStep("something", "");
-                var result = _runner.Run(actionStepText);
-                Assert.That(result.Result, Is.InstanceOf<Failed>());
-                Assert.That(result.Message, Is.StringContaining("ArgumentNullException"));
+                var step = new StringStep("something", "");
+                _runner.Run(step);
+                Assert.That(step.StepResult.Result, Is.InstanceOf<Failed>());
+                Assert.That(step.StepResult.Message, Is.StringContaining("ArgumentNullException"));
             }
 
             [Given(@"When_AfterStep_throws_exception$")]

@@ -104,9 +104,9 @@ namespace NBehave.Narrator.Framework.Specifications
         [Test]
         public void HasFailedSteps_should_report_failed_if_at_least_one_step_failed()
         {
-            var passed = new StepResult("Foo".AsActionStepText(""), new Passed());
+            var passed = new StepResult("Foo".AsStringStep(""), new Passed());
             _results.AddActionStepResult(passed);
-            var failed = new StepResult("Foo".AsActionStepText(""), new Failed(new Exception()));
+            var failed = new StepResult("Foo".AsStringStep(""), new Failed(new Exception()));
             _results.AddActionStepResult(failed);
             Assert.IsTrue(_results.HasFailedSteps());
         }
@@ -114,11 +114,18 @@ namespace NBehave.Narrator.Framework.Specifications
         [Test]
         public void HasFailedSteps_should_return_false_if_no_failed_steps()
         {
-            var passed = new StepResult("Foo".AsActionStepText(""), new Passed());
+            var passed = new StepResult("Foo".AsStringStep(""), new Passed());
             _results.AddActionStepResult(passed);
-            var pending = new StepResult("Bar".AsActionStepText(""), new Pending("yadda"));
+            var pending = new StepResult("Bar".AsStringStep(""), new Pending("yadda"));
             _results.AddActionStepResult(pending);
             Assert.IsFalse(_results.HasFailedSteps());
+        }
+
+        [Test]
+        public void Should_pend_scenario_with_PendingNotImplemented()
+        {
+            _results.AddActionStepResult(new StepResult(new StringStep("Given foo", ""), new PendingNotImplemented("not implemented")));
+            Assert.That(_results.Result, Is.TypeOf(typeof(Pending)));
         }
     }
 }

@@ -33,36 +33,33 @@ namespace NBehave.Narrator.Framework
 
         private ParameterConverter ParameterConverter { get; set; }
 
-        public StepResult Run(StringStep actionStep)
+        public void Run(StringStep step)
         {
-            return (this as IStringStepRunner).Run(actionStep, null);
+            (this as IStringStepRunner).Run(step, null);
         }
 
-        public StepResult Run(StringStep actionStep, Row row)
+        public void Run(StringStep step, Row row)
         {
-            var result = new StepResult(actionStep, new Passed());
             try
             {
-                if (!ActionCatalog.ActionExists(actionStep))
+                if (!ActionCatalog.ActionExists(step))
                 {
-                    var pendReason = string.Format("No matching Action found for \"{0}\"", actionStep);
-                    result = new StepResult(actionStep, new Pending(pendReason));
+                    var pendReason = string.Format("No matching Action found for \"{0}\"", step);
+                    step.PendNotImplemented(pendReason);
                 }
                 else
                 {
                     if (row == null)
-                        RunStep(actionStep);
+                        RunStep(step);
                     else
-                        RunStep(actionStep, row);
+                        RunStep(step, row);
                 }
             }
             catch (Exception e)
             {
                 var realException = FindUsefulException(e);
-                result = new StepResult(actionStep, new Failed(realException));
+                step.Fail(realException);
             }
-
-            return result;
         }
 
         public void OnCloseScenario()
@@ -122,7 +119,7 @@ namespace NBehave.Narrator.Framework
 
         private void PublishStepStartedEvent(StringStep actionStep)
         {
-            _hub.Publish(new StepStartedEvent(this, actionStep.Step));
+            _hub.Publish(new StepStartedEvent(this, actionStep));
         }
 
         private void PublishStepFinishedEvent(StringStep actionStep)

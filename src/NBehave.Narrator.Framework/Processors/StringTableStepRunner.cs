@@ -15,29 +15,23 @@ namespace NBehave.Narrator.Framework.Processors
             _stringStepRunner = stringStepRunner;
         }
 
-        public StepResult RunStringTableStep(StringTableStep stringStep)
+        public StepResult RunStringTableStep(StringTableStep step)
         {
-            var actionStepResult = GetNewActionStepResult(stringStep);
-            var hasParamsInStep = HasParametersInStep(stringStep.Step);
-            foreach (var row in stringStep.TableSteps)
+            var stringStep = GetNewStringStep(step);
+            foreach (var row in step.TableSteps)
             {
-                StringStep step = stringStep;
-                if (hasParamsInStep)
-                {
-                    step = InsertParametersToStep(stringStep, row);
-                }
+                var stepWithParameters = AddParametersToStep(step, row);
 
-                var result = _stringStepRunner.Run(step, row);
-                actionStepResult.MergeResult(result.Result);
+                _stringStepRunner.Run(stepWithParameters, row);
+                stringStep.StepResult.MergeResult(stepWithParameters.StepResult.Result);
             }
 
-            return actionStepResult;
+            return stringStep.StepResult;
         }
 
-        private StepResult GetNewActionStepResult(StringTableStep stringStep)
+        private StringStep GetNewStringStep(StringTableStep stringStep)
         {
-            var fullStep = new StringStep(CreateStepText(stringStep), stringStep.Source);
-            return new StepResult(fullStep, new Passed());
+            return new StringStep(CreateStepText(stringStep), stringStep.Source);
         }
 
         private string CreateStepText(StringTableStep stringStep)
@@ -58,13 +52,11 @@ namespace NBehave.Narrator.Framework.Processors
             step.Remove(step.Length - Environment.NewLine.Length, Environment.NewLine.Length);
         }
 
-        private bool HasParametersInStep(string step)
+        private StringStep AddParametersToStep(StringTableStep step, Row row)
         {
-            return _hasParamsInStep.IsMatch(step);
-        }
+            if (HasParametersInStep(step.Step) == false)
+                return new StringStep(step.Step, step.Source);
 
-        private StringStep InsertParametersToStep(StringTableStep step, Row row)
-        {
             var stringStep = step.Step;
             foreach (var column in row.ColumnValues)
             {
@@ -72,6 +64,11 @@ namespace NBehave.Narrator.Framework.Processors
                 stringStep = replceWithValue.Replace(stringStep, column.Value);
             }
             return new StringStep(stringStep, step.Source);
+        }
+
+        private bool HasParametersInStep(string step)
+        {
+            return _hasParamsInStep.IsMatch(step);
         }
     }
 }

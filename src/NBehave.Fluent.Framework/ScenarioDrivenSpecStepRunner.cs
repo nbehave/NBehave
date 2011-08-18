@@ -41,27 +41,29 @@ namespace NBehave.Fluent.Framework
             _inlineImplementations.RegisterImplementation(CurrentScenarioStage, step, implementation);
         }
 
-        public StepResult Run(StringStep step)
+        public void Run(StringStep step)
         {
             var stepImplementation = _resolvers.Select(resolver => resolver.ResolveStep(step))
                                                   .Where(action => action != null)
                                                   .FirstOrDefault();
             if (stepImplementation == null)
-                return new StepResult(step, new Pending("No implementation located"));
+            {
+                step.PendNotImplemented("No implementation found");
+                return;
+            }
 
             try
             {
                 stepImplementation();
-                return new StepResult(step, new Passed());
             }
             catch (Exception ex)
             {
                 var realException = FindUsefulException(ex);
-                return new StepResult(step, new Failed(realException));
+                step.Fail(realException);
             }
         }
 
-        public StepResult Run(StringStep step, Row row)
+        public void Run(StringStep step, Row row)
         {
             throw new NotSupportedException("NBehave.Spec does not support example-driven scenarios");
         }

@@ -100,9 +100,9 @@ namespace NBehave.Narrator.Framework.Specifications.Processors
             [Test]
             public void Should_update_stepContext_with_info_from_StepCreatedEvent()
             {
-                const string step = "Given something";
+                var step = "Given something".AsStringStep("");
                 InvokeEvent(new StepStartedEvent(this, step));
-                Assert.That(_stepContext.Step, Is.EqualTo(step));
+                Assert.That(_stepContext.Step, Is.EqualTo(step.Step));
             }
 
             [Test]
@@ -113,7 +113,7 @@ namespace NBehave.Narrator.Framework.Specifications.Processors
                 const string scenarioTitle = "scenario title";
                 var content = new Scenario(scenarioTitle, "", new Feature("ignored"));
                 InvokeEvent(new ScenarioStartedEvent(this, content));
-                const string step = "Given something";
+                var step = "Given something".AsStringStep("");
                 InvokeEvent(new StepStartedEvent(this, step));
                 Assert.That(_stepContext.ScenarioContext, Is.SameAs(_scenarioContext));
             }

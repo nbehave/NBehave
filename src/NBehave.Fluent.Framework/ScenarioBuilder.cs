@@ -59,13 +59,12 @@ namespace NBehave.Fluent.Framework
             if(Scenario.Steps.Count() == 0)
                 StepRunner.BeforeScenario();
 
-            string stringStep = string.Format("{0} {1}", currentStage, step);
-            var stringStringStep = new StringStep(stringStep, Scenario.Source);
-            Scenario.AddStep(stringStringStep);
+            var stringStep = new StringStep(string.Format("{0} {1}", currentStage, step), Scenario.Source);
+            Scenario.AddStep(stringStep);
 
-            stringStringStep.StepResult = StepRunner.Run(stringStringStep);
+            StepRunner.Run(stringStep);
 
-            var failure = stringStringStep.StepResult.Result as Failed;
+            var failure = stringStep.StepResult.Result as Failed;
             if (failure != null)
             {
                 throw new ApplicationException("Failed on step " + step, failure.Exception);

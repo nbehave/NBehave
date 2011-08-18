@@ -63,7 +63,7 @@ namespace NBehave.Narrator.Framework.Processors
 
         private void OnStepCreatedEvent(StepStartedEvent e)
         {
-            _stepContext.Step = e.Content;
+            _stepContext.StringStep = e.Content;
         }
 
         private void OnStepFinishedEvent(StepFinishedEvent e)

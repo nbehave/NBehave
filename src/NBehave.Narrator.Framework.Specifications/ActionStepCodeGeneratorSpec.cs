@@ -74,6 +74,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 StringAssert.Contains(@"public void Given_some_stuff()", _generatedCode);
             }
         }
+
         [TestFixture]
         public class WhenAddingAMethodWithAnIntegerParameter : ActionStepCodeGeneratorSpec
         {

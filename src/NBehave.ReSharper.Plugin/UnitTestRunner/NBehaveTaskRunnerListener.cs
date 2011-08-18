@@ -97,7 +97,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
 
         private void NotifyResharperOfScenarioResult(ScenarioResult result, TaskState scenario)
         {
-            var stepResult = new StepResult(result.ScenarioTitle.AsActionStepText(""), result.Result);
+            var stepResult = new StepResult(result.ScenarioTitle.AsStringStep(""), result.Result);
             NotifyResharperOfTaskResult(result, stepResult, scenario);
         }
 

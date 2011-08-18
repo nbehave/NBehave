@@ -40,7 +40,7 @@ namespace NBehave.Narrator.Framework.Specifications
 
                 var actionCatalog = tinyIoCContainer.Resolve<ActionCatalog>();
 
-                Assert.That(actionCatalog.ActionExists("Given my name is Morgan".AsActionStepText("")), Is.True);
+                Assert.That(actionCatalog.ActionExists("Given my name is Morgan".AsStringStep("")), Is.True);
             }
 
             [Test]
@@ -51,7 +51,7 @@ namespace NBehave.Narrator.Framework.Specifications
 
                 var actionCatalog = TinyIoCContainer.Current.Resolve<ActionCatalog>();
 
-                Assert.That(actionCatalog.ActionExists("Given I'm greeted".AsActionStepText("")), Is.True);
+                Assert.That(actionCatalog.ActionExists("Given I'm greeted".AsStringStep("")), Is.True);
             }
 
             [Test]
@@ -62,7 +62,7 @@ namespace NBehave.Narrator.Framework.Specifications
 
                 var actionCatalog = TinyIoCContainer.Current.Resolve<ActionCatalog>();
 
-                Assert.That(actionCatalog.ActionExists("Given I should be greeted with “Hello, Morgan!”".AsActionStepText("")), Is.True);
+                Assert.That(actionCatalog.ActionExists("Given I should be greeted with “Hello, Morgan!”".AsStringStep("")), Is.True);
             }
         }
 

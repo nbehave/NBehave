@@ -64,15 +64,15 @@ namespace NBehave.Narrator.Framework.Processors
             {
                 if (failedStep)
                 {
-                    step.StepResult = new StepResult(step, new PendingBecauseOfPreviousFailedStep("Previous step has failed"));
+                    step.PendBecauseOfPreviousFailedStep();
                     stepResults.Add(step.StepResult);
                     continue;
                 }
 
                 if (step is StringTableStep)
-                    step.StepResult = RunStringTableStep((StringTableStep)step);
+                    RunStringTableStep((StringTableStep)step);
                 else
-                    step.StepResult = _stringStepRunner.Run(step);
+                    _stringStepRunner.Run(step);
 
                 if (step.StepResult.Result is Failed)
                 {

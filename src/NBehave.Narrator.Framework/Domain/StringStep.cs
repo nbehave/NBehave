@@ -14,18 +14,20 @@ using System.Text.RegularExpressions;
 namespace NBehave.Narrator.Framework
 {
     [Serializable]
-    public class StringStep 
+    public class StringStep
     {
         public StringStep(string step, string source)
         {
             Step = step;
             Source = source;
+            StepResult = new StepResult(this, new Passed());
         }
 
         private string _matchableStep;
         public string MatchableStep { get { return _matchableStep; } }
 
         private string _step;
+
         public string Step
         {
             get { return _step; }
@@ -51,7 +53,6 @@ namespace NBehave.Narrator.Framework
             }
         }
 
-
         public virtual StringStep BuildStep(Row values)
         {
             var template = Step;
@@ -67,6 +68,26 @@ namespace NBehave.Narrator.Framework
         protected static Regex BuildColumnValueReplaceRegex(ExampleColumn columnName)
         {
             return new Regex(string.Format(@"(\${0})|(\[{0}\])", columnName), RegexOptions.IgnoreCase);
+        }
+
+        public void Pend(string reason)
+        {
+            StepResult = new StepResult(this, new Pending(reason));
+        }
+
+        public void PendNotImplemented(string pendReason)
+        {
+            StepResult = new StepResult(this, new PendingNotImplemented(pendReason));
+        }
+
+        public void PendBecauseOfPreviousFailedStep()
+        {
+            StepResult = new StepResult(this, new PendingBecauseOfPreviousFailedStep("Previous step has failed"));
+        }
+
+        public void Fail(Exception exception)
+        {
+            StepResult = new StepResult(this, new Failed(exception));
         }
 
         public override bool Equals(object obj)
