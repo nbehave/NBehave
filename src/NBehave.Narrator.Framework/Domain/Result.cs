@@ -46,7 +46,16 @@ namespace NBehave.Narrator.Framework
     }
 
     [Serializable]
-    public class PendingBecauseOfPreviousFailedStep : Result
+    public class PendingNotImplemented : Pending
+    {
+        public PendingNotImplemented(string pendingReason)
+            : base(pendingReason)
+        {
+        }
+    }
+
+    [Serializable]
+    public class PendingBecauseOfPreviousFailedStep : Pending
     {
         public PendingBecauseOfPreviousFailedStep(string message) 
             : base(message)

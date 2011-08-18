@@ -31,14 +31,14 @@ namespace NBehave.Narrator.Framework
             var attribute = string.Format("[{0}(\"{1}\")]{2}", attrib, actionStepParameterized, Environment.NewLine);
             var methodName = ExtractMethodName(attrib + " " + actionStepParameterized);
             var methodSignature = string.Format("public void {0}({1}){2}", methodName.Replace(' ', '_'), GetParameters(actionStep), " ");
-            const string methodBody = "{ throw new System.NotImplementedException(); }";
+            string methodBody = string.Format("{{{0}\tStep.Pend(\"Not implemented\");{0}}}", Environment.NewLine);
             return attribute + methodSignature + Environment.NewLine + methodBody;
         }
 
         private TypeOfStep DetermineTypeOfStep(StringStep stringStep)
         {
             var step = stringStep.TypeOfStep;
-            step= (step == TypeOfStep.Unknown) ? _lastTypeOfStep : step;
+            step = (step == TypeOfStep.Unknown) ? _lastTypeOfStep : step;
             _lastTypeOfStep = step;
             return step;
         }

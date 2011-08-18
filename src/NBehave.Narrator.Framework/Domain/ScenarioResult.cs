@@ -56,9 +56,7 @@ namespace NBehave.Narrator.Framework
         public virtual void AddActionStepResults(IEnumerable<StepResult> stepResults)
         {
             foreach (var stepResult in stepResults)
-            {
                 AddActionStepResult(stepResult);
-            }
         }
 
         public virtual void AddActionStepResult(StepResult actionStepResult)
@@ -84,13 +82,13 @@ namespace NBehave.Narrator.Framework
         protected void MergeResult(StepResult actionStepResult)
         {
             var newResult = actionStepResult.Result;
-            if (newResult.GetType() == typeof(Failed))
+            if (newResult is Failed)
             {
                 _result = newResult;
                 Fail(((Failed)newResult).Exception);
             }
 
-            if (newResult.GetType() == typeof(Pending) && _result.GetType() != typeof(Failed))
+            if (newResult is Pending && (_result is Failed == false))
             {
                 _result = newResult;
                 Pend(newResult.Message);
@@ -147,7 +145,7 @@ namespace NBehave.Narrator.Framework
         {
             return _actionStepResults.Any(_ => _.Result is Failed);
         }
-    
+
         public bool HasBackgroundResults()
         {
             return StepResults.Any(_ => _ is BackgroundStepResult);

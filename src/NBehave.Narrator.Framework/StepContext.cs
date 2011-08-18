@@ -1,10 +1,20 @@
 namespace NBehave.Narrator.Framework
 {
-    public class StepContext 
+    public static class Step
     {
-        public FeatureContext FeatureContext { get; protected set; }
-        public ScenarioContext ScenarioContext { get; protected set; }
-        public string Step { get; internal set; }
+        public static void Pend(string reason)
+        {
+            StepContext.Current.Pend(reason);
+        }
+    }
+
+    public class StepContext
+    {
+        public FeatureContext FeatureContext { get; private set; }
+        public ScenarioContext ScenarioContext { get; private set; }
+        public string Step { get { return StringStep.Step; } }
+
+        internal StringStep StringStep { get; set; }
 
         public StepContext(FeatureContext featureContext, ScenarioContext scenarioContext)
         {
@@ -20,6 +30,11 @@ namespace NBehave.Narrator.Framework
         public override string ToString()
         {
             return Step;
+        }
+
+        public void Pend(string reason)
+        {
+            StringStep.Pend(reason);
         }
     }
 }
