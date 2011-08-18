@@ -144,10 +144,10 @@ namespace NBehave.Console
                 eventListeners.Add(EventListeners.XmlWriterEventListener(options.xml));
 
             if (options.console)
-                eventListeners.Add(new ColorfulConsoleOutputEventListener());
+                eventListeners.Add(EventListeners.ColorfulConsoleOutputEventListener());
 
             if (eventListeners.Count == 0)
-                eventListeners.Add(new ColorfulConsoleOutputEventListener());
+                eventListeners.Add(EventListeners.ColorfulConsoleOutputEventListener());
 
             if (options.codegen)
                 eventListeners.Add(EventListeners.CodeGenEventListener(System.Console.Out));

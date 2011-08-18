@@ -40,7 +40,7 @@ namespace NBehave.Narrator.Framework.EventListeners
         {
             foreach (var actionStepResult in result.StepResults)
             {
-                if (actionStepResult.Result is Pending)
+                if (actionStepResult.Result is PendingNotImplemented)
                 {
                     if (_firstPendingStep)
                     {

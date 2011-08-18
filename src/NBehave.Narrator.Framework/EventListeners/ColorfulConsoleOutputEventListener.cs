@@ -16,7 +16,7 @@ namespace NBehave.Narrator.Framework.EventListeners
 
     public class ColorfulConsoleOutputEventListener : EventListener
     {
-        private List<ScenarioResult> _allResults = new List<ScenarioResult>();
+        private readonly List<ScenarioResult> _allResults = new List<ScenarioResult>();
 
         public override void FeatureStarted(string feature)
         {
@@ -26,12 +26,11 @@ namespace NBehave.Narrator.Framework.EventListeners
                 return;
             }
 
-            this.WriteColorString("Feature: " + feature, ConsoleColor.Cyan);
+            WriteColorString("Feature: " + feature, ConsoleColor.Cyan);
         }
 
         public override void RunStarted()
         {
-            _allResults = new List<ScenarioResult>();
         }
 
         public override void FeatureNarrative(string narrative)
@@ -77,11 +76,18 @@ namespace NBehave.Narrator.Framework.EventListeners
             _allResults.Add(scenarioResult);
             foreach (var stepResult in scenarioResult.StepResults)
             {
-                WriteColorString("  " + stepResult.StringStep + " - " + stepResult.Result.ToString().ToUpper(),
+                WriteColorString("  " + stepResult.StringStep + " - " + TypeAsString(stepResult),
                     GetColorForResult(stepResult.Result));
             }
 
             DoExamplesInScenario(scenarioResult as ScenarioExampleResult);
+        }
+
+        private static string TypeAsString(StepResult stepResult)
+        {
+            if (stepResult.Result is Pending)
+                return "PENDING";
+            return stepResult.Result.ToString().ToUpper();
         }
 
         private void WriteBackground(ScenarioResult scenarioResult)

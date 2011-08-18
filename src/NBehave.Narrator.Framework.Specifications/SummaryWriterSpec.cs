@@ -9,7 +9,8 @@ namespace NBehave.Narrator.Framework.Specifications
 	{
 		private SummaryWriter _output;
 		private TextWriter _writer;
-		[SetUp]
+	
+        [SetUp]
 		public void EstablishContext()
 		{
 			_writer = new StringWriter();
@@ -17,11 +18,13 @@ namespace NBehave.Narrator.Framework.Specifications
 			var results = new FeatureResults(this);
 			var feature = new Feature("feature title");
 			var scenarioResult = new ScenarioResult(feature, "scenario title");
-            scenarioResult.AddActionStepResult(new StepResult("a".AsActionStepText(""), new Passed()));
-            scenarioResult.AddActionStepResult(new StepResult("b".AsActionStepText(""), new Passed()));
-            scenarioResult.AddActionStepResult(new StepResult("c".AsActionStepText(""), new Pending("pending reason")));
-            scenarioResult.AddActionStepResult(new StepResult("d".AsActionStepText(""), new Failed(new Exception("why it failed"))));
-			results.AddResult(scenarioResult);
+            scenarioResult.AddActionStepResult(new StepResult("a".AsStringStep(""), new Passed()));
+            scenarioResult.AddActionStepResult(new StepResult("b".AsStringStep(""), new Passed()));
+            scenarioResult.AddActionStepResult(new StepResult("c".AsStringStep(""), new Pending("pending reason")));
+            scenarioResult.AddActionStepResult(new StepResult("c".AsStringStep(""), new PendingNotImplemented("not implemented")));
+            scenarioResult.AddActionStepResult(new StepResult("d".AsStringStep(""), new Failed(new Exception("why it failed"))));
+            scenarioResult.AddActionStepResult(new StepResult("c".AsStringStep(""), new PendingBecauseOfPreviousFailedStep("previous step failed")));
+            results.AddResult(scenarioResult);
 			
 			_output.WriteSummaryResults(results);
 		}
@@ -29,7 +32,7 @@ namespace NBehave.Narrator.Framework.Specifications
 		[Test]
 		public void ShouldWriteNumberOfActionstepsInSummary()
 		{
-			Assert.That(_writer.ToString(),Is.StringContaining("Steps 4"));
+			Assert.That(_writer.ToString(),Is.StringContaining("Steps 6"));
 		}
 		
 		[Test]
@@ -41,7 +44,7 @@ namespace NBehave.Narrator.Framework.Specifications
 		[Test]
 		public void ShouldWriteNumberOfPendingActionstepsInSummary()
 		{
-			Assert.That(_writer.ToString(),Is.StringContaining("pending 1"));
+			Assert.That(_writer.ToString(),Is.StringContaining("pending 3"));
 		}
 	}
 }

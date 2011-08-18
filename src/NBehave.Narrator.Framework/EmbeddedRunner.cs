@@ -50,7 +50,7 @@ namespace NBehave.Narrator.Framework
             var eventListeners = new List<IEventListener>();
             eventListeners.AddRange(eventListenersArg);
 
-            eventListeners.Add(new ColorfulConsoleOutputEventListener());
+            eventListeners.Add(EventListeners.EventListeners.ColorfulConsoleOutputEventListener());
             eventListeners.Add(new FailSpecResultEventListener());
 
             var multiEventListener = new MultiOutputEventListener(eventListeners.ToArray());
