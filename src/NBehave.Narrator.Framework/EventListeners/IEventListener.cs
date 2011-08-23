@@ -5,9 +5,9 @@
         void RunStarted();
         void FeatureStarted(string feature);
         void FeatureNarrative(string message);
+        void FeatureFinished(FeatureResult result);
         void ScenarioStarted(string scenarioTitle);
-        void ScenarioResult(ScenarioResult result);
-        void FeatureFinished();
+        void ScenarioFinished(ScenarioResult result);
         void RunFinished();
     }
 }

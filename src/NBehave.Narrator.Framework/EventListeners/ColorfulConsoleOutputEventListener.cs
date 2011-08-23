@@ -69,7 +69,7 @@ namespace NBehave.Narrator.Framework.EventListeners
             WriteSummary();
         }
 
-        public override void ScenarioResult(ScenarioResult scenarioResult)
+        public override void ScenarioFinished(ScenarioResult scenarioResult)
         {
             WriteBackground(scenarioResult);
             WriteColorString("Scenario: " + scenarioResult.ScenarioTitle + " - " + scenarioResult.Result.ToString().ToUpper(), GetColorForResult(scenarioResult.Result));

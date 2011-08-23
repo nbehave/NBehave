@@ -47,7 +47,7 @@ namespace NBehave.ReSharper.Plugin
         void Narrator.Framework.Processors.IFeatureRunner.Run(Feature feature)
         {
             if (_configuration.IsDryRun)
-                return;
+                return ;
             DoRun(feature);
         }
 

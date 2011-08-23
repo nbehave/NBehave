@@ -20,7 +20,7 @@ namespace NBehave.TestDriven.Plugin
             _listener.WriteLine("\tFeature: " + feature, Category.Output);
         }
 
-        public override void ScenarioResult(ScenarioResult result)
+        public override void ScenarioFinished(ScenarioResult result)
         {                        
             _listener.WriteLine(string.Format("\t\tScenario: {0} - {1}", result.ScenarioTitle, result.Result), Category.Info);
             _listener.TestFinished(

@@ -21,15 +21,13 @@ namespace NBehave.Narrator.Framework.Processors
             foreach (var scenario in feature.Scenarios)
             {
                 _hub.Publish(new ScenarioStartedEvent(this, scenario));
-                if (scenario.Examples.Any())
-                    RunExamples(scenario);
-                else
-                    RunScenario(scenario);
+                ScenarioResult scenarioResult = scenario.Examples.Any() ? RunExamples(scenario) : RunScenario(scenario);
+                _hub.Publish(new ScenarioResultEvent(this, scenarioResult));
                 _hub.Publish(new ScenarioFinishedEvent(this, scenario));
             }
         }
 
-        private void RunScenario(Scenario scenario)
+        private ScenarioResult RunScenario(Scenario scenario)
         {
             var scenarioResult = new ScenarioResult(scenario.Feature, scenario.Title);
             BeforeScenario();
@@ -38,14 +36,14 @@ namespace NBehave.Narrator.Framework.Processors
             var stepResults = RunSteps(scenario.Steps);
             scenarioResult.AddActionStepResults(stepResults);
             AfterScenario(scenario, scenarioResult);
-            _hub.Publish(new ScenarioResultEvent(this, scenarioResult));
+            return scenarioResult;
         }
 
-        private void RunExamples(Scenario scenario)
+        private ScenarioResult RunExamples(Scenario scenario)
         {
             var runner = new ExampleRunner(_stringStepRunner);
             var exampleResults = runner.RunExamples(scenario, RunSteps, BeforeScenario, AfterScenario);
-            _hub.Publish(new ScenarioResultEvent(this, exampleResults));
+            return exampleResults;
         }
 
         private IEnumerable<StepResult> RunBackground(Scenario background)

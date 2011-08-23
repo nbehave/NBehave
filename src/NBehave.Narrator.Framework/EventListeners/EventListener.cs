@@ -22,7 +22,7 @@ namespace NBehave.Narrator.Framework
         {
         }
 
-        public virtual void FeatureFinished()
+        public virtual void FeatureFinished(FeatureResult result)
         {
         }
 
@@ -30,7 +30,7 @@ namespace NBehave.Narrator.Framework
         {
         }
 
-        public virtual void ScenarioResult(ScenarioResult result)
+        public virtual void ScenarioFinished(ScenarioResult result)
         {
         }
 

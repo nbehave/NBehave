@@ -52,7 +52,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
             }
         }
 
-        public override void ScenarioResult(ScenarioResult result)
+        public override void ScenarioFinished(ScenarioResult result)
         {
             _scenarioResults.Add(result);
             List<TaskState> nodes;

@@ -30,7 +30,7 @@ namespace NBehave.Narrator.Framework.EventListeners
             throw new StepFailedException(errors.ToString());
         }
 
-        public override void ScenarioResult(ScenarioResult result)
+        public override void ScenarioFinished(ScenarioResult result)
         {
             _results.Add(result);
         }

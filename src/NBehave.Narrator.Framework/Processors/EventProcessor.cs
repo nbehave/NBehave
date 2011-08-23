@@ -11,13 +11,13 @@ namespace NBehave.Narrator.Framework.Processors
             if (AppDomain.CurrentDomain.FriendlyName == RunnerFactory.AppDomainName)
                 return;
 
-            hub.Subscribe<FeatureStartedEvent>(created => configuration.EventListener.FeatureStarted(created.Content));
-            hub.Subscribe<FeatureNarrativeEvent>(narrative => configuration.EventListener.FeatureNarrative(narrative.Content));
-            hub.Subscribe<ScenarioStartedEvent>(created => configuration.EventListener.ScenarioStarted(created.Content.Title));
-            hub.Subscribe<RunStartedEvent>(started => configuration.EventListener.RunStarted());
-            hub.Subscribe<RunFinishedEvent>(finished => configuration.EventListener.RunFinished());
-            hub.Subscribe<FeatureFinishedEvent>(themeFinished => configuration.EventListener.FeatureFinished());
-            hub.Subscribe<ScenarioResultEvent>(message => configuration.EventListener.ScenarioResult(message.Content));
+            hub.Subscribe<RunStartedEvent>(_ => configuration.EventListener.RunStarted());
+            hub.Subscribe<RunFinishedEvent>(_ => configuration.EventListener.RunFinished());
+            hub.Subscribe<FeatureStartedEvent>(_ => configuration.EventListener.FeatureStarted(_.Content));
+            hub.Subscribe<FeatureNarrativeEvent>(_ => configuration.EventListener.FeatureNarrative(_.Content));
+            hub.Subscribe<FeatureResultEvent>(_ => configuration.EventListener.FeatureFinished(_.Content));
+            hub.Subscribe<ScenarioStartedEvent>(_ => configuration.EventListener.ScenarioStarted(_.Content.Title));
+            hub.Subscribe<ScenarioResultEvent>(_ => configuration.EventListener.ScenarioFinished(_.Content));
         }
     }
 }

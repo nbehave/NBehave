@@ -52,7 +52,7 @@ namespace NBehave.Narrator.Framework.EventListeners
             _writer.Flush();
         }
 
-        public override void ScenarioResult(ScenarioResult result)
+        public override void ScenarioFinished(ScenarioResult result)
         {
             _allResults.Add(result);
             foreach (var actionStepResult in result.StepResults)
