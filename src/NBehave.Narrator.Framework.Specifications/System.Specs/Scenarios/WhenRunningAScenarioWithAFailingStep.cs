@@ -28,7 +28,7 @@ namespace NBehave.Narrator.Framework.Specifications.System.Specs
         public void ShouldDisplayErrorMessageForFailingStep()
         {
             Assert.That(_results.NumberOfFailingScenarios, Is.EqualTo(1));
-            Assert.That(_results.ScenarioResults[0].Message.StartsWith("Should.Core.Exceptions.EqualException"), Is.True);
+            Assert.That(_results[0].ScenarioResults[0].Message.StartsWith("Should.Core.Exceptions.EqualException"), Is.True);
         }
     }
 

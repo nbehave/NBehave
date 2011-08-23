@@ -8,6 +8,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 using Microsoft.Build.Framework;
@@ -35,9 +36,7 @@ namespace NBehave.MSBuild
         [Required]
         public string[] ScenarioFiles { get; set; }
 
-
         public FeatureResults FeatureResults { get; private set; }
-
 
         public NBehaveTask()
         {
@@ -92,13 +91,13 @@ namespace NBehave.MSBuild
             output.WriteSeparator();
         }
 
-        private bool FailBuildBasedOn(FeatureResults results)
+        private bool FailBuildBasedOn(FeatureResults resultEvent)
         {
-            if (results.NumberOfFailingScenarios == 0)
+            if (resultEvent.NumberOfFailingScenarios == 0)
                 return false;
 
             var exceptionMessage = new StringBuilder();
-            foreach (var result in results.ScenarioResults)
+            foreach (var result in resultEvent.SelectMany(_=>_.ScenarioResults))
             {
                 exceptionMessage.AppendLine(result.Message);
                 exceptionMessage.AppendLine(result.StackTrace);

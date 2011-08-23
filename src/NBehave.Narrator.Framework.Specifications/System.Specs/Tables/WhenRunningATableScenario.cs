@@ -15,9 +15,9 @@ namespace NBehave.Narrator.Framework.Specifications.System.Specs
         {
             _config = ConfigurationNoAppDomain
                 .New
-                .SetAssemblies(new[] {Path.GetFileName(GetType().Assembly.Location)})
+                .SetAssemblies(new[] { Path.GetFileName(GetType().Assembly.Location) })
                 .SetEventListener(Framework.EventListeners.EventListeners.NullEventListener())
-                .SetScenarioFiles(new[] {@"System.Specs\Tables\TableScenario.feature"});
+                .SetScenarioFiles(new[] { @"System.Specs\Tables\TableScenario.feature" });
         }
 
         protected override void Because()
@@ -28,12 +28,12 @@ namespace NBehave.Narrator.Framework.Specifications.System.Specs
         [Test]
         public void AllStepsShouldPass()
         {
-            IEnumerable<StepResult> enumerable = _results.ScenarioResults.SelectMany(result => result.StepResults);
+            IEnumerable<StepResult> enumerable = _results.SelectMany(_ => _.ScenarioResults).SelectMany(result => result.StepResults);
             IEnumerable<Result> results = enumerable.Select(stepResult => stepResult.Result);
 
             foreach (var result in results)
             {
-                Assert.That(result, Is.TypeOf(typeof (Passed)), result.Message);
+                Assert.That(result, Is.TypeOf(typeof(Passed)), result.Message);
             }
         }
     }

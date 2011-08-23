@@ -115,7 +115,7 @@ namespace NBehave.Narrator.Framework.Specifications
         public class When_running_plain_text_scenarios_with_config_file : RemotableStoryRunnerSpec
         {
             private IRunner _runner;
-            private FeatureResults _result;
+            private FeatureResults _results;
 
             [SetUp]
             public void SetUp()
@@ -128,7 +128,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 SetupConfigFile();
                 _runner = CreateTextRunner(new[] { "TestPlainTextAssembly.dll" }, scenarioText);
 
-                _result = _runner.Run();
+                _results = _runner.Run();
 
             }
 
@@ -141,8 +141,8 @@ namespace NBehave.Narrator.Framework.Specifications
             [Specification]
             public void Should_read_values_from_the_appropriate_config_file()
             {
-                Assert.AreEqual(1, _result.NumberOfPassingScenarios);
-                Assert.AreEqual(0, _result.NumberOfFailingScenarios);
+                Assert.AreEqual(1, _results.NumberOfPassingScenarios);
+                Assert.AreEqual(0, _results.NumberOfFailingScenarios);
             }
         }
 
@@ -150,7 +150,7 @@ namespace NBehave.Narrator.Framework.Specifications
         public class When_running_failing_plain_text_scenarios_with_config_file : RemotableStoryRunnerSpec
         {
             private IRunner _runner;
-            private FeatureResults _result;
+            private FeatureResults _results;
 
             [SetUp]
             public void SetUp()
@@ -163,7 +163,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 SetupConfigFile();
                 _runner = CreateTextRunner(new[] { "TestPlainTextAssembly.dll" }, scenarioText);
 
-                _result = _runner.Run();
+                _results = _runner.Run();
 
             }
 
@@ -177,8 +177,8 @@ namespace NBehave.Narrator.Framework.Specifications
             public void Should_read_values_from_the_appropriate_config_file()
             {
                 //WARNING: This test crashes the R# test runner, v 5.1.3000.12 anyway
-                Assert.AreEqual(0, _result.NumberOfPassingScenarios);
-                Assert.AreEqual(1, _result.NumberOfFailingScenarios);
+                Assert.AreEqual(0, _results.NumberOfPassingScenarios);
+                Assert.AreEqual(1, _results.NumberOfFailingScenarios);
             }
         }
 
@@ -186,7 +186,6 @@ namespace NBehave.Narrator.Framework.Specifications
         public class When_running_text_scenarios_with_no_feature_and_config_file : RemotableStoryRunnerSpec
         {
             private IRunner _runner;
-            private FeatureResults _result;
 
             [SetUp]
             public void SetUp()
@@ -208,7 +207,7 @@ namespace NBehave.Narrator.Framework.Specifications
             [Specification, ExpectedException(typeof(ScenarioMustHaveFeatureException))]
             public void Should_throw_appropriate_exception()
             {
-                _result = _runner.Run();
+                _runner.Run();
             }
         }
 
@@ -216,7 +215,7 @@ namespace NBehave.Narrator.Framework.Specifications
         public class When_running_plain_text_scenarios_with_listener_and_config_file : RemotableStoryRunnerSpec
         {
             private IRunner _runner;
-            private FeatureResults _result;
+            private FeatureResults _results;
             private XmlDocument _xmlOut;
             private const string FeatureTitle = "Scenario runner that can read from its own config file";
 
@@ -235,7 +234,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 SetupConfigFile();
                 _runner = CreateTextRunner(new[] { "TestPlainTextAssembly.dll" }, listener, scenarioText);
 
-                _result = _runner.Run();
+                _results = _runner.Run();
 
                 _xmlOut = new XmlDocument();
                 writer.BaseStream.Seek(0, SeekOrigin.Begin);
@@ -251,7 +250,7 @@ namespace NBehave.Narrator.Framework.Specifications
             [Specification]
             public void Should_read_values_from_the_appropriate_config_file()
             {
-                Assert.AreEqual(1, _result.NumberOfPassingScenarios);
+                Assert.AreEqual(1, _results.NumberOfPassingScenarios);
             }
 
             [Specification]

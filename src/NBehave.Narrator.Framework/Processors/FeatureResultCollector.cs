@@ -6,25 +6,30 @@ namespace NBehave.Narrator.Framework.Processors
     {
         private readonly ITinyMessengerHub _hub;
 
-        private readonly FeatureResults _featureResults;
+        private FeatureResultEvent _featureResultEvent;
 
         public FeatureResultCollector(ITinyMessengerHub hub)
         {
+            _featureResultEvent = new FeatureResultEvent(this, new FeatureResult());
             _hub = hub;
-            _featureResults = new FeatureResults(this);
-
+            _hub.Subscribe<FeatureStartedEvent>(OnFeatureStarted);
             _hub.Subscribe<ScenarioResultEvent>(OnScenarioResultRecieved);
             _hub.Subscribe<FeatureFinishedEvent>(finished => OnFeatureFinished());
         }
 
+        private void OnFeatureStarted(FeatureStartedEvent obj)
+        {
+            _featureResultEvent = new FeatureResultEvent(this, new FeatureResult());
+        }
+
         private void OnScenarioResultRecieved(ScenarioResultEvent message)
         {
-            _featureResults.AddResult(message.Content);
+            _featureResultEvent.Content.AddResult(message.Content);
         }
 
         private void OnFeatureFinished()
         {
-            _hub.Publish(_featureResults);
+            _hub.Publish(_featureResultEvent);
         }
     }
 }

@@ -111,6 +111,7 @@
     <Compile Include="Domain\BackgroundStepResult.cs" />
     <Compile Include="Domain\ColumnValues.cs" />
     <Compile Include="Domain\ExampleColumn.cs" />
+    <Compile Include="Domain\FeatureResult.cs" />
     <Compile Include="Domain\StepResult.cs" />
     <Compile Include="EventListeners\BackgroundWriter.cs" />
     <Compile Include="EventListeners\FailSpecResultEventListener.cs" />
@@ -224,7 +225,7 @@
     <Compile Include="TextParsing\ModelBuilders\StepBuilder.cs" />
     <Compile Include="TextParsing\Messages\ParsingFileStart.cs" />
     <Compile Include="TextRunner.cs" />
-    <Compile Include="Processors\Messages\FeatureResults.cs" />
+    <Compile Include="Processors\Messages\FeatureResultEvent.cs" />
     <Compile Include="StoryRunnerFilter.cs" />
     <Compile Include="Attributes\ThenAttribute.cs" />
     <Compile Include="Domain\Example.cs" />

@@ -80,12 +80,12 @@ namespace NBehave.Console
                 .SetAssemblies(assemblies)
                 .SetEventListener(CreateEventListener(options));
 
-            FeatureResults results;
+            FeatureResults featureResults;
 
             try
             {
                 IRunner runner = config.Build();
-                results = runner.Run();
+                featureResults = runner.Run();
             }
             catch (FileNotFoundException fileNotFoundException)
             {
@@ -106,7 +106,7 @@ namespace NBehave.Console
                 System.Console.ReadKey();
             }
 
-            return results.NumberOfFailingScenarios;
+            return featureResults.NumberOfFailingScenarios;
         }
 
         private static void WaitForDebuggerToAttach()

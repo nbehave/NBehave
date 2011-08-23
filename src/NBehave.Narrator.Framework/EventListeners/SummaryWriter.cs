@@ -24,34 +24,34 @@ namespace NBehave.Narrator.Framework
 
         public void WriteCompleteSummary(IEnumerable<ScenarioResult> results)
         {
-            var featureResults = GetFeatureResult(results);
-            WriteSummaryResults(featureResults);
-            WriteFailures(featureResults);
+            var featureResult = GetFeatureResult(results);
+            WriteSummaryResults(featureResult);
+            WriteFailures(featureResult);
         }
 
-        public void WriteSummaryResults(FeatureResults featureResults)
+        public void WriteSummaryResults(FeatureResult featureResult)
         {
             _writer.WriteLine(
                 "Scenarios run: {0}, Failures: {1}, Pending: {2}",
-                featureResults.NumberOfScenariosFound,
-                featureResults.NumberOfFailingScenarios,
-                featureResults.NumberOfPendingScenarios);
+                featureResult.NumberOfScenariosFound,
+                featureResult.NumberOfFailingScenarios,
+                featureResult.NumberOfPendingScenarios);
 
-            var actionSteps = CountActionSteps(featureResults);
-            var failedSteps = CountFailedActionSteps(featureResults);
-            var pendingSteps = CountPendingActionSteps(featureResults);
+            var actionSteps = CountActionSteps(featureResult);
+            var failedSteps = CountFailedActionSteps(featureResult);
+            var pendingSteps = CountPendingActionSteps(featureResult);
             _writer.WriteLine("Steps {0}, failed {1}, pending {2}", actionSteps, failedSteps, pendingSteps);
         }
 
-        private void WriteFailures(FeatureResults results)
+        private void WriteFailures(FeatureResult featureResult)
         {
-            if (results.NumberOfFailingScenarios > 0)
+            if (featureResult.NumberOfFailingScenarios > 0)
             {
                 WriteSeparator();
                 _writer.WriteLine("Failures:");
                 var failureNumber = 1;
 
-                foreach (var result in results.ScenarioResults)
+                foreach (var result in featureResult.ScenarioResults)
                 {
                     if (result.Result.GetType() == typeof(Failed))
                     {
@@ -70,41 +70,41 @@ namespace NBehave.Narrator.Framework
             _writer.WriteLine(string.Empty);
         }
 
-        private FeatureResults GetFeatureResult(IEnumerable<ScenarioResult> results)
+        private FeatureResult GetFeatureResult(IEnumerable<ScenarioResult> scenarioResults)
         {
-            var featureResults = new FeatureResults(this);
-            foreach (var result in results)
-                featureResults.AddResult(result);
+            var featureResult = new FeatureResult();
+            foreach (var result in scenarioResults)
+                featureResult.AddResult(result);
 
-            return featureResults;
+            return featureResult;
         }
 
-        private int CountActionSteps(FeatureResults featureResults)
+        private int CountActionSteps(FeatureResult featureResult)
         {
-            return CountPassedActionSteps(featureResults) +
-                CountPendingActionSteps(featureResults) +
-                CountFailedActionSteps(featureResults);
+            return CountPassedActionSteps(featureResult) +
+                CountPendingActionSteps(featureResult) +
+                CountFailedActionSteps(featureResult);
         }
 
-        private int CountPassedActionSteps(FeatureResults featureResults)
+        private int CountPassedActionSteps(FeatureResult featureResult)
         {
-            return CountActionStepsOfType(featureResults, r => r is Passed);
+            return CountActionStepsOfType(featureResult, r => r is Passed);
         }
 
-        private int CountFailedActionSteps(FeatureResults featureResults)
+        private int CountFailedActionSteps(FeatureResult featureResult)
         {
-            return CountActionStepsOfType(featureResults, r => r is Failed);
+            return CountActionStepsOfType(featureResult, r => r is Failed);
         }
 
-        private int CountPendingActionSteps(FeatureResults featureResults)
+        private int CountPendingActionSteps(FeatureResult featureResult)
         {
-            return CountActionStepsOfType(featureResults, r => r is Pending);
+            return CountActionStepsOfType(featureResult, r => r is Pending);
         }
 
-        private int CountActionStepsOfType(FeatureResults featureResults, Predicate<Result> isOfType)
+        private int CountActionStepsOfType(FeatureResult featureResult, Predicate<Result> isOfType)
         {
             var sum = 0;
-            foreach (var result in featureResults.ScenarioResults)
+            foreach (var result in featureResult.ScenarioResults)
             {
                 var count = from r in result.StepResults
                             where isOfType(r.Result)

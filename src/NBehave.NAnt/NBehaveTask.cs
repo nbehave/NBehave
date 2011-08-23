@@ -76,12 +76,12 @@ namespace NBehave.NAnt
             output.WriteSeparator();
         }
 
-        private void FailBuildBasedOn(FeatureResults results)
+        private void FailBuildBasedOn(FeatureResults featureResults)
         {
-            if (results.NumberOfFailingScenarios == 0) return;
+            if (featureResults.NumberOfFailingScenarios == 0) return;
 
             var exceptionMessage = new StringBuilder();
-            foreach (var result in results.ScenarioResults)
+            foreach (var result in featureResults.SelectMany(_=>_.ScenarioResults))
             {
                 exceptionMessage.AppendLine(result.Message);
                 exceptionMessage.AppendLine(result.StackTrace);

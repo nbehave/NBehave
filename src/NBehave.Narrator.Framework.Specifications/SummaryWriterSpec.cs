@@ -15,8 +15,8 @@ namespace NBehave.Narrator.Framework.Specifications
 		{
 			_writer = new StringWriter();
 			_output = new SummaryWriter(_writer);
-			var results = new FeatureResults(this);
 			var feature = new Feature("feature title");
+            var featureResult = new FeatureResult();
 			var scenarioResult = new ScenarioResult(feature, "scenario title");
             scenarioResult.AddActionStepResult(new StepResult("a".AsStringStep(""), new Passed()));
             scenarioResult.AddActionStepResult(new StepResult("b".AsStringStep(""), new Passed()));
@@ -24,9 +24,8 @@ namespace NBehave.Narrator.Framework.Specifications
             scenarioResult.AddActionStepResult(new StepResult("c".AsStringStep(""), new PendingNotImplemented("not implemented")));
             scenarioResult.AddActionStepResult(new StepResult("d".AsStringStep(""), new Failed(new Exception("why it failed"))));
             scenarioResult.AddActionStepResult(new StepResult("c".AsStringStep(""), new Skipped("previous step failed")));
-            results.AddResult(scenarioResult);
-			
-			_output.WriteSummaryResults(results);
+            featureResult.AddResult(scenarioResult);
+			_output.WriteSummaryResults(featureResult);
 		}
 		
 		[Test]

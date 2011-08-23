@@ -28,7 +28,7 @@ namespace NBehave.Narrator.Framework.Specifications.System.Specs
         [Test]
         public void AllStepsShouldPass()
         {
-            IEnumerable<StepResult> enumerable = _results.ScenarioResults.SelectMany(result => result.StepResults);
+            IEnumerable<StepResult> enumerable = _results.SelectMany(_=>_.ScenarioResults).SelectMany(result => result.StepResults);
             IEnumerable<Result> results = enumerable.Select(stepResult => stepResult.Result);
 
             foreach (var result in results)

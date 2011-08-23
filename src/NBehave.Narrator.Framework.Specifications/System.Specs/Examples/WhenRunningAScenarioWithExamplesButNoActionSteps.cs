@@ -28,7 +28,7 @@ namespace NBehave.Narrator.Framework.Specifications.System.Specs
         [Test]
         public void ItShouldMarkAllResultsAsPending()
         {
-            IEnumerable<Result> enumerable = _results.ScenarioResults.First().StepResults.Select(result => result.Result).ToList();
+            IEnumerable<Result> enumerable = _results.First().ScenarioResults.First().StepResults.Select(result => result.Result).ToList();
             CollectionAssert.AllItemsAreInstancesOfType(enumerable, typeof (Pending));
         }
     }

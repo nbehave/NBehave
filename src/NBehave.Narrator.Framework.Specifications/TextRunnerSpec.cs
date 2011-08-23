@@ -69,16 +69,16 @@ namespace NBehave.Narrator.Framework.Specifications
         [TestFixture]
         public class WhenRunningPlainTextScenarios : TextRunnerSpec
         {
-            private FeatureResults _result;
+            private FeatureResults _results;
 
             [Test]
             public void ShouldGetCorrectErrormessageFromFailedScenario()
             {
-                _result = CreateRunnerWithBasicConfiguration().SetScenarioFiles(
+                _results = CreateRunnerWithBasicConfiguration().SetScenarioFiles(
                     new[] { TestFeatures.FeatureWithFailingStep }).Build().Run();
 
-                Assert.That(_result.NumberOfFailingScenarios, Is.EqualTo(1));
-                Assert.That(_result.ScenarioResults[0].Message.StartsWith("Should.Core.Exceptions.EqualException"), Is.True);
+                Assert.That(_results.NumberOfFailingScenarios, Is.EqualTo(1));
+                Assert.That(_results[0].ScenarioResults[0].Message.StartsWith("Should.Core.Exceptions.EqualException"), Is.True);
             }
 
             [Test]
@@ -95,76 +95,76 @@ namespace NBehave.Narrator.Framework.Specifications
             [Test]
             public void ShouldExecuteMoreThanOneScenarioInTextFile()
             {
-                _result = CreateRunnerWithBasicConfiguration().SetScenarioFiles(
+                _results = CreateRunnerWithBasicConfiguration().SetScenarioFiles(
                     new[] { TestFeatures.FeatureWithManyScenarios }).Build().Run();
 
-                Assert.That(_result.NumberOfScenariosFound, Is.EqualTo(2));
-                Assert.That(_result.NumberOfPassingScenarios, Is.EqualTo(2));
+                Assert.That(_results.NumberOfScenariosFound, Is.EqualTo(2));
+                Assert.That(_results.NumberOfPassingScenarios, Is.EqualTo(2));
             }
 
             [Test]
             public void ShouldRunScenarioInTextFileWithScenarioTitle()
             {
-                _result = CreateRunnerWithBasicConfiguration().SetScenarioFiles(
+                _results = CreateRunnerWithBasicConfiguration().SetScenarioFiles(
                     new[] { TestFeatures.ScenariosWithoutFeature }).Build().Run();
 
-                Assert.That(_result.ScenarioResults[0].ScenarioTitle, Is.EqualTo("greeting Morgan"));
-                Assert.That(_result.ScenarioResults[0].Result, Is.TypeOf(typeof(Passed)));
+                Assert.That(_results[0].ScenarioResults[0].ScenarioTitle, Is.EqualTo("greeting Morgan"));
+                Assert.That(_results[0].ScenarioResults[0].Result, Is.TypeOf(typeof(Passed)));
             }
 
             [Test]
             public void ShouldRunTextScenarioWhithNewlinesInGiven()
             {
-                _result = CreateRunnerWithBasicConfiguration().SetScenarioFiles(
+                _results = CreateRunnerWithBasicConfiguration().SetScenarioFiles(
                     new[] { TestFeatures.FeatureWithNewLineInGivenClause }).Build().Run();
 
-                Assert.That(_result.NumberOfPassingScenarios, Is.EqualTo(1));
+                Assert.That(_results.NumberOfPassingScenarios, Is.EqualTo(1));
             }
 
             [Test]
             public void ShouldSetScenarioPendingIfActionGivenInTokenStringDoesntExist()
             {
-                _result = CreateRunnerWithBasicConfiguration().SetScenarioFiles(
+                _results = CreateRunnerWithBasicConfiguration().SetScenarioFiles(
                     new[] { TestFeatures.ScenarioWithNoActionSteps }).Build().Run();
 
-                Assert.That(_result.NumberOfPendingScenarios, Is.EqualTo(1));
+                Assert.That(_results.NumberOfPendingScenarios, Is.EqualTo(1));
             }
 
             [Test]
             public void ShouldListAllPendingActionSteps()
             {
-                _result = CreateRunnerWithBasicConfiguration().SetScenarioFiles(
+                _results = CreateRunnerWithBasicConfiguration().SetScenarioFiles(
                     new[] { TestFeatures.ScenarioWithNoActionSteps }).Build().Run();
 
-                StringAssert.Contains("No matching Action found for \"Given something that has no ActionStep\"", _result.ScenarioResults[0].Message);
-                StringAssert.Contains("No matching Action found for \"And something else that has no ActionStep\"", _result.ScenarioResults[0].Message);
+                StringAssert.Contains("No matching Action found for \"Given something that has no ActionStep\"", _results[0].ScenarioResults[0].Message);
+                StringAssert.Contains("No matching Action found for \"And something else that has no ActionStep\"", _results[0].ScenarioResults[0].Message);
             }
 
             [Test]
             public void ShouldUseWildcardAndRunAllScenariosInAllMatchingTextFiles()
             {
-                _result = CreateRunnerWithBasicConfiguration().SetScenarioFiles(
+                _results = CreateRunnerWithBasicConfiguration().SetScenarioFiles(
                     new[] { @"Features\\Feature*.feature" }).Build().Run();
 
-                Assert.That(_result.NumberOfPassingScenarios, Is.EqualTo(6));
+                Assert.That(_results.NumberOfPassingScenarios, Is.EqualTo(6));
             }
 
             [Test]
             public void Should_not_crash_when_steps_are_written_in_lower_case()
             {
-                _result = CreateRunnerWithBasicConfiguration().SetScenarioFiles(
+                _results = CreateRunnerWithBasicConfiguration().SetScenarioFiles(
                     new[] { TestFeatures.FeatureWithLowerCaseSteps }).Build().Run();
 
-                Assert.That(_result.NumberOfPassingScenarios, Is.EqualTo(1));
+                Assert.That(_results.NumberOfPassingScenarios, Is.EqualTo(1));
             }
 
             [Test]
             public void Should_not_crash_when_feature_file_ends_with_comment()
             {
-                _result = CreateRunnerWithBasicConfiguration().SetScenarioFiles(
+                _results = CreateRunnerWithBasicConfiguration().SetScenarioFiles(
                     new[] { TestFeatures.FeatureWithCommentOnLastRow }).Build().Run();
 
-                Assert.That(_result.NumberOfPassingScenarios, Is.EqualTo(1));
+                Assert.That(_results.NumberOfPassingScenarios, Is.EqualTo(1));
             }
         }
 
@@ -256,7 +256,7 @@ namespace NBehave.Narrator.Framework.Specifications
         [TestFixture]
         public class WhenRunningPlainTextScenariosWithFeature : TextRunnerSpec
         {
-            private FeatureResults _result;
+            private FeatureResults _results;
             private StringWriter _messages;
 
             [SetUp]
@@ -265,7 +265,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 _messages = new StringWriter();
                 var listener = new TextWriterEventListener(_messages);
 
-                _result = CreateRunnerWithBasicConfiguration()
+                _results = CreateRunnerWithBasicConfiguration()
                     .SetEventListener(listener)
                     .SetScenarioFiles(new[] { TestFeatures.FeatureNamedStory })
                     .Build()
@@ -275,7 +275,7 @@ namespace NBehave.Narrator.Framework.Specifications
             [Test]
             public void ShouldSetFeatureTitleOnResult()
             {
-                Assert.That(_result.ScenarioResults[0].FeatureTitle, Is.EqualTo("Greeting system"));
+                Assert.That(_results[0].ScenarioResults[0].FeatureTitle, Is.EqualTo("Greeting system"));
             }
 
             [Test]
@@ -290,7 +290,7 @@ namespace NBehave.Narrator.Framework.Specifications
             [Test]
             public void ShouldSetScenarioTitleOnResult()
             {
-                Assert.That(_result.ScenarioResults[0].ScenarioTitle, Is.EqualTo("Greeting someone"));
+                Assert.That(_results[0].ScenarioResults[0].ScenarioTitle, Is.EqualTo("Greeting someone"));
             }
         }
 

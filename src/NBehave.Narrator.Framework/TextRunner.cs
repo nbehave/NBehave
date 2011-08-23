@@ -19,8 +19,8 @@ namespace NBehave.Narrator.Framework
             NBehaveInitialiser.Initialise(_configuration);
             _hub = TinyIoCContainer.Current.Resolve<ITinyMessengerHub>();
 
-            FeatureResults results = null;
-            _hub.Subscribe<FeatureResults>(featureResults => results = featureResults);
+            var results = new FeatureResults();
+            _hub.Subscribe<FeatureResultEvent>(_ => results.Add(_.Content));
 
             try
             {
