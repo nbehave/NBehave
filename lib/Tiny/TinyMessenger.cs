@@ -80,11 +80,11 @@ namespace NBehave.Narrator.Framework.Tiny
         /// Create a new instance of the GenericTinyMessage class.
         /// </summary>
         /// <param name="sender">Message sender (usually "this")</param>
-        /// <param name="scenario">Contents of the message</param>
-        public GenericTinyMessage(object sender, TContent scenario)
+        /// <param name="content">Contents of the message</param>
+        public GenericTinyMessage(object sender, TContent content)
             : base(sender)
         {
-            Content = scenario;
+            Content = content;
         }
     }
 
