@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using System.Threading;
 using System.Xml;
 using NBehave.Narrator.Framework.EventListeners.Xml;
 using NBehave.Narrator.Framework.Specifications.Features;
@@ -69,13 +70,6 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
             }
 
             [Test]
-            public void ResultsNodeShouldHaveOneTheme()
-            {
-                var outcome = _xmlDoc.SelectSingleNode("results").Attributes["themes"].Value;
-                Assert.That(int.Parse(outcome), Is.EqualTo(1));
-            }
-
-            [Test]
             public void ShouldHaveScenariosInResultsNode()
             {
                 var outcome = _xmlDoc.SelectSingleNode("results").Attributes["scenarios"].Value;
@@ -83,77 +77,70 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
             }
 
             [Test]
-            public void ThemeT1ShouldHaveSixScenarios()
+            public void ResultsNodeShouldContainAttributeAboutExecutionTime()
             {
-                var outcome = _xmlDoc.SelectSingleNode("results/theme").Attributes["scenarios"].Value;
-                Assert.That(int.Parse(outcome), Is.EqualTo(6));
+                Assert.IsNotNull(_xmlDoc.SelectSingleNode("results").Attributes["executionTime"].Value);
             }
 
             [Test]
-            public void ThemeNodesShouldContainAttributeAboutExecutionTime()
-            {
-                Assert.IsNotNull(_xmlDoc.SelectSingleNode("results/theme").Attributes["time"].Value);
-            }
-
-            [Test]
-            public void ThemeNodeShouldHaveOnePendingScenarios()
+            public void ResultsNodeShouldHaveOnePendingScenario()
             {
                 Assert.AreEqual("1",
-                                _xmlDoc.SelectSingleNode(@"results/theme").Attributes["scenariosPending"].
+                                _xmlDoc.SelectSingleNode(@"results").Attributes["scenariosPending"].
                                     Value);
             }
 
             [Test]
-            public void ThemeNodeShouldHaveOneFailedScenarios()
+            public void ResultsNodeShouldHaveOneFailedScenarios()
             {
                 Assert.AreEqual("1",
-                                _xmlDoc.SelectSingleNode(@"results/theme").Attributes["scenariosFailed"].
+                                _xmlDoc.SelectSingleNode(@"results").Attributes["scenariosFailed"].
                                     Value);
             }
 
             [Test]
-            public void StoryNodeShouldHaveANameAttribute()
+            public void FeatureNodeShouldHaveANameAttribute()
             {
-                Assert.IsNotNull(_xmlDoc.SelectSingleNode("//story[@name='S1']"));
+                Assert.IsNotNull(_xmlDoc.SelectSingleNode("//feature[@name='S1']"));
             }
 
             [Test]
-            public void StoryShouldHaveANarrativeChildElement()
+            public void FeatureShouldHaveANarrativeChildElement()
             {
                 Assert.IsNotNull(
-                    _xmlDoc.SelectSingleNode("results/theme/stories/story[@name='S1']/narrative"));
+                    _xmlDoc.SelectSingleNode("results/features/feature[@name='S1']/narrative"));
                 Assert.AreEqual("As a X1" + Environment.NewLine +
                                 "I want Y1" + Environment.NewLine +
                                 "So that Z1" + Environment.NewLine,
-                                _xmlDoc.SelectSingleNode("results/theme/stories/story/narrative").InnerText);
+                                _xmlDoc.SelectSingleNode("results/features/feature/narrative").InnerText);
             }
 
             [Test]
-            public void StoryNodeShouldHaveSummary()
+            public void FeatureNodeShouldHaveSummary()
             {
                 Assert.AreEqual("3",
-                                _xmlDoc.SelectSingleNode(@"results/theme/stories/story").Attributes[
+                                _xmlDoc.SelectSingleNode(@"results/features/feature").Attributes[
                                     "scenarios"].Value);
                 Assert.AreEqual("0",
-                                _xmlDoc.SelectSingleNode(@"results/theme/stories/story").Attributes[
+                                _xmlDoc.SelectSingleNode(@"results/features/feature").Attributes[
                                     "scenariosFailed"].Value);
                 Assert.AreEqual("1",
-                                _xmlDoc.SelectSingleNode(@"results/theme/stories/story").Attributes[
+                                _xmlDoc.SelectSingleNode(@"results/features/feature").Attributes[
                                     "scenariosPending"].Value);
             }
 
             [Test]
-            public void StoryNodeShouldHaveOneScenarioNodePerScenarioInStory()
+            public void FeatureNodeShouldHaveOneScenarioNodePerScenarioInStory()
             {
-                var node = _xmlDoc.SelectNodes(@"//stories/story[@name='S1']/scenarios/scenario");
+                var node = _xmlDoc.SelectNodes(@"//features/feature[@name='S1']/scenarios/scenario");
                 Assert.IsNotNull(node);
                 Assert.AreEqual(3, node.Count);
             }
 
             [Test]
-            public void ScenarioNodeShouldHaveActionStepSubnodes()
+            public void ScenarioNodeShouldHaveStepSubnodes()
             {
-                var nodes = _xmlDoc.SelectNodes(@"//story[@name='S1']/scenarios/scenario[@name='SC1']/actionStep");
+                var nodes = _xmlDoc.SelectNodes(@"//feature[@name='S1']/scenarios/scenario[@name='SC1']/step");
                 Assert.IsNotNull(nodes);
                 Assert.AreEqual(3, nodes.Count);
             }
@@ -181,7 +168,7 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
             [Test]
             public void ShouldHaveFailureChildNodeInFailedActionStep()
             {
-                var node = _xmlDoc.SelectSingleNode(@"//scenario[@name='FailingScenario']/actionStep[@outcome='failed']/failure");
+                var node = _xmlDoc.SelectSingleNode(@"//scenario[@name='FailingScenario']/step[@outcome='failed']/failure");
                 Assert.IsNotNull(node);
                 StringAssert.Contains("outcome failed", node.InnerText);
             }
@@ -205,7 +192,7 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
             [Test]
             public void ShouldHaveOneScenario()
             {
-                var outcome = _xmlDoc.SelectSingleNode("results/theme").Attributes["scenarios"].Value;
+                var outcome = _xmlDoc.SelectSingleNode("results").Attributes["scenarios"].Value;
                 Assert.That(int.Parse(outcome), Is.EqualTo(1));
             }
 
@@ -218,7 +205,7 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
                                              "Then you should see [strOut]"
                                          };
 
-                var nodes = _xmlDoc.SelectNodes(@"//story[@name='Example']/scenarios/scenario[@name='SC1']/actionStep");
+                var nodes = _xmlDoc.SelectNodes(@"//feature[@name='Example']/scenarios/scenario[@name='SC1']/step");
                 Assert.IsNotNull(nodes);
                 Assert.AreEqual(3, nodes.Count);
                 for (var i = 0; i < 3; i++)
@@ -230,12 +217,17 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
             [Test]
             public void ScenarioNodeShouldHaveExampleNodes()
             {
-                var nodes = _xmlDoc.SelectNodes(@"//story[@name='Example']/scenarios/scenario[@name='SC1']/examples/example");
+                var nodes = _xmlDoc.SelectNodes(@"//feature[@name='Example']/scenarios/scenario[@name='SC1']/examples/example");
                 Assert.IsNotNull(nodes);
                 Assert.AreEqual(2, nodes.Count);
             }
         }
 
+        [BeforeScenario]
+        public void WaitSomeTime()
+        {
+            Thread.Sleep(100);
+        }
         [Given(@"a string $str")]
         public void AString(string str)
         {

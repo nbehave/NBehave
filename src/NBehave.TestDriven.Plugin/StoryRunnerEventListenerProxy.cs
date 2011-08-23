@@ -15,11 +15,6 @@ namespace NBehave.TestDriven.Plugin
             _listener = listener;
         }
 
-        public override void ThemeStarted(string name)
-        {
-            _listener.WriteLine(string.Format("Theme : {0}", name), Category.Output);
-        }
-
         public override void FeatureStarted(string feature)
         {
             _listener.WriteLine("\tFeature: " + feature, Category.Output);

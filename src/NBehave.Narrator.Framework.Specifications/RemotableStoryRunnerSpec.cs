@@ -218,7 +218,7 @@ namespace NBehave.Narrator.Framework.Specifications
             private IRunner _runner;
             private FeatureResults _result;
             private XmlDocument _xmlOut;
-            private const string StoryTitle = "Scenario runner that can read from its own config file";
+            private const string FeatureTitle = "Scenario runner that can read from its own config file";
 
             [SetUp]
             public void SetUp()
@@ -226,11 +226,11 @@ namespace NBehave.Narrator.Framework.Specifications
                 var writer = new XmlTextWriter(new MemoryStream(), Encoding.UTF8);
                 var listener = new XmlOutputEventListener(writer);
 
-                var scenarioText = "Feature: " + StoryTitle + "\r\n" +
-                                    "Scenario: Reading values from a config file\r\n" +
-                                    "Given an assembly with a matching configuration file\r\n" +
-                                    "When the value of setting foo is read\r\n" +
-                                    "Then the value should be bar";
+                const string scenarioText = "Feature: " + FeatureTitle + "\r\n" +
+                                            "Scenario: Reading values from a config file\r\n" +
+                                            "Given an assembly with a matching configuration file\r\n" +
+                                            "When the value of setting foo is read\r\n" +
+                                            "Then the value should be bar";
 
                 SetupConfigFile();
                 _runner = CreateTextRunner(new[] { "TestPlainTextAssembly.dll" }, listener, scenarioText);
@@ -255,22 +255,22 @@ namespace NBehave.Narrator.Framework.Specifications
             }
 
             [Specification]
-            public void Should_find_one_story()
+            public void Should_find_one_feature()
             {
-                var storyNodes = _xmlOut.SelectNodes("//story");
+                var storyNodes = _xmlOut.SelectNodes("//feature");
                 Assert.That(storyNodes.Count, Is.EqualTo(1));
             }
 
             [Specification]
-            public void Should_set_title_of_story()
+            public void Should_set_title_of_feature()
             {
-                var storyNodes = _xmlOut.SelectSingleNode("//story").Attributes["name"];
+                var storyNodes = _xmlOut.SelectSingleNode("//feature").Attributes["name"];
 
-                Assert.That(storyNodes.Value, Is.EqualTo(StoryTitle));
+                Assert.That(storyNodes.Value, Is.EqualTo(FeatureTitle));
             }
 
             [Specification]
-            public void Should_run_two_scenarios()
+            public void Should_run_one_scenario()
             {
                 var scenarioNodes = _xmlOut.SelectNodes("//scenario");
 

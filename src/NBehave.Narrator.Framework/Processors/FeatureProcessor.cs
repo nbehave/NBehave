@@ -34,8 +34,6 @@ namespace NBehave.Narrator.Framework.Processors
         {
             if (_features == null || !_actionStepsLoaded) return;
 
-            _hub.Publish(new ThemeStartedEvent(this, string.Empty));
-
             foreach (Feature feature in _features)
             {
                 _hub.Publish(new FeatureStartedEvent(this, feature.Title));
@@ -44,8 +42,6 @@ namespace NBehave.Narrator.Framework.Processors
                 _featureRunner.Run(feature);
                 _hub.Publish(new FeatureFinishedEvent(this, feature.Title));
             }
-
-            _hub.Publish(new ThemeFinishedEvent(this));
         }
     }
 }

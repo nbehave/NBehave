@@ -13,11 +13,10 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
     {
         RunStart, 
         RunFinished,
-        ThemeStarted, 
-        ThemeFinished,
-        FeatureCreated, 
+        FeatureStart,
         FeatureNarrative,
-        ScenarioCreated, 
+        FeatureFinished,
+        ScenarioStart, 
         ScenarioResult
     }
 }

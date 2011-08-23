@@ -20,9 +20,9 @@ namespace NBehave.Narrator.Framework.Specifications
 
             var config = ConfigurationNoAppDomain
                 .New
-                .SetAssemblies(new[] {"TestPlainTextAssembly.dll"})
+                .SetAssemblies(new[] { "TestPlainTextAssembly.dll" })
                 .SetEventListener(listener)
-                .SetScenarioFiles(new[] {TestFeatures.FeatureWithManyScenarios});
+                .SetScenarioFiles(new[] { TestFeatures.FeatureWithManyScenarios });
 
             return config;
         }
@@ -75,7 +75,7 @@ namespace NBehave.Narrator.Framework.Specifications
             public void ShouldGetCorrectErrormessageFromFailedScenario()
             {
                 _result = CreateRunnerWithBasicConfiguration().SetScenarioFiles(
-                    new[] {TestFeatures.FeatureWithFailingStep}).Build().Run();
+                    new[] { TestFeatures.FeatureWithFailingStep }).Build().Run();
 
                 Assert.That(_result.NumberOfFailingScenarios, Is.EqualTo(1));
                 Assert.That(_result.ScenarioResults[0].Message.StartsWith("Should.Core.Exceptions.EqualException"), Is.True);
@@ -87,7 +87,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 var writer = new StringWriter();
                 var listener = new TextWriterEventListener(writer);
                 CreateRunnerWithBasicConfiguration().SetEventListener(listener).SetScenarioFiles(
-                    new[] {TestFeatures.FeatureWithFailingStep}).Build().Run();
+                    new[] { TestFeatures.FeatureWithFailingStep }).Build().Run();
 
                 StringAssert.Contains("Then I should be greeted with “Hello, Scott!” - FAILED", writer.ToString());
             }
@@ -96,7 +96,7 @@ namespace NBehave.Narrator.Framework.Specifications
             public void ShouldExecuteMoreThanOneScenarioInTextFile()
             {
                 _result = CreateRunnerWithBasicConfiguration().SetScenarioFiles(
-                    new[] {TestFeatures.FeatureWithManyScenarios}).Build().Run();
+                    new[] { TestFeatures.FeatureWithManyScenarios }).Build().Run();
 
                 Assert.That(_result.NumberOfScenariosFound, Is.EqualTo(2));
                 Assert.That(_result.NumberOfPassingScenarios, Is.EqualTo(2));
@@ -106,17 +106,17 @@ namespace NBehave.Narrator.Framework.Specifications
             public void ShouldRunScenarioInTextFileWithScenarioTitle()
             {
                 _result = CreateRunnerWithBasicConfiguration().SetScenarioFiles(
-                    new[] {TestFeatures.ScenariosWithoutFeature}).Build().Run();
+                    new[] { TestFeatures.ScenariosWithoutFeature }).Build().Run();
 
                 Assert.That(_result.ScenarioResults[0].ScenarioTitle, Is.EqualTo("greeting Morgan"));
-                Assert.That(_result.ScenarioResults[0].Result, Is.TypeOf(typeof (Passed)));
+                Assert.That(_result.ScenarioResults[0].Result, Is.TypeOf(typeof(Passed)));
             }
 
             [Test]
             public void ShouldRunTextScenarioWhithNewlinesInGiven()
             {
                 _result = CreateRunnerWithBasicConfiguration().SetScenarioFiles(
-                    new[] {TestFeatures.FeatureWithNewLineInGivenClause}).Build().Run();
+                    new[] { TestFeatures.FeatureWithNewLineInGivenClause }).Build().Run();
 
                 Assert.That(_result.NumberOfPassingScenarios, Is.EqualTo(1));
             }
@@ -125,7 +125,7 @@ namespace NBehave.Narrator.Framework.Specifications
             public void ShouldSetScenarioPendingIfActionGivenInTokenStringDoesntExist()
             {
                 _result = CreateRunnerWithBasicConfiguration().SetScenarioFiles(
-                    new[] {TestFeatures.ScenarioWithNoActionSteps}).Build().Run();
+                    new[] { TestFeatures.ScenarioWithNoActionSteps }).Build().Run();
 
                 Assert.That(_result.NumberOfPendingScenarios, Is.EqualTo(1));
             }
@@ -134,7 +134,7 @@ namespace NBehave.Narrator.Framework.Specifications
             public void ShouldListAllPendingActionSteps()
             {
                 _result = CreateRunnerWithBasicConfiguration().SetScenarioFiles(
-                    new[] {TestFeatures.ScenarioWithNoActionSteps}).Build().Run();
+                    new[] { TestFeatures.ScenarioWithNoActionSteps }).Build().Run();
 
                 StringAssert.Contains("No matching Action found for \"Given something that has no ActionStep\"", _result.ScenarioResults[0].Message);
                 StringAssert.Contains("No matching Action found for \"And something else that has no ActionStep\"", _result.ScenarioResults[0].Message);
@@ -144,7 +144,7 @@ namespace NBehave.Narrator.Framework.Specifications
             public void ShouldUseWildcardAndRunAllScenariosInAllMatchingTextFiles()
             {
                 _result = CreateRunnerWithBasicConfiguration().SetScenarioFiles(
-                    new[] {@"Features\\Feature*.feature"}).Build().Run();
+                    new[] { @"Features\\Feature*.feature" }).Build().Run();
 
                 Assert.That(_result.NumberOfPassingScenarios, Is.EqualTo(6));
             }
@@ -153,7 +153,7 @@ namespace NBehave.Narrator.Framework.Specifications
             public void Should_not_crash_when_steps_are_written_in_lower_case()
             {
                 _result = CreateRunnerWithBasicConfiguration().SetScenarioFiles(
-                    new[] {TestFeatures.FeatureWithLowerCaseSteps}).Build().Run();
+                    new[] { TestFeatures.FeatureWithLowerCaseSteps }).Build().Run();
 
                 Assert.That(_result.NumberOfPassingScenarios, Is.EqualTo(1));
             }
@@ -162,7 +162,7 @@ namespace NBehave.Narrator.Framework.Specifications
             public void Should_not_crash_when_feature_file_ends_with_comment()
             {
                 _result = CreateRunnerWithBasicConfiguration().SetScenarioFiles(
-                    new[] {TestFeatures.FeatureWithCommentOnLastRow}).Build().Run();
+                    new[] { TestFeatures.FeatureWithCommentOnLastRow }).Build().Run();
 
                 Assert.That(_result.NumberOfPassingScenarios, Is.EqualTo(1));
             }
@@ -172,7 +172,6 @@ namespace NBehave.Narrator.Framework.Specifications
         public class WhenRunningWithXmlListener : TextRunnerSpec
         {
             private XmlDocument _xmlOut;
-            private FeatureResults _result;
 
             [SetUp]
             public void SetUp()
@@ -180,9 +179,9 @@ namespace NBehave.Narrator.Framework.Specifications
                 var writer = new XmlTextWriter(new MemoryStream(), Encoding.UTF8);
                 var listener = new XmlOutputEventListener(writer);
 
-                _result = CreateRunnerWithBasicConfiguration()
+                CreateRunnerWithBasicConfiguration()
                     .SetEventListener(listener)
-                    .SetScenarioFiles(new[] {TestFeatures.FeatureWithFailingStep})
+                    .SetScenarioFiles(new[] { TestFeatures.FeatureWithFailingStep })
                     .Build()
                     .Run();
 
@@ -192,16 +191,16 @@ namespace NBehave.Narrator.Framework.Specifications
             }
 
             [Test]
-            public void ShouldFindOneFailedActionStep()
+            public void ShouldFindOneFailedStep()
             {
-                var storyNodes = _xmlOut.SelectNodes("//actionStep[@outcome='failed']");
+                var storyNodes = _xmlOut.SelectNodes("//step[@outcome='failed']");
                 Assert.That(storyNodes.Count, Is.EqualTo(1));
             }
 
             [Test]
-            public void ShouldFindTwoPassedActionStep()
+            public void ShouldFindTwoPassedStep()
             {
-                var storyNodes = _xmlOut.SelectNodes("//actionStep[@outcome='passed']");
+                var storyNodes = _xmlOut.SelectNodes("//step[@outcome='passed']");
                 Assert.That(storyNodes.Count, Is.EqualTo(2));
             }
         }
@@ -212,16 +211,15 @@ namespace NBehave.Narrator.Framework.Specifications
             private const string StoryTitle = "Greeting system";
 
             private XmlDocument _xmlOut;
-            private FeatureResults _result;
 
             [SetUp]
             public void SetUp()
             {
                 var writer = new XmlTextWriter(new MemoryStream(), Encoding.UTF8);
                 var listener = new XmlOutputEventListener(writer);
-                _result = CreateRunnerWithBasicConfiguration()
+                CreateRunnerWithBasicConfiguration()
                     .SetEventListener(listener)
-                    .SetScenarioFiles(new[] {TestFeatures.FeatureWithManyScenarios})
+                    .SetScenarioFiles(new[] { TestFeatures.FeatureWithManyScenarios })
                     .DontIsolateInAppDomain()
                     .Build()
                     .Run();
@@ -232,16 +230,16 @@ namespace NBehave.Narrator.Framework.Specifications
             }
 
             [Test]
-            public void ShouldFindOneStory()
+            public void ShouldFindOneFeature()
             {
-                var storyNodes = _xmlOut.SelectNodes("//story");
+                var storyNodes = _xmlOut.SelectNodes("//feature");
                 Assert.That(storyNodes.Count, Is.EqualTo(1));
             }
 
             [Test]
-            public void ShouldSetTitleOfStory()
+            public void ShouldSetTitleOfFeature()
             {
-                var storyNodes = _xmlOut.SelectSingleNode("//story").Attributes["name"];
+                var storyNodes = _xmlOut.SelectSingleNode("//feature").Attributes["name"];
 
                 Assert.That(storyNodes.Value, Is.EqualTo(StoryTitle));
             }
@@ -256,7 +254,7 @@ namespace NBehave.Narrator.Framework.Specifications
         }
 
         [TestFixture]
-        public class WhenRunningPlainTextScenariosWithStory : TextRunnerSpec
+        public class WhenRunningPlainTextScenariosWithFeature : TextRunnerSpec
         {
             private FeatureResults _result;
             private StringWriter _messages;
@@ -269,13 +267,13 @@ namespace NBehave.Narrator.Framework.Specifications
 
                 _result = CreateRunnerWithBasicConfiguration()
                     .SetEventListener(listener)
-                    .SetScenarioFiles(new[] {TestFeatures.FeatureNamedStory})
+                    .SetScenarioFiles(new[] { TestFeatures.FeatureNamedStory })
                     .Build()
                     .Run();
             }
 
             [Test]
-            public void ShouldSetStoryTitleOnResult()
+            public void ShouldSetFeatureTitleOnResult()
             {
                 Assert.That(_result.ScenarioResults[0].FeatureTitle, Is.EqualTo("Greeting system"));
             }
@@ -331,8 +329,8 @@ namespace NBehave.Narrator.Framework.Specifications
             public void SetUp()
             {
                 _featureResults = CreateRunnerWithBasicConfiguration()
-                    .SetAssemblies(new[] {Path.GetFileName(GetType().Assembly.Location)})
-                    .SetScenarioFiles(new[] {TestFeatures.FeatureInSwedish})
+                    .SetAssemblies(new[] { Path.GetFileName(GetType().Assembly.Location) })
+                    .SetScenarioFiles(new[] { TestFeatures.FeatureInSwedish })
                     .Build()
                     .Run();
             }

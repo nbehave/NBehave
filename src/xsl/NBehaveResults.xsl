@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-  <xsl:output method="html" version="1.0" encoding="UTF-8" indent="yes" />
-  <xsl:template match="/">
-    <xsl:apply-templates select="//results" />
-  </xsl:template>
-  <xsl:template match="theme">
-    <style type="text/css">
+	<xsl:output method="html" version="1.0" encoding="UTF-8" indent="yes" />
+	<xsl:template match="results">
+		<style type="text/css">
       BODY {
       background-color:darkgray;
       text-align: center;
@@ -14,10 +10,13 @@
       font-size: 14px;
       }
       .pageBox {
+      margin-left: 5px;
+      margin-top: 5px;
+      margin-bottom: 5px;
+      margin-right: 5px;
       text-align: left;
       background-color:white;
       border: 1px solid black;
-      width: 1000px;
       }
       .nbehaveTitle {
       background-color: cornflowerblue;
@@ -40,25 +39,25 @@
       border-bottom: 1px solid gray;
       margin-bottom: 10px;
       }
-      .storyBox {
+      .featureBox {
       margin-left: 20px;
       margin-bottom: 20px;
       }
-      .storyTitlePassed {
+      .featureTitlePassed {
       font-size: 130%;
       font-weight: bold;
       border-bottom: 1px solid gray;
       margin-bottom: 5px;
       color: green;
       }
-      .storyTitlePending {
+      .featureTitlePending {
       font-size: 130%;
       font-weight: bold;
       border-bottom: 1px solid gray;
       margin-bottom: 5px;
       color: gray;
       }
-      .storyTitleFailed {
+      .featureTitleFailed {
       font-size: 130%;
       font-weight: bold;
       border-bottom: 1px solid gray;
@@ -66,7 +65,7 @@
       color: red;
       }
 
-      .storyNarrative {
+      .featureNarrative {
       margin-left: 0px;
       margin-bottom: 3px;
       font-size: 110%;
@@ -79,7 +78,7 @@
       font-family: "Trebuchet MS", Tahoma, Verdana, Arial;
       }
 
-      .storyInfos {
+      .featureInfos {
       margin-left: 20px;
       background-color: lightyellow;
       font-size: 90%
@@ -87,12 +86,13 @@
       margin-bottom: 10px;
       line-height: 98%;
       }
-      .storyInfoLabel {
-      font-size: 80%;
-      font-weight: bold;
-      }
-      .storyInfoValue {
+      .featureInfoLabel {
+      font-size: 90%;
       font-weight: normal;
+      }
+      .featureInfoValue {
+      font-weight: normal;
+      margin-right: 20px;
       }
       .scenarioBox {
       margin-left: 20px;
@@ -197,172 +197,165 @@
       .tableText {
       padding: 2px;
       }
-    </style>
-    <div class="pageBox">
-      <div class="nbehaveTitle">
-        NBehave tests results
-      </div>
-      <xsl:for-each select=".">
-        <div class="themeBox">
-          <div class="themeTitle">
-            Theme:
-            <xsl:value-of select="@name" />
-          </div>
-          <div class="storyInfos">
-            <div>
-              <span class="storyInfoLabel">Features run:</span>
-              <span class="storyInfoValue">
-                <xsl:value-of select="@stories" />
-              </span>
-            </div>
-            <div>
-              <span class="storyInfoLabel">Scenarios run:</span>
-              <span class="storyInfoValue">
-                <xsl:value-of select="@scenarios" />
-              </span>
-            </div>
-            <div>
-              <span class="storyInfoLabel">Scenarios failed:</span>
-              <span class="storyInfoValue">
-                <xsl:value-of select="@scenariosFailed" />
-              </span>
-            </div>
-            <div>
-              <span class="storyInfoLabel">Scenarios pending:</span>
-              <span class="storyInfoValue">
-                <xsl:value-of select="@scenariosPending" />
-              </span>
-            </div>
-            <div>
-              <span class="storyInfoLabel">Execution time:</span>
-              <span class="storyInfoValue">
-                <xsl:value-of select="@time" />
+		</style>
+		<div class="pageBox">
+			<div class="nbehaveTitle">
+        NBehave results
+			</div>
+			<xsl:for-each select=".">
+				<div class="themeBox">
+					<div class="themeTitle">Summary:</div>
+					<div class="featureInfos">
+						<div>
+							<span class="featureInfoLabel">Features run: </span>
+							<span class="featureInfoValue">
+								<xsl:value-of select="@features" />
+							</span>
+							<span class="featureInfoLabel">Scenarios run: </span>
+							<span class="featureInfoValue">
+								<xsl:value-of select="@scenarios" />
+							</span>
+							<span class="featureInfoLabel">Scenarios failed: </span>
+							<span class="featureInfoValue">
+								<xsl:value-of select="@scenariosFailed" />
+							</span>
+							<span class="featureInfoLabel">Scenarios pending: </span>
+							<span class="featureInfoValue">
+								<xsl:value-of select="@scenariosPending" />
+							</span>
+						</div>
+						<div>
+							<span class="featureInfoLabel">Execution time: </span>
+							<span class="featureInfoValue">
+								<xsl:value-of select="@executionTime" />
                 s
-              </span>
-            </div>
-          </div>
-          <xsl:for-each select="stories/story">
-            <div class="storyBox">
+							</span>
+						</div>
+					</div>
+					<xsl:for-each select="features/feature">
+						<div class="featureBox">
 
-              <div class="storyTitle">
-                <xsl:attribute name="class">
-                  <xsl:if test="@scenariosFailed>0">storyTitleFailed</xsl:if>
-                  <xsl:if test="@scenariosFailed=0">
-                    <xsl:if test="@scenariosPending=0">storyTitlePassed</xsl:if>
-                    <xsl:if test="@scenariosPending>0">storyTitlePending</xsl:if>
-                  </xsl:if>
-                </xsl:attribute>
+							<div class="featureTitle">
+								<xsl:attribute name="class">
+									<xsl:if test="@scenariosFailed>0">featureTitleFailed</xsl:if>
+									<xsl:if test="@scenariosFailed=0">
+										<xsl:if test="@scenariosPending=0">featureTitlePassed</xsl:if>
+										<xsl:if test="@scenariosPending>0">featureTitlePending</xsl:if>
+									</xsl:if>
+								</xsl:attribute>
                 Feature:
-                <xsl:value-of select="@name" />
+								<xsl:value-of select="@name" />
 
-              </div>
-              <div class="storyInfos">
+							</div>
+							<div class="featureInfos">
+								<div>
+									<span class="featureInfoLabel">
+										<textarea class="featureNarrative" rows="3" cols="80" readonly="true">
+											<xsl:value-of select="narrative" />
+										</textarea>
+									</span>
+								</div>
+								<!--
                 <div>
-                  <span class="storyInfoLabel">
-                    <textarea class="storyNarrative" rows="3" cols="80" readonly="true">
-                      <xsl:value-of select="narrative" />
-                    </textarea>
-                  </span>
-                </div>
-                <div>
-                  <span class="storyInfoLabel">Scenarios run:</span>
-                  <span class="storyInfoValue">
+                  <span class="featureInfoLabel">Scenarios run:</span>
+                  <span class="featureInfoValue">
                     <xsl:value-of select="@scenarios" />
                   </span>
                 </div>
                 <div>
-                  <span class="storyInfoLabel">Scenarios failed:</span>
-                  <span class="storyInfoValue">
+                  <span class="featureInfoLabel">Scenarios failed:</span>
+                  <span class="featureInfoValue">
                     <xsl:value-of select="@scenariosFailed" />
                   </span>
                 </div>
                 <div>
-                  <span class="storyInfoLabel">Scenarios pending:</span>
-                  <span class="storyInfoValue">
+                  <span class="featureInfoLabel">Scenarios pending:</span>
+                  <span class="featureInfoValue">
                     <xsl:value-of select="@scenariosPending" />
                   </span>
                 </div>
                 <div>
-                  <span class="storyInfoLabel">Execution time:</span>
-                  <span class="storyInfoValue">
-                    <xsl:value-of select="@time" />
-                    s
+                  <span class="featureInfoLabel">Execution time:</span>
+                  <span class="featureInfoValue">
+                    <xsl:value-of select="@time" /> s
                   </span>
                 </div>
-              </div>
-              <xsl:for-each select="scenarios/scenario">
-                <div class="scenarioBox">
-                  <!-- <div class="scenarioFailedTitle"> -->
-                  <div>
-                    <xsl:attribute name="class">
-                      <xsl:if test="@outcome='pending'">scenarioTitlePending</xsl:if>
-                      <xsl:if test="@outcome='passed'">scenarioTitlePassed</xsl:if>
-                      <xsl:if test="@outcome='failed'">scenarioTitleFailed</xsl:if>
-                    </xsl:attribute>
+              -->
+							</div>
+							<xsl:for-each select="scenarios/scenario">
+								<div class="scenarioBox">
+									<!-- <div class="scenarioFailedTitle"> -->
+									<div>
+										<xsl:attribute name="class">
+											<xsl:if test="@outcome='pending'">scenarioTitlePending</xsl:if>
+											<xsl:if test="@outcome='passed'">scenarioTitlePassed</xsl:if>
+											<xsl:if test="@outcome='failed'">scenarioTitleFailed</xsl:if>
+										</xsl:attribute>
                     Scenario:
-                    <xsl:value-of select="@name" />
-                  </div>
-                  <!--
+										<xsl:value-of select="@name" />
+									</div>
+									<!--
 								<div class="scenarioInfos">
 									<div>
 										 <span class="scenarioInfoLabel">Execution time: </span> <span class="scenarioInfoValue"><xsl:value-of select="@time"/> s</span> 
 									</div>
 								</div>
 								-->
-                  <div class="scenarioNarration">
-                    <xsl:for-each select="actionStep">
-                      <div>
-                        <xsl:attribute name="class">
-                          <xsl:if test="@outcome='pending'">actionStepPending</xsl:if>
-                          <xsl:if test="@outcome='passed'">actionStepPassed</xsl:if>
-                          <xsl:if test="@outcome='failed'">actionStepFailed</xsl:if>
-                        </xsl:attribute>
-                        <xsl:value-of select="@name" />
-                        <br />
-                        <xsl:if test="@outcome='failed'">
-                          <div class="stepFailureText">
-                            <xsl:value-of select="failure" />
-                          </div>
-                        </xsl:if>
-                      </div>
-                    </xsl:for-each>
-                    <xsl:for-each select="examples">
-                      <br />
+									<div class="scenarioNarration">
+										<xsl:for-each select="step">
+											<div>
+												<xsl:attribute name="class">
+													<xsl:if test="@outcome='pending'">actionStepPending</xsl:if>
+													<xsl:if test="@outcome='passed'">actionStepPassed</xsl:if>
+													<xsl:if test="@outcome='failed'">actionStepFailed</xsl:if>
+												</xsl:attribute>
+												<xsl:value-of select="@name" />
+												<br />
+												<xsl:if test="@outcome='failed'">
+													<div class="stepFailureText">
+														<xsl:value-of select="failure" />
+													</div>
+												</xsl:if>
+											</div>
+										</xsl:for-each>
+										<xsl:for-each select="examples">
+											<br />
                       Examples:
-                      <br />
-                      <table cellpadding="0" cellspacing="0" class="table">
-                        <xsl:for-each select="columnNames/columnName">
-                          <th align="left" class="th">
-                            <div class="tableText">
-                              <xsl:value-of select="." />
-                            </div>
-                          </th>
-                        </xsl:for-each>
-                        <xsl:for-each select="example">
-                          <tr>
-                            <xsl:attribute name="class">
-                              <xsl:if test="@outcome='pending'">actionStepPending</xsl:if>
-                              <xsl:if test="@outcome='passed'">actionStepPassed</xsl:if>
-                              <xsl:if test="@outcome='failed'">actionStepFailed</xsl:if>
-                            </xsl:attribute>
-                            <xsl:for-each select="column">
-                              <td class="td">
-                                <div class="tableText">
-                                  <xsl:value-of select="." />
-                                </div>
-                              </td>
-                            </xsl:for-each>
-                          </tr>
-                        </xsl:for-each>
-                      </table>
-                    </xsl:for-each>
-                  </div>
-                </div>
-              </xsl:for-each>
-            </div>
-          </xsl:for-each>
-        </div>
-      </xsl:for-each>
-    </div>
-  </xsl:template>
+											<br />
+											<table cellpadding="0" cellspacing="0" class="table">
+												<xsl:for-each select="columnNames/columnName">
+													<th align="left" class="th">
+														<div class="tableText">
+															<xsl:value-of select="." />
+														</div>
+													</th>
+												</xsl:for-each>
+												<xsl:for-each select="example">
+													<tr>
+														<xsl:attribute name="class">
+															<xsl:if test="@outcome='pending'">actionStepPending</xsl:if>
+															<xsl:if test="@outcome='passed'">actionStepPassed</xsl:if>
+															<xsl:if test="@outcome='failed'">actionStepFailed</xsl:if>
+														</xsl:attribute>
+														<xsl:for-each select="column">
+															<td class="td">
+																<div class="tableText">
+																	<xsl:value-of select="." />
+																</div>
+															</td>
+														</xsl:for-each>
+													</tr>
+												</xsl:for-each>
+											</table>
+										</xsl:for-each>
+									</div>
+								</div>
+							</xsl:for-each>
+						</div>
+					</xsl:for-each>
+				</div>
+			</xsl:for-each>
+		</div>
+	</xsl:template>
 </xsl:stylesheet>
+

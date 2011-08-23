@@ -14,7 +14,7 @@ namespace NBehave.Narrator.Framework.Processors
             _featureResults = new FeatureResults(this);
 
             _hub.Subscribe<ScenarioResultEvent>(OnScenarioResultRecieved);
-            _hub.Subscribe<ThemeFinishedEvent>(finished => OnThemeFinished());
+            _hub.Subscribe<FeatureFinishedEvent>(finished => OnFeatureFinished());
         }
 
         private void OnScenarioResultRecieved(ScenarioResultEvent message)
@@ -22,7 +22,7 @@ namespace NBehave.Narrator.Framework.Processors
             _featureResults.AddResult(message.Content);
         }
 
-        private void OnThemeFinished()
+        private void OnFeatureFinished()
         {
             _hub.Publish(_featureResults);
         }

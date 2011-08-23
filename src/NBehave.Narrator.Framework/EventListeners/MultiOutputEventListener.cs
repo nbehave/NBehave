@@ -50,14 +50,9 @@ namespace NBehave.Narrator.Framework.EventListeners
             Invoke(l => l.RunFinished());
         }
 
-        public override void ThemeStarted(string name)
+        public override void FeatureFinished()
         {
-            Invoke(l => l.ThemeStarted(name));
-        }
-
-        public override void ThemeFinished()
-        {
-            Invoke(l => l.ThemeFinished());
+            Invoke(l => l.FeatureFinished());
         }
 
         public override void ScenarioResult(ScenarioResult result)

@@ -16,8 +16,7 @@ namespace NBehave.Narrator.Framework.Processors
             hub.Subscribe<ScenarioStartedEvent>(created => configuration.EventListener.ScenarioStarted(created.Content.Title));
             hub.Subscribe<RunStartedEvent>(started => configuration.EventListener.RunStarted());
             hub.Subscribe<RunFinishedEvent>(finished => configuration.EventListener.RunFinished());
-            hub.Subscribe<ThemeStartedEvent>(themeStarted => configuration.EventListener.ThemeStarted(themeStarted.Content));
-            hub.Subscribe<ThemeFinishedEvent>(themeFinished => configuration.EventListener.ThemeFinished());
+            hub.Subscribe<FeatureFinishedEvent>(themeFinished => configuration.EventListener.FeatureFinished());
             hub.Subscribe<ScenarioResultEvent>(message => configuration.EventListener.ScenarioResult(message.Content));
         }
     }

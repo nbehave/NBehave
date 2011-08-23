@@ -145,9 +145,7 @@
     <Compile Include="Processors\Messages\ScenarioStartedEvent.cs" />
     <Compile Include="Processors\Messages\FeatureNarrativeEvent.cs" />
     <Compile Include="Processors\Messages\FeatureStartedEvent.cs" />
-    <Compile Include="Processors\Messages\ThemeStartedEvent.cs" />
     <Compile Include="Processors\Messages\RunFinishedEvent.cs" />
-    <Compile Include="Processors\Messages\ThemeFinishedEvent.cs" />
     <Compile Include="Processors\Messages\ScenarioResultEvent.cs" />
     <Compile Include="EventListeners\Xml\EventReceived.cs" />
     <Compile Include="EventListeners\Xml\EventType.cs" />

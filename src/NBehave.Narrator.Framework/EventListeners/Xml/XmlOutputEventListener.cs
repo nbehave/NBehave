@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System;
+
 namespace NBehave.Narrator.Framework.EventListeners.Xml
 {
     using System.Collections.Generic;
@@ -16,6 +18,7 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
     {
         private readonly XmlOutputWriter _xmlOutputWriter;
         private readonly List<EventReceived> _eventsReceived = new List<EventReceived>();
+        private string _feature;
 
         public XmlOutputEventListener(XmlWriter writer)
         {
@@ -36,19 +39,10 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
             _xmlOutputWriter.WriteAllXml();
         }
 
-        public override void ThemeStarted(string name)
-        {
-            _eventsReceived.Add(new EventReceived(name, EventType.ThemeStarted));
-        }
-
-        public override void ThemeFinished()
-        {
-            _eventsReceived.Add(new EventReceived(string.Empty, EventType.ThemeFinished));
-        }
-
         public override void FeatureStarted(string feature)
         {
-            _eventsReceived.Add(new EventReceived(feature, EventType.FeatureCreated));
+            _feature = feature;
+            _eventsReceived.Add(new EventReceived(feature, EventType.FeatureStart));
         }
 
         public override void FeatureNarrative(string message)
@@ -56,9 +50,14 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
             _eventsReceived.Add(new EventReceived(message, EventType.FeatureNarrative));
         }
 
+        public override void FeatureFinished()
+        {
+            _eventsReceived.Add(new EventReceived(_feature, EventType.FeatureFinished));
+        }
+
         public override void ScenarioStarted(string scenario)
         {
-            _eventsReceived.Add(new EventReceived(scenario, EventType.ScenarioCreated));
+            _eventsReceived.Add(new EventReceived(scenario, EventType.ScenarioStart));
         }
 
         public override void ScenarioResult(ScenarioResult result)

@@ -22,7 +22,15 @@ namespace NBehave.Narrator.Framework
         {
         }
 
+        public virtual void FeatureFinished()
+        {
+        }
+
         public virtual void ScenarioStarted(string scenarioTitle)
+        {
+        }
+
+        public virtual void ScenarioResult(ScenarioResult result)
         {
         }
 
@@ -31,18 +39,6 @@ namespace NBehave.Narrator.Framework
         }
 
         public virtual void RunFinished()
-        {
-        }
-
-        public virtual void ThemeStarted(string name)
-        {
-        }
-
-        public virtual void ThemeFinished()
-        {
-        }
-
-        public virtual void ScenarioResult(ScenarioResult result)
         {
         }
     }

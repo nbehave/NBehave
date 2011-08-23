@@ -52,14 +52,6 @@ namespace NBehave.Narrator.Framework.EventListeners
             _writer.Flush();
         }
 
-        public override void ThemeStarted(string name)
-        {
-            if (string.IsNullOrEmpty(name) == false)
-            {
-                _writer.WriteLine("Theme: {0}", name);
-            }
-        }
-
         public override void ScenarioResult(ScenarioResult result)
         {
             _allResults.Add(result);
