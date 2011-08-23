@@ -310,8 +310,8 @@ namespace NBehave.Narrator.Framework.Specifications
             public void Should_mark_all_following_steps_as_pending()
             {
                 Assert.That(_scenarioResult.StepResults.ElementAt(0).Result, Is.InstanceOf<Failed>());
-                Assert.That(_scenarioResult.StepResults.ElementAt(1).Result, Is.InstanceOf<PendingBecauseOfPreviousFailedStep>());
-                Assert.That(_scenarioResult.StepResults.ElementAt(2).Result, Is.InstanceOf<PendingBecauseOfPreviousFailedStep>());
+                Assert.That(_scenarioResult.StepResults.ElementAt(1).Result, Is.InstanceOf<Skipped>());
+                Assert.That(_scenarioResult.StepResults.ElementAt(2).Result, Is.InstanceOf<Skipped>());
             }
         }
 

@@ -8,7 +8,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace NBehave.Narrator.Framework
 {

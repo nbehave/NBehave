@@ -23,7 +23,7 @@ namespace NBehave.Narrator.Framework.Specifications
             scenarioResult.AddActionStepResult(new StepResult("c".AsStringStep(""), new Pending("pending reason")));
             scenarioResult.AddActionStepResult(new StepResult("c".AsStringStep(""), new PendingNotImplemented("not implemented")));
             scenarioResult.AddActionStepResult(new StepResult("d".AsStringStep(""), new Failed(new Exception("why it failed"))));
-            scenarioResult.AddActionStepResult(new StepResult("c".AsStringStep(""), new PendingBecauseOfPreviousFailedStep("previous step failed")));
+            scenarioResult.AddActionStepResult(new StepResult("c".AsStringStep(""), new Skipped("previous step failed")));
             results.AddResult(scenarioResult);
 			
 			_output.WriteSummaryResults(results);

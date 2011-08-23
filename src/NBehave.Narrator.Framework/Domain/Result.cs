@@ -55,9 +55,9 @@ namespace NBehave.Narrator.Framework
     }
 
     [Serializable]
-    public class PendingBecauseOfPreviousFailedStep : Pending
+    public class Skipped : Pending
     {
-        public PendingBecauseOfPreviousFailedStep(string message) 
+        public Skipped(string message) 
             : base(message)
         {
         }

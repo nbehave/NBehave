@@ -85,7 +85,7 @@ namespace NBehave.Narrator.Framework.EventListeners
 
         private static string TypeAsString(StepResult stepResult)
         {
-            if (stepResult.Result is Pending)
+            if (stepResult.Result is Pending && (stepResult.Result is Skipped == false))
                 return "PENDING";
             return stepResult.Result.ToString().ToUpper();
         }

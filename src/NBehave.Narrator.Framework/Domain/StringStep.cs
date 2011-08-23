@@ -82,7 +82,7 @@ namespace NBehave.Narrator.Framework
 
         public void PendBecauseOfPreviousFailedStep()
         {
-            StepResult = new StepResult(this, new PendingBecauseOfPreviousFailedStep("Previous step has failed"));
+            StepResult = new StepResult(this, new Skipped("Previous step has failed"));
         }
 
         public void Fail(Exception exception)
