@@ -223,10 +223,10 @@ namespace NBehave.Spec.Xunit.Specs
             "Lorem ipsum dolor sit amet.".ShouldNotContain("foo");
         }
 
-        [Specification, ExpectedException(typeof(AssertionException))]
+        [Test, ExpectedException(typeof(DoesNotContainException))]
         public void Should_allow_substitution_for_ShouldNotContain__for_string_failing()
         {
-            "Lorem ipsum dolor sit amet.".ShouldNotContain("ipsum");
+            "Lorem ipsum dolor sit amet".ShouldNotContain("ipsum");
         }
 
         [Test]
@@ -236,7 +236,7 @@ namespace NBehave.Spec.Xunit.Specs
             str.ShouldContain("Hell");
         }
 
-        [Specification, ExpectedException(typeof(AssertionException))]
+        [Test, ExpectedException(typeof(ContainsException))]
         public void Should_allow_substitution_for_ShouldContain_for_string_failing()
         {
             var str = "Hello";
@@ -367,15 +367,15 @@ namespace NBehave.Spec.Xunit.Specs
             action.ShouldThrow<ArgumentException>();
         }
 
-        [Specification, ExpectedException(typeof(AssertionException), ExpectedMessage = "Exception of type <System.ArgumentException> expected but no exception occurred")]
+        [Test, ExpectedException(typeof(FalseException), ExpectedMessage = "Exception of type <System.ArgumentException> expected but no exception occurred")]
         public void Should_fail_when_no_exception_occurs()
         {
             Action action = () => {  };
             action.ShouldThrow<ArgumentException>();
         }
 
-        [Specification, ExpectedException(typeof(AssertionException))]
-        public void Should_pass_fail_when_exception_is_not_correct_type()
+        [Test, ExpectedException(typeof(IsTypeException))]
+        public void Should_fail_when_exception_is_not_correct_type()
         {
             Action action = () => { throw new ApplicationException("blerg"); };
             action.ShouldThrow<ArgumentException>();
