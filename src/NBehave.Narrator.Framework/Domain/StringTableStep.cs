@@ -7,12 +7,14 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System;
 using System.Linq;
 
 namespace NBehave.Narrator.Framework
 {
     using System.Collections.Generic;
 
+    [Serializable]
     public class StringTableStep : StringStep
     {
         private readonly List<Row> _tableSteps = new List<Row>();

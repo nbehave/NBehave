@@ -119,6 +119,7 @@
     </Compile>
     <Compile Include="ActionCatalogSpec.cs" />
     <Compile Include="ActionStepCodeGeneratorSpec.cs" />
+    <Compile Include="Domain\StringTableStepSpec.cs" />
     <Compile Include="EventListeners\ColorfulConsoleOutputEventListenerSpec.cs" />
     <Compile Include="EmbeddedRunnerSpec.cs" />
     <Compile Include="EventListeners\FailSpecResultEventListenerSpec.cs" />
