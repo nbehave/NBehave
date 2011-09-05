@@ -79,11 +79,22 @@
     <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
   </PropertyGroup>
+  <Choose>
+    <When Condition=" '$(Configuration)|$(Platform)' == 'AutomatedDebug-3.5|AnyCPU' ">
+      <ItemGroup>
+		<Reference Include="Microsoft.Build.Utilities.v3.5" />
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+		<Reference Include="Microsoft.Build.Utilities.v4.0" />
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
+  
   <ItemGroup>
     <Reference Include="Microsoft.Build.Engine" />
     <Reference Include="Microsoft.Build.Framework" />
-    <Reference Include="Microsoft.Build.Utilities.v3.5" Condition="'$(TargetFrameworkVersion)' == 'v3.5'" />
-    <Reference Include="Microsoft.Build.Utilities.v4.0" Condition="'$(TargetFrameworkVersion)' == 'v4.0'" />
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
