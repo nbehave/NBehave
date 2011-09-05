@@ -191,7 +191,7 @@ namespace NBehave.Spec.Xunit
                 Assert.IsAssignableFrom(expected, actual);
                 Assert.False(true, string.Format("Object of type {0} should not be assignable from type '{1}'", actual.GetType(), expected));
             }
-            catch (Exception e)
+            catch (Exception)
             { }
         }
 
