@@ -107,14 +107,19 @@ namespace NBehave.Narrator.Framework
         {
             var info = ActionCatalog.GetAction(actionStep);
 
-            PublishStepStartedEvent(actionStep);
-            BeforeEachScenario(info);
-            BeforeEachStep(info);
-            RunStep(info, getParametersForActionStepText);
-            AfterEachStep(info);
-            PublishStepFinishedEvent(actionStep);
-
-            _lastAction = info;
+            try
+            {
+                PublishStepStartedEvent(actionStep);
+                BeforeEachScenario(info);
+                BeforeEachStep(info);
+                RunStep(info, getParametersForActionStepText);
+            }
+            finally
+            {
+                _lastAction = info;
+                AfterEachStep(info);
+                PublishStepFinishedEvent(actionStep);
+            }
         }
 
         private void PublishStepStartedEvent(StringStep actionStep)

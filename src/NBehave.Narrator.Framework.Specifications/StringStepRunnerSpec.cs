@@ -180,9 +180,84 @@ namespace NBehave.Narrator.Framework.Specifications
             [AfterStep]
             public void AfterStep()
             {
-                throw new ArgumentNullException("AfterScenario");
+                throw new ArgumentNullException("AfterStep");
             }
 
+        }
+
+        [TestFixture, ActionSteps]
+        public class When_BeforeStep_throws_exception : StringStepRunnerSpec
+        {
+            private bool _afterStepWasCalled;
+
+            [SetUp]
+            public override void Setup()
+            {
+                base.Setup();
+
+                Action action = GivenSomething;
+                _actionCatalog.Add(new ActionMethodInfo(new Regex(@"something"), action, action.Method, "Given", this));
+            }
+
+            [Test]
+            public void RunningAStepShouldCallMostAttributedMethods()
+            {
+                var step = new StringStep("something", "");
+                _runner.Run(step);
+                Assert.That(step.StepResult.Result, Is.InstanceOf<Failed>());
+                Assert.That(step.StepResult.Message, Is.StringContaining("ArgumentNullException"));
+            }
+
+            [Given(@"When_AfterStep_throws_exception$")]
+            public void GivenSomething()
+            { }
+
+            [BeforeStep]
+            public void BeforeStep()
+            {
+                throw new ArgumentNullException("BeforeStep");                
+            }
+
+            [AfterStep]
+            public void AfterStep()
+            {
+                 _afterStepWasCalled = true;
+            }
+
+        }
+        [TestFixture, ActionSteps]
+        public class When_first_step_throws_exception : StringStepRunnerSpec
+        {
+            private bool _afterStepWasCalled;
+
+            [SetUp]
+            public override void Setup()
+            {
+                base.Setup();
+
+                Action action = GivenSomething;
+                _actionCatalog.Add(new ActionMethodInfo(new Regex(@"something"), action, action.Method, "Given", this));
+            }
+
+            [Test]
+            public void Should_Call_afterStep_if_step_fails()
+            {
+                var step = new StringStep("something", "");
+                _runner.Run(step);
+                Assert.That(_afterStepWasCalled, Is.True);
+            }
+
+            [Given(@"something")]
+            public void GivenSomething()
+            {
+                throw new NotImplementedException("fail");
+            }
+
+            [AfterStep]
+            public void AfterStep()
+            {
+                _afterStepWasCalled = true;
+            }
         }
     }
 }

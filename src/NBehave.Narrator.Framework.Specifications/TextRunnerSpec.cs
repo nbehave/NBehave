@@ -359,5 +359,34 @@ namespace NBehave.Narrator.Framework.Specifications
                 Assert.That(_thenWasCalled, Is.True);
             }
         }
+
+        [TestFixture]
+        public class When_running_scenario_that_fails : TextRunnerSpec
+        {
+            [Test, Ignore]
+            public void Should_get_FeatureFinishedEvent()
+            {
+                var runner = CreateRunnerWithBasicConfiguration().SetScenarioFiles(new[] { TestFeatures.FeatureWithFailingStep }).Build();
+                var hub = TinyIoCContainer.Current.Resolve<ITinyMessengerHub>();
+
+                bool featureFinishedEvent = false;
+                hub.Subscribe<FeatureFinishedEvent>(_ => featureFinishedEvent = true);
+                runner.Run();
+                Assert.That(featureFinishedEvent, Is.True);
+            }
+
+            [Test, Ignore]
+            public void Should_get_ScenarioFinishedEvent()
+            {
+                var runner = CreateRunnerWithBasicConfiguration().SetScenarioFiles(new[] { TestFeatures.FeatureWithFailingStep }).Build();
+                var hub = TinyIoCContainer.Current.Resolve<ITinyMessengerHub>();
+
+                bool scenarioFinishedEvent = false;
+                hub.Subscribe<ScenarioFinishedEvent>(_ => scenarioFinishedEvent = true);
+                runner.Run();
+
+                Assert.That(scenarioFinishedEvent, Is.True);
+            }
+        }
     }
 }

@@ -1,11 +1,10 @@
-﻿namespace NBehave.Narrator.Framework.Contracts
+﻿using System.Collections.Generic;
+using NBehave.Narrator.Framework.Messages;
+using NBehave.Narrator.Framework.Processors;
+using NBehave.Narrator.Framework.Tiny;
+
+namespace NBehave.Narrator.Framework.Contracts
 {
-    using System.Collections.Generic;
-
-    using NBehave.Narrator.Framework.Messages;
-    using NBehave.Narrator.Framework.Processors;
-    using NBehave.Narrator.Framework.Tiny;
-
     public class ParseScenarioFiles : IMessageProcessor
     {
         private readonly ITinyMessengerHub _hub;
@@ -13,24 +12,24 @@
 
         public ParseScenarioFiles(ITinyMessengerHub hub)
         {
-            this._hub = hub;
-            this._features = new List<Feature>();
+            _hub = hub;
+            _features = new List<Feature>();
 
-            this._hub.Subscribe<ScenarioFilesLoaded>(loaded => OnScenarioFilesLoaded(loaded.Content));
-            this._hub.Subscribe<FeatureBuilt>(built => this._features.Add(built.Content));
+            _hub.Subscribe<ScenarioFilesLoaded>(loaded => OnScenarioFilesLoaded(loaded.Content), true);
+            _hub.Subscribe<FeatureBuilt>(built => _features.Add(built.Content), true);
         }
 
         private void OnScenarioFilesLoaded(IEnumerable<string> content)
         {
-            this.LoadFiles(content);
-            this._hub.Publish(new FeaturesLoaded(this, this._features));
+            LoadFiles(content);
+            _hub.Publish(new FeaturesLoaded(this, _features));
         }
 
         private void LoadFiles(IEnumerable<string> files)
         {
             foreach (var file in files)
             {
-                var scenarioTextParser = new GherkinScenarioParser(this._hub);
+                var scenarioTextParser = new GherkinScenarioParser(_hub);
                 scenarioTextParser.Parse(file);
             }
         }

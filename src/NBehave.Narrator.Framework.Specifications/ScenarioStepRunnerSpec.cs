@@ -226,6 +226,7 @@ namespace NBehave.Narrator.Framework.Specifications
         {
             private ScenarioResult _scenarioResult;
             private TinyMessageSubscriptionToken _subscription;
+            private bool _afterStepWasCalled;
 
             [Given(@"something")]
             public void GivenSomething()
@@ -238,6 +239,11 @@ namespace NBehave.Narrator.Framework.Specifications
                 throw new ApplicationException("OnBeforeScenario failed");
             }
 
+            [AfterStep]
+            public void AfterStep()
+            {
+                _afterStepWasCalled = true;
+            }
             [TestFixtureSetUp]
             public void Setup()
             {
@@ -271,6 +277,12 @@ namespace NBehave.Narrator.Framework.Specifications
                 {
                     Assert.That(stepResult, Is.Not.InstanceOf<Failed>());
                 }
+            }
+
+            [Test]
+            public void Should_call_AfterScenario()
+            {
+                Assert.That(_afterStepWasCalled, Is.True);
             }
         }
 
@@ -314,7 +326,6 @@ namespace NBehave.Narrator.Framework.Specifications
                 Assert.That(_scenarioResult.StepResults.ElementAt(2).Result, Is.InstanceOf<Skipped>());
             }
         }
-
 
         [TestFixture]
         public class When_running_a_scenario_with_implemented_steps_and_one_step_calls_pend : ScenarioStepRunnerSpec
