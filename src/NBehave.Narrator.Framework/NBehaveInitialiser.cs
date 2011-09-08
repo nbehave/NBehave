@@ -27,13 +27,13 @@ namespace NBehave.Narrator.Framework
         /// </remarks>
         private static void RegisterEventListener(IEventListener listener, ITinyMessengerHub hub)
         {
-            hub.Subscribe<FeatureStartedEvent>(_ => listener.FeatureStarted(_.Content));
-            hub.Subscribe<FeatureResultEvent>(_ => listener.FeatureFinished(_.Content));
-            hub.Subscribe<FeatureNarrativeEvent>(_ => listener.FeatureNarrative(_.Content));
-            hub.Subscribe<ScenarioStartedEvent>(_ => listener.ScenarioStarted(_.Content.Title));
-            hub.Subscribe<RunStartedEvent>(_ => listener.RunStarted());
-            hub.Subscribe<RunFinishedEvent>(_ => listener.RunFinished());
-            hub.Subscribe<ScenarioResultEvent>(_ => listener.ScenarioFinished(_.Content));
+            hub.Subscribe<FeatureStartedEvent>(_ => listener.FeatureStarted(_.Content), true);
+            hub.Subscribe<FeatureResultEvent>(_ => listener.FeatureFinished(_.Content), true);
+            hub.Subscribe<FeatureNarrativeEvent>(_ => listener.FeatureNarrative(_.Content), true);
+            hub.Subscribe<ScenarioStartedEvent>(_ => listener.ScenarioStarted(_.Content.Title), true);
+            hub.Subscribe<RunStartedEvent>(_ => listener.RunStarted(), true);
+            hub.Subscribe<RunFinishedEvent>(_ => listener.RunFinished(), true);
+            hub.Subscribe<ScenarioResultEvent>(_ => listener.ScenarioFinished(_.Content), true);
         }
     }
 

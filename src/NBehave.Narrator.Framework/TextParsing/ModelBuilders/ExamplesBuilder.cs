@@ -15,8 +15,8 @@ namespace NBehave.Narrator.Framework.Processors
         {
             _hub = hub;
 
-            _hub.Subscribe<ScenarioBuilt>(built => _scenario = built.Content);
-            _hub.Subscribe<EnteringExamples>(_ => _listenToParsedTable = true);
+            _hub.Subscribe<ScenarioBuilt>(built => _scenario = built.Content, true);
+            _hub.Subscribe<EnteringExamples>(_ => _listenToParsedTable = true, true);
             _hub.Subscribe<ParsedTable>(ExtractExamplesFromTable, _ => _listenToParsedTable);
         }
 

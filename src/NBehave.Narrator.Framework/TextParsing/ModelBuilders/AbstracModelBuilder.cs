@@ -10,8 +10,8 @@ namespace NBehave.Narrator.Framework.Processors
         {
             _hub = hub;
 
-            _hub.Subscribe<ModelBuilderInitialise>(start => Initialise());
-            _hub.Subscribe<ModelBuilderCleanup>(start => Cleanup());
+            _hub.Subscribe<ModelBuilderInitialise>(start => Initialise(), true);
+            _hub.Subscribe<ModelBuilderCleanup>(start => Cleanup(), true);
         }
 
         public virtual void Initialise()

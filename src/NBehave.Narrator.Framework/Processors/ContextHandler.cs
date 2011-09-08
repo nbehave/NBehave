@@ -37,7 +37,7 @@ namespace NBehave.Narrator.Framework.Processors
 
         private void Subscribe<T>(Action<T> eventReceiver) where T : class, ITinyMessage
         {
-            var token = _hub.Subscribe(eventReceiver);
+            var token = _hub.Subscribe(eventReceiver, true);
             _hubSubscriberTokens.Add(new KeyValuePair<TinyMessageSubscriptionToken, Type>(token, typeof(T)));
         }
 
@@ -67,7 +67,7 @@ namespace NBehave.Narrator.Framework.Processors
         }
 
         private void OnStepFinishedEvent(StepFinishedEvent e)
-        {}
+        { }
 
         private void DisposeContextValues(NBehaveContext context)
         {

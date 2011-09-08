@@ -25,8 +25,8 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
             {
                 featureResult = new List<ScenarioResult>();
                 _featureResults.Add(_.Content, featureResult);
-            });
-            _scenarioResultEventSubscription = _hub.Subscribe<ScenarioResultEvent>(_ => featureResult.Add(_.Content));
+            }, true);
+            _scenarioResultEventSubscription = _hub.Subscribe<ScenarioResultEvent>(_ => featureResult.Add(_.Content), true);
         }
 
         public void PublishResults(IEnumerable<NBehaveFeatureTask> tasks)

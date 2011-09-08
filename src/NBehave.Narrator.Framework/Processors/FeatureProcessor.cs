@@ -21,13 +21,13 @@ namespace NBehave.Narrator.Framework.Processors
                                                {
                                                    _features = loaded.Content;
                                                    OnRunStarted();
-                                               });
+                                               }, true);
 
             _hub.Subscribe<ActionStepsLoaded>(stepsLoaded =>
                                                   {
                                                       _actionStepsLoaded = true;
                                                       OnRunStarted();
-                                                  });
+                                                  }, true);
         }
 
         private void OnRunStarted()

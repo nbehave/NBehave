@@ -1,14 +1,13 @@
-﻿namespace NBehave.Narrator.Framework.Contracts
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using NBehave.Narrator.Framework.Messages;
+using NBehave.Narrator.Framework.Processors;
+using NBehave.Narrator.Framework.Tiny;
+
+namespace NBehave.Narrator.Framework.Contracts
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-
-    using NBehave.Narrator.Framework.Messages;
-    using NBehave.Narrator.Framework.Processors;
-    using NBehave.Narrator.Framework.Tiny;
-
     public class LoadScenarioFiles : IMessageProcessor
     {
         private readonly NBehaveConfiguration _configuration;
@@ -16,17 +15,17 @@
 
         public LoadScenarioFiles(NBehaveConfiguration configuration, ITinyMessengerHub hub)
         {
-            this._configuration = configuration;
-            this._hub = hub;
+            _configuration = configuration;
+            _hub = hub;
 
-            this._hub.Subscribe<RunStartedEvent>(started => this.Initialise());
+            _hub.Subscribe<RunStartedEvent>(started => Initialise(), true);
         }
 
         public void Initialise()
         {
-            IEnumerable<string> files = this._configuration
+            IEnumerable<string> files = _configuration
                 .ScenarioFiles
-                .Select(loc => this.GetFiles(loc))
+                .Select(loc => GetFiles(loc))
                 .SelectMany(enumerable => enumerable);
 
             _hub.Publish(new ScenarioFilesLoaded(this, files));

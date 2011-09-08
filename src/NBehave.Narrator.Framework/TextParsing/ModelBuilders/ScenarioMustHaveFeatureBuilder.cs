@@ -13,14 +13,12 @@ namespace NBehave.Narrator.Framework.Processors
             : base(hub)
         {
             _hub = hub;
-            _hub.Subscribe<FeatureBuilt>(built => _feature = built.Content);
+            _hub.Subscribe<FeatureBuilt>(built => _feature = built.Content, true);
             _hub.Subscribe<ParsedScenario>(scenario =>
             {
                 if (_feature == null)
-                {
                     throw new ScenarioMustHaveFeatureException(scenario.Content);
-                }
-            });
+            }, true);
         }
 
         public override void Cleanup()

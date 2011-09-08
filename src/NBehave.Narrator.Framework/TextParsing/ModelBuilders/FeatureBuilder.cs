@@ -11,12 +11,12 @@
             : base(hub)
         {
             _hub = hub;
-            _hub.Subscribe<ParsingFileStart>(file => _file = file.Content);
+            _hub.Subscribe<ParsingFileStart>(file => _file = file.Content, true);
             _hub.Subscribe<ParsedFeature>(message =>
                 {
                     var feature = new Feature(message.Content, _file);
                     _hub.Publish(new FeatureBuilt(this, feature));
-                });
+                }, true);
         }
     }
 }

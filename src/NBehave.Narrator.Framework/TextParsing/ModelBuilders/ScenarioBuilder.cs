@@ -13,8 +13,8 @@ namespace NBehave.Narrator.Framework.Processors
         {
             _hub = hub;
 
-            _hub.Subscribe<FeatureBuilt>(built => _feature = built.Content);
-            _hub.Subscribe<ParsingFileStart>(file => _file = file.Content);
+            _hub.Subscribe<FeatureBuilt>(built => _feature = built.Content, true);
+            _hub.Subscribe<ParsingFileStart>(file => _file = file.Content, true);
             _hub.Subscribe<ParsedScenario>(
                 message =>
                     {

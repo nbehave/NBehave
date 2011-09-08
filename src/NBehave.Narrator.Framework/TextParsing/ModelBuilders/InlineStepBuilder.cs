@@ -15,8 +15,8 @@ namespace NBehave.Narrator.Framework.Processors
             : base(hub)
         {
             _hub = hub;
-            _hub.Subscribe<ScenarioBuilt>(built => _scenario = built.Content);
-            _hub.Subscribe<ParsedStep>(message => _lastStep.Enqueue(message));
+            _hub.Subscribe<ScenarioBuilt>(built => _scenario = built.Content, true);
+            _hub.Subscribe<ParsedStep>(message => _lastStep.Enqueue(message), true);
 
             _hub.Subscribe<ITinyMessage>(
                 anyMessage =>

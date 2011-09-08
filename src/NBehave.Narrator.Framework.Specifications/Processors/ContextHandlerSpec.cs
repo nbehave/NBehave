@@ -34,7 +34,7 @@ namespace NBehave.Narrator.Framework.Specifications.Processors
 
         private void InvokeEvent<T>(T args) where T : class, ITinyMessage
         {
-            var e = _hub.GetArgumentsForCallsMadeOn(_ => _.Subscribe<T>(null)).First();
+            var e = _hub.GetArgumentsForCallsMadeOn(_ => _.Subscribe<T>(null, true)).First();
             var evt = e[0] as Action<T>;
             evt.Invoke(args);
         }

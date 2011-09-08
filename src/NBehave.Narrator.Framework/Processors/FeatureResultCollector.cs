@@ -12,9 +12,9 @@ namespace NBehave.Narrator.Framework.Processors
         {
             _featureResultEvent = new FeatureResultEvent(this, new FeatureResult());
             _hub = hub;
-            _hub.Subscribe<FeatureStartedEvent>(OnFeatureStarted);
-            _hub.Subscribe<ScenarioResultEvent>(OnScenarioResultRecieved);
-            _hub.Subscribe<FeatureFinishedEvent>(finished => OnFeatureFinished());
+            _hub.Subscribe<FeatureStartedEvent>(OnFeatureStarted, true);
+            _hub.Subscribe<ScenarioResultEvent>(OnScenarioResultRecieved, true);
+            _hub.Subscribe<FeatureFinishedEvent>(finished => OnFeatureFinished(), true);
         }
 
         private void OnFeatureStarted(FeatureStartedEvent obj)

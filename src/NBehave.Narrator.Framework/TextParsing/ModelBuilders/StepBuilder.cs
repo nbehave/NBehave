@@ -52,7 +52,7 @@ namespace NBehave.Narrator.Framework.Processors
                                                 {
                                                     zipped(queue.Dequeue(), queue.Peek());
                                                 }
-                                            });
+                                            }, true);
         }
 
         public override void Cleanup()

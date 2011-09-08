@@ -39,7 +39,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
                 .ToList();
 
             IEnumerable<Feature> features = null;
-            var featuresLoadedSubscription = _hub.Subscribe<FeaturesLoaded>(_ => features = _.Content);
+            var featuresLoadedSubscription = _hub.Subscribe<FeaturesLoaded>(_ => features = _.Content, true);
             try
             {
                 _featureRunner.DryRun(featureFiles);
