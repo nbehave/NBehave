@@ -67,8 +67,9 @@ namespace NBehave.Narrator.Framework
 
         public void Fail(Exception exception)
         {
-            AddToCurrentMessage(BuildMessage(exception));
-            _stackTrace = BuildStackTrace(exception);
+            var wrapped = new WrappedException(exception);
+            AddToCurrentMessage(wrapped.Message);
+            _stackTrace = wrapped.StackTrace;
             _result = new Failed(exception);
         }
 
@@ -107,39 +108,15 @@ namespace NBehave.Narrator.Framework
             }
         }
 
-        private string BuildMessage(Exception exception)
-        {
-            var sb = new StringBuilder();
-            sb.AppendFormat("{0} : {1}", exception.GetType(), exception.Message);
+        //private string BuildMessage(WrappedException exception)
+        //{
+        //    return exception.Message;
+        //}
 
-            var inner = exception.InnerException;
-            while (inner != null)
-            {
-                sb.AppendLine();
-                sb.AppendFormat("  ----> {0} : {1}", inner.GetType(), inner.Message);
-                inner = inner.InnerException;
-            }
-
-            return sb.ToString();
-        }
-
-        private string BuildStackTrace(Exception exception)
-        {
-            var builder = new StringBuilder(exception.StackTrace);
-
-            var inner = exception.InnerException;
-            while (inner != null)
-            {
-                builder.AppendLine();
-                builder.Append("--");
-                builder.Append(inner.GetType().Name);
-                builder.AppendLine();
-                builder.Append(inner.StackTrace);
-                inner = inner.InnerException;
-            }
-
-            return builder.ToString();
-        }
+        //private string BuildStackTrace(Exception exception)
+        //{
+        //    return new WrappedException(exception).StackTrace;
+        //}
 
         public bool HasFailedSteps()
         {

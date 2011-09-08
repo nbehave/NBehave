@@ -7,19 +7,6 @@ namespace NBehave.Narrator.Framework
     [Serializable]
     public class FeatureResults : List<FeatureResult>
     {
-        public int NumberOfFailingFeatures
-        {
-            get { return this.Count(_ => _.NumberOfFailingScenarios > 0); }
-        }
-        public int NumberOfPassingFeatures
-        {
-            get { return this.Count(_ => _.NumberOfFailingScenarios == 0 && _.NumberOfPendingScenarios == 0); }
-        }
-        public int NumberOfPendingFeatures
-        {
-            get { return this.Count(_ => _.NumberOfFailingScenarios == 0 && _.NumberOfPendingScenarios > 0); }
-        }
-
         public int NumberOfScenariosFound
         {
             get { return this.SelectMany(_ => _.ScenarioResults).Count(); }
@@ -48,7 +35,6 @@ namespace NBehave.Narrator.Framework
                 return this.SelectMany(_ => _.ScenarioResults).Count(_ => _.Result is Passed);
             }
         }
-
     }
 
     [Serializable]
@@ -74,14 +60,6 @@ namespace NBehave.Narrator.Framework
             get
             {
                 return _scenarioResults.FindAll(_ => _.Result is Pending).Count;
-            }
-        }
-
-        public int NumberOfPassingScenarios
-        {
-            get
-            {
-                return _scenarioResults.FindAll(_ => _.Result is Passed).Count;
             }
         }
 

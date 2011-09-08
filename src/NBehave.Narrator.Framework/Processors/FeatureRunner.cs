@@ -97,7 +97,7 @@ namespace NBehave.Narrator.Framework.Processors
                 catch (Exception e)
                 {
                     if (!scenarioResult.HasFailedSteps())
-                        scenarioResult.Fail(e);
+                        scenarioResult.Fail(new WrappedException(e));
                 }
             }
         }

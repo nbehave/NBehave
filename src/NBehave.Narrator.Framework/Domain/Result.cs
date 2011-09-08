@@ -22,17 +22,12 @@ namespace NBehave.Narrator.Framework
     [Serializable]
     public class Failed : Result
     {
-        private Exception _exception;
-        public Exception Exception
-        {
-            get { return _exception; }
-            private set { _exception = value; }
-        }
+        public WrappedException Exception { get; private set; }
 
         public Failed(Exception exception)
             : base(exception.ToString())
         {
-            Exception = exception;
+            Exception = new WrappedException(exception);
         }
     }
 
