@@ -13,7 +13,9 @@ namespace NBehave.Narrator.Framework.Remoting
 
         public FeatureResults Run()
         {
-            return new TextRunner(_configuration).Run();
+            var runner = new TextRunner(_configuration);
+            var results = runner.Run();
+            return results;
         }
     }
 }

@@ -113,6 +113,7 @@
     <Compile Include="Domain\ExampleColumn.cs" />
     <Compile Include="Domain\FeatureResult.cs" />
     <Compile Include="Domain\StepResult.cs" />
+    <Compile Include="Domain\WrappedException.cs" />
     <Compile Include="EventListeners\BackgroundWriter.cs" />
     <Compile Include="EventListeners\FailSpecResultEventListener.cs" />
     <Compile Include="EventListeners\IEventListener.cs" />
@@ -164,6 +165,7 @@
     <Compile Include="Remoting\AppDomainBootstrapper.cs" />
     <Compile Include="Processors\IMessageProcessor.cs" />
     <Compile Include="Processors\FeatureProcessor.cs" />
+    <Compile Include="Remoting\AppDomainRunner.cs" />
     <Compile Include="Remoting\RemotableStoryRunner.cs" />
     <Compile Include="RunnerFactory.cs" />
     <Compile Include="ScenarioContext.cs" />

@@ -107,7 +107,7 @@ namespace NBehave.Narrator.Framework.Specifications
             [Specification]
             public void Should_construct_runner_suited_for_remoting()
             {
-                Assert.IsInstanceOf(typeof(RemotableStoryRunner), _runner);
+                Assert.IsInstanceOf(typeof(AppDomainRunner), _runner);
             }
         }
 

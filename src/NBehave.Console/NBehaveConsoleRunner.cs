@@ -75,22 +75,25 @@ namespace NBehave.Console
 
             var assemblies = options.Parameters.ToArray().Select(assembly => assembly).Cast<string>().ToList();
             var config = NBehaveConfiguration.New
-                .SetScenarioFiles(options.scenarioFiles.Split(new[] {';'}, StringSplitOptions.RemoveEmptyEntries))
+                .SetScenarioFiles(options.scenarioFiles.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries))
                 .SetDryRun(options.dryRun)
                 .SetAssemblies(assemblies)
                 .SetEventListener(CreateEventListener(options));
 
-            FeatureResults featureResults;
+            FeatureResults featureResults = null;
 
             try
             {
-                IRunner runner = config.Build();
-                featureResults = runner.Run();
+                featureResults = Run(config);
             }
             catch (FileNotFoundException fileNotFoundException)
             {
                 System.Console.WriteLine(string.Format("File not found: {0}", fileNotFoundException.FileName));
                 return ReturnCode.FileNotFound;
+            }
+            catch (Exception e)
+            {
+                System.Console.WriteLine(e.ToString());
             }
 
             PrintTimeTaken(t0);
@@ -105,8 +108,14 @@ namespace NBehave.Console
                 System.Console.WriteLine("Press any key to exit");
                 System.Console.ReadKey();
             }
-
             return featureResults.NumberOfFailingScenarios;
+        }
+
+        private static FeatureResults Run(NBehaveConfiguration config)
+        {
+            IRunner runner = config.Build();
+            FeatureResults featureResults = runner.Run();
+            return featureResults;
         }
 
         private static void WaitForDebuggerToAttach()

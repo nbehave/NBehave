@@ -1,5 +1,6 @@
 using System;
 using NBehave.Narrator.Framework.Messages;
+using NBehave.Narrator.Framework.Remoting;
 using NBehave.Narrator.Framework.Tiny;
 
 namespace NBehave.Narrator.Framework.Processors
@@ -8,7 +9,7 @@ namespace NBehave.Narrator.Framework.Processors
     {
         public EventProcessor(ITinyMessengerHub hub, NBehaveConfiguration configuration)
         {
-            if (AppDomain.CurrentDomain.FriendlyName == RunnerFactory.AppDomainName)
+            if (AppDomain.CurrentDomain.FriendlyName == AppDomainRunner.AppDomainName)
                 return;
 
             hub.Subscribe<RunStartedEvent>(_ => configuration.EventListener.RunStarted(), true);
