@@ -28,9 +28,7 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
 
         public void WriteAllXml()
         {
-            var evt = (from e in EventsReceived
-                       where e.EventType == EventType.RunStart
-                       select e).First();
+            var evt = EventsReceived.OrderBy(_=>_.Time).FirstOrDefault();
 
             Writer.WriteStartElement("results");
             var assemblyString = typeof(XmlOutputEventListener).AssemblyQualifiedName.Split(new[] { ',' });
@@ -51,8 +49,8 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
 
         private TimeSpan CalcExecutionTime()
         {
-            var start = (EventsReceived.Where(e => e.EventType == EventType.RunStart)).First();
-            var end = (EventsReceived.Where(e => e.EventType == EventType.RunFinished)).First();
+            var start = (EventsReceived.OrderBy(_ => _.Time)).First();
+            var end = (EventsReceived.OrderBy(_ => _.Time)).Last();
             return end.Time.Subtract(start.Time);
         }
 
@@ -229,7 +227,7 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
         {
             Writer.WriteStartElement(elementName);
             Writer.WriteAttributeString("name", attributeName);
-            Writer.WriteAttributeString("time", Math.Round(timeTaken.TotalSeconds,1).ToString());
+            Writer.WriteAttributeString("time", Math.Round(timeTaken.TotalSeconds, 1).ToString());
         }
 
         private void CreatePendingSteps(EventReceived evt, ScenarioResult scenarioResult)
