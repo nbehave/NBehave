@@ -17,5 +17,10 @@ namespace NBehave.Narrator.Framework.Remoting
             var results = runner.Run();
             return results;
         }
+
+        public override object InitializeLifetimeService()
+        {
+            return null;
+        }
     }
 }

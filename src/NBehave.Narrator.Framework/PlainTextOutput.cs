@@ -61,5 +61,10 @@ namespace NBehave.Narrator.Framework
                 Environment.Version);
             _writer.WriteLine(runtimeEnv);
         }
+
+        public override object InitializeLifetimeService()
+        {
+            return null;
+        }
     }
 }

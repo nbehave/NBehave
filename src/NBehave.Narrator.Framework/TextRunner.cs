@@ -33,5 +33,10 @@ namespace NBehave.Narrator.Framework
 
             return results;
         }
+
+        public override object InitializeLifetimeService()
+        {
+            return null;
+        }
     }
 }

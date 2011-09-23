@@ -94,5 +94,10 @@ namespace NBehave.Narrator.Framework
             CreateAppDomain = false;
             return this;
         }
+
+        public override object InitializeLifetimeService()
+        {
+            return null;
+        }
     }
 }

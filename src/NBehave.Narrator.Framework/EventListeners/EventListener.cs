@@ -41,5 +41,10 @@ namespace NBehave.Narrator.Framework
         public virtual void RunFinished()
         {
         }
+
+        public override object InitializeLifetimeService()
+        {
+            return null;
+        }
     }
 }
