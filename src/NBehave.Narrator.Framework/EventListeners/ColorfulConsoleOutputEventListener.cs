@@ -108,48 +108,16 @@ namespace NBehave.Narrator.Framework.EventListeners
             if (scenarioExampleResult == null)
                 return;
 
-            var columnSize = CalcColumnSize(scenarioExampleResult);
-            var columns = "Examples:" + Environment.NewLine + "\t|";
-            foreach (var columnName in scenarioExampleResult.Examples.First().ColumnNames)
-                columns += FormatColumnValue(columnSize, columnName.Name, columnName.Name);
-
+            var ex = new ExampleTableFormatter();
+            var columns = "Examples:" + Environment.NewLine + "\t" + ex.TableHeader(scenarioExampleResult.Examples);
             WriteColorString(columns, ConsoleColor.Gray);
 
             var scenarioResults = scenarioExampleResult.ExampleResults.ToArray();
-            var idx = 0;
-            foreach (var example in scenarioExampleResult.Examples)
+            var rows = ex.TableRows(scenarioExampleResult.Examples);
+            for (int i = 0; i < rows.Length; i++)
             {
-                var row = "\t|";
-                foreach (var columnName in example.ColumnNames)
-                    row += FormatColumnValue(columnSize, columnName.Name, example.ColumnValues[columnName.Name.ToLower()]);
-
-                WriteColorString(row, GetColorForResult(scenarioResults[idx++].Result));
+                WriteColorString("\t" + rows[i],GetColorForResult(scenarioResults[i].Result));
             }
-        }
-
-        private string FormatColumnValue(Dictionary<string, int> columnSize, string columnName, string columnValue)
-        {
-            return string.Format(" {0} |", columnValue.PadRight(columnSize[columnName]));
-        }
-
-        private Dictionary<string, int> CalcColumnSize(ScenarioExampleResult result)
-        {
-            var columns = new Dictionary<string, int>();
-            foreach (var example in result.Examples.First().ColumnNames)
-                columns.Add(example.Name, example.Name.Length);
-            foreach (var example in result.Examples)
-            {
-                foreach (var columnName in example.ColumnNames)
-                {
-                    var name = columnName.Name;
-                    var valueLength = example.ColumnValues[name].Length;
-                    if (columns[name] < valueLength)
-                        columns[name] = valueLength;
-                }
-
-            }
-
-            return columns;
         }
 
         private void WriteColorString(string text, ConsoleColor color)
@@ -180,4 +148,5 @@ namespace NBehave.Narrator.Framework.EventListeners
             return ConsoleColor.Gray;
         }
     }
+   
 }

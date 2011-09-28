@@ -11,7 +11,7 @@ namespace NBehave.Narrator.Framework.Specifications.Domain
         {
             var columnNames = new ExampleColumns(new[] { new ExampleColumn("colA"), new ExampleColumn("colB"), });
             var columnValues = new Dictionary<string, string> { { "colA", "A" }, { "colB", "B" } };
-            var example = new Example(columnNames,columnValues);
+            var example = new Example(columnNames, columnValues);
 
             var str = example.ToString();
             var exampleFromString = ExampleBuilder.BuildFromString(str);

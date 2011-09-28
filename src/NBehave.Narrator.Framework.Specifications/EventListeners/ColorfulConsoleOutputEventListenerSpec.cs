@@ -84,8 +84,7 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
             public void Should_write_summary_of_Scenarios()
             {
                 StringAssert.Contains("Scenarios run: 1, Failures: 0, Pending: 0", _output);
-            }
-            
+            }            
         }
 
         public class When_running_scenario_with_unimplemented_step : ColorfulConsoleOutputEventListenerSpec

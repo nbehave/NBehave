@@ -153,6 +153,13 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
             taskState.State = SignalState.Started;
             if (taskResult == TaskResult.Error)
                 _server.TaskException(taskState.Task, new[] { new TaskException(((Failed)result.Result).Exception) });
+            if (result.StringStep is StringTableStep)
+            {
+                var tableStep = result.StringStep as StringTableStep;
+                var x = new ExampleTableFormatter();
+                var msg = x.TableHeader(tableStep.TableSteps) + Environment.NewLine + string.Join(Environment.NewLine, x.TableRows(tableStep.TableSteps));
+                _server.TaskOutput(taskState.Task, msg, TaskOutputType.STDOUT);
+            }
             if (taskResult == TaskResult.Inconclusive)
             {
                 var code = GetCodeForPendingStep(scenarioResult, result);

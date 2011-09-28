@@ -112,6 +112,7 @@
     <Compile Include="Domain\ColumnValues.cs" />
     <Compile Include="Domain\ExampleBuilder.cs" />
     <Compile Include="Domain\ExampleColumn.cs" />
+    <Compile Include="Domain\ExampleTableFormatter.cs" />
     <Compile Include="Domain\FeatureResult.cs" />
     <Compile Include="Domain\StepResult.cs" />
     <Compile Include="Domain\WrappedException.cs" />

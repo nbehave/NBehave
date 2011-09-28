@@ -14,8 +14,8 @@ namespace NBehave.ReSharper.Plugin.Specifications
     [TestFixture]
     public abstract class ResharperResultPublisherSpec
     {
-        const string Source = @"X:\Code\Proj\Features\Cool.feature";
-        const string ScenarioTitle = "scenario title";
+        private const string Source = @"X:\Code\Proj\Features\Cool.feature";
+        private const string ScenarioTitle = "scenario title";
 
         private IRemoteTaskServer server;
         private Narrator.Framework.Feature feature;
@@ -67,7 +67,7 @@ namespace NBehave.ReSharper.Plugin.Specifications
             }
         }
 
-        public class When_step_Fails  :ResharperResultPublisherSpec
+        public class When_step_Fails : ResharperResultPublisherSpec
         {
             protected override void Because_of()
             {
@@ -88,7 +88,7 @@ namespace NBehave.ReSharper.Plugin.Specifications
             {
                 server.AssertWasCalled(_ => _.TaskException(Arg<RemoteTask>.Is.Same(scenarioTask), Arg<TaskException[]>.Is.NotNull));
                 server.AssertWasCalled(_ => _.TaskFinished(scenarioTask, "System.ArgumentNullException: Value cannot be null.\r\nParameter name: wtf!", TaskResult.Error));
-            }            
+            }
         }
 
         public class When_step_is_pending : ResharperResultPublisherSpec
@@ -98,7 +98,7 @@ namespace NBehave.ReSharper.Plugin.Specifications
                 var result = new ScenarioResult(feature, ScenarioTitle);
                 result.AddActionStepResult(new StepResult(new StringStep("Given something that passes", Source), new Passed()));
                 result.AddActionStepResult(new StepResult(new StringStep("Given something", Source), new PendingNotImplemented("not implemented")));
-                resultPublisher.Notify(result);                
+                resultPublisher.Notify(result);
             }
 
             [Test]
@@ -112,6 +112,25 @@ namespace NBehave.ReSharper.Plugin.Specifications
             public void Should_notify_of_pending_scenario()
             {
                 server.AssertWasCalled(_ => _.TaskFinished(scenarioTask, "not implemented", TaskResult.Inconclusive));
+            }
+        }
+
+        public class When_running_Table_steps : ResharperResultPublisherSpec
+        {
+            protected override void Because_of()
+            {
+                var result = new ScenarioResult(feature, ScenarioTitle);
+                var stringTableStep = new StringTableStep("Given something", Source);
+                stringTableStep.AddTableStep(new Example(new ExampleColumns(new[] { new ExampleColumn("A"), new ExampleColumn("B"), }),
+                                                         new Dictionary<string, string> { { "A", "aaa" }, { "B", "bb" } }));
+                result.AddActionStepResult(new StepResult(stringTableStep, new Passed()));
+                resultPublisher.Notify(result);
+            }
+
+            [Test]
+            public void Should_add_table_to_explanation()
+            {
+                server.AssertWasCalled(_ => _.TaskOutput(task, "| A   | B  |\r\n| aaa | bb |", TaskOutputType.STDOUT));
             }
         }
     }
