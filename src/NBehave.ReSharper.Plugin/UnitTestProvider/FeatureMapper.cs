@@ -50,8 +50,21 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
             Add(_parent);
             BuildBackgroundElements(scenario);
             BuildSteps(scenario.Steps);
-            //BuildExamples(scenario.Examples);
+            BuildExamples(scenario);
             _parent = parent;
+        }
+
+        private void BuildExamples(Scenario scenario)
+        {
+            if (scenario.Examples.Any() == false)
+                return;
+            var ex = new NBehaveExampleParentTestElement(scenario.Examples, _parent.FeatureFile, _unitTestProvider, _projectModel, _parent);
+            Add(ex);
+            foreach (var example in scenario.Examples)
+            {
+                var s = new NBehaveExampleTestElement(example, _parent.FeatureFile, _unitTestProvider, _projectModel, ex);
+                Add(s);
+            }
         }
 
         private void BuildBackgroundElements(Scenario scenario)

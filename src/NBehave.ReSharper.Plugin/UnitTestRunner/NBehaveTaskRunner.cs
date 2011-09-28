@@ -47,7 +47,8 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
             var assemblies = new[] { asm.AssemblyFile };
             var files = node.Children.Select(_ => ((NBehaveFeatureTask)_.RemoteTask).FeatureFile).Distinct().ToList();
             var codeGenListener = new CodeGenEventListener();
-            var listener = new NBehaveTaskRunnerListener(node.Children, Server, codeGenListener);
+            var resharperResultNotifier = new ResharperResultPublisher(node.Children, Server, codeGenListener);
+            var listener = new NBehaveTaskRunnerListener(resharperResultNotifier);
 
             var featureTasks = new List<NBehaveFeatureTask>();
             foreach (var featureNode in node.Children)

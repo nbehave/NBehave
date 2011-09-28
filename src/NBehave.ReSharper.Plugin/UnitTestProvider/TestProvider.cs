@@ -20,7 +20,9 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
 	                                                                                            typeof(NBehaveFeatureTestElement) ,
 	                                                                                            typeof(NBehaveBackgroundTestElement) ,
 	                                                                                            typeof(NBehaveScenarioTestElement) ,
-	                                                                                            typeof(NBehaveStepTestElement)
+	                                                                                            typeof(NBehaveStepTestElement),
+	                                                                                            typeof(NBehaveExampleTestElement),
+	                                                                                            typeof(NBehaveExampleParentTestElement)
                                                                                             });
 
         private readonly ISolution _soultion;

@@ -93,6 +93,7 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Extensions.cs" />
     <Compile Include="Initialiser.cs" />
     <Compile Include="UnitTestProvider\FeatureMapper.cs" />
     <Compile Include="FeatureRunner.cs" />
@@ -100,10 +101,14 @@
     <Compile Include="IFeatureRunner.cs" />
     <Compile Include="UnitTestProvider\MetadataExplorer.cs" />
     <Compile Include="UnitTestProvider\NBehaveBackgroundTestElement.cs" />
+    <Compile Include="UnitTestProvider\NBehaveExampleParentTestElement.cs" />
+    <Compile Include="UnitTestProvider\NBehaveExampleTestElement.cs" />
     <Compile Include="UnitTestProvider\NBehaveFeatureTestElement.cs" />
     <Compile Include="UnitTestProvider\NBehaveScenarioTestElement.cs" />
     <Compile Include="UnitTestProvider\NBehaveStepTestElement.cs" />
     <Compile Include="UnitTestRunner\NBehaveBackgroundTask.cs" />
+    <Compile Include="UnitTestRunner\NBehaveExampleParentTask.cs" />
+    <Compile Include="UnitTestRunner\NBehaveExampleTask.cs" />
     <Compile Include="UnitTestRunner\NBehaveScenarioTask.cs" />
     <Compile Include="UnitTestRunner\NBehaveStepTask.cs" />
     <Compile Include="UnitTestRunner\NBehaveTaskRunner.cs" />
@@ -116,6 +121,7 @@
     <Compile Include="UnitTestProvider\TestProvider.cs" />
     <Compile Include="UnitTestProvider\UnitTestMetadataExplorer.cs" />
     <Compile Include="UnitTestRunner\NBehaveTaskRunnerListener.cs" />
+    <Compile Include="UnitTestRunner\ResharperResultPublisher.cs" />
     <Compile Include="UnitTestRunner\ResultPublisher.cs" />
     <Compile Include="UnitTestRunner\TaskExecutionNodeExtensions.cs" />
   </ItemGroup>

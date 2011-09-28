@@ -6,32 +6,49 @@ using JetBrains.ReSharper.TaskRunnerFramework;
 namespace NBehave.ReSharper.Plugin.UnitTestRunner
 {
     [Serializable]
-    public class NBehaveStepTask : RemoteTask, IEquatable<NBehaveStepTask>
+    public class NBehaveRemoteTask : RemoteTask
     {
-        public NBehaveStepTask(XmlElement element) 
+
+        public string FeatureFile { get; private set; }
+        public string Scenario { get; private set; }
+
+        public override bool IsMeaningfulTask
+        {
+            get { return true; }
+        }
+
+         public NBehaveRemoteTask(XmlElement element)
             : base(element)
         {
             FeatureFile = GetXmlAttribute(element, "featureFile");
             Scenario = GetXmlAttribute(element, "scenario");
+
+        }
+
+         public NBehaveRemoteTask(IProjectFile featureFile, string scenario)
+            : base(NBehaveTaskRunner.RunnerId)
+        {
+            FeatureFile = featureFile.Location.FullPath;
+            Scenario = scenario;
+        }
+    }
+
+    [Serializable]
+    public class NBehaveStepTask : NBehaveRemoteTask, IEquatable<NBehaveStepTask>
+    {
+        public string Step { get; private set; }
+
+        public NBehaveStepTask(XmlElement element)
+            : base(element)
+        {
             Step = GetXmlAttribute(element, "step");
 
         }
 
         public NBehaveStepTask(IProjectFile featureFile, string scenario, string step)
-            : base(NBehaveTaskRunner.RunnerId)
+            : base(featureFile, scenario)
         {
-            FeatureFile = featureFile.Location.FullPath;
-            Scenario = scenario;
             Step = step;
-        }
-
-        public string FeatureFile { get; private set; }
-        public string Scenario { get; private set; }
-        public string Step { get; private set; }
-
-        public override bool IsMeaningfulTask
-        {
-            get { return true; }
         }
 
         public override void SaveXml(XmlElement element)

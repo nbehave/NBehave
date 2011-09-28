@@ -1,3 +1,4 @@
+using JetBrains.DataFlow;
 using JetBrains.ProjectModel;
 using JetBrains.Util;
 using NBehave.ReSharper.Plugin.UnitTestRunner;

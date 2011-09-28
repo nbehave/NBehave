@@ -20,6 +20,8 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
             Present(new PresentationCallback<TreeModelNode, IPresentableItem, NBehaveScenarioTestElement>(PresentScenario));
             Present(new PresentationCallback<TreeModelNode, IPresentableItem, NBehaveBackgroundTestElement>(PresentBackgroundScenario));
             Present(new PresentationCallback<TreeModelNode, IPresentableItem, NBehaveStepTestElement>(PresentStep));
+            Present(new PresentationCallback<TreeModelNode, IPresentableItem, NBehaveExampleTestElement>((a, b, c, d) => { }));
+            Present(new PresentationCallback<TreeModelNode, IPresentableItem, NBehaveExampleParentTestElement>((a, b, c, d) => { }));
         }
 
         protected override bool IsNaturalParent(object parent, object child)
@@ -74,6 +76,5 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
             taskResult = (results.Any(_ => _.Result is Failed)) ? TaskResult.Error : taskResult;
             return taskResult;
         }
-
     }
 }
