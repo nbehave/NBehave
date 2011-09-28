@@ -38,7 +38,7 @@ namespace NBehave.Narrator.Framework
             (this as IStringStepRunner).Run(step, null);
         }
 
-        public void Run(StringStep step, Row row)
+        public void Run(StringStep step, Example example)
         {
             try
             {
@@ -49,10 +49,10 @@ namespace NBehave.Narrator.Framework
                 }
                 else
                 {
-                    if (row == null)
+                    if (example == null)
                         RunStep(step);
                     else
-                        RunStep(step, row);
+                        RunStep(step, example);
                 }
             }
             catch (Exception e)
@@ -97,7 +97,7 @@ namespace NBehave.Narrator.Framework
             RunStep(actionStep, getParameters);
         }
 
-        private void RunStep(StringStep actionStep, Row row)
+        private void RunStep(StringStep actionStep, Example row)
         {
             Func<object[]> getParameters = () => ParameterConverter.GetParametersForStep(actionStep, row);
             RunStep(actionStep, getParameters);

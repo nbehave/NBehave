@@ -18,11 +18,11 @@ namespace NBehave.Narrator.Framework.Processors
         public StepResult RunStringTableStep(StringTableStep step)
         {
             var stringStep = GetNewStringStep(step);
-            foreach (var row in step.TableSteps)
+            foreach (var example in step.TableSteps)
             {
-                var stepWithParameters = AddParametersToStep(step, row);
+                var stepWithParameters = AddParametersToStep(step, example);
 
-                _stringStepRunner.Run(stepWithParameters, row);
+                _stringStepRunner.Run(stepWithParameters, example);
                 stringStep.StepResult.MergeResult(stepWithParameters.StepResult.Result);
             }
 
@@ -52,7 +52,7 @@ namespace NBehave.Narrator.Framework.Processors
             step.Remove(step.Length - Environment.NewLine.Length, Environment.NewLine.Length);
         }
 
-        private StringStep AddParametersToStep(StringTableStep step, Row row)
+        private StringStep AddParametersToStep(StringTableStep step, Example row)
         {
             if (HasParametersInStep(step.Step) == false)
                 return new StringStep(step.Step, step.Source);

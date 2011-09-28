@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
 using NUnit.Framework;
 
 namespace NBehave.Narrator.Framework.Specifications.Domain
@@ -17,7 +14,7 @@ namespace NBehave.Narrator.Framework.Specifications.Domain
             var s = new StringTableStep("Given x", "source");
             var columns = new ExampleColumns(new[] { new ExampleColumn("a") });
             var values = new Dictionary<string, string> { { "a", "value" } };
-            var row = new Row(columns, values);
+            var row = new Example(columns, values);
             s.AddTableStep(row);
 
             var b = new BinaryFormatter();

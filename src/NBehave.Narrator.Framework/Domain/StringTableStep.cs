@@ -17,13 +17,13 @@ namespace NBehave.Narrator.Framework
     [Serializable]
     public class StringTableStep : StringStep
     {
-        private readonly List<Row> _tableSteps = new List<Row>();
+        private readonly List<Example> _tableSteps = new List<Example>();
 
         public StringTableStep(string step, string source)
             : base(step, source)
         { }
 
-        public IEnumerable<Row> TableSteps
+        public IEnumerable<Example> TableSteps
         {
             get
             {
@@ -31,12 +31,12 @@ namespace NBehave.Narrator.Framework
             }
         }
 
-        public void AddTableStep(Row row)
+        public void AddTableStep(Example row)
         {
             _tableSteps.Add(row);
         }
 
-        public override StringStep BuildStep(Row values)
+        public override StringStep BuildStep(Example values)
         {
             var template = Step;
             foreach (var columnName in values.ColumnNames)
@@ -64,7 +64,7 @@ namespace NBehave.Narrator.Framework
             {
                 var clonedValues = tableStep.ColumnValues.ToDictionary(pair => pair.Key, pair => pair.Value);
                 var clonedNames = new ExampleColumns(tableStep.ColumnNames);
-                var clonedRow = new Row(clonedNames, clonedValues);
+                var clonedRow = new Example(clonedNames, clonedValues);
                 clone.AddTableStep(clonedRow);
             }
         }

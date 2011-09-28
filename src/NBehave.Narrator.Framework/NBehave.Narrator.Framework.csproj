@@ -110,6 +110,7 @@
     <Compile Include="ActionCatalog.cs" />
     <Compile Include="Domain\BackgroundStepResult.cs" />
     <Compile Include="Domain\ColumnValues.cs" />
+    <Compile Include="Domain\ExampleBuilder.cs" />
     <Compile Include="Domain\ExampleColumn.cs" />
     <Compile Include="Domain\FeatureResult.cs" />
     <Compile Include="Domain\StepResult.cs" />
@@ -233,7 +234,6 @@
     <Compile Include="Domain\Example.cs" />
     <Compile Include="Domain\ExampleColumns.cs" />
     <Compile Include="Domain\Feature.cs" />
-    <Compile Include="Domain\Row.cs" />
     <Compile Include="Domain\Scenario.cs" />
     <Compile Include="Domain\StringStep.cs" />
     <Compile Include="Domain\StringTableStep.cs" />

@@ -41,7 +41,7 @@ namespace NBehave.Narrator.Framework.Processors
 
         private ScenarioResult RunExamples(Scenario scenario)
         {
-            var runner = new ExampleRunner(_stringStepRunner);
+            var runner = new ExampleRunner();
             var exampleResults = runner.RunExamples(scenario, RunSteps, BeforeScenario, AfterScenario);
             return exampleResults;
         }

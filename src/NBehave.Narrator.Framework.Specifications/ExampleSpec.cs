@@ -4,9 +4,9 @@ using NUnit.Framework;
 namespace NBehave.Narrator.Framework.Specifications.Text
 {
     [TestFixture]
-    public class RowSpec
+    public class ExampleSpec
     {
-        Row _row;
+        Example _row;
 
         [SetUp]
         public void EstablishContext()
@@ -18,7 +18,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             {
                 { "colName" , colValue }
             };
-            _row = new Row(columnNames, columnValues);
+            _row = new Example(columnNames, columnValues);
         }
 
         [Test]

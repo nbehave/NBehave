@@ -190,7 +190,7 @@ namespace NBehave.Narrator.Framework.Specifications
             {
                 Action<string> action = name => { };
                 _actionCatalog.Add(new ActionMethodInfo("I have a name".AsRegex(), action, action.Method, null));
-                var row = new Row(new ExampleColumns(new[] { new ExampleColumn("name") }), new Dictionary<string, string> { { "name", "Morgan" } });
+                var row = new Example(new ExampleColumns(new[] { new ExampleColumn("name") }), new Dictionary<string, string> { { "name", "Morgan" } });
                 var values = _parameterConverter.GetParametersForStep(new StringStep("Given I have a name", ""), row);
 
                 Assert.That(values.Length, Is.EqualTo(1));

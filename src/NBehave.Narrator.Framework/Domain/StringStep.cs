@@ -53,7 +53,7 @@ namespace NBehave.Narrator.Framework
             }
         }
 
-        public virtual StringStep BuildStep(Row values)
+        public virtual StringStep BuildStep(Example values)
         {
             var template = Step;
             foreach (var columnName in values.ColumnNames)

@@ -63,7 +63,7 @@ namespace NBehave.Fluent.Framework
             }
         }
 
-        public void Run(StringStep step, Row row)
+        public void Run(StringStep step, Example example)
         {
             throw new NotSupportedException("NBehave.Spec does not support example-driven scenarios");
         }

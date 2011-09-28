@@ -33,11 +33,11 @@ namespace NBehave.Narrator.Framework
             return GetParametersForStep(action, paramNames, getValues);
         }
 
-        public object[] GetParametersForStep(StringStep stringStep, Row row)
+        public object[] GetParametersForStep(StringStep stringStep, Example example)
         {
             var action = _actionCatalog.GetAction(stringStep);
             var paramNames = action.ParameterInfo.Select(a => a.Name).ToList();
-            Func<int, string> getValues = i => row.ColumnValues[paramNames[i]];
+            Func<int, string> getValues = i => example.ColumnValues[paramNames[i]];
 
             return GetParametersForStep(action, paramNames, getValues);
         }

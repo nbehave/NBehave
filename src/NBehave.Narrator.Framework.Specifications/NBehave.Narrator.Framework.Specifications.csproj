@@ -119,6 +119,7 @@
     </Compile>
     <Compile Include="ActionCatalogSpec.cs" />
     <Compile Include="ActionStepCodeGeneratorSpec.cs" />
+    <Compile Include="Domain\ExampleBuilderSpec.cs" />
     <Compile Include="Domain\StringTableStepSpec.cs" />
     <Compile Include="EventListeners\ColorfulConsoleOutputEventListenerSpec.cs" />
     <Compile Include="EmbeddedRunnerSpec.cs" />
@@ -156,7 +157,7 @@
     <Compile Include="StoryRunnerFilterSpecs.cs" />
     <Compile Include="ActionStepAttributeSpec.cs" />
     <Compile Include="IgnoreSpaceAndUnderScoreMatcherSpec.cs" />
-    <Compile Include="RowSpec.cs" />
+    <Compile Include="ExampleSpec.cs" />
     <Compile Include="ScenarioParserSpec.cs" />
     <Compile Include="StringStepSpec.cs" />
   </ItemGroup>

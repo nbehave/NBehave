@@ -54,7 +54,7 @@ namespace NBehave.Narrator.Framework.Processors
                     row.Add(exampleColumns[i].Name, example.ElementAt(i));
                 }
 
-                stringTableStep.AddTableStep(new Row(exampleColumns, row));
+                stringTableStep.AddTableStep(new Example(exampleColumns, row));
             }
         }
 

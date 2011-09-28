@@ -6,13 +6,6 @@ namespace NBehave.Narrator.Framework.Processors
 {
     public class ExampleRunner
     {
-        private readonly IStringStepRunner _stringStepRunner;
-
-        public ExampleRunner(IStringStepRunner stringStepRunner)
-        {
-            _stringStepRunner = stringStepRunner;
-        }
-
         public ScenarioExampleResult RunExamples(Scenario scenario, 
             Func<IEnumerable<StringStep>, IEnumerable<StepResult>> runSteps, 
             Action beforeScenario,
@@ -40,7 +33,7 @@ namespace NBehave.Narrator.Framework.Processors
             return scenarioResult;
         }
 
-        private IEnumerable<StringStep> BuildSteps(Scenario scenario, Row example)
+        private IEnumerable<StringStep> BuildSteps(Scenario scenario, Example example)
         {
             return scenario.Steps.Select(step => step.BuildStep(example));
         }
