@@ -76,11 +76,25 @@ namespace NBehave.Narrator.Framework.EventListeners
             _allResults.Add(scenarioResult);
             foreach (var stepResult in scenarioResult.StepResults)
             {
-                WriteColorString("  " + stepResult.StringStep + " - " + TypeAsString(stepResult),
-                    GetColorForResult(stepResult.Result));
+                WriteColorString("  " + stepResult.StringStep + " - " + TypeAsString(stepResult), GetColorForResult(stepResult.Result));
+                WriteTableSteps(stepResult);
             }
 
             DoExamplesInScenario(scenarioResult as ScenarioExampleResult);
+        }
+
+        private void WriteTableSteps(StepResult stepResult)
+        {
+            if (stepResult.StringStep is StringTableStep == false)
+                return;
+
+            var stringTableStep = stepResult.StringStep as StringTableStep;
+            var heeader = stringTableStep.TableSteps.First();
+            WriteColorString("   " + heeader.ColumnNamesToString(), GetColorForResult(stepResult.Result));
+            foreach (var tableStep in stringTableStep.TableSteps)
+            {
+                WriteColorString("   " + tableStep.ColumnValuesToString(), GetColorForResult(stepResult.Result));
+            }
         }
 
         private static string TypeAsString(StepResult stepResult)
@@ -116,7 +130,7 @@ namespace NBehave.Narrator.Framework.EventListeners
             var rows = ex.TableRows(scenarioExampleResult.Examples);
             for (int i = 0; i < rows.Length; i++)
             {
-                WriteColorString("\t" + rows[i],GetColorForResult(scenarioResults[i].Result));
+                WriteColorString("\t" + rows[i], GetColorForResult(scenarioResults[i].Result));
             }
         }
 
@@ -148,5 +162,5 @@ namespace NBehave.Narrator.Framework.EventListeners
             return ConsoleColor.Gray;
         }
     }
-   
+
 }

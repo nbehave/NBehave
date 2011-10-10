@@ -41,7 +41,7 @@ namespace NBehave.Narrator.Framework
             var step = new StringBuilder();
             foreach (var columnName in ColumnNames)
             {
-                step.Append("| " + getValue(columnName));
+                step.Append(" | " + getValue(columnName));
             }
 
             step.Append(" |");
