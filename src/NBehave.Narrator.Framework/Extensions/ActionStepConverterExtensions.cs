@@ -14,9 +14,9 @@ namespace NBehave.Narrator.Framework
 
     public static class ActionStepConverterExtensions
     {
-        public const string TokenRegexPattern = @"(\$[a-zA-Z]\w+)|(\[[a-zA-Z]\w+\])";
+        public const string TokenRegexPattern = @"(?<name>\$[a-zA-Z]\w*)|(?<bracketName>\[[a-zA-Z]\w*\])";
         private static readonly Regex _tokenPattern = new Regex(TokenRegexPattern);
-        private static readonly Regex _validRegexGroupName = new Regex(@"[a-zA-Z]\w+");
+        private static readonly Regex _validRegexGroupName = new Regex(@"[a-zA-Z]\w*");
 
         public static Regex AsRegex(this string actionStep)
         {
@@ -29,10 +29,10 @@ namespace NBehave.Narrator.Framework
                     regex += string.Format(@"{0}\s+", word);
                     continue;
                 }
-                
+                var handleBracketName = _tokenPattern.Match(word).Groups["bracketName"].Success ? 1 : 0;
                 var groupName = GetValidRegexGroupName(word);
                 var stuffAtStart = word.Substring(0, word.IndexOf(groupName) - 1);
-                var stuffAtEnd = word.Substring(word.IndexOf(groupName) + groupName.Length);
+                var stuffAtEnd = word.Substring(word.IndexOf(groupName) + groupName.Length + handleBracketName);
 
                 var lengthRestriction = "+";
                 if (stuffAtEnd.StartsWith("{") && stuffAtEnd.Contains("}"))
