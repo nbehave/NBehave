@@ -15,18 +15,15 @@ namespace NBehave.Narrator.Framework.Processors
             _stringStepRunner = stringStepRunner;
         }
 
-        public StepResult RunStringTableStep(StringTableStep step)
+        public void RunStringTableStep(StringTableStep step)
         {
-            var stringStep = GetNewStringStep(step);
             foreach (var example in step.TableSteps)
             {
                 var stepWithParameters = AddParametersToStep(step, example);
 
                 _stringStepRunner.Run(stepWithParameters, example);
-                stringStep.StepResult.MergeResult(stepWithParameters.StepResult.Result);
+                step.StepResult.MergeResult(stepWithParameters.StepResult.Result);
             }
-
-            return stringStep.StepResult;
         }
 
         private StringStep GetNewStringStep(StringTableStep stringStep)

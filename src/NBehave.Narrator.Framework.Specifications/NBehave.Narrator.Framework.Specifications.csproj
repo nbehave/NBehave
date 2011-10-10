@@ -136,6 +136,9 @@
     <Compile Include="ParameterConverterSpec.cs" />
     <Compile Include="Processors\ActionStepConverterExtensionsSpec.cs" />
     <Compile Include="Processors\ContextHandlerSpec.cs" />
+    <Compile Include="Processors\FeatureRunnerSpec.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="RemotableStoryRunnerSpec.cs" />
     <Compile Include="ScenarioContextSpec.cs" />
     <Compile Include="StringExtensionsSpec.cs" />

@@ -102,10 +102,10 @@ namespace NBehave.Narrator.Framework.Processors
             }
         }
 
-        private StepResult RunStringTableStep(StringTableStep stringStep)
+        private void RunStringTableStep(StringTableStep stringStep)
         {
             var r = new StringTableStepRunner(_stringStepRunner);
-            return r.RunStringTableStep(stringStep);
+            r.RunStringTableStep(stringStep);
         }
     }
 }
