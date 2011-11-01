@@ -70,6 +70,16 @@ namespace NBehave.Narrator.Framework.Specifications
             }
 
             [Test]
+            public void ShouldGetStringParameter()
+            {
+                Action<string> action = value => { };
+                _actionCatalog.Add(new ActionMethodInfo(new Regex(@"an string (?<value>\w+)"), action, action.Method, "Given"));
+                var values = _parameterConverter.GetParametersForStep(new StringStep("Given an string Hello", ""));
+                Assert.That(values[0], Is.TypeOf(typeof(string)));
+                Assert.That(values[0], Is.EqualTo("Hello"));
+            }
+
+            [Test]
             public void ShouldGetIntParameter()
             {
                 Action<int> action = value => { };
@@ -179,6 +189,38 @@ namespace NBehave.Narrator.Framework.Specifications
                 Assert.AreEqual(1, arr.First());
                 Assert.AreEqual(2, arr.Skip(1).First());
                 Assert.AreEqual(5, arr.Last());
+            }
+
+            public class Book
+            {
+                public string Name { get; set; }
+                public string Author { get; set; }
+                public int ISBN { get; set; }
+            }
+
+            [Test]
+            public void Should_get_value_as_complex_type()
+            {
+                Action<Book> actionStep = p => { };
+                _actionCatalog.Add(new ActionMethodInfo(new Regex(@"a book named (?<name>\w+) of author (?<author>.*) with isbn (?<isbn>\w+)$"), actionStep, actionStep.Method, "Given"));
+                const string actionString = "Given a book named GoodBook of author Bok Writer with isbn 123";
+                var values = _parameterConverter.GetParametersForStep(new StringStep(actionString, ""));
+                var value = values[0];
+                Assert.That(value, Is.TypeOf(typeof(Book)));
+                var book = (Book)value;
+                Assert.AreEqual("GoodBook", book.Name);
+                Assert.AreEqual("Bok Writer", book.Author);
+                Assert.AreEqual(123, book.ISBN);
+            }
+
+            [Test]
+            public void Should_throw_meaningful_exception_when_property_does_not_exist_on_complex_type()
+            {
+                Action<Book> actionStep = p => { };
+                _actionCatalog.Add(new ActionMethodInfo(new Regex(@"a book named (?<name>\w+) of author (?<Foo>.*) with isbn (?<isbn>\w+)$"), actionStep, actionStep.Method, "Given"));
+                const string actionString = "Given a book named GoodBook of author Bok Writer with isbn 123";
+                var ex = Assert.Throws<ArgumentException>(() => _parameterConverter.GetParametersForStep(new StringStep(actionString, "")));
+                Assert.AreEqual("Type 'Book' dont have a property with the name 'Foo'", ex.Message);
             }
         }
 

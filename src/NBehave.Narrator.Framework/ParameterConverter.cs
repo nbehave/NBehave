@@ -52,14 +52,36 @@ namespace NBehave.Narrator.Framework
         {
             var args = action.ParameterInfo;
             var values = new object[args.Length];
+            if (args.Length == 1 && args[0].ParameterType.IsClass && args.Length != paramNames.Count)
+            {
+                values[0] = CreateInstanceOfComplexType(paramNames, args, getValue);
+            }
+            else
+            {
+                for (var argNumber = 0; argNumber < paramNames.Count; argNumber++)
+                {
+                    var strParam = getValue(argNumber);
+                    values[argNumber] = ChangeParameterType(strParam, args[argNumber]);
+                }
+            }
+            return values;
+        }
 
+        private object CreateInstanceOfComplexType(ICollection<string> paramNames, ParameterInfo[] args, Func<int, string> getValue)
+        {
+            var instance = Activator.CreateInstance(args[0].ParameterType);
             for (var argNumber = 0; argNumber < paramNames.Count; argNumber++)
             {
+                var argName = paramNames.ToArray()[argNumber];
+                var prop = instance.GetType().GetProperties().FirstOrDefault(_ => _.Name.Equals(argName, StringComparison.CurrentCultureIgnoreCase));
+                if (prop == null)
+                    throw new ArgumentException(string.Format("Type '{0}' dont have a property with the name '{1}'", instance.GetType().Name, argName));
                 var strParam = getValue(argNumber);
-                values[argNumber] = ChangeParameterType(strParam, args[argNumber]);
+                var paramType = prop.GetSetMethod(true).GetParameters()[0];
+                var value = ChangeParameterType(strParam, paramType);
+                prop.SetValue(instance, value, null);
             }
-
-            return values;
+            return instance;
         }
 
         private List<string> GetParameterNames(ActionMethodInfo actionValue)
@@ -83,7 +105,6 @@ namespace NBehave.Narrator.Framework
             {
                 return Enum.Parse(paramType.ParameterType, strParam);
             }
-
             return Convert.ChangeType(strParam, paramType.ParameterType);
         }
 
