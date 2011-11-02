@@ -108,13 +108,7 @@
     <None Include="Bowling Game\BowlingGame.nant.build">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Bowling Game\features\Bowling score calculation\All once.feature">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Bowling Game\features\Bowling score calculation\One spare.feature">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Bowling Game\features\Bowling score calculation\One strike.feature">
+    <None Include="Bowling Game\features\bowling.feature">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Calculator table\features\AddNumbers.feature">
@@ -127,9 +121,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Game of life\features\The_grid_starts_empty.feature">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Bowling Game\features\Bowling score calculation\Gutter game.feature">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Tables\Table.feature">

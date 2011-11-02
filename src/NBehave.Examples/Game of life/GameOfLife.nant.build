@@ -15,7 +15,7 @@
         <include name="..\**\NBehave.Examples.dll" />
       </assemblies>
       <scenarioFiles>
-        <include name="Specs\**\*.feature" />
+        <include name="Features\**\*.feature" />
       </scenarioFiles>
     </nbehave>
   </target>
