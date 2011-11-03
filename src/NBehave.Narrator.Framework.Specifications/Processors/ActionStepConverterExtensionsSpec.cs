@@ -60,5 +60,12 @@ namespace NBehave.Narrator.Framework.Specifications.Processors
             var regex = "a [variable]{3,5}".AsRegex();
             Assert.AreEqual(@"^a\s+(?<variable>.{3,5})\s*$", regex.ToString());
         }
+
+        [Test]
+        public void Should_convert_string_with_variable_surronded_with_angle_brackets_to_regex()
+        {
+            var regex = "a <variable>".AsRegex();
+            Assert.AreEqual(@"^a\s+(?<variable>.+)\s*$", regex.ToString());
+        }
     }
 }

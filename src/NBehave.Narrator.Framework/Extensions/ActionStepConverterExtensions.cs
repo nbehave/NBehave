@@ -14,7 +14,7 @@ namespace NBehave.Narrator.Framework
 
     public static class ActionStepConverterExtensions
     {
-        public const string TokenRegexPattern = @"(?<name>\$[a-zA-Z]\w*)|(?<bracketName>\[[a-zA-Z]\w*\])";
+        public const string TokenRegexPattern = @"(?<name>\$[a-zA-Z]\w*)|(?<bracketName>(\[|\<)[a-zA-Z]\w*(\]|\>))";
         private static readonly Regex _tokenPattern = new Regex(TokenRegexPattern);
         private static readonly Regex _validRegexGroupName = new Regex(@"[a-zA-Z]\w*");
 
