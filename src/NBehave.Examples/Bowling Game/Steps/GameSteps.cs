@@ -1,4 +1,5 @@
-﻿using NBehave.Examples.BowlingGame;
+﻿using System.Linq;
+using NBehave.Examples.BowlingGame;
 using NBehave.Narrator.Framework;
 using NBehave.Spec.NUnit;
 
@@ -19,10 +20,7 @@ namespace NBehave.Examples.Bowling_Game.Specs
         [When(@"the rest of my $rolls rolls are $pins")]
         public void RollMany(int rolls, int pins)
         {
-            for (var i = 0; i < rolls; i++)
-            {
-                _game.Roll(pins);
-            }
+            Enumerable.Range(1, rolls).ToList().ForEach(_ => _game.Roll(pins));
         }
 
         [Then]
