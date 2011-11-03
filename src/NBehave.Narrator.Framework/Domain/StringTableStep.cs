@@ -31,6 +31,14 @@ namespace NBehave.Narrator.Framework
             }
         }
 
+        public override IEnumerable<MethodParametersType> MatchableStepTypes
+        {
+            get
+            {
+                return new[] { MethodParametersType.TypedListStep, MethodParametersType.TypedStep, MethodParametersType.UntypedStep, MethodParametersType.UntypedListStep };
+            }
+        }
+
         public void AddTableStep(Example row)
         {
             _tableSteps.Add(row);

@@ -119,6 +119,7 @@
     </Compile>
     <Compile Include="ActionCatalogSpec.cs" />
     <Compile Include="ActionStepCodeGeneratorSpec.cs" />
+    <Compile Include="Domain\ActionMethodInfoSpec.cs" />
     <Compile Include="Domain\ExampleBuilderSpec.cs" />
     <Compile Include="Domain\ExampleTableFormatterSpec.cs" />
     <Compile Include="Domain\StringTableStepSpec.cs" />

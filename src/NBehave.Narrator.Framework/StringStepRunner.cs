@@ -6,15 +6,13 @@
 //   Defines the StringStepRunner type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
+using System;
+using System.Globalization;
+using System.Reflection;
 using NBehave.Narrator.Framework.Tiny;
 
 namespace NBehave.Narrator.Framework
 {
-    using System;
-    using System.Globalization;
-    using System.Reflection;
-
     public class StringStepRunner : IStringStepRunner
     {
         private ActionMethodInfo _lastAction;
@@ -35,11 +33,6 @@ namespace NBehave.Narrator.Framework
 
         public void Run(StringStep step)
         {
-            (this as IStringStepRunner).Run(step, null);
-        }
-
-        public void Run(StringStep step, Example example)
-        {
             try
             {
                 if (!ActionCatalog.ActionExists(step))
@@ -49,10 +42,7 @@ namespace NBehave.Narrator.Framework
                 }
                 else
                 {
-                    if (example == null)
-                        RunStep(step);
-                    else
-                        RunStep(step, example);
+                    RunStep(step);
                 }
             }
             catch (Exception e)
@@ -93,18 +83,6 @@ namespace NBehave.Narrator.Framework
 
         private void RunStep(StringStep actionStep)
         {
-            Func<object[]> getParameters = () => ParameterConverter.GetParametersForStep(actionStep);
-            RunStep(actionStep, getParameters);
-        }
-
-        private void RunStep(StringStep actionStep, Example row)
-        {
-            Func<object[]> getParameters = () => ParameterConverter.GetParametersForStep(actionStep, row);
-            RunStep(actionStep, getParameters);
-        }
-
-        private void RunStep(StringStep actionStep, Func<object[]> getParametersForActionStepText)
-        {
             var info = ActionCatalog.GetAction(actionStep);
 
             try
@@ -112,7 +90,10 @@ namespace NBehave.Narrator.Framework
                 PublishStepStartedEvent(actionStep);
                 BeforeEachScenario(info);
                 BeforeEachStep(info);
-                RunStep(info, getParametersForActionStepText);
+                if (actionStep is StringTableStep && ShouldForEachOverStep(info))
+                    ForEachOverStep(actionStep as StringTableStep, info);
+                else
+                    RunStep(info, () => ParameterConverter.GetParametersForStep(actionStep));
             }
             finally
             {
@@ -122,14 +103,15 @@ namespace NBehave.Narrator.Framework
             }
         }
 
-        private void PublishStepStartedEvent(StringStep actionStep)
+        private void ForEachOverStep(StringTableStep actionStep, ActionMethodInfo info)
         {
-            _hub.Publish(new StepStartedEvent(this, actionStep));
+            foreach (var example in actionStep.TableSteps)
+                RunStep(info, () => ParameterConverter.GetParametersForStep(actionStep, example));
         }
 
-        private void PublishStepFinishedEvent(StringStep actionStep)
+        private static bool ShouldForEachOverStep(ActionMethodInfo info)
         {
-            _hub.Publish(new StepFinishedEvent(this, actionStep.Step));
+            return info.MethodParametersType != MethodParametersType.TypedListStep;
         }
 
         private void RunStep(ActionMethodInfo info, Func<object[]> getParametersForActionStepText)
@@ -143,6 +125,16 @@ namespace NBehave.Narrator.Framework
                 null,
                 new object[] { actionParamValues },
                 CultureInfo.CurrentCulture);
+        }
+
+        private void PublishStepStartedEvent(StringStep actionStep)
+        {
+            _hub.Publish(new StepStartedEvent(this, actionStep));
+        }
+
+        private void PublishStepFinishedEvent(StringStep actionStep)
+        {
+            _hub.Publish(new StepFinishedEvent(this, actionStep.Step));
         }
 
         private void BeforeEachStep(ActionMethodInfo info)

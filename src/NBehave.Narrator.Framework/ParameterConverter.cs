@@ -42,12 +42,6 @@ namespace NBehave.Narrator.Framework
             return GetParametersForStep(action, paramNames, getValues);
         }
 
-        private object CreateGeneric(Type generic, Type innerType)
-        {
-            var specificType = generic.MakeGenericType(new[] { innerType });
-            return Activator.CreateInstance(specificType, null);
-        }
-
         private object[] GetParametersForStep(ActionMethodInfo action, ICollection<string> paramNames, Func<int, string> getValue)
         {
             var args = action.ParameterInfo;
@@ -96,7 +90,7 @@ namespace NBehave.Narrator.Framework
                 return CreateArray(strParam, paramType.ParameterType);
             }
 
-            if (IsGenericIEnumerable(paramType))
+            if (paramType.IsGenericIEnumerable())
             {
                 return CreateList(strParam, paramType.ParameterType);
             }
@@ -120,27 +114,10 @@ namespace NBehave.Narrator.Framework
         private object CreateList(string param, Type parameterType)
         {
             var innerType = parameterType.GetGenericArguments()[0];
-            var genericList = CreateGeneric(typeof(List<>), innerType);
+            var genericList = typeof(List<>).CreateGeneric(innerType);
             var strParamAsArray = GetParamAsArray(param);
             SetValues(strParamAsArray, innerType, genericList, "AddValue");
             return genericList;
-        }
-
-        private bool IsGenericIEnumerable(ParameterInfo paramType)
-        {
-            if (paramType.ParameterType.IsGenericType == false)
-            {
-                return false;
-            }
-
-            var genericArgs = paramType.ParameterType.GetGenericArguments();
-            if (genericArgs.Length > 1)
-            {
-                throw new NotSupportedException("Sorry, nbehave only supports one generic parameter");
-            }
-
-            var ien = CreateGeneric(typeof(List<>), genericArgs[0]);
-            return paramType.ParameterType.IsAssignableFrom(ien.GetType());
         }
 
         private void SetValues(string[] strParamAsArray, Type typeInList, object typedArray, string function)

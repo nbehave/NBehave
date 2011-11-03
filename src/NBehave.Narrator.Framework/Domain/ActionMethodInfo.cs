@@ -1,20 +1,11 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ActionMethodInfo.cs" company="NBehave">
-//   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
-// </copyright>
-// <summary>
-//   Defines the ActionMethodInfo type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace NBehave.Narrator.Framework
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Reflection;
-    using System.Text.RegularExpressions;
-
     public class ActionMethodInfo
     {
         public ActionMethodInfo(Regex actionStepMatcher, object action, MethodInfo methodInfo, string actionType)
@@ -23,39 +14,52 @@ namespace NBehave.Narrator.Framework
         }
 
         public ActionMethodInfo(Regex actionStepMatcher, object action, MethodInfo methodInfo, string actionType, object instance)
-            : this()
         {
-            this.ActionStepMatcher = actionStepMatcher;
-            this.Action = action;
-            this.MethodInfo = methodInfo;
-            this.ActionType = actionType;
-            this.Instance = instance;
+            ActionStepMatcher = actionStepMatcher;
+            Action = action;
+            MethodInfo = methodInfo;
+            ActionType = actionType;
+            Instance = instance;
+            FileMatcher = new MatchAllFiles();
+            MethodParametersType = FigureOutParameterTypes();
         }
 
-        private ActionMethodInfo()
+        private MethodParametersType FigureOutParameterTypes()
         {
-            this.FileMatcher = new MatchAllFiles();
+            var parameters = MethodInfo.GetParameters();
+            if (parameters.Length != 1)
+                return MethodParametersType.UntypedStep;
+
+            var paramType = parameters.First();
+            if (IsStringType(paramType.ParameterType) || paramType.ParameterType.IsPrimitive)
+                return MethodParametersType = MethodParametersType.UntypedStep;
+
+            if (paramType.IsGenericIEnumerable())
+            {
+                var arg = paramType.GetGenericArgument();
+                return IsStringType(arg) ? MethodParametersType.UntypedListStep : MethodParametersType.TypedListStep;
+            }
+            return MethodParametersType.TypedStep;
+        }
+
+        private static bool IsStringType(Type type)
+        {
+            return type == typeof(string);
         }
 
         public string ActionType { get; private set; }
-
         public MethodInfo MethodInfo { get; private set; }
-
         public Regex ActionStepMatcher { get; private set; }
-
         public object Action { get; private set; }
-
         public IFileMatcher FileMatcher { get; set; }
 
         public ParameterInfo[] ParameterInfo
         {
-            get
-            {
-                return this.MethodInfo.GetParameters();
-            }
+            get { return MethodInfo.GetParameters(); }
         }
 
         private object Instance { get; set; }
+        public MethodParametersType MethodParametersType { get; private set; }
 
         public List<string> GetParameterNames()
         {
@@ -84,25 +88,25 @@ namespace NBehave.Narrator.Framework
 
         public void ExecuteNotificationMethod(Type notificationType)
         {
-            if (this.Instance == null)
+            if (Instance == null)
             {
                 return;
             }
 
-            var methodInfo = this.LocateNotificationMethod(notificationType);
+            var methodInfo = LocateNotificationMethod(notificationType);
             if (methodInfo == null)
             {
                 return;
             }
 
-            methodInfo.Invoke(this.Instance, new object[0]);
+            methodInfo.Invoke(Instance, new object[0]);
         }
 
         private MethodInfo LocateNotificationMethod(Type notificationType)
         {
             return MethodInfo.DeclaringType
-                    .GetMethods()
-                    .FirstOrDefault(m => m.GetCustomAttributes(notificationType, true).Length > 0);
+                .GetMethods()
+                .FirstOrDefault(m => m.GetCustomAttributes(notificationType, true).Length > 0);
         }
     }
 }

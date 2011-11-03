@@ -67,10 +67,7 @@ namespace NBehave.Narrator.Framework.Processors
                     continue;
                 }
 
-                if (step is StringTableStep)
-                    RunStringTableStep((StringTableStep)step);
-                else
-                    _stringStepRunner.Run(step);
+                _stringStepRunner.Run(step);
 
                 if (step.StepResult.Result is Failed)
                 {
@@ -100,12 +97,6 @@ namespace NBehave.Narrator.Framework.Processors
                         scenarioResult.Fail(new WrappedException(e));
                 }
             }
-        }
-
-        private void RunStringTableStep(StringTableStep stringStep)
-        {
-            var r = new StringTableStepRunner(_stringStepRunner);
-            r.RunStringTableStep(stringStep);
         }
     }
 }

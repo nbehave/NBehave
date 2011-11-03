@@ -1,13 +1,5 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="StringStep.cs" company="NBehave">
-//   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
-// </copyright>
-// <summary>
-//   Defines the StringStep type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -24,7 +16,11 @@ namespace NBehave.Narrator.Framework
         }
 
         private string _matchableStep;
-        public string MatchableStep { get { return _matchableStep; } }
+
+        public string MatchableStep
+        {
+            get { return _matchableStep; }
+        }
 
         private string _step;
 
@@ -41,14 +37,19 @@ namespace NBehave.Narrator.Framework
         public string Source { get; private set; }
         public StepResult StepResult { get; set; }
 
+        public virtual IEnumerable<MethodParametersType> MatchableStepTypes
+        {
+            get { return new[] {MethodParametersType.TypedStep, MethodParametersType.UntypedStep, MethodParametersType.UntypedListStep, MethodParametersType.TypedListStep}; }
+        }
+
         public TypeOfStep TypeOfStep
         {
             get
             {
-                var validNames = Enum.GetNames(typeof(TypeOfStep)).ToList();
+                var validNames = Enum.GetNames(typeof (TypeOfStep)).ToList();
                 var firstWord = Step.GetFirstWord();
                 if (validNames.Contains(firstWord))
-                    return (TypeOfStep)Enum.Parse(typeof(TypeOfStep), firstWord, true);
+                    return (TypeOfStep) Enum.Parse(typeof (TypeOfStep), firstWord, true);
                 return TypeOfStep.Unknown;
             }
         }
