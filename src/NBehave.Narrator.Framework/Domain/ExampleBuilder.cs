@@ -7,7 +7,7 @@ namespace NBehave.Narrator.Framework
     {
         public static Example BuildFromString(string str)
         {
-            var cols = str.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+            var cols = str.Trim().Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
             var columnNames = BuildColumnNames(cols);
             var columnValues = BuildColumnValues(columnNames, cols);
             return new Example(columnNames, columnValues);

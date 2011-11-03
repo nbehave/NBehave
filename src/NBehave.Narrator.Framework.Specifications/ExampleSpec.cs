@@ -24,10 +24,8 @@ namespace NBehave.Narrator.Framework.Specifications.Text
         [Test]
         public void Should_use_formatted_column()
         {
-
-
             var rowAsString = _row.ColumnNamesToString();
-            const string expected = "| colName |";
+            const string expected = " | colName |";
             Assert.That(rowAsString, Is.EqualTo(expected));
         }
 
@@ -35,7 +33,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
         public void ShouldMakeColumnValuesToString()
         {
             var rowAsString = _row.ColumnValuesToString();
-            const string expected = "| a really wide column value |";
+            const string expected = " | a really wide column value |";
             Assert.That(rowAsString, Is.EqualTo(expected));
         }
     }
