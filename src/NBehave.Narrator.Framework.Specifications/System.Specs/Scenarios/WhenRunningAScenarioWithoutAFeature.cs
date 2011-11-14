@@ -7,7 +7,6 @@ namespace NBehave.Narrator.Framework.Specifications.System.Specs
     [TestFixture]
     public class WhenRunningAScenarioWithoutAFeature : SystemTestContext
     {
-        private FeatureResults _results;
         private ScenarioMustHaveFeatureException _exception;
 
         protected override void EstablishContext()
@@ -19,7 +18,7 @@ namespace NBehave.Narrator.Framework.Specifications.System.Specs
         {
             try
             {
-                _results = _config.Build().Run();
+                _config.Build().Run();
             }
             catch (ScenarioMustHaveFeatureException exception)
             {

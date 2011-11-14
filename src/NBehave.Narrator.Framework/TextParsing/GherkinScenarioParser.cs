@@ -61,7 +61,7 @@ namespace NBehave.Narrator.Framework
 
         public void Step(Token keyword, Token name)
         {
-            string stepText = string.Format("{0}{1}", keyword.Content, name.Content);
+            string stepText = string.Format("{0} {1}", keyword.Content, name.Content);
             _events.Enqueue(new StepEvent(_hub, stepText));
         }
 

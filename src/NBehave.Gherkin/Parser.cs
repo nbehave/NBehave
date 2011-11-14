@@ -1,5 +1,6 @@
 using System.IO;
-using gherkin.lexer;
+using GurkBurk;
+//using gherkin.lexer;
 
 namespace NBehave.Gherkin
 {

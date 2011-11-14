@@ -204,9 +204,9 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             [Test]
             public void ShouldHaveNarrative()
             {
-                Assert.That(_scenarios.First().Feature.Narrative, Is.EqualTo(
-                    "This is the narrative" + Environment.NewLine +
-                    "This is second row of narrative"));
+                var narrative = _scenarios.First().Feature.Narrative;
+                StringAssert.Contains("This is the narrative" + Environment.NewLine, narrative);
+                StringAssert.Contains("This is second row of narrative", narrative);
             }
 
             [Test]

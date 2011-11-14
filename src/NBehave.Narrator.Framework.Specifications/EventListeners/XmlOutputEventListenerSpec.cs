@@ -85,9 +85,8 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
             [Test]
             public void ResultsNodeShouldHaveOnePendingScenario()
             {
-                Assert.AreEqual("1",
-                                _xmlDoc.SelectSingleNode(@"results").Attributes["scenariosPending"].
-                                    Value);
+                var pending = _xmlDoc.SelectSingleNode(@"results").Attributes["scenariosPending"].Value;
+                Assert.AreEqual("1", pending);
             }
 
             [Test]
@@ -109,10 +108,10 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
             {
                 Assert.IsNotNull(
                     _xmlDoc.SelectSingleNode("results/features/feature[@name='S1']/narrative"));
-                Assert.AreEqual("As a X1" + Environment.NewLine +
-                                "I want Y1" + Environment.NewLine +
-                                "So that Z1" + Environment.NewLine,
-                                _xmlDoc.SelectSingleNode("results/features/feature/narrative").InnerText);
+                var narrative = _xmlDoc.SelectSingleNode("results/features/feature/narrative").InnerText;
+                StringAssert.Contains("As a X1" + Environment.NewLine, narrative);
+                StringAssert.Contains("I want Y1" + Environment.NewLine, narrative);
+                StringAssert.Contains("So that Z1" + Environment.NewLine, narrative);
             }
 
             [Test]
