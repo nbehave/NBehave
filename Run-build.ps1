@@ -22,7 +22,7 @@ if (-not(test-path $buildFile)) {
     $buildFile = (join-path $scriptPath $buildFile)
 } 
 
-Build "3.5" "Clean"
+Build "3.5" "Init"
 Build "3.5" $task
 Build "4.0" $task
 Build "3.5" "Distribute"
