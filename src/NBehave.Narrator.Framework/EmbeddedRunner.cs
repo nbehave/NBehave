@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using NBehave.Narrator.Framework.EventListeners;
 
@@ -50,7 +51,8 @@ namespace NBehave.Narrator.Framework
             var eventListeners = new List<IEventListener>();
             eventListeners.AddRange(eventListenersArg);
 
-            eventListeners.Add(EventListeners.EventListeners.ColorfulConsoleOutputEventListener());
+            if (eventListeners.Any() == false)
+                eventListeners.Add(EventListeners.EventListeners.ColorfulConsoleOutputEventListener());
             eventListeners.Add(new FailSpecResultEventListener());
 
             var multiEventListener = new MultiOutputEventListener(eventListeners.ToArray());
