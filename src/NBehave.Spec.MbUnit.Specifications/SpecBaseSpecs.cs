@@ -25,9 +25,9 @@ namespace NBehave.Spec.MbUnit.Specs
     [TestFixture]
     public class When_using_the_setup_methods_in_non_generic_specs : SpecBase
     {
-        private static int _estContextCount;
-        private static int _becauseOfCount;
-        private static int _cleanupCount;
+        private int _estContextCount;
+        private int _becauseOfCount;
+        private int _cleanupCount;
 
         protected override void Establish_context()
         {

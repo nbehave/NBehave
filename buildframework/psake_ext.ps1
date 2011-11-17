@@ -59,20 +59,20 @@ function zip($path, $files)
 	$ZipFile.CopyHere($files)
 }
 
-function ilmerge($key, $directory, $name, $assemblies, $extension)
+function Run-ILMerge($key, $directory, $outAssembly, $assemblies)
 {	
 	new-item -path $directory -name "temp_merge" -type directory -ErrorAction SilentlyContinue
 	
-	if($framework -eq "4.0")
-	{
-		Exec { ..\tools\ilmerge\ilmerge.exe /keyfile:$key /out:"$directory\temp_merge\$name.$extension" "$directory\$name.$extension" $assemblies /targetplatform:"v4,$env:ProgramFiles\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0" }
+	$outFile = "$directory\temp_merge\$outAssembly"
+	Write-Host "$outFile"
+	
+	if($framework -eq "4.0") {
+		Exec { .\tools\ilmerge\ilmerge.exe /keyfile:$key /out:$outFile $assemblies /targetplatform:"v4,$env:ProgramFiles\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0" }
 	}
-	else
-	{
-		Exec { ..\tools\ilmerge\ilmerge.exe /keyfile:$key /out:"$directory\temp_merge\$name.$extension" "$directory\$name.$extension" $assemblies }
+	else {
+		Exec { .\tools\ilmerge\ilmerge.exe /keyfile:$key /out:$outFile $assemblies }
 	}
 	
-	Get-ChildItem "$directory\temp_merge\**" -Include *.dll, *.pdb | Copy-Item -Destination $directory
-	
+	Get-ChildItem "$directory\temp_merge\**" -Include *.dll, *.pdb | Copy-Item -Destination $directory	
 	Remove-Item "$directory\temp_merge" -Recurse -ErrorAction SilentlyContinue
 }

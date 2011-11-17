@@ -1,6 +1,6 @@
 @REM ********
 @REM To pass parameters you do:
-@REM "go.cmd -env=test" -task=Clean
+@REM "go.cmd -task:Clean
 @REM ********
 
 @echo off

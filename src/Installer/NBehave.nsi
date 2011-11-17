@@ -1,15 +1,15 @@
 !ifndef VERSION
 	!define VERSION "0.0.0"
 !endif
-!define FILES "..\..\Build\dist"
-!define PLUGIN "..\..\Build\dist\v4.0\VSplugin"
-!define RESHARPER_PLUGIN "..\..\Build\dist\v3.5\resharper"
-!define EXAMPLEFILES "..\..\Build"
+!define FILES "..\..\Build\Installer"
+!define PLUGIN "..\..\Build\Installer\v4.0\VSplugin"
+!define RESHARPER_PLUGIN "..\..\Build\Installer\v3.5\resharper"
+!define EXAMPLEFILES "..\..\Build\Installer"
 ; The name of the installer
 Name "NBehave"
 
 ; The files to write
-Outfile "..\..\Build\NBehave_${VERSION}.exe"
+Outfile "..\..\Build\Installer\NBehave_${VERSION}.exe"
 
 ; The default installation directory
 InstallDir $PROGRAMFILES\NBehave\${VERSION}
@@ -40,26 +40,15 @@ Section ".Net 3.5 files" ;No components page, name is not important
 	SetOutPath $INSTDIR\v3.5
   
 	; Put file there
-	File "${FILES}\v3.5\**"
-	File "${FILES}\v3.5\NBehave.Gherkin.dll"
-	File "${FILES}\v3.5\NBehave.NAnt.dll"
-	File "${FILES}\v3.5\NBehave.MSBuild.dll"
-	File "${FILES}\v3.5\NBehave.Narrator.Framework.dll"
+	; File "${FILES}\v3.5\**"
+	File "${FILES}\v3.5\NBehave.*.dll"
 	File "${FILES}\v3.5\NBehave.Narrator.Framework.dll.tdnet"
-	File "${FILES}\v3.5\NBehave.Fluent.Framework.dll"
-	File "${FILES}\v3.5\NBehave.Spec.MbUnit.dll"
-	File "${FILES}\v3.5\NBehave.Spec.MSTest.dll"
-	File "${FILES}\v3.5\NBehave.Spec.NUnit.dll"
-	File "${FILES}\v3.5\NBehave.Spec.Xunit.dll"
-	File "${FILES}\v3.5\NBehave.TestDriven.Plugin.dll"
 	File "${FILES}\v3.5\Gallio.dll"
 	File "${FILES}\v3.5\MbUnit.dll"
 	File "${FILES}\v3.5\nunit.framework.dll"
 	File "${FILES}\v3.5\Rhino.Mocks.dll"
 	File "${FILES}\v3.5\xunit.dll"
-	File "${FILES}\v3.5\IKVM.OpenJDK.Core.dll"
-	File "${FILES}\v3.5\IKVM.OpenJDK.Util.dll"
-	File "${FILES}\v3.5\IKVM.Runtime.dll"
+	File "${FILES}\v3.5\IKVM.*.dll"
 	File "..\xsl\NBehaveResults.xsl"
 
 	; Write the installation path into the registry
@@ -82,26 +71,14 @@ Section ".Net 4.0 files" ;No components page, name is not important
 	SetOutPath $INSTDIR\v4.0
   
 	; Put file there
-	File "${FILES}\v4.0\**"
-	File "${FILES}\v4.0\NBehave.Gherkin.dll"
-	File "${FILES}\v4.0\NBehave.NAnt.dll"
-	File "${FILES}\v4.0\NBehave.MSBuild.dll"
-	File "${FILES}\v4.0\NBehave.Narrator.Framework.dll"
+	File "${FILES}\v4.0\NBehave.*.dll"
 	File "${FILES}\v4.0\NBehave.Narrator.Framework.dll.tdnet"
-	File "${FILES}\v4.0\NBehave.Fluent.Framework.dll"
-	File "${FILES}\v4.0\NBehave.Spec.MbUnit.dll"
-	File "${FILES}\v4.0\NBehave.Spec.MSTest.dll"
-	File "${FILES}\v4.0\NBehave.Spec.NUnit.dll"
-	File "${FILES}\v4.0\NBehave.Spec.Xunit.dll"
-	File "${FILES}\v4.0\NBehave.TestDriven.Plugin.dll"
 	File "${FILES}\v4.0\Gallio.dll"
 	File "${FILES}\v4.0\MbUnit.dll"
 	File "${FILES}\v4.0\nunit.framework.dll"
 	File "${FILES}\v4.0\Rhino.Mocks.dll"
 	File "${FILES}\v4.0\xunit.dll"
-	File "${FILES}\v4.0\IKVM.OpenJDK.Core.dll"
-	File "${FILES}\v4.0\IKVM.OpenJDK.Util.dll"
-	File "${FILES}\v4.0\IKVM.Runtime.dll"
+	File "${FILES}\v4.0\IKVM.*.dll"
 	File "..\xsl\NBehaveResults.xsl"
 
 	; Write the installation path into the registry
@@ -145,28 +122,19 @@ Section "Uninstall"
   
   ; Remove v3.5 files and uninstaller
   Delete $INSTDIR\v3.5\**
-  Delete $INSTDIR\v3.5\*.tdnet
-  Delete $INSTDIR\v3.5\*.zip
-  Delete $INSTDIR\v3.5\NBehave-Console.exe
-  Delete $INSTDIR\v3.5\NBehaveResults.xsl
+  Delete $INSTDIR\v3.5\*.*
   
   ; Remove v4.0 files and uninstaller
   Delete $INSTDIR\v4.0\**
-  Delete $INSTDIR\v4.0\*.tdnet
-  Delete $INSTDIR\v4.0\*.zip
-  Delete $INSTDIR\v4.0\NBehave-Console.exe
-  Delete $INSTDIR\v4.0\NBehave-Console-x86.exe
-  Delete $INSTDIR\v4.0\NBehaveResults.xsl
+  Delete $INSTDIR\v4.0\*.*
 
   ; Remove VS2010 Plugin
   Delete "$PROGRAMFILES\Microsoft Visual Studio 10.0\Common7\IDE\Extensions\NBehave\**"
-  Delete "$PROGRAMFILES\Microsoft Visual Studio 10.0\Common7\IDE\Extensions\NBehave\NBehave.VS2010.Plugin.dll"
-  Delete "$PROGRAMFILES\Microsoft Visual Studio 10.0\Common7\IDE\Extensions\NBehave\NBehave.VS2010.Plugin.pkgdef"
+  Delete "$PROGRAMFILES\Microsoft Visual Studio 10.0\Common7\IDE\Extensions\NBehave\*.*"
   
   ; Remove uninstaller
   Delete $INSTDIR\uninstall.exe
-  
-  
+    
   ; Remove directories used
   RMDir "$INSTDIR"
   RMDir "$PROGRAMFILES\Microsoft Visual Studio 10.0\Common7\IDE\Extensions\NBehave"

@@ -1,8 +1,13 @@
 param(
-	$task = "default", 
 	$version = "0.1.0.0", 
+	$task = "default", 
 	$buildFile = ".\build.ps1"
 )
+
+Write-Host "buildFile $buildFile"
+Write-Host "task $task"
+Write-Host "version $version"
+
 function Build($framework, $taskToRun) {
 	invoke-psake $buildFile -framework '4.0x86' -t $taskToRun -parameters @{"version"="$version";"frameworkVersion"="$framework"}
 	if ($LastExitCode -ne $null) {
@@ -25,5 +30,3 @@ if (-not(test-path $buildFile)) {
 Build "3.5" "Init"
 Build "3.5" $task
 Build "4.0" $task
-Build "3.5" "Distribute"
-Build "4.0" "BuildInstaller"
