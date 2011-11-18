@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>NBehave.VsPlugin</id>
+    <version>$version$</version>
+    <title>NBehave Visual Studio plugin</title>
+    <authors>NBehave</authors>
+    <owners>NBehave</owners>
+    <licenseUrl>http://www.opensource.org/licenses/bsd-license.php</licenseUrl>
+    <projectUrl>http://nbehave.org/</projectUrl>
+    <iconUrl>http://static.tumblr.com/z2xvmc8/mhzlb82x5/logo.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Simple approach to Behaviour Driven Development for .NET projects.</description>
+    <language>en-US</language>
+    <tags>nbehave bdd atdd gherkin cucumber resharper</tags>
+	<dependencies>
+	  <dependency id="NBehave.Core" version="$version$" />
+	</dependencies>
+  </metadata>
+  <files>
+    <!-- ==================== -->
+	<!-- content -->
+    <!-- ==================== -->
+	<file src=".\Example.feature" target="content\Features\Example.feature" />
+	<file src=".\Example.cs" target="content\Steps\Example.cs" />
+  </files>
+</package>
