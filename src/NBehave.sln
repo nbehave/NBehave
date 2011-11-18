@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{32A51014-8E9C-49F1-9CDF-A39CE01EAFA1}"
 	ProjectSection(SolutionItems) = preProject
-		..\clicktobuild.bat = ..\clicktobuild.bat
-		..\clicktobuildfull.bat = ..\clicktobuildfull.bat
-		..\go.bat = ..\go.bat
-		..\NBehave.build = ..\NBehave.build
+		..\artifacts.ps1 = ..\artifacts.ps1
+		..\build.ps1 = ..\build.ps1
+		..\BuildProperties.ps1 = ..\BuildProperties.ps1
+		..\Go.cmd = ..\Go.cmd
 		Installer\NBehave.nsi = Installer\NBehave.nsi
 		xsl\NBehaveResults.xsl = xsl\NBehaveResults.xsl
-		..\run-story-sample.bat = ..\run-story-sample.bat
+		..\nuget.ps1 = ..\nuget.ps1
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NBehave.Spec", "NBehave.Spec", "{2EF1C1FB-3D4F-4ADD-8431-D29386A9DE21}"
@@ -28,7 +28,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.Spec.Xunit.Specific
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.Spec.Xunit", "NBehave.Spec.Xunit\NBehave.Spec.Xunit.csproj", "{AB99C5F4-1C74-4263-B79A-C8569D9561FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.Spec.MSTest", "NBehave.Spec.MSTest\NBehave.Spec.MSTest.csproj", "{32745321-6BAF-46A1-B3C4-E82CBA663F55}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.Spec.MSTest", "NBehave.Spec.MsTest\NBehave.Spec.MSTest.csproj", "{32745321-6BAF-46A1-B3C4-E82CBA663F55}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.Fluent.Framework", "NBehave.Fluent.Framework\NBehave.Fluent.Framework.csproj", "{87B1B4CA-3EF7-44EB-BF48-5A472E26F1B0}"
 EndProject
@@ -64,7 +64,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.VS2010.Plugin", "NB
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "VS2010.plugin", "VS2010.plugin", "{F0FE6340-3B43-4A3B-83D3-D51622BAC3F3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.Spec.MSTest.Specifications", "NBehave.Spec.MSTest.Specifications\NBehave.Spec.MSTest.Specifications.csproj", "{EAD364F3-9162-46EE-83AA-5E938FE126FA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.Spec.MSTest.Specifications", "NBehave.Spec.MsTest.Specifications\NBehave.Spec.MSTest.Specifications.csproj", "{EAD364F3-9162-46EE-83AA-5E938FE126FA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.Examples", "NBehave.Examples\NBehave.Examples.csproj", "{5CBAFACF-8BD9-46FB-A0BC-276EDE593186}"
 EndProject
