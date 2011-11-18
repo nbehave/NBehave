@@ -1,21 +1,10 @@
-param(
-	$version          = "0.1.0.0",
-	$frameworkVersion = "4.0"
-)
+param($version = "0.1.0.0", $frameworkVersion = "4.0")
 
-properties {
-	$rootDir        = Split-Path $psake.build_script_file
-	$sourceDir      = "$rootDir\src"
-	$buildDir       = "$rootDir\build"
-	$toolsDir       = "$rootDir\tools"
-	$testReportsDir = "$buildDir\test-reports"
-	$testDir        = "$buildDir\Debug-$frameworkVersion\UnitTests"
-	$exclusions     = @("*JetBrains*", "*Microsoft*", "log4net.dll", "NAnt.Core.dll", "TestDriven.Framework.dll", "*.pdb")
-}
+Include ".\BuildProperties.ps1"
 Include ".\buildframework\psake_ext.ps1"
 
 task Init -depends Clean, Version
-task Default -depends Test, ILMerge
+task Default -depends Test #, ILMerge
 
 task Clean { 
 	if ($true -eq (Test-Path "$buildDir")) {
@@ -62,12 +51,6 @@ Task ILMerge -depends Compile {
 	Run-ILMerge $snk $directory $out $assemblies
 	Remove-Item "$directory\Gherkin.dll"
 	Remove-Item "$directory\NBehave.Gherkin.dll"
-	#$delete = $assemblies | Where-Object { (Split-Path $_ -leaf) -ne $out }
-	#$delete | ForEach-Object { Get-ChildItem -Path "$buildDirFramework" -Filter (Split-Path $_ -leaf) -Recurse | ForEach-Object { Remove-Item $_.FullName} } 
-	#Copy-Item "$directory\$out" "$buildDirFramework\NBehave\NBehave.Narrator.Framework.dll"
-	#Copy-Item "$directory\$out" "$buildDirFramework\ReSharper\NBehave.Narrator.Framework.dll"
-	#if ($frameworkVersion -eq "4.0") {	Copy-Item "$directory\$out" "$buildDirFramework\VSPlugin\NBehave.Narrator.Framework.dll" }
-	#Remove-Item "$directory\$out"
 }
 
 Task Test -depends Compile {

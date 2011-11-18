@@ -1,17 +1,6 @@
-param(
-	$version          = "0.1.0.0",
-	$frameworkVersion = "4.0"
-)
+param($version = "0.1.0.0", $frameworkVersion = "4.0")
 
-properties {
-	$rootDir        = Split-Path $psake.build_script_file
-	$sourceDir      = "$rootDir\src"
-	$buildDir       = "$rootDir\build"
-	$installerDir   = "$buildDir\Installer"
-	$artifactsDir   = "$buildDir\Artifacts"
-	$toolsDir       = "$rootDir\tools"
-	$exclusions     = @("*JetBrains*", "*Microsoft*", "log4net.dll", "NAnt.Core.dll", "TestDriven.Framework.dll", "*.pdb", "*.xml")
-}
+Include ".\BuildProperties.ps1"
 Include ".\buildframework\psake_ext.ps1"
 
 Task Init -depends Clean
@@ -92,4 +81,5 @@ Task DistributeResharper {
 
 Task BuildInstaller -depends Distribute -precondition { return $frameworkVersion -eq "4.0" } {
 	Exec { .\tools\nsis\makensis.exe /DVERSION=$version "$sourceDir\Installer\NBehave.nsi"}
+	Move-Item "$installerDir\*.exe" "$artifactsDir"
 }

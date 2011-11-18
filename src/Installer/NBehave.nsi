@@ -41,14 +41,14 @@ Section ".Net 3.5 files" ;No components page, name is not important
   
 	; Put file there
 	; File "${FILES}\v3.5\**"
-	File "${FILES}\v3.5\NBehave.*.dll"
-	File "${FILES}\v3.5\NBehave.Narrator.Framework.dll.tdnet"
+	File "${FILES}\v3.5\*NBehave*.*"
 	File "${FILES}\v3.5\Gallio.dll"
 	File "${FILES}\v3.5\MbUnit.dll"
 	File "${FILES}\v3.5\nunit.framework.dll"
 	File "${FILES}\v3.5\Rhino.Mocks.dll"
 	File "${FILES}\v3.5\xunit.dll"
 	File "${FILES}\v3.5\IKVM.*.dll"
+	File "${FILES}\v3.5\Gherkin.dll"
 	File "..\xsl\NBehaveResults.xsl"
 
 	; Write the installation path into the registry
@@ -71,14 +71,14 @@ Section ".Net 4.0 files" ;No components page, name is not important
 	SetOutPath $INSTDIR\v4.0
   
 	; Put file there
-	File "${FILES}\v4.0\NBehave.*.dll"
-	File "${FILES}\v4.0\NBehave.Narrator.Framework.dll.tdnet"
+	File "${FILES}\v4.0\*NBehave*.*"
 	File "${FILES}\v4.0\Gallio.dll"
 	File "${FILES}\v4.0\MbUnit.dll"
 	File "${FILES}\v4.0\nunit.framework.dll"
 	File "${FILES}\v4.0\Rhino.Mocks.dll"
 	File "${FILES}\v4.0\xunit.dll"
 	File "${FILES}\v4.0\IKVM.*.dll"
+	File "${FILES}\v4.0\Gherkin.dll"
 	File "..\xsl\NBehaveResults.xsl"
 
 	; Write the installation path into the registry
