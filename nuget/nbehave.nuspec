@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>NBehave.Core</id>
+    <id>nbehave</id>
     <version>$version$</version>
-    <title>NBehave core</title>
+    <title>NBehave</title>
     <authors>NBehave</authors>
     <owners>NBehave</owners>
     <licenseUrl>http://www.opensource.org/licenses/bsd-license.php</licenseUrl>
@@ -33,18 +33,15 @@
 	<file src="..\build\Debug-3.5\NBehave\NBehave-Console.exe" target="tools\net35" />
 	<file src="..\build\Debug-3.5\NBehave\NBehave-Console-x86.exe" target="tools\net35" />
 	<file src="..\build\Debug-3.5\NBehave\NBehave.Narrator.Framework.dll" target="tools\net35" />
+    <file src="..\build\Debug-3.5\NBehave\NBehave.Gherkin.dll" target="tools\net35" />
     <file src="..\build\Debug-3.5\NBehave\IKVM.*.dll" target="tools\net35" />
     <file src="..\build\Debug-3.5\NBehave\Gherkin.dll" target="tools\net35" />
 	<!-- 4.0 -->
 	<file src="..\build\Debug-4.0\NBehave\NBehave-Console.exe" target="tools\net40" />
 	<file src="..\build\Debug-4.0\NBehave\NBehave-Console-x86.exe" target="tools\net40" />
 	<file src="..\build\Debug-4.0\NBehave\NBehave.Narrator.Framework.dll" target="tools\net40" />
+    <file src="..\build\Debug-4.0\NBehave\NBehave.Gherkin.dll" target="tools\net40" />
     <file src="..\build\Debug-4.0\NBehave\IKVM.*.dll" target="tools\net40" />
     <file src="..\build\Debug-4.0\NBehave\Gherkin.dll" target="tools\net40" />
-    <!-- ==================== -->
-	<!-- content -->
-    <!-- ==================== -->
-	<file src=".\Example.feature" target="content\Features\Example.feature" />
-	<file src=".\Example.cs" target="content\Steps\Example.cs" />
   </files>
 </package>

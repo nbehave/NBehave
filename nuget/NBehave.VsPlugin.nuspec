@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>NBehave.VsPlugin</id>
+    <id>nbehave.vsplugin</id>
     <version>$version$</version>
     <title>NBehave Visual Studio plugin</title>
     <authors>NBehave</authors>
@@ -14,14 +14,14 @@
     <language>en-US</language>
     <tags>nbehave bdd atdd gherkin cucumber resharper</tags>
 	<dependencies>
-	  <dependency id="NBehave.Core" version="$version$" />
+	  <dependency id="NBehave" version="$version$" />
 	</dependencies>
   </metadata>
   <files>
     <!-- ==================== -->
 	<!-- content -->
     <!-- ==================== -->
-	<file src=".\Example.feature" target="content\Features\Example.feature" />
-	<file src=".\Example.cs" target="content\Steps\Example.cs" />
+	<file src="Example.feature" target="content\Features\Example.feature" />
+	<file src="Example.cs.pp" target="content\Steps\" />
   </files>
 </package>

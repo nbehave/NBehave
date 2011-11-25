@@ -1,4 +1,4 @@
-sing System.Collections.Generic;
+using System.Collections.Generic;
 using NBehave.Narrator.Framework;
 
 namespace $rootnamespace$

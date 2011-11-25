@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>NBehave.Spec.</id>
+    <id>nbehave.spec.</id>
     <version>$version$</version>
-    <title>NBehave Spec</title>
+    <title>NBehave Spec -</title>
     <authors>NBehave</authors>
     <owners>NBehave</owners>
     <licenseUrl>http://www.opensource.org/licenses/bsd-license.php</licenseUrl>
@@ -11,7 +11,7 @@
     <iconUrl>http://static.tumblr.com/z2xvmc8/mhzlb82x5/logo.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Extension methods for asserts for a more readable assert.
-	Ex: 1.ShouldNotEqual(2)</description>
+	Ex: 1.ShouldNotBeEqualTo(2)</description>
     <language>en-US</language>
     <tags>nbehave bdd atdd gherkin cucumber</tags>
 	<dependencies>
@@ -22,12 +22,7 @@
     <!-- ==================== -->
     <!-- lib -->
     <!-- ==================== -->    
-    <file src="..\build\Debug-3.5\NBehave\NBehave.Spec.{0}.dll" target="lib\net35" />
-	<!-- 4.0 -->
-    <file src="..\build\Debug-4.0\NBehave\NBehave.Spec.{0}.dll" target="lib\net40" />
-    <!-- ==================== -->
-	<!-- content -->
-    <!-- ==================== -->
-	<file src="..\nuget\SpecExample.cs" target="content\Steps\Example.cs" />
+    <file src="..\Debug-3.5\NBehave\NBehave.Spec.{0}.dll" target="lib\net35" />
+    <file src="..\Debug-4.0\NBehave\NBehave.Spec.{0}.dll" target="lib\net40" />
   </files>
 </package>

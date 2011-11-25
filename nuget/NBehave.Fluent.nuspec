@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>NBehave.Fluent.</id>
+    <id>nbehave.fluent.</id>
     <version>$version$</version>
-    <title>NBehave Fluent</title>
+    <title>NBehave Fluent -</title>
     <authors>NBehave</authors>
     <owners>NBehave</owners>
     <licenseUrl>http://www.opensource.org/licenses/bsd-license.php</licenseUrl>
@@ -14,6 +14,7 @@
     <language>en-US</language>
     <tags>nbehave bdd atdd gherkin cucumber</tags>
 	<dependencies>
+		<dependency id="nbehave" version="$version$" />
 		<dependency id="RhinoMocks" version="3.6" />
 	</dependencies>
   </metadata>
@@ -21,34 +22,7 @@
     <!-- ==================== -->
     <!-- lib -->
     <!-- ==================== -->
-    <file src="..\build\Debug-3.5\NBehave\IKVM.*.dll" target="lib\net35" />
-    <file src="..\build\Debug-3.5\NBehave\Gherkin.dll" target="lib\net35" />
-    <file src="..\build\Debug-3.5\NBehave\NBehave.Gherkin.dll" target="lib\net35" />
-    <file src="..\build\Debug-3.5\NBehave\NBehave.Narrator.Framework.dll" target="lib\net35" />
-    <file src="..\build\Debug-3.5\NBehave\NBehave.Fluent.Framework.dll" target="lib\net35" />
-	<!-- 4.0 -->
-    <file src="..\build\Debug-4.0\NBehave\IKVM.*.dll" target="lib\net40" />
-    <file src="..\build\Debug-4.0\NBehave\Gherkin.dll" target="lib\net40" />
-    <file src="..\build\Debug-4.0\NBehave\NBehave.Gherkin.dll" target="lib\net40" />
-    <file src="..\build\Debug-4.0\NBehave\NBehave.Narrator.Framework.dll" target="lib\net40" />
-    <file src="..\build\Debug-4.0\NBehave\NBehave.Fluent.Framework.dll" target="lib\net40" />
-    <!-- ==================== -->
-	<!-- tools -->
-    <!-- ==================== -->
-	<file src="..\build\Debug-3.5\NBehave\NBehave-Console.exe" target="tools\net35" />
-	<file src="..\build\Debug-3.5\NBehave\NBehave-Console-x86.exe" target="tools\net35" />
-	<file src="..\build\Debug-3.5\NBehave\NBehave.Narrator.Framework.dll" target="tools\net35" />
-    <file src="..\build\Debug-3.5\NBehave\IKVM.*.dll" target="tools\net35" />
-    <file src="..\build\Debug-3.5\NBehave\Gherkin.dll" target="tools\net35" />
-	<!-- 4.0 -->
-	<file src="..\build\Debug-4.0\NBehave\NBehave-Console.exe" target="tools\net40" />
-	<file src="..\build\Debug-4.0\NBehave\NBehave-Console-x86.exe" target="tools\net40" />
-	<file src="..\build\Debug-4.0\NBehave\NBehave.Narrator.Framework.dll" target="tools\net40" />
-    <file src="..\build\Debug-4.0\NBehave\IKVM.*.dll" target="tools\net40" />
-    <file src="..\build\Debug-4.0\NBehave\Gherkin.dll" target="tools\net40" />
-    <!-- ==================== -->
-	<!-- content -->
-    <!-- ==================== -->
-	<file src="..\nuget\FluentExample.cs" target="content\Steps\Example.cs" />
+    <file src="..\Debug-3.5\NBehave\NBehave.Fluent.Framework.dll" target="lib\net35" />
+    <file src="..\Debug-4.0\NBehave\NBehave.Fluent.Framework.dll" target="lib\net40" />
   </files>
 </package>
