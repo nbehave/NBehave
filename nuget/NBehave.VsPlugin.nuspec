@@ -18,10 +18,6 @@
 	</dependencies>
   </metadata>
   <files>
-    <!-- ==================== -->
-	<!-- content -->
-    <!-- ==================== -->
-	<file src="Example.feature" target="content\Features\Example.feature" />
-	<file src="Example.cs.pp" target="content\Steps\" />
+	
   </files>
 </package>
