@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using NUnit.Framework;
 
 namespace NBehave.Narrator.Framework.Specifications.Text
@@ -55,6 +56,17 @@ namespace NBehave.Narrator.Framework.Specifications.Text
                 var s1 = new StringStep("Foo", "s1");
                 var s2 = new StringStep("Foo", "s2");
                 Assert.That(s1, Is.Not.EqualTo(s2));
+            }
+
+            [TestCase("Given a $param")]
+            [TestCase("Given a [param]")]
+            [TestCase("Given a <param>")]
+            public void Should_build_string_step(string stringStep)
+            {
+                var step = new StringStep(stringStep, "whatever");
+                var example = new Example(new ExampleColumns(new[] { new ExampleColumn("param"), }), new Dictionary<string, string> { { "param", "12" } });
+                var newStep = step.BuildStep(example);
+                Assert.That(newStep.Step, Is.EqualTo("Given a 12"));
             }
         }
     }

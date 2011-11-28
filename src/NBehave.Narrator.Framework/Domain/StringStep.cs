@@ -68,7 +68,7 @@ namespace NBehave.Narrator.Framework
 
         protected static Regex BuildColumnValueReplaceRegex(ExampleColumn columnName)
         {
-            return new Regex(string.Format(@"(\${0})|(\[{0}\])", columnName), RegexOptions.IgnoreCase);
+            return new Regex(string.Format(@"(\${0})|(\[{0}\])|(\<{0}\>)", columnName), RegexOptions.IgnoreCase);
         }
 
         public void Pend(string reason)
