@@ -90,7 +90,7 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="xunit">
-      <HintPath>..\..\lib\xunit.dll</HintPath>
+      <HintPath>..\..\lib\Xunit\xunit.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
