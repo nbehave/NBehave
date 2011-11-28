@@ -1,10 +1,10 @@
-sing System.Collections.Generic;
+using System.Collections.Generic;
 using NBehave.Narrator.Framework;
 
 namespace $rootnamespace$
 {
 	[ActionSteps]
-	public class ExampleSteps
+	public class SimpleSteps
 	{
 		[Given("an empty list")]
 		public void EmptyList()
@@ -22,11 +22,8 @@ namespace $rootnamespace$
         [Then("the list should contain $y")]
         public void ListShouldContain(string y)
         {
-            // To get this step to pass, add reference to nunit (ex via nuget: Install-Package nunit)
-            // remove the Step.Pend line and uncomment the other 2 lines of code
-            Step.Pend("not implemented");
-            //var list = ScenarioContext.Current.Get<List<string>>("list");
-            //NUnit.Framework.CollectionAssert.Contains(list, y);              
+            var list = ScenarioContext.Current.Get<List<string>>("list");
+            NUnit.Framework.CollectionAssert.Contains(list, y);              
         }
 	}
 }
