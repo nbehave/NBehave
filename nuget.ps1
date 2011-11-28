@@ -47,13 +47,15 @@ function Set-Using($name, $methodAttrib, $namespace) {
 }
 
 task Clean { 
-	Remove-Item "$artifactsDir\*.nupkg"
 	if ($true -eq (Test-Path $tempNugetDir)) { Remove-Item $tempNugetDir -Recurse }
 	New-Item $tempNugetDir -type Directory
+	if ($false -eq (Test-Path $artifactsDir)) { New-Item $artifactsDir -type Directory }
+	Remove-Item $artifactsDir\*.nuget
 }
 
 task NuGet -depends Clean -precondition{ return $frameworkVersion -eq "4.0" } {
 	Exec { .\tools\nuget\nuget.exe pack nuget\nbehave.nuspec -Version $version -OutputDirectory $artifactsDir}
+	Exec { .\tools\nuget\nuget.exe pack nuget\nbehave.samples.nuspec -Version $version -OutputDirectory $artifactsDir}
 	Exec { .\tools\nuget\nuget.exe pack nuget\NBehave.Resharper.nuspec -Version $version -OutputDirectory $artifactsDir}	
 	Exec { .\tools\nuget\nuget.exe pack nuget\NBehave.VsPlugin.nuspec -Version $version -OutputDirectory $artifactsDir}	
 }
