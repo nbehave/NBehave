@@ -108,7 +108,7 @@ namespace NBehave.Console
                 System.Console.WriteLine("Press any key to exit");
                 System.Console.ReadKey();
             }
-            return featureResults.NumberOfFailingScenarios;
+            return (featureResults == null) ? -1 : featureResults.NumberOfFailingScenarios;
         }
 
         private static FeatureResults Run(NBehaveConfiguration config)
