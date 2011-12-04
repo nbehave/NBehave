@@ -18,6 +18,16 @@
 	</dependencies>
   </metadata>
   <files>
-	
+	 <!-- ==================== -->
+	<!-- tools -->
+    <!-- ==================== -->
+  	<file src="..\build\Debug-4.0\VSPlugin\NBehave.VS2010.Plugin.vsix" target="tools\net40\VSPlugin" />
+
+	<file src="VsPlugin.feature" target="content\VsPlugin.feature" />
+	<!-- ==================== -->
+	<!-- script -->
+    <!-- ==================== -->
+	<file src="VsPlugin.scripts\Install.ps1" target="tools\Install.ps1" />
+	<file src="VsPlugin.scripts\UnInstall.ps1" target="tools\UnInstall.ps1" />
   </files>
 </package>
