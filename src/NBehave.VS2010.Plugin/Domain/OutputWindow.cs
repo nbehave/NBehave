@@ -17,7 +17,7 @@ namespace NBehave.VS2010.Plugin.Domain
 
         public void WriteLine(string message)
         {
-            _outputWindowPane.OutputString(string.Format("{0}{1}", message, Environment.NewLine));
+            _outputWindowPane.OutputStringThreadSafe(string.Format("{0}{1}", message, Environment.NewLine));
         }
 
         public void BringToFront()
