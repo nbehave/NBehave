@@ -27,6 +27,7 @@ namespace NBehave.VS2010.Plugin
             var container = new TinyIoCContainer();
             container.Register<IServiceProvider>(this);
             container.Register<IServiceContainer>(this);
+            container.Register<IVisualStudioService, VisualStudioService>().AsMultiInstance();
 
             container.Install(
                 new OutputWindowTask(),
