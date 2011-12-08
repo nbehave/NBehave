@@ -4,7 +4,7 @@ Include ".\BuildProperties.ps1"
 Include ".\buildframework\psake_ext.ps1"
 
 Task Init -depends Clean
-Task Distribute -depends DistributeVSPlugin, DistributeBinaries, DistributeResharper, DistributeExamples
+Task Distribute -depends DistributeVSPlugin, DistributeBinaries, DistributeResharper, DistributeExamples, DistributeZip
 Task Default -depends Distribute, BuildInstaller
 
 task Clean { 
@@ -38,6 +38,19 @@ Task DistributeBinaries {
 	Get-ChildItem "$source\*.*" -Include *NBehave*, *.dll -Exclude $exclusions | Copy-Item -Destination $destination
 }
 
+Task DistributeResharper {
+	new-item -path "$installerDir\v$frameworkVersion" -name "ReSharper" -type directory -ErrorAction SilentlyContinue
+	$destination = "$installerDir\v$frameworkVersion\ReSharper"
+	$source = "$buildDir\Debug-$frameworkVersion\ReSharper"
+	
+	Get-ChildItem "$source\*.*" -Include *NBehave*, *.dll -Exclude $exclusions | Copy-Item -Destination $destination
+}
+
+Task DistributeZip -depends DistributeBinaries, DistributeResharper, DistributeVSPlugin {
+	$destFile = "$installerDir\NBehave.$version.zip"
+	Exec { .\tools\7zip\7za.exe a -r "$destFile" "$installerDir\v$frameworkVersion" }
+}
+
 Task DistributeExamples -precondition { return $frameworkVersion -eq "3.5" } {
 	$examplesDestDir = "$buildDir\Examples\"
 	$examplesSourceDir = "$sourceDir\NBehave.Examples"
@@ -67,16 +80,7 @@ Task DistributeExamples -precondition { return $frameworkVersion -eq "3.5" } {
 		$xpath = "//xsi:Reference[@Include='$node']/xsi:HintPath"
 		xmlPoke $path $xpath "lib\$dllfile" $namespaces
 	}
-	Write-Host "=============> ZIP it: $installerDir\NBehave.Examples.zip $examplesDestDir"
-	zip "$installerDir\NBehave.Examples.zip" $examplesDestDir
-}
-
-Task DistributeResharper {
-	new-item -path "$installerDir\v$frameworkVersion" -name "ReSharper" -type directory -ErrorAction SilentlyContinue
-	$destination = "$installerDir\v$frameworkVersion\ReSharper"
-	$source = "$buildDir\Debug-$frameworkVersion\ReSharper"
-	
-	Get-ChildItem "$source\*.*" -Include *NBehave*, *.dll -Exclude $exclusions | Copy-Item -Destination $destination
+	Exec { .\tools\7zip\7za.exe a -r "$installerDir\NBehave.Examples.zip" $examplesDestDir }
 }
 
 Task BuildInstaller -depends Distribute -precondition { return $frameworkVersion -eq "4.0" } {

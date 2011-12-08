@@ -47,20 +47,7 @@ function xmlList([string]$file, [string]$xpath, [hashtable]$namespaces) {
 	return $nodes
 }
 
-function zip($path, $files)
-{
-	if (-not $path.EndsWith('.zip')) {$path += '.zip'} 
-
-	if (-not (test-path $path)) { 
-	  set-content $path ("PK" + [char]5 + [char]6 + ("$([char]0)" * 18)) 
-	} 
-
-	$ZipFile = (new-object -com shell.application).NameSpace($path) 
-	$ZipFile.CopyHere($files)
-}
-
-function Run-ILMerge($key, $directory, $outAssembly, $assemblies)
-{	
+function Run-ILMerge($key, $directory, $outAssembly, $assemblies) {	
 	new-item -path $directory -name "temp_merge" -type directory -ErrorAction SilentlyContinue
 	
 	$outFile = "$directory\temp_merge\$outAssembly"
