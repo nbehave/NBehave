@@ -7,16 +7,11 @@ namespace NBehave.Narrator.Framework.Specifications.System.Specs
     [TestFixture]
     public class WhenRunningAScenarioWithAFailingStep : SystemTestContext
     {
-        private NBehaveConfiguration _config;
         private FeatureResults _results;
 
         protected override void EstablishContext()
         {
-            _config = ConfigurationNoAppDomain
-                .New
-                .SetAssemblies(new[] {Path.GetFileName(GetType().Assembly.Location)})
-                .SetEventListener(Framework.EventListeners.EventListeners.NullEventListener())
-                .SetScenarioFiles(new[] {@"System.Specs\Scenarios\ScenarioWithFailingStep.feature"});
+           Configure_With(@"System.Specs\Scenarios\ScenarioWithFailingStep.feature");
         }
 
         protected override void Because()
