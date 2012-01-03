@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NBehave.Narrator.Framework.EventListeners;
+using NBehave.Narrator.Framework.TextParsing.TagFilter;
 
 namespace NBehave.Narrator.Framework
 {
@@ -26,6 +27,7 @@ namespace NBehave.Narrator.Framework
         {
             CreateAppDomain = createAppDomain;
             Filter = new StoryRunnerFilter();
+            TagsFilter = new List<string[]>();;
         }
 
         public IEnumerable<string> ScenarioFiles { get; set; }
@@ -33,6 +35,7 @@ namespace NBehave.Narrator.Framework
         public IEnumerable<string> Assemblies { get; set; }
         public IEventListener EventListener { get; set; }
         public StoryRunnerFilter Filter { get; set; }
+        public List<string[]> TagsFilter { get; private set; }
         public bool CreateAppDomain { get; protected set; }
 
 
@@ -98,6 +101,11 @@ namespace NBehave.Narrator.Framework
         public override object InitializeLifetimeService()
         {
             return null;
+        }
+
+        public void UseTagsFilter(List<string[]> tagsFilter)
+        {
+            TagsFilter = tagsFilter;
         }
     }
 }

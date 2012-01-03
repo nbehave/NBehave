@@ -24,7 +24,7 @@ namespace NBehave.Narrator.Framework.Specifications
 
             _hub = TinyIoCContainer.Current.Resolve<ITinyMessengerHub>();
             _loadScenarioFiles = new LoadScenarioFiles(_config, _hub);
-            _parseScenarioFiles = new ParseScenarioFiles(_hub);
+            _parseScenarioFiles = new ParseScenarioFiles(_hub, _config);
             _hub.Subscribe<FeaturesLoaded>(loaded => _features = loaded.Content);
             _loadScenarioFiles.Initialise();
         }

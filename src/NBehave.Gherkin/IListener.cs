@@ -13,5 +13,6 @@ namespace NBehave.Gherkin
         void Comment(Token comment);
         void Tag(Token name);
         void SyntaxError(string state, string @event, IEnumerable<string> legalEvents, LineInFile lineInFile);
+        void Eof();
     }
 }

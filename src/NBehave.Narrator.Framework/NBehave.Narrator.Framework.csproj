@@ -179,6 +179,9 @@
     <Compile Include="Extensions\ActionStepConverterExtensions.cs" />
     <Compile Include="EmbeddedRunner.cs" />
     <Compile Include="StepContext.cs" />
+    <Compile Include="TextParsing\GherkinEvent.cs" />
+    <Compile Include="TextParsing\TagFilterBuilder.cs" />
+    <Compile Include="TextParsing\TagFilter\TagFilter.cs" />
     <Compile Include="TextParsing\Messages\BackgroundBuilt.cs" />
     <Compile Include="TextParsing\Messages\ModelBuilderCleanup.cs" />
     <Compile Include="TextParsing\Messages\ModelBuilderInitialise.cs" />
@@ -210,6 +213,7 @@
     <Compile Include="Contracts\IMatchFiles.cs" />
     <Compile Include="Attributes\NotificationMethodAttribute.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="TextParsing\Messages\ParsedTag.cs" />
     <Compile Include="TextParsing\Messages\ParsingFileEnd.cs" />
     <Compile Include="TextParsing\ModelBuilders\AbstracModelBuilder.cs" />
     <Compile Include="TextParsing\ModelBuilders\BackgroundBuilder.cs" />
@@ -228,6 +232,7 @@
     <Compile Include="TextParsing\ModelBuilders\ScenarioMustHaveFeatureBuilder.cs" />
     <Compile Include="TextParsing\ModelBuilders\StepBuilder.cs" />
     <Compile Include="TextParsing\Messages\ParsingFileStart.cs" />
+    <Compile Include="TextParsing\GroupEventsByTag.cs" />
     <Compile Include="TextRunner.cs" />
     <Compile Include="Processors\Messages\FeatureResultEvent.cs" />
     <Compile Include="StoryRunnerFilter.cs" />

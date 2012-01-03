@@ -21,7 +21,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             _hub = container.Resolve<ITinyMessengerHub>();
             _scenarios = new List<Scenario>();
 
-            return new GherkinScenarioParser(_hub);
+            return new GherkinScenarioParser(_hub, NBehaveConfiguration.New);
         }
 
         private StringStep NewStringStep(string step)

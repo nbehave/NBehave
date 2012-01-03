@@ -189,6 +189,11 @@ namespace NBehave.VS2010.Plugin.Editor
         {
         }
 
+        public void Eof()
+        {
+            throw new NotImplementedException();
+        }
+
         public void Dispose()
         {
             _inputListener.Dispose();

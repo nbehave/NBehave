@@ -159,6 +159,10 @@
     <Compile Include="System.Specs\SystemTestContext.cs" />
     <Compile Include="System.Specs\Examples\WhenRunningAScenarioWithExamples.cs" />
     <Compile Include="System.Specs\Tables\WhenRunningATableScenario.cs" />
+    <Compile Include="System.Specs\Tags\WhenRunningAScenario.cs" />
+    <Compile Include="TextParsing\GroupEventsByTagSpec.cs" />
+    <Compile Include="TextParsing\TagFilterBuilderSpec.cs" />
+    <Compile Include="TextParsing\TagFilterSpec.cs" />
     <Compile Include="TextRunnerSpec.cs" />
     <Compile Include="StoryRunnerFilterSpecs.cs" />
     <Compile Include="ActionStepAttributeSpec.cs" />
@@ -251,6 +255,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="System.Specs\Tables\TableScenario.feature">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="System.Specs\Tags\Tags.feature">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

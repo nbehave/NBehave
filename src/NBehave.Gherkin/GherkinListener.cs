@@ -18,7 +18,7 @@ namespace NBehave.Gherkin
         }
 
         public void docString(string str, int line)
-        {}
+        { }
 
         public void feature(string feature, string title, string narrative, int line)
         {
@@ -86,6 +86,7 @@ namespace NBehave.Gherkin
         public void eof()
         {
             _tableAction.Invoke();
+            _listener.Eof();
         }
 
         private void ParsedTable(LineInFile position)

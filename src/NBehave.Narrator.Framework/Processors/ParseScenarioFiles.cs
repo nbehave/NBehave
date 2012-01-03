@@ -9,11 +9,13 @@ namespace NBehave.Narrator.Framework.Contracts
     {
         private readonly ITinyMessengerHub _hub;
         private readonly List<Feature> _features;
+        private NBehaveConfiguration _configuration;
 
-        public ParseScenarioFiles(ITinyMessengerHub hub)
+        public ParseScenarioFiles(ITinyMessengerHub hub, NBehaveConfiguration configuration)
         {
             _hub = hub;
             _features = new List<Feature>();
+            _configuration = configuration;
 
             _hub.Subscribe<ScenarioFilesLoaded>(loaded => OnScenarioFilesLoaded(loaded.Content), true);
             _hub.Subscribe<FeatureBuilt>(built => _features.Add(built.Content), true);
@@ -29,7 +31,7 @@ namespace NBehave.Narrator.Framework.Contracts
         {
             foreach (var file in files)
             {
-                var scenarioTextParser = new GherkinScenarioParser(_hub);
+                var scenarioTextParser = new GherkinScenarioParser(_hub, _configuration);
                 scenarioTextParser.Parse(file);
             }
         }
