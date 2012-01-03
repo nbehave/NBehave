@@ -9,7 +9,7 @@ namespace NBehave.Narrator.Framework.Specifications
     [TestFixture]
     public abstract class EmbeddedRunnerSpec
     {
-        public class When_running_with_features_in_files : EmbeddedRunnerSpec
+        public abstract class When_running_with_features_in_files : EmbeddedRunnerSpec
         {
             public class AcceptanceTest : When_running_with_features_in_files
             {
@@ -191,7 +191,7 @@ namespace NBehave.Narrator.Framework.Specifications
             }
         }
 
-        public class When_Running_with_text_embedded_in_test : EmbeddedRunnerSpec
+        public abstract class When_Running_with_text_embedded_in_test : EmbeddedRunnerSpec
         {
             public class When_running_passing_scenario : When_running_with_features_in_files
             {
@@ -242,8 +242,6 @@ namespace NBehave.Narrator.Framework.Specifications
                     StringAssert.Contains("Steps 3, failed 0, pending 0", _messages);
                 }
             }
-
-            
         }
     }
 }

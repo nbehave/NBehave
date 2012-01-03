@@ -16,7 +16,7 @@ using Specification = NUnit.Framework.TestAttribute;
 namespace NBehave.Narrator.Framework.Specifications
 {
     [Context]
-    public class RemotableStoryRunnerSpec
+    public abstract class RemotableStoryRunnerSpec
     {
         [Explicit("This test crashes the R# test runner")]
         public void RawDeserialization()
