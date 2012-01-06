@@ -6,7 +6,7 @@ namespace NBehave.Narrator.Framework.TextParsing
 {
     public static class TagFilterBuilder
     {
-        public static TagFilter.TagFilter Build(List<string[]> tagsFilter)
+        public static TagFilter.TagFilter Build(IEnumerable<string[]> tagsFilter)
         {
             if (tagsFilter.Any())
             {

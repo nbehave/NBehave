@@ -17,6 +17,7 @@ namespace NBehave.Narrator.Framework
     public class ParameterConverter
     {
         private readonly ActionCatalog _actionCatalog;
+        private readonly TypeConverter typeConverter = new TypeConverter();
 
         public ParameterConverter(ActionCatalog actionCatalog)
         {
@@ -55,10 +56,15 @@ namespace NBehave.Narrator.Framework
                 for (var argNumber = 0; argNumber < paramNames.Count; argNumber++)
                 {
                     var strParam = getValue(argNumber);
-                    values[argNumber] = ChangeParameterType(strParam, args[argNumber]);
+                    values[argNumber] = typeConverter.ChangeParameterType(strParam, args[argNumber]);
                 }
             }
             return values;
+        }
+
+        private List<string> GetParameterNames(ActionMethodInfo actionValue)
+        {
+            return actionValue.GetParameterNames();
         }
 
         private object CreateInstanceOfComplexType(ICollection<string> paramNames, ParameterInfo[] args, Func<int, string> getValue)
@@ -72,105 +78,10 @@ namespace NBehave.Narrator.Framework
                     throw new ArgumentException(string.Format("Type '{0}' dont have a property with the name '{1}'", instance.GetType().Name, argName));
                 var strParam = getValue(argNumber);
                 var paramType = prop.GetSetMethod(true).GetParameters()[0];
-                var value = ChangeParameterType(strParam, paramType);
+                var value = typeConverter.ChangeParameterType(strParam, paramType);
                 prop.SetValue(instance, value, null);
             }
             return instance;
-        }
-
-        private List<string> GetParameterNames(ActionMethodInfo actionValue)
-        {
-            return actionValue.GetParameterNames();
-        }
-
-        private object ChangeParameterType(string strParam, ParameterInfo paramType)
-        {
-            if (paramType.ParameterType.IsArray)
-            {
-                return CreateArray(strParam, paramType.ParameterType);
-            }
-
-            if (paramType.IsGenericIEnumerable())
-            {
-                return CreateList(strParam, paramType.ParameterType);
-            }
-
-            if (paramType.ParameterType.IsEnum)
-            {
-                return Enum.Parse(paramType.ParameterType, strParam);
-            }
-            return Convert.ChangeType(strParam, paramType.ParameterType);
-        }
-
-        private object CreateArray(string strParam, Type arrayOfType)
-        {
-            var strParamAsArray = GetParamAsArray(strParam);
-            var typedArray = Activator.CreateInstance(arrayOfType, strParamAsArray.Length);
-            var typeInList = arrayOfType.GetElementType();
-            SetValues(strParamAsArray, typeInList, typedArray, "SetValue");
-            return typedArray;
-        }
-
-        private object CreateList(string param, Type parameterType)
-        {
-            var innerType = parameterType.GetGenericArguments()[0];
-            var genericList = typeof(List<>).CreateGeneric(innerType);
-            var strParamAsArray = GetParamAsArray(param);
-            SetValues(strParamAsArray, innerType, genericList, "AddValue");
-            return genericList;
-        }
-
-        private void SetValues(string[] strParamAsArray, Type typeInList, object typedArray, string function)
-        {
-            var method = GetType().GetMethod(function, BindingFlags.NonPublic | BindingFlags.Instance);
-            var types = new[] { typeInList };
-            var genMethod = method.MakeGenericMethod(types);
-            for (var i = 0; i < strParamAsArray.Length; i++)
-            {
-                var value = Convert.ChangeType(strParamAsArray[i], typeInList);
-                genMethod.Invoke(this, new[] { typedArray, i, value });
-            }
-        }
-
-        private string[] GetParamAsArray(string strParam)
-        {
-            var strParamAsArray = strParam.Replace(Environment.NewLine, "\n").Split(new[] { ',' });
-            TrimValues(strParamAsArray);
-            var trimmedArray = TrimEnd(strParamAsArray);
-            return trimmedArray;
-        }
-
-        private void TrimValues(string[] strParamAsArray)
-        {
-            for (var i = 0; i < strParamAsArray.Length; i++)
-            {
-                if (string.IsNullOrEmpty(strParamAsArray[i]) == false)
-                {
-                    strParamAsArray[i] = strParamAsArray[i].Trim();
-                }
-            }
-        }
-
-        private string[] TrimEnd(string[] strParamAsArray)
-        {
-            while (string.IsNullOrEmpty(strParamAsArray.Last()))
-            {
-                strParamAsArray = strParamAsArray.Take(strParamAsArray.Length - 1).ToArray();
-            }
-
-            return strParamAsArray;
-        }
-
-        // This method is called with reflection by the CreateArray method
-        private void SetValue<T>(T[] array, int index, T value)
-        {
-            array[index] = value;
-        }
-
-        // This method is called with reflection by the CreateArray method
-        private void AddValue<T>(ICollection<T> array, int index, T value)
-        {
-            array.Add(value);
         }
     }
 }

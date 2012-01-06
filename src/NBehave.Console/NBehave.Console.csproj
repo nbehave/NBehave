@@ -121,7 +121,7 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="CommandLineOptions.cs" />
+    <Compile Include="CommandLineParser.cs" />
     <Compile Include="ConsoleOptions.cs" />
     <Compile Include="NBehaveConsoleRunner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -245,6 +245,7 @@
     <Compile Include="Domain\StringTableStep.cs" />
     <Compile Include="Attributes\WhenAttribute.cs" />
     <Compile Include="Domain\TypeOfStep.cs" />
+    <Compile Include="TypeConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\NBehave.snk">

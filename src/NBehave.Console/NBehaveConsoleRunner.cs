@@ -40,9 +40,9 @@ namespace NBehave.Console
         {
             var t0 = DateTime.Now;
             var output = new PlainTextOutput(System.Console.Out);
-            var options = new ConsoleOptions(args);
+            var options = CommandLineParser<ConsoleOptions>.Parse(args);
 
-            if (!options.nologo)
+            if (!options.Nologo)
             {
                 output.WriteHeader();
                 output.WriteSeparator();
@@ -50,20 +50,20 @@ namespace NBehave.Console
                 output.WriteSeparator();
             }
 
-            if (options.help)
+            if (options.Help)
             {
-                options.Help();
+                options.ShowHelp();
                 return 0;
             }
 
-            if (!options.Validate())
+            if (!options.IsValid())
             {
                 System.Console.Error.WriteLine("fatal error: invalid arguments");
-                options.Help();
+                options.ShowHelp();
                 return ReturnCode.InvalidArguments;
             }
 
-            if (options.waitForDebugger)
+            if (options.WaitForDebugger)
             {
                 WaitForDebuggerToAttach();
                 if (!Debugger.IsAttached)
@@ -75,9 +75,10 @@ namespace NBehave.Console
 
             var assemblies = options.Parameters.ToArray().Select(assembly => assembly).Cast<string>().ToList();
             var config = NBehaveConfiguration.New
-                .SetScenarioFiles(options.scenarioFiles.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries))
-                .SetDryRun(options.dryRun)
+                .SetScenarioFiles((options.ScenarioFiles).Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries))
+                .SetDryRun(options.DryRun)
                 .SetAssemblies(assemblies)
+                .UseTagsFilter(options.Tags.Select(_=>_.Split(',')))
                 .SetEventListener(CreateEventListener(options));
 
             FeatureResults featureResults = null;
@@ -98,12 +99,12 @@ namespace NBehave.Console
 
             PrintTimeTaken(t0);
 
-            if (options.dryRun)
+            if (options.DryRun)
             {
                 return 0;
             }
 
-            if (options.pause)
+            if (options.Pause)
             {
                 System.Console.WriteLine("Press any key to exit");
                 System.Console.ReadKey();
@@ -147,18 +148,18 @@ namespace NBehave.Console
         {
             var eventListeners = new List<EventListener>();
             if (options.HasStoryOutput)
-                eventListeners.Add(EventListeners.FileOutputEventListener(options.storyOutput));
+                eventListeners.Add(EventListeners.FileOutputEventListener(options.StoryOutput));
 
             if (options.HasStoryXmlOutput)
-                eventListeners.Add(EventListeners.XmlWriterEventListener(options.xml));
+                eventListeners.Add(EventListeners.XmlWriterEventListener(options.Xml));
 
-            if (options.console)
+            if (options.Console)
                 eventListeners.Add(EventListeners.ColorfulConsoleOutputEventListener());
 
             if (eventListeners.Count == 0)
                 eventListeners.Add(EventListeners.ColorfulConsoleOutputEventListener());
 
-            if (options.codegen)
+            if (options.Codegen)
                 eventListeners.Add(EventListeners.CodeGenEventListener(System.Console.Out));
 
             return new MultiOutputEventListener(eventListeners.ToArray());

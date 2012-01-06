@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -50,7 +51,7 @@ namespace NBehave.Console.Specifications
         [Test]
         public void Should_create_colorful_listener_when_no_story_output_argument_passed_in()
         {
-            var options = new ConsoleOptions(new[] { "TestAssembly.dll" });
+            var options = new ConsoleOptions { Parameters = new List<string> { "TestAssembly.dll" } };
 
             EventListener listener = null;
             try
@@ -69,7 +70,7 @@ namespace NBehave.Console.Specifications
         [Test]
         public void Should_create_file_listener_when_story_output_argument_passed_in()
         {
-            var options = new ConsoleOptions(new[] { "TestAssembly.dll", "/storyOutput:Output.txt" });
+            var options = new ConsoleOptions { Parameters = new List<string> { "TestAssembly.dll" }, StoryOutput = "Output.txt" };
 
             EventListener listener = null;
             try
@@ -88,7 +89,7 @@ namespace NBehave.Console.Specifications
         [Test]
         public void Should_create_xml_listener_when_xml_argument_passed_in()
         {
-            var options = new ConsoleOptions(new[] { "TestAssembly.dll", "/xml:XmlOutput.xml" });
+            var options = new ConsoleOptions { Parameters = new List<string> { "TestAssembly.dll" }, Xml = "XmlOutput.txt" };
 
             EventListener listener = null;
             try
@@ -110,7 +111,7 @@ namespace NBehave.Console.Specifications
         [Test]
         public void Should_create_both_file_and_xml_listener_when_story_output_argument_and_xml_argument_passed_in()
         {
-            var options = new ConsoleOptions(new[] { "TestAssembly.dll", "/xml:XmlOutputTest.xml", "/storyOutput:storiesTest.txt" });
+            var options = new ConsoleOptions { Parameters = new List<string> { "TestAssembly.dll" }, Xml = "XmlOutput2.txt", StoryOutput = "storiesTest.txt" };
 
             EventListener listener = null;
             try
@@ -134,8 +135,8 @@ namespace NBehave.Console.Specifications
         {
             NBehaveConsoleRunner.Main(new[] { "IDontExist.dll", "/sf=*.scenario" });
             Assert.That(_output.ToString(), Contains.Substring("File not found:"));
-//            Assert.Contains("File not found: IDontExist.dll", _output.ToString());
-//            Assert.IsTrue(_output.ToString().Contains("File not found: IDontExist.dll"));
+            //            Assert.Contains("File not found: IDontExist.dll", _output.ToString());
+            //            Assert.IsTrue(_output.ToString().Contains("File not found: IDontExist.dll"));
         }
     }
 }
