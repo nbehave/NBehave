@@ -226,8 +226,8 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
         [BeforeScenario]
         public void WaitSomeTime()
         {
-            Thread.Sleep(100);
         }
+
         [Given(@"a string $str")]
         public void AString(string str)
         {
