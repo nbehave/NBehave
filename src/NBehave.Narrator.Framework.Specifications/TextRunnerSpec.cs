@@ -20,7 +20,7 @@ namespace NBehave.Narrator.Framework.Specifications
             return config.Build();
         }
 
-        private static NBehaveConfiguration CreateBasicConfiguration()
+        private NBehaveConfiguration CreateBasicConfiguration()
         {
             var writer = new StreamWriter(new MemoryStream());
             var listener = new TextWriterEventListener(writer);
@@ -333,7 +333,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 _thenWasCalled = true;
             }
 
-            [SetUp]
+            [TestFixtureSetUp]
             public void SetUp()
             {
                 _featureResults = CreateBasicConfiguration()

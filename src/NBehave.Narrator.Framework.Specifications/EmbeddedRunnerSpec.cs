@@ -30,7 +30,7 @@ namespace NBehave.Narrator.Framework.Specifications
             {
                 private string _messages;
 
-                [SetUp]
+                [TestFixtureSetUp]
                 public void Run_Feature()
                 {
                     var messages = new StringWriter();
@@ -79,7 +79,7 @@ namespace NBehave.Narrator.Framework.Specifications
             {
                 private string _messages;
 
-                [SetUp]
+                [TestFixtureSetUp]
                 public void Run_Feature()
                 {
                     var messages = new StringWriter();
@@ -145,7 +145,7 @@ namespace NBehave.Narrator.Framework.Specifications
             {
                 private string _messages;
 
-                [SetUp]
+                [TestFixtureSetUp]
                 public void Run_Feature()
                 {
                     var messages = new StringWriter();
@@ -197,7 +197,7 @@ namespace NBehave.Narrator.Framework.Specifications
             {
                 private string _messages;
 
-                [SetUp]
+                [TestFixtureSetUp]
                 public void Run_Feature()
                 {
                     var messages = new StringWriter();

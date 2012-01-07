@@ -11,7 +11,7 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
         private string _output;
         private CodeGenEventListener _listener;
 
-        [SetUp]
+        [TestFixtureSetUp]
         public virtual void SetUp()
         {
             _listener = new CodeGenEventListener();
