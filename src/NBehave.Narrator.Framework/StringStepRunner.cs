@@ -90,7 +90,7 @@ namespace NBehave.Narrator.Framework
                 PublishStepStartedEvent(actionStep);
                 BeforeEachScenario(info);
                 BeforeEachStep(info);
-                if (actionStep is StringTableStep && ShouldForEachOverStep(info))
+                if (actionStep is StringTableStep && !ShouldForEachOverStep(info))
                     ForEachOverStep(actionStep as StringTableStep, info);
                 else
                     RunStep(info, () => ParameterConverter.GetParametersForStep(actionStep));
@@ -109,9 +109,9 @@ namespace NBehave.Narrator.Framework
                 RunStep(info, () => ParameterConverter.GetParametersForStep(actionStep, example));
         }
 
-        private static bool ShouldForEachOverStep(ActionMethodInfo info)
+        private bool ShouldForEachOverStep(ActionMethodInfo info)
         {
-            return info.MethodParametersType != MethodParametersType.TypedListStep;
+            return info.MethodParametersType == MethodParametersType.TypedListStep;
         }
 
         private void RunStep(ActionMethodInfo info, Func<object[]> getParametersForActionStepText)
