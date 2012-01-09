@@ -15,7 +15,7 @@ namespace NBehave.Narrator.Framework
 
             var genericArgument = paramType.GetGenericArgument();
 
-            var ien = typeof(List<>).CreateGeneric(genericArgument);
+            var ien = typeof(List<>).CreateGenericInstance(genericArgument);
             return paramType.ParameterType.IsAssignableFrom(ien.GetType());
         }
 
@@ -29,7 +29,12 @@ namespace NBehave.Narrator.Framework
             return genericArgs[0];
         }
 
-        public static object CreateGeneric(this Type generic, Type innerType)
+        public static object CreateInstanceOfGenericList(this Type parameterType)
+        {
+            return typeof(List<>).CreateGenericInstance(parameterType);
+        }
+
+        public static object CreateGenericInstance(this Type generic, Type innerType)
         {
             var specificType = generic.MakeGenericType(new[] { innerType });
             return Activator.CreateInstance(specificType, null);

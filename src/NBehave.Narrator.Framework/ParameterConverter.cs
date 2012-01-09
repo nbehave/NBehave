@@ -31,7 +31,16 @@ namespace NBehave.Narrator.Framework
             var match = action.ActionStepMatcher.Match(stringStep.MatchableStep);
             Func<int, string> getValues = i => match.Groups[paramNames[i]].Value;
 
+            if (IsListStep(action, stringStep))
+                return GetParametersForListStep(action, stringStep, paramNames);
             return GetParametersForStep(action, paramNames, getValues);
+        }
+
+        private bool IsListStep(ActionMethodInfo action, StringStep step)
+        {
+            return (action.MethodParametersType == MethodParametersType.TypedListStep
+                   || action.MethodParametersType == MethodParametersType.UntypedListStep)
+                   && step is StringTableStep;
         }
 
         public object[] GetParametersForStep(StringStep stringStep, Example example)
@@ -43,11 +52,33 @@ namespace NBehave.Narrator.Framework
             return GetParametersForStep(action, paramNames, getValues);
         }
 
+
+        private object[] GetParametersForListStep(ActionMethodInfo action, StringStep stringStep, List<string> paramNames)
+        {
+            var itemType = action.ParameterInfo[0].ParameterType.GetGenericArguments()[0];
+            var values = itemType.CreateInstanceOfGenericList();
+            var addMethodOnList = values.GetType().GetMethod("Add");
+            Func<Example, string> getValues = e => e.ColumnValues[e.ColumnNames[0].Name];
+            var method = new ActionMethodInfo(action.ActionStepMatcher, addMethodOnList, addMethodOnList, action.ActionType);
+            GetValuesFromTableStep(stringStep, paramNames, getValues, addMethodOnList, values, method);
+            return new object[] { values };
+        }
+
+        private void GetValuesFromTableStep(StringStep stringStep, List<string> paramNames, Func<Example, string> getValues, MethodInfo addMethodOnList, object values, ActionMethodInfo method)
+        {
+            foreach (var example in ((StringTableStep)stringStep).TableSteps)
+            {
+                var value = GetParametersForStep(method, paramNames, _ => getValues(example))[0];
+                addMethodOnList.Invoke(values, new[] { value });
+            }
+        }
+
         private object[] GetParametersForStep(ActionMethodInfo action, ICollection<string> paramNames, Func<int, string> getValue)
         {
             var args = action.ParameterInfo;
             var values = new object[args.Length];
-            if (args.Length == 1 && args[0].ParameterType.IsClass && args.Length != paramNames.Count)
+            if (args.Length == 1 && args[0].ParameterType.IsClass && args[0].ParameterType != typeof(string) 
+                && IsArrayOrIEnumerable(args[0])==false)
             {
                 values[0] = CreateInstanceOfComplexType(paramNames, args, getValue);
             }
@@ -60,6 +91,11 @@ namespace NBehave.Narrator.Framework
                 }
             }
             return values;
+        }
+
+        private static bool IsArrayOrIEnumerable(ParameterInfo parameter)
+        {
+            return parameter.ParameterType.IsArray || parameter.IsGenericIEnumerable();
         }
 
         private List<string> GetParameterNames(ActionMethodInfo actionValue)

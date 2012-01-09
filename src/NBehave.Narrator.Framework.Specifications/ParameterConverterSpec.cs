@@ -109,7 +109,7 @@ namespace NBehave.Narrator.Framework.Specifications
             [Test]
             public void ShouldGetMultilineValueAsString()
             {
-                Action<object> action = value => { };
+                Action<string> action = value => { };
                 _actionCatalog.Add(new ActionMethodInfo(new Regex(@"a string\s+(?<value>(\w+\s+)*)"), action, action.Method, "Given"));
                 var multiLineValue = "one" + Environment.NewLine + "two";
                 var actionString = "Given a string " + multiLineValue;
@@ -177,9 +177,7 @@ namespace NBehave.Narrator.Framework.Specifications
 
             private void ShouldGetMultilineValueAsGenericCollectionOfIntegers<T>() where T : IEnumerable<int>
             {
-                //                object paramReceived = null;
                 Action<T> actionStep = p => { };
-                //                Action<object> action = value => { paramReceived = value; };
                 _actionCatalog.Add(new ActionMethodInfo(new Regex(@"a list of integers (?<value>(\d+,?\s*)+)"), actionStep, actionStep.Method, "Given"));
                 const string multiLineValue = "1, 2, 5";
                 const string actionString = "Given a list of integers " + multiLineValue;

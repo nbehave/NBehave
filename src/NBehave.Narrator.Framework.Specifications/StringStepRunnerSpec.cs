@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using NBehave.Narrator.Framework.Tiny;
 using NUnit.Framework;
@@ -74,6 +75,40 @@ namespace NBehave.Narrator.Framework.Specifications
                 _runner.Run(new StringStep("Given my name is Morgan", ""));
                 _hub.AssertWasCalled(_ => _.Publish<StepFinishedEvent>(null), o => o.IgnoreArguments().Repeat.Once());
             }
+
+            public class NameClass
+            {
+                public string Name { get; set; }
+            }
+
+            [Test]
+            public void Should_get_parameter_value_for_action_with_parameter_of_complex_type()
+            {
+                NameClass actual = null;
+                Action<NameClass> action = name => { actual = name; };
+                _actionCatalog.Add(new ActionMethodInfo(new Regex(@"my name is (?<name>\w+)"), action, action.Method, "Given"));
+                _runner.Run(new StringStep("Given my name is Morgan", ""));
+                Assert.That(actual, Is.Not.Null);
+                Assert.That(actual.Name, Is.EqualTo("Morgan"));
+            }
+
+            [Test]
+            public void Should_get_parameter_value_for_action_with_parameter_of_List_of_complex_type()
+            {
+                List<NameClass> actual = null;
+                Action<List<NameClass>> action = name => { actual = name; };
+                _actionCatalog.Add(new ActionMethodInfo(new Regex(@"my name is (?<name>\w+)"), action, action.Method, "Given"));
+                var tableStep = new StringTableStep("Given my name is xyz", "");
+                tableStep.AddTableStep(new Example(new ExampleColumns { new ExampleColumn("name") }, new Dictionary<string, string> { { "name", "Morgan" } }));
+                tableStep.AddTableStep(new Example(new ExampleColumns { new ExampleColumn("name") }, new Dictionary<string, string> { { "name", "Kalle" } }));
+                _runner.Run(tableStep);
+                Assert.That(actual, Is.Not.Null);
+                Assert.That(actual.Count, Is.EqualTo(2));
+                Assert.That(actual[0].Name, Is.EqualTo("Morgan"));
+                Assert.That(actual[1].Name, Is.EqualTo("Kalle"));
+            }
+
+
         }
 
         [TestFixture, ActionSteps]
@@ -215,16 +250,17 @@ namespace NBehave.Narrator.Framework.Specifications
             [BeforeStep]
             public void BeforeStep()
             {
-                throw new ArgumentNullException("BeforeStep");                
+                throw new ArgumentNullException("BeforeStep");
             }
 
             [AfterStep]
             public void AfterStep()
             {
-                 _afterStepWasCalled = true;
+                _afterStepWasCalled = true;
             }
 
         }
+
         [TestFixture, ActionSteps]
         public class When_first_step_throws_exception : StringStepRunnerSpec
         {

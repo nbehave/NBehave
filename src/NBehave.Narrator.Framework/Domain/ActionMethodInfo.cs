@@ -37,7 +37,7 @@ namespace NBehave.Narrator.Framework
             if (paramType.IsGenericIEnumerable())
             {
                 var arg = paramType.GetGenericArgument();
-                return IsStringType(arg) ? MethodParametersType.UntypedListStep : MethodParametersType.TypedListStep;
+                return IsStringType(arg) || arg.IsPrimitive ? MethodParametersType.UntypedListStep : MethodParametersType.TypedListStep;
             }
             return MethodParametersType.TypedStep;
         }

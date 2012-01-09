@@ -34,7 +34,7 @@ namespace NBehave.Narrator.Framework
         public object CreateList(string param, Type parameterType)
         {
             var innerType = parameterType.GetGenericArguments()[0];
-            var genericList = typeof(List<>).CreateGeneric(innerType);
+            var genericList = innerType.CreateInstanceOfGenericList();
             var strParamAsArray = GetParamAsArray(param);
             SetValues(strParamAsArray, innerType, genericList, "AddValue");
             return genericList;
