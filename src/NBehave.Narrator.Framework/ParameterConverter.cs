@@ -27,12 +27,17 @@ namespace NBehave.Narrator.Framework
         public object[] GetParametersForStep(StringStep stringStep)
         {
             var action = _actionCatalog.GetAction(stringStep);
-            var paramNames = GetParameterNames(action);
-            var match = action.ActionStepMatcher.Match(stringStep.MatchableStep);
-            Func<int, string> getValues = i => match.Groups[paramNames[i]].Value;
 
             if (IsListStep(action, stringStep))
-                return GetParametersForListStep(action, stringStep, paramNames);
+                return GetParametersForListStep(action, stringStep);
+            return GetParametersForStep(stringStep, action);
+        }
+
+        private object[] GetParametersForStep(StringStep stringStep, ActionMethodInfo action)
+        {
+            var match = action.ActionStepMatcher.Match(stringStep.MatchableStep);
+            Func<string, string> getValues = _ => match.Groups[_].Value;
+            var paramNames = GetParameterNames(action);
             return GetParametersForStep(action, paramNames, getValues);
         }
 
@@ -46,39 +51,38 @@ namespace NBehave.Narrator.Framework
         public object[] GetParametersForStep(StringStep stringStep, Example example)
         {
             var action = _actionCatalog.GetAction(stringStep);
+            Func<string, string> getValues = i => example.ColumnValues[i];
             var paramNames = action.ParameterInfo.Select(a => a.Name).ToList();
-            Func<int, string> getValues = i => example.ColumnValues[paramNames[i]];
-
             return GetParametersForStep(action, paramNames, getValues);
         }
 
-
-        private object[] GetParametersForListStep(ActionMethodInfo action, StringStep stringStep, List<string> paramNames)
+        private object[] GetParametersForListStep(ActionMethodInfo action, StringStep stringStep)
         {
             var itemType = action.ParameterInfo[0].ParameterType.GetGenericArguments()[0];
             var values = itemType.CreateInstanceOfGenericList();
             var addMethodOnList = values.GetType().GetMethod("Add");
-            Func<Example, string> getValues = e => e.ColumnValues[e.ColumnNames[0].Name];
+            Func<Example, string, string> getValues = (e, name) => e.ColumnValues[name];
             var method = new ActionMethodInfo(action.ActionStepMatcher, addMethodOnList, addMethodOnList, action.ActionType);
-            GetValuesFromTableStep(stringStep, paramNames, getValues, addMethodOnList, values, method);
+            GetValuesFromTableStep((StringTableStep)stringStep, getValues, addMethodOnList, values, method);
             return new object[] { values };
         }
 
-        private void GetValuesFromTableStep(StringStep stringStep, List<string> paramNames, Func<Example, string> getValues, MethodInfo addMethodOnList, object values, ActionMethodInfo method)
+        private void GetValuesFromTableStep(StringTableStep stringStep, Func<Example, string, string> getValues, MethodInfo addMethodOnList, object values, ActionMethodInfo method)
         {
-            foreach (var example in ((StringTableStep)stringStep).TableSteps)
+            List<string> paramNames = (stringStep.TableSteps.FirstOrDefault() ?? Example.EmptyExample).ColumnNames.Select(_ => _.Name).ToList();
+            foreach (var example in (stringStep).TableSteps)
             {
-                var value = GetParametersForStep(method, paramNames, _ => getValues(example))[0];
+                var value = GetParametersForStep(method, paramNames, _ => getValues(example, _))[0];
                 addMethodOnList.Invoke(values, new[] { value });
             }
         }
 
-        private object[] GetParametersForStep(ActionMethodInfo action, ICollection<string> paramNames, Func<int, string> getValue)
+        private object[] GetParametersForStep(ActionMethodInfo action, ICollection<string> paramNames, Func<string, string> getValue)
         {
             var args = action.ParameterInfo;
             var values = new object[args.Length];
-            if (args.Length == 1 && args[0].ParameterType.IsClass && args[0].ParameterType != typeof(string) 
-                && IsArrayOrIEnumerable(args[0])==false)
+            if (args.Length == 1 && args[0].ParameterType.IsClass && args[0].ParameterType != typeof(string)
+                && IsArrayOrIEnumerable(args[0]) == false)
             {
                 values[0] = CreateInstanceOfComplexType(paramNames, args, getValue);
             }
@@ -86,7 +90,8 @@ namespace NBehave.Narrator.Framework
             {
                 for (var argNumber = 0; argNumber < paramNames.Count; argNumber++)
                 {
-                    var strParam = getValue(argNumber);
+                    string argName = args[argNumber].Name;
+                    var strParam = getValue(argName);
                     values[argNumber] = typeConverter.ChangeParameterType(strParam, args[argNumber]);
                 }
             }
@@ -103,7 +108,7 @@ namespace NBehave.Narrator.Framework
             return actionValue.GetParameterNames();
         }
 
-        private object CreateInstanceOfComplexType(ICollection<string> paramNames, ParameterInfo[] args, Func<int, string> getValue)
+        private object CreateInstanceOfComplexType(ICollection<string> paramNames, ParameterInfo[] args, Func<string, string> getValue)
         {
             var instance = Activator.CreateInstance(args[0].ParameterType);
             for (var argNumber = 0; argNumber < paramNames.Count; argNumber++)
@@ -112,7 +117,7 @@ namespace NBehave.Narrator.Framework
                 var prop = instance.GetType().GetProperties().FirstOrDefault(_ => _.Name.Equals(argName, StringComparison.CurrentCultureIgnoreCase));
                 if (prop == null)
                     throw new ArgumentException(string.Format("Type '{0}' dont have a property with the name '{1}'", instance.GetType().Name, argName));
-                var strParam = getValue(argNumber);
+                var strParam = getValue(argName);
                 var paramType = prop.GetSetMethod(true).GetParameters()[0];
                 var value = typeConverter.ChangeParameterType(strParam, paramType);
                 prop.SetValue(instance, value, null);

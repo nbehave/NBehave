@@ -76,39 +76,41 @@ namespace NBehave.Narrator.Framework.Specifications
                 _hub.AssertWasCalled(_ => _.Publish<StepFinishedEvent>(null), o => o.IgnoreArguments().Repeat.Once());
             }
 
-            public class NameClass
+            public class UserClass
             {
+                public int Age { get; set; }
                 public string Name { get; set; }
             }
 
             [Test]
             public void Should_get_parameter_value_for_action_with_parameter_of_complex_type()
             {
-                NameClass actual = null;
-                Action<NameClass> action = name => { actual = name; };
-                _actionCatalog.Add(new ActionMethodInfo(new Regex(@"my name is (?<name>\w+)"), action, action.Method, "Given"));
-                _runner.Run(new StringStep("Given my name is Morgan", ""));
+                UserClass actual = null;
+                Action<UserClass> action = _ => { actual = _; };
+                _actionCatalog.Add(new ActionMethodInfo(new Regex(@"my name is (?<name>\w+) and I'm (?<age>\d+) years old"), action, action.Method, "Given"));
+                _runner.Run(new StringStep("Given my name is Morgan and I'm 42 years old", ""));
                 Assert.That(actual, Is.Not.Null);
                 Assert.That(actual.Name, Is.EqualTo("Morgan"));
+                Assert.That(actual.Age, Is.EqualTo(42));
             }
 
             [Test]
             public void Should_get_parameter_value_for_action_with_parameter_of_List_of_complex_type()
             {
-                List<NameClass> actual = null;
-                Action<List<NameClass>> action = name => { actual = name; };
-                _actionCatalog.Add(new ActionMethodInfo(new Regex(@"my name is (?<name>\w+)"), action, action.Method, "Given"));
-                var tableStep = new StringTableStep("Given my name is xyz", "");
-                tableStep.AddTableStep(new Example(new ExampleColumns { new ExampleColumn("name") }, new Dictionary<string, string> { { "name", "Morgan" } }));
-                tableStep.AddTableStep(new Example(new ExampleColumns { new ExampleColumn("name") }, new Dictionary<string, string> { { "name", "Kalle" } }));
+                List<UserClass> actual = null;
+                Action<List<UserClass>> action = _ => { actual = _; };
+                _actionCatalog.Add(new ActionMethodInfo(new Regex(@"some users:"), action, action.Method, "Given"));
+                var tableStep = new StringTableStep("Given some users:", "");
+                tableStep.AddTableStep(new Example(new ExampleColumns { new ExampleColumn("age"), new ExampleColumn("name") }, new Dictionary<string, string> { { "age", "42" }, { "name", "Morgan" } }));
+                tableStep.AddTableStep(new Example(new ExampleColumns { new ExampleColumn("age"), new ExampleColumn("name") }, new Dictionary<string, string> { { "age", "666" }, { "name", "Lucifer" } }));
                 _runner.Run(tableStep);
                 Assert.That(actual, Is.Not.Null);
                 Assert.That(actual.Count, Is.EqualTo(2));
                 Assert.That(actual[0].Name, Is.EqualTo("Morgan"));
-                Assert.That(actual[1].Name, Is.EqualTo("Kalle"));
+                Assert.That(actual[0].Age, Is.EqualTo(42));
+                Assert.That(actual[1].Name, Is.EqualTo("Lucifer"));
+                Assert.That(actual[1].Age, Is.EqualTo(666));
             }
-
-
         }
 
         [TestFixture, ActionSteps]

@@ -26,6 +26,11 @@ namespace NBehave.Narrator.Framework
 
         public ExampleColumns ColumnNames { get; private set; }
 
+        public static Example EmptyExample
+        {
+            get { return new Example(new ExampleColumns(), new Dictionary<string, string>()); }
+        }
+
         public string ColumnNamesToString()
         {
             return ValuesToString(_ => _.Name);

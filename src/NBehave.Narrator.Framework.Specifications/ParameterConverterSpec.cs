@@ -25,7 +25,7 @@ namespace NBehave.Narrator.Framework.Specifications
             [Test]
             public void ShouldGetParameterForActionWithTokenInMiddleOfString()
             {
-                Action<int> action = accountBalance => { };
+                Action<int> action = amount=> { };
 
                 _actionCatalog.Add(new ActionMethodInfo("I have $amount euros on my cash account".AsRegex(), action, action.Method, null));
                 var values = _parameterConverter.GetParametersForStep(new StringStep("Given I have 20 euros on my cash account", ""));
@@ -37,7 +37,7 @@ namespace NBehave.Narrator.Framework.Specifications
             [Test]
             public void ShouldGetParameterForActionIfTokenHasNewlines()
             {
-                Action<string> action = someAction => { };
+                Action<string> action = board => { };
                 _actionCatalog.Add(new ActionMethodInfo("I have a board like this\n$board".AsRegex(), action, action.Method, null));
                 var values = _parameterConverter.GetParametersForStep(new StringStep("Given I have a board like this\nxo \n x \no x", ""));
 
@@ -61,7 +61,7 @@ namespace NBehave.Narrator.Framework.Specifications
             [Test]
             public void ShouldGetParametersForMessageWithANegativeParameter()
             {
-                Action<string> action = someAction => { };
+                Action<string> action = value => { };
                 _actionCatalog.Add(new ActionMethodInfo("$value something".AsRegex(), action, action.Method, null));
                 var givenValue = _parameterConverter.GetParametersForStep(new StringStep("Given -20 something", ""));
 
@@ -120,9 +120,7 @@ namespace NBehave.Narrator.Framework.Specifications
             [Test]
             public void ShouldGetMultilineValueAsArrayOfStrings()
             {
-                //                object paramReceived = null;
-                Action<string[]> actionStep = p => { };
-                //                Action<object> action = value => { paramReceived = value; };
+                Action<string[]> actionStep = value => { };
                 _actionCatalog.Add(new ActionMethodInfo(new Regex(@"a string\s+(?<value>(\w+,?\s*)+)"), actionStep, actionStep.Method, "Given"));
                 const string multiLineValue = "one, two";
                 var actionString = "Given a string " + Environment.NewLine + multiLineValue;
@@ -177,7 +175,7 @@ namespace NBehave.Narrator.Framework.Specifications
 
             private void ShouldGetMultilineValueAsGenericCollectionOfIntegers<T>() where T : IEnumerable<int>
             {
-                Action<T> actionStep = p => { };
+                Action<T> actionStep = value => { };
                 _actionCatalog.Add(new ActionMethodInfo(new Regex(@"a list of integers (?<value>(\d+,?\s*)+)"), actionStep, actionStep.Method, "Given"));
                 const string multiLineValue = "1, 2, 5";
                 const string actionString = "Given a list of integers " + multiLineValue;
