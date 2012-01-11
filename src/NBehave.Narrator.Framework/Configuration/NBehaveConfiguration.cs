@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using NBehave.Narrator.Framework.EventListeners;
 using NBehave.Narrator.Framework.TextParsing.TagFilter;
 
@@ -71,13 +72,13 @@ namespace NBehave.Narrator.Framework
 
         public NBehaveConfiguration SetScenarioFiles(IEnumerable<string> scenarioFiles)
         {
-            ScenarioFiles = scenarioFiles;
+            ScenarioFiles = scenarioFiles.ToList();
             return this;
         }
 
         public NBehaveConfiguration SetAssemblies(IEnumerable<string> assemblies)
         {
-            Assemblies = assemblies;
+            Assemblies = assemblies.ToList();
             return this;
         }
 
@@ -101,7 +102,7 @@ namespace NBehave.Narrator.Framework
 
         public NBehaveConfiguration UseTagsFilter(IEnumerable<string[]> tagsFilter)
         {
-            TagsFilter = tagsFilter;
+            TagsFilter = tagsFilter.ToList();
             return this;
         }
 
