@@ -20,7 +20,7 @@ namespace TestPlainTextAssembly
             _configValue = ConfigurationManager.AppSettings[key];
         }
 
-        [Then("the value should be $val")]
+        [Then("the value should be $actionPerformed")]
         public void ActionPerformed(string actionPerformed)
         {
             _configValue.Should().Equal(actionPerformed);
