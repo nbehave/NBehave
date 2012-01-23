@@ -82,6 +82,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NBehave.Fluent", "NBehave.F
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.Gherkin", "NBehave.Gherkin\NBehave.Gherkin.csproj", "{9AFBC5C5-DC22-4E9B-8811-4A38BDCFD037}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuget", "nuget", "{8757BAB5-F776-492A-BE86-4E0448F7744A}"
+	ProjectSection(SolutionItems) = preProject
+		..\nuget\NBehave.Fluent.nuspec = ..\nuget\NBehave.Fluent.nuspec
+		..\nuget\nbehave.nuspec = ..\nuget\nbehave.nuspec
+		..\nuget\nbehave.resharper.nuspec = ..\nuget\nbehave.resharper.nuspec
+		..\nuget\NBehave.Samples.nuspec = ..\nuget\NBehave.Samples.nuspec
+		..\nuget\NBehave.Spec.nuspec = ..\nuget\NBehave.Spec.nuspec
+		..\nuget\NBehave.VsPlugin.nuspec = ..\nuget\NBehave.VsPlugin.nuspec
+		..\nuget.ps1 = ..\nuget.ps1
+		..\nuget\ReSharper.feature = ..\nuget\ReSharper.feature
+		..\nuget\VsPlugin.feature = ..\nuget\VsPlugin.feature
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		AutomatedDebug-3.5|Any CPU = AutomatedDebug-3.5|Any CPU
