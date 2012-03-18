@@ -8,6 +8,7 @@ task Default -depends Test #, ILMerge
 
 task Clean { 
 	if ($true -eq (Test-Path "$buildDir")) {
+		Get-ChildItem $buildDir\**\*.* -Recurse | ForEach-Object { Remove-Item $_.FullName }
 		Remove-Item $buildDir -Recurse
 	}
 	New-Item $buildDir -type directory
@@ -31,12 +32,12 @@ Task Version {
 Task Compile -depends Compile-Console-x86, CompileAnyCpu
 
 Task CompileAnyCpu {
-	Exec { msbuild "$sourceDir\NBehave.sln" /p:Configuration=AutomatedDebug-$frameworkVersion /v:m /p:TargetFrameworkVersion=v$frameworkVersion /toolsversion:$frameworkVersion /t:Rebuild }
+	Exec { msbuild "$sourceDir\NBehave.sln" /p:Configuration=AutomatedDebug-$frameworkVersion /v:m /m /p:TargetFrameworkVersion=v$frameworkVersion /toolsversion:4.0 /t:Rebuild }
 }
 
 Task Compile-Console-x86 {
 	$params = "Configuration=AutomatedDebug-$frameworkVersion-x86;Platform=x86;OutputPath=$buildDir\Debug-$frameworkVersion\NBehave\"
-	Exec { msbuild "$sourceDir\NBehave.Console\NBehave.Console.csproj" /p:$params /p:TargetFrameworkVersion=v$frameworkVersion /v:m /toolsversion:$frameworkVersion /t:Rebuild }
+	Exec { msbuild "$sourceDir\NBehave.Console\NBehave.Console.csproj" /p:$params /p:TargetFrameworkVersion=v$frameworkVersion /v:m /m /toolsversion:$frameworkVersion /t:Rebuild }
 	Move-Item "$buildDir\Debug-$frameworkVersion\NBehave\NBehave-Console.exe" "$buildDir\Debug-$frameworkVersion\NBehave\NBehave-Console-x86.exe" -Force
 }
 
@@ -59,4 +60,3 @@ Task Test -depends Compile {
 	$arguments = Get-Item "$testDir\*Specifications*.dll"
 	Exec { .\tools\nunit\nunit-console-x86.exe $arguments /xml:$testReportsDir\UnitTests-$frameworkVersion.xml}
 }
-
