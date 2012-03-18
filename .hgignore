@@ -14,5 +14,5 @@ glob:release/
 glob:*.ReSharper
 glob:*.bak
 glob:lib/ReSharper/*
-glob:*.crunchproject.local.xml
-glob:*.crunchsolution.local.xml
+glob:*.ncrunchproject
+glob:*.ncrunchsolution
