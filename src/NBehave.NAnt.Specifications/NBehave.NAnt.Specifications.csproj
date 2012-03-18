@@ -70,111 +70,111 @@
     <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CollectionGen, Version=1.0.834.34691, Culture=neutral">
+    <Reference Include="CollectionGen">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\nant\lib\net\2.0\CollectionGen.dll</HintPath>
     </Reference>
-    <Reference Include="Interop.MsmMergeTypeLib, Version=2.0.0.0, Culture=neutral">
+    <Reference Include="Interop.MsmMergeTypeLib">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\nant\lib\net\2.0\Interop.MsmMergeTypeLib.dll</HintPath>
     </Reference>
-    <Reference Include="Interop.StarTeam, Version=1.0.0.0, Culture=neutral">
+    <Reference Include="Interop.StarTeam">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\nant\lib\net\2.0\Interop.StarTeam.dll</HintPath>
     </Reference>
-    <Reference Include="Interop.WindowsInstaller, Version=1.0.0.0, Culture=neutral">
+    <Reference Include="Interop.WindowsInstaller">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\nant\lib\net\2.0\Interop.WindowsInstaller.dll</HintPath>
     </Reference>
-    <Reference Include="log4net, Version=1.2.9.0, Culture=neutral, PublicKeyToken=b32731d11ce58905">
+    <Reference Include="log4net">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\nant\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="NAnt, Version=0.91.3881.0, Culture=neutral">
+    <Reference Include="NAnt">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\nant\NAnt.exe</HintPath>
     </Reference>
-    <Reference Include="NAnt.CompressionTasks, Version=0.91.3881.0, Culture=neutral">
+    <Reference Include="NAnt.CompressionTasks">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\nant\NAnt.CompressionTasks.dll</HintPath>
     </Reference>
-    <Reference Include="NAnt.Contrib.Tasks, Version=0.85.2479.0, Culture=neutral">
+    <Reference Include="NAnt.Contrib.Tasks">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\nant\tasks\net\NAnt.Contrib.Tasks.dll</HintPath>
     </Reference>
-    <Reference Include="NAnt.Core, Version=0.91.3881.0, Culture=neutral">
+    <Reference Include="NAnt.Core">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\nant\NAnt.Core.dll</HintPath>
     </Reference>
-    <Reference Include="NAnt.DotNetTasks, Version=0.91.3881.0, Culture=neutral">
+    <Reference Include="NAnt.DotNetTasks">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\nant\NAnt.DotNetTasks.dll</HintPath>
     </Reference>
-    <Reference Include="NAnt.MSNetTasks, Version=0.91.3881.0, Culture=neutral">
+    <Reference Include="NAnt.MSNetTasks">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\nant\NAnt.MSNetTasks.dll</HintPath>
     </Reference>
-    <Reference Include="NAnt.NUnit, Version=0.91.3881.0, Culture=neutral">
+    <Reference Include="NAnt.NUnit">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\nant\NAnt.NUnit.dll</HintPath>
     </Reference>
-    <Reference Include="NAnt.NUnit1Tasks, Version=0.91.3881.0, Culture=neutral">
+    <Reference Include="NAnt.NUnit1Tasks">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\nant\NAnt.NUnit1Tasks.dll</HintPath>
     </Reference>
-    <Reference Include="NAnt.NUnit2Tasks, Version=0.91.3881.0, Culture=neutral">
+    <Reference Include="NAnt.NUnit2Tasks">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\nant\NAnt.NUnit2Tasks.dll</HintPath>
     </Reference>
-    <Reference Include="NAnt.SourceControlTasks, Version=0.91.3881.0, Culture=neutral">
+    <Reference Include="NAnt.SourceControlTasks">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\nant\NAnt.SourceControlTasks.dll</HintPath>
     </Reference>
-    <Reference Include="NAnt.VisualCppTasks, Version=0.91.3881.0, Culture=neutral">
+    <Reference Include="NAnt.VisualCppTasks">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\nant\NAnt.VisualCppTasks.dll</HintPath>
     </Reference>
-    <Reference Include="NAnt.VSNetTasks, Version=0.91.3881.0, Culture=neutral">
+    <Reference Include="NAnt.VSNetTasks">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\nant\NAnt.VSNetTasks.dll</HintPath>
     </Reference>
-    <Reference Include="NAnt.Win32Tasks, Version=0.91.3881.0, Culture=neutral">
+    <Reference Include="NAnt.Win32Tasks">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\nant\NAnt.Win32Tasks.dll</HintPath>
     </Reference>
-    <Reference Include="NDoc.Core, Version=1.3.1851.0, Culture=neutral, PublicKeyToken=b9896512f28c0f09">
+    <Reference Include="NDoc.Core">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\nant\lib\net\2.0\NDoc.Core.dll</HintPath>
     </Reference>
-    <Reference Include="NDoc.Documenter.Msdn, Version=1.3.1851.0, Culture=neutral, PublicKeyToken=b9896512f28c0f09">
+    <Reference Include="NDoc.Documenter.Msdn">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\nant\lib\net\2.0\NDoc.Documenter.Msdn.dll</HintPath>
     </Reference>
-    <Reference Include="NDoc.Documenter.NAnt, Version=0.91.3881.0, Culture=neutral">
+    <Reference Include="NDoc.Documenter.NAnt">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\nant\NDoc.Documenter.NAnt.dll</HintPath>
     </Reference>
-    <Reference Include="NDoc.ExtendedUI, Version=1.3.1851.0, Culture=neutral, PublicKeyToken=b9896512f28c0f09">
+    <Reference Include="NDoc.ExtendedUI">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\nant\lib\net\2.0\NDoc.ExtendedUI.dll</HintPath>
     </Reference>
-    <Reference Include="nunit.core, Version=2.2.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+    <Reference Include="nunit.core">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\tools\nant\lib\net\2.0\nunit.core.dll</HintPath>
+      <HintPath>..\..\tools\nunit\nunit.core.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\nunit\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="scvs, Version=0.36.4902.7334, Culture=neutral">
+    <Reference Include="scvs">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\nant\scvs.exe</HintPath>
     </Reference>
-    <Reference Include="Should.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Should.Core">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\should\Should.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Should.Fluent, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Should.Fluent">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\should\Should.Fluent.dll</HintPath>
     </Reference>

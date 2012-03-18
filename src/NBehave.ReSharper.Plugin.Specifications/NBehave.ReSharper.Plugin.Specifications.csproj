@@ -62,7 +62,7 @@
       <HintPath>..\..\lib\ReSharper\6.0\JetBrains.Platform.ReSharper.ProjectModel.dll</HintPath>
     </Reference>
     <Reference Include="JetBrains.Platform.ReSharper.Shell">
-	  <HintPath>..\..\lib\ReSharper\6.0\JetBrains.Platform.ReSharper.Shell.dll</HintPath>
+      <HintPath>..\..\lib\ReSharper\6.0\JetBrains.Platform.ReSharper.Shell.dll</HintPath>
     </Reference>
     <Reference Include="JetBrains.Platform.ReSharper.Util">
       <HintPath>..\..\lib\ReSharper\6.0\JetBrains.Platform.ReSharper.Util.dll</HintPath>
@@ -82,7 +82,6 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
