@@ -25,22 +25,32 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
 	                                                                                            typeof(NBehaveExampleParentTestElement)
                                                                                             });
 
-        private readonly ISolution _soultion;
-
+ #if RESHARPER_61
+    public TestProvider()
+    {
+#else 
         public TestProvider(ISolution solution)
         {
-            _soultion = solution;
+            Solution = solution;
+#endif
         }
 
         public System.Drawing.Image Icon
         {
-            get { return ImageLoader.GetImage("nbehave", new Assembly[0]); }
+            get { return ImageLoader.GetImage("nbehave", GetType().Assembly); }
         }
 
-        public ISolution Solution
+#if !RESHARPER_61
+        public ISolution Solution { get; private set; }
+
+        public void SerializeElement(XmlElement parent, IUnitTestElement element)
+        { }
+
+        public IUnitTestElement DeserializeElement(XmlElement parent, IUnitTestElement parentElement)
         {
-            get { return _soultion; }
+            return null;
         }
+#endif
 
         public string ID
         {
@@ -88,12 +98,5 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
             return _unitTestElementComparer.Compare(x, y);
         }
 
-        public void SerializeElement(XmlElement parent, IUnitTestElement element)
-        { }
-
-        public IUnitTestElement DeserializeElement(XmlElement parent, IUnitTestElement parentElement)
-        {
-            return null;
-        }
     }
 }

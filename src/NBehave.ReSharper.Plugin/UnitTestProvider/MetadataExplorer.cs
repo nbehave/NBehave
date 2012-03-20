@@ -12,7 +12,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
 {
     public class MetadataExplorer
     {
-        private readonly TestProvider _testProvider;
+        private readonly IUnitTestProvider _testProvider;
         private readonly UnitTestElementConsumer _consumer;
         private readonly IProject _project;
         private readonly ProjectModelElementEnvoy _projectModel;
@@ -20,7 +20,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
         private readonly ISolution _solution;
         private readonly ITinyMessengerHub _hub;
 
-        public MetadataExplorer(TestProvider provider, ISolution solution, IProject project, UnitTestElementConsumer consumer)
+        public MetadataExplorer(IUnitTestProvider provider, ISolution solution, IProject project, UnitTestElementConsumer consumer)
         {
             Initialiser.Initialise();
             _testProvider = provider;

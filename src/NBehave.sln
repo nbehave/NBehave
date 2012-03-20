@@ -95,6 +95,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuget", "nuget", "{8757BAB5
 		..\nuget\VsPlugin.feature = ..\nuget\VsPlugin.feature
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.ReSharper61.Plugin", "NBehave.ReSharper61.Plugin\NBehave.ReSharper61.Plugin.csproj", "{C192A6DE-D254-4A69-8232-D4FF298E514E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		AutomatedDebug-3.5|Any CPU = AutomatedDebug-3.5|Any CPU
@@ -639,6 +641,26 @@ Global
 		{9AFBC5C5-DC22-4E9B-8811-4A38BDCFD037}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{9AFBC5C5-DC22-4E9B-8811-4A38BDCFD037}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{9AFBC5C5-DC22-4E9B-8811-4A38BDCFD037}.Release|x86.ActiveCfg = Release|Any CPU
+		{C192A6DE-D254-4A69-8232-D4FF298E514E}.AutomatedDebug-3.5|Any CPU.ActiveCfg = Debug|Any CPU
+		{C192A6DE-D254-4A69-8232-D4FF298E514E}.AutomatedDebug-3.5|Any CPU.Build.0 = Debug|Any CPU
+		{C192A6DE-D254-4A69-8232-D4FF298E514E}.AutomatedDebug-3.5|Mixed Platforms.ActiveCfg = AutomatedDebug-3.5|Any CPU
+		{C192A6DE-D254-4A69-8232-D4FF298E514E}.AutomatedDebug-3.5|Mixed Platforms.Build.0 = AutomatedDebug-3.5|Any CPU
+		{C192A6DE-D254-4A69-8232-D4FF298E514E}.AutomatedDebug-3.5|x86.ActiveCfg = Debug|Any CPU
+		{C192A6DE-D254-4A69-8232-D4FF298E514E}.AutomatedDebug-4.0|Any CPU.ActiveCfg = Debug|Any CPU
+		{C192A6DE-D254-4A69-8232-D4FF298E514E}.AutomatedDebug-4.0|Any CPU.Build.0 = Debug|Any CPU
+		{C192A6DE-D254-4A69-8232-D4FF298E514E}.AutomatedDebug-4.0|Mixed Platforms.ActiveCfg = AutomatedDebug-4.0|Any CPU
+		{C192A6DE-D254-4A69-8232-D4FF298E514E}.AutomatedDebug-4.0|Mixed Platforms.Build.0 = AutomatedDebug-4.0|Any CPU
+		{C192A6DE-D254-4A69-8232-D4FF298E514E}.AutomatedDebug-4.0|x86.ActiveCfg = Debug|Any CPU
+		{C192A6DE-D254-4A69-8232-D4FF298E514E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C192A6DE-D254-4A69-8232-D4FF298E514E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C192A6DE-D254-4A69-8232-D4FF298E514E}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{C192A6DE-D254-4A69-8232-D4FF298E514E}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{C192A6DE-D254-4A69-8232-D4FF298E514E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C192A6DE-D254-4A69-8232-D4FF298E514E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C192A6DE-D254-4A69-8232-D4FF298E514E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C192A6DE-D254-4A69-8232-D4FF298E514E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{C192A6DE-D254-4A69-8232-D4FF298E514E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{C192A6DE-D254-4A69-8232-D4FF298E514E}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -671,6 +693,7 @@ Global
 		{E2EF537E-04C9-4804-9848-4205277D74AF} = {F0FE6340-3B43-4A3B-83D3-D51622BAC3F3}
 		{669A1BF0-7EFB-4E95-999B-532F62C95B03} = {4A5E0FD3-7225-4AA1-A3AB-E27CADF30896}
 		{AA9C7D40-A49C-4522-938B-BD1A99EE3E78} = {4A5E0FD3-7225-4AA1-A3AB-E27CADF30896}
+		{C192A6DE-D254-4A69-8232-D4FF298E514E} = {4A5E0FD3-7225-4AA1-A3AB-E27CADF30896}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		CodeStyleEnforcer_Active = 0

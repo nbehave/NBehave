@@ -41,7 +41,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
             return Feature;
         }
 
-        public override IList<UnitTestTask> GetTaskSequence(IEnumerable<IUnitTestElement> explicitElements)
+        public override IList<UnitTestTask> GetTaskSequence(IList<IUnitTestElement> explicitElements)
         {
             var list = new List<UnitTestTask>
                                        {

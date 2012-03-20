@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.UnitTestFramework;
@@ -40,7 +41,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
             return Example.ColumnValuesToString();
         }
 
-        public override IList<UnitTestTask> GetTaskSequence(IEnumerable<IUnitTestElement> explicitElements)
+        public override IList<UnitTestTask> GetTaskSequence(IList<IUnitTestElement> explicitElements)
         {
             var parent = Parent as NBehaveExampleParentTestElement;
             string scenario = (parent.Parent is NBehaveScenarioTestElement) ? ((NBehaveScenarioTestElement)parent.Parent).Scenario : "";

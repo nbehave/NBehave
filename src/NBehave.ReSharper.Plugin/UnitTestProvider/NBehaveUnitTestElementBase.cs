@@ -84,8 +84,14 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
             get { return _categories; }
         }
 
-        public abstract IList<UnitTestTask> GetTaskSequence(IEnumerable<IUnitTestElement> explicitElements);
+        //This one is for R# 6.0
+        public IList<UnitTestTask> GetTaskSequence(IEnumerable<IUnitTestElement> explicitElements)
+        {
+            return GetTaskSequence(explicitElements.ToList());
+        }
 
+        // R# 6.1
+        public abstract IList<UnitTestTask> GetTaskSequence(IList<IUnitTestElement> explicitElements);
 
         public virtual IEnumerable<IProjectFile> GetProjectFiles()
         {
