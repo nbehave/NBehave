@@ -8,7 +8,6 @@ namespace NBehave.Narrator.Framework.Specifications.System.Specs
     [TestFixture]
     public class WhenRunningATableScenario : SystemTestContext
     {
-        private NBehaveConfiguration _config;
         private FeatureResults _results;
 
         protected override void EstablishContext()
