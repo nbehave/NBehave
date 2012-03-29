@@ -29,7 +29,8 @@ namespace NBehave.Narrator.Framework
         {
             CreateAppDomain = createAppDomain;
             Filter = new StoryRunnerFilter();
-            TagsFilter = new List<string[]>();;
+            TagsFilter = new List<string[]>();
+            Assemblies = new List<string>();
         }
 
         public IEnumerable<string> ScenarioFiles { get; set; }

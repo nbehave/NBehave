@@ -10,20 +10,20 @@
 namespace NBehave.Narrator.Framework
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
 
     public class ActionStepParser
     {
-        private readonly StoryRunnerFilter _storyRunnerFilter;
-
-        private readonly ActionCatalog _actionCatalog;
+        private readonly StoryRunnerFilter storyRunnerFilter;
+        private readonly ActionCatalog actionCatalog;
+        private readonly MethodWithAttributeFinder methodWithAttributeFinder;
 
         public ActionStepParser(StoryRunnerFilter storyRunnerFilter, ActionCatalog actionCatalog)
         {
-            _storyRunnerFilter = storyRunnerFilter;
-            _actionCatalog = actionCatalog;
+            this.storyRunnerFilter = storyRunnerFilter;
+            this.actionCatalog = actionCatalog;
+            methodWithAttributeFinder = new MethodWithAttributeFinder(storyRunnerFilter);
         }
 
         public void FindActionSteps(Assembly assembly)
@@ -32,8 +32,8 @@ namespace NBehave.Narrator.Framework
             {
                 if (t.GetCustomAttributes(typeof(ActionStepsAttribute), true).Length > 0)
                 {
-                    if (t.IsAbstract == false && _storyRunnerFilter.NamespaceFilter.IsMatch(t.Namespace ?? string.Empty) 
-                        && _storyRunnerFilter.ClassNameFilter.IsMatch(t.Name))
+                    if (t.IsAbstract == false && storyRunnerFilter.NamespaceFilter.IsMatch(t.Namespace ?? string.Empty)
+                        && storyRunnerFilter.ClassNameFilter.IsMatch(t.Name))
                     {
                         FindActionStepMethods(t);
                     }
@@ -43,13 +43,13 @@ namespace NBehave.Narrator.Framework
 
         public void FindActionStepMethods(Type actionSteps, object instance)
         {
-            var methods = GetMethodsWithActionStepAttribute(actionSteps);
+            var methods = methodWithAttributeFinder.FindMethodsWithAttribute<ActionMethodInfo, ActionStepAttribute>(actionSteps, BuildActionMethodInfo);
             foreach (var method in methods)
             {
                 var action = CreateAction(instance, method);
                 var m = new ActionMethodInfo(method.ActionStepMatcher, action, method.MethodInfo, method.ActionType, instance);
                 AddFileMatcher(m, instance);
-                _actionCatalog.Add(m);
+                actionCatalog.Add(m);
             }
         }
 
@@ -115,14 +115,14 @@ namespace NBehave.Narrator.Framework
         {
             Action<object, object> action =
                 (a, b) =>
-                    {
-                        var invokeParameters = new[]
+                {
+                    var invokeParameters = new[]
                             {
                                 this.ChangeType(methodInfo, a, 0), 
                                 this.ChangeType(methodInfo, b, 1),
                             };
-                        methodInfo.Invoke(instance, invokeParameters);
-                    };
+                    methodInfo.Invoke(instance, invokeParameters);
+                };
             return action;
         }
 
@@ -130,15 +130,15 @@ namespace NBehave.Narrator.Framework
         {
             Action<object, object, object> action =
                 (a, b, c) =>
-                    {
-                        var invokeParameters = new[]
+                {
+                    var invokeParameters = new[]
                             {
                                 this.ChangeType(methodInfo, a, 0), 
                                 this.ChangeType(methodInfo, b, 1), 
                                 this.ChangeType(methodInfo, c, 2),
                             };
-                        methodInfo.Invoke(instance, invokeParameters);
-                    };
+                    methodInfo.Invoke(instance, invokeParameters);
+                };
             return action;
         }
 
@@ -146,16 +146,16 @@ namespace NBehave.Narrator.Framework
         {
             Action<object, object, object, object> action =
                 (a, b, c, d) =>
-                    {
-                        var invokeParameters = new[]
+                {
+                    var invokeParameters = new[]
                             {
                                 this.ChangeType(methodInfo, a, 0), 
                                 this.ChangeType(methodInfo, b, 1), 
                                 this.ChangeType(methodInfo, c, 2),
                                 this.ChangeType(methodInfo, d, 3)
                             };
-                        methodInfo.Invoke(instance, invokeParameters);
-                    };
+                    methodInfo.Invoke(instance, invokeParameters);
+                };
             return action;
         }
 
@@ -185,12 +185,12 @@ namespace NBehave.Narrator.Framework
         private IEnumerable<MethodInfo> GetAllMethodsWithActionStepAttribute(Type actionSteps)
         {
             return
-                (from method in
+                from method in
                     actionSteps.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
                 where
                     method.GetCustomAttributes(typeof(ActionStepAttribute), true).Length > 0 &&
                     _storyRunnerFilter.MethodNameFiler.IsMatch(method.Name)
-                select method).ToList();
+                select method;
         }
 
         private object ChangeType(MethodInfo methodInfo, object parameter, int parameterIndex)
@@ -202,6 +202,7 @@ namespace NBehave.Narrator.Framework
         {
             return actionMethodInfo.ParameterInfo.Count();
         }
+
 
         private ActionMethodInfo BuildActionMethodInfo(ActionStepAttribute actionStep, MethodInfo method)
         {
@@ -233,5 +234,6 @@ namespace NBehave.Narrator.Framework
 
             return methodName;
         }
+
     }
 }

@@ -20,7 +20,7 @@ namespace NBehave.Narrator.Framework.Contracts
             _hub.Subscribe<RunStartedEvent>(started => Initialise(), true);
         }
 
-        public void Initialise()
+        private void Initialise()
         {
             var parser = new ActionStepParser(_configuration.Filter, _actionCatalog);
 

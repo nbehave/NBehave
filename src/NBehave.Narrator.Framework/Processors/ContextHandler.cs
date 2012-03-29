@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using NBehave.Narrator.Framework.Hooks;
 using NBehave.Narrator.Framework.Tiny;
 
 namespace NBehave.Narrator.Framework.Processors
@@ -102,7 +104,7 @@ namespace NBehave.Narrator.Framework.Processors
         {
             foreach (var tokenPair in _hubSubscriberTokens)
             {
-                var token = tokenPair.Key;
+                TinyMessageSubscriptionToken token = tokenPair.Key;
                 var type = tokenPair.Value;
                 _hub.Unsubscribe(token, type);
             }

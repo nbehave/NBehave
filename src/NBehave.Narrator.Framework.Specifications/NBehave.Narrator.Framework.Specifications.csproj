@@ -128,6 +128,7 @@
     <Compile Include="EventListeners\FailSpecResultEventListenerSpec.cs" />
     <Compile Include="ConfigurationNoAppDomain.cs" />
     <Compile Include="Extensions\StoryRunnerFilterExtensionsSpec.cs" />
+    <Compile Include="HooksParserSpec.cs" />
     <Compile Include="LoadAndParseScenarioFilesSpec.cs" />
     <Compile Include="ActionStepParserSpec.cs" />
     <Compile Include="EventListeners\CodeGenEventListenerSpec.cs" />

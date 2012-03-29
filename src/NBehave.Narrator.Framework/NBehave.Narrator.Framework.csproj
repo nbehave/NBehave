@@ -122,11 +122,16 @@
     <Compile Include="Extensions\ReflectionExtensions.cs" />
     <Compile Include="Extensions\StoryRunnerFilterExtensions.cs" />
     <Compile Include="FeatureContext.cs" />
+    <Compile Include="HooksParser.cs" />
+    <Compile Include="Hooks\BeforeStepAttribute.cs" />
+    <Compile Include="MethodWithAttributeFinder.cs" />
     <Compile Include="NBehaveContext.cs" />
     <Compile Include="Processors\ContextHandler.cs" />
     <Compile Include="Processors\EventProcessor.cs" />
     <Compile Include="Processors\ExampleRunner.cs" />
+    <Compile Include="Processors\HookHandler.cs" />
     <Compile Include="Processors\IFeatureRunner.cs" />
+    <Compile Include="Hooks\LoadHooks.cs" />
     <Compile Include="Processors\Messages\ActionStepsLoaded.cs" />
     <Compile Include="Processors\FeatureResultCollector.cs" />
     <Compile Include="Processors\Messages\FeatureFinishedEvent.cs" />
@@ -275,6 +280,7 @@
       <Name>NBehave.Gherkin</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

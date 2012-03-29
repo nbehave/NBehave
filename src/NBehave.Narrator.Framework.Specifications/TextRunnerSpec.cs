@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml;
 using NBehave.Narrator.Framework.EventListeners;
 using NBehave.Narrator.Framework.EventListeners.Xml;
@@ -421,5 +422,128 @@ namespace NBehave.Narrator.Framework.Specifications
                 Assert.That(scenarioFinishedEvent, Is.True);
             }
         }
+
+
+        [TestFixture, Hooks.Hooks]
+        public class HooksSpec : TextRunnerSpec
+        {
+            private static int _timesBeforeScenarioWasCalled;
+            private static int _timesBeforeStepWasCalled;
+            private static int _timesAfterStepWasCalled;
+            private static int _timesAfterScenarioWasCalled;
+            private static int _beforeRun;
+            private static int _afterRun;
+            private static int _beforeFeature;
+            private static int _afterFeature;
+
+            [Hooks.BeforeRun]
+            public void OnBeforeRun()
+            {
+                _beforeRun++;
+            }
+            [Hooks.AfterRun]
+            public void OnAfterRun()
+            {
+                _afterRun++;
+            }
+            [Hooks.BeforeFeature]
+            public void OnBeforeFeature()
+            {
+                _beforeFeature++;
+            }
+            [Hooks.AfterFeature]
+            public void OnAfterFeature()
+            {
+                _afterFeature++;
+            }
+            [Hooks.BeforeScenario]
+            public void OnBeforeScenario()
+            {
+                _timesBeforeScenarioWasCalled++;
+            }
+            [Hooks.BeforeStep]
+            public void OnBeforeStep()
+            {
+                _timesBeforeStepWasCalled++;
+            }
+            [Hooks.AfterStep]
+            public void OnAfterStep()
+            {
+                _timesAfterStepWasCalled++;
+            }
+            [Hooks.AfterScenario]
+            public void OnAfterScenario()
+            {
+                _timesAfterScenarioWasCalled++;
+            }
+
+            [TestFixtureSetUp]
+            public void Setup()
+            {
+                _timesBeforeScenarioWasCalled = 0;
+                _timesBeforeStepWasCalled = 0;
+                _timesAfterStepWasCalled = 0;
+                _timesAfterScenarioWasCalled = 0;
+                _beforeRun = 0;
+                _afterRun = 0;
+                _beforeFeature = 0;
+                _afterFeature = 0;
+
+                CreateBasicConfiguration()
+                .SetAssemblies(new[] { "TestPlainTextAssembly.dll", Path.GetFileName(GetType().Assembly.Location) })
+                        .SetScenarioFiles(new[] { TestFeatures.FeatureNamedStory })
+                        .Build()
+                        .Run();
+            }
+
+            [Test]
+            public void Should_call_BeforeRun_once()
+            {
+                Assert.AreEqual(1, _beforeRun);
+            }
+
+            [Test]
+            public void Should_call_AfterRun_once()
+            {
+                Assert.AreEqual(1, _afterRun);
+            }
+
+            [Test]
+            public void Should_call_BeforeFeature()
+            {
+                Assert.AreEqual(1, _beforeFeature);
+            }
+
+            [Test]
+            public void Should_call_AfterFeature()
+            {
+                Assert.AreEqual(1, _afterFeature);
+            }
+
+            [Test]
+            public void ShouldCallBeforeScenarioOncePerScenario()
+            {
+                Assert.That(_timesBeforeScenarioWasCalled, Is.EqualTo(1));
+            }
+
+            [Test]
+            public void ShouldCallAfterScenarioOncePerScenario()
+            {
+                Assert.That(_timesAfterScenarioWasCalled, Is.EqualTo(1));
+            }
+
+            [Test]
+            public void ShouldCallBeforeStepOncePerStep()
+            {
+                Assert.That(_timesBeforeStepWasCalled, Is.EqualTo(3));
+            }
+
+            [Test]
+            public void ShouldCallAfterStepOncePerStep()
+            {
+                Assert.That(_timesAfterStepWasCalled, Is.EqualTo(3));
+            }
+        }
+
     }
 }

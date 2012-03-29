@@ -25,7 +25,6 @@ namespace NBehave.Narrator.Framework.Specifications
             NBehaveInitialiser.Initialise(ConfigurationNoAppDomain.New.SetEventListener(Framework.EventListeners.EventListeners.NullEventListener()));
             _hub = TinyIoCContainer.Current.Resolve<ITinyMessengerHub>();
             _actionCatalog = TinyIoCContainer.Current.Resolve<ActionCatalog>();
-
             _stringStepRunner = new StringStepRunner(_actionCatalog, _hub);
             _runner = new FeatureRunner(_hub, _stringStepRunner);
         }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using NBehave.Narrator.Framework.EventListeners;
+using NBehave.Narrator.Framework.Hooks;
 using NBehave.Narrator.Framework.Messages;
 using NBehave.Narrator.Framework.Processors;
 using NBehave.Narrator.Framework.Tiny;
@@ -44,6 +45,7 @@ namespace NBehave.Narrator.Framework
             InitializeContext(container);
 
             container.Register<ActionCatalog>().AsSingleton();
+            container.Register<HooksCatalog>().AsSingleton();
             container.Register(configuration);
             container.Register<IStringStepRunner, StringStepRunner>().AsMultiInstance();
             container.Register<ITinyMessengerHub, TinyMessengerHub>().AsSingleton();
@@ -53,6 +55,13 @@ namespace NBehave.Narrator.Framework
 
             container.Resolve<IEnumerable<IMessageProcessor>>();
             container.Resolve<IEnumerable<IModelBuilder>>();
+
+            InitializeHooks(configuration, container.Resolve<HooksCatalog>());
+        }
+
+        private static void InitializeHooks(NBehaveConfiguration configuration, HooksCatalog hooksCatalog)
+        {
+            new LoadHooks(configuration, hooksCatalog).Initialise();
         }
 
         private static void InitializeContext(TinyIoCContainer container)
