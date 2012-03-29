@@ -16,13 +16,13 @@ namespace NBehave.Narrator.Framework.Specifications
                 [Test]
                 public void Running_a_passing_feature()
                 {
-                    TestFeatures.FeatureNamedStory.ExecuteFile(typeof(GreetingSystemActionSteps).Assembly);
+                    TestFeatures.FeatureNamedStory.ExecuteFile(typeof(GreetingSystemActionSteps).Assembly, new TextWriterEventListener(new StringWriter()));
                 }
 
                 [Test]
                 public void Running_a_failing_feature()
                 {
-                    Assert.Throws<StepFailedException>(() => TestFeatures.FeatureWithFailingStep.ExecuteFile(typeof(GreetingSystemActionSteps).Assembly));
+                    Assert.Throws<StepFailedException>(() => TestFeatures.FeatureWithFailingStep.ExecuteFile(typeof(GreetingSystemActionSteps).Assembly, new TextWriterEventListener(new StringWriter())));
                 }
             }
 

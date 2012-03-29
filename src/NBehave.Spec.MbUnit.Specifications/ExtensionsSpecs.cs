@@ -1,12 +1,31 @@
 ﻿using System;
+using System.IO;
 using System.Text.RegularExpressions;
 using Gallio.Framework.Assertions;
 using NUnit.Framework;
 
 namespace NBehave.Spec.MbUnit.Specs
 {
+    public abstract class ConsoleRedirect
+    {
+        private TextWriter outStream;
+
+        [SetUp]
+        public void CaptureConsoleOut()
+        {
+            outStream = Console.Out;
+            Console.SetOut(new StringWriter());
+        }
+
+        [TearDown]
+        public void ResetConsoleOut()
+        {
+            Console.SetOut(outStream);
+        }
+    }
+
 	[TestFixture]
-	public class When_using_BDD_style_language_for_boolean_assertions
+    public class When_using_BDD_style_language_for_boolean_assertions : ConsoleRedirect
 	{
 		[Test]
 		public void Should_allow_substitution_for_IsFalse()
@@ -22,7 +41,7 @@ namespace NBehave.Spec.MbUnit.Specs
 	}
 
 	[TestFixture]
-	public class When_using_BDD_style_language_for_equality_assertions
+    public class When_using_BDD_style_language_for_equality_assertions : ConsoleRedirect
 	{
 		[Test]
 		public void Should_allow_substitution_for_AreEqual()
@@ -63,7 +82,7 @@ namespace NBehave.Spec.MbUnit.Specs
 	}
 
 	[TestFixture]
-	public class When_using_BDD_style_language_for_collection_assertions
+    public class When_using_BDD_style_language_for_collection_assertions : ConsoleRedirect
 	{
 		[Test]
 		public void Should_allow_substitution_for_Contains_on_collections()
@@ -135,7 +154,7 @@ namespace NBehave.Spec.MbUnit.Specs
 	}
 
 	[TestFixture]
-	public class When_using_BDD_style_language_for_integer_assertions
+    public class When_using_BDD_style_language_for_integer_assertions : ConsoleRedirect
 	{
 		[Test]
 		public void Should_allow_substitution_for_Greater()
@@ -169,7 +188,7 @@ namespace NBehave.Spec.MbUnit.Specs
 	}
 
 	[TestFixture]
-	public class When_using_BDD_style_language_for_string_assertions
+    public class When_using_BDD_style_language_for_string_assertions : ConsoleRedirect
 	{
 		[Test]
 		public void Should_allow_substitution_for_IsNotEmpty_for_strings()
@@ -220,10 +239,11 @@ namespace NBehave.Spec.MbUnit.Specs
 		}
 
 		[Test]
-		[ExpectedException(typeof(AssertionFailureException))]
 		public void Should_allow_substitution_for_ShouldNotContain__for_string_failing()
 		{
-			"Lorem ipsum dolor sit amet.".ShouldNotContain("ipsum");
+            Assert.Throws<AssertionFailureException>(
+		        () => "Lorem ipsum dolor sit amet.".ShouldNotContain("ipsum")
+            );
 		}
 
 		[Test]
@@ -234,16 +254,17 @@ namespace NBehave.Spec.MbUnit.Specs
 		}
 
 		[Test]
-		[ExpectedException(typeof(AssertionFailureException))]
 		public void Should_allow_substitution_for_ShouldContain_for_string_failing()
 		{
 			var str = "Hello";
-			str.ShouldContain("Foo");
+            Assert.Throws<AssertionFailureException>(
+			    () => str.ShouldContain("Foo")
+            );
 		}
 }
 
 	[TestFixture]
-	public class When_using_BDD_style_language_for_instance_type_assertions
+    public class When_using_BDD_style_language_for_instance_type_assertions : ConsoleRedirect
 	{
 		[Test]
 		public void Should_allow_substitution_for_IsAssignableFrom()
@@ -287,7 +308,7 @@ namespace NBehave.Spec.MbUnit.Specs
 	}
 
 	[TestFixture]
-	public class When_using_BDD_style_language_for_instance_type_assertions_using_generics
+    public class When_using_BDD_style_language_for_instance_type_assertions_using_generics : ConsoleRedirect
 	{
 		[Test]
 		public void Should_allow_substitution_for_IsAssignableFrom()
@@ -315,7 +336,7 @@ namespace NBehave.Spec.MbUnit.Specs
 	}
 
 	[TestFixture]
-	public class When_specifying_exceptions_to_be_thrown
+    public class When_specifying_exceptions_to_be_thrown : ConsoleRedirect
 	{
 		[Test]
 		[ExpectedException(typeof(AssertionFailureException))]
@@ -350,7 +371,7 @@ namespace NBehave.Spec.MbUnit.Specs
 	}
 
 	[TestFixture]
-	public class When_using_BDD_style_language_for_double_assertions
+    public class When_using_BDD_style_language_for_double_assertions : ConsoleRedirect
 	{
 		[Test]
 		public void Should_allow_substitution_for_Greater()
