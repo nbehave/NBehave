@@ -15,7 +15,7 @@ namespace NBehave.Examples.GameOfLife.Specs
             _game = new Game(width, height);
         }
 
-        [When(@"I toggle the cell at $x, $y")]
+        [When(@"I toggle the cell at ($x, $y)")]
         public void ToggleCell(int x, int y)
         {
             _game.ToggleCell(x, y);
