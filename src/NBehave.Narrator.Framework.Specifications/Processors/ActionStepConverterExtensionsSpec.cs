@@ -67,5 +67,34 @@ namespace NBehave.Narrator.Framework.Specifications.Processors
             var regex = "a <variable>".AsRegex();
             Assert.AreEqual(@"^a\s+(?<variable>.+)\s*$", regex.ToString());
         }
+
+        [Test]
+        public void Should_escape_parentheses()
+        {
+            var regex = "handle () in regex".AsRegex();
+            Assert.AreEqual(@"^handle\s+\(\)\s+in\s+regex\s*$", regex.ToString());            
+        }
+
+        [Test]
+        public void Should_handle_parameter_between_parentheses()
+        {
+            var regex = "I toggle the cell at ($x, $y)".AsRegex();
+            Assert.AreEqual(@"^I\s+toggle\s+the\s+cell\s+at\s+\((?<x>.+),\s+(?<y>.+)\)\s*$", regex.ToString());            
+        }
+
+        [TestCase("this is regex$")]
+        [TestCase("^this is regex")]
+        [TestCase(@"the grid should be\s+(?<rows>(.+\s*)+)")]
+        public void Should_be_regex(string text)
+        {
+            Assert.IsTrue(text.IsRegex());
+        }
+
+        [TestCase("I have $parameter")]
+        [TestCase((string)null)]
+        public void Should_not_be_regex(string text)
+        {
+            Assert.IsFalse(text.IsRegex());
+        }
     }
 }

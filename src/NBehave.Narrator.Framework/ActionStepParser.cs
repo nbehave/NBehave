@@ -185,12 +185,12 @@ namespace NBehave.Narrator.Framework
         private IEnumerable<MethodInfo> GetAllMethodsWithActionStepAttribute(Type actionSteps)
         {
             return
-                from method in
+                (from method in
                     actionSteps.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
                 where
                     method.GetCustomAttributes(typeof(ActionStepAttribute), true).Length > 0 &&
                     _storyRunnerFilter.MethodNameFiler.IsMatch(method.Name)
-                select method;
+                select method).ToList();
         }
 
         private object ChangeType(MethodInfo methodInfo, object parameter, int parameterIndex)

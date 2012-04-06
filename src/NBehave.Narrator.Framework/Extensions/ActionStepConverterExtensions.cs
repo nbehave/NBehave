@@ -14,22 +14,23 @@ namespace NBehave.Narrator.Framework
 
     public static class ActionStepConverterExtensions
     {
-        public const string TokenRegexPattern = @"(?<name>\$[a-zA-Z]\w*)|(?<bracketName>(\[|\<)[a-zA-Z]\w*(\]|\>))";
-        private static readonly Regex _tokenPattern = new Regex(TokenRegexPattern);
-        private static readonly Regex _validRegexGroupName = new Regex(@"[a-zA-Z]\w*");
+        private const string TokenRegexPattern = @"(?<name>\$[a-zA-Z]\w*)|(?<bracketName>(\[|\<)[a-zA-Z]\w*(\]|\>))";
+        private static readonly Regex TokenPattern = new Regex(TokenRegexPattern);
+        private static readonly Regex ValidRegexGroupName = new Regex(@"[a-zA-Z]\w*");
 
         public static Regex AsRegex(this string actionStep)
         {
             var words = actionStep.Split(new[] { ' ', '\n', '\r', '\t' }, StringSplitOptions.RemoveEmptyEntries);
             var regex = "^";
-            foreach (var word in words)
+            foreach (var w in words)
             {
+                var word = w.Replace("(", "\\(").Replace(")", "\\)");
                 if (!WordIsToken(word))
                 {
                     regex += string.Format(@"{0}\s+", word);
                     continue;
                 }
-                var handleBracketName = _tokenPattern.Match(word).Groups["bracketName"].Success ? 1 : 0;
+                var handleBracketName = TokenPattern.Match(word).Groups["bracketName"].Success ? 1 : 0;
                 var groupName = GetValidRegexGroupName(word);
                 var stuffAtStart = word.Substring(0, word.IndexOf(groupName) - 1);
                 var stuffAtEnd = word.Substring(word.IndexOf(groupName) + groupName.Length + handleBracketName);
@@ -55,12 +56,36 @@ namespace NBehave.Narrator.Framework
 
         private static bool WordIsToken(string word)
         {
-            return _tokenPattern.IsMatch(word);
+            return TokenPattern.IsMatch(word);
         }
 
         private static string GetValidRegexGroupName(string word)
         {
-            return _validRegexGroupName.Match(word).Value;
+            return ValidRegexGroupName.Match(word).Value;
+        }
+
+        private static readonly Regex IsCharsAndNumbersOnly = new Regex(@"^(\w|\d|\s)+$");
+        private static readonly Regex IsTokenString = new Regex(TokenRegexPattern);
+        private static readonly Regex IsRegexWithNamedGroup = new Regex(@"\(\?\<\w+\>");
+        public static bool IsRegex(this string regexOrTokenString)
+        {
+            if (string.IsNullOrEmpty(regexOrTokenString))
+                return false;
+
+            if (regexOrTokenString.EndsWith("$") 
+                || regexOrTokenString.StartsWith("^")
+                || IsRegexWithNamedGroup.IsMatch(regexOrTokenString))
+            {
+                return true;
+            }
+
+            if (IsTokenString.IsMatch(regexOrTokenString)
+                || IsCharsAndNumbersOnly.IsMatch(regexOrTokenString))
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

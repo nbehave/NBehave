@@ -30,7 +30,7 @@ namespace NBehave.Gherkin
         {
             var ms = new MemoryStream();
             var sr = new StreamWriter(ms);
-            sr.Write(source.Replace("\r", string.Empty));
+            sr.Write(source);
             sr.Flush();
             ms.Seek(0, SeekOrigin.Begin);
             return new StreamReader(ms);
