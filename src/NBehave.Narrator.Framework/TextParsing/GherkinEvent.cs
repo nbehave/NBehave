@@ -32,6 +32,17 @@ namespace NBehave.Narrator.Framework
             : base(invokeEvent) { }
     }
 
+    public class DocStringEvent : GherkinEvent
+    {
+        public DocStringEvent(string docString, Action invokeEvent)
+            : base(invokeEvent)
+        {
+            DocString = docString;
+        }
+
+        public string DocString { get; private set; }
+    }
+
     public class StepEvent : GherkinEvent
     {
         public StepEvent(string stepText, Action invokeEvent)
@@ -42,6 +53,7 @@ namespace NBehave.Narrator.Framework
 
         public string Step { get; private set; }
     }
+
 
     public class TableEvent : GherkinEvent
     {

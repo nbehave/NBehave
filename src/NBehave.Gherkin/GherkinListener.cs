@@ -17,7 +17,11 @@ namespace NBehave.Gherkin
         }
 
         public void docString(string str, int line)
-        { }
+        {
+            tableAction();
+            var position = new LineInFile(line);
+            listener.DocString(new Token(str.Trim(), position));
+        }
 
         public void feature(string feature, string title, string narrative, int line)
         {

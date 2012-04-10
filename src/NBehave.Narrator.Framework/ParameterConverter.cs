@@ -28,9 +28,21 @@ namespace NBehave.Narrator.Framework
         {
             var action = _actionCatalog.GetAction(stringStep);
 
+            object[] parametersForStep;
             if (IsListStep(action, stringStep))
-                return GetParametersForListStep(action, stringStep);
-            return GetParametersForStep(stringStep, action);
+                parametersForStep = GetParametersForListStep(action, stringStep);
+            else
+                parametersForStep = GetParametersForStep(stringStep, action);
+            AddDocStringParameter(parametersForStep, stringStep);
+            return parametersForStep;
+        }
+
+        private void AddDocStringParameter(object[] parametersForStep, StringStep stringStep)
+        {
+            int last = parametersForStep.Length - 1;
+            if (stringStep.HasDocString == false || parametersForStep[last] != null)
+                return;
+            parametersForStep[last] = stringStep.DocString;
         }
 
         private object[] GetParametersForStep(StringStep stringStep, ActionMethodInfo action)

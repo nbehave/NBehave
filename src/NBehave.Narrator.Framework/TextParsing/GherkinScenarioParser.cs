@@ -45,6 +45,7 @@ namespace NBehave.Narrator.Framework.TextParsing
         public event EventHandler<EventArgs<Scenario>> BackgroundEvent;
         public event EventHandler<EventArgs<IList<IList<Token>>>> TableEvent;
         public event EventHandler<EventArgs<string>> StepEvent;
+        public event EventHandler<EventArgs<string>> DocStringEvent;
         public event EventHandler<EventArgs<string>> TagEvent;
         public event EventHandler<EventArgs> EofEvent;
 
@@ -127,6 +128,12 @@ namespace NBehave.Narrator.Framework.TextParsing
             }
         }
 
+        public void DocString(Token docString)
+        {
+            var docStringText = docString.Content;
+            events.Enqueue(new DocStringEvent(docStringText, () => DocStringEvent.Invoke(this, new EventArgs<string>(docStringText))));
+        }
+
         private IEnumerable<GherkinEvent> FilterByTag()
         {
             var events = GroupEventsByTag.GroupByTag(this.events);
@@ -151,6 +158,7 @@ namespace NBehave.Narrator.Framework.TextParsing
         event EventHandler<EventArgs<Scenario>> BackgroundEvent;
         event EventHandler<EventArgs<IList<IList<Token>>>> TableEvent;
         event EventHandler<EventArgs<string>> StepEvent;
+        event EventHandler<EventArgs<string>> DocStringEvent;
         event EventHandler<EventArgs<string>> TagEvent;
         event EventHandler<EventArgs> EofEvent;
     }

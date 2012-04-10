@@ -275,5 +275,33 @@ namespace NBehave.Narrator.Framework.Specifications
                 _afterStepWasCalled = true;
             }
         }
+
+        [TestFixture]
+        public class When_running_with_step_that_has_docstring : StringStepRunnerSpec
+        {
+            [SetUp]
+            public override void Setup()
+            {
+                base.Setup();
+            }
+
+            [Test]
+            public void ShouldInvokeActionGivenATokenString()
+            {
+                var wasCalled = false;
+                var docString = "";
+                Action<int, string> action = (value, thisIsThedocString) =>
+                {
+                    wasCalled = true;
+                    docString = thisIsThedocString;
+                };
+                actionCatalog.Add(new ActionMethodInfo("a value $value followed by docstring".AsRegex(), action, action.Method, "Given"));
+                var stringStep = new StringStep("Given a value 42 followed by docstring", "");
+                stringStep.AddDocString("docString");
+                runner.Run(stringStep);
+                Assert.IsTrue(wasCalled, "Action was not called");
+                Assert.AreEqual("docString", docString);
+            }
+        }
     }
 }

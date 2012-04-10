@@ -30,7 +30,7 @@ namespace NBehave.Narrator.Framework.Specifications.TextParsing
         }
 
         [Test]
-        public void Should_add_tabsle_steps_to_scenario()
+        public void Should_add_table_steps_to_scenario()
         {
             var gherkinEvents = MockRepository.GenerateStub<IGherkinParserEvents>();
             var stepBuilder = new StepBuilder(gherkinEvents);
@@ -61,5 +61,26 @@ namespace NBehave.Narrator.Framework.Specifications.TextParsing
             Assert.That(scenario.Steps.ToList()[0], Is.TypeOf<StringStep>());
             Assert.That(scenario.Steps.ToList()[1], Is.TypeOf<StringTableStep>());
         }
+
+        [Test]
+        public void Should_add_docstring_to_previous_step()
+        {
+            var gherkinEvents = MockRepository.GenerateStub<IGherkinParserEvents>();
+            var stepBuilder = new StepBuilder(gherkinEvents);
+            var feature = new Feature("title");
+            var scenario = new Scenario("title", "source", feature);
+            gherkinEvents.Raise(_ => _.FeatureEvent += null, this, new EventArgs<Feature>(feature));
+            gherkinEvents.Raise(_ => _.ScenarioEvent += null, this, new EventArgs<Scenario>(scenario));
+            gherkinEvents.Raise(_ => _.StepEvent += null, this, new EventArgs<string>("step 1"));
+            gherkinEvents.Raise(_ => _.StepEvent += null, this, new EventArgs<string>("step 2"));
+            gherkinEvents.Raise(_ => _.DocStringEvent += null, this, new EventArgs<string>("docstring"));
+            gherkinEvents.Raise(_ => _.EofEvent += null, this, new EventArgs());
+
+            Assert.That(scenario.Steps.Count(), Is.EqualTo(2));
+            var step = scenario.Steps.Last();
+            Assert.IsTrue(step.HasDocString);
+            Assert.AreEqual("docstring", step.DocString);
+        }
+
     }
 }

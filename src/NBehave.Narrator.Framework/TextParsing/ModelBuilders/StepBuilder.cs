@@ -20,6 +20,7 @@ namespace NBehave.Narrator.Framework.TextParsing.ModelBuilders
                                                HandlePreviousEvent();
                                                previousStep = e.EventInfo;
                                            };
+            gherkinEvents.DocStringEvent += (s, e) => HandleDocString(e.EventInfo);
             gherkinEvents.FeatureEvent += (s, e) => HandlePreviousEventAndCleanUp();
             gherkinEvents.ExamplesEvent += (s, e) => HandlePreviousEvent();
             gherkinEvents.BackgroundEvent += (s, e) =>
@@ -34,6 +35,14 @@ namespace NBehave.Narrator.Framework.TextParsing.ModelBuilders
                                             };
             gherkinEvents.TagEvent += (s, e) => HandlePreviousEvent();
             gherkinEvents.EofEvent += (s, e) => HandlePreviousEventAndCleanUp();
+        }
+
+        private void HandleDocString(string docString)
+        {
+            if (previousStep == null || scenario == null)
+                return;
+            HandlePreviousEvent();
+            scenario.Steps.Last().AddDocString(docString);
         }
 
         private void HandlePreviousEventAndCleanUp()

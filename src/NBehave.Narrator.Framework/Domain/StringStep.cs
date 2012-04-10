@@ -39,21 +39,29 @@ namespace NBehave.Narrator.Framework
 
         public virtual IEnumerable<MethodParametersType> MatchableStepTypes
         {
-            get { return new[] {MethodParametersType.TypedStep, MethodParametersType.UntypedStep, MethodParametersType.UntypedListStep, MethodParametersType.TypedListStep}; }
+            get { return new[] { MethodParametersType.TypedStep, MethodParametersType.UntypedStep, MethodParametersType.UntypedListStep, MethodParametersType.TypedListStep }; }
         }
 
         public TypeOfStep TypeOfStep
         {
             get
             {
-                var validNames = Enum.GetNames(typeof (TypeOfStep)).ToList();
+                var validNames = Enum.GetNames(typeof(TypeOfStep)).ToList();
                 var firstWord = Step.GetFirstWord();
                 if (validNames.Contains(firstWord))
-                    return (TypeOfStep) Enum.Parse(typeof (TypeOfStep), firstWord, true);
+                    return (TypeOfStep)Enum.Parse(typeof(TypeOfStep), firstWord, true);
                 return TypeOfStep.Unknown;
             }
         }
 
+        public bool HasDocString { get; set; }
+        public string DocString { get; set; }
+
+        public void AddDocString(string docString)
+        {
+            HasDocString = string.IsNullOrEmpty(docString) == false;
+            DocString = docString;
+        }
         public virtual StringStep BuildStep(Example values)
         {
             var template = Step;
