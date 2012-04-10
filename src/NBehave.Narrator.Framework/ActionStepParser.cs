@@ -1,18 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ActionStepParser.cs" company="NBehave">
-//   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
-// </copyright>
-// <summary>
-//   Defines the ActionStepParser type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace NBehave.Narrator.Framework
 {
-    using System;
-    using System.Linq;
-    using System.Reflection;
-
     public class ActionStepParser
     {
         private readonly StoryRunnerFilter storyRunnerFilter;
@@ -117,10 +109,10 @@ namespace NBehave.Narrator.Framework
                 (a, b) =>
                 {
                     var invokeParameters = new[]
-                            {
-                                this.ChangeType(methodInfo, a, 0), 
-                                this.ChangeType(methodInfo, b, 1),
-                            };
+                                                   {
+                                                       ChangeType(methodInfo, a, 0),
+                                                       ChangeType(methodInfo, b, 1),
+                                                   };
                     methodInfo.Invoke(instance, invokeParameters);
                 };
             return action;
@@ -132,11 +124,11 @@ namespace NBehave.Narrator.Framework
                 (a, b, c) =>
                 {
                     var invokeParameters = new[]
-                            {
-                                this.ChangeType(methodInfo, a, 0), 
-                                this.ChangeType(methodInfo, b, 1), 
-                                this.ChangeType(methodInfo, c, 2),
-                            };
+                                                   {
+                                                       ChangeType(methodInfo, a, 0),
+                                                       ChangeType(methodInfo, b, 1),
+                                                       ChangeType(methodInfo, c, 2),
+                                                   };
                     methodInfo.Invoke(instance, invokeParameters);
                 };
             return action;
@@ -148,12 +140,12 @@ namespace NBehave.Narrator.Framework
                 (a, b, c, d) =>
                 {
                     var invokeParameters = new[]
-                            {
-                                this.ChangeType(methodInfo, a, 0), 
-                                this.ChangeType(methodInfo, b, 1), 
-                                this.ChangeType(methodInfo, c, 2),
-                                this.ChangeType(methodInfo, d, 3)
-                            };
+                                                   {
+                                                       ChangeType(methodInfo, a, 0),
+                                                       ChangeType(methodInfo, b, 1),
+                                                       ChangeType(methodInfo, c, 2),
+                                                       ChangeType(methodInfo, d, 3)
+                                                   };
                     methodInfo.Invoke(instance, invokeParameters);
                 };
             return action;
@@ -189,7 +181,7 @@ namespace NBehave.Narrator.Framework
                     actionSteps.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
                 where
                     method.GetCustomAttributes(typeof(ActionStepAttribute), true).Length > 0 &&
-                    _storyRunnerFilter.MethodNameFiler.IsMatch(method.Name)
+                    storyRunnerFilter.MethodNameFiler.IsMatch(method.Name)
                 select method;
         }
 
@@ -202,7 +194,6 @@ namespace NBehave.Narrator.Framework
         {
             return actionMethodInfo.ParameterInfo.Count();
         }
-
 
         private ActionMethodInfo BuildActionMethodInfo(ActionStepAttribute actionStep, MethodInfo method)
         {
@@ -234,6 +225,5 @@ namespace NBehave.Narrator.Framework
 
             return methodName;
         }
-
     }
 }
