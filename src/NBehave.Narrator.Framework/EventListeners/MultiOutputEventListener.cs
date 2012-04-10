@@ -13,26 +13,21 @@ namespace NBehave.Narrator.Framework.EventListeners
 
     public class MultiOutputEventListener : EventListener
     {
-        private readonly IEventListener[] _listeners;
+        private readonly IEventListener[] listeners;
 
         public MultiOutputEventListener(params IEventListener[] listeners)
         {
-            _listeners = listeners;
+            this.listeners = listeners;
         }
 
         public IEventListener[] Listeners
         {
-            get { return _listeners; }
+            get { return listeners; }
         }
 
-        public override void FeatureStarted(string feature)
+        public override void FeatureStarted(Feature feature)
         {
             Invoke(l => l.FeatureStarted(feature));
-        }
-
-        public override void FeatureNarrative(string message)
-        {
-            Invoke(l => l.FeatureNarrative(message));
         }
 
         public override void ScenarioStarted(string scenarioTitle)
@@ -62,7 +57,7 @@ namespace NBehave.Narrator.Framework.EventListeners
 
         private void Invoke(Action<IEventListener> f)
         {
-            foreach (var listener in _listeners)
+            foreach (var listener in listeners)
             {
                 f(listener);
             }

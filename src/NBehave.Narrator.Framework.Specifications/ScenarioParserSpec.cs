@@ -2,37 +2,27 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using NBehave.Narrator.Framework.Processors;
-using NBehave.Narrator.Framework.Tiny;
+using NBehave.Narrator.Framework.TextParsing;
 using NUnit.Framework;
 
-namespace NBehave.Narrator.Framework.Specifications.Text
+namespace NBehave.Narrator.Framework.Specifications
 {
     [TestFixture]
     public abstract class ScenarioParserSpec
     {
+        private List<Scenario> scenarios;
+        private string featureFileName;
+
         private GherkinScenarioParser CreateScenarioParser()
         {
-            TinyIoCContainer container = TinyIoCContainer.Current;
-            container.Register<ITinyMessengerHub, TinyMessengerHub>().AsSingleton();
-            container.RegisterMany<IModelBuilder>().AsSingleton();
-            container.Resolve<IEnumerable<IModelBuilder>>();
-
-            _hub = container.Resolve<ITinyMessengerHub>();
-            _scenarios = new List<Scenario>();
-
-            return new GherkinScenarioParser(_hub, NBehaveConfiguration.New);
+            scenarios = new List<Scenario>();
+            return new GherkinScenarioParser(NBehaveConfiguration.New);
         }
 
         private StringStep NewStringStep(string step)
         {
-            return new StringStep(step, _featureFileName);
+            return new StringStep(step, featureFileName);
         }
-
-        private List<Scenario> _scenarios;
-
-        private ITinyMessengerHub _hub;
-        private string _featureFileName;
 
         private void Parse(string scenario)
         {
@@ -44,16 +34,16 @@ namespace NBehave.Narrator.Framework.Specifications.Text
                                               "    So that I can build a domain model" + Environment.NewLine);
             }
 
-            _featureFileName = Path.GetTempFileName();
+            featureFileName = Path.GetTempFileName();
 
-            using (var fileStream = new StreamWriter(File.Create(_featureFileName)))
+            using (var fileStream = new StreamWriter(File.Create(featureFileName)))
             {
                 fileStream.Write(scenario);
             }
 
             var parser = CreateScenarioParser();
-            _hub.Subscribe<ScenarioBuilt>(built => _scenarios.Add(built.Content));
-            parser.Parse(_featureFileName);
+            parser.ScenarioEvent += (s, e) => scenarios.Add(e.EventInfo);
+            parser.Parse(featureFileName);
         }
 
         [TestFixture]
@@ -74,19 +64,19 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             [Test]
             public void ShouldHaveGivenStep()
             {
-                CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("Given numbers 1 and 2"));
+                CollectionAssert.Contains(scenarios.First().Steps, NewStringStep("Given numbers 1 and 2"));
             }
 
             [Test]
             public void ShouldHaveWhenStep()
             {
-                CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("When I add the numbers"));
+                CollectionAssert.Contains(scenarios.First().Steps, NewStringStep("When I add the numbers"));
             }
 
             [Test]
             public void ShouldHaveThenStep()
             {
-                CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("Then the sum is 3"));
+                CollectionAssert.Contains(scenarios.First().Steps, NewStringStep("Then the sum is 3"));
             }
         }
 
@@ -106,13 +96,13 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             [Test]
             public void ShouldFind3Steps()
             {
-                Assert.That(_scenarios.First().Steps.Count(), Is.EqualTo(3));
+                Assert.That(scenarios.First().Steps.Count(), Is.EqualTo(3));
             }
 
             [Test]
             public void ShouldHaveAScenarioTitle()
             {
-                Assert.That(_scenarios.First().Title, Is.EqualTo("Adding numbers"));
+                Assert.That(scenarios.First().Title, Is.EqualTo("Adding numbers"));
             }
         }
 
@@ -137,14 +127,14 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             [Test]
             public void ShouldFind2Scenarios()
             {
-                Assert.That(_scenarios.Count(), Is.EqualTo(2));
+                Assert.That(scenarios.Count(), Is.EqualTo(2));
             }
 
             [Test]
             public void ShouldHaveAScenarioTitleOnBothScenarios()
             {
-                Assert.That(_scenarios.First().Title, Is.EqualTo("Adding numbers"));
-                Assert.That(_scenarios.Skip(1).First().Title, Is.EqualTo("Adding numbers again"));
+                Assert.That(scenarios.First().Title, Is.EqualTo("Adding numbers"));
+                Assert.That(scenarios.Skip(1).First().Title, Is.EqualTo("Adding numbers again"));
             }
         }
 
@@ -170,13 +160,13 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             [Test]
             public void ShouldFind2Scenarios()
             {
-                Assert.That(_scenarios.Count(), Is.EqualTo(2));
+                Assert.That(scenarios.Count(), Is.EqualTo(2));
             }
 
             [Test]
             public void ShouldHaveAFeatureTitle()
             {
-                Assert.That(_scenarios.First().Feature.Title, Is.EqualTo("Calculator"));
+                Assert.That(scenarios.First().Feature.Title, Is.EqualTo("Calculator"));
             }
         }
 
@@ -204,7 +194,7 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             [Test]
             public void ShouldHaveNarrative()
             {
-                var narrative = _scenarios.First().Feature.Narrative;
+                var narrative = scenarios.First().Feature.Narrative;
                 StringAssert.Contains("This is the narrative" + Environment.NewLine, narrative);
                 StringAssert.Contains("This is second row of narrative", narrative);
             }
@@ -212,13 +202,13 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             [Test]
             public void ShouldFind2Scenarios()
             {
-                Assert.That(_scenarios.Count(), Is.EqualTo(2));
+                Assert.That(scenarios.Count(), Is.EqualTo(2));
             }
 
             [Test]
             public void ShouldHaveAFeatureTitle()
             {
-                Assert.That(_scenarios.First().Feature.Title, Is.EqualTo("Calculator"));
+                Assert.That(scenarios.First().Feature.Title, Is.EqualTo("Calculator"));
             }
         }
 
@@ -243,38 +233,38 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             [Test]
             public void ScenarioShouldHaveTwoExamples()
             {
-                Assert.That(_scenarios.First().Examples.Count(), Is.EqualTo(2));
+                Assert.That(scenarios.First().Examples.Count(), Is.EqualTo(2));
             }
 
             [Test]
             public void ShouldFind3Steps()
             {
-                Assert.That(_scenarios.First().Steps.Count(), Is.EqualTo(3));
+                Assert.That(scenarios.First().Steps.Count(), Is.EqualTo(3));
             }
 
             [Test]
             public void ShouldHaveAScenarioTitle()
             {
-                Assert.That(_scenarios.First().Title, Is.EqualTo("Adding numbers"));
+                Assert.That(scenarios.First().Title, Is.EqualTo("Adding numbers"));
             }
 
             [Test]
             public void ShouldHaveGivenStep()
             {
-                CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("Given numbers [left] and [right]"));
+                CollectionAssert.Contains(scenarios.First().Steps, NewStringStep("Given numbers [left] and [right]"));
             }
 
             [Test]
             public void ShouldHaveThenStep()
             {
-                CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("Then the sum is [sum]"));
+                CollectionAssert.Contains(scenarios.First().Steps, NewStringStep("Then the sum is [sum]"));
             }
         }
 
         public class ScenarioScenarioWithTableOnGiven : ScenarioParserSpec
         {
-            private StringTableStep _givenStep;
-            private StringTableStep _thenStep;
+            private StringTableStep givenStep;
+            private StringTableStep thenStep;
 
             [SetUp]
             public void Scenario()
@@ -293,26 +283,26 @@ namespace NBehave.Narrator.Framework.Specifications.Text
                     "  |Jimmy Nilsson |";
 
                 Parse(scenario);
-                _givenStep = _scenarios.First().Steps.First() as StringTableStep;
-                _thenStep = _scenarios.First().Steps.Last() as StringTableStep;
+                givenStep = scenarios.First().Steps.First() as StringTableStep;
+                thenStep = scenarios.First().Steps.Last() as StringTableStep;
             }
 
             [Test]
             public void GivenStepShouldHaveThreeTableSteps()
             {
-                Assert.That(_givenStep.TableSteps.Count(), Is.EqualTo(3));
+                Assert.That(givenStep.TableSteps.Count(), Is.EqualTo(3));
             }
 
             [Test]
             public void ThenStepShouldHaveTwoTableSteps()
             {
-                Assert.That(_thenStep.TableSteps.Count(), Is.EqualTo(2));
+                Assert.That(thenStep.TableSteps.Count(), Is.EqualTo(2));
             }
 
             [Test]
             public void TableStepColumnNamesShouldBeStoredInLowerCase()
             {
-                var step = _givenStep.TableSteps.First();
+                var step = givenStep.TableSteps.First();
                 CollectionAssert.Contains(step.ColumnNames, new ExampleColumn("Name"));
                 Assert.That(step.ColumnValues["Name"], Is.Not.Null);
             }
@@ -320,19 +310,19 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             [Test]
             public void ShouldHaveGivenStep()
             {
-                CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("Given the following people exists:"));
+                CollectionAssert.Contains(scenarios.First().Steps, NewStringStep("Given the following people exists:"));
             }
 
             [Test]
             public void ShouldHaveWhenStep()
             {
-                CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("When I search for people in sweden"));
+                CollectionAssert.Contains(scenarios.First().Steps, NewStringStep("When I search for people in sweden"));
             }
 
             [Test]
             public void ShouldHaveThenStep()
             {
-                CollectionAssert.Contains(_scenarios.First().Steps, NewStringStep("Then I should get:"));
+                CollectionAssert.Contains(scenarios.First().Steps, NewStringStep("Then I should get:"));
             }
         }
 
@@ -359,13 +349,13 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             [Test]
             public void Feature1ShouldBeReferencedByScenario2()
             {
-                Assert.That(_scenarios.First().Feature.Title, Is.EqualTo("Calculator 1"));
+                Assert.That(scenarios.First().Feature.Title, Is.EqualTo("Calculator 1"));
             }
 
             [Test]
             public void Feature2ShouldBeReferencedByScenario2()
             {
-                Assert.That(_scenarios.Skip(1).First().Feature.Title, Is.EqualTo("Calculator 2"));
+                Assert.That(scenarios.Skip(1).First().Feature.Title, Is.EqualTo("Calculator 2"));
             }
         }
 
@@ -394,14 +384,14 @@ namespace NBehave.Narrator.Framework.Specifications.Text
             [Test]
             public void ShouldHaveAddedBackgroundGivenStepToFeature()
             {
-                var background = _scenarios.First().Feature.Background;
+                var background = scenarios.First().Feature.Background;
                 Assert.That(background.Steps.First().Step, Is.EqualTo("Given this background section declaration"));
             }
 
             [Test]
             public void ShouldHaveAddedBackgroundAndStepToFeature()
             {
-                var background = _scenarios.First().Feature.Background;
+                var background = scenarios.First().Feature.Background;
                 Assert.That(background.Steps.Skip(1).First().Step, Is.EqualTo("And this one"));
             }
         }

@@ -27,13 +27,12 @@ namespace NBehave.Narrator.Framework.Specifications.System.Specs
         [Test]
         public void AllStepsShouldPass()
         {
-            IEnumerable<StepResult> enumerable = _results.SelectMany(_ => _.ScenarioResults).SelectMany(result => result.StepResults);
-            IEnumerable<Result> results = enumerable.Select(stepResult => stepResult.Result);
+            var stepResults = _results.SelectMany(_ => _.ScenarioResults).SelectMany(result => result.StepResults).ToList();
+            var results = stepResults.Select(stepResult => stepResult.Result).ToList();
 
+            Assert.That(results.Count, Is.Not.EqualTo(0));
             foreach (var result in results)
-            {
-                Assert.That(result, Is.TypeOf(typeof(Passed)), result.Message);
-            }
+                Assert.That(result, Is.TypeOf(typeof (Passed)), result.Message);
         }
     }
 

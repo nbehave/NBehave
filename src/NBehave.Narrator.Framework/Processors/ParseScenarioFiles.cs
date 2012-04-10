@@ -1,39 +1,41 @@
 ﻿using System.Collections.Generic;
-using NBehave.Narrator.Framework.Messages;
-using NBehave.Narrator.Framework.Processors;
-using NBehave.Narrator.Framework.Tiny;
+using NBehave.Narrator.Framework.TextParsing;
 
-namespace NBehave.Narrator.Framework.Contracts
+namespace NBehave.Narrator.Framework.Processors
 {
-    public class ParseScenarioFiles : IMessageProcessor
+    public class ParseScenarioFiles
     {
-        private readonly ITinyMessengerHub _hub;
-        private readonly List<Feature> _features;
-        private NBehaveConfiguration _configuration;
+        private readonly NBehaveConfiguration configuration;
 
-        public ParseScenarioFiles(ITinyMessengerHub hub, NBehaveConfiguration configuration)
+        public ParseScenarioFiles(NBehaveConfiguration configuration)
         {
-            _hub = hub;
-            _features = new List<Feature>();
-            _configuration = configuration;
-
-            _hub.Subscribe<ScenarioFilesLoaded>(loaded => OnScenarioFilesLoaded(loaded.Content), true);
-            _hub.Subscribe<FeatureBuilt>(built => _features.Add(built.Content), true);
+            this.configuration = configuration;
         }
 
-        private void OnScenarioFilesLoaded(IEnumerable<string> content)
+        public IEnumerable<Feature> LoadFiles(IEnumerable<string> files)
         {
-            LoadFiles(content);
-            _hub.Publish(new FeaturesLoaded(this, _features));
-        }
-
-        private void LoadFiles(IEnumerable<string> files)
-        {
+            var textParser = new GherkinScenarioParser(configuration);
+            var features = new List<Feature>();
+            Feature feature = null;
+            textParser.FeatureEvent += (s, e) =>
+                                           {
+                                               feature = e.EventInfo;
+                                               features.Add(e.EventInfo);
+                                           };
+            textParser.ScenarioEvent += (s, e) =>
+                                            {
+                                                if (feature == null)
+                                                {
+                                                    feature = e.EventInfo.Feature;
+                                                    features.Add(feature);
+                                                }
+                                            };
             foreach (var file in files)
             {
-                var scenarioTextParser = new GherkinScenarioParser(_hub, _configuration);
-                scenarioTextParser.Parse(file);
+                feature = null;
+                textParser.Parse(file);
             }
+            return features;
         }
     }
 }

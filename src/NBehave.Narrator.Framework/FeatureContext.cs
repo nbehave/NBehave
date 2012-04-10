@@ -1,8 +1,22 @@
+using System.Collections.Generic;
+
 namespace NBehave.Narrator.Framework
 {
     public class FeatureContext : NBehaveContext
     {
-        public string FeatureTitle { get; internal set; }
+        public string FeatureTitle { get { return Feature.Title; } }
+        internal Feature Feature { get; set; }
+
+        public FeatureContext(Feature feature)
+        {
+            Feature = feature;            
+        }
+        
+        public FeatureContext(Feature feature, IEnumerable<string> tags)
+            :this(feature)
+        {
+            AddTags(tags);
+        }
 
         public static FeatureContext Current
         {

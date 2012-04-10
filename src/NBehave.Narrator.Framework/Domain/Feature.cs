@@ -6,12 +6,13 @@
 //   Defines the Feature type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+using System;
+using System.Collections.Generic;
 
 namespace NBehave.Narrator.Framework
 {
-    using System;
-    using System.Collections.Generic;
 
+    [Serializable]
     public class Feature
     {
         public Feature()
@@ -20,7 +21,7 @@ namespace NBehave.Narrator.Framework
         }
 
         public Feature(string title)
-            :this(title,string.Empty)
+            : this(title, string.Empty)
         { }
 
         public Feature(string title, string source)
@@ -31,26 +32,27 @@ namespace NBehave.Narrator.Framework
             Background = new Scenario(String.Empty, string.Empty, this);
         }
 
+        public Feature(string title, string narrative, string source)
+        {
+            Source = source;
+            Scenarios = new List<Scenario>();
+            Title = title;
+            Narrative = narrative;
+            Background = new Scenario(String.Empty, string.Empty, this);
+        }
+
         public string Title { get; private set; }
         public string Narrative { get; set; }
         public string Source { get; private set; }
         public List<Scenario> Scenarios { get; private set; }
 
-        public bool HasTitle
-        {
-            get
-            {
-                return !string.IsNullOrEmpty(Title);
-            }
-        }
-
         public void AddScenario(Scenario scenario)
         {
             scenario.Feature = this;
-            this.Scenarios.Add(scenario);
+            Scenarios.Add(scenario);
         }
 
-        public void ExtractTitleAndNarrative(string content)
+        private void ExtractTitleAndNarrative(string content)
         {
             if (content.Contains(Environment.NewLine))
             {

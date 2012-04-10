@@ -128,7 +128,7 @@
     <Compile Include="EventListeners\FailSpecResultEventListenerSpec.cs" />
     <Compile Include="ConfigurationNoAppDomain.cs" />
     <Compile Include="Extensions\StoryRunnerFilterExtensionsSpec.cs" />
-    <Compile Include="HooksParserSpec.cs" />
+    <Compile Include="HooksSpec.cs" />
     <Compile Include="LoadAndParseScenarioFilesSpec.cs" />
     <Compile Include="ActionStepParserSpec.cs" />
     <Compile Include="EventListeners\CodeGenEventListenerSpec.cs" />
@@ -162,6 +162,7 @@
     <Compile Include="System.Specs\Tables\WhenRunningATableScenario.cs" />
     <Compile Include="System.Specs\Tags\WhenRunningAScenario.cs" />
     <Compile Include="TextParsing\GroupEventsByTagSpec.cs" />
+    <Compile Include="TextParsing\StepBuilderSpec.cs" />
     <Compile Include="TextParsing\TagFilterBuilderSpec.cs" />
     <Compile Include="TextParsing\TagFilterSpec.cs" />
     <Compile Include="TextRunnerSpec.cs" />
@@ -187,6 +188,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Features\FeatureWithTags.feature">
+      <LastGenOutput>GreetingSystem1.feature.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Features\FeatureWithPendingStep.feature">
       <LastGenOutput>GreetingSystem1.feature.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

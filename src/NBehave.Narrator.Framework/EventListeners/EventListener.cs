@@ -14,13 +14,8 @@ namespace NBehave.Narrator.Framework
 {
     public abstract class EventListener : MarshalByRefObject, IEventListener
     {
-        public virtual void FeatureStarted(string feature)
-        {
-        }
-
-        public virtual void FeatureNarrative(string message)
-        {
-        }
+        public virtual void FeatureStarted(Feature feature)
+        { }
 
         public virtual void FeatureFinished(FeatureResult result)
         {

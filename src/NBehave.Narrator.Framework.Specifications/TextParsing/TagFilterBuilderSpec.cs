@@ -1,9 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NBehave.Narrator.Framework.TextParsing;
-using NBehave.Narrator.Framework.Tiny;
 using NUnit.Framework;
-using Rhino.Mocks;
 
 namespace NBehave.Narrator.Framework.Specifications.TextParsing
 {
@@ -15,13 +13,15 @@ namespace NBehave.Narrator.Framework.Specifications.TextParsing
         {
             var tagsToFilter = new List<string[]>();
             var filter = TagFilterBuilder.Build(tagsToFilter);
-            var hub = MockRepository.GenerateStub<ITinyMessengerHub>();
             var events = new GherkinEvent[]
                              {
-                                 new FeatureEvent(hub, "title"), 
-                                 new ScenarioEvent(hub, "title", "@tag1"), 
-                                 new ScenarioEvent(hub, "title", "@tag1", "@tag2"), 
-                                 new EofEvent()
+                                 new FeatureEvent(new Feature("title"), () => { }),
+                                 new TagEvent("@tag1", () => { }), 
+                                 new ScenarioEvent(new Scenario("title", ""), () => { }),
+                                 new TagEvent("@tag1", () => { }), 
+                                 new TagEvent("@tag2", () => { }),
+                                 new ScenarioEvent(new Scenario("title", ""), () => { }),
+                                 new EofEvent(() => { })
                              };
             var filteredEvents = filter.Filter(events).ToList();
             CollectionAssert.AreEqual(events, filteredEvents);
@@ -32,16 +32,18 @@ namespace NBehave.Narrator.Framework.Specifications.TextParsing
         {
             var tagsToFilter = new List<string[]> { new[] { "@tag1", "@tag2" } };
             var filter = TagFilterBuilder.Build(tagsToFilter);
-            var hub = MockRepository.GenerateStub<ITinyMessengerHub>();
-            var events = new GherkinEvent[]
-                             {
-                                 new FeatureEvent(hub, "title"), 
-                                 new ScenarioEvent(hub, "title", "@tag1"), 
-                                 new ScenarioEvent(hub, "title", "@tag3"), 
-                                 new ScenarioEvent(hub, "title", "@tag2"), 
-                                 new ScenarioEvent(hub, "title", "@tag3"), 
-                                 new EofEvent()
-                             };
+            var eventsInQueue = new Queue<GherkinEvent>();
+            eventsInQueue.Enqueue(new FeatureEvent(new Feature("title"), () => { }));
+            eventsInQueue.Enqueue(new TagEvent("@tag1", () => { }));
+            eventsInQueue.Enqueue(new ScenarioEvent(new Scenario("title", ""), () => { }));
+            eventsInQueue.Enqueue(new TagEvent("@tag3", () => { }));
+            eventsInQueue.Enqueue(new ScenarioEvent(new Scenario("title", ""), () => { }));
+            eventsInQueue.Enqueue(new TagEvent("@tag2", () => { }));
+            eventsInQueue.Enqueue(new ScenarioEvent(new Scenario("title", ""), () => { }));
+            eventsInQueue.Enqueue(new TagEvent("@tag3", () => { }));
+            eventsInQueue.Enqueue(new ScenarioEvent(new Scenario("title", ""), () => { }));
+            eventsInQueue.Enqueue(new EofEvent(() => { }));
+            var events = GroupEventsByTag.GroupByTag(eventsInQueue);
             var filteredEvents = filter.Filter(events).ToList();
             Assert.AreEqual(4, filteredEvents.Count);
             //no events with tag3

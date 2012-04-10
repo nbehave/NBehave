@@ -8,22 +8,22 @@ namespace NBehave.TestDriven.Plugin
     /// </summary>
     public class StoryRunnerEventListenerProxy : EventListener
     {
-        private readonly ITestListener _listener;
+        private readonly ITestListener listener;
 
         public StoryRunnerEventListenerProxy(ITestListener listener)
         {
-            _listener = listener;
+            this.listener = listener;
         }
 
-        public override void FeatureStarted(string feature)
+        public override void FeatureStarted(Feature feature)
         {
-            _listener.WriteLine("\tFeature: " + feature, Category.Output);
+            listener.WriteLine("\tFeature: " + feature.Title, Category.Output);
         }
 
         public override void ScenarioFinished(ScenarioResult result)
         {                        
-            _listener.WriteLine(string.Format("\t\tScenario: {0} - {1}", result.ScenarioTitle, result.Result), Category.Info);
-            _listener.TestFinished(
+            listener.WriteLine(string.Format("\t\tScenario: {0} - {1}", result.ScenarioTitle, result.Result), Category.Info);
+            listener.TestFinished(
                 new TestResult
                 {
                     Name = result.ScenarioTitle,

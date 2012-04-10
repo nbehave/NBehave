@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using NBehave.Narrator.Framework.Messages;
 using NBehave.Narrator.Framework.Processors;
-using NBehave.Narrator.Framework.Tiny;
 using NUnit.Framework;
 using Rhino.Mocks;
 
@@ -13,16 +10,14 @@ namespace NBehave.Narrator.Framework.Specifications.Processors
     public class FeatureRunnerSpec
     {
         private FeatureRunner featureRunner;
-        private ITinyMessengerHub hub;
         private ActionCatalog actionCatalog;
 
         [SetUp]
         public void SetUp()
         {
             CreateActionCatalog();
-            hub = MockRepository.GenerateStub<ITinyMessengerHub>();
-            IStringStepRunner stringStepRunner = new StringStepRunner(actionCatalog, hub);
-            featureRunner = new FeatureRunner(hub, stringStepRunner);
+            IStringStepRunner stringStepRunner = new StringStepRunner(actionCatalog);
+            featureRunner = new FeatureRunner(stringStepRunner, MockRepository.GenerateStub<IRunContext>());
         }
 
         private void CreateActionCatalog()
@@ -44,11 +39,10 @@ namespace NBehave.Narrator.Framework.Specifications.Processors
                 var feature = new Feature("title");
                 var scenario = CreateScenarioWithTable(feature);
                 feature.AddScenario(scenario);
-                featureRunner.Run(feature);
-                var args = hub.GetArgumentsForCallsMadeOn(_ => _.Publish<ScenarioResultEvent>(null));
-                Assert.IsNotNull(args);
-                var se = (ScenarioResultEvent)(args[0][0]);
-                Assert.IsTrue(se.Content.HasFailedSteps());
+                var result = featureRunner.Run(feature);
+                Assert.IsNotNull(result);
+                var se = result.ScenarioResults[0];
+                Assert.IsTrue(se.HasFailedSteps());
             }
 
             private Scenario CreateScenarioWithTable(Feature feature)

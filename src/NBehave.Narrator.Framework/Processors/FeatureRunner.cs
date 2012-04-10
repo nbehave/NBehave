@@ -1,30 +1,31 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NBehave.Narrator.Framework.Tiny;
 
 namespace NBehave.Narrator.Framework.Processors
 {
     public class FeatureRunner : IFeatureRunner
     {
-        private readonly ITinyMessengerHub _hub;
-        private readonly IStringStepRunner _stringStepRunner;
+        private readonly IStringStepRunner stringStepRunner;
+        private readonly IRunContext context;
 
-        public FeatureRunner(ITinyMessengerHub hub, IStringStepRunner stringStepRunner)
+        public FeatureRunner(IStringStepRunner stringStepRunner, IRunContext context)
         {
-            _hub = hub;
-            _stringStepRunner = stringStepRunner;
+            this.context = context;
+            this.stringStepRunner = stringStepRunner;
         }
 
-        public void Run(Feature feature)
+        public FeatureResult Run(Feature feature)
         {
+            var featureResult = new FeatureResult();
             foreach (var scenario in feature.Scenarios)
             {
-                _hub.Publish(new ScenarioStartedEvent(this, scenario));
+                context.ScenarioStartedEvent(scenario);
                 ScenarioResult scenarioResult = scenario.Examples.Any() ? RunExamples(scenario) : RunScenario(scenario);
-                _hub.Publish(new ScenarioResultEvent(this, scenarioResult));
-                _hub.Publish(new ScenarioFinishedEvent(this, scenario));
+                featureResult.AddResult(scenarioResult);
+                context.ScenarioFinishedEvent(scenarioResult);
             }
+            return featureResult;
         }
 
         private ScenarioResult RunScenario(Scenario scenario)
@@ -60,6 +61,7 @@ namespace NBehave.Narrator.Framework.Processors
             var stepResults = new List<StepResult>();
             foreach (var step in stepsToRun)
             {
+                context.StepStarted(step);
                 if (failedStep)
                 {
                     step.PendBecauseOfPreviousFailedStep();
@@ -67,20 +69,21 @@ namespace NBehave.Narrator.Framework.Processors
                     continue;
                 }
 
-                _stringStepRunner.Run(step);
+                stringStepRunner.Run(step);
 
                 if (step.StepResult.Result is Failed)
                 {
                     failedStep = true;
                 }
                 stepResults.Add(step.StepResult);
+                context.StepFinished(step.StepResult);
             }
             return stepResults;
         }
 
         private void BeforeScenario()
         {
-            _stringStepRunner.BeforeScenario();
+            stringStepRunner.BeforeScenario();
         }
 
         private void AfterScenario(Scenario scenario, ScenarioResult scenarioResult)
@@ -89,7 +92,7 @@ namespace NBehave.Narrator.Framework.Processors
             {
                 try
                 {
-                    _stringStepRunner.AfterScenario();
+                    stringStepRunner.AfterScenario();
                 }
                 catch (Exception e)
                 {

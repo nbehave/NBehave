@@ -5,31 +5,31 @@ using System.Linq;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.UnitTestFramework;
 using NBehave.Narrator.Framework;
-using NBehave.Narrator.Framework.Messages;
+using NBehave.Narrator.Framework.Processors;
 using NBehave.Narrator.Framework.Tiny;
 
 namespace NBehave.ReSharper.Plugin.UnitTestProvider
 {
     public class MetadataExplorer
     {
-        private readonly IUnitTestProvider _testProvider;
-        private readonly UnitTestElementConsumer _consumer;
-        private readonly IProject _project;
-        private readonly ProjectModelElementEnvoy _projectModel;
-        private readonly IFeatureRunner _featureRunner;
-        private readonly ISolution _solution;
-        private readonly ITinyMessengerHub _hub;
+        private readonly IUnitTestProvider testProvider;
+        private readonly UnitTestElementConsumer consumer;
+        private readonly IProject project;
+        private readonly ProjectModelElementEnvoy projectModel;
+        private readonly IFeatureRunner featureRunner;
+        private readonly ISolution solution;
+        private readonly IRunContextEvents contextEvents;
 
         public MetadataExplorer(IUnitTestProvider provider, ISolution solution, IProject project, UnitTestElementConsumer consumer)
         {
             Initialiser.Initialise();
-            _testProvider = provider;
-            _consumer = consumer;
-            _project = project;
-            _solution = solution;
-            _projectModel = new ProjectModelElementEnvoy(_project);
-            _hub = TinyIoCContainer.Current.Resolve<ITinyMessengerHub>();
-            _featureRunner = TinyIoCContainer.Current.Resolve<IFeatureRunner>();
+            testProvider = provider;
+            this.consumer = consumer;
+            this.project = project;
+            this.solution = solution;
+            projectModel = new ProjectModelElementEnvoy(this.project);
+            featureRunner = TinyIoCContainer.Current.Resolve<IFeatureRunner>();
+            contextEvents = TinyIoCContainer.Current.Resolve<IRunContextEvents>();
         }
 
         public void ExploreProject()
@@ -38,24 +38,25 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
                 .Select(_ => _.Location.FullPath)
                 .ToList();
 
-            IEnumerable<Feature> features = null;
-            var featuresLoadedSubscription = _hub.Subscribe<FeaturesLoaded>(_ => features = _.Content, true);
+            var features = new List<Feature>();
+            EventHandler<EventArgs<Feature>> featureStarted = (s, e) => features.Add(e.EventInfo);
+            contextEvents.OnFeatureStarted += featureStarted;
             try
             {
-                _featureRunner.DryRun(featureFiles);
-                var elements = new FeatureMapper(_testProvider, _projectModel, _solution).MapFeatures(features);
+                featureRunner.DryRun(featureFiles);
+                var elements = new FeatureMapper(testProvider, projectModel, solution).MapFeatures(features);
                 BindFeatures(elements);
             }
             finally
             {
-                _hub.Unsubscribe<FeaturesLoaded>(featuresLoadedSubscription);
+                contextEvents.OnFeatureStarted -= featureStarted;
             }
         }
 
         private IEnumerable<IProjectFile> GetFeatureFilesFromProject()
         {
             var validExtensions = NBehaveConfiguration.FeatureFileExtensions;
-            var featureFiles = _project
+            var featureFiles = project
                 .GetAllProjectFiles()
                 .Where(_ => validExtensions.Any(e => e.Equals(Path.GetExtension(_.Name), StringComparison.CurrentCultureIgnoreCase)))
                 .ToList();
@@ -65,7 +66,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
         private void BindFeatures(IEnumerable<NBehaveUnitTestElementBase> features)
         {
             foreach (var feature in features)
-                _consumer(feature);
+                consumer(feature);
         }
     }
 }

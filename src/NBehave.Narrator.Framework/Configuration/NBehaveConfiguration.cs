@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using NBehave.Narrator.Framework.EventListeners;
-using NBehave.Narrator.Framework.TextParsing.TagFilter;
 
 namespace NBehave.Narrator.Framework
 {
@@ -33,14 +31,13 @@ namespace NBehave.Narrator.Framework
             Assemblies = new List<string>();
         }
 
-        public IEnumerable<string> ScenarioFiles { get; set; }
+        public IEnumerable<string> ScenarioFiles { get; private set; }
         public bool IsDryRun { get; set; }
-        public IEnumerable<string> Assemblies { get; set; }
-        public IEventListener EventListener { get; set; }
-        public StoryRunnerFilter Filter { get; set; }
+        public IEnumerable<string> Assemblies { get; private set; }
+        public IEventListener EventListener { get; private set; }
+        public StoryRunnerFilter Filter { get; private set; }
         public IEnumerable<string[]> TagsFilter { get; private set; }
         public bool CreateAppDomain { get; protected set; }
-
 
         /// <summary>
         ///   Sets a value indicating whether the action steps should be executed or not.

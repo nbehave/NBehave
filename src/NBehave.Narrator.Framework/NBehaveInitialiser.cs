@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using NBehave.Narrator.Framework.EventListeners;
+﻿using NBehave.Narrator.Framework.EventListeners;
 using NBehave.Narrator.Framework.Hooks;
-using NBehave.Narrator.Framework.Messages;
 using NBehave.Narrator.Framework.Processors;
 using NBehave.Narrator.Framework.Tiny;
 
@@ -14,27 +12,26 @@ namespace NBehave.Narrator.Framework
             TinyIoCContainer container = TinyIoCContainer.Current;
             container.Register<IFeatureRunner, FeatureRunner>();
             CommonInitializer.Initialise(container, configuration);
-            if (configuration.CreateAppDomain)
-                RegisterEventListener(configuration.EventListener, container.Resolve<ITinyMessengerHub>());
+            //if (configuration.CreateAppDomain)
+            RegisterEventListener(configuration.EventListener, container.Resolve<IRunContextEvents>());
         }
 
         /// <summary>
         ///   Connects an event listener to our message bus
         /// </summary>
         /// <param name = "listener">The event listener, which will be marshalled from another AppDomain</param>
-        /// <param name = "hub">The message bus</param>
+        /// <param name = "context">Run context event raiser</param>
         /// <remarks>
         ///   We cannot pass the message bus instance to the event listener, since the listener may be in a remote AppDomain
         /// </remarks>
-        private static void RegisterEventListener(IEventListener listener, ITinyMessengerHub hub)
+        private static void RegisterEventListener(IEventListener listener, IRunContextEvents context)
         {
-            hub.Subscribe<FeatureStartedEvent>(_ => listener.FeatureStarted(_.Content), true);
-            hub.Subscribe<FeatureResultEvent>(_ => listener.FeatureFinished(_.Content), true);
-            hub.Subscribe<FeatureNarrativeEvent>(_ => listener.FeatureNarrative(_.Content), true);
-            hub.Subscribe<ScenarioStartedEvent>(_ => listener.ScenarioStarted(_.Content.Title), true);
-            hub.Subscribe<RunStartedEvent>(_ => listener.RunStarted(), true);
-            hub.Subscribe<RunFinishedEvent>(_ => listener.RunFinished(), true);
-            hub.Subscribe<ScenarioResultEvent>(_ => listener.ScenarioFinished(_.Content), true);
+            context.OnRunStarted += (s, e) => listener.RunStarted();
+            context.OnRunFinished += (s, e) => listener.RunFinished();
+            context.OnFeatureStarted += (s, e) => listener.FeatureStarted(e.EventInfo);
+            context.OnFeatureFinished += (s, e) => listener.FeatureFinished(e.EventInfo);
+            context.OnScenarioStarted += (s, e) => listener.ScenarioStarted(e.EventInfo.Title);
+            context.OnScenarioFinished += (s, e) => listener.ScenarioFinished(e.EventInfo);
         }
     }
 
@@ -42,20 +39,13 @@ namespace NBehave.Narrator.Framework
     {
         public static void Initialise(TinyIoCContainer container, NBehaveConfiguration configuration)
         {
-            InitializeContext(container);
-
             container.Register<ActionCatalog>().AsSingleton();
             container.Register<HooksCatalog>().AsSingleton();
+            container.Register<HooksHandler>().AsSingleton();
             container.Register(configuration);
             container.Register<IStringStepRunner, StringStepRunner>().AsMultiInstance();
-            container.Register<ITinyMessengerHub, TinyMessengerHub>().AsSingleton();
 
-            container.RegisterMany<IMessageProcessor>().AsSingleton();
-            container.RegisterMany<IModelBuilder>().AsSingleton();
-
-            container.Resolve<IEnumerable<IMessageProcessor>>();
-            container.Resolve<IEnumerable<IModelBuilder>>();
-
+            InitializeContext(container);
             InitializeHooks(configuration, container.Resolve<HooksCatalog>());
         }
 
@@ -69,6 +59,10 @@ namespace NBehave.Narrator.Framework
             container.Register<FeatureContext>().AsSingleton();
             container.Register<ScenarioContext>().AsSingleton();
             container.Register<StepContext>().AsSingleton();
+            container.Register<IContextHandler, ContextHandler>().AsSingleton();
+            var r = new RunContext(container.Resolve<IContextHandler>(), container.Resolve<HooksHandler>());
+            container.Register<IRunContext>(r);
+            container.Register<IRunContextEvents>(r);
         }
     }
 }

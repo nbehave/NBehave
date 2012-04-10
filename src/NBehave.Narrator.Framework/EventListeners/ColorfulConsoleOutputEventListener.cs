@@ -16,39 +16,29 @@ namespace NBehave.Narrator.Framework.EventListeners
 
     public class ColorfulConsoleOutputEventListener : EventListener
     {
-        private readonly List<ScenarioResult> _allResults = new List<ScenarioResult>();
+        private readonly List<ScenarioResult> allResults = new List<ScenarioResult>();
 
-        public override void FeatureStarted(string feature)
+        public override void FeatureStarted(Feature feature)
         {
-            if (string.IsNullOrEmpty(feature))
+            if (feature == null || string.IsNullOrEmpty(feature.Title))
             {
                 Console.WriteLine();
                 return;
             }
 
-            WriteColorString("Feature: " + feature, ConsoleColor.Cyan);
+            WriteColorString("Feature: " + feature.Title, ConsoleColor.Cyan);
+            WriteColorString(feature.Narrative, ConsoleColor.DarkCyan);
         }
 
         public override void RunStarted()
-        {
-        }
-
-        public override void FeatureNarrative(string narrative)
-        {
-            if (string.IsNullOrEmpty(narrative))
-            {
-                return;
-            }
-
-            WriteColorString(narrative, ConsoleColor.DarkCyan);
-        }
+        { }
 
         public override void RunFinished()
         {
             Console.WriteLine(string.Empty);
             Console.ResetColor();
             var failureText = new StringBuilder("-----------------------------------------" + Environment.NewLine);
-            foreach (var failedActionStepResult in _allResults)
+            foreach (var failedActionStepResult in allResults)
             {
                 if (failedActionStepResult.Result is Failed)
                 {
@@ -73,7 +63,7 @@ namespace NBehave.Narrator.Framework.EventListeners
         {
             WriteBackground(scenarioResult);
             WriteColorString("Scenario: " + scenarioResult.ScenarioTitle + " - " + scenarioResult.Result.ToString().ToUpper(), GetColorForResult(scenarioResult.Result));
-            _allResults.Add(scenarioResult);
+            allResults.Add(scenarioResult);
             foreach (var stepResult in scenarioResult.StepResults)
             {
                 WriteColorString("  " + stepResult.StringStep + " - " + TypeAsString(stepResult), GetColorForResult(stepResult.Result));
@@ -114,7 +104,7 @@ namespace NBehave.Narrator.Framework.EventListeners
         private void WriteSummary()
         {
             var summaryWriter = new SummaryWriter(Console.Out);
-            summaryWriter.WriteCompleteSummary(_allResults);
+            summaryWriter.WriteCompleteSummary(allResults);
         }
 
         private void DoExamplesInScenario(ScenarioExampleResult scenarioExampleResult)

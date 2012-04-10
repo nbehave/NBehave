@@ -3,6 +3,7 @@ using System.Linq;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using NBehave.Narrator.Framework;
 using NBehave.Narrator.Framework.EventListeners;
+using NBehave.Narrator.Framework.Processors;
 using NBehave.Narrator.Framework.Tiny;
 using NBehave.ReSharper.Plugin.UnitTestProvider;
 
@@ -10,9 +11,9 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
 {
     public class NBehaveTaskRunner : RecursiveRemoteTaskRunner
     {
-        private NBehaveConfiguration _config;
-        private IFeatureRunner _runner;
-        private ITinyMessengerHub _hub;
+        private NBehaveConfiguration config;
+        private IFeatureRunner runner;
+        private IRunContextEvents context;
         public const string RunnerId = TestProvider.NBehaveId;
 
         public NBehaveTaskRunner(IRemoteTaskServer server)
@@ -38,9 +39,9 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
         public override void ExecuteRecursive(TaskExecutionNode node)
         {
             Initialiser.Initialise();
-            _config = TinyIoCContainer.Current.Resolve<NBehaveConfiguration>();
-            _runner = TinyIoCContainer.Current.Resolve<IFeatureRunner>();
-            _hub = TinyIoCContainer.Current.Resolve<ITinyMessengerHub>();
+            config = TinyIoCContainer.Current.Resolve<NBehaveConfiguration>();
+            runner = TinyIoCContainer.Current.Resolve<IFeatureRunner>();
+            context = TinyIoCContainer.Current.Resolve<IRunContextEvents>();
             var asm = node.RemoteTask as NBehaveAssemblyTask;
             if (asm == null)
                 return;
@@ -65,16 +66,16 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
 
         private void Run(IEnumerable<NBehaveFeatureTask> tasks)
         {
-            using (var publisher = new ResultPublisher(Server, _hub))
+            using (var publisher = new ResultPublisher(Server, context))
             {
-                _runner.Run(_config.ScenarioFiles);
+                runner.Run(config.ScenarioFiles);
                 publisher.PublishResults(tasks);
             }
         }
 
         private void ModifyConfig(IEnumerable<string> featureFiles, IEnumerable<string> assemblies, EventListener evtListener)
         {
-            _config
+            config
                 .SetAssemblies(assemblies)
                 .SetEventListener(evtListener)
                 .SetScenarioFiles(featureFiles);

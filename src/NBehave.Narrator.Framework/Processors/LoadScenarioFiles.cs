@@ -2,33 +2,25 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using NBehave.Narrator.Framework.Messages;
-using NBehave.Narrator.Framework.Processors;
-using NBehave.Narrator.Framework.Tiny;
 
-namespace NBehave.Narrator.Framework.Contracts
+namespace NBehave.Narrator.Framework.Processors
 {
-    public class LoadScenarioFiles : IMessageProcessor
+    public class LoadScenarioFiles
     {
-        private readonly NBehaveConfiguration _configuration;
-        private readonly ITinyMessengerHub _hub;
+        private readonly NBehaveConfiguration configuration;
 
-        public LoadScenarioFiles(NBehaveConfiguration configuration, ITinyMessengerHub hub)
+        public LoadScenarioFiles(NBehaveConfiguration configuration)
         {
-            _configuration = configuration;
-            _hub = hub;
-
-            _hub.Subscribe<RunStartedEvent>(started => Initialise(), true);
+            this.configuration = configuration;
         }
 
-        public void Initialise()
+        public IEnumerable<string> LoadFiles()
         {
-            IEnumerable<string> files = _configuration
+            IEnumerable<string> files = configuration
                 .ScenarioFiles
-                .Select(loc => GetFiles(loc))
-                .SelectMany(enumerable => enumerable);
-
-            _hub.Publish(new ScenarioFilesLoaded(this, files));
+                .Select(_ => GetFiles(_))
+                .SelectMany(_ => _);
+            return files.ToList();
         }
 
         private IEnumerable<string> GetFiles(string location)
@@ -41,9 +33,9 @@ namespace NBehave.Narrator.Framework.Contracts
             else
             {
                 var absoluteLocation = GetAbsolutePath(location);
-                var path = Path.GetFileName(absoluteLocation);
-                var pattern = Path.GetDirectoryName(absoluteLocation);
-                files = Directory.GetFiles(pattern, path);
+                var pattern = Path.GetFileName(absoluteLocation);
+                var path = Path.GetDirectoryName(absoluteLocation);
+                files = Directory.GetFiles(path, pattern, SearchOption.AllDirectories);
             }
 
             return files;

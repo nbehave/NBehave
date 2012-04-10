@@ -6,10 +6,13 @@
 //   Defines the Scenario type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using System;
 using System.Collections.Generic;
 
 namespace NBehave.Narrator.Framework
 {
+    [Serializable]
     public class Scenario
     {
         private readonly List<StringStep> _steps;
@@ -38,7 +41,7 @@ namespace NBehave.Narrator.Framework
             _source = source;
         }
 
-        public string Title { get; set; }
+        public string Title { get; private set; }
 
         public Feature Feature { get; set; }
 

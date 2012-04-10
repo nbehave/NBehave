@@ -1,13 +1,11 @@
-﻿using System.IO;
-using NBehave.Narrator.Framework.Processors;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
-namespace NBehave.Narrator.Framework.Specifications.System.Specs
+namespace NBehave.Narrator.Framework.Specifications.System.Specs.Scenarios
 {
     [TestFixture]
     public class WhenRunningAScenarioWithoutAFeature : SystemTestContext
     {
-        private ScenarioMustHaveFeatureException _exception;
+        private FeatureResults result;
 
         protected override void EstablishContext()
         {
@@ -16,20 +14,15 @@ namespace NBehave.Narrator.Framework.Specifications.System.Specs
 
         protected override void Because()
         {
-            try
-            {
-                _config.Build().Run();
-            }
-            catch (ScenarioMustHaveFeatureException exception)
-            {
-                _exception = exception;
-            }
+            result = _config.Build().Run();
         }
 
         [Test]
         public void AllStepsShouldPass()
         {
-            Assert.That(_exception, Is.Not.Null);
+            Assert.That(result.NumberOfPassingScenarios, Is.GreaterThan(0));
+            Assert.That(result.NumberOfFailingScenarios, Is.EqualTo(0));
+            Assert.That(result.NumberOfPendingScenarios, Is.EqualTo(0));
         }
     }
 

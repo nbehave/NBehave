@@ -1,34 +1,32 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using NBehave.Narrator.Framework.Tiny;
+using NBehave.Gherkin;
 
-namespace NBehave.Narrator.Framework.Processors
+namespace NBehave.Narrator.Framework.TextParsing.ModelBuilders
 {
-    internal class ExamplesBuilder : AbstracModelBuilder
+    public class ExamplesBuilder
     {
-        private readonly ITinyMessengerHub _hub;
-        private Scenario _scenario;
-        private bool _listenToParsedTable;
+        private Scenario scenario;
+        private bool listenToParsedTable;
 
-        public ExamplesBuilder(ITinyMessengerHub hub)
-            : base(hub)
+        public ExamplesBuilder(IGherkinParserEvents gherkinEvents)
         {
-            _hub = hub;
-
-            _hub.Subscribe<ScenarioBuilt>(built => _scenario = built.Content, true);
-            _hub.Subscribe<EnteringExamples>(_ => _listenToParsedTable = true, true);
-            _hub.Subscribe<ParsedTable>(ExtractExamplesFromTable, _ => _listenToParsedTable);
+            gherkinEvents.FeatureEvent += (s, e) => Cleanup();
+            gherkinEvents.EofEvent += (s, e) => Cleanup();
+            gherkinEvents.ScenarioEvent += (sender, evt) => { scenario = evt.EventInfo; };
+            gherkinEvents.ExamplesEvent += (sender, evt) => { listenToParsedTable = true; };
+            gherkinEvents.TableEvent += (sender, evt) => ExtractExamplesFromTable(evt.EventInfo);
         }
 
-        private void ExtractExamplesFromTable(ParsedTable table)
+        private void ExtractExamplesFromTable(IList<IList<Token>> table)
         {
-            if (!_listenToParsedTable)
+            if (!listenToParsedTable)
                 return;
 
-            var columns = table.Content.First().Select(token => new ExampleColumn(token.Content)).ToList();
+            var columns = table.First().Select(token => new ExampleColumn(token.Content)).ToList();
             var exampleColumns = new ExampleColumns(columns);
 
-            foreach (var list in table.Content.Skip(1))
+            foreach (var list in table.Skip(1))
             {
                 var example = list.Select(token => token.Content);
                 var row = new Dictionary<string, string>();
@@ -36,15 +34,15 @@ namespace NBehave.Narrator.Framework.Processors
                 for (int i = 0; i < example.Count(); i++)
                     row.Add(exampleColumns[i].Name.ToLower(), example.ElementAt(i));
 
-                _scenario.AddExamples(new List<Example> { new Example(exampleColumns, row) });
+                scenario.AddExamples(new List<Example> { new Example(exampleColumns, row) });
             }
-            _listenToParsedTable = false;
+            listenToParsedTable = false;
         }
 
-        public override void Cleanup()
+        private void Cleanup()
         {
-            _listenToParsedTable = false;
-            _scenario = null;
+            listenToParsedTable = false;
+            scenario = null;
         }
     }
 }

@@ -6,24 +6,23 @@
 //   Defines the TextWriterEventListener type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace NBehave.Narrator.Framework.EventListeners
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-
     public class TextWriterEventListener : EventListener, IDisposable
     {
-        private readonly TextWriter _writer;
+        private readonly TextWriter writer;
 
-        private readonly List<ScenarioResult> _allResults = new List<ScenarioResult>();
+        private readonly List<ScenarioResult> allResults = new List<ScenarioResult>();
 
-        private bool _disposed;
+        private bool disposed;
 
         public TextWriterEventListener(TextWriter writer)
         {
-            _writer = writer;
+            this.writer = writer;
         }
 
         void IDisposable.Dispose()
@@ -31,60 +30,56 @@ namespace NBehave.Narrator.Framework.EventListeners
             Dispose(true);
         }
 
-        public override void FeatureStarted(string feature)
+        public override void FeatureStarted(Feature feature)
         {
-            _writer.WriteLine("Feature: {0}", feature);
-        }
-
-        public override void FeatureNarrative(string message)
-        {
-            _writer.WriteLine(message);
+            writer.WriteLine("Feature: {0}", feature.Title);
+            writer.WriteLine(feature.Narrative);
         }
 
         public override void ScenarioStarted(string scenarioTitle)
         {
-            _writer.WriteLine("Scenario: {0}", scenarioTitle);
+            writer.WriteLine("Scenario: {0}", scenarioTitle);
         }
 
         public override void RunFinished()
         {
             WriteSummary();
-            _writer.Flush();
+            writer.Flush();
         }
 
         public override void ScenarioFinished(ScenarioResult result)
         {
-            _allResults.Add(result);
+            allResults.Add(result);
             foreach (var actionStepResult in result.StepResults)
             {
                 var msg = (actionStepResult.Result is Passed) ? string.Empty : " - " + actionStepResult.Result.ToString().ToUpper();
-                _writer.WriteLine(actionStepResult.StringStep + msg);
+                writer.WriteLine(actionStepResult.StringStep + msg);
             }
         }
 
         protected virtual void Dispose(bool disposing)
         {
-            if (_disposed)
+            if (disposed)
             {
                 return;
             }
 
             if (disposing)
             {
-                if (_writer != null)
+                if (writer != null)
                 {
-                    _writer.Flush();
-                    _writer.Close();
+                    writer.Flush();
+                    writer.Close();
                 }
             }
 
-            _disposed = true;
+            disposed = true;
         }
 
         private void WriteSummary()
         {
-            var summaryWriter = new SummaryWriter(_writer);
-            summaryWriter.WriteCompleteSummary(_allResults);
+            var summaryWriter = new SummaryWriter(writer);
+            summaryWriter.WriteCompleteSummary(allResults);
         }
     }
 }

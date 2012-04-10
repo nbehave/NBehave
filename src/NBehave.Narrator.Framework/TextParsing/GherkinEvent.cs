@@ -1,60 +1,90 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using NBehave.Gherkin;
-using NBehave.Narrator.Framework.Tiny;
 
 namespace NBehave.Narrator.Framework
 {
-
     public class FeatureEvent : GherkinEvent
     {
-        public FeatureEvent(ITinyMessengerHub hub, string titleAndNarrative, params string[] tags)
-            : base(() => hub.Publish(new ParsedFeature(hub, titleAndNarrative)), tags) { }
+        public Feature Feature { get; private set; }
+
+        public FeatureEvent(Feature feature, Action invokeEvent)
+            : base(invokeEvent)
+        {
+            Feature = feature;
+        }
+
     }
     public class ScenarioEvent : GherkinEvent
     {
-        public ScenarioEvent(ITinyMessengerHub hub, string scenarioTitle, params string[] tags)
-            : base(() => hub.Publish(new ParsedScenario(hub, scenarioTitle)), tags) { }
+        public Scenario Scenario { get; set; }
+
+        public ScenarioEvent(Scenario scenario, Action invokeEvent)
+            : base(invokeEvent)
+        {
+            Scenario = scenario;
+        }
     }
+
     public class ExamplesEvent : GherkinEvent
     {
-        public ExamplesEvent(ITinyMessengerHub hub, params string[] tags)
-            : base(() => hub.Publish(new EnteringExamples(hub)), tags) { }
+        public ExamplesEvent(Action invokeEvent)
+            : base(invokeEvent) { }
     }
+
     public class StepEvent : GherkinEvent
     {
-        public StepEvent(ITinyMessengerHub hub, string stepText, params string[] tags)
-            : base(() => hub.Publish(new ParsedStep(hub, stepText)), tags) { }
+        public StepEvent(string stepText, Action invokeEvent)
+            : base(invokeEvent)
+        {
+            Step = stepText;
+        }
+
+        public string Step { get; private set; }
     }
+
     public class TableEvent : GherkinEvent
     {
-        public TableEvent(ITinyMessengerHub hub, IList<IList<Token>> columns, params string[] tags)
-            : base(() => hub.Publish(new ParsedTable(hub, columns)), tags) { }
+        public IList<IList<Token>> Columns { get; private set; }
+
+        public TableEvent(IList<IList<Token>> columns, Action invokeEvent)
+            : base(invokeEvent)
+        {
+            Columns = columns;
+        }
     }
+    
     public class BackgroundEvent : GherkinEvent
     {
-        public BackgroundEvent(ITinyMessengerHub hub, string backgroundTitle, params string[] tags)
-            : base(() => hub.Publish(new ParsedBackground(hub, backgroundTitle)), tags) { }
+        public Scenario Scenario { get; set; }
+
+        public BackgroundEvent(Scenario scenario, Action invokeEvent)
+            : base(invokeEvent)
+        {
+            Scenario = scenario;
+        }
     }
+    
     public class TagEvent : GherkinEvent
     {
-        public TagEvent(ITinyMessengerHub hub, string tag)
-            : base(() => hub.Publish(new ParsedTag(hub, tag)), tag) { }
+        public TagEvent(string tag, Action invokeEvent)
+            : base(invokeEvent) { Tags.Add(tag); }
     }
+    
     public class EofEvent : GherkinEvent
     {
-        public EofEvent()
-            : base(() => { }) { }
+        public EofEvent( Action invokeEvent)
+            : base(invokeEvent) { }
     }
-    public abstract class GherkinEvent : IEquatable<GherkinEvent>
+    
+    public abstract class GherkinEvent : EventArgs, IEquatable<GherkinEvent>
     {
         private readonly Action eventAction;
 
-        protected GherkinEvent(Action eventAction, params string[] tags)
+        protected GherkinEvent(Action eventAction)
         {
             this.eventAction = eventAction;
-            Tags = tags.ToList();
+            Tags = new List<string>();
         }
 
         public List<string> Tags { get; private set; }

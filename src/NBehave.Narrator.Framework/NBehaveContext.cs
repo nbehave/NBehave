@@ -4,6 +4,19 @@ namespace NBehave.Narrator.Framework
 {
     public abstract class NBehaveContext : Dictionary<string, object>
     {
+        private readonly List<string> tags = new List<string>();
+        public IEnumerable<string> Tags { get { return tags; } }
+
+        internal void AddTags(IEnumerable<string> tagsToAdd)
+        {
+            tags.AddRange(tagsToAdd);
+        }
+
+        internal void ClearTags()
+        {
+            tags.Clear();
+        }
+
         public T Get<T>(string key)
         {
             return (T)this[key];

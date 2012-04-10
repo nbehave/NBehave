@@ -1,22 +1,31 @@
-﻿namespace NBehave.Narrator.Framework.Processors
+﻿using NBehave.Narrator.Framework.TextParsing;
+
+namespace NBehave.Narrator.Framework.Processors
 {
-    using NBehave.Narrator.Framework.Tiny;
-
-    internal class FeatureBuilder : AbstracModelBuilder
+    public class FeatureBuilder
     {
-        private readonly ITinyMessengerHub _hub;
-        private string _file;
+        Feature feature;
 
-        public FeatureBuilder(ITinyMessengerHub hub)
-            : base(hub)
+        public FeatureBuilder(IGherkinParserEvents gherkinParser)
         {
-            _hub = hub;
-            _hub.Subscribe<ParsingFileStart>(file => _file = file.Content, true);
-            _hub.Subscribe<ParsedFeature>(message =>
-                {
-                    var feature = new Feature(message.Content, _file);
-                    _hub.Publish(new FeatureBuilt(this, feature));
-                }, true);
+            gherkinParser.FeatureEvent += (s, e) => { feature = e.EventInfo; };
+            gherkinParser.ScenarioEvent += (s, e) =>
+                                               {
+                                                   CreateFeatureIfNull(e.EventInfo.Source);
+                                                   feature.AddScenario(e.EventInfo);
+                                               };
+            gherkinParser.BackgroundEvent += (s, e) =>
+                                                 {
+                                                     CreateFeatureIfNull(e.EventInfo.Source);
+                                                     feature.AddBackground(e.EventInfo);
+                                                 };
+            gherkinParser.EofEvent += (s, e) => { feature = null; };
+        }
+
+        private void CreateFeatureIfNull(string source)
+        {
+            if (feature == null)
+                feature = new Feature("", source);
         }
     }
 }

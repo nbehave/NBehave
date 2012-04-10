@@ -1,60 +1,53 @@
 using System.Collections.Generic;
 using NBehave.Narrator.Framework;
-using NBehave.Narrator.Framework.Messages;
+using NBehave.Narrator.Framework.Processors;
 using NBehave.Narrator.Framework.Tiny;
 
 namespace NBehave.ReSharper.Plugin
 {
     public class FeatureRunner : IFeatureRunner, Narrator.Framework.Processors.IFeatureRunner
     {
-        private readonly NBehaveConfiguration _configuration;
-        private readonly IStringStepRunner _stringStepRunner;
-        private readonly ITinyMessengerHub _hub;
+        private readonly NBehaveConfiguration configuration;
+        private readonly IStringStepRunner stringStepRunner;
+        private readonly IRunContext context;
 
         public FeatureRunner()
         {
-            _configuration = TinyIoCContainer.Current.Resolve<NBehaveConfiguration>();
-            _stringStepRunner = TinyIoCContainer.Current.Resolve<IStringStepRunner>();
-            _hub = TinyIoCContainer.Current.Resolve<ITinyMessengerHub>();
+            configuration = TinyIoCContainer.Current.Resolve<NBehaveConfiguration>();
+            stringStepRunner = TinyIoCContainer.Current.Resolve<IStringStepRunner>();
+            context = TinyIoCContainer.Current.Resolve<IRunContext>();
         }
 
-        void IFeatureRunner.Run(IEnumerable<string> featureFiles)
+        FeatureResults IFeatureRunner.Run(IEnumerable<string> featureFiles)
         {
-            _configuration.IsDryRun = false;
-            Run(featureFiles);
+            configuration.IsDryRun = false;
+            return Run(featureFiles);
         }
 
-        public void DryRun(IEnumerable<string> featureFiles)
+        public FeatureResults DryRun(IEnumerable<string> featureFiles)
         {
-            _configuration.IsDryRun = true;
-            Run(featureFiles);
+            configuration.IsDryRun = true;
+            return Run(featureFiles);
         }
 
-        private void Run(IEnumerable<string> featureFiles)
+        private FeatureResults Run(IEnumerable<string> featureFiles)
         {
-            _configuration.SetScenarioFiles(featureFiles);
-
-            try
-            {
-                _hub.Publish(new RunStartedEvent(this));
-            }
-            finally
-            {
-                _hub.Publish(new RunFinishedEvent(this));
-            }
+            configuration.SetScenarioFiles(featureFiles);
+            var t = new TextRunner(configuration);
+            return t.Run();
         }
 
-        void Narrator.Framework.Processors.IFeatureRunner.Run(Feature feature)
+        FeatureResult Narrator.Framework.Processors.IFeatureRunner.Run(Feature feature)
         {
-            if (_configuration.IsDryRun)
-                return ;
-            DoRun(feature);
+            if (configuration.IsDryRun)
+                return new FeatureResult();
+            return DoRun(feature);
         }
 
-        private void DoRun(Feature feature)
+        private FeatureResult DoRun(Feature feature)
         {
-            var runner = new Narrator.Framework.Processors.FeatureRunner(_hub, _stringStepRunner);
-            runner.Run(feature);
+            var runner = new Narrator.Framework.Processors.FeatureRunner(stringStepRunner, context);
+            return runner.Run(feature);
         }
     }
 }

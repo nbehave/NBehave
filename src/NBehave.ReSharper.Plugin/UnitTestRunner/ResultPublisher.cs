@@ -3,30 +3,29 @@ using System.Collections.Generic;
 using System.Linq;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using NBehave.Narrator.Framework;
-using NBehave.Narrator.Framework.Tiny;
+using NBehave.Narrator.Framework.Processors;
 
 namespace NBehave.ReSharper.Plugin.UnitTestRunner
 {
     public class ResultPublisher : IDisposable
     {
-        private readonly IRemoteTaskServer _server;
-        private readonly ITinyMessengerHub _hub;
-        readonly Dictionary<string, List<ScenarioResult>> _featureResults = new Dictionary<string, List<ScenarioResult>>();
-        private readonly TinyMessageSubscriptionToken _featureStartedEventSubscription;
-        private readonly TinyMessageSubscriptionToken _scenarioResultEventSubscription;
-        private bool _disposed;
+        readonly IRemoteTaskServer server;
+        readonly IRunContextEvents contextEvents;
+        readonly Dictionary<string, List<ScenarioResult>> featureResults = new Dictionary<string, List<ScenarioResult>>();
+        bool disposed;
 
-        public ResultPublisher(IRemoteTaskServer server, ITinyMessengerHub hub)
+        string title = "";
+        readonly EventHandler<EventArgs<Feature>> featureStarted;
+        readonly EventHandler<EventArgs<FeatureResult>> featureFinished;
+
+        public ResultPublisher(IRemoteTaskServer server, IRunContextEvents contextEvents)
         {
-            _server = server;
-            _hub = hub;
-            var featureResult = new List<ScenarioResult>();
-            _featureStartedEventSubscription = _hub.Subscribe<FeatureStartedEvent>(_ =>
-            {
-                featureResult = new List<ScenarioResult>();
-                _featureResults.Add(_.Content, featureResult);
-            }, true);
-            _scenarioResultEventSubscription = _hub.Subscribe<ScenarioResultEvent>(_ => featureResult.Add(_.Content), true);
+            this.server = server;
+            this.contextEvents = contextEvents;
+            featureStarted = (s, e) => { title = e.EventInfo.Title; };
+            featureFinished = (s, e) => featureResults.Add(title, e.EventInfo.ScenarioResults.ToList()); contextEvents.OnFeatureFinished += featureFinished;
+            contextEvents.OnFeatureStarted += featureStarted;
+            contextEvents.OnFeatureFinished += featureFinished;
         }
 
         public void PublishResults(IEnumerable<NBehaveFeatureTask> tasks)
@@ -41,14 +40,14 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
         private IEnumerable<ScenarioResult> FindScenarioResultsForFeatureTask(NBehaveFeatureTask task)
         {
             List<ScenarioResult> featureResult;
-            if (_featureResults.TryGetValue(task.FeatureTitle, out featureResult))
+            if (featureResults.TryGetValue(task.FeatureTitle, out featureResult))
                 return featureResult;
             return new List<ScenarioResult>();
         }
 
         private void PublishFeatureResults(IEnumerable<ScenarioResult> results, NBehaveFeatureTask task)
         {
-            _server.TaskProgress(task, "");
+            server.TaskProgress(task, "");
             PublishTaskResult(task, results);
         }
 
@@ -61,16 +60,16 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
             if (taskResult == TaskResult.Inconclusive)
             {
                 taskResultMessage = "Pending";
-                _server.TaskExplain(task, "See pending step(s) for more information");
+                server.TaskExplain(task, "See pending step(s) for more information");
             }
             if (taskResult == TaskResult.Error)
             {
-                var failure =  results.First(_ => _.Result is Failed).Result as Failed;
+                var failure = results.First(_ => _.Result is Failed).Result as Failed;
                 taskResultMessage = failure.Exception.Message;
                 var te = new TaskException(failure.Exception);
-                _server.TaskException(task, new[] { te });
+                server.TaskException(task, new[] { te });
             }
-            _server.TaskFinished(task, taskResultMessage, taskResult);
+            server.TaskFinished(task, taskResultMessage, taskResult);
         }
 
         private TaskResult GetTaskResult(IEnumerable<ScenarioResult> results)
@@ -90,11 +89,11 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
 
         private void Dispose(bool disposing)
         {
-            if (disposing && !_disposed)
+            if (disposing && !disposed)
             {
-                _disposed = true;
-                _hub.Unsubscribe<FeatureStartedEvent>(_featureStartedEventSubscription);
-                _hub.Unsubscribe<ScenarioResultEvent>(_scenarioResultEventSubscription);
+                disposed = true;
+                contextEvents.OnFeatureStarted += featureStarted;
+                contextEvents.OnFeatureFinished += featureFinished;
             }
         }
     }

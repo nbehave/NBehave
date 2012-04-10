@@ -6,13 +6,13 @@ namespace NBehave.Narrator.Framework.TextParsing.TagFilter
 {
     public abstract class TagFilter
     {
-        protected readonly List<string> theseTags;
-        protected readonly List<string> notTheseTags;
+        protected readonly List<string> TheseTags;
+        protected readonly List<string> NotTheseTags;
 
         protected TagFilter(string[] tags)
         {
-            theseTags = tags.Where(_ => _.StartsWith("~") == false).ToList();
-            notTheseTags = tags.Where(_ => _.StartsWith("~")).Select(_ => _.Substring(1)).ToList();
+            TheseTags = tags.Where(_ => _.StartsWith("~") == false).ToList();
+            NotTheseTags = tags.Where(_ => _.StartsWith("~")).Select(_ => _.Substring(1)).ToList();
         }
 
         public IEnumerable<GherkinEvent> Filter(IEnumerable<GherkinEvent> events)
@@ -96,8 +96,8 @@ namespace NBehave.Narrator.Framework.TextParsing.TagFilter
         {
 
             var scenarioEvents = events.Where(_ => _ is ScenarioEvent).ToList();
-            var includeOperand = scenarioEvents.Where(_ => theseTags.Intersect(_.Tags).Any()).ToList();
-            var includeOperand2 = notTheseTags.Any() ? scenarioEvents.Except(scenarioEvents.Where(_ => notTheseTags.Intersect(_.Tags).Any()).ToList()) : new GherkinEvent[0];
+            var includeOperand = scenarioEvents.Where(_ => TheseTags.Intersect(_.Tags).Any()).ToList();
+            var includeOperand2 = NotTheseTags.Any() ? scenarioEvents.Except(scenarioEvents.Where(_ => NotTheseTags.Intersect(_.Tags).Any()).ToList()) : new GherkinEvent[0];
             var scenarioEventsToKeep = includeOperand.Union(includeOperand2).Distinct().ToList();
             return FilterEvents(scenarioEventsToKeep, events).ToList();
         }

@@ -9,21 +9,18 @@
 using System;
 using System.Globalization;
 using System.Reflection;
-using NBehave.Narrator.Framework.Tiny;
 
 namespace NBehave.Narrator.Framework
 {
     public class StringStepRunner : IStringStepRunner
     {
-        private ActionMethodInfo _lastAction;
+        private ActionMethodInfo lastAction;
 
-        private bool _isFirstStepInScenario = true;
-        private readonly ITinyMessengerHub _hub;
+        private bool isFirstStepInScenario = true;
 
-        public StringStepRunner(ActionCatalog actionCatalog, ITinyMessengerHub hub)
+        public StringStepRunner(ActionCatalog actionCatalog)
         {
             ActionCatalog = actionCatalog;
-            _hub = hub;
             ParameterConverter = new ParameterConverter(ActionCatalog);
         }
 
@@ -54,22 +51,22 @@ namespace NBehave.Narrator.Framework
 
         public void OnCloseScenario()
         {
-            if (_lastAction != null)
+            if (lastAction != null)
             {
-                _lastAction.ExecuteNotificationMethod(typeof(AfterScenarioAttribute));
+                lastAction.ExecuteNotificationMethod(typeof(AfterScenarioAttribute));
             }
         }
 
         public void BeforeScenario()
         {
-            _isFirstStepInScenario = true;
+            isFirstStepInScenario = true;
         }
 
         public void AfterScenario()
         {
-            if (_lastAction != null)
+            if (lastAction != null)
             {
-                _lastAction.ExecuteNotificationMethod(typeof(AfterScenarioAttribute));
+                lastAction.ExecuteNotificationMethod(typeof(AfterScenarioAttribute));
             }
         }
 
@@ -87,7 +84,7 @@ namespace NBehave.Narrator.Framework
 
             try
             {
-                PublishStepStartedEvent(actionStep);
+                //TODO: Move Before-/After-EachStep to RunContext !!
                 BeforeEachScenario(info);
                 BeforeEachStep(info);
                 if (actionStep is StringTableStep && !ShouldForEachOverStep(info))
@@ -97,9 +94,8 @@ namespace NBehave.Narrator.Framework
             }
             finally
             {
-                _lastAction = info;
+                lastAction = info;
                 AfterEachStep(info);
-                PublishStepFinishedEvent(actionStep);
             }
         }
 
@@ -127,16 +123,6 @@ namespace NBehave.Narrator.Framework
                 CultureInfo.CurrentCulture);
         }
 
-        private void PublishStepStartedEvent(StringStep actionStep)
-        {
-            _hub.Publish(new StepStartedEvent(this, actionStep));
-        }
-
-        private void PublishStepFinishedEvent(StringStep actionStep)
-        {
-            _hub.Publish(new StepFinishedEvent(this, actionStep.Step));
-        }
-
         private void BeforeEachStep(ActionMethodInfo info)
         {
             info.ExecuteNotificationMethod(typeof(BeforeStepAttribute));
@@ -149,9 +135,9 @@ namespace NBehave.Narrator.Framework
 
         private void BeforeEachScenario(ActionMethodInfo info)
         {
-            if (_isFirstStepInScenario)
+            if (isFirstStepInScenario)
             {
-                _isFirstStepInScenario = false;
+                isFirstStepInScenario = false;
                 info.ExecuteNotificationMethod(typeof(BeforeScenarioAttribute));
             }
         }

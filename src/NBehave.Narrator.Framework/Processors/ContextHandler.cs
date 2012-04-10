@@ -1,74 +1,65 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using NBehave.Narrator.Framework.Hooks;
-using NBehave.Narrator.Framework.Tiny;
 
 namespace NBehave.Narrator.Framework.Processors
 {
-    public class ContextHandler : IMessageProcessor, IDisposable
+    public class ContextHandler : IContextHandler
     {
-        private readonly ITinyMessengerHub _hub;
-        private readonly FeatureContext _featureContext;
-        private readonly ScenarioContext _scenarioContext;
-        private readonly StepContext _stepContext;
-        private bool _disposed;
-        private readonly List<KeyValuePair<TinyMessageSubscriptionToken, Type>> _hubSubscriberTokens = new List<KeyValuePair<TinyMessageSubscriptionToken, Type>>();
+        private readonly FeatureContext featureContext;
+        private readonly ScenarioContext scenarioContext;
+        private readonly StepContext stepContext;
 
-        public ContextHandler(ITinyMessengerHub hub,
-                              FeatureContext featureContext,
-                              ScenarioContext scenarioContext,
-                              StepContext stepContext)
+        private readonly List<string> tags = new List<string>();
+        private readonly List<string> featureTags = new List<string>();
+
+        public ContextHandler(FeatureContext featureContext, ScenarioContext scenarioContext, StepContext stepContext)
         {
-            _featureContext = featureContext;
-            _scenarioContext = scenarioContext;
-            _stepContext = stepContext;
-            _hub = hub;
-            SubscribeToHubEvents();
+            this.featureContext = featureContext;
+            this.scenarioContext = scenarioContext;
+            this.stepContext = stepContext;
         }
 
-        private void SubscribeToHubEvents()
+        private readonly char[] at = new[] { '@' };
+        public void OnParsedTagEvent(string tag)
         {
-            Subscribe<FeatureStartedEvent>(OnFeatureCreated);
-            Subscribe<FeatureFinishedEvent>(OnFeatureFinishedEvent);
-            Subscribe<ScenarioStartedEvent>(OnScenarioCreatedEvent);
-            Subscribe<ScenarioFinishedEvent>(OnScenarioFinishedEvent);
-            Subscribe<StepStartedEvent>(OnStepCreatedEvent);
-            Subscribe<StepFinishedEvent>(OnStepFinishedEvent);
+            tags.Add(tag.TrimStart(at));
         }
 
-        private void Subscribe<T>(Action<T> eventReceiver) where T : class, ITinyMessage
+        public void OnFeatureStartedEvent(Feature feature)
         {
-            var token = _hub.Subscribe(eventReceiver, true);
-            _hubSubscriberTokens.Add(new KeyValuePair<TinyMessageSubscriptionToken, Type>(token, typeof(T)));
+            featureContext.ClearTags();
+            featureContext.Feature = feature;
+            featureTags.AddRange(tags);
+            featureContext.AddTags(tags);
         }
 
-        private void OnFeatureCreated(FeatureStartedEvent e)
+        public void OnFeatureFinishedEvent()
         {
-            _featureContext.FeatureTitle = e.Content;
+            DisposeContextValues(featureContext);
+            featureTags.Clear();
+            tags.Clear();
         }
 
-        private void OnFeatureFinishedEvent(FeatureFinishedEvent e)
+        public void OnScenarioStartedEvent(Scenario scenario)
         {
-            DisposeContextValues(_featureContext);
+            scenarioContext.ClearTags();
+            scenarioContext.Scenario = scenario;
+            scenarioContext.AddTags(tags);
         }
 
-        private void OnScenarioCreatedEvent(ScenarioStartedEvent e)
+        public void OnScenarioFinishedEvent()
         {
-            _scenarioContext.ScenarioTitle = e.Content.Title;
+            DisposeContextValues(scenarioContext);
+            tags.Clear();
+            tags.AddRange(featureTags);
         }
 
-        private void OnScenarioFinishedEvent(ScenarioFinishedEvent e)
+        public void OnStepStartedEvent(StringStep step)
         {
-            DisposeContextValues(_scenarioContext);
+            stepContext.StringStep = step;
         }
 
-        private void OnStepCreatedEvent(StepStartedEvent e)
-        {
-            _stepContext.StringStep = e.Content;
-        }
-
-        private void OnStepFinishedEvent(StepFinishedEvent e)
+        public void OnStepFinishedEvent()
         { }
 
         private void DisposeContextValues(NBehaveContext context)
@@ -80,34 +71,6 @@ namespace NBehave.Narrator.Framework.Processors
                     d.Dispose();
             }
             context.Clear();
-        }
-
-        public virtual void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        private void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                if (!_disposed)
-                {
-                    _disposed = true;
-                    Unsubscribe();
-                }
-            }
-        }
-
-        private void Unsubscribe()
-        {
-            foreach (var tokenPair in _hubSubscriberTokens)
-            {
-                TinyMessageSubscriptionToken token = tokenPair.Key;
-                var type = tokenPair.Value;
-                _hub.Unsubscribe(token, type);
-            }
         }
     }
 }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Xml;
 using NBehave.Narrator.Framework.EventListeners;
 using NBehave.Narrator.Framework.EventListeners.Xml;
@@ -157,7 +156,9 @@ namespace NBehave.Narrator.Framework.Specifications
             {
                 _results = CreateBasicConfiguration().SetScenarioFiles(new[] { @"Features\\Feature*.feature" }).Build().Run();
 
-                Assert.That(_results.NumberOfPassingScenarios, Is.EqualTo(6));
+                Assert.That(_results.Count, Is.EqualTo(12));
+                Assert.That(_results.NumberOfScenariosFound, Is.EqualTo(17));
+                Assert.That(_results.NumberOfPassingScenarios, Is.EqualTo(8));
             }
 
             [Test]
@@ -423,7 +424,6 @@ namespace NBehave.Narrator.Framework.Specifications
             }
         }
 
-
         [TestFixture, Hooks.Hooks]
         public class HooksSpec : TextRunnerSpec
         {
@@ -544,6 +544,5 @@ namespace NBehave.Narrator.Framework.Specifications
                 Assert.That(_timesAfterStepWasCalled, Is.EqualTo(3));
             }
         }
-
     }
 }

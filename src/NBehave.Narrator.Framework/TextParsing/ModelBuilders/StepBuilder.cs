@@ -1,63 +1,82 @@
-﻿using System;
-using System.Collections.Generic;
-using NBehave.Narrator.Framework.Tiny;
+﻿using System.Collections.Generic;
+using System.Linq;
+using NBehave.Gherkin;
 
-namespace NBehave.Narrator.Framework.Processors
+namespace NBehave.Narrator.Framework.TextParsing.ModelBuilders
 {
-    internal class StepBuilder : AbstracModelBuilder
+    public class StepBuilder
     {
-        private readonly ITinyMessengerHub _hub;
-        private Scenario _scenario;
-        private Scenario _background;
-
-        public StepBuilder(ITinyMessengerHub hub)
-            : base(hub)
+        private Scenario scenario;
+        private string previousStep;
+        public StepBuilder(IGherkinParserEvents gherkinEvents)
         {
-            _hub = hub;
-
-            Zip(_hub, (messageOne, messageTwo) =>
-                          {
-                              if (messageOne is ParsedStep && !(messageTwo is ParsedTable))
-                              {
-                                  if (IsBackgroundStep())
-                                      _background.AddStep((messageOne as ParsedStep).Content);
-                                  else
-                                      _scenario.AddStep((messageOne as ParsedStep).Content);
-                              }
-
-                              if (messageOne is ScenarioBuilt)
-                                  _scenario = (messageOne as ScenarioBuilt).Content;
-                              if (messageTwo is ScenarioBuilt)
-                                  _scenario = (messageTwo as ScenarioBuilt).Content;
-                              if (messageOne is BackgroundBuilt)
-                                  _background = (messageOne as BackgroundBuilt).Content;
-                              if (messageTwo is BackgroundBuilt)
-                                  _background = (messageTwo as BackgroundBuilt).Content;
-                          });
-        }
-
-        private bool IsBackgroundStep()
-        {
-            return _scenario == null;
-        }
-
-        private void Zip(ITinyMessengerHub hub, Action<ITinyMessage, ITinyMessage> zipped)
-        {
-            var queue = new Queue<ITinyMessage>();
-            hub.Subscribe<ITinyMessage>(message =>
+            gherkinEvents.ScenarioEvent += (s, e) =>
+                                               {
+                                                   HandlePreviousEvent();
+                                                   scenario = e.EventInfo;
+                                               };
+            gherkinEvents.StepEvent += (s, e) =>
+                                           {
+                                               HandlePreviousEvent();
+                                               previousStep = e.EventInfo;
+                                           };
+            gherkinEvents.FeatureEvent += (s, e) => HandlePreviousEventAndCleanUp();
+            gherkinEvents.ExamplesEvent += (s, e) => HandlePreviousEvent();
+            gherkinEvents.BackgroundEvent += (s, e) =>
+                                                 {
+                                                     HandlePreviousEvent();
+                                                     scenario = e.EventInfo;
+                                                 };
+            gherkinEvents.TableEvent += (s, e) =>
                                             {
-                                                queue.Enqueue(message);
-
-                                                if (queue.Count == 2)
-                                                {
-                                                    zipped(queue.Dequeue(), queue.Peek());
-                                                }
-                                            }, true);
+                                                HandleTableEvent(e.EventInfo);
+                                                previousStep = null;
+                                            };
+            gherkinEvents.TagEvent += (s, e) => HandlePreviousEvent();
+            gherkinEvents.EofEvent += (s, e) => HandlePreviousEventAndCleanUp();
         }
 
-        public override void Cleanup()
+        private void HandlePreviousEventAndCleanUp()
         {
-            _scenario = null;
+            HandlePreviousEvent();
+            Cleanup();
+        }
+
+        private void HandleTableEvent(IList<IList<Token>> content)
+        {
+            if (previousStep == null)
+                return;
+            var stringTableStep = new StringTableStep(previousStep, scenario.Source);
+            scenario.AddStep(stringTableStep);
+
+            var columns = content.First().Select(token => new ExampleColumn(token.Content));
+            var exampleColumns = new ExampleColumns(columns);
+
+            foreach (var list in content.Skip(1))
+            {
+                var example = list.Select(token => token.Content).ToList();
+
+                var row = new Dictionary<string, string>();
+
+                for (int i = 0; i < example.Count(); i++)
+                    row.Add(exampleColumns[i].Name, example.ElementAt(i));
+
+                stringTableStep.AddTableStep(new Example(exampleColumns, row));
+            }
+        }
+
+        private void HandlePreviousEvent()
+        {
+            if (previousStep == null || scenario == null)
+                return;
+            scenario.AddStep(previousStep);
+            previousStep = null;
+        }
+
+        private void Cleanup()
+        {
+            scenario = null;
+            previousStep = null;
         }
     }
 }

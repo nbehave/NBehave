@@ -1,10 +1,11 @@
 using System.Collections.Generic;
+using NBehave.Narrator.Framework;
 
 namespace NBehave.ReSharper.Plugin
 {
     public interface IFeatureRunner
     {
-        void Run(IEnumerable<string> featureFiles);
-        void DryRun(IEnumerable<string> featureFiles);
+        FeatureResults Run(IEnumerable<string> featureFiles);
+        FeatureResults DryRun(IEnumerable<string> featureFiles);
     }
 }
