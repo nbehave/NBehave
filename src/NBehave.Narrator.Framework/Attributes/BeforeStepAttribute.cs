@@ -7,8 +7,11 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System;
+
 namespace NBehave.Narrator.Framework
 {
+    [Obsolete("Use NBehave.Narrator.Framework.Hooks.BeforeStepAttribute")]
     public class BeforeStepAttribute : NotificationMethodAttribute
     {
     }

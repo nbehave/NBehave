@@ -12,6 +12,7 @@ namespace NBehave.Narrator.Framework
     using System;
 
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+    [Obsolete("Use attributes of type NBehave.Narrator.Framework.Hooks.HookAttribute")]
     public class NotificationMethodAttribute : Attribute
     {
     }

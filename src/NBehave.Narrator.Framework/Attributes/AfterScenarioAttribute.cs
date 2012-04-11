@@ -7,8 +7,11 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System;
+
 namespace NBehave.Narrator.Framework
 {
+    [Obsolete("Use NBehave.Narrator.Framework.Hooks.AfterScenarioAttribute")]
     public class AfterScenarioAttribute : NotificationMethodAttribute
     {
     }
