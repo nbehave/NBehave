@@ -16,6 +16,7 @@ using Microsoft.Build.Utilities;
 
 using NBehave.Narrator.Framework;
 using NBehave.Narrator.Framework.EventListeners;
+using NBehave.Narrator.Framework.Internal;
 
 namespace NBehave.MSBuild
 {

@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using NBehave.Narrator.Framework.Processors;
+using NBehave.Narrator.Framework.Internal;
 using NUnit.Framework;
 
 namespace NBehave.Narrator.Framework.Specifications

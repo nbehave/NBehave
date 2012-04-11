@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using NBehave.Narrator.Framework;
-using NBehave.Narrator.Framework.Processors;
+using NBehave.Narrator.Framework.Internal;
 using NBehave.Narrator.Framework.Tiny;
 
 namespace NBehave.ReSharper.Plugin
 {
-    public class FeatureRunner : IFeatureRunner, Narrator.Framework.Processors.IFeatureRunner
+    public class FeatureRunner : IFeatureRunner, Narrator.Framework.Internal.IFeatureRunner
     {
         private readonly NBehaveConfiguration configuration;
         private readonly IStringStepRunner stringStepRunner;
@@ -37,7 +37,7 @@ namespace NBehave.ReSharper.Plugin
             return t.Run();
         }
 
-        FeatureResult Narrator.Framework.Processors.IFeatureRunner.Run(Feature feature)
+        FeatureResult Narrator.Framework.Internal.IFeatureRunner.Run(Feature feature)
         {
             if (configuration.IsDryRun)
                 return new FeatureResult();
@@ -46,7 +46,7 @@ namespace NBehave.ReSharper.Plugin
 
         private FeatureResult DoRun(Feature feature)
         {
-            var runner = new Narrator.Framework.Processors.FeatureRunner(stringStepRunner, context);
+            var runner = new Narrator.Framework.Internal.FeatureRunner(stringStepRunner, context);
             return runner.Run(feature);
         }
     }

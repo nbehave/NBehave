@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using NBehave.Narrator.Framework.Extensions;
 using NUnit.Framework;
 
 namespace NBehave.Narrator.Framework.Specifications.System.Specs

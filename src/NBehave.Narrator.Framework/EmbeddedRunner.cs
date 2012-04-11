@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using NBehave.Narrator.Framework.EventListeners;
+using NBehave.Narrator.Framework.Extensions;
 
 namespace NBehave.Narrator.Framework
 {

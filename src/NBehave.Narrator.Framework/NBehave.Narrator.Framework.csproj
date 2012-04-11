@@ -104,7 +104,16 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="ActionCatalog.cs" />
+    <Compile Include="Hooks\AfterFeatureAttribute.cs" />
+    <Compile Include="Hooks\AfterRunAttribute.cs" />
+    <Compile Include="Hooks\AfterScenarioAttribute.cs" />
+    <Compile Include="Hooks\AfterStepAttribute.cs" />
+    <Compile Include="Hooks\BeforeFeatureAttribute.cs" />
+    <Compile Include="Hooks\BeforeRunAttribute.cs" />
+    <Compile Include="Hooks\BeforeScenarioAttribute.cs" />
+    <Compile Include="Hooks\HookAttribute.cs" />
+    <Compile Include="Hooks\HooksAttribute.cs" />
+    <Compile Include="Internal\ActionCatalog.cs" />
     <Compile Include="Domain\BackgroundStepResult.cs" />
     <Compile Include="Domain\ColumnValues.cs" />
     <Compile Include="Domain\ExampleBuilder.cs" />
@@ -119,21 +128,21 @@
     <Compile Include="Extensions\ReflectionExtensions.cs" />
     <Compile Include="Extensions\StoryRunnerFilterExtensions.cs" />
     <Compile Include="FeatureContext.cs" />
-    <Compile Include="HooksParser.cs" />
+    <Compile Include="Hooks\HooksParser.cs" />
     <Compile Include="Hooks\BeforeStepAttribute.cs" />
-    <Compile Include="MethodWithAttributeFinder.cs" />
-    <Compile Include="NBehaveContext.cs" />
-    <Compile Include="Processors\ContextHandler.cs" />
-    <Compile Include="Processors\EventArgs.cs" />
-    <Compile Include="Processors\ExampleRunner.cs" />
-    <Compile Include="Processors\HooksHandler.cs" />
-    <Compile Include="Processors\IContextHandler.cs" />
-    <Compile Include="Processors\IFeatureRunner.cs" />
+    <Compile Include="Internal\MethodWithAttributeFinder.cs" />
+    <Compile Include="Internal\NBehaveContext.cs" />
+    <Compile Include="Internal\ContextHandler.cs" />
+    <Compile Include="Internal\EventArgs.cs" />
+    <Compile Include="Internal\ExampleRunner.cs" />
+    <Compile Include="Hooks\HooksHandler.cs" />
+    <Compile Include="Internal\IContextHandler.cs" />
+    <Compile Include="Internal\IFeatureRunner.cs" />
     <Compile Include="Hooks\LoadHooks.cs" />
-    <Compile Include="Processors\IRunContext.cs" />
-    <Compile Include="Processors\IRunContextEvents.cs" />
-    <Compile Include="Processors\ParseScenarioFiles.cs" />
-    <Compile Include="Processors\LoadScenarioFiles.cs">
+    <Compile Include="Internal\IRunContext.cs" />
+    <Compile Include="Internal\IRunContextEvents.cs" />
+    <Compile Include="Internal\ParseScenarioFiles.cs" />
+    <Compile Include="Internal\LoadScenarioFiles.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Configuration\NBehaveConfiguration.cs">
@@ -148,15 +157,15 @@
     <Compile Include="EventListeners\Xml\XmlOutputWriter.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Extensions\NBehaveConfigurationExtensions.cs" />
-    <Compile Include="IRunner.cs" />
-    <Compile Include="NBehaveInitialiser.cs" />
-    <Compile Include="ParameterConverter.cs" />
-    <Compile Include="Processors\FeatureRunner.cs" />
-    <Compile Include="Processors\RunContext.cs" />
+    <Compile Include="Internal\IRunner.cs" />
+    <Compile Include="Internal\NBehaveInitialiser.cs" />
+    <Compile Include="Internal\ParameterConverter.cs" />
+    <Compile Include="Internal\FeatureRunner.cs" />
+    <Compile Include="Internal\RunContext.cs" />
     <Compile Include="Remoting\AppDomainBootstrapper.cs" />
     <Compile Include="Remoting\AppDomainRunner.cs" />
     <Compile Include="Remoting\RemotableStoryRunner.cs" />
-    <Compile Include="RunnerFactory.cs" />
+    <Compile Include="Internal\RunnerFactory.cs" />
     <Compile Include="ScenarioContext.cs" />
     <Compile Include="Domain\ScenarioExampleResult.cs" />
     <Compile Include="EventListeners\SummaryWriter.cs" />
@@ -173,18 +182,18 @@
     <Compile Include="TextParsing\GherkinScenarioParser.cs" />
     <Compile Include="Contracts\IFileMatcher.cs" />
     <Compile Include="IgnoreSpaceAndUnderScoreMatcher.cs" />
-    <Compile Include="Contracts\IStringStepRunner.cs" />
+    <Compile Include="Internal\IStringStepRunner.cs" />
     <Compile Include="MatchAllFiles.cs" />
-    <Compile Include="StringStepRunner.cs" />
+    <Compile Include="Internal\StringStepRunner.cs" />
     <Compile Include="Attributes\ActionStepsAttribute.cs" />
-    <Compile Include="ActionStepParser.cs" />
+    <Compile Include="Internal\ActionStepParser.cs" />
     <Compile Include="EventListeners\EventListeners.cs" />
     <Compile Include="EventListeners\MultiOutputEventListener.cs" />
     <Compile Include="EventListeners\NullEventListener.cs" />
     <Compile Include="EventListeners\TextWriterEventListener.cs" />
     <Compile Include="EventListeners\Xml\XmlOutputEventListener.cs" />
     <Compile Include="EventListeners\EventListener.cs" />
-    <Compile Include="PlainTextOutput.cs" />
+    <Compile Include="Internal\PlainTextOutput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Domain\Result.cs" />
     <Compile Include="Domain\ScenarioResult.cs" />
@@ -200,8 +209,8 @@
     <Compile Include="TextParsing\ModelBuilders\FeatureBuilder.cs" />
     <Compile Include="TextParsing\ModelBuilders\StepBuilder.cs" />
     <Compile Include="TextParsing\GroupEventsByTag.cs" />
-    <Compile Include="TextRunner.cs" />
-    <Compile Include="StoryRunnerFilter.cs" />
+    <Compile Include="Internal\TextRunner.cs" />
+    <Compile Include="Internal\StoryRunnerFilter.cs" />
     <Compile Include="Attributes\ThenAttribute.cs" />
     <Compile Include="Domain\Example.cs" />
     <Compile Include="Domain\ExampleColumns.cs" />
@@ -211,7 +220,7 @@
     <Compile Include="Domain\StringTableStep.cs" />
     <Compile Include="Attributes\WhenAttribute.cs" />
     <Compile Include="Domain\TypeOfStep.cs" />
-    <Compile Include="TypeConverter.cs" />
+    <Compile Include="Internal\TypeConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\NBehave.snk">

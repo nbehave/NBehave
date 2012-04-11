@@ -6,6 +6,7 @@ using System.Text;
 using System.Xml;
 using NBehave.Narrator.Framework.EventListeners;
 using NBehave.Narrator.Framework.EventListeners.Xml;
+using NBehave.Narrator.Framework.Internal;
 using NBehave.Narrator.Framework.Remoting;
 using NUnit.Framework;
 using TestPlainTextAssembly;

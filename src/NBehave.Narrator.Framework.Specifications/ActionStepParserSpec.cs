@@ -1,3 +1,4 @@
+using NBehave.Narrator.Framework.Internal;
 using NUnit.Framework;
 
 namespace NBehave.Narrator.Framework.Specifications

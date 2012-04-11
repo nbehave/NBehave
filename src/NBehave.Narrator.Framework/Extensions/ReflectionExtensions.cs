@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace NBehave.Narrator.Framework
+namespace NBehave.Narrator.Framework.Extensions
 {
     public static class ReflectionExtensions
     {

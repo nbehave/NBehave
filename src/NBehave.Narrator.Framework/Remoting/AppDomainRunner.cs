@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Reflection;
+using NBehave.Narrator.Framework.Internal;
 
 namespace NBehave.Narrator.Framework.Remoting
 {

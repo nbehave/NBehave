@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using NBehave.Narrator.Framework;
+using NBehave.Narrator.Framework.Internal;
 
 namespace NBehave.Fluent.Framework
 {

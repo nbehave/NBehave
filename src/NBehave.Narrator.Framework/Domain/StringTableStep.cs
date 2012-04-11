@@ -9,6 +9,8 @@
 
 using System;
 using System.Linq;
+using NBehave.Narrator.Framework.Extensions;
+using NBehave.Narrator.Framework.Internal;
 
 namespace NBehave.Narrator.Framework
 {

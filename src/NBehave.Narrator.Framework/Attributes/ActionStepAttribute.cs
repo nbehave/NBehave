@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using NBehave.Narrator.Framework.Extensions;
+
 namespace NBehave.Narrator.Framework
 {
     using System;

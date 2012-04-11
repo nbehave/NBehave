@@ -6,6 +6,8 @@ using System.Linq;
 using System.Threading;
 using NBehave.Narrator.Framework;
 using NBehave.Narrator.Framework.EventListeners;
+using NBehave.Narrator.Framework.Extensions;
+using NBehave.Narrator.Framework.Internal;
 
 namespace NBehave.Console
 {

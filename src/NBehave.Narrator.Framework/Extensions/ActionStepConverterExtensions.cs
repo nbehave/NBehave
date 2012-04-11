@@ -7,11 +7,11 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace NBehave.Narrator.Framework
-{
-    using System;
-    using System.Text.RegularExpressions;
+using System;
+using System.Text.RegularExpressions;
 
+namespace NBehave.Narrator.Framework.Extensions
+{
     public static class ActionStepConverterExtensions
     {
         private const string TokenRegexPattern = @"(?<name>\$[a-zA-Z]\w*)|(?<bracketName>(\[|\<)[a-zA-Z]\w*(\]|\>))";

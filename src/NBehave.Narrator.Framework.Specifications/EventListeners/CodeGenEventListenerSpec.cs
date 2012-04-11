@@ -1,5 +1,6 @@
 using System.Linq;
 using NBehave.Narrator.Framework.EventListeners;
+using NBehave.Narrator.Framework.Extensions;
 using NBehave.Narrator.Framework.Specifications.Features;
 using NUnit.Framework;
 

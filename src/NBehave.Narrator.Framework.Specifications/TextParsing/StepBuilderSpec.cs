@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NBehave.Gherkin;
-using NBehave.Narrator.Framework.Processors;
+using NBehave.Narrator.Framework.Internal;
 using NBehave.Narrator.Framework.TextParsing;
 using NBehave.Narrator.Framework.TextParsing.ModelBuilders;
 using NUnit.Framework;

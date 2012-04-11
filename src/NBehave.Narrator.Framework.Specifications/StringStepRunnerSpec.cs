@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using NBehave.Narrator.Framework.Extensions;
+using NBehave.Narrator.Framework.Internal;
 using NUnit.Framework;
 
 namespace NBehave.Narrator.Framework.Specifications

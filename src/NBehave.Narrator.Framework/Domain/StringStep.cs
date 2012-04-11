@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using NBehave.Narrator.Framework.Extensions;
+using NBehave.Narrator.Framework.Internal;
 
 namespace NBehave.Narrator.Framework
 {

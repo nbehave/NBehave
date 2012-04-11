@@ -7,7 +7,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace NBehave.Narrator.Framework
+using NBehave.Narrator.Framework.Internal;
+
+namespace NBehave.Narrator.Framework.Extensions
 {
     public static class NBehaveConfigurationExtensions
     {

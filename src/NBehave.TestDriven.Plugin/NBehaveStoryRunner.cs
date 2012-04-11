@@ -2,6 +2,8 @@
 using System.IO;
 using System.Reflection;
 using NBehave.Narrator.Framework;
+using NBehave.Narrator.Framework.Extensions;
+using NBehave.Narrator.Framework.Internal;
 using TestDriven.Framework;
 
 //IF you change the namespace or the name of the class dont forget to update the installer.

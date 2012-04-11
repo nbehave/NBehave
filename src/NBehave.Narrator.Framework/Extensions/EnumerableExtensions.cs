@@ -7,11 +7,11 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace NBehave.Narrator.Framework
-{
-    using System;
-    using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 
+namespace NBehave.Narrator.Framework.Extensions
+{
     public static class EnumerableExtensions
     {
         public static void Each<T>(this IEnumerable<T> list, Action<T> action)

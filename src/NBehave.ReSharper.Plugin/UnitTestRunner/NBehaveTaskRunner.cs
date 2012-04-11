@@ -3,7 +3,7 @@ using System.Linq;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using NBehave.Narrator.Framework;
 using NBehave.Narrator.Framework.EventListeners;
-using NBehave.Narrator.Framework.Processors;
+using NBehave.Narrator.Framework.Internal;
 using NBehave.Narrator.Framework.Tiny;
 using NBehave.ReSharper.Plugin.UnitTestProvider;
 

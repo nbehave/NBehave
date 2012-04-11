@@ -5,7 +5,7 @@ using System.Linq;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.UnitTestFramework;
 using NBehave.Narrator.Framework;
-using NBehave.Narrator.Framework.Processors;
+using NBehave.Narrator.Framework.Internal;
 using NBehave.Narrator.Framework.Tiny;
 
 namespace NBehave.ReSharper.Plugin.UnitTestProvider

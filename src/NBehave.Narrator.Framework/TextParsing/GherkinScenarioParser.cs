@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NBehave.Gherkin;
-using NBehave.Narrator.Framework.Processors;
+using NBehave.Narrator.Framework.Internal;
 using NBehave.Narrator.Framework.TextParsing.ModelBuilders;
 
 namespace NBehave.Narrator.Framework.TextParsing

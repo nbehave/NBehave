@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;
-using NBehave.Narrator.Framework.Processors;
+using NBehave.Narrator.Framework.Internal;
 using NBehave.Narrator.Framework.Tiny;
 using NUnit.Framework;
 

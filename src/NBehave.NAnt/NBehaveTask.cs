@@ -5,6 +5,8 @@ using NAnt.Core.Attributes;
 using NAnt.Core.Types;
 using NBehave.Narrator.Framework;
 using NBehave.Narrator.Framework.EventListeners;
+using NBehave.Narrator.Framework.Extensions;
+using NBehave.Narrator.Framework.Internal;
 using NAntCore = NAnt.Core;
 
 namespace NBehave.NAnt

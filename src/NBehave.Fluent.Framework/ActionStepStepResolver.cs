@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using NBehave.Narrator.Framework;
+using NBehave.Narrator.Framework.Internal;
 
 namespace NBehave.Fluent.Framework
 {

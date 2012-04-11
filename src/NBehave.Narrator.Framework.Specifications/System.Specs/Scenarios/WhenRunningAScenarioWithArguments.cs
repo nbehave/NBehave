@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using NBehave.Narrator.Framework.Extensions;
 using NUnit.Framework;
 
 namespace NBehave.Narrator.Framework.Specifications.System.Specs

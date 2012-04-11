@@ -1,6 +1,4 @@
-﻿using NBehave.Narrator.Framework.TextParsing;
-
-namespace NBehave.Narrator.Framework.Processors
+﻿namespace NBehave.Narrator.Framework.TextParsing.ModelBuilders
 {
     public class FeatureBuilder
     {

@@ -1,7 +1,8 @@
 using System;
 using System.Text.RegularExpressions;
+using NBehave.Narrator.Framework.Internal;
 
-namespace NBehave.Narrator.Framework
+namespace NBehave.Narrator.Framework.Extensions
 {
     public static class In
     {

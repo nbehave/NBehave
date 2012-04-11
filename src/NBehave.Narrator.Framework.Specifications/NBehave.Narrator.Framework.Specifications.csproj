@@ -136,9 +136,9 @@
     <Compile Include="EventListeners\XmlOutputEventListenerSpec.cs" />
     <Compile Include="Features\TestFeatures.cs" />
     <Compile Include="ParameterConverterSpec.cs" />
-    <Compile Include="Processors\ActionStepConverterExtensionsSpec.cs" />
-    <Compile Include="Processors\ContextHandlerSpec.cs" />
-    <Compile Include="Processors\FeatureRunnerSpec.cs">
+    <Compile Include="Extensions\ActionStepConverterExtensionsSpec.cs" />
+    <Compile Include="Internal\ContextHandlerSpec.cs" />
+    <Compile Include="Internal\FeatureRunnerSpec.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="RemotableStoryRunnerSpec.cs" />

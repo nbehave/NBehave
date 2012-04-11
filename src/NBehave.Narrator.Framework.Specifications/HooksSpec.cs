@@ -1,7 +1,8 @@
 using System;
 using System.Linq;
+using NBehave.Narrator.Framework.Extensions;
 using NBehave.Narrator.Framework.Hooks;
-using NBehave.Narrator.Framework.Processors;
+using NBehave.Narrator.Framework.Internal;
 using NUnit.Framework;
 using Rhino.Mocks;
 

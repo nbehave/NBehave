@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using NBehave.Narrator.Framework;
-using NBehave.Narrator.Framework.Processors;
+using NBehave.Narrator.Framework.Internal;
 
 namespace NBehave.ReSharper.Plugin.UnitTestRunner
 {

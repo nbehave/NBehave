@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using NBehave.Narrator.Framework.Extensions;
 using NBehave.Narrator.Framework.Specifications.Features;
 using NUnit.Framework;
 using TestPlainTextAssembly;

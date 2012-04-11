@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
+using NBehave.Narrator.Framework.Internal;
 using NUnit.Framework;
 using Rhino.Mocks;
 

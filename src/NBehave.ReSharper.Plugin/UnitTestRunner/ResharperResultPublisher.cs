@@ -4,6 +4,7 @@ using System.Linq;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using NBehave.Narrator.Framework;
 using NBehave.Narrator.Framework.EventListeners;
+using NBehave.Narrator.Framework.Extensions;
 
 namespace NBehave.ReSharper.Plugin.UnitTestRunner
 {

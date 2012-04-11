@@ -7,10 +7,10 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace NBehave.Narrator.Framework
-{
-    using System.Text.RegularExpressions;
+using System.Text.RegularExpressions;
 
+namespace NBehave.Narrator.Framework.Extensions
+{
     public static class StringExtensions
     {
         public static readonly char[] WhiteSpaceChars = new[] { ' ', '\n', '\r', '\t' };
