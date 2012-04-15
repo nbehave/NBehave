@@ -8,7 +8,8 @@ task Default -depends Test #, ILMerge
 
 task Clean { 
 	if ($true -eq (Test-Path "$buildDir")) {
-		Get-ChildItem $buildDir\**\*.* -Recurse | ForEach-Object { Remove-Item $_.FullName }
+		Get-ChildItem $buildDir\**\*.* -Recurse | where { $_.mode -notmatch "d"} | Sort-Object mode | ForEach-Object { Remove-Item $_.FullName }
+		Write-Host "Files removed."
 		Remove-Item $buildDir -Recurse
 	}
 	New-Item $buildDir -type directory
