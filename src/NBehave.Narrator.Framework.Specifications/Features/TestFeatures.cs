@@ -2,6 +2,7 @@
 {
     public static class TestFeatures
     {
+        public const string FeatureWithScenarioBackground = "System.Specs\\Backgrounds\\Background.feature";
         public const string FeatureWithPendingStep = "Features\\FeatureWithPendingStep.feature";
         public const string FeatureWithCommentOnLastRow = "Features\\FeatureWithCommentOnLastRow.feature";
         public const string FeatureWithLowerCaseSteps = "Features\\FeatureWithLowerCaseSteps.feature";

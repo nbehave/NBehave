@@ -3,7 +3,7 @@
 	I want to be able to declare background sections
 	So that I can add context to my scenarios
 
-	Background:
+	Background: can have title
 		Given this background section declaration
 		And this one
 

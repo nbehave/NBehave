@@ -153,6 +153,58 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
         }
 
         [TestFixture]
+        public class BackgroundNode : XmlOutputWriterSpec
+        {
+            const string XPathToNode = @"/background";
+
+            protected override void EstablishContext()
+            {
+                var memStream = new MemoryStream();
+                var xmlWriter = new XmlTextWriter(memStream, Encoding.UTF8);
+
+                var feature = new Feature("FeatureTitle");
+                var scenarioResult = new ScenarioResult(feature, "ScenarioTitle");
+                var bgStepResult1 = new BackgroundStepResult("background title", new StepResult(Step("Given a"), Passed));
+                scenarioResult.AddActionStepResult(bgStepResult1);
+                var bgStepResult2 = new BackgroundStepResult("background title", new StepResult(Step("And b"), Passed));
+                scenarioResult.AddActionStepResult(bgStepResult2);
+                var actionStepResult1 = new StepResult(Step("Given a"), Passed);
+                scenarioResult.AddActionStepResult(actionStepResult1);
+                var actionStepResult2 = new StepResult(Step("When b"), Passed);
+                scenarioResult.AddActionStepResult(actionStepResult2);
+                var actionStepResult3 = new StepResult(Step("Then c"), Passed);
+                scenarioResult.AddActionStepResult(actionStepResult3);
+
+                var eventsReceived = new List<EventReceived>
+				                         {
+				                             new EventReceived("ScenarioTitle", EventType.ScenarioStart),
+				                             new ScenarioResultEventReceived(scenarioResult)
+				                         };
+
+                _xmlOutputWriter = new XmlOutputWriter(xmlWriter, eventsReceived);
+                _xmlOutputWriter.DoBackground(scenarioResult);
+                xmlWriter.Flush();
+                _xmlDoc = new XmlDocument();
+                memStream.Seek(0, SeekOrigin.Begin);
+                _xmlDoc.Load(memStream);
+            }
+
+            [Test]
+            public void Should_have_background_node()
+            {
+                var node = _xmlDoc.SelectSingleNode(XPathToNode);
+                Assert.That(node, Is.Not.Null);
+            }
+
+            [Test]
+            public void NodeShouldHaveNameAttribute()
+            {
+                var node = _xmlDoc.SelectSingleNode(XPathToNode);
+                Assert.That(node.Attributes["name"].Value, Is.EqualTo("background title"));
+            }
+        }
+
+        [TestFixture]
         public class FeatureNode : XmlOutputWriterSpec
         {
             const string XPathToNode = @"/feature";

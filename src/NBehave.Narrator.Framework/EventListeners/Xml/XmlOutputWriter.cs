@@ -28,7 +28,7 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
 
         public void WriteAllXml()
         {
-            var evt = EventsReceived.OrderBy(_=>_.Time).FirstOrDefault();
+            var evt = EventsReceived.OrderBy(_ => _.Time).FirstOrDefault();
 
             Writer.WriteStartElement("results");
             var assemblyString = typeof(XmlOutputEventListener).AssemblyQualifiedName.Split(new[] { ',' });
@@ -71,6 +71,13 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
 
             WriteStoryDataAttributes(scenarioResultsForFeature);
             WriteStoryNarrative(events);
+            WriteBackgroundEvents(events);
+            WriteScenarioEvents(scenarioResultsForFeature, featureTitle, events);
+            Writer.WriteEndElement();
+        }
+
+        private void WriteScenarioEvents(IEnumerable<ScenarioResult> scenarioResultsForFeature, string featureTitle, IEnumerable<EventReceived> events)
+        {
             Writer.WriteStartElement("scenarios");
             foreach (var e in events.Where(evts => evts.EventType == EventType.ScenarioStart))
             {
@@ -84,7 +91,38 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
             }
 
             Writer.WriteEndElement();
+        }
+
+        private void WriteBackgroundEvents(IEnumerable<EventReceived> events)
+        {
+            var scenarioResultEvent = events
+                .Where(_ => _ is ScenarioResultEventReceived)
+                .Cast<ScenarioResultEventReceived>()
+                .FirstOrDefault();
+            if (scenarioResultEvent != null && scenarioResultEvent.ScenarioResult.HasBackgroundResults())
+            {
+                DoBackground(scenarioResultEvent.ScenarioResult);
+            }
+        }
+
+        public void DoBackground(ScenarioResult scenarioResult)
+        {
+            Writer.WriteStartElement("background");
+            WriteBackgroundSteps(scenarioResult);
             Writer.WriteEndElement();
+        }
+
+        private void WriteBackgroundSteps(ScenarioResult scenarioResult)
+        {
+            var bgSteps = scenarioResult.StepResults
+                .Where(_ => _ is BackgroundStepResult)
+                .Cast<BackgroundStepResult>()
+                .ToList();
+            var backgroundTitle = (bgSteps.Any()) ? bgSteps.First().BackgroundTitle : "";
+            Writer.WriteAttributeString("name", backgroundTitle);
+
+            foreach (var step in bgSteps)
+                DoActionStep(step);
         }
 
         public void DoScenario(EventReceived evt, ScenarioResult scenarioResult)
