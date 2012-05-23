@@ -120,6 +120,10 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
                 .ToList();
             var backgroundTitle = (bgSteps.Any()) ? bgSteps.First().BackgroundTitle : "";
             Writer.WriteAttributeString("name", backgroundTitle);
+            string outcome = "passed";
+            outcome = (bgSteps.Any(_ => _.Result is Pending)) ? "pending" : outcome;
+            outcome = (bgSteps.Any(_ => _.Result is Failed)) ? "pending" : outcome;
+            Writer.WriteAttributeString("outcome", outcome);
 
             foreach (var step in bgSteps)
                 DoActionStep(step);
@@ -151,7 +155,23 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
             Writer.WriteAttributeString("outcome", result.Result.ToString());
             if (result.Result.GetType() == typeof(Failed))
                 Writer.WriteElementString("failure", result.Message);
+            if (result.StringStep is StringTableStep)
+                DoStringTableStep(result.StringStep as StringTableStep);
+            Writer.WriteEndElement();
+        }
 
+        private void DoStringTableStep(StringTableStep stringTableStep)
+        {
+            if (!stringTableStep.TableSteps.Any())
+                return;
+            Writer.WriteStartElement("table");
+            WriteColumnNames(stringTableStep.TableSteps.First().ColumnNames);
+            foreach (var tableStep in stringTableStep.TableSteps)
+            {
+                Writer.WriteStartElement("row");
+                WriteExampleRow(tableStep);
+                Writer.WriteEndElement();
+            }
             Writer.WriteEndElement();
         }
 
@@ -169,16 +189,7 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
             }
 
             Writer.WriteStartElement("examples");
-            Writer.WriteStartElement("columnNames");
-
-            foreach (var columnName in scenarioExampleResult.Examples.First().ColumnNames)
-            {
-                Writer.WriteStartElement("columnName");
-                Writer.WriteString(columnName.Name);
-                Writer.WriteEndElement();
-            }
-
-            Writer.WriteEndElement();
+            WriteColumnNames(scenarioExampleResult.Examples.First().ColumnNames);
 
             var scenarioResults = scenarioExampleResult.ExampleResults.ToArray();
             var idx = 0;
@@ -188,16 +199,34 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
                 Writer.WriteStartAttribute("outcome");
                 Writer.WriteString(scenarioResults[idx++].Result.ToString());
                 Writer.WriteEndAttribute();
-                foreach (var columnName in example.ColumnNames)
-                {
-                    Writer.WriteStartElement("column");
-                    Writer.WriteStartAttribute("columnName");
-                    Writer.WriteString(columnName.Name);
-                    Writer.WriteEndAttribute();
-                    Writer.WriteString(example.ColumnValues[columnName.Name]);
-                    Writer.WriteEndElement();
-                }
+                WriteExampleRow(example);
+                Writer.WriteEndElement();
+            }
 
+            Writer.WriteEndElement();
+        }
+
+        private void WriteExampleRow(Example example)
+        {
+            foreach (var columnName in example.ColumnNames)
+            {
+                Writer.WriteStartElement("column");
+                Writer.WriteStartAttribute("columnName");
+                Writer.WriteString(columnName.Name);
+                Writer.WriteEndAttribute();
+                Writer.WriteString(example.ColumnValues[columnName.Name]);
+                Writer.WriteEndElement();
+            }
+        }
+
+        private void WriteColumnNames(ExampleColumns columnNames)
+        {
+            Writer.WriteStartElement("columnNames");
+
+            foreach (var columnName in columnNames)
+            {
+                Writer.WriteStartElement("columnName");
+                Writer.WriteString(columnName.Name);
                 Writer.WriteEndElement();
             }
 
