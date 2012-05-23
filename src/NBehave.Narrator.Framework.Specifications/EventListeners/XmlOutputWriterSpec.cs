@@ -202,6 +202,13 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
                 var node = _xmlDoc.SelectSingleNode(XPathToNode);
                 Assert.That(node.Attributes["name"].Value, Is.EqualTo("background title"));
             }
+
+            [Test]
+            public void NodeShouldHaveOutcomeAttribute()
+            {
+                var node = _xmlDoc.SelectSingleNode(XPathToNode);
+                Assert.That(node.Attributes["outcome"].Value, Is.EqualTo("passed"));
+            }
         }
 
         [TestFixture]
