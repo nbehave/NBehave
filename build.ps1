@@ -1,12 +1,16 @@
-param($version = "0.1.0.0", $frameworkVersion = "4.0")
+param($version = "0.1.0", $versionSuffix = "", $frameworkVersion = "4.0", $environment = "Dev")
 
 Include ".\BuildProperties.ps1"
 Include ".\buildframework\psake_ext.ps1"
 
+properties {
+	$fullVersion = $version + $versionSuffix
+}
+
 task Init -depends Clean, Version
 task Default -depends Test #, ILMerge
 
-task Clean { 
+task Clean {
 	if ($true -eq (Test-Path "$buildDir")) {
 		Get-ChildItem $buildDir\**\*.* -Recurse | where { $_.mode -notmatch "d"} | Sort-Object mode | ForEach-Object { Remove-Item $_.FullName }
 		Write-Host "Files removed."
@@ -20,13 +24,16 @@ Task Version {
 	if ($environment -ne "Dev")  {
 		$asmInfo = "$sourceDir\CommonAssemblyInfo.cs"
 		$src = Get-Content $asmInfo
-		$newSrc = foreach($row in $src) { 
-			if ($row -match 'Assembly((Version)|(FileVersion))\s*\(\s*"\d+\.\d+\.\d+\.\d+"\s*\)') { 
-				$row -replace "\d+\.\d+\.\d+\.\d+", $version 
+		$newSrc = foreach($row in $src) {
+			if ($row -match 'Assembly((InformationalVersion)|(Version)|(FileVersion))\s*\(\s*"\d+\.\d+\.\d+.*"\s*\)') {
+				if ($row -match 'AssemblyInformationalVersion') {
+					$row -replace '\d+\.\d+\.\d+.*.*"', ("$fullVersion" + '"')
+				}
+				else { $row -replace "\d+\.\d+\.\d+.\d+", "$version.0" }
 			}
 			else { $row }
 		}
-		Set-Content -path $asmInfo -value $newSrc			
+		Set-Content -path $asmInfo -value $newSrc
 	}
 }
 
@@ -49,7 +56,7 @@ Task ILMerge -depends Compile {
 	$resharperDir = "$buildDirFramework\Resharper"
 	$out = "NBehave.Narrator.Framework.dll"
 	$assemblies = @("$directory\NBehave.Narrator.Framework.dll", "$directory\Gherkin.dll", "$directory\NBehave.Gherkin.dll")
-	
+
 	Run-ILMerge $snk $directory $out $assemblies
 	Remove-Item "$directory\Gherkin.dll"
 	Remove-Item "$directory\NBehave.Gherkin.dll"
@@ -57,7 +64,7 @@ Task ILMerge -depends Compile {
 
 Task Test -depends Compile {
 	new-item $testReportsDir -type directory -ErrorAction SilentlyContinue
-	
+
 	$arguments = Get-Item "$testDir\*Specifications*.dll"
 	Exec { .\tools\nunit\nunit-console-x86.exe $arguments /xml:$testReportsDir\UnitTests-$frameworkVersion.xml}
 }

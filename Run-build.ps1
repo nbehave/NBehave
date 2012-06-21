@@ -1,20 +1,26 @@
 param(
-	$version = "0.1.0.0", 
-	$task = "default", 
+	$version = "0.1.0",
+	$versionSuffix = "",
+	$task = "default",
+	$environment = "Dev",
 	$buildFile = ".\build.ps1"
 )
+
+$env:EnableNuGetPackageRestore = $TRUE
 
 Write-Host "buildFile $buildFile"
 Write-Host "task $task"
 Write-Host "version $version"
+Write-Host "versionSuffix $versionSuffix"
 
 function Build($framework, $taskToRun) {
-	invoke-psake $buildFile -framework '4.0x86' -t $taskToRun -parameters @{"version"="$version";"frameworkVersion"="$framework"}
-	if ($LastExitCode -ne $null) {
-		if ($LastExitCode -ne 0) { 
-			$msg = "build exited with errorcode $LastExitCode"
-			throw $msg 
-		}
+	invoke-psake $buildFile -framework '4.0x86' -t $taskToRun -parameters @{"version"="$version";"frameworkVersion"="$framework";"versionSuffix"="$versionSuffix";"environment"="$environment"}
+	if ($psake.build_success -eq $FALSE) {
+		$errMsg = $psake.build_error_message
+		$replace = @{ "\|" = "||"; "`n" = "|n"; "`r" = "|r"; "'" = "|'"; "\[" = "|["; "\]"  = "|]"; '0x0085' = "|x"; '0x2028' = "|l"; '0x2029' = "|p" }
+		$replace.GetEnumerator() | ForEach-Object {  $errMsg = $errMsg -replace $_.Key, $_.Value }
+		write-host "##teamcity[message text='build failed: $errMsg' errorDetails='$errMsg' status='ERROR']"
+		throw $errMsg
 	}
 }
 
@@ -25,7 +31,7 @@ Import-Module (join-path $scriptPath ".\buildframework\psake.psm1")
 
 if (-not(test-path $buildFile)) {
     $buildFile = (join-path $scriptPath $buildFile)
-} 
+}
 
 Build "3.5" "Init"
 Build "3.5" $task
