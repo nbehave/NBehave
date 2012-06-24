@@ -1,11 +1,7 @@
-param($version = "0.1.0", $versionSuffix = "", $frameworkVersion = "4.0")
+param($build = "", $frameworkVersion = "4.0")
 
 Include ".\BuildProperties.ps1"
 Include ".\buildframework\psake_ext.ps1"
-
-properties {
-	$nugetVersion = "$version$versionSuffix"
-}
 
 task Init -precondition { return $frameworkVersion -eq "4.0" }
 task Default -depends  NuGet, NuGet-Spec, NuGet-Fluent -precondition { return $frameworkVersion -eq "4.0" }
@@ -58,16 +54,16 @@ task Clean {
 }
 
 task NuGet -depends Clean -precondition{ return $frameworkVersion -eq "4.0" } {
-	Exec { .\tools\nuget\nuget.exe pack nuget\nbehave.nuspec -Version $nugetVersion -OutputDirectory $artifactsDir}
-	Exec { .\tools\nuget\nuget.exe pack nuget\nbehave.samples.nuspec -Version $nugetVersion -OutputDirectory $artifactsDir}
-	#Exec { .\tools\nuget\nuget.exe pack nuget\NBehave.Resharper.nuspec -Version $nugetVersion -OutputDirectory $artifactsDir}
-	#Exec { .\tools\nuget\nuget.exe pack nuget\NBehave.VsPlugin.nuspec -Version $nugetVersion -OutputDirectory $artifactsDir}
+	Exec { .\tools\nuget\nuget.exe pack nuget\nbehave.nuspec -Version $build -OutputDirectory $artifactsDir}
+	Exec { .\tools\nuget\nuget.exe pack nuget\nbehave.samples.nuspec -Version $build -OutputDirectory $artifactsDir}
+	#Exec { .\tools\nuget\nuget.exe pack nuget\NBehave.Resharper.nuspec -Version $build -OutputDirectory $artifactsDir}
+	#Exec { .\tools\nuget\nuget.exe pack nuget\NBehave.VsPlugin.nuspec -Version $build -OutputDirectory $artifactsDir}
 }
 
 function Build-FluentPackage($name, $namespace, $metaData) {
 	Add-Dependencies $name "Fluent" "$tempNugetDir\NBehave.Fluent.$name.nuspec"  $metaData
 	Set-Using $namespace "Specification" $namespace
-	Exec { .\tools\nuget\nuget.exe pack "$tempNugetDir\NBehave.Fluent.$name.nuspec"  -Version $nugetVersion -OutputDirectory $artifactsDir}
+	Exec { .\tools\nuget\nuget.exe pack "$tempNugetDir\NBehave.Fluent.$name.nuspec"  -Version $build -OutputDirectory $artifactsDir}
 }
 
 task NuGet-Fluent -depends Clean -precondition{ return $frameworkVersion -eq "4.0" } {
@@ -81,7 +77,7 @@ function Build-SpecPackage($name, $namespace, $metaData) {
 	Add-Dependencies $name "Spec" "$tempNugetDir\NBehave.Spec.$name.nuspec"  $metaData
 	Set-LibName  $name
 	Set-Using $name "Specification" $namespace
-	Exec { .\tools\nuget\nuget.exe pack "$tempNugetDir\NBehave.Spec.$name.nuspec"  -Version $nugetVersion -OutputDirectory $artifactsDir}
+	Exec { .\tools\nuget\nuget.exe pack "$tempNugetDir\NBehave.Spec.$name.nuspec"  -Version $build -OutputDirectory $artifactsDir}
 }
 
 task NuGet-Spec -depends Clean -precondition{ return $frameworkVersion -eq "4.0" } {

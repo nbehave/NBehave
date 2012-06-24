@@ -1,11 +1,7 @@
-param($version = "0.1.0", $versionSuffix = "", $frameworkVersion = "4.0")
+param($build = "", $frameworkVersion = "4.0")
 
 Include ".\BuildProperties.ps1"
 Include ".\buildframework\psake_ext.ps1"
-
-properties {
-	$fullVersion = $version + $versionSuffix
-}
 
 Task Init -depends Clean
 Task ToInstallerDir -depends VisualStudioPlugin, MoveBinariesToInstallerDir, ZipExamples, MoveResharperPluginToInstallerDir, ZipBinaries
@@ -30,7 +26,7 @@ Task VisualStudioPlugin -precondition { return $frameworkVersion -eq "4.0" } {
 	$namespaces = @{ "vsx" = "http://schemas.microsoft.com/developer/vsx-schema/2010"}
 	$xpath = "/vsx:Vsix/vsx:Identifier/vsx:"
 	xmlPoke "$destination\extension.vsixmanifest" $xpath"InstalledByMsi" "true" $namespaces
-	xmlPoke "$destination\extension.vsixmanifest" $xpath"Version" $fullVersion $namespaces
+	xmlPoke "$destination\extension.vsixmanifest" $xpath"Version" $build $namespaces
 }
 
 Task MoveBinariesToInstallerDir {
@@ -51,7 +47,7 @@ Task MoveResharperPluginToInstallerDir {
 }
 
 Task ZipBinaries -depends MoveBinariesToInstallerDir, MoveResharperPluginToInstallerDir, VisualStudioPlugin -precondition { return $frameworkVersion -eq "4.0" } {
-	$destFile = "$installerDir\NBehave.$fullVersion.zip"
+	$destFile = "$installerDir\NBehave.$build.zip"
 	Exec { .\tools\7zip\7za.exe a -r "$destFile" "$installerDir\*.*" }
 	#Move-Item "$destFile" "$artifactsDir"
 }
@@ -90,7 +86,7 @@ Task ZipExamples -depends MoveBinariesToInstallerDir -precondition { return $fra
 }
 
 Task BuildInstaller -precondition { return $frameworkVersion -eq "4.0" } {
-	Exec { .\tools\nsis\makensis.exe /DVERSION=$fullVersion "$sourceDir\Installer\NBehave.nsi"}
+	Exec { .\tools\nsis\makensis.exe /DVERSION=$build "$sourceDir\Installer\NBehave.nsi"}
 }
 
 Task Artifacts -depends ToInstallerDir, BuildInstaller {

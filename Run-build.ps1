@@ -1,20 +1,17 @@
 param(
 	$task = "default",
 	$buildFile = ".\build.ps1",
-	$version = "0.6.0",
-	$versionSuffix = "-devlocal0"
+	$build = "-devlocal0"
 )
 
 $env:EnableNuGetPackageRestore = $TRUE
 
-Write-Host "buildFile $buildFile"
 Write-Host "task $task"
-Write-Host "version $version"
-Write-Host "versionSuffix $versionSuffix"
-
+Write-Host "buildFile $buildFile"
+Write-Host "build $build"
 
 function Build($framework, $taskToRun) {
-	invoke-psake $buildFile -framework '4.0x86' -t $taskToRun -parameters @{"version"="$version";"frameworkVersion"="$framework";"versionSuffix"="$versionSuffix";"environment"="$environment"}
+	invoke-psake $buildFile -framework '4.0x86' -t $taskToRun -parameters @{"build"="$build";"frameworkVersion"="$framework"}
 	if ($psake.build_success -eq $FALSE) {
 		$errMsg = $psake.build_error_message
 		$replace = @{ "\|" = "||"; "`n" = "|n"; "`r" = "|r"; "'" = "|'"; "\[" = "|["; "\]"  = "|]"; '0x0085' = "|x"; '0x2028' = "|l"; '0x2029' = "|p" }

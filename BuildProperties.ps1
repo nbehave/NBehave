@@ -10,4 +10,5 @@ properties {
 	$tempNugetDir       = "$buildDir\temp_nuget"
 	$artifactsDir       = "$buildDir\Artifacts"
 	$exclusions         = @("*JetBrains*", "*Microsoft*", "log4net.dll", "NAnt.Core.dll", "TestDriven.Framework.dll", "*.pdb", "*.xml")
+	$version 						= "0.6.0"
 }

@@ -1,11 +1,7 @@
-param($version = "0.1.0", $versionSuffix = "", $frameworkVersion = "4.0")
+param($build = "", $frameworkVersion = "4.0")
 
 Include ".\BuildProperties.ps1"
 Include ".\buildframework\psake_ext.ps1"
-
-properties {
-	$fullVersion = $version + $versionSuffix
-}
 
 task Init -depends Clean, Version
 task Default -depends Test #, ILMerge
@@ -21,14 +17,15 @@ task Clean {
 }
 
 Task Version {
-	write-host "##teamcity[buildNumber '$fullVersion']"
+	if ($build -match "^\-") { $build = "$version$build" }
+	write-host "##teamcity[buildNumber '$build']"
 
 	$asmInfo = "$sourceDir\CommonAssemblyInfo.cs"
 	$src = Get-Content $asmInfo
 	$newSrc = foreach($row in $src) {
 		if ($row -match 'Assembly((InformationalVersion)|(Version)|(FileVersion))\s*\(\s*"\d+\.\d+\.\d+.*"\s*\)') {
 			if ($row -match 'AssemblyInformationalVersion') {
-				$row -replace '\d+\.\d+\.\d+.*.*"', ("$fullVersion" + '"')
+				$row -replace '\d+\.\d+\.\d+.*.*"', ("$build" + '"')
 			}
 			else { $row -replace "\d+\.\d+\.\d+.\d+", "$version.0" }
 		}
