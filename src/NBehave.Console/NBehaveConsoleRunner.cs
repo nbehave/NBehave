@@ -26,8 +26,8 @@ namespace NBehave.Console
         /// <summary>
         ///   NBehave-Console [inputfiles] [options]
         ///   Runs a set of NBehave stories from the console
-        ///   You may specify one or more assemblies.    
-        ///   Options:            
+        ///   You may specify one or more assemblies.
+        ///   Options:
         ///   Options that take values may use an equal sign, a colon
         ///   or a space to separate the option from its value.
         /// </summary>
@@ -45,12 +45,7 @@ namespace NBehave.Console
             var options = CommandLineParser<ConsoleOptions>.Parse(args);
 
             if (!options.Nologo)
-            {
-                output.WriteHeader();
-                output.WriteSeparator();
-                output.WriteRuntimeEnvironment();
-                output.WriteSeparator();
-            }
+                WriteHeader(output);
 
             if (options.Help)
             {
@@ -60,8 +55,7 @@ namespace NBehave.Console
 
             if (!options.IsValid())
             {
-                System.Console.Error.WriteLine("fatal error: invalid arguments");
-                options.ShowHelp();
+                WriteInvalidArguments(options);
                 return ReturnCode.InvalidArguments;
             }
 
@@ -112,6 +106,22 @@ namespace NBehave.Console
                 System.Console.ReadKey();
             }
             return (featureResults == null) ? -1 : featureResults.NumberOfFailingScenarios;
+        }
+
+        private static void WriteInvalidArguments(ConsoleOptions options)
+        {
+            System.Console.ForegroundColor = ConsoleColor.DarkRed;
+            System.Console.Error.WriteLine("fatal error: invalid arguments");
+            System.Console.ResetColor();
+            options.ShowHelp();
+        }
+
+        private static void WriteHeader(PlainTextOutput output)
+        {
+            output.WriteHeader();
+            output.WriteSeparator();
+            output.WriteRuntimeEnvironment();
+            output.WriteSeparator();
         }
 
         private static FeatureResults Run(NBehaveConfiguration config)

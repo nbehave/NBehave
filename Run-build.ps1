@@ -1,9 +1,9 @@
 param(
-	$version = "0.1.0",
-	$versionSuffix = "",
 	$task = "default",
 	$environment = "Dev",
-	$buildFile = ".\build.ps1"
+	$buildFile = ".\build.ps1",
+	$version = "0.6.0",
+	$versionSuffix = "-dev.local.0"
 )
 
 $env:EnableNuGetPackageRestore = $TRUE

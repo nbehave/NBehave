@@ -30,12 +30,12 @@ namespace NBehave.Narrator.Framework.Internal
         public void WriteHeader()
         {
             var executingAssembly = Assembly.GetExecutingAssembly();
-            var version = executingAssembly.GetName().Version;
-
+            var semVer = (AssemblyInformationalVersionAttribute)
+                         Attribute.GetCustomAttribute(executingAssembly, typeof(AssemblyInformationalVersionAttribute));
             var copyrights = (AssemblyCopyrightAttribute[])
                 Attribute.GetCustomAttributes(executingAssembly, typeof(AssemblyCopyrightAttribute));
 
-            _writer.WriteLine("NBehave version {0}", version);
+            _writer.WriteLine("NBehave version {0}", semVer.InformationalVersion);
 
             foreach (var copyrightAttribute in copyrights)
             {

@@ -21,20 +21,18 @@ task Clean {
 }
 
 Task Version {
-	if ($environment -ne "Dev")  {
-		$asmInfo = "$sourceDir\CommonAssemblyInfo.cs"
-		$src = Get-Content $asmInfo
-		$newSrc = foreach($row in $src) {
-			if ($row -match 'Assembly((InformationalVersion)|(Version)|(FileVersion))\s*\(\s*"\d+\.\d+\.\d+.*"\s*\)') {
-				if ($row -match 'AssemblyInformationalVersion') {
-					$row -replace '\d+\.\d+\.\d+.*.*"', ("$fullVersion" + '"')
-				}
-				else { $row -replace "\d+\.\d+\.\d+.\d+", "$version.0" }
+	$asmInfo = "$sourceDir\CommonAssemblyInfo.cs"
+	$src = Get-Content $asmInfo
+	$newSrc = foreach($row in $src) {
+		if ($row -match 'Assembly((InformationalVersion)|(Version)|(FileVersion))\s*\(\s*"\d+\.\d+\.\d+.*"\s*\)') {
+			if ($row -match 'AssemblyInformationalVersion') {
+				$row -replace '\d+\.\d+\.\d+.*.*"', ("$fullVersion" + '"')
 			}
-			else { $row }
+			else { $row -replace "\d+\.\d+\.\d+.\d+", "$version.0" }
 		}
-		Set-Content -path $asmInfo -value $newSrc
+		else { $row }
 	}
+	Set-Content -path $asmInfo -value $newSrc
 }
 
 Task Compile -depends Compile-Console-x86, CompileAnyCpu
