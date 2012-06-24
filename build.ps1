@@ -21,6 +21,8 @@ task Clean {
 }
 
 Task Version {
+	write-host "##teamcity[buildNumber '$fullVersion']"
+
 	$asmInfo = "$sourceDir\CommonAssemblyInfo.cs"
 	$src = Get-Content $asmInfo
 	$newSrc = foreach($row in $src) {

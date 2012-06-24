@@ -11,8 +11,7 @@ Write-Host "buildFile $buildFile"
 Write-Host "task $task"
 Write-Host "version $version"
 Write-Host "versionSuffix $versionSuffix"
-$buildNumber = "$version$versionSuffix"
-write-host "##teamcity[buildNumber '$buildNumber']"
+
 
 function Build($framework, $taskToRun) {
 	invoke-psake $buildFile -framework '4.0x86' -t $taskToRun -parameters @{"version"="$version";"frameworkVersion"="$framework";"versionSuffix"="$versionSuffix";"environment"="$environment"}
