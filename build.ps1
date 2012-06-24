@@ -1,4 +1,4 @@
-param($version = "0.1.0", $versionSuffix = "", $frameworkVersion = "4.0", $environment = "Dev")
+param($version = "0.1.0", $versionSuffix = "", $frameworkVersion = "4.0")
 
 Include ".\BuildProperties.ps1"
 Include ".\buildframework\psake_ext.ps1"

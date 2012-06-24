@@ -1,6 +1,5 @@
 param(
 	$task = "default",
-	$environment = "Dev",
 	$buildFile = ".\build.ps1",
 	$version = "0.6.0",
 	$versionSuffix = "-dev.local.0"
