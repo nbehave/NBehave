@@ -4,7 +4,7 @@ Include ".\BuildProperties.ps1"
 Include ".\buildframework\psake_ext.ps1"
 
 properties {
-	$nugetVersion = $version + $versionSuffix
+	$nugetVersion = "$version$versionSuffix"
 }
 
 task Init -precondition { return $frameworkVersion -eq "4.0" }
