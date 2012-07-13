@@ -4,7 +4,7 @@ Include ".\BuildProperties.ps1"
 Include ".\buildframework\psake_ext.ps1"
 
 task Init -depends Clean, Version, InstallNunitRunners
-task Default -depends Test #, ILMerge
+task Default -depends Compile, ILMerge, Test
 
 task Clean {
 	if ($true -eq (Test-Path "$buildDir")) {
@@ -59,10 +59,10 @@ Task ILMerge -depends Compile {
 	$directory = "$buildDirFramework\NBehave"
 	$resharperDir = "$buildDirFramework\Resharper"
 	$out = "NBehave.Narrator.Framework.dll"
-	$assemblies = @("$directory\NBehave.Narrator.Framework.dll", "$directory\Gherkin.dll", "$directory\NBehave.Gherkin.dll")
+	$assemblies = @("$directory\NBehave.Narrator.Framework.dll", "$directory\GurkBurk.dll", "$directory\NBehave.Gherkin.dll")
 
 	Run-ILMerge $snk $directory $out $assemblies
-	Remove-Item "$directory\Gherkin.dll"
+	Remove-Item "$directory\GurkBurk.dll"
 	Remove-Item "$directory\NBehave.Gherkin.dll"
 }
 
