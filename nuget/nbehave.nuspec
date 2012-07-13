@@ -18,12 +18,8 @@
     <!-- ==================== -->
     <!-- lib -->
     <!-- ==================== -->
-    <file src="..\build\Debug-3.5\NBehave\GurkBurk.dll" target="lib\net35" />
-    <file src="..\build\Debug-3.5\NBehave\NBehave.Gherkin.dll" target="lib\net35" />
     <file src="..\build\Debug-3.5\NBehave\NBehave.Narrator.Framework.dll" target="lib\net35" />
 	<!-- 4.0 -->
-    <file src="..\build\Debug-4.0\NBehave\GurkBurk.dll" target="lib\net40" />
-    <file src="..\build\Debug-4.0\NBehave\NBehave.Gherkin.dll" target="lib\net40" />
     <file src="..\build\Debug-4.0\NBehave\NBehave.Narrator.Framework.dll" target="lib\net40" />
     <!-- ==================== -->
 	<!-- tools -->
@@ -31,13 +27,9 @@
 	<file src="..\build\Debug-3.5\NBehave\NBehave-Console.exe" target="tools\net35" />
 	<file src="..\build\Debug-3.5\NBehave\NBehave-Console-x86.exe" target="tools\net35" />
 	<file src="..\build\Debug-3.5\NBehave\NBehave.Narrator.Framework.dll" target="tools\net35" />
-    <file src="..\build\Debug-3.5\NBehave\NBehave.Gherkin.dll" target="tools\net35" />
-    <file src="..\build\Debug-3.5\NBehave\GurkBurk.dll" target="tools\net35" />
 	<!-- 4.0 -->
 	<file src="..\build\Debug-4.0\NBehave\NBehave-Console.exe" target="tools\net40" />
 	<file src="..\build\Debug-4.0\NBehave\NBehave-Console-x86.exe" target="tools\net40" />
 	<file src="..\build\Debug-4.0\NBehave\NBehave.Narrator.Framework.dll" target="tools\net40" />
-    <file src="..\build\Debug-4.0\NBehave\NBehave.Gherkin.dll" target="tools\net40" />
-    <file src="..\build\Debug-4.0\NBehave\GurkBurk.dll" target="tools\net40" />
   </files>
 </package>

@@ -21,14 +21,10 @@
     <!-- ==================== -->
 	<!-- tools -->
     <!-- ==================== -->
-  	<file src="..\build\Debug-3.5\ReSharper\gherkin.dll" target="tools\net35\ReSharper" />
-  	<file src="..\build\Debug-3.5\ReSharper\IKVM*.dll" target="tools\net35\ReSharper" />
   	<file src="..\build\Debug-3.5\ReSharper\NBehave*.dll" target="tools\net35\ReSharper" />
 	<!-- 4.0 -->
-  	<file src="..\build\Debug-4.0\ReSharper\gherkin.dll" target="tools\net40\ReSharper" />
-  	<file src="..\build\Debug-4.0\ReSharper\IKVM*.dll" target="tools\net40\ReSharper" />
   	<file src="..\build\Debug-4.0\ReSharper\NBehave*.dll" target="tools\net40\ReSharper" />
-	
+
 	<file src="ReSharper.feature" target="content\Resharper.feature" />
 	<!-- ==================== -->
 	<!-- script -->
