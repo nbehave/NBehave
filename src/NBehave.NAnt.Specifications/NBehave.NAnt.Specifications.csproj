@@ -32,6 +32,8 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <TargetFrameworkProfile />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\src\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -158,25 +160,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\nant\lib\net\2.0\NDoc.ExtendedUI.dll</HintPath>
     </Reference>
-    <Reference Include="nunit.core">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\tools\nunit\nunit.core.dll</HintPath>
-    </Reference>
     <Reference Include="nunit.framework">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\tools\nunit\nunit.framework.dll</HintPath>
+      <HintPath>..\packages\NUnit.2.6.0.12054\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="scvs">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\nant\scvs.exe</HintPath>
-    </Reference>
-    <Reference Include="Should.Core">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\should\Should.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Should.Fluent">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\should\Should.Fluent.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -211,6 +200,7 @@
     <None Include="NBehaveTestScript.build">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <None Include="GreetingSystemFailure.scenario">
@@ -235,6 +225,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

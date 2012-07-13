@@ -3,7 +3,7 @@ param($build = "", $frameworkVersion = "4.0")
 Include ".\BuildProperties.ps1"
 Include ".\buildframework\psake_ext.ps1"
 
-task Init -depends Clean, Version
+task Init -depends Clean, Version, InstallNunitRunners
 task Default -depends Test #, ILMerge
 
 task Clean {
@@ -14,6 +14,13 @@ task Clean {
 	}
 	New-Item $buildDir -type directory
 	New-Item $testReportsDir -type directory
+	if ($false -eq (Test-Path "$sourceDir\packages")) {
+		New-Item "$sourceDir\packages" -type directory
+	}
+}
+
+Task InstallNunitRunners {
+	Exec { .\src\.nuget\NuGet.exe install nunit.runners -OutputDirectory src\packages\ }
 }
 
 Task Version {
@@ -63,5 +70,7 @@ Task Test -depends Compile {
 	new-item $testReportsDir -type directory -ErrorAction SilentlyContinue
 
 	$arguments = Get-Item "$testDir\*Specifications*.dll"
-	Exec { .\tools\nunit\nunit-console-x86.exe $arguments /xml:$testReportsDir\UnitTests-$frameworkVersion.xml}
+	$basePath =  (get-item src/packages/nunit.runners*).Name
+	$nunitExe = ".\src\packages\$basePath\tools\nunit-console-x86.exe"
+	Exec { "$nunitExe $arguments /xml:$testReportsDir\UnitTests-$frameworkVersion.xml" }
 }

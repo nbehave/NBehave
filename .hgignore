@@ -16,3 +16,4 @@ glob:*.bak
 glob:lib/ReSharper/*
 glob:*.ncrunchproject
 glob:*.ncrunchsolution
+glob:packages
