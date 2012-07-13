@@ -17,3 +17,4 @@ glob:lib/ReSharper/*
 glob:*.ncrunchproject
 glob:*.ncrunchsolution
 glob:packages
+glob:buildframework/psake*
