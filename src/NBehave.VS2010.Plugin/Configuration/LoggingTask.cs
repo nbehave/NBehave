@@ -19,7 +19,7 @@ namespace NBehave.VS2010.Plugin.Configuration
             outputWindowTarget.Layout = "${date:format=HH\\:MM\\:ss} ${logger} ${exception:ToString}";
             config.AddTarget("mail", outputWindowTarget);
 
-            var rule1 = new LoggingRule("*", LogLevel.Fatal, outputWindowTarget);
+            var rule1 = new LoggingRule("NBehave.*", LogLevel.Fatal, outputWindowTarget);
             config.LoggingRules.Add(rule1);
 
             LogManager.Configuration = config;
