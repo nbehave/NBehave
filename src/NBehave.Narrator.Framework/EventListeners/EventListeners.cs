@@ -42,7 +42,7 @@ namespace NBehave.Narrator.Framework.EventListeners
 
         public static EventListener ColorfulConsoleOutputEventListener()
         {
-            return new ColorfulConsoleOutputEventListener();
+            return new OutputEventListener(new ConsoleWriter());
         }
 
         public static EventListener FileOutputEventListener(string outputPath)

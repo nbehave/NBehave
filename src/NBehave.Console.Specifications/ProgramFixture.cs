@@ -58,7 +58,7 @@ namespace NBehave.Console.Specifications
             {
                 listener = NBehaveConsoleRunner.CreateEventListener(options);
                 var multiOutputEventListener = (MultiOutputEventListener)listener;
-                Assert.That(multiOutputEventListener.Listeners[0], Is.TypeOf(typeof(ColorfulConsoleOutputEventListener)));
+                Assert.That(multiOutputEventListener.Listeners[0], Is.TypeOf(typeof(OutputEventListener)));
             }
             finally
             {

@@ -106,6 +106,8 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="EventListeners\ConsoleWriter.cs" />
+    <Compile Include="EventListeners\IOutputWriter.cs" />
     <Compile Include="Hooks\AfterFeatureAttribute.cs" />
     <Compile Include="Hooks\AfterRunAttribute.cs" />
     <Compile Include="Hooks\AfterScenarioAttribute.cs" />
@@ -152,7 +154,7 @@
     </Compile>
     <Compile Include="EventListeners\CodeGeneration\ActionStepCodeGenerator.cs" />
     <Compile Include="EventListeners\CodeGeneration\CodeGenEventListener.cs" />
-    <Compile Include="EventListeners\ColorfulConsoleOutputEventListener.cs" />
+    <Compile Include="EventListeners\OutputEventListener.cs" />
     <Compile Include="EventListeners\Xml\EventReceived.cs" />
     <Compile Include="EventListeners\Xml\EventType.cs" />
     <Compile Include="EventListeners\Xml\StoryResultsEventReceived.cs" />
