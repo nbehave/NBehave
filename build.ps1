@@ -70,7 +70,9 @@ Task Test -depends Compile {
 	new-item $testReportsDir -type directory -ErrorAction SilentlyContinue
 
 	$arguments = Get-Item "$testDir\*Specifications*.dll"
+	$arguments = $arguments + " /xml:$testReportsDir\UnitTests-$frameworkVersion.xml"
 	$basePath =  (get-item src/packages/nunit.runners*).Name
-	$nunitExe = ".\src\packages\$basePath\tools\nunit-console-x86.exe"
-	Exec { "$nunitExe $arguments /xml:$testReportsDir\UnitTests-$frameworkVersion.xml" }
+	$nunitExe =  ".\src\packages\$basePath\tools\nunit-console-x86.exe"
+	$cmd = $executioncontext.invokecommand.NewScriptBlock("$nunitExe $arguments")
+	Exec $cmd
 }
