@@ -12,16 +12,15 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Extension methods for asserts for a more readable assert.
 	Ex: 1.ShouldNotBeEqualTo(2)</description>
+    <!-- <summary></summary> -->
+    <copyright>Copyright © NBehave 2007-2012</copyright>
     <language>en-US</language>
     <tags>nbehave bdd atdd gherkin cucumber</tags>
-	<dependencies>
-		<dependency id="RhinoMocks" version="3.6" />
-	</dependencies>
+    <dependencies>
+        <dependency id="RhinoMocks" version="3.6" />
+    </dependencies>
   </metadata>
   <files>
-    <!-- ==================== -->
-    <!-- lib -->
-    <!-- ==================== -->    
     <file src="..\Debug-3.5\NBehave\NBehave.Spec.{0}.dll" target="lib\net35" />
     <file src="..\Debug-4.0\NBehave\NBehave.Spec.{0}.dll" target="lib\net40" />
   </files>

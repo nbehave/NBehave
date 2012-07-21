@@ -55,6 +55,7 @@ task Clean {
 
 task NuGet -depends Clean -precondition{ return $frameworkVersion -eq "4.0" } {
 	Exec { .\src\.nuget\nuget.exe pack nuget\nbehave.nuspec -Version $build -OutputDirectory $artifactsDir}
+	Exec { .\src\.nuget\nuget.exe pack nuget\nbehave.runners.nuspec -Version $build -OutputDirectory $artifactsDir}
 	Exec { .\src\.nuget\nuget.exe pack nuget\nbehave.samples.nuspec -Version $build -OutputDirectory $artifactsDir}
 	#Exec { .\src\.nuget\nuget.exe pack nuget\NBehave.Resharper.nuspec -Version $build -OutputDirectory $artifactsDir}
 	#Exec { .\src\.nuget\nuget.exe pack nuget\NBehave.VsPlugin.nuspec -Version $build -OutputDirectory $artifactsDir}

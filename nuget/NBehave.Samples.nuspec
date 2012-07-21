@@ -11,18 +11,17 @@
     <iconUrl>http://static.tumblr.com/z2xvmc8/mhzlb82x5/logo.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>This package contains samples that demonstrate the use of nbehave</description>
+    <!-- <summary></summary> -->
+    <copyright>Copyright © NBehave 2007-2012</copyright>
     <language>en-US</language>
     <tags>nbehave bdd atdd gherkin cucumber sample</tags>
-	<dependencies>
-		<dependency id="nbehave" version="$version$" />
-		<dependency id="nbehave.fluent.nunit" version="$version$" />
-		<dependency id="nbehave.spec.nunit" version="$version$" />
-	</dependencies>
+  <dependencies>
+    <dependency id="nbehave" version="$version$" />
+    <dependency id="nbehave.fluent.nunit" version="$version$" />
+    <dependency id="nbehave.spec.nunit" version="$version$" />
+  </dependencies>
   </metadata>
   <files>
-    <!-- ==================== -->
-	<!-- content -->
-    <!-- ==================== -->
-	<file src="Samples\**\*.*" target="content\" />
+    <file src="Samples\**\*.*" target="content\" />
   </files>
 </package>
