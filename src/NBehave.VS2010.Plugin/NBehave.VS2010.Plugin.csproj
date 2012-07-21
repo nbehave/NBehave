@@ -188,6 +188,12 @@
     <Reference Include="System.Xml" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="VSLangProj, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="VSLangProj100, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="System.Xaml" />
   </ItemGroup>
@@ -199,6 +205,9 @@
     <Compile Include="Configuration\MenuCommandTask.cs" />
     <Compile Include="Configuration\OutputWindowTask.cs" />
     <Compile Include="Configuration\PublishCrossPackageServicesTask.cs" />
+    <Compile Include="Domain\ConsoleRunner.cs" />
+    <Compile Include="Domain\NuGet.cs" />
+    <Compile Include="Domain\OutputWindowWriter.cs" />
     <Compile Include="Tiny\TinyIoCContainerExtension.cs" />
     <Compile Include="Contracts\IVisualStudioService.cs" />
     <Compile Include="Contracts\IPluginLogger.cs" />
@@ -306,13 +315,13 @@
     <VsSDKInstall>$(SolutionDir)..\tools\vs2010.sdk\</VsSDKInstall>
     <VsSDKIncludes>$(VsSDKInstall)inc\</VsSDKIncludes>
     <VsixSchemaPath>$(VsSDKInstall)VSIXManifestSchema.xsd</VsixSchemaPath>
-    <DeployExtension>false</DeployExtension>
+    <DeployExtension>true</DeployExtension>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- Condition to allow blend to open project -->
   <!--  <Import Condition="'$(BuildingInsideVisualStudio)' == 'true'" Project="$(VsSDKInstall)Microsoft.VsSDK.targets" />-->
   <Import Condition="'$(Configuration)' != 'ExpressionBlend'" Project="$(VsSDKInstall)Microsoft.VsSDK.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets. -->
   <UsingTask TaskName="EnvironmentVariable" AssemblyFile="$(SolutionDir)..\tools\msbuild.extension.pack\MSBuild.ExtensionPack.dll" />
   <Target Name="BeforeBuild" DependsOnTargets="ConfigureVsSDKBuild">

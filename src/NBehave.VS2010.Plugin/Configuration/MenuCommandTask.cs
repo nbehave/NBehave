@@ -12,22 +12,22 @@ namespace NBehave.VS2010.Plugin.Configuration
     {
         private IOutputWindow _outputWindow;
         private IServiceProvider _serviceProvider;
-        private IVisualStudioService _visualStudioService;
+        private IScenarioRunner _scenarioRunner;
 
         public void Install(TinyIoCContainer container)
         {
             _serviceProvider = container.Resolve<IServiceProvider>();
-            _visualStudioService = container.Resolve<IVisualStudioService>();
             _outputWindow = container.Resolve<IOutputWindow>();
+            _scenarioRunner = container.Resolve<IScenarioRunner>();
 
-            var mcs = _serviceProvider.GetService(typeof (IMenuCommandService)) as OleMenuCommandService;
+            var mcs = _serviceProvider.GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
             if (mcs == null) return;
 
-            var menuCommandId = new CommandID((Identifiers.CommandGroupGuid), (int) Identifiers.RunCommandId);
+            var menuCommandId = new CommandID((Identifiers.CommandGroupGuid), (int)Identifiers.RunCommandId);
             var menuItem = new MenuCommand(RunCommandOnClick, menuCommandId);
             mcs.AddCommand(menuItem);
 
-            var debugCommandId = new CommandID((Identifiers.CommandGroupGuid), (int) Identifiers.DebugCommandId);
+            var debugCommandId = new CommandID((Identifiers.CommandGroupGuid), (int)Identifiers.DebugCommandId);
             var debugItem = new MenuCommand(DebugCommandOnClick, debugCommandId);
             mcs.AddCommand(debugItem);
         }
@@ -46,8 +46,7 @@ namespace NBehave.VS2010.Plugin.Configuration
         {
             try
             {
-                var runner = new ScenarioRunner(_outputWindow, _visualStudioService);
-                runner.Run(debug);
+                _scenarioRunner.Run(debug);
             }
             catch (Exception exception)
             {

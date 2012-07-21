@@ -21,8 +21,13 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs.ViewModels
     {
         private List<dynamic> _buttons;
 
-        [Import(AllowDefault = true)]
-        public ScenarioRunner ScenarioRunner { get; set; }
+        //public RunOrDebugViewModel(IScenarioRunner scenarioRunner)
+        //{
+        //    ScenarioRunner = scenarioRunner;
+        //}
+
+        [Import(AllowDefault = false)]
+        public IScenarioRunner ScenarioRunner { get; set; }
 
         public List<dynamic> Buttons
         {
@@ -36,26 +41,25 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs.ViewModels
         {
             get
             {
-                return new ActionCommand(() =>
-                {
-                    string tempFileName = GetTempScenarioFile();
-
-                    ScenarioRunner.Run(tempFileName, false);
-                });
+                return GetCommand(false);
             }
         }
 
         public ICommand DebugClicked
         {
-            get
+            get 
             {
-                return new ActionCommand(() =>
-                {
-                    string tempFileName = GetTempScenarioFile();
-
-                    ScenarioRunner.Run(tempFileName, true);
-                });
+                return GetCommand(true);
             }
+        }
+
+        private ICommand GetCommand(bool debug)
+        {
+            return new ActionCommand(() =>
+                                         {
+                                             string tempFileName = GetTempScenarioFile();
+                                             ScenarioRunner.Run(tempFileName, debug);
+                                         });
         }
 
         private string GetTempScenarioFile()
@@ -72,8 +76,8 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs.ViewModels
         {
             Position = Point.Subtract(position, new Vector(3, 3));
             RelativeVisualElement = visualElement;
-            this.View = runOrDebugView;
-            this.ScenarioText = scenarioText;
+            View = runOrDebugView;
+            ScenarioText = scenarioText;
 
             _buttons = new List<dynamic>
             {
@@ -85,14 +89,14 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs.ViewModels
             Observable
                 .FromEvent<PropertyChangedEventHandler, PropertyChangedEventArgs>(
                     handler => ((sender, args) => handler(sender, args)),
-                    eventHandler => this.PropertyChanged += eventHandler,
-                    changedEventHandler => this.PropertyChanged += changedEventHandler)
+                    eventHandler => PropertyChanged += eventHandler,
+                    changedEventHandler => PropertyChanged += changedEventHandler)
                 .Where(@event => @event.EventArgs.PropertyName == "SelectedItem" && SelectedItem != null)
                 .Throttle(TimeSpan.FromSeconds(1))
                 .ObserveOnDispatcher()
                 .Subscribe(event1 =>
                                {
-                                   this.SelectedItem.Command.Execute(null);
+                                   SelectedItem.Command.Execute(null);
                                    View.Deselect();
                                });
         }

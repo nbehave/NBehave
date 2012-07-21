@@ -7,12 +7,12 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs
 {
     public class PlayGlyphTag : IGlyphTag
     {
-        public string ScenarioText { get; set; }
+        private readonly string scenarioText;
         private RunOrDebugViewModel viewModel;
 
         public PlayGlyphTag(string scenarioText)
         {
-            ScenarioText = scenarioText;
+            this.scenarioText = scenarioText;
         }
 
         public void Execute(Point position, FrameworkElement visualElement)
@@ -21,7 +21,7 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs
             {
                 var runOrDebugView = new RunOrDebugView();
                 viewModel = runOrDebugView.DataContext as RunOrDebugViewModel;
-                viewModel.InitialiseProperties(position, visualElement, runOrDebugView, ScenarioText);
+                viewModel.InitialiseProperties(position, visualElement, runOrDebugView, scenarioText);
             }
 
             viewModel.Show();

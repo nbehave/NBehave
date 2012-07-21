@@ -28,6 +28,9 @@ namespace NBehave.VS2010.Plugin
             container.Register<IServiceProvider>(this);
             container.Register<IServiceContainer>(this);
             container.Register<IVisualStudioService, VisualStudioService>().AsMultiInstance();
+            container.Register<INuGet, NuGet>().AsMultiInstance();
+            container.Register<IConsoleRunner, ConsoleRunner>().AsMultiInstance();
+            container.Register<IScenarioRunner, ScenarioRunner>().AsMultiInstance();
 
             container.Install(
                 new OutputWindowTask(),

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
+﻿using System.ComponentModel.Composition;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -30,7 +28,7 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs
     {
         private readonly IWpfTextViewHost _wpfTextViewHost;
         private readonly IViewTagAggregatorFactoryService _viewTagAggregatorFactoryService;
-        private ITagAggregator<PlayGlyphTag> _createTagAggregator;
+        private readonly ITagAggregator<PlayGlyphTag> _createTagAggregator;
 
         public PlayMouseProcessor(IWpfTextViewHost wpfTextViewHost, IViewTagAggregatorFactoryService viewTagAggregatorFactoryService)
         {
@@ -42,14 +40,17 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs
 
         public override void PreprocessMouseLeftButtonDown(MouseButtonEventArgs e)
         {
-            IWpfTextView textView = this._wpfTextViewHost.TextView;
+            IWpfTextView textView = _wpfTextViewHost.TextView;
             Point position = e.GetPosition(textView.VisualElement);
 
-            ITextViewLine textViewLine = 
-                textView.TextViewLines.GetTextViewLineContainingYCoordinate(position.Y + textView.ViewportTop);
-            
-            PlayGlyphTag tag = this._createTagAggregator.GetTags(textViewLine.ExtentAsMappingSpan).Select(span => span.Tag).First();
-            tag.Execute(position, textView.VisualElement);
+            ITextViewLine textViewLine = textView.TextViewLines
+                .GetTextViewLineContainingYCoordinate(position.Y + textView.ViewportTop);
+
+            PlayGlyphTag tag = _createTagAggregator.GetTags(textViewLine.ExtentAsMappingSpan)
+                .Select(span => span.Tag)
+                .FirstOrDefault();
+            if (tag != null)
+                tag.Execute(position, textView.VisualElement);
         }
     }
 }

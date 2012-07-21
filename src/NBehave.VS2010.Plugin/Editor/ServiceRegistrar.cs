@@ -41,10 +41,7 @@ namespace NBehave.VS2010.Plugin.Editor
 
                 container.GetExport<GherkinFileEditorParserFactory>().Value.CreateParser(buffer);
 
-                var outputWindow = ServiceProvider.GetService(typeof(IOutputWindow)) as IOutputWindow;
-                var visualStudioService = ServiceProvider.GetService(typeof(IVisualStudioService)) as IVisualStudioService;
-                  
-                var scenarioRunner = new ScenarioRunner(outputWindow, visualStudioService);
+                var scenarioRunner = ServiceProvider.GetService(typeof(IScenarioRunner)) as IScenarioRunner;
 
                 GherkinFileClassifier fileClassifierForBuffer = buffer.Properties.GetOrCreateSingletonProperty(() => new GherkinFileClassifier(buffer));
                 buffer.Properties.GetOrCreateSingletonProperty(() => new PlayTagger(buffer) as ITagger<PlayGlyphTag>);
@@ -76,14 +73,14 @@ namespace NBehave.VS2010.Plugin.Editor
 
         public IEnumerable<ExportProvider> GetCustomExportProviders()
         {
-            return new []{ Container };
+            return new[] { Container };
         }
 
         private AggregateCatalog GetCatalog()
         {
             var location = (from assembly in AppDomain.CurrentDomain.GetAssemblies()
-                                 where assembly == typeof (ServiceRegistrar).Assembly
-                                 select assembly.Location).First();
+                            where assembly == typeof(ServiceRegistrar).Assembly
+                            select assembly.Location).First();
 
             var directory = Path.GetDirectoryName(location);
 

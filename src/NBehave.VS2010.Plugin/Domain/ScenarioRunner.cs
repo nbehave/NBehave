@@ -1,21 +1,33 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using Microsoft.Win32;
 using NBehave.VS2010.Plugin.Contracts;
 
 namespace NBehave.VS2010.Plugin.Domain
 {
-    public class ScenarioRunner
+    [Guid("7D6EEAFD-FFC0-4d56-A1A9-256178D1A330")]
+    [ComVisible(true)]
+    public interface IScenarioRunner
     {
-        private readonly IOutputWindow _outputWindow;
-        private readonly IVisualStudioService _visualStudioService;
+        void Run(bool debug);
+        void Run(string documentName, bool debug);
+    }
 
-        public ScenarioRunner(IOutputWindow outputWindow, IVisualStudioService visualStudioService)
+    public class ScenarioRunner : IScenarioRunner
+    {
+        private readonly IVisualStudioService _visualStudioService;
+        private readonly IOutputWindow _outputWindow;
+        private readonly IConsoleRunner _consoleRunner;
+
+        public ScenarioRunner(IOutputWindow outputWindow,
+            IVisualStudioService visualStudioService,
+            IConsoleRunner consoleRunner)
         {
             _outputWindow = outputWindow;
             _visualStudioService = visualStudioService;
+            _consoleRunner = consoleRunner;
         }
 
         public void Run(bool debug)
@@ -28,82 +40,74 @@ namespace NBehave.VS2010.Plugin.Domain
         {
             _visualStudioService.BuildSolution();
             _outputWindow.Clear();
+            _outputWindow.BringToFront();
 
-            var assemblyPath = _visualStudioService.GetAssemblyPath();
+            RunDocumentFile(documentName, debug);
+        }
 
+        private void RunDocumentFile(string documentName, bool debug)
+        {
+            var pathToNBehaveConsole = _consoleRunner.GetPathToExecutable();
+            Run(pathToNBehaveConsole, documentName, debug);
+        }
 
-            var args = string.Format("\"{0}\" /sf=\"{1}\"", assemblyPath, documentName);
+        private void Run(string pathToNBehaveConsole, string documentName, bool debug)
+        {
+            _visualStudioService.BuildSolution();
+            _outputWindow.Clear();
 
-            if (debug)
-            {
-                args += " /wd";
-            }
+            var assemblyPath = _visualStudioService.GetProjectAssemblyOutputPath();
+            // create an xml document, xsl transform it to html and load it in VS
+            // or get data back live from the console and show it in visual studio
+            var args = FormatArguments(documentName, assemblyPath, debug);
 
-            var processStartInfo = new ProcessStartInfo
-                                       {
-                                           Arguments = args,
-                                           CreateNoWindow = true,
-                                           FileName = GetExecutable(Path.GetDirectoryName(assemblyPath)),
-                                           RedirectStandardOutput = true,
-                                           UseShellExecute = false,
-                                           WorkingDirectory = Path.GetDirectoryName(assemblyPath)
-                                       };
-
-            var process = new Process
-                              {
-                                  StartInfo = processStartInfo
-                              };
-
-
-            process.Start();
+            var process = StartConsole(pathToNBehaveConsole, assemblyPath, args);
             var output = new Task(() =>
-                                      {
-                                          try
-                                          {
-                                              _outputWindow.BringToFront();
+            {
+                try
+                {
+                    _outputWindow.BringToFront();
 
-                                              while (!process.StandardOutput.EndOfStream)
-                                              {
-                                                  _outputWindow.WriteLine(process.StandardOutput.ReadLine());
-                                              }
-                                          }
-                                          catch (Exception exception)
-                                          {
-                                              _outputWindow.WriteLine(exception.ToString());
-                                          }
-                                      });
+                    while (!process.StandardOutput.EndOfStream)
+                    {
+                        _outputWindow.WriteLine(process.StandardOutput.ReadLine());
+                    }
+                }
+                catch (Exception exception)
+                {
+                    _outputWindow.WriteLine(exception.ToString());
+                }
+            });
             output.Start();
 
             if (debug)
-            {
                 _visualStudioService.AttachDebugger(process.Id);
-            }
         }
 
-        private string GetExecutable(string workingDirectory)
+        private string FormatArguments(string documentName, string assemblyPath, bool debug)
         {
-            var nbehaveRegKey =
-                Registry.LocalMachine.OpenSubKey(string.Format("{0}{1}", "SOFTWARE\\NBehave\\",
-                                                               typeof (ScenarioRunner).Assembly.GetName().Version));
-            var nbehaveConsoleExe = "NBehave-Console.exe";
+            var args = string.Format("\"{0}\" /sf=\"{1}\"", assemblyPath, documentName);
 
-            if (nbehaveRegKey != null)
+            if (debug)
+                args += " /wd";
+            return args;
+        }
+
+        private Process StartConsole(string pathToNBehaveConsole, string assemblyPath, string args)
+        {
+            var processStartInfo = new ProcessStartInfo
             {
-                var installDirectory = nbehaveRegKey.GetValue("Install_Dir");
+                Arguments = args,
+                CreateNoWindow = true,
+                FileName = pathToNBehaveConsole,
+                RedirectStandardOutput = true,
+                UseShellExecute = false,
+                WorkingDirectory = Path.GetDirectoryName(assemblyPath)
+            };
 
-
-                if (installDirectory != null)
-                {
-                    var version = _visualStudioService.GetTargetFrameworkVersion();
-
-                    return Path.Combine((string) installDirectory, version, nbehaveConsoleExe);
-                }
-            }
-            else
-            {
-                return Path.Combine(workingDirectory, nbehaveConsoleExe);
-            }
-            return nbehaveConsoleExe;
+            var process = new Process { StartInfo = processStartInfo };
+            process.Start();
+            return process;
         }
     }
 }

@@ -15,7 +15,7 @@ namespace NBehave.VS2010.Plugin.Configuration
             var pane = (IVsOutputWindow)serviceProvider.GetService(typeof(SVsOutputWindow));
 
             var myGuidList = Guid.NewGuid();
-            pane.CreatePane(myGuidList, "Scenario Results", 1, 1);
+            pane.CreatePane(myGuidList, "NBehave", 1, 1);
 
             IVsOutputWindowPane outputWindowPane;
             pane.GetPane(myGuidList, out outputWindowPane);

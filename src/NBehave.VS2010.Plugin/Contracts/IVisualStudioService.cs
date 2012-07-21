@@ -6,10 +6,12 @@ namespace NBehave.VS2010.Plugin.Contracts
     [ComVisible(true)]
     public interface IVisualStudioService
     {
-        string GetAssemblyPath();
+        string GetProjectAssemblyOutputPath();
         string GetActiveDocumentFullName();
-        void AttachDebugger(int id);
+        void AttachDebugger(int processId);
         void BuildSolution();
         string GetTargetFrameworkVersion();
+        string ReferencedAssemblyFolder(string referencedAssembly);
+        bool Is32Bit { get; }
     }
 }

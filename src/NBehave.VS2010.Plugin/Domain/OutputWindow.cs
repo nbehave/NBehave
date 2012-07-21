@@ -1,4 +1,5 @@
 using System;
+using System.Windows.Threading;
 using Microsoft.VisualStudio.Shell.Interop;
 using NBehave.VS2010.Plugin.Contracts;
 
@@ -7,17 +8,19 @@ namespace NBehave.VS2010.Plugin.Domain
     public class OutputWindow : IOutputWindow
     {
         private readonly IVsOutputWindowPane _outputWindowPane;
+        private readonly Dispatcher _dispatcher;
 
         public OutputWindow(IVsOutputWindowPane outputWindowPane)
         {
             _outputWindowPane = outputWindowPane;
+            _dispatcher = Dispatcher.CurrentDispatcher;
         }
-
-        #region IOutputWindow Members
 
         public void WriteLine(string message)
         {
-            _outputWindowPane.OutputStringThreadSafe(string.Format("{0}{1}", message, Environment.NewLine));
+            string str = string.Format("{0}{1}", message, Environment.NewLine);
+            Action outString = () => _outputWindowPane.OutputStringThreadSafe(str);
+            _dispatcher.Invoke(outString);
         }
 
         public void BringToFront()
@@ -29,7 +32,5 @@ namespace NBehave.VS2010.Plugin.Domain
         {
             _outputWindowPane.Clear();
         }
-
-        #endregion
     }
 }

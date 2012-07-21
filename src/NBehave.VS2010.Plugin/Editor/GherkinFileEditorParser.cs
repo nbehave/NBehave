@@ -112,24 +112,12 @@ namespace NBehave.VS2010.Plugin.Editor
 
         public void Examples(Token keyword, Token name)
         {
-            _parserEvents.OnNext(new ParserEvent(ParserEventType.Examples)
-            {
-                Keyword = keyword.Content,
-                Name = name.Content,
-                Line = keyword.LineInFile.Line,
-                Snapshot = _snapshot
-            });
+            OnNext(keyword, name, ParserEventType.Examples);
         }
 
         public void Step(Token keyword, Token name)
         {
-            _parserEvents.OnNext(new ParserEvent(ParserEventType.Step)
-            {
-                Keyword = keyword.Content,
-                Text = name.Content,
-                Line = keyword.LineInFile.Line,
-                Snapshot = _snapshot
-            });
+            OnNext(keyword, name, ParserEventType.Step);
         }
 
         public void Table(IList<IList<Token>> rows, LineInFile tablePosition)
@@ -145,44 +133,22 @@ namespace NBehave.VS2010.Plugin.Editor
 
         public void Background(Token keyword, Token name)
         {
-            _parserEvents.OnNext(new ParserEvent(ParserEventType.Background)
-            {
-                Keyword = keyword.Content,
-                Name = name.Content,
-                Line = keyword.LineInFile.Line,
-                Snapshot = _snapshot
-            });
+            OnNext(keyword, name, ParserEventType.Background);
         }
 
         public void ScenarioOutline(Token keyword, Token name)
         {
-            _parserEvents.OnNext(new ParserEvent(ParserEventType.ScenarioOutline)
-            {
-                Keyword = keyword.Content,
-                Name = name.Content,
-                Line = keyword.LineInFile.Line,
-                Snapshot = _snapshot
-            });
+            OnNext(keyword, name, ParserEventType.ScenarioOutline);
         }
 
         public void Comment(Token content)
         {
-            _parserEvents.OnNext(new ParserEvent(ParserEventType.Comment)
-            {
-                Comment = content.Content,
-                Line = content.LineInFile.Line,
-                Snapshot = _snapshot
-            });
+            OnNext(content, ParserEventType.Comment);
         }
 
-        public void Tag(Token name)
+        public void Tag(Token content)
         {
-            _parserEvents.OnNext(new ParserEvent(ParserEventType.Tag)
-            {
-                Name = name.Content,
-                Line = name.LineInFile.Line,
-                Snapshot = _snapshot
-            });
+            OnNext(content, ParserEventType.Tag);
         }
 
         public void SyntaxError(string state, string @event, IEnumerable<string> legalEvents, LineInFile lineInFile)
@@ -195,6 +161,27 @@ namespace NBehave.VS2010.Plugin.Editor
         public void DocString(Token docString)
         { }
 
+
+        private void OnNext(Token content, ParserEventType parserEventType)
+        {
+            _parserEvents.OnNext(new ParserEvent(parserEventType)
+            {
+                Name = content.Content,
+                Line = content.LineInFile.Line,
+                Snapshot = _snapshot
+            });
+        }
+
+        private void OnNext(Token keyword, Token name, ParserEventType parserEventType)
+        {
+            _parserEvents.OnNext(new ParserEvent(parserEventType)
+            {
+                Keyword = keyword.Content,
+                Name = name.Content,
+                Line = keyword.LineInFile.Line,
+                Snapshot = _snapshot
+            });
+        }
         public void Dispose()
         {
             _inputListener.Dispose();

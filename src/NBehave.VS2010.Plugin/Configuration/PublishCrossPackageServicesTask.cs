@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.Design;
 using NBehave.Narrator.Framework.Tiny;
 using NBehave.VS2010.Plugin.Contracts;
+using NBehave.VS2010.Plugin.Domain;
 using NBehave.VS2010.Plugin.Tiny;
 
 namespace NBehave.VS2010.Plugin.Configuration
@@ -10,10 +11,7 @@ namespace NBehave.VS2010.Plugin.Configuration
         private void AddService<T>(IServiceContainer serviceContainer, TinyIoCContainer iocContainer)
             where T : class
         {
-            serviceContainer.AddService(
-                typeof(T),
-                (container, serviceType) => iocContainer.Resolve<T>(),
-                true);
+            serviceContainer.AddService(typeof(T), (container, serviceType) => iocContainer.Resolve<T>(), true);
         }
 
         public void Install(TinyIoCContainer container)
@@ -28,6 +26,7 @@ namespace NBehave.VS2010.Plugin.Configuration
             AddService<IOutputWindow>(serviceContainer, container);
             AddService<IVisualStudioService>(serviceContainer, container);
             AddService<IPluginLogger>(serviceContainer, container);
+            AddService<IScenarioRunner>(serviceContainer, container);
         }
     }
 }
