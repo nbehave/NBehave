@@ -4,7 +4,7 @@ Include ".\BuildProperties.ps1"
 Include ".\buildframework\psake_ext.ps1"
 
 task Init -depends Clean, Version, InstallNunitRunners
-task Default -depends Compile, ILMerge, Test
+task Default -depends Compile, Test
 
 task Clean {
 	if ($true -eq (Test-Path "$buildDir")) {
@@ -54,7 +54,6 @@ Task Compile-Console-x86 {
 }
 
 Task ILMerge -depends Compile {
-	$snk = "$sourceDir\NBehave.snk"
 	$buildDirFramework = "$buildDir\Debug-$frameworkVersion"
 	$directory = "$buildDirFramework\NBehave"
 	$resharperDir = "$buildDirFramework\Resharper"

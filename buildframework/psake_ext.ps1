@@ -52,26 +52,26 @@ function xmlList([string]$file, [string]$xpath, [hashtable]$namespaces) {
 	{
 		$xmlNameSpace.AddNamespace($key, $namespaces.$key);
 	}
-	$nodes = @()
+  $nodes = @()
     $node = $fileXml.SelectNodes($xpath, $xmlNameSpace)
-	$node | ForEach-Object { $nodes += @($_.Value)}
+  $node | ForEach-Object { $nodes += @($_.Value)}
 
-	return $nodes
+  return $nodes
 }
 
-function Run-ILMerge($key, $directory, $outAssembly, $assemblies) {
-	new-item -path $directory -name "temp_merge" -type directory -ErrorAction SilentlyContinue
+function Run-ILMerge($directory, $outAssembly, $assemblies) {
+  new-item -path $directory -name "temp_merge" -type directory -ErrorAction SilentlyContinue
 
-	$outFile = "$directory\temp_merge\$outAssembly"
-	Write-Host "$outFile"
+  $outFile = "$directory\temp_merge\$outAssembly"
+  Write-Host "$outFile"
 
-	if($framework -eq "4.0") {
-		Exec { .\tools\ilmerge\ilmerge.exe /keyfile:$key /out:$outFile $assemblies /targetplatform:"v4,$env:ProgramFiles\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0" }
-	}
-	else {
-		Exec { .\tools\ilmerge\ilmerge.exe /keyfile:$key /out:$outFile $assemblies }
-	}
+  if($framework -eq "4.0") {
+    Exec { .\tools\ilmerge\ilmerge.exe /out:$outFile $assemblies /targetplatform:"v4,$env:ProgramFiles\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0" }
+  }
+  else {
+    Exec { .\tools\ilmerge\ilmerge.exe /out:$outFile $assemblies /targetplatform:"v2,$env:ProgramFiles\Reference Assemblies\Microsoft\Framework\.NETFramework\v3.5" }
+  }
 
-	Get-ChildItem "$directory\temp_merge\**" -Include *.dll, *.pdb | Copy-Item -Destination $directory
-	Remove-Item "$directory\temp_merge" -Recurse -ErrorAction SilentlyContinue
+  Get-ChildItem "$directory\temp_merge\**" -Include *.dll, *.pdb | Copy-Item -Destination $directory
+  Remove-Item "$directory\temp_merge" -Recurse -ErrorAction SilentlyContinue
 }
