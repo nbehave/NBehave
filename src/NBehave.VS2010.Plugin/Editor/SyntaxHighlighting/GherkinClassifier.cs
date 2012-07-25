@@ -17,17 +17,23 @@ namespace NBehave.VS2010.Plugin.Editor.SyntaxHighlighting
 
         public ClassificationSpan CreateFeatureClassification(Feature feature, ITextSnapshot snapshot)
         {
-            return CreateClassification(feature.SourceLine, feature.Title, ClassificationRegistry.FeatureTitle, snapshot);
+            var snapshotSpan = CreateClassification(feature.SourceLine, feature.Title, snapshot);
+            return (snapshotSpan.HasValue) ? new ClassificationSpan(snapshotSpan.Value, ClassificationRegistry.FeatureTitle) : null;
+
         }
 
         public IEnumerable<ClassificationSpan> CreateScenarioClassification(Feature feature, ITextSnapshot snapshot)
         {
             return feature.Scenarios
-                .Select(scenario => CreateClassification(scenario.SourceLine, scenario.Title, ClassificationRegistry.ScenarioTitle, snapshot))
+                .Select(scenario =>
+                            {
+                                var snapshotSpan = CreateClassification(scenario.SourceLine, scenario.Title, snapshot);
+                                return (snapshotSpan.HasValue) ? new ClassificationSpan(snapshotSpan.Value, ClassificationRegistry.ScenarioTitle) : null;
+                            })
                 .Where(c => c != null);
         }
 
-        private ClassificationSpan CreateClassification(int sourceLine, string text, IClassificationType classificationType, ITextSnapshot snapshot)
+        private SnapshotSpan? CreateClassification(int sourceLine, string text, ITextSnapshot snapshot)
         {
             int descriptionStartPosition = snapshot.GetLineFromLineNumber(sourceLine).Start.Position;
             int lineNumber = text.Split(new[] { Environment.NewLine }, StringSplitOptions.None).Count() + sourceLine;
@@ -35,8 +41,7 @@ namespace NBehave.VS2010.Plugin.Editor.SyntaxHighlighting
                 return null;
             int descriptionEndPosition = snapshot.GetLineFromLineNumber(lineNumber).Start.Position;
             var descriptionSpan = new Span(descriptionStartPosition, descriptionEndPosition - descriptionStartPosition);
-
-            return new ClassificationSpan(new SnapshotSpan(snapshot, descriptionSpan), classificationType);
+            return new SnapshotSpan(snapshot, descriptionSpan);
         }
     }
 }

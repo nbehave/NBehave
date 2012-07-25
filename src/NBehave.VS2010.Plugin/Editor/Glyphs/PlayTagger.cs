@@ -45,7 +45,7 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs
         public PlayTagger(ITextBuffer buffer)
         {
             var currentSnapshot = buffer.CurrentSnapshot;
-            var snapshotSpans = new Stack<SnapshotSpan>();
+            var snapshotSpans = new Stack<ScenarioSnapshotSpan>();
             listeners = new CompositeDisposable();
             tagSpans = new List<ITagSpan<PlayGlyphTag>>();
 
@@ -62,25 +62,25 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs
                 .Subscribe(parserEvent => ScenariosToSnapshotSpan(currentSnapshot, parserEvent).ToList().ForEach(snapshotSpans.Push)));
         }
 
-        private void ConvertSnapshotSpanToPlayGlyphTag(Stack<SnapshotSpan> snapshotSpans)
+        private void ConvertSnapshotSpanToPlayGlyphTag(Stack<ScenarioSnapshotSpan> snapshotSpans)
         {
             while (!snapshotSpans.IsEmpty())
             {
                 var snapshotSpan = snapshotSpans.Pop();
-                var playGlyphTag = new PlayGlyphTag(snapshotSpan.GetText());
-                tagSpans.Add(new TagSpan<PlayGlyphTag>(snapshotSpan, playGlyphTag));
+                var playGlyphTag = new PlayGlyphTag(snapshotSpan.Scenario);
+                tagSpans.Add(new TagSpan<PlayGlyphTag>(snapshotSpan.SnapshotSpan, playGlyphTag));
             }
             tagSpans.Reverse();
         }
 
-        private static IEnumerable<SnapshotSpan> ScenariosToSnapshotSpan(ITextSnapshot currentSnapshot, Feature parserEvent)
+        private static IEnumerable<ScenarioSnapshotSpan> ScenariosToSnapshotSpan(ITextSnapshot currentSnapshot, Feature parserEvent)
         {
             var scenarios = parserEvent.Scenarios;
             var numberOfScenarios = scenarios.Count;
             for (int i = 0; i < numberOfScenarios; i++)
             {
                 var snapshotSpan = ScenarioToSnapshotSpan(scenarios, i, currentSnapshot);
-                yield return snapshotSpan;
+                yield return new ScenarioSnapshotSpan(snapshotSpan, scenarios[i]);
             }
         }
 
@@ -103,6 +103,18 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs
         IEnumerable<ITagSpan<PlayGlyphTag>> ITagger<PlayGlyphTag>.GetTags(NormalizedSnapshotSpanCollection spans)
         {
             return tagSpans;
+        }
+    }
+
+    public class ScenarioSnapshotSpan
+    {
+        public SnapshotSpan SnapshotSpan { get; set; }
+        public Scenario Scenario { get; set; }
+
+        public ScenarioSnapshotSpan(SnapshotSpan snapshotSpan, Scenario scenario)
+        {
+            SnapshotSpan = snapshotSpan;
+            Scenario = scenario;
         }
     }
 }

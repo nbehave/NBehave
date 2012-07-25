@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.Concurrency;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -10,6 +11,7 @@ using System.Windows.Media.Imaging;
 using MEFedMVVM.Common;
 using MEFedMVVM.ViewModelLocator;
 using Microsoft.Expression.Interactivity.Core;
+using NBehave.Narrator.Framework;
 using NBehave.VS2010.Plugin.Domain;
 using NBehave.VS2010.Plugin.Editor.Glyphs.Views;
 
@@ -18,7 +20,7 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs.ViewModels
     [ExportViewModel("RunOrDebugViewModel")]
     public class RunOrDebugViewModel : NotifyPropertyChangedBase, IDesignTimeAware
     {
-        private List<dynamic> _buttons;
+        private List<dynamic> buttons;
 
         [Import(AllowDefault = false)]
         public IScenarioRunner ScenarioRunner { get; set; }
@@ -27,7 +29,7 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs.ViewModels
         {
             get
             {
-                return _buttons;
+                return buttons;
             }
         }
 
@@ -49,21 +51,44 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs.ViewModels
 
         private ICommand GetCommand(bool debug)
         {
-            return new ActionCommand(() =>
-                                         {
-                                             string tempFileName = ScenarioText.ToTempFile();
-                                             ScenarioRunner.Run(tempFileName, debug);
-                                         });
+            return new ActionCommand(() => RunScenario(debug));
         }
 
-        public void InitialiseProperties(Point position, FrameworkElement visualElement, IRunOrDebugView runOrDebugView, string scenarioText)
+        private void RunScenario(bool debug)
+        {
+            string tempFileName = ScenarioAsString.ToTempFile();
+            ScenarioRunner.Run(tempFileName, debug);
+            DeleteTempFile(tempFileName);
+        }
+
+        private string ScenarioAsString
+        {
+            get
+            {
+                string str = Scenario.Feature + Environment.NewLine + Environment.NewLine + Scenario;
+                return str;
+            }
+        }
+
+        private static void DeleteTempFile(string tempFileName)
+        {
+            try
+            {
+                File.Delete(tempFileName);
+            }
+            catch (IOException)
+            {
+            }
+        }
+
+        public void InitialiseProperties(Point position, FrameworkElement visualElement, IRunOrDebugView runOrDebugView, Scenario scenarioText)
         {
             Position = Point.Subtract(position, new Vector(3, 3));
             RelativeVisualElement = visualElement;
             View = runOrDebugView;
-            ScenarioText = scenarioText;
+            Scenario = scenarioText;
 
-            _buttons = new List<dynamic>
+            buttons = new List<dynamic>
             {
                 new { Icon = new BitmapImage(new Uri("pack://application:,,,/NBehave.VS2010.Plugin;component/Editor/Resources/Icons/Debug.png", UriKind.Absolute)), Text="Start With Debugger", Command = DebugClicked },
                 new { Icon = new BitmapImage(new Uri("pack://application:,,,/NBehave.VS2010.Plugin;component/Editor/Resources/Icons/Play.png", UriKind.Absolute)), Text="Start Without Debugger", Command = RunClicked }
@@ -85,7 +110,7 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs.ViewModels
                                });
         }
 
-        protected string ScenarioText { get; set; }
+        protected Scenario Scenario { get; set; }
 
         protected IRunOrDebugView View { get; set; }
 
@@ -139,7 +164,7 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs.ViewModels
 
         public void DesignTimeInitialization()
         {
-            _buttons = new List<dynamic>
+            buttons = new List<dynamic>
             {
                 new { Icon = new BitmapImage(new Uri("pack://application:,,,/NBehave.VS2010.Plugin;component/Editor/Resources/Icons/Debug.png", UriKind.Absolute)), Text="Start With Debugger" },
                 new { Icon = new BitmapImage(new Uri("pack://application:,,,/NBehave.VS2010.Plugin;component/Editor/Resources/Icons/Play.png", UriKind.Absolute)), Text="Start Without Debugger" }
