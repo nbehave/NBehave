@@ -9,6 +9,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace NBehave.Narrator.Framework
 {
@@ -56,7 +57,6 @@ namespace NBehave.Narrator.Framework
             get { return _steps; }
         }
 
-
         public IEnumerable<Example> Examples
         {
             get
@@ -79,6 +79,36 @@ namespace NBehave.Narrator.Framework
         public void AddExamples(IEnumerable<Example> examples)
         {
             _examples.AddRange(examples);
+        }
+
+        public string ToStringAsBackground()
+        {
+            return ToString("Background", "  ");
+        }
+
+        public override string ToString()
+        {
+            return ToString("Scenario", "");
+        }
+
+        private string ToString(string type, string prefixAllLinesWith)
+        {
+            var scenario = prefixAllLinesWith + type + ": " + Title + Environment.NewLine;
+            var steps = Steps.Select(_ => prefixAllLinesWith + "  " + _.ToString()).ToArray();
+            var str = scenario + String.Join(Environment.NewLine, steps);
+            if (_examples.Any())
+                str += Environment.NewLine + ExamplesAsString(prefixAllLinesWith);
+            return str;
+        }
+
+        private string ExamplesAsString(string prefixAllLinesWith)
+        {
+            if (!_examples.Any())
+                return "";
+            var prefix = prefixAllLinesWith + "    ";
+            var str = prefix + _examples.First().ColumnNamesToString() + Environment.NewLine;
+            var colStr = _examples.Select(_ => prefix + _.ColumnValuesToString()).ToArray();
+            return str + string.Join(Environment.NewLine, colStr);
         }
     }
 }

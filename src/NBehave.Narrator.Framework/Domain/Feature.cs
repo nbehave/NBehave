@@ -8,6 +8,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace NBehave.Narrator.Framework
 {
@@ -75,5 +76,17 @@ namespace NBehave.Narrator.Framework
         }
 
         public Scenario Background { get; private set; }
+
+        public override string ToString()
+        {
+            var str = string.Format("Feature: {1}{0}{2}", Environment.NewLine, Title, Narrative);
+            if (Background.Steps.Any())
+            {
+                var b = Background.ToStringAsBackground();
+                //.Split(Environment.NewLine.ToCharArray(),StringSplitOptions.RemoveEmptyEntries);
+                str += string.Format("{0}{0}{1}", Environment.NewLine, b);
+            }
+            return str;
+        }
     }
 }

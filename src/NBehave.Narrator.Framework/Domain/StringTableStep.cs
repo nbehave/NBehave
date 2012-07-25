@@ -19,7 +19,7 @@ namespace NBehave.Narrator.Framework
     [Serializable]
     public class StringTableStep : StringStep
     {
-        private readonly List<Example> _tableSteps = new List<Example>();
+        private readonly List<Example> tableSteps = new List<Example>();
 
         public StringTableStep(string step, string source)
             : base(step, source)
@@ -33,7 +33,7 @@ namespace NBehave.Narrator.Framework
         {
             get
             {
-                return _tableSteps;
+                return tableSteps;
             }
         }
 
@@ -47,7 +47,7 @@ namespace NBehave.Narrator.Framework
 
         public void AddTableStep(Example row)
         {
-            _tableSteps.Add(row);
+            tableSteps.Add(row);
         }
 
         public override StringStep BuildStep(Example values)
@@ -81,6 +81,13 @@ namespace NBehave.Narrator.Framework
                 var clonedRow = new Example(clonedNames, clonedValues);
                 clone.AddTableStep(clonedRow);
             }
+        }
+
+        public override string ToString()
+        {
+            return base.ToString() + Environment.NewLine +
+                "    " + tableSteps.First().ColumnNamesToString() + Environment.NewLine +
+                string.Join(Environment.NewLine, tableSteps.Select(_ => "    " + _.ColumnValuesToString()).ToArray());
         }
     }
 }

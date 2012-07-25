@@ -124,6 +124,8 @@
     <Compile Include="Domain\ActionMethodInfoSpec.cs" />
     <Compile Include="Domain\ExampleBuilderSpec.cs" />
     <Compile Include="Domain\ExampleTableFormatterSpec.cs" />
+    <Compile Include="Domain\FeatureSpec.cs" />
+    <Compile Include="Domain\ScenarioSpec.cs" />
     <Compile Include="Domain\StringTableStepSpec.cs" />
     <Compile Include="EventListeners\ColorfulConsoleOutputEventListenerSpec.cs" />
     <Compile Include="EmbeddedRunnerSpec.cs" />
