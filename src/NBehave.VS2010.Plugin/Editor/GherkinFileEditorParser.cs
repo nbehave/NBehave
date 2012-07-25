@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.Text;
-using NBehave.Gherkin;
-using NBehave.VS2010.Plugin.Editor.Domain;
+using Microsoft.VisualStudio.Text.Classification;
+using NBehave.Narrator.Framework;
+using NBehave.Narrator.Framework.Internal;
 
 namespace NBehave.VS2010.Plugin.Editor
 {
@@ -25,166 +25,76 @@ namespace NBehave.VS2010.Plugin.Editor
 
     [Export(typeof(GherkinFileEditorParser))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
-    public class GherkinFileEditorParser : IListener, IDisposable
+    public class GherkinFileEditorParser : IDisposable
     {
-        private Subject<ParserEvent> _parserEvents;
+        private Subject<Feature> parserEvents;
+        private IDisposable inputListener;
+        private ITextSnapshot snapshot;
+        private Subject<bool> isParsing;
 
-        private IDisposable _inputListener;
-
-        private ITextSnapshot _snapshot;
-        private Subject<bool> _isParsing;
-
-        public IObservable<ParserEvent> ParserEvents
+        public IObservable<Feature> ParserEvents
         {
-            get { return _parserEvents; }
+            get { return parserEvents; }
         }
 
         public IObservable<bool> IsParsing
         {
-            get { return _isParsing; }
+            get { return isParsing; }
         }
 
         public void InitialiseWithBuffer(ITextBuffer textBuffer)
         {
-            _parserEvents = new Subject<ParserEvent>();
-            _isParsing = new Subject<bool>();
+            parserEvents = new Subject<Feature>();
+            isParsing = new Subject<bool>();
 
-            _snapshot = textBuffer.CurrentSnapshot;
+            snapshot = textBuffer.CurrentSnapshot;
 
             IObservable<IEvent<TextContentChangedEventArgs>> fromEvent =
                 Observable.FromEvent<TextContentChangedEventArgs>(
                     handler => textBuffer.Changed += handler,
                     handler => textBuffer.Changed -= handler);
 
-            _inputListener = fromEvent
+            inputListener = fromEvent
                 .Sample(TimeSpan.FromSeconds(1))
                 .Select(event1 => event1.EventArgs.After)
                 .Subscribe(Parse);
         }
 
-        private void Parse(ITextSnapshot snapshot)
+        public List<Feature> ParseSnapshot(ITextSnapshot textSnapshot)
         {
-            _isParsing.OnNext(true);
-            _snapshot = snapshot;
-
-            try
-            {
-                var parser = new Parser(this);
-                parser.Scan(new StringReader(snapshot.GetText()));
-            }
-            catch (Exception) { }
-            finally
-            {
-                _isParsing.OnNext(false);
-            }
+            var text = textSnapshot.GetText();
+            var tempFile = text.ToTempFile();
+            var config = NBehaveConfiguration.New.SetScenarioFiles(new[] {tempFile});
+            var scenarioParser = new ParseScenarioFiles(config);
+            var features = scenarioParser.LoadFiles(config.ScenarioFiles).ToList();
+            return features;
         }
 
         public void FirstParse()
         {
-            Parse(_snapshot);
+            Parse(snapshot);
         }
 
-        public void Feature(Token keyword, Token title, Token narrative)
+        private void Parse(ITextSnapshot snapshot)
         {
-            string featureTitle = title.Content;
-            string description = narrative.Content;
-
-            _parserEvents.OnNext(new ParserEvent(ParserEventType.Feature)
+            isParsing.OnNext(true);
+            this.snapshot = snapshot;
+            try
             {
-                Keyword = keyword.Content,
-                Title = featureTitle,
-                Description = description,
-                Line = keyword.LineInFile.Line,
-                Snapshot = _snapshot
-            });
-        }
-
-        public void Scenario(Token keyword, Token name)
-        {
-            _parserEvents.OnNext(new ParserEvent(ParserEventType.Scenario)
+                var features = ParseSnapshot(snapshot);
+                features.ForEach(f => parserEvents.OnNext(f));
+            }
+            catch (Exception) { }
+            finally
             {
-                Keyword = keyword.Content,
-                Title = name.Content,
-                Line = keyword.LineInFile.Line,
-                Snapshot = _snapshot
-            });
+                isParsing.OnNext(false);
+            }
         }
 
-        public void Examples(Token keyword, Token name)
-        {
-            OnNext(keyword, name, ParserEventType.Examples);
-        }
 
-        public void Step(Token keyword, Token name)
-        {
-            OnNext(keyword, name, ParserEventType.Step);
-        }
-
-        public void Table(IList<IList<Token>> rows, LineInFile tablePosition)
-        {
-            _parserEvents.OnNext(new ParserEvent(ParserEventType.Table)
-            {
-                TableColumns = rows.First().Select(token => token.Content),
-                Line = tablePosition.Line,
-                RowCount = rows.Count - 1,
-                Snapshot = _snapshot
-            });
-        }
-
-        public void Background(Token keyword, Token name)
-        {
-            OnNext(keyword, name, ParserEventType.Background);
-        }
-
-        public void ScenarioOutline(Token keyword, Token name)
-        {
-            OnNext(keyword, name, ParserEventType.ScenarioOutline);
-        }
-
-        public void Comment(Token content)
-        {
-            OnNext(content, ParserEventType.Comment);
-        }
-
-        public void Tag(Token content)
-        {
-            OnNext(content, ParserEventType.Tag);
-        }
-
-        public void SyntaxError(string state, string @event, IEnumerable<string> legalEvents, LineInFile lineInFile)
-        {
-        }
-
-        public void Eof()
-        { }
-
-        public void DocString(Token docString)
-        { }
-
-
-        private void OnNext(Token content, ParserEventType parserEventType)
-        {
-            _parserEvents.OnNext(new ParserEvent(parserEventType)
-            {
-                Name = content.Content,
-                Line = content.LineInFile.Line,
-                Snapshot = _snapshot
-            });
-        }
-
-        private void OnNext(Token keyword, Token name, ParserEventType parserEventType)
-        {
-            _parserEvents.OnNext(new ParserEvent(parserEventType)
-            {
-                Keyword = keyword.Content,
-                Name = name.Content,
-                Line = keyword.LineInFile.Line,
-                Snapshot = _snapshot
-            });
-        }
         public void Dispose()
         {
-            _inputListener.Dispose();
+            inputListener.Dispose();
         }
     }
 }

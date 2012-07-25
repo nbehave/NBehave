@@ -208,17 +208,17 @@
     <Compile Include="Domain\ConsoleRunner.cs" />
     <Compile Include="Domain\NuGet.cs" />
     <Compile Include="Domain\OutputWindowWriter.cs" />
+    <Compile Include="Editor\Domain\GherkinFileClassificationDefinitions.cs" />
+    <Compile Include="Editor\SyntaxHighlighting\GherkinClassifier.cs" />
+    <Compile Include="FileExtensions.cs" />
     <Compile Include="Tiny\TinyIoCContainerExtension.cs" />
     <Compile Include="Contracts\IVisualStudioService.cs" />
     <Compile Include="Contracts\IPluginLogger.cs" />
     <Compile Include="Domain\PluginLogger.cs" />
     <Compile Include="Domain\VisualStudioService.cs" />
     <Compile Include="Contracts\IOutputWindow.cs" />
-    <Compile Include="Editor\Domain\GherkinFileClassificationDefinitions.cs" />
     <Compile Include="Editor\Domain\GherkinFileClassifierFormats.cs" />
     <Compile Include="Editor\Domain\GherkinFileEditorClassifications.cs" />
-    <Compile Include="Editor\Domain\ParserEvent.cs" />
-    <Compile Include="Editor\Domain\ParserEventType.cs" />
     <Compile Include="Editor\Extensions\NullExtensions.cs" />
     <Compile Include="Editor\GherkinFileEditorParser.cs" />
     <Compile Include="Editor\Glyphs\Controls\ContextMenuButton.cs" />
@@ -238,12 +238,6 @@
       <DependentUpon>Logo.xaml</DependentUpon>
     </Compile>
     <Compile Include="Editor\ServiceRegistrar.cs" />
-    <Compile Include="Editor\SyntaxHighlighting\Classifiers\FeatureClassifier.cs" />
-    <Compile Include="Editor\SyntaxHighlighting\Classifiers\GherkinClassifierBase.cs" />
-    <Compile Include="Editor\SyntaxHighlighting\Classifiers\IGherkinClassifier.cs" />
-    <Compile Include="Editor\SyntaxHighlighting\Classifiers\ScenarioClassifier.cs" />
-    <Compile Include="Editor\SyntaxHighlighting\Classifiers\StepClassifier.cs" />
-    <Compile Include="Editor\SyntaxHighlighting\Classifiers\TableClassifier.cs" />
     <Compile Include="Editor\SyntaxHighlighting\GherkinFileClassifier.cs" />
     <Compile Include="Identifiers.cs" />
     <Compile Include="NBehaveRunnerPackage.cs" />

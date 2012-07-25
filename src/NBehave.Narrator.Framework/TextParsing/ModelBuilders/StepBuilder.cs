@@ -7,7 +7,7 @@ namespace NBehave.Narrator.Framework.TextParsing.ModelBuilders
     public class StepBuilder
     {
         private Scenario scenario;
-        private string previousStep;
+        private StringStep previousStep;
         public StepBuilder(IGherkinParserEvents gherkinEvents)
         {
             gherkinEvents.ScenarioEvent += (s, e) =>
@@ -55,7 +55,7 @@ namespace NBehave.Narrator.Framework.TextParsing.ModelBuilders
         {
             if (previousStep == null)
                 return;
-            var stringTableStep = new StringTableStep(previousStep, scenario.Source);
+            var stringTableStep = new StringTableStep(previousStep.Step, scenario.Source, previousStep.SourceLine);
             scenario.AddStep(stringTableStep);
 
             var columns = content.First().Select(token => new ExampleColumn(token.Content));

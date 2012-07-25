@@ -11,20 +11,24 @@ namespace NBehave.Narrator.Framework
     public class StringStep
     {
         public StringStep(string step, string source)
+            : this(step, source, -1)
+        { }
+
+        public StringStep(string step, string source, int sourceLine)
         {
             Step = step;
             Source = source;
+            SourceLine = sourceLine;
             StepResult = new StepResult(this, new Passed());
         }
 
         private string _matchableStep;
+        private string _step;
 
         public string MatchableStep
         {
             get { return _matchableStep; }
         }
-
-        private string _step;
 
         public string Step
         {
@@ -37,6 +41,8 @@ namespace NBehave.Narrator.Framework
         }
 
         public string Source { get; private set; }
+        public int SourceLine { get; private set; }
+
         public StepResult StepResult { get; set; }
 
         public virtual IEnumerable<MethodParametersType> MatchableStepTypes
@@ -64,6 +70,7 @@ namespace NBehave.Narrator.Framework
             HasDocString = string.IsNullOrEmpty(docString) == false;
             DocString = docString;
         }
+
         public virtual StringStep BuildStep(Example values)
         {
             var template = Step;

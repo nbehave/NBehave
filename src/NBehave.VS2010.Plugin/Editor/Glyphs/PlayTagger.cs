@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
-using NBehave.VS2010.Plugin.Editor.Domain;
+using NBehave.Narrator.Framework;
 
 namespace NBehave.VS2010.Plugin.Editor.Glyphs
 {
@@ -37,63 +37,62 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs
     /// </summary>
     public class PlayTagger : ITagger<PlayGlyphTag>
     {
-        private readonly CompositeDisposable _listeners;
-        private readonly List<ITagSpan<PlayGlyphTag>> _tagSpans;
-        
-        public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
+        private readonly CompositeDisposable listeners;
+        private readonly List<ITagSpan<PlayGlyphTag>> tagSpans;
 
-        private readonly Stack<SnapshotSpan> _snapshotSpans = new Stack<SnapshotSpan>();
+        public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
 
         public PlayTagger(ITextBuffer buffer)
         {
-            _listeners = new CompositeDisposable();
-            _tagSpans = new List<ITagSpan<PlayGlyphTag>>();
+            var currentSnapshot = buffer.CurrentSnapshot;
+            var snapshotSpans = new Stack<SnapshotSpan>();
+            listeners = new CompositeDisposable();
+            tagSpans = new List<ITagSpan<PlayGlyphTag>>();
 
-            var parser = buffer.Properties.GetProperty<GherkinFileEditorParser>(typeof (GherkinFileEditorParser));
+            var parser = buffer.Properties.GetProperty<GherkinFileEditorParser>(typeof(GherkinFileEditorParser));
 
-            _listeners.Add(parser.IsParsing.Where(b => b).Subscribe(b1 => _tagSpans.Clear()));
+            listeners.Add(parser.IsParsing.Where(_ => _)
+                .Subscribe(b1 => tagSpans.Clear()));
 
-            _listeners.Add(parser.IsParsing.Where(b2 => !b2).Subscribe(b3 =>
+            listeners.Add(parser.IsParsing.Where(_ => !_)
+                .Subscribe(_ => ConvertSnapshotSpanToPlayGlyphTag(snapshotSpans)));
+
+            listeners.Add(parser.ParserEvents
+                .Where(parserEvent => true)
+                .Subscribe(parserEvent => ScenariosToSnapshotSpan(currentSnapshot, parserEvent).ToList().ForEach(snapshotSpans.Push)));
+        }
+
+        private void ConvertSnapshotSpanToPlayGlyphTag(Stack<SnapshotSpan> snapshotSpans)
+        {
+            while (!snapshotSpans.IsEmpty())
             {
-                while (!_snapshotSpans.IsEmpty())
-                {
-                    var snapshotSpan = _snapshotSpans.Pop();
-                    var playGlyphTag = new PlayGlyphTag(snapshotSpan.GetText());
-                    _tagSpans.Add(new TagSpan<PlayGlyphTag>(snapshotSpan, playGlyphTag));
-                }
-                _tagSpans.Reverse();
-            }));
+                var snapshotSpan = snapshotSpans.Pop();
+                var playGlyphTag = new PlayGlyphTag(snapshotSpan.GetText());
+                tagSpans.Add(new TagSpan<PlayGlyphTag>(snapshotSpan, playGlyphTag));
+            }
+            tagSpans.Reverse();
+        }
 
-            _listeners.Add(parser
-                .ParserEvents
-                .Where(parserEvent => parserEvent.EventType == ParserEventType.Scenario)
-                .Subscribe(parserEvent =>
-                {
-                    ITextSnapshotLine lineFromLineNumber = parserEvent.Snapshot.GetLineFromLineNumber(parserEvent.Line - 1);
-                    _snapshotSpans.Push(new SnapshotSpan(lineFromLineNumber.Start, lineFromLineNumber.Length));
-                }));
+        private static IEnumerable<SnapshotSpan> ScenariosToSnapshotSpan(ITextSnapshot currentSnapshot, Feature parserEvent)
+        {
+            var scenarios = parserEvent.Scenarios;
+            var numberOfScenarios = scenarios.Count;
+            for (int i = 0; i < numberOfScenarios; i++)
+            {
+                var snapshotSpan = ScenarioToSnapshotSpan(scenarios, i, currentSnapshot);
+                yield return snapshotSpan;
+            }
+        }
 
-            _listeners.Add(parser
-                .ParserEvents
-                .Where(parserEvent => parserEvent.EventType == ParserEventType.Step || parserEvent.EventType == ParserEventType.Examples)
-                .Subscribe(parserEvent =>
-                {
-                    ITextSnapshotLine lineFromLineNumber = parserEvent.Snapshot.GetLineFromLineNumber(parserEvent.Line - 1);
-                    var snapshotSpan = _snapshotSpans.Pop();
-                    _snapshotSpans.Push(new SnapshotSpan(snapshotSpan.Start, (lineFromLineNumber.Start.Position - snapshotSpan.Start.Position + lineFromLineNumber.Length)));
-                }));
-
-            _listeners.Add(parser
-                .ParserEvents
-                .Where(parserEvent => parserEvent.EventType == ParserEventType.Table)
-                .Subscribe(parserEvent =>
-                {
-                    ITextSnapshotLine lastRowLine = parserEvent.Snapshot.GetLineFromLineNumber(parserEvent.Line + parserEvent.RowCount - 1);
-                    var snapshotSpan = _snapshotSpans.Pop();
-                    int lastLineReturn = lastRowLine.GetText().EndsWith(Environment.NewLine) ? Environment.NewLine.Length : 0;
-                    _snapshotSpans.Push(new SnapshotSpan(snapshotSpan.Start, (lastRowLine.Start.Position - snapshotSpan.Start.Position) + lastRowLine.Length - lastLineReturn));
-                }));
-
+        private static SnapshotSpan ScenarioToSnapshotSpan(List<Scenario> scenarios, int currentIndex, ITextSnapshot currentSnapshot)
+        {
+            var numberOfScenarios = scenarios.Count;
+            ITextSnapshotLine start = currentSnapshot.GetLineFromLineNumber(scenarios[currentIndex].SourceLine - 1);
+            var end = (currentIndex + 1 < numberOfScenarios)
+                          ? currentSnapshot.GetLineFromLineNumber(scenarios[currentIndex + 1].SourceLine - 1).Start
+                          : currentSnapshot.GetLineFromLineNumber(currentSnapshot.LineCount - 1).End;
+            var snapshotSpan = new SnapshotSpan(start.Start, end - start.Start);
+            return snapshotSpan;
         }
 
         /// <summary>
@@ -103,7 +102,7 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs
         /// <returns>The list of ToDoTag TagSpans.</returns>
         IEnumerable<ITagSpan<PlayGlyphTag>> ITagger<PlayGlyphTag>.GetTags(NormalizedSnapshotSpanCollection spans)
         {
-            return _tagSpans;
+            return tagSpans;
         }
     }
 }

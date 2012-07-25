@@ -38,13 +38,14 @@ namespace NBehave.Narrator.Framework.TextParsing
         private string file;
         private Scenario currentScenario;
         private ModelBuilder modelBuilder;
+        private Feature currentFeature;
 
         public event EventHandler<EventArgs<Feature>> FeatureEvent;
         public event EventHandler<EventArgs<Scenario>> ScenarioEvent;
         public event EventHandler<EventArgs> ExamplesEvent;
         public event EventHandler<EventArgs<Scenario>> BackgroundEvent;
         public event EventHandler<EventArgs<IList<IList<Token>>>> TableEvent;
-        public event EventHandler<EventArgs<string>> StepEvent;
+        public event EventHandler<EventArgs<StringStep>> StepEvent;
         public event EventHandler<EventArgs<string>> DocStringEvent;
         public event EventHandler<EventArgs<string>> TagEvent;
         public event EventHandler<EventArgs> EofEvent;
@@ -65,19 +66,20 @@ namespace NBehave.Narrator.Framework.TextParsing
 
         public void Feature(Token keyword, Token title, Token narrative)
         {
-            CreateFeature(title.Content, narrative.Content);
+            CreateFeature(title.Content, narrative.Content, keyword.LineInFile.Line);
         }
 
         public void Scenario(Token keyword, Token title)
         {
-            var scenario = new Scenario(title.Content, file);
+            var scenario = new Scenario(title.Content, file, currentFeature, keyword.LineInFile.Line);
             currentScenario = scenario;
             events.Enqueue(new ScenarioEvent(currentScenario, () => ScenarioEvent.Invoke(this, new EventArgs<Scenario>(scenario))));
         }
 
-        private void CreateFeature(string title, string narrative)
+        private void CreateFeature(string title, string narrative, int sourceLine)
         {
-            var feature = new Feature(title, narrative, file);
+            var feature = new Feature(title, narrative, file, sourceLine);
+            currentFeature = feature;
             events.Enqueue(new FeatureEvent(feature, () => FeatureEvent.Invoke(this, new EventArgs<Feature>(feature))));
         }
 
@@ -89,7 +91,8 @@ namespace NBehave.Narrator.Framework.TextParsing
         public void Step(Token keyword, Token name)
         {
             string stepText = string.Format("{0} {1}", keyword.Content, name.Content);
-            events.Enqueue(new StepEvent(stepText, () => StepEvent.Invoke(this, new EventArgs<string>(stepText))));
+            var stringStep = new StringStep(stepText, file, keyword.LineInFile.Line);
+            events.Enqueue(new StepEvent(stepText, () => StepEvent.Invoke(this, new EventArgs<StringStep>(stringStep))));
         }
 
         public void Table(IList<IList<Token>> columns, LineInFile tableRow)
@@ -99,7 +102,7 @@ namespace NBehave.Narrator.Framework.TextParsing
 
         public void Background(Token keyword, Token name)
         {
-            var scenario = new Scenario(name.Content, file);
+            var scenario = new Scenario(name.Content, file, currentFeature, keyword.LineInFile.Line);
             currentScenario = scenario;
             events.Enqueue(new BackgroundEvent(currentScenario, () => BackgroundEvent.Invoke(this, new EventArgs<Scenario>(scenario))));
         }
@@ -137,7 +140,7 @@ namespace NBehave.Narrator.Framework.TextParsing
         private IEnumerable<GherkinEvent> FilterByTag()
         {
             var events = GroupEventsByTag.GroupByTag(this.events);
-        var eventsToRaise = new List<GherkinEvent>();
+            var eventsToRaise = new List<GherkinEvent>();
             while (events.Any())
             {
                 var eventsToHandle = new Queue<GherkinEvent>(GroupEventsByFeature.GetEventsForNextFeature(events).ToList());
@@ -157,7 +160,7 @@ namespace NBehave.Narrator.Framework.TextParsing
         event EventHandler<EventArgs> ExamplesEvent;
         event EventHandler<EventArgs<Scenario>> BackgroundEvent;
         event EventHandler<EventArgs<IList<IList<Token>>>> TableEvent;
-        event EventHandler<EventArgs<string>> StepEvent;
+        event EventHandler<EventArgs<StringStep>> StepEvent;
         event EventHandler<EventArgs<string>> DocStringEvent;
         event EventHandler<EventArgs<string>> TagEvent;
         event EventHandler<EventArgs> EofEvent;

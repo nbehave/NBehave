@@ -18,13 +18,13 @@ namespace NBehave.Narrator.Framework
         private readonly List<StringStep> _steps;
         private readonly List<Example> _examples;
 
-        private readonly string _source;
-
-        public Scenario() : this(string.Empty, string.Empty)
+        public Scenario()
+            : this(string.Empty, string.Empty)
         {
         }
 
-        public Scenario(string title, string source) : this(title, source, new Feature())
+        public Scenario(string title, string source)
+            : this(title, source, new Feature())
         {
             Feature = new Feature();
             Title = title;
@@ -33,16 +33,22 @@ namespace NBehave.Narrator.Framework
         }
 
         public Scenario(string title, string source, Feature feature)
+            : this(title, source, feature, -1)
+        { }
+
+        public Scenario(string title, string source, Feature feature, int sourceLine)
         {
             Feature = feature;
             Title = title;
+            Source = source;
+            SourceLine = sourceLine;
             _steps = new List<StringStep>();
             _examples = new List<Example>();
-            _source = source;
         }
 
+        public string Source { get; private set; }
+        public int SourceLine { get; private set; }
         public string Title { get; private set; }
-
         public Feature Feature { get; set; }
 
         public IEnumerable<StringStep> Steps
@@ -50,13 +56,6 @@ namespace NBehave.Narrator.Framework
             get { return _steps; }
         }
 
-        public string Source
-        {
-            get
-            {
-                return _source;
-            }
-        }
 
         public IEnumerable<Example> Examples
         {

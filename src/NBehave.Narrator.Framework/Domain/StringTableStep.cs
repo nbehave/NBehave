@@ -25,6 +25,10 @@ namespace NBehave.Narrator.Framework
             : base(step, source)
         { }
 
+        public StringTableStep(string step, string source, int sourceLine)
+            : base(step, source, sourceLine)
+        { }
+
         public IEnumerable<Example> TableSteps
         {
             get
@@ -63,7 +67,7 @@ namespace NBehave.Narrator.Framework
                         row.ColumnValues.Add(pair.Key, pair.Value);
                 }
             }
-            var clone = new StringTableStep(template, Source);
+            var clone = new StringTableStep(template, Source, SourceLine);
             CloneTableSteps(clone);
             return clone;
         }

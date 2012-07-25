@@ -6,12 +6,10 @@ using System.Linq;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Utilities;
-using NBehave.VS2010.Plugin.Editor.Extensions;
-using NBehave.VS2010.Plugin.Editor.SyntaxHighlighting.Classifiers;
+using NBehave.Narrator.Framework;
 
 namespace NBehave.VS2010.Plugin.Editor.SyntaxHighlighting
 {
-
     [Export(typeof(IClassifierProvider))]
     [ContentType("gherkin")]
     internal class GherkinFileClassifierProvider : IClassifierProvider
@@ -22,7 +20,7 @@ namespace NBehave.VS2010.Plugin.Editor.SyntaxHighlighting
         public IClassifier GetClassifier(ITextBuffer buffer)
         {
             ServiceRegistrar.Initialise(buffer);
-            
+
             return buffer.Properties.GetProperty<IClassifier>(typeof(GherkinFileClassifier));
         }
     }
@@ -35,29 +33,37 @@ namespace NBehave.VS2010.Plugin.Editor.SyntaxHighlighting
         private List<ClassificationSpan> _spans;
         private CompositeDisposable _listeners;
 
+        [Import]
+        public GherkinClassifier GherkinClassifier { get; set; }
+
         public GherkinFileClassifier(ITextBuffer buffer)
         {
+            var snapshot = buffer.CurrentSnapshot;
             _spans = new List<ClassificationSpan>();
             _listeners = new CompositeDisposable();
 
-            _parser = buffer.Properties.GetProperty<GherkinFileEditorParser>(typeof (GherkinFileEditorParser));
+            _parser = buffer.Properties.GetProperty<GherkinFileEditorParser>(typeof(GherkinFileEditorParser));
 
             _listeners.Add(_parser.IsParsing.Where(isParsing => isParsing).Subscribe(b => _spans.Clear()));
             _listeners.Add(_parser.IsParsing.Where(isParsing => !isParsing).Subscribe(b => PublishClassificationEvents()));
 
             _listeners.Add(_parser
                             .ParserEvents
-                            .Select(parserEvent => Classifiers
-                                    .With(list => list.FirstOrDefault(classifier => classifier.CanClassify(parserEvent)))
-                                    .Return(gherkinClassifier => gherkinClassifier.Classify(parserEvent), new List<ClassificationSpan>()))
+                            .Select(f => SelectClassifiable(f, snapshot))
                             .Subscribe((spans => _spans.AddRange(spans))));
         }
 
+        private IList<ClassificationSpan> SelectClassifiable(Feature feature, ITextSnapshot snapshot)
+        {
+            ClassificationSpan f = GherkinClassifier.CreateFeatureClassification(feature, snapshot);
+            var classificationSpans = new List<ClassificationSpan>();
+            //classificationSpans.Add(f);
+            classificationSpans.AddRange(GherkinClassifier.CreateScenarioClassification(feature, snapshot).ToList());
+            return classificationSpans;
+        }
+
         public event EventHandler<ClassificationChangedEventArgs> ClassificationChanged;
-        
-        [ImportMany]
-        public IEnumerable<IGherkinClassifier> Classifiers { get; set; }
-        
+
         public IList<ClassificationSpan> GetClassificationSpans(SnapshotSpan span)
         {
             return _spans;

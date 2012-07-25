@@ -32,18 +32,20 @@ namespace NBehave.Narrator.Framework
             Background = new Scenario(String.Empty, string.Empty, this);
         }
 
-        public Feature(string title, string narrative, string source)
+        public Feature(string title, string narrative, string source, int sourceLine)
         {
             Source = source;
             Scenarios = new List<Scenario>();
             Title = title;
             Narrative = narrative;
-            Background = new Scenario(String.Empty, string.Empty, this);
+            SourceLine = sourceLine;
+            Background = new Scenario(String.Empty, string.Empty, this, -1);
         }
 
         public string Title { get; private set; }
         public string Narrative { get; set; }
         public string Source { get; private set; }
+        public int SourceLine { get; private set; }
         public List<Scenario> Scenarios { get; private set; }
 
         public void AddScenario(Scenario scenario)

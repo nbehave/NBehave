@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.Concurrency;
-using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -20,11 +19,6 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs.ViewModels
     public class RunOrDebugViewModel : NotifyPropertyChangedBase, IDesignTimeAware
     {
         private List<dynamic> _buttons;
-
-        //public RunOrDebugViewModel(IScenarioRunner scenarioRunner)
-        //{
-        //    ScenarioRunner = scenarioRunner;
-        //}
 
         [Import(AllowDefault = false)]
         public IScenarioRunner ScenarioRunner { get; set; }
@@ -57,19 +51,9 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs.ViewModels
         {
             return new ActionCommand(() =>
                                          {
-                                             string tempFileName = GetTempScenarioFile();
+                                             string tempFileName = ScenarioText.ToTempFile();
                                              ScenarioRunner.Run(tempFileName, debug);
                                          });
-        }
-
-        private string GetTempScenarioFile()
-        {
-            var tempFileName = Path.GetTempFileName();
-            using (var writer = new StreamWriter(tempFileName))
-            {
-                writer.Write(ScenarioText);
-            }
-            return tempFileName;
         }
 
         public void InitialiseProperties(Point position, FrameworkElement visualElement, IRunOrDebugView runOrDebugView, string scenarioText)
