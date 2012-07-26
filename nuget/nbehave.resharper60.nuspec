@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>nbehave.resharper</id>
+    <id>nbehave.resharper60</id>
     <version>$version$</version>
-    <title>NBehave Resharper</title>
+    <title>NBehave Resharper 6</title>
     <authors>NBehave</authors>
     <owners>NBehave</owners>
     <licenseUrl>http://www.opensource.org/licenses/bsd-license.php</licenseUrl>
