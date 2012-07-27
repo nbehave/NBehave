@@ -21,11 +21,12 @@ function Build($framework, $taskToRun) {
 	}
 }
 
+$scriptPath = Split-Path -parent $MyInvocation.MyCommand.path
+
 # Install psake
 $psakeVersion = "4.2.0.1"
-.\src\.nuget\NuGet.exe install psake -OutputDirectory buildframework -Version $psakeVersion
+& $scriptPath\src\.nuget\NuGet.exe install psake -OutputDirectory buildframework -Version $psakeVersion
 
-$scriptPath = (Get-Location).Path
 remove-module psake -ea 'SilentlyContinue'
 Import-Module (join-path $scriptPath ".\buildframework\psake.$psakeVersion\tools\psake.psm1")
 
