@@ -7,12 +7,15 @@ task Init -depends Clean, Version, InstallNunitRunners
 task Default -depends Compile, Test
 
 task Clean {
-	if ($true -eq (Test-Path "$buildDir")) {
-		Get-ChildItem $buildDir\**\*.* -Recurse | where { $_.mode -notmatch "d"} | Sort-Object mode | ForEach-Object { Remove-Item $_.FullName }
-		Write-Host "Files removed."
-		Remove-Item $buildDir -Recurse
+	if ($false -eq (Test-Path "$buildDir")) {
+		New-Item $buildDir -type directory
 	}
-	New-Item $buildDir -type directory
+	else {
+		Get-ChildItem $buildDir\* -Recurse | Select -ExpandProperty FullName | Sort {$_.Length} -Descending | ForEach-Object { Remove-Item $_ }
+		Write-Host "Files removed."
+		Get-ChildItem $buildDir -Recurse -Include * | Select -ExpandProperty FullName | Sort {$_.Length} -Descending | ForEach-Object { Remove-Item $_ }
+		Write-Host "Folders removed."
+	}
 	New-Item $testReportsDir -type directory
 	if ($false -eq (Test-Path "$sourceDir\packages")) {
 		New-Item "$sourceDir\packages" -type directory
@@ -20,7 +23,7 @@ task Clean {
 }
 
 Task InstallNunitRunners {
-	Exec { .\src\.nuget\NuGet.exe install nunit.runners -OutputDirectory src\packages\ }
+	Exec { .\src\.nuget\NuGet.exe install nunit.runners -Version 2.6.0.12051 -OutputDirectory src\packages\ }
 }
 
 Task Version {
