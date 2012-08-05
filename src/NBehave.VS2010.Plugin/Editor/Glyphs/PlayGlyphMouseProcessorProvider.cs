@@ -45,10 +45,12 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs
 
             ITextViewLine textViewLine = textView.TextViewLines
                 .GetTextViewLineContainingYCoordinate(position.Y + textView.ViewportTop);
+            var lineText = textViewLine.Extent.GetText();
 
-            PlayGlyphTag tag = _createTagAggregator.GetTags(textViewLine.ExtentAsMappingSpan)
-                .Select(span => span.Tag)
-                .FirstOrDefault();
+            var tagSpans = _createTagAggregator.GetTags(textViewLine.ExtentAsMappingSpan).ToList();
+            var selected = tagSpans.Select(span => span.Tag).ToList();
+            PlayGlyphTag tag = selected
+                .FirstOrDefault(_ => _.IsScenario(lineText));
             if (tag != null)
                 tag.Execute(position, textView.VisualElement);
         }

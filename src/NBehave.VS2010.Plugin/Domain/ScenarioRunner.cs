@@ -1,8 +1,12 @@
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.XPath;
+using System.Xml.Xsl;
 using NBehave.VS2010.Plugin.Contracts;
 
 namespace NBehave.VS2010.Plugin.Domain
@@ -17,76 +21,105 @@ namespace NBehave.VS2010.Plugin.Domain
 
     public class ScenarioRunner : IScenarioRunner
     {
-        private readonly IVisualStudioService _visualStudioService;
-        private readonly IOutputWindow _outputWindow;
-        private readonly IConsoleRunner _consoleRunner;
+        private readonly IVisualStudioService visualStudioService;
+        private readonly IOutputWindow outputWindow;
+        private readonly IConsoleRunner consoleRunner;
+        private XslCompiledTransform xslTransformer;
+        private bool htmlOutput = false;
 
         public ScenarioRunner(IOutputWindow outputWindow,
             IVisualStudioService visualStudioService,
             IConsoleRunner consoleRunner)
         {
-            _outputWindow = outputWindow;
-            _visualStudioService = visualStudioService;
-            _consoleRunner = consoleRunner;
+            this.outputWindow = outputWindow;
+            this.visualStudioService = visualStudioService;
+            this.consoleRunner = consoleRunner;
         }
 
         public void Run(bool debug)
         {
-            var activeDocumentFullName = _visualStudioService.GetActiveDocumentFullName();
+            var activeDocumentFullName = visualStudioService.GetActiveDocumentFullName();
             Run(activeDocumentFullName, debug);
         }
 
         public void Run(string documentName, bool debug)
         {
-            _visualStudioService.BuildSolution();
-            _outputWindow.Clear();
-            _outputWindow.BringToFront();
+            visualStudioService.BuildSolution();
+            outputWindow.Clear();
+            outputWindow.BringToFront();
 
-            RunDocumentFile(documentName, debug);
-        }
-
-        private void RunDocumentFile(string documentName, bool debug)
-        {
-            var pathToNBehaveConsole = _consoleRunner.GetPathToExecutable();
+            var pathToNBehaveConsole = consoleRunner.GetPathToExecutable();
             Run(pathToNBehaveConsole, documentName, debug);
         }
 
         private void Run(string pathToNBehaveConsole, string documentName, bool debug)
         {
-            _visualStudioService.BuildSolution();
-            _outputWindow.Clear();
-
-            var assemblyPath = _visualStudioService.GetProjectAssemblyOutputPath();
-            // create an xml document, xsl transform it to html and load it in VS
-            // or get data back live from the console and show it in visual studio
-            var args = FormatArguments(documentName, assemblyPath, debug);
+            var assemblyPath = visualStudioService.GetProjectAssemblyOutputPath();
+            string filename = "nbehave_" + DateTime.Now.Ticks.ToString(CultureInfo.InvariantCulture) + ".xml";
+            var xmlOutput = Path.Combine(Path.GetTempPath(), filename);
+            var args = FormatArguments(documentName, assemblyPath, xmlOutput, debug);
 
             var process = StartConsole(pathToNBehaveConsole, assemblyPath, args);
             var output = new Task(() =>
             {
                 try
                 {
-                    _outputWindow.BringToFront();
+                    outputWindow.BringToFront();
 
                     while (!process.StandardOutput.EndOfStream)
-                    {
-                        _outputWindow.WriteLine(process.StandardOutput.ReadLine());
-                    }
+                        outputWindow.WriteLine(process.StandardOutput.ReadLine());
+                    CreateHtmlOutput(xmlOutput);
                 }
                 catch (Exception exception)
                 {
-                    _outputWindow.WriteLine(exception.ToString());
+                    outputWindow.WriteLine(exception.ToString());
                 }
             });
             output.Start();
 
             if (debug)
-                _visualStudioService.AttachDebugger(process.Id);
+                visualStudioService.AttachDebugger(process.Id);
         }
 
-        private string FormatArguments(string documentName, string assemblyPath, bool debug)
+        private void CreateHtmlOutput(string xmlOutput)
         {
-            var args = string.Format("\"{0}\" /sf=\"{1}\"", assemblyPath, documentName);
+            if (htmlOutput)
+            {
+                var htmlFile = TransformXmltoHtml(xmlOutput);
+                Process.Start(htmlFile);
+            }
+        }
+
+        private string TransformXmltoHtml(string xmlOutput)
+        {
+            string outputFilename = xmlOutput + ".html";
+            using (XmlWriter output = XmlWriter.Create(outputFilename))
+            {
+                var input = new XPathDocument(xmlOutput);
+                XsltTransformer.Transform(input, output);
+            }
+            return outputFilename;
+        }
+
+        private XslCompiledTransform XsltTransformer
+        {
+            get
+            {
+                if (xslTransformer == null)
+                {
+                    xslTransformer = new XslCompiledTransform();
+                    var stream = GetType().Assembly.GetManifestResourceStream(typeof(NBehaveRunnerPackage), "NBehaveResults.xsl");
+                    var x = new XmlTextReader(stream);
+                    xslTransformer.Load(x);
+                }
+                return xslTransformer;
+            }
+        }
+
+        private string FormatArguments(string documentName, string assemblyPath, string xmlOutput, bool debug)
+        {
+            var args = string.Format("\"{0}\" /sf=\"{1}\" /console", assemblyPath, documentName) +
+                string.Format(" /xml=\"{0}\"", xmlOutput);
 
             if (debug)
                 args += " /wd";

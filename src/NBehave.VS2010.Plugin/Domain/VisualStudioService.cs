@@ -65,22 +65,26 @@ namespace NBehave.VS2010.Plugin.Domain
             process.Attach();
         }
 
-        private static readonly object BuildLock = new object();
+        readonly ManualResetEventSlim protectFromCompilingWhenCompiling = new ManualResetEventSlim(false);
 
         public void BuildSolution()
         {
-            try
+            if (!protectFromCompilingWhenCompiling.IsSet)
             {
-                if (Monitor.TryEnter(BuildLock))
-                    _dteService.Solution.SolutionBuild.Build(true);
-                else
+                try
                 {
-                    while (!Monitor.TryEnter(BuildLock, 100)) { }
+                    protectFromCompilingWhenCompiling.Set();
+                    _dteService.Solution.SolutionBuild.Build(true);
+                }
+                finally
+                {
+                    protectFromCompilingWhenCompiling.Reset();
                 }
             }
-            finally
+            else
             {
-                Monitor.Exit(BuildLock);
+                while (protectFromCompilingWhenCompiling.IsSet)
+                    System.Threading.Thread.Sleep(50);
             }
         }
 

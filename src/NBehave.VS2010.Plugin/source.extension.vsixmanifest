@@ -8,7 +8,7 @@
     <Description xml:space="preserve">Allows execution of NBehave scenario files from within the IDE. More information at http://www.nbehave.org.</Description>
     <Locale>1033</Locale>
     <MoreInfoUrl>
-      http://www.nbehave.org
+      http://nbehave.org
     </MoreInfoUrl>
     <InstalledByMsi>false</InstalledByMsi>
     <SupportedProducts>

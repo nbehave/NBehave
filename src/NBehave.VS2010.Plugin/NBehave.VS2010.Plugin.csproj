@@ -302,6 +302,11 @@
       <Name>NBehave.Narrator.Framework</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\xsl\NBehaveResults.xsl">
+      <Link>NBehaveResults.xsl</Link>
+    </EmbeddedResource>
+  </ItemGroup>
   <PropertyGroup>
     <UseCodebase>true</UseCodebase>
   </PropertyGroup>

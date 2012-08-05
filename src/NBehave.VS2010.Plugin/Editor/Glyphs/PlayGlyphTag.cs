@@ -18,14 +18,18 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs
 
         public void Execute(Point position, FrameworkElement visualElement)
         {
+            var runOrDebugView = new RunOrDebugView();
             if (viewModel == null)
             {
-                var runOrDebugView = new RunOrDebugView();
                 viewModel = runOrDebugView.DataContext as RunOrDebugViewModel;
-                viewModel.InitialiseProperties(position, visualElement, runOrDebugView, scenario);
             }
-
+            viewModel.InitialiseProperties(position, visualElement, runOrDebugView, scenario);
             viewModel.Show();
+        }
+
+        public bool IsScenario(string scenarioTitle)
+        {
+            return scenarioTitle.Contains(scenario.Title);
         }
     }
 }

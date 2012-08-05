@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.Concurrency;
-using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -25,6 +24,15 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs.ViewModels
         [Import(AllowDefault = false)]
         public IScenarioRunner ScenarioRunner { get; set; }
 
+        public RunOrDebugViewModel()
+        {
+            buttons = new List<dynamic>
+            {
+                new { Icon = new BitmapImage(new Uri("pack://application:,,,/NBehave.VS2010.Plugin;component/Editor/Resources/Icons/Debug.png", UriKind.Absolute)), Text="Start With Debugger", Command = DebugClicked },
+                new { Icon = new BitmapImage(new Uri("pack://application:,,,/NBehave.VS2010.Plugin;component/Editor/Resources/Icons/Play.png", UriKind.Absolute)), Text="Start Without Debugger", Command = RunClicked }
+            };
+        }
+
         public List<dynamic> Buttons
         {
             get
@@ -43,7 +51,7 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs.ViewModels
 
         public ICommand DebugClicked
         {
-            get 
+            get
             {
                 return GetCommand(true);
             }
@@ -58,7 +66,6 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs.ViewModels
         {
             string tempFileName = ScenarioAsString.ToTempFile();
             ScenarioRunner.Run(tempFileName, debug);
-            DeleteTempFile(tempFileName);
         }
 
         private string ScenarioAsString
@@ -70,29 +77,18 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs.ViewModels
             }
         }
 
-        private static void DeleteTempFile(string tempFileName)
+        private bool initialized;
+        public void InitialiseProperties(Point position, FrameworkElement visualElement, IRunOrDebugView runOrDebugView, Scenario scenario)
         {
-            try
-            {
-                File.Delete(tempFileName);
-            }
-            catch (IOException)
-            {
-            }
-        }
-
-        public void InitialiseProperties(Point position, FrameworkElement visualElement, IRunOrDebugView runOrDebugView, Scenario scenarioText)
-        {
-            Position = Point.Subtract(position, new Vector(3, 3));
-            RelativeVisualElement = visualElement;
             View = runOrDebugView;
-            Scenario = scenarioText;
+            RelativeVisualElement = visualElement;
+            Position = Point.Subtract(position, new Vector(3, 3));
+            Scenario = scenario;
+            
+            // Dont want multiple events to fire.
+            if (initialized)
+                return;
 
-            buttons = new List<dynamic>
-            {
-                new { Icon = new BitmapImage(new Uri("pack://application:,,,/NBehave.VS2010.Plugin;component/Editor/Resources/Icons/Debug.png", UriKind.Absolute)), Text="Start With Debugger", Command = DebugClicked },
-                new { Icon = new BitmapImage(new Uri("pack://application:,,,/NBehave.VS2010.Plugin;component/Editor/Resources/Icons/Play.png", UriKind.Absolute)), Text="Start Without Debugger", Command = RunClicked }
-            };
             OnPropertyChanged(() => Buttons);
 
             Observable
@@ -104,13 +100,14 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs.ViewModels
                 .Throttle(TimeSpan.FromSeconds(1))
                 .ObserveOnDispatcher()
                 .Subscribe(event1 =>
-                               {
-                                   SelectedItem.Command.Execute(null);
-                                   View.Deselect();
-                               });
+                {
+                    SelectedItem.Command.Execute(null);
+                    View.Deselect();
+                });
+            initialized = true;
         }
 
-        protected Scenario Scenario { get; set; }
+        public Scenario Scenario { get; set; }
 
         protected IRunOrDebugView View { get; set; }
 
@@ -142,7 +139,7 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs.ViewModels
         {
             View.Deselect();
             IsVisible = true;
-            
+
             Observable
                 .Timer(TimeSpan.FromMilliseconds(250), TimeSpan.FromMilliseconds(250), Scheduler.Dispatcher)
                 .Select(time => View.IsMouseOverPopup)
