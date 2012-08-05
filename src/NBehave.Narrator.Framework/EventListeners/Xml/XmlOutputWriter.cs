@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Reflection;
+
 namespace NBehave.Narrator.Framework.EventListeners.Xml
 {
     using System;
@@ -31,9 +33,11 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
             var evt = EventsReceived.OrderBy(_ => _.Time).FirstOrDefault();
 
             Writer.WriteStartElement("results");
-            var assemblyString = typeof(XmlOutputEventListener).AssemblyQualifiedName.Split(new[] { ',' });
-            Writer.WriteAttributeString("name", assemblyString[1]);
-            Writer.WriteAttributeString("version", assemblyString[2]);
+            var semVer = (AssemblyInformationalVersionAttribute)
+             Attribute.GetCustomAttribute(GetType().Assembly, typeof(AssemblyInformationalVersionAttribute));
+
+            Writer.WriteAttributeString("name", "NBehave");
+            Writer.WriteAttributeString("version", semVer.InformationalVersion);
             Writer.WriteAttributeString("date", evt.Time.ToShortDateString());
             Writer.WriteAttributeString("time", evt.Time.ToShortTimeString());
             Writer.WriteAttributeString("executionTime", Math.Round(CalcExecutionTime().TotalSeconds, 1).ToString());
