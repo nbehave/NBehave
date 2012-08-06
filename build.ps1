@@ -11,12 +11,10 @@ task Clean {
 		New-Item $buildDir -type directory
 	}
 	else {
-		Get-ChildItem $buildDir\* -Recurse | Select -ExpandProperty FullName | Sort {$_.Length} -Descending | ForEach-Object { Remove-Item $_ }
-		Write-Host "Files removed."
-		Get-ChildItem $buildDir -Recurse -Include * | Select -ExpandProperty FullName | Sort {$_.Length} -Descending | ForEach-Object { Remove-Item $_ }
-		Write-Host "Folders removed."
+		clearDir $buildDir
 	}
 	New-Item $testReportsDir -type directory
+	if ($false -eq (Test-Path $artifactsDir)) { New-Item $artifactsDir -type Directory }
 	if ($false -eq (Test-Path "$sourceDir\packages")) {
 		New-Item "$sourceDir\packages" -type directory
 	}
@@ -27,21 +25,24 @@ Task InstallNunitRunners {
 }
 
 Task Version {
-	if ($build -match "^\-") { $build = "$version$build" }
-	write-host "##teamcity[buildNumber '$build']"
-
 	$asmInfo = "$sourceDir\CommonAssemblyInfo.cs"
 	$src = Get-Content $asmInfo
 	$newSrc = foreach($row in $src) {
 		if ($row -match 'Assembly((InformationalVersion)|(Version)|(FileVersion))\s*\(\s*"\d+\.\d+\.\d+.*"\s*\)') {
 			if ($row -match 'AssemblyInformationalVersion') {
-				$row -replace '\d+\.\d+\.\d+.*.*"', ("$build" + '"')
+				$row -replace '\d+\.\d+\.\d+.*.*"', ("$buildNumber" + '"')
 			}
-			else { $row -replace "\d+\.\d+\.\d+.\d+", "$version.0" }
+			else { $row -replace "\d+\.\d+\.\d+.\d+", "$assemblyVersion" }
 		}
 		else { $row }
 	}
 	Set-Content -path $asmInfo -value $newSrc
+
+	#Version for source.extension.vsixmanifest
+	$vsixFile = "$sourceDir\NBehave.VS2010.Plugin\source.extension.vsixmanifest"
+	[xml] $xml = Get-Content $vsixFile
+	$xml.Vsix.Identifier.Version = "$buildNumber"
+	$xml.Save($vsixFile)
 }
 
 Task Compile -depends Compile-Console-x86, CompileAnyCpu

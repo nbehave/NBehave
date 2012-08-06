@@ -11,47 +11,65 @@ function xunitVersion() {
   return (get-item src/packages/xunit*).Name -replace "xunit."
 }
 
+
+function BuildNumber {
+  $buildNum = $build
+  if ($build -match "^\d+$") { $buildNum = $version }
+  if ($build -match "^\-")  { $buildNum = "$version$build" }
+  return $buildNum
+}
+
+function AssemblyVersion {
+  if ($build -match '^\d+$') { $asmVersion = "$version.$build" }
+  else { $asmVersion = "$version.0" }
+  return $asmVersion
+}
+
+function clearDir($dirToRemove) {
+  Get-ChildItem $dirToRemove\* -Recurse | Select -ExpandProperty FullName | Sort {$_.Length} -Descending | ForEach-Object { Remove-Item $_ }
+  Write-Host "Files removed."
+  Get-ChildItem $dirToRemove -Recurse -Include * | Select -ExpandProperty FullName | Sort {$_.Length} -Descending | ForEach-Object { Remove-Item $_ }
+  Write-Host "Folders removed."
+}
+
 function xmlPoke([string]$file, [string]$xpath, $value, [hashtable]$namespaces) {
-    [xml] $fileXml = Get-Content $file
-	$xmlNameTable = new-object System.Xml.NameTable
-	$xmlNameSpace = new-object System.Xml.XmlNamespaceManager($xmlNameTable)
+  [xml] $fileXml = Get-Content $file
+  $xmlNameTable = new-object System.Xml.NameTable
+  $xmlNameSpace = new-object System.Xml.XmlNamespaceManager($xmlNameTable)
 
-	foreach($key in $namespaces.keys)
-	{
-		$xmlNameSpace.AddNamespace($key, $namespaces.$key);
-	}
+  foreach($key in $namespaces.keys) {
+    $xmlNameSpace.AddNamespace($key, $namespaces.$key);
+  }
 
-    $node = $fileXml.SelectSingleNode($xpath, $xmlNameSpace)
-    if ($node) {
-        $node.InnerText = $value
-
-        $fileXml.Save($file)
+  $node = $fileXml.SelectSingleNode($xpath, $xmlNameSpace)
+  if ($node) {
+    $node.InnerText = $value
+    $fileXml.Save($file)
     }
 }
 
 function xmlPeek([string]$file, [string]$xpath, [hashtable]$namespaces) {
-    [xml] $fileXml = Get-Content $file
-	$xmlNameTable = new-object System.Xml.NameTable
-	$xmlNameSpace = new-object System.Xml.XmlNamespaceManager($xmlNameTable)
+  [xml] $fileXml = Get-Content $file
+  $xmlNameTable = new-object System.Xml.NameTable
+  $xmlNameSpace = new-object System.Xml.XmlNamespaceManager($xmlNameTable)
 
-	foreach($key in $namespaces.keys)
-	{
-		$xmlNameSpace.AddNamespace($key, $namespaces.$key);
-	}
+  foreach($key in $namespaces.keys) {
+    $xmlNameSpace.AddNamespace($key, $namespaces.$key);
+  }
 
-    $node = $fileXml.SelectSingleNode($xpath, $xmlNameSpace)
-	return $node.InnerText
+  $node = $fileXml.SelectSingleNode($xpath, $xmlNameSpace)
+  return $node.InnerText
 }
 
 function xmlList([string]$file, [string]$xpath, [hashtable]$namespaces) {
-    [xml] $fileXml = Get-Content $file
-	$xmlNameTable = new-object System.Xml.NameTable
-	$xmlNameSpace = new-object System.Xml.XmlNamespaceManager($xmlNameTable)
+  [xml] $fileXml = Get-Content $file
+  $xmlNameTable = new-object System.Xml.NameTable
+  $xmlNameSpace = new-object System.Xml.XmlNamespaceManager($xmlNameTable)
 
-	foreach($key in $namespaces.keys)
-	{
-		$xmlNameSpace.AddNamespace($key, $namespaces.$key);
-	}
+  foreach($key in $namespaces.keys)
+  {
+    $xmlNameSpace.AddNamespace($key, $namespaces.$key);
+  }
   $nodes = @()
     $node = $fileXml.SelectNodes($xpath, $xmlNameSpace)
   $node | ForEach-Object { $nodes += @($_.Value)}
