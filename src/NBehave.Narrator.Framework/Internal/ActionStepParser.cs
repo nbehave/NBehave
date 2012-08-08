@@ -199,32 +199,10 @@ namespace NBehave.Narrator.Framework.Internal
         private ActionMethodInfo BuildActionMethodInfo(ActionStepAttribute actionStep, MethodInfo method)
         {
             if (actionStep.ActionMatch == null)
-            {
-                var tokenString = BuildTokenString(method);
-                var tokenStringWithoutFirstWord = tokenString.RemoveFirstWord();
-                var actionMatcher = tokenStringWithoutFirstWord.AsRegex();
-                return new ActionMethodInfo(actionMatcher, null, method, tokenString.GetFirstWord());
-            }
+                actionStep.BuildActionMatchFromMethodInfo(method);
 
             return new ActionMethodInfo(actionStep.ActionMatch, null, method, actionStep.Type);
         }
 
-        private string BuildTokenString(MethodInfo method)
-        {
-            var methodName = method.Name.Replace('_', ' ');
-            var parameters = method.GetParameters();
-
-            foreach (var param in parameters)
-            {
-                var paramName = param.Name;
-                var pos = methodName.IndexOf(paramName);
-                if (pos > 0)
-                {
-                    methodName = methodName.Substring(0, pos) + "$" + methodName.Substring(pos);
-                }
-            }
-
-            return methodName;
-        }
     }
 }

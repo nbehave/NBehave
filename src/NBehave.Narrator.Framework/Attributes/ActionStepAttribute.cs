@@ -7,6 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Reflection;
 using NBehave.Narrator.Framework.Extensions;
 
 namespace NBehave.Narrator.Framework
@@ -39,8 +40,34 @@ namespace NBehave.Narrator.Framework
             }
         }
 
-        public Regex ActionMatch { get; protected set; }
+        public Regex ActionMatch { get; private set; }
 
         public string Type { get; protected set; }
+
+        public void BuildActionMatchFromMethodInfo(MethodInfo method)
+        {
+            var tokenString = BuildTokenString(method);
+            var tokenStringWithoutFirstWord = tokenString.RemoveFirstWord();
+            ActionMatch = tokenStringWithoutFirstWord.AsRegex();
+            Type = tokenString.GetFirstWord();
+        }
+
+        private string BuildTokenString(MethodInfo method)
+        {
+            var methodName = method.Name.Replace('_', ' ');
+            var parameters = method.GetParameters();
+
+            foreach (var param in parameters)
+            {
+                var paramName = param.Name;
+                var pos = methodName.IndexOf(paramName);
+                if (pos > 0)
+                {
+                    methodName = methodName.Substring(0, pos) + "$" + methodName.Substring(pos);
+                }
+            }
+
+            return methodName;
+        }
     }
 }
