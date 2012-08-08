@@ -10,13 +10,12 @@ namespace NBehave.VS2010.Plugin.Domain
 {
     internal class VisualStudioService : IVisualStudioService
     {
-        private readonly DTE _dteService;
+        private readonly DTE dteService;
 
         public VisualStudioService(IServiceProvider serviceProvider)
         {
-            _dteService = serviceProvider.GetService(typeof(SDTE)) as DTE;
-
-            if (_dteService == null)
+            dteService = serviceProvider.GetService(typeof(SDTE)) as DTE;
+            if (dteService == null)
                 throw new InvalidOperationException("Was not able to get the EnvDTE service.");
         }
 
@@ -38,6 +37,16 @@ namespace NBehave.VS2010.Plugin.Domain
             }
         }
 
+        public bool IsSolutionOpen { get { return dteService.Solution.IsOpen; } }
+
+        public string SolutionFolder
+        {
+            get
+            {
+                return Path.GetDirectoryName(dteService.Solution.FullName);
+            }
+        }
+
         public string GetProjectAssemblyOutputPath()
         {
             var containingProject = Project;
@@ -54,12 +63,12 @@ namespace NBehave.VS2010.Plugin.Domain
 
         public string GetActiveDocumentFullName()
         {
-            return _dteService.ActiveDocument.FullName;
+            return dteService.ActiveDocument.FullName;
         }
 
         public void AttachDebugger(int processId)
         {
-            Process process = _dteService.Debugger.LocalProcesses
+            Process process = dteService.Debugger.LocalProcesses
                 .Cast<Process>()
                 .First(proc => proc.ProcessID == processId);
             process.Attach();
@@ -74,7 +83,7 @@ namespace NBehave.VS2010.Plugin.Domain
                 try
                 {
                     protectFromCompilingWhenCompiling.Set();
-                    _dteService.Solution.SolutionBuild.Build(true);
+                    dteService.Solution.SolutionBuild.Build(true);
                 }
                 finally
                 {
@@ -91,7 +100,7 @@ namespace NBehave.VS2010.Plugin.Domain
         public string GetTargetFrameworkVersion()
         {
             var targetFramework =
-                _dteService.ActiveDocument.ProjectItem.ContainingProject.Properties.Item("TargetFrameworkMoniker");
+                dteService.ActiveDocument.ProjectItem.ContainingProject.Properties.Item("TargetFrameworkMoniker");
             return (string)targetFramework.Value == ".NETFramework,PackageVersion=v4.0" ? "v4.0" : "V3.5";
         }
 
@@ -99,7 +108,7 @@ namespace NBehave.VS2010.Plugin.Domain
         {
             get
             {
-                var project = _dteService.ActiveDocument.ProjectItem.ContainingProject;
+                var project = dteService.ActiveDocument.ProjectItem.ContainingProject;
                 return project;
             }
         }

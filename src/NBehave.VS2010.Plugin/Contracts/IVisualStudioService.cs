@@ -13,5 +13,7 @@ namespace NBehave.VS2010.Plugin.Contracts
         string GetTargetFrameworkVersion();
         string ReferencedAssemblyFolder(string referencedAssembly);
         bool Is32Bit { get; }
+        bool IsSolutionOpen { get; }
+        string SolutionFolder { get; }
     }
 }

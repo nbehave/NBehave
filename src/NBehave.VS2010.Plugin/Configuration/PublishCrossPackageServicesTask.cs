@@ -25,8 +25,10 @@ namespace NBehave.VS2010.Plugin.Configuration
 
             AddService<IOutputWindow>(serviceContainer, container);
             AddService<IVisualStudioService>(serviceContainer, container);
+            AddService<ISolutionEventsListener>(serviceContainer, container);
             AddService<IPluginLogger>(serviceContainer, container);
             AddService<IScenarioRunner>(serviceContainer, container);
+            AddService<IPluginConfiguration>(serviceContainer, container);
         }
     }
 }

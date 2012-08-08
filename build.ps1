@@ -41,7 +41,7 @@ Task Version {
 	#Version for source.extension.vsixmanifest
 	$vsixFile = "$sourceDir\NBehave.VS2010.Plugin\source.extension.vsixmanifest"
 	[xml] $xml = Get-Content $vsixFile
-	$xml.Vsix.Identifier.Version = "$buildNumber"
+	$xml.Vsix.Identifier.Version = "$assemblyVersion"
 	$xml.Save($vsixFile)
 }
 

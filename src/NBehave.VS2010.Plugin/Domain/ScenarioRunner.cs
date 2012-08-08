@@ -24,15 +24,17 @@ namespace NBehave.VS2010.Plugin.Domain
         private readonly IVisualStudioService visualStudioService;
         private readonly IOutputWindow outputWindow;
         private readonly IConsoleRunner consoleRunner;
+        private readonly IPluginConfiguration configuration;
         private XslCompiledTransform xslTransformer;
-        private bool htmlOutput = false;
 
         public ScenarioRunner(IOutputWindow outputWindow,
             IVisualStudioService visualStudioService,
+            IPluginConfiguration configuration,
             IConsoleRunner consoleRunner)
         {
             this.outputWindow = outputWindow;
             this.visualStudioService = visualStudioService;
+            this.configuration = configuration;
             this.consoleRunner = consoleRunner;
         }
 
@@ -83,7 +85,7 @@ namespace NBehave.VS2010.Plugin.Domain
 
         private void CreateHtmlOutput(string xmlOutput)
         {
-            if (htmlOutput)
+            if (configuration.CreateHtmlReport)
             {
                 var htmlFile = TransformXmltoHtml(xmlOutput);
                 Process.Start(htmlFile);

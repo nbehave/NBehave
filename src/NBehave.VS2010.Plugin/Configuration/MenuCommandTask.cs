@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.ComponentModel.Design;
 using Microsoft.VisualStudio.Shell;
 using NBehave.Narrator.Framework.Tiny;
@@ -8,50 +9,80 @@ using NBehave.VS2010.Plugin.Tiny;
 
 namespace NBehave.VS2010.Plugin.Configuration
 {
-    internal class MenuCommandTask : ITinyIocInstaller
+    public class MenuCommandTask : ITinyIocInstaller, IDisposable
     {
-        private IOutputWindow _outputWindow;
-        private IServiceProvider _serviceProvider;
-        private IScenarioRunner _scenarioRunner;
+        private IServiceProvider serviceProvider;
+        private OleMenuCommandService menuCommandService;
+        private IPluginConfiguration pluginConfiguration;
+        private ISolutionEventsListener solutionEvents;
+
+        private bool disposed;
+        private MenuCommand toggleCreateHtmlReportButton;
 
         public void Install(TinyIoCContainer container)
         {
-            _serviceProvider = container.Resolve<IServiceProvider>();
-            _outputWindow = container.Resolve<IOutputWindow>();
-            _scenarioRunner = container.Resolve<IScenarioRunner>();
+            serviceProvider = container.Resolve<IServiceProvider>();
 
-            var mcs = _serviceProvider.GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
-            if (mcs == null) return;
-
-            var menuCommandId = new CommandID((Identifiers.CommandGroupGuid), (int)Identifiers.RunCommandId);
-            var menuItem = new MenuCommand(RunCommandOnClick, menuCommandId);
-            mcs.AddCommand(menuItem);
-
-            var debugCommandId = new CommandID((Identifiers.CommandGroupGuid), (int)Identifiers.DebugCommandId);
-            var debugItem = new MenuCommand(DebugCommandOnClick, debugCommandId);
-            mcs.AddCommand(debugItem);
+            menuCommandService = serviceProvider.GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
+            if (menuCommandService == null) return;
+            pluginConfiguration = container.Resolve<IPluginConfiguration>();
+            pluginConfiguration.PropertyChanged += SetButtonState;
+            solutionEvents = container.Resolve<ISolutionEventsListener>();
+            solutionEvents.AfterSolutionLoaded += SolutionLoaded;
+            solutionEvents.BeforeSolutionClosed += SolutionClosed;
+            var vs = container.Resolve<IVisualStudioService>();
+            InstallMenuCommands(vs.IsSolutionOpen);
         }
 
-        private void DebugCommandOnClick(object sender, EventArgs e)
+        private void SetButtonState(object sender, PropertyChangedEventArgs e)
         {
-            ExecuteScenario(true);
+            toggleCreateHtmlReportButton.Checked = pluginConfiguration.CreateHtmlReport;
         }
 
-        private void RunCommandOnClick(object sender, EventArgs e)
+        private void InstallMenuCommands(bool enabled)
         {
-            ExecuteScenario(false);
+            var menuCmdId = new CommandID(Identifiers.TopLevelMenuCmdSet, Identifiers.MenuCommandHtmlReportToggleId);
+            toggleCreateHtmlReportButton = new MenuCommand(ToggleCreateHtmlReport, menuCmdId)
+                {
+                    Checked = pluginConfiguration.CreateHtmlReport && enabled,
+                    Enabled = enabled
+                };
+            menuCommandService.AddCommand(toggleCreateHtmlReportButton);
         }
 
-        private void ExecuteScenario(bool debug)
+        private void ToggleCreateHtmlReport(object sender, EventArgs e)
         {
-            try
+            var cmd = (MenuCommand)sender;
+            pluginConfiguration.CreateHtmlReport = !pluginConfiguration.CreateHtmlReport;
+            cmd.Checked = pluginConfiguration.CreateHtmlReport;
+        }
+
+
+        private void SolutionLoaded()
+        {
+            toggleCreateHtmlReportButton.Checked = pluginConfiguration.CreateHtmlReport;
+            toggleCreateHtmlReportButton.Enabled = true;
+        }
+
+        private void SolutionClosed()
+        {
+            toggleCreateHtmlReportButton.Checked = false;
+            toggleCreateHtmlReportButton.Enabled = false;
+        }
+
+
+        public void Dispose()
+        {
+            if (!disposed)
             {
-                _scenarioRunner.Run(debug);
+                disposed = true;
+                if (solutionEvents != null)
+                {
+                    solutionEvents.AfterSolutionLoaded -= SolutionLoaded;
+                    solutionEvents.BeforeSolutionClosed -= SolutionClosed;
+                }
             }
-            catch (Exception exception)
-            {
-                _outputWindow.WriteLine(exception.ToString());
-            }
+            GC.SuppressFinalize(this);
         }
     }
 }

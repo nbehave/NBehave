@@ -1,49 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
- 
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" 
+              xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
   <Extern href="stdidcmd.h"/>
   <Extern href="vsshlids.h"/>
   <Extern href="msobtnid.h"/>
 
-  <Commands package="PackageGuidString">
-    
+  <Commands package="NBehavePackage">
+
     <Groups>
-      <Group guid="CommandGroupGuidString" id="CommandGroup" priority="0x0600">
+      <Group guid="CommandGroupSet" id="CommandGroup" priority="0x0600">
         <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN"/>
       </Group>
+      <Group guid="TopLevelMenuCmdSet" id="MyMenuGroup" priority="0x0600">
+        <Parent guid="TopLevelMenuCmdSet" id="TopLevelMenu" />
+      </Group>
     </Groups>
-    
-    <Buttons>
 
-      <Button guid="CommandGroupGuidString" id="RunCommandId" priority="0x0100" type="Button">
-        <Parent guid="CommandGroupGuidString" id="CommandGroup" />
+    <Menus>
+      <Menu guid="TopLevelMenuCmdSet" id="TopLevelMenu" priority="0x999" type="Menu">
+        <!-- IDG_VS_MM_TOOLSADDINS IDM_VS_MENU_TOOLS -->
+        <Parent guid="guidSHLMainMenu" id="IDG_VS_MM_TOOLSADDINS" />
+        <Strings>
+          <ButtonText>NBehave</ButtonText>
+          <CommandName>NBehave</CommandName>
+        </Strings>
+      </Menu>
+    </Menus>
+
+    <Buttons>
+      <Button guid="TopLevelMenuCmdSet" id="toggleCreateHtmlReportCommandId" priority="0x0100" type="Button">
+        <Parent guid="TopLevelMenuCmdSet" id="MyMenuGroup" />
+        <Strings>
+          <CommandName>toggleCreateHtmlReportCommandId</CommandName>
+          <ButtonText>Create HTML Report</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="CommandGroupSet" id="RunCommandId" priority="0x0100" type="Button">
+        <Parent guid="CommandGroupSet" id="CommandGroup" />
         <Strings>
           <CommandName>RunCommandId</CommandName>
           <ButtonText>Run Scenario</ButtonText>
         </Strings>
       </Button>
 
-      <Button guid="CommandGroupGuidString" id="DebugCommandId" priority="0x0100" type="Button">
-        <Parent guid="CommandGroupGuidString" id="CommandGroup" />
+      <Button guid="CommandGroupSet" id="DebugCommandId" priority="0x0100" type="Button">
+        <Parent guid="CommandGroupSet" id="CommandGroup" />
         <Strings>
           <CommandName>DebugCommandId</CommandName>
           <ButtonText>Debug Scenario</ButtonText>
         </Strings>
       </Button>
-      
     </Buttons>
-
+    
+    <Bitmaps>
+      <Bitmap guid="guidImages" href="Resources\Images.bmp" usedList="blank, blueCheck, yellowDot, question, chain, info"/>
+    </Bitmaps>
+    
   </Commands>
 
   <Symbols>
-    <GuidSymbol name="PackageGuidString" value="{39b466a1-7b58-4a9d-91d1-010d05512884}" />
     
-    <GuidSymbol name="CommandGroupGuidString" value="{14e96ffb-091b-4471-9a94-f5c9790b5f4b}">
+    <GuidSymbol name="NBehavePackage" value="{39b466a1-7b58-4a9d-91d1-010d05512884}" />
+
+    <GuidSymbol name="TopLevelMenuCmdSet" value="{c55f2134-fce5-4d0d-b42c-e4fb78bdfb3e}">
+      <IDSymbol name="MyMenuGroup" value="0x1020"/>
+      <IDSymbol name="TopLevelMenu" value="0x1021"/>
+      <IDSymbol name="toggleCreateHtmlReportCommandId" value="0x0201"/>
+    </GuidSymbol>
+    
+    <GuidSymbol name="CommandGroupSet" value="{14e96ffb-091b-4471-9a94-f5c9790b5f4b}">
       <IDSymbol name="CommandGroup" value="0x1020" />
       <IDSymbol name="RunCommandId" value="0x0100" />
       <IDSymbol name="DebugCommandId" value="0x0101" />
     </GuidSymbol>
 
-  </Symbols>
 
+    <GuidSymbol name="guidImages" value="{025ae962-3b28-455f-B817-6c83fea8c4e6}" >
+      <IDSymbol name="blank" value="1" />
+      <IDSymbol name="blueCheck" value="2" />
+      <IDSymbol name="yellowDot" value="3" />
+      <IDSymbol name="question" value="4" />
+      <IDSymbol name="chain" value="5" />
+      <IDSymbol name="info" value="6" />
+    </GuidSymbol>
+
+  </Symbols>
+  
 </CommandTable>

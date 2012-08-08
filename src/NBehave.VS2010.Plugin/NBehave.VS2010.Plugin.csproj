@@ -201,6 +201,8 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Configuration\CodeWindowTask.cs" />
+    <Compile Include="Domain\IPluginConfiguration.cs" />
     <Compile Include="Configuration\LoggingTask.cs" />
     <Compile Include="Configuration\MenuCommandTask.cs" />
     <Compile Include="Configuration\OutputWindowTask.cs" />
@@ -208,6 +210,8 @@
     <Compile Include="Domain\ConsoleRunner.cs" />
     <Compile Include="Domain\NuGet.cs" />
     <Compile Include="Domain\OutputWindowWriter.cs" />
+    <Compile Include="Domain\PluginConfiguration.cs" />
+    <Compile Include="Domain\SolutionEventsListener.cs" />
     <Compile Include="Editor\Domain\GherkinFileClassificationDefinitions.cs" />
     <Compile Include="Editor\SyntaxHighlighting\GherkinClassifier.cs" />
     <Compile Include="FileExtensions.cs" />
@@ -306,6 +310,9 @@
     <EmbeddedResource Include="..\xsl\NBehaveResults.xsl">
       <Link>NBehaveResults.xsl</Link>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\Images.bmp" />
   </ItemGroup>
   <PropertyGroup>
     <UseCodebase>true</UseCodebase>
