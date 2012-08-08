@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: AssemblyVersion("0.6.0.0")]
 [assembly: AssemblyFileVersion("0.6.0.0")]
-[assembly: AssemblyInformationalVersion("0.6.0-build99")]
+[assembly: AssemblyInformationalVersion("0.6.0-devlocal0")]
 [assembly: AssemblyCopyright("Copyright © NBehave 2007-2012")]
 [assembly: AssemblyProduct("NBehave")]
 [assembly: AssemblyCompany("NBehave")]
