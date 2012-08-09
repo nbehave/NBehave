@@ -21,7 +21,7 @@ task Clean {
 }
 
 Task InstallNunitRunners {
-	Exec { .\src\.nuget\NuGet.exe install nunit.runners -Version 2.6.0.12051 -OutputDirectory src\packages\ }
+	Exec { .\src\.nuget\NuGet.exe install nunit.runners -Version 2.6.1 -OutputDirectory src\packages\ }
 }
 
 Task Version {
