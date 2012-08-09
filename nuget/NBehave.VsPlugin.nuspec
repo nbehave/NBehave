@@ -16,7 +16,7 @@
    <language>en-US</language>
     <tags>nbehave bdd atdd gherkin cucumber resharper</tags>
   <dependencies>
-    <dependency id="NBehave" version="$version$" />
+    <dependency id="NBehave" version="[$version$]" />
   </dependencies>
   </metadata>
   <files>

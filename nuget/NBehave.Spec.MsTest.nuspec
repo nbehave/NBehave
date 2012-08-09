@@ -17,7 +17,7 @@
     <language>en-US</language>
     <tags>nbehave bdd atdd tdd</tags>
     <dependencies>
-        <dependency id="RhinoMocks" version="3.6.1" />
+        <dependency id="RhinoMocks" version="[3.6.1]" />
     </dependencies>
   </metadata>
   <files>

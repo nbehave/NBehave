@@ -17,8 +17,8 @@
     <tags>nbehave bdd atdd</tags>
     <dependencies>
         <dependency id="nbehave" version="$version$" />
-        <dependency id="XUnit" version="$xunitVersion$" />
-        <dependency id="RhinoMocks" version="3.6.1" />
+        <dependency id="XUnit" version="[$xunitVersion$]" />
+        <dependency id="RhinoMocks" version="[3.6.1]" />
     </dependencies>
   </metadata>
   <files>
