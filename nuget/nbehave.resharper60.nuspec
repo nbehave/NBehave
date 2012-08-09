@@ -20,10 +20,10 @@
   </dependencies>
   </metadata>
   <files>
-    <file src="..\build\Debug-3.5\ReSharper\NBehave*.dll" target="tools\net35\ReSharper" />
-    <file src="..\build\Debug-3.5\ReSharper\GurkBurk.dll" target="tools\net35\ReSharper" />
-    <file src="..\build\Debug-4.0\ReSharper\NBehave*.dll" target="tools\net40\ReSharper" />
-    <file src="..\build\Debug-4.0\ReSharper\GurkBurk.dll" target="tools\net40\ReSharper" />
+    <file src="..\build\Debug-3.5\ReSharper6\NBehave*.dll" target="tools\net35\ReSharper" />
+    <file src="..\build\Debug-3.5\ReSharper6\GurkBurk.dll" target="tools\net35\ReSharper" />
+    <file src="..\build\Debug-4.0\ReSharper6\NBehave*.dll" target="tools\net40\ReSharper" />
+    <file src="..\build\Debug-4.0\ReSharper6\GurkBurk.dll" target="tools\net40\ReSharper" />
     <file src="ReSharper.feature" target="content\Resharper.feature" />
     <file src="Resharper.scripts\Install.ps1" target="tools\Install.ps1" />
     <file src="Resharper.scripts\UnInstall.ps1" target="tools\UnInstall.ps1" />
