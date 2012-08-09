@@ -1,6 +1,4 @@
-﻿}
-
-function nunitVersion() {
+﻿function nunitVersion() {
   return (get-item src/packages/nunit* -Exclude nunit.runners* | Sort-Object Name -descending | Select-Object -first 1).Name -replace "Nunit."
 }
 
