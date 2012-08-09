@@ -1,14 +1,15 @@
-﻿
+﻿}
+
 function nunitVersion() {
-  return  (get-item src/packages/nunit* -Exclude nunit.runners*).Name -replace "Nunit."
+  return (get-item src/packages/nunit* -Exclude nunit.runners* | Sort-Object Name -descending | Select-Object -first 1).Name -replace "Nunit."
 }
 
 function mbUnitVersion() {
-  return (get-item src/packages/mbunit*).Name -replace "mbunit."
+  return (get-item src/packages/mbunit* | Sort-Object Name -descending | Select-Object -first 1).Name -replace "mbunit."
 }
 
 function xunitVersion() {
-  return (get-item src/packages/xunit*).Name -replace "xunit."
+  return (get-item src/packages/xunit* | Sort-Object Name -descending | Select-Object -first 1).Name -replace "xunit."
 }
 
 
