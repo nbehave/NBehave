@@ -1,0 +1,17 @@
+bin
+obj
+build
+packages
+buildframework/psake*
+
+_NCrunch_*
+*.ncrunchproject
+*.ncrunchsolution
+
+*_ReSharper*
+*.resharper.*
+
+*.suo
+*.user
+
+TestResult.xml
