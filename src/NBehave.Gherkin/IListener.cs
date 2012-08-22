@@ -8,7 +8,7 @@ namespace NBehave.Gherkin
         void Scenario(Token keyword, Token title);
         void Examples(Token keyword, Token name);
         void Step(Token keyword, Token name);
-        void Table(IList<IList<Token>> rows, LineInFile tableRow);
+        void Table(IList<IList<Token>> rows, LineInFile lineInFile);
         void Background(Token keyword, Token name);
         void Comment(Token comment);
         void Tag(Token name);

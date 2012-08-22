@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GherkinListener.cs" />
+    <Compile Include="ParseException.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="IListener.cs" />
     <Compile Include="LineInFile.cs" />

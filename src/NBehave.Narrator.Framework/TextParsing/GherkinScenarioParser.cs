@@ -95,7 +95,7 @@ namespace NBehave.Narrator.Framework.TextParsing
             events.Enqueue(new StepEvent(stepText, () => StepEvent.Invoke(this, new EventArgs<StringStep>(stringStep))));
         }
 
-        public void Table(IList<IList<Token>> columns, LineInFile tableRow)
+        public void Table(IList<IList<Token>> columns, LineInFile lineInFile)
         {
             events.Enqueue(new TableEvent(columns, () => TableEvent.Invoke(this, new EventArgs<IList<IList<Token>>>(columns))));
         }

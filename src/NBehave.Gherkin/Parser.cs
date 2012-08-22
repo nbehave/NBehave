@@ -23,7 +23,14 @@ namespace NBehave.Gherkin
         {
             var feature = stream.ReadToEnd();
             var lexer = new I18nLexer(new GherkinListener(_listener));
-            lexer.scan(feature);
+            try
+            {
+                lexer.scan(feature);
+            }
+            catch (LexerError e)
+            {
+                throw new ParseException(e.Message, e);
+            }
         }
 
         private TextReader CreateStream(string source)

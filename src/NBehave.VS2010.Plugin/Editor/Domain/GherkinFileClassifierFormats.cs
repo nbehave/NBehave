@@ -1,139 +1,262 @@
 ﻿using System.ComponentModel.Composition;
+using System.Windows.Media;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Utilities;
 
 namespace NBehave.VS2010.Plugin.Editor.Domain
 {
     [Export(typeof(EditorFormatDefinition))]
-    [ClassificationType(ClassificationTypeNames = "gherkin.keyword")]
-    [Name("gherkin.keyword")]
-    [UserVisible(true)] 
-    [Order(Before = Priority.Default)] 
-    internal sealed class GherkinKeywordClassificationFormat : ClassificationFormatDefinition
+    [ClassificationType(ClassificationTypeNames = "gherkin.syntaxError")]
+    [Name("gherkin.syntaxError")]
+    [UserVisible(false)]
+    [Order(Before = Priority.Low)]
+    internal sealed class GherkinSyntaxErrorClassificationFormat : ClassificationFormatDefinition
     {
-        public GherkinKeywordClassificationFormat()
+        public GherkinSyntaxErrorClassificationFormat()
         {
-            this.DisplayName = "Gherkin Keyword"; 
+            DisplayName = "Gherkin syntax error";
+            ForegroundColor = Colors.Red;
+        }
+    }
+
+    [Export(typeof(EditorFormatDefinition))]
+    [ClassificationType(ClassificationTypeNames = "gherkin.feature")]
+    [Name("gherkin.feature")]
+    [UserVisible(true)]
+    [Order(Before = Priority.Default)]
+    internal sealed class GherkinFeatureTitleClassificationFormat : ClassificationFormatDefinition
+    {
+        public GherkinFeatureTitleClassificationFormat()
+        {
+            DisplayName = "Gherkin Feature";
+            IsBold = true;
+            FontRenderingSize = 16;
+        }
+    }
+
+    [Export(typeof(EditorFormatDefinition))]
+    [ClassificationType(ClassificationTypeNames = "gherkin.featureTitle")]
+    [Name("gherkin.featureTitle")]
+    [UserVisible(true)]
+    [Order(Before = Priority.Default)]
+    internal sealed class GherkinFeatureTitleFormat : ClassificationFormatDefinition
+    {
+        public GherkinFeatureTitleFormat()
+        {
+            DisplayName = "Gherkin Feature title";
+            FontRenderingSize = 14;
+            IsBold = true;
+        }
+    }
+
+    [Export(typeof(EditorFormatDefinition))]
+    [ClassificationType(ClassificationTypeNames = "gherkin.featureDescription")]
+    [Name("gherkin.featureDescription")]
+    [UserVisible(true)]
+    [Order(Before = Priority.Default)]
+    internal sealed class GherkinDescriptionClassificationFormat : ClassificationFormatDefinition
+    {
+        public GherkinDescriptionClassificationFormat()
+        {
+            DisplayName = "Gherkin Feature Description";
+            IsItalic = true;
+            ForegroundColor = Colors.Chocolate;
+        }
+    }
+
+    [Export(typeof(EditorFormatDefinition))]
+    [ClassificationType(ClassificationTypeNames = "gherkin.scenario")]
+    [Name("gherkin.scenario")]
+    [UserVisible(true)]
+    [Order(Before = Priority.Default)]
+    internal sealed class GherkinScenarioTitleClassificationFormat : ClassificationFormatDefinition
+    {
+        public GherkinScenarioTitleClassificationFormat()
+        {
+            DisplayName = "Gherkin Scenario";
+            FontRenderingSize = 13;
+            IsBold = true;
+            ForegroundColor = Colors.Black;
+        }
+    }
+
+    [Export(typeof(EditorFormatDefinition))]
+    [ClassificationType(ClassificationTypeNames = "gherkin.scenarioTitle")]
+    [Name("gherkin.scenarioTitle")]
+    [UserVisible(true)]
+    [Order(Before = Priority.Default)]
+    internal sealed class GherkinScenarioTitleFormat : ClassificationFormatDefinition
+    {
+        public GherkinScenarioTitleFormat()
+        {
+            DisplayName = "Gherkin Scenario title";
+            IsBold = true;
+        }
+    }
+
+    [Export(typeof(EditorFormatDefinition))]
+    [ClassificationType(ClassificationTypeNames = "gherkin.background")]
+    [Name("gherkin.background")]
+    [UserVisible(true)]
+    [Order(Before = Priority.Default)]
+    internal sealed class GherkinBackgroundTitleClassificationFormat : ClassificationFormatDefinition
+    {
+        public GherkinBackgroundTitleClassificationFormat()
+        {
+            DisplayName = "Gherkin Background";
+            ForegroundColor = Colors.BlueViolet;
+            FontRenderingSize = 13;
+        }
+    }
+
+    [Export(typeof(EditorFormatDefinition))]
+    [ClassificationType(ClassificationTypeNames = "gherkin.backgroundTitle")]
+    [Name("gherkin.backgroundTitle")]
+    [UserVisible(true)]
+    [Order(Before = Priority.Default)]
+    internal sealed class GherkinBackgroundTitleFormat : ClassificationFormatDefinition
+    {
+        public GherkinBackgroundTitleFormat()
+        {
+            DisplayName = "Gherkin Background title";
+            IsBold = true;
         }
     }
 
     [Export(typeof(EditorFormatDefinition))]
     [ClassificationType(ClassificationTypeNames = "gherkin.comment")]
     [Name("gherkin.comment")]
-    [UserVisible(true)] 
-    [Order(Before = Priority.Default)] 
+    [UserVisible(true)]
+    [Order(Before = Priority.Default)]
     internal sealed class GherkinCommentClassificationFormat : ClassificationFormatDefinition
     {
         public GherkinCommentClassificationFormat()
         {
-            this.DisplayName = "Gherkin Comment";
+            DisplayName = "Gherkin Comment";
+            ForegroundColor = Colors.Green;
+            IsItalic = true;
         }
     }
 
     [Export(typeof(EditorFormatDefinition))]
     [ClassificationType(ClassificationTypeNames = "gherkin.tag")]
     [Name("gherkin.tag")]
-    [UserVisible(true)] 
-    [Order(Before = Priority.Default)] 
+    [UserVisible(true)]
+    [Order(Before = Priority.Default)]
     internal sealed class GherkinTagClassificationFormat : ClassificationFormatDefinition
     {
         public GherkinTagClassificationFormat()
         {
-            this.DisplayName = "Gherkin Tag"; 
-            this.IsItalic = true;
+            DisplayName = "Gherkin Tag";
+            ForegroundColor = Colors.MediumVioletRed;
+            BackgroundColor = Colors.Bisque;
+            IsItalic = true;
         }
     }
 
     [Export(typeof(EditorFormatDefinition))]
-    [ClassificationType(ClassificationTypeNames = "gherkin.placeholder")]
-    [Name("gherkin.placeholder")]
-    [UserVisible(true)] 
-    [Order(Before = Priority.Default)] 
-    internal sealed class GherkinPlaceholderClassificationFormat : ClassificationFormatDefinition
-    {
-        public GherkinPlaceholderClassificationFormat()
-        {
-            this.DisplayName = "Gherkin Scenario Outline Placeholder"; 
-        }
-    }
-
-    [Export(typeof(EditorFormatDefinition))]
-    [ClassificationType(ClassificationTypeNames = "gherkin.multilinetext")]
-    [Name("gherkin.multilinetext")]
-    [UserVisible(true)] 
+    [ClassificationType(ClassificationTypeNames = "gherkin.docstring")]
+    [Name("gherkin.docstring")]
+    [UserVisible(true)]
     [Order(Before = Priority.Default)]
-    internal sealed class GherkinMultilineTextClassificationFormat : ClassificationFormatDefinition
+    internal sealed class GherkinDocstringClassificationFormat : ClassificationFormatDefinition
     {
-        public GherkinMultilineTextClassificationFormat()
+        public GherkinDocstringClassificationFormat()
         {
-            this.DisplayName = "Gherkin Multi-line Text Argument";
+            DisplayName = "Gherkin Docstring (Multi-line Text Argument)";
+            ForegroundColor = Colors.Olive;
         }
     }
 
     [Export(typeof(EditorFormatDefinition))]
-    [ClassificationType(ClassificationTypeNames = "gherkin.tablecell")]
-    [Name("gherkin.tablecell")]
-    [UserVisible(true)] 
-    [Order(Before = Priority.Default)] 
-    internal sealed class GherkinTableCellClassificationFormat : ClassificationFormatDefinition
+    [ClassificationType(ClassificationTypeNames = "gherkin.examples")]
+    [Name("gherkin.examples")]
+    [UserVisible(true)]
+    [Order(Before = Priority.Default)]
+    internal sealed class GherkinExamplesClassificationFormat : ClassificationFormatDefinition
     {
-        public GherkinTableCellClassificationFormat()
+        public GherkinExamplesClassificationFormat()
         {
-            this.DisplayName = "Gherkin Table Cell"; 
+            DisplayName = "Gherkin Examples";
+            ForegroundColor = Colors.Blue;
+            IsBold = true;
+            IsItalic = true;
+        }
+    }
+
+    [Export(typeof(EditorFormatDefinition))]
+    [ClassificationType(ClassificationTypeNames = "gherkin.step")]
+    [Name("gherkin.step")]
+    [UserVisible(true)]
+    [Order(Before = Priority.Default)]
+    internal sealed class GherkinStepClassificationFormat : ClassificationFormatDefinition
+    {
+        public GherkinStepClassificationFormat()
+        {
+            DisplayName = "Gherkin Step";
+            ForegroundColor = Colors.DarkOrchid;
+            IsBold = true;
+            IsItalic = true;
+        }
+    }
+
+    [Export(typeof(EditorFormatDefinition))]
+    [ClassificationType(ClassificationTypeNames = "gherkin.stepText")]
+    [Name("gherkin.stepText")]
+    [UserVisible(true)]
+    [Order(Before = Priority.Default)]
+    internal sealed class GherkinStepTextClassificationFormat : ClassificationFormatDefinition
+    {
+        public GherkinStepTextClassificationFormat()
+        {
+            DisplayName = "Gherkin step text";
+            ForegroundColor = Colors.DarkSlateBlue;
+        }
+    }
+    [Export(typeof(EditorFormatDefinition))]
+    [ClassificationType(ClassificationTypeNames = "gherkin.table")]
+    [Name("gherkin.table")]
+    [UserVisible(true)]
+    [Order(Before = Priority.Default)]
+    internal sealed class GherkinTableClassificationFormat : ClassificationFormatDefinition
+    {
+        public GherkinTableClassificationFormat()
+        {
+            DisplayName = "Gherkin Table";
+            ForegroundColor = Colors.Black;
+            BackgroundColor = Colors.AliceBlue;
+            IsBold = true;
         }
     }
 
     [Export(typeof(EditorFormatDefinition))]
     [ClassificationType(ClassificationTypeNames = "gherkin.tableheader")]
     [Name("gherkin.tableheader")]
-    [UserVisible(true)] 
+    [UserVisible(true)]
     [Order(Before = Priority.Default)]
     internal sealed class GherkinTableHeaderClassificationFormat : ClassificationFormatDefinition
     {
         public GherkinTableHeaderClassificationFormat()
         {
-            this.DisplayName = "Gherkin Table Header";
-            this.IsItalic = true;
+            DisplayName = "Gherkin Table Header";
+            IsItalic = true;
+            IsBold = true;
+            ForegroundColor = Colors.Black;
         }
     }
 
     [Export(typeof(EditorFormatDefinition))]
-    [ClassificationType(ClassificationTypeNames = "gherkin.description")]
-    [Name("gherkin.description")]
-    [UserVisible(true)] 
-    [Order(Before = Priority.Default)] 
-    internal sealed class GherkinDescriptionClassificationFormat : ClassificationFormatDefinition
+    [ClassificationType(ClassificationTypeNames = "gherkin.tablecell")]
+    [Name("gherkin.tablecell")]
+    [UserVisible(true)]
+    [Order(Before = Priority.Default)]
+    internal sealed class GherkinTableCellClassificationFormat : ClassificationFormatDefinition
     {
-        public GherkinDescriptionClassificationFormat()
+        public GherkinTableCellClassificationFormat()
         {
-            this.DisplayName = "Gherkin Feature/Scenario Description";
-            this.IsItalic = true;
-        }
-    }
-
-    [Export(typeof(EditorFormatDefinition))]
-    [ClassificationType(ClassificationTypeNames = "gherkin.scenariotitle")]
-    [Name("gherkin.scenariotitle")]
-    [UserVisible(true)] 
-    [Order(Before = Priority.Default)] 
-    internal sealed class GherkinScenarioTitleClassificationFormat : ClassificationFormatDefinition
-    {
-        public GherkinScenarioTitleClassificationFormat()
-        {
-            this.DisplayName = "Gherkin Scenario Title"; 
-        }
-    }
-
-    [Export(typeof(EditorFormatDefinition))]
-    [ClassificationType(ClassificationTypeNames = "gherkin.featuretitle")]
-    [Name("gherkin.featuretitle")]
-    [UserVisible(true)] 
-    [Order(Before = Priority.Default)] 
-    internal sealed class GherkinFeatureTitleClassificationFormat : ClassificationFormatDefinition
-    {
-        public GherkinFeatureTitleClassificationFormat()
-        {
-            this.DisplayName = "Gherkin Feature Title"; 
+            DisplayName = "Gherkin Table Cell";
+            ForegroundColor = Colors.MintCream;
+            BackgroundColor = Colors.MidnightBlue;
         }
     }
 }
