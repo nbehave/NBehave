@@ -202,13 +202,17 @@
     <Compile Include="Domain\NuGet.cs" />
     <Compile Include="Domain\PluginConfiguration.cs" />
     <Compile Include="Domain\SolutionEventsListener.cs" />
+    <Compile Include="Editor\Domain\GherkinErrorTagger.cs" />
     <Compile Include="Editor\Domain\GherkinClassifier.cs" />
+    <Compile Include="Editor\Domain\GherkinClassifierProvider.cs" />
     <Compile Include="Editor\Domain\GherkinFileClassificationDefinitions.cs" />
     <Compile Include="FileExtensions.cs" />
+    <Compile Include="Editor\Domain\GherkinErrorTagProvider.cs" />
     <Compile Include="LanguageService\GherkinLanguageServiceListener.cs" />
     <Compile Include="LanguageService\GherkinParseEvent.cs" />
     <Compile Include="LanguageService\GherkinStepTagger.cs" />
     <Compile Include="LanguageService\GherkinTokenTag.cs" />
+    <Compile Include="LanguageService\GherkinTokenTagger.cs" />
     <Compile Include="LanguageService\GherkinTokenTagProvider.cs" />
     <Compile Include="LanguageService\GherkinTokenType.cs" />
     <Compile Include="Tiny\TinyIoCContainerExtension.cs" />

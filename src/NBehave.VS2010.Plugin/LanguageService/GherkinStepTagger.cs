@@ -10,16 +10,11 @@ namespace NBehave.VS2010.Plugin.LanguageService
 {
     public class GherkinStepTagger
     {
-        public static readonly char[] WhiteSpaces = new[] { '\t', ' ', '\r', '\n' };
+        private static readonly char[] WhiteSpaces = new[] { '\t', ' ', '\r', '\n' };
 
         private readonly Dictionary<GherkinTokenType, Func<SnapshotSpan, GherkinParseEvent, IEnumerable<Tuple<SnapshotSpan, TagSpan<GherkinTokenTag>>>>> tagHandler;
-        private ITextBuffer textBuffer;
-
-        //public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
-
-        public GherkinStepTagger(ITextBuffer textBuffer)
+        public GherkinStepTagger()
         {
-            this.textBuffer = textBuffer;
             tagHandler = new Dictionary<GherkinTokenType, Func<SnapshotSpan, GherkinParseEvent, IEnumerable<Tuple<SnapshotSpan, TagSpan<GherkinTokenTag>>>>>
                 {
                     {GherkinTokenType.SyntaxError, SyntaxError},
@@ -38,6 +33,10 @@ namespace NBehave.VS2010.Plugin.LanguageService
 
         public IEnumerable<ITagSpan<GherkinTokenTag>> CreateTags(List<GherkinParseEvent> events, SnapshotSpan span)
         {
+            var value = span.GetText();
+            if (string.IsNullOrWhiteSpace(value))
+                return new ITagSpan<GherkinTokenTag>[0];
+
             var tags = new List<ITagSpan<GherkinTokenTag>>();
             var line = span.Start.GetContainingLine();
             int lineNumber = line.LineNumber;
@@ -62,6 +61,8 @@ namespace NBehave.VS2010.Plugin.LanguageService
                       ?? events.Where(_ => _.Tokens.Any(λ => λ.LineInFile.Line < lineNumber))
                              .OrderByDescending(_ => _.Tokens.First().LineInFile.Line)
                              .FirstOrDefault();
+            if (evt != null && evt.GherkinTokenType == GherkinTokenType.SyntaxError && lineNumber > evt.Tokens.Max(_ => _.LineInFile.Line))
+                return null;
             return evt;
         }
 

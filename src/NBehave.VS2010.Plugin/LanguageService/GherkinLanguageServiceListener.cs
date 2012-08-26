@@ -59,11 +59,15 @@ namespace NBehave.VS2010.Plugin.LanguageService
             events.Add(new GherkinParseEvent(GherkinTokenType.Comment, comment));
         }
 
-        public void Tag(Token name)
+        public void Tag(Token tag)
         {
-            if (name.Content != "@") //bug in gherkin parser?
+            if (tag.Content != "@") //bug in gherkin parser?
             {
-                events.Add(new GherkinParseEvent(GherkinTokenType.Tag, name));
+                var previous = events.LastOrDefault() ?? new GherkinParseEvent(GherkinTokenType.SyntaxError);
+                if (previous.GherkinTokenType == GherkinTokenType.Tag && tag.LineInFile.Line == previous.Tokens[0].LineInFile.Line)
+                    previous.Tokens.Add(tag);
+                else
+                    events.Add(new GherkinParseEvent(GherkinTokenType.Tag, tag));
             }
         }
 

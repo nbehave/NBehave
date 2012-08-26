@@ -9,13 +9,12 @@ namespace NBehave.VS2010.Plugin.Editor.Domain
     [ClassificationType(ClassificationTypeNames = "gherkin.syntaxError")]
     [Name("gherkin.syntaxError")]
     [UserVisible(false)]
-    [Order(Before = Priority.Low)]
+    [Order(Before = Priority.Default)]
     internal sealed class GherkinSyntaxErrorClassificationFormat : ClassificationFormatDefinition
     {
         public GherkinSyntaxErrorClassificationFormat()
         {
             DisplayName = "Gherkin syntax error";
-            ForegroundColor = Colors.Red;
         }
     }
 
@@ -45,6 +44,7 @@ namespace NBehave.VS2010.Plugin.Editor.Domain
         {
             DisplayName = "Gherkin Feature title";
             FontRenderingSize = 14;
+            ForegroundColor = Colors.DarkBlue;
             IsBold = true;
         }
     }
@@ -90,6 +90,7 @@ namespace NBehave.VS2010.Plugin.Editor.Domain
         public GherkinScenarioTitleFormat()
         {
             DisplayName = "Gherkin Scenario title";
+            ForegroundColor = Colors.DarkBlue;
             IsBold = true;
         }
     }
@@ -106,6 +107,7 @@ namespace NBehave.VS2010.Plugin.Editor.Domain
             DisplayName = "Gherkin Background";
             ForegroundColor = Colors.BlueViolet;
             FontRenderingSize = 13;
+            IsBold = true;
         }
     }
 
@@ -119,6 +121,7 @@ namespace NBehave.VS2010.Plugin.Editor.Domain
         public GherkinBackgroundTitleFormat()
         {
             DisplayName = "Gherkin Background title";
+            ForegroundColor = Colors.DarkBlue;
             IsBold = true;
         }
     }
@@ -194,8 +197,9 @@ namespace NBehave.VS2010.Plugin.Editor.Domain
         public GherkinStepClassificationFormat()
         {
             DisplayName = "Gherkin Step";
-            ForegroundColor = Colors.DarkOrchid;
+            ForegroundColor = Colors.DarkSlateBlue;
             IsBold = true;
+            FontRenderingSize = 13;
             IsItalic = true;
         }
     }
@@ -210,9 +214,10 @@ namespace NBehave.VS2010.Plugin.Editor.Domain
         public GherkinStepTextClassificationFormat()
         {
             DisplayName = "Gherkin step text";
-            ForegroundColor = Colors.DarkSlateBlue;
+            ForegroundColor = Colors.Blue;
         }
     }
+
     [Export(typeof(EditorFormatDefinition))]
     [ClassificationType(ClassificationTypeNames = "gherkin.table")]
     [Name("gherkin.table")]
