@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.Text.Tagging;
 
-namespace NBehave.VS2010.Plugin.LanguageService
+namespace NBehave.VS2010.Plugin.Tagging
 {
     public class GherkinTokenTag : ITag
     {
@@ -8,7 +8,7 @@ namespace NBehave.VS2010.Plugin.LanguageService
 
         public GherkinTokenTag(GherkinTokenType type)
         {
-            this.Type = type;
+            Type = type;
         }
     }
 }

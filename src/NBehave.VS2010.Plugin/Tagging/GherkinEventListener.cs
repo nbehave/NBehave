@@ -2,9 +2,9 @@
 using System.Linq;
 using NBehave.Gherkin;
 
-namespace NBehave.VS2010.Plugin.LanguageService
+namespace NBehave.VS2010.Plugin.Tagging
 {
-    public class GherkinLanguageServiceListener : IListener
+    public class GherkinEventListener : IListener
     {
         private readonly List<GherkinParseEvent> events = new List<GherkinParseEvent>();
 

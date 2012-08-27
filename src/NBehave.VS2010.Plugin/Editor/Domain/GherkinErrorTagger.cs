@@ -3,17 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Tagging;
-using NBehave.VS2010.Plugin.LanguageService;
+using NBehave.VS2010.Plugin.Tagging;
 
 namespace NBehave.VS2010.Plugin.Editor.Domain
 {
     public class GherkinErrorTagger : ITagger<IErrorTag>
     {
         private readonly ITagAggregator<GherkinTokenTag> aggregator;
+        private readonly TokenParser tokenParser;
 
-        public GherkinErrorTagger(ITagAggregator<GherkinTokenTag> aggregator)
+        public GherkinErrorTagger(ITagAggregator<GherkinTokenTag> aggregator, TokenParser tokenParser)
         {
             this.aggregator = aggregator;
+            this.tokenParser = tokenParser;
+            tokenParser.TokenParserEvent += UpdateEvents;
+        }
+
+        private void UpdateEvents(object sender, TokenParserEventArgs e)
+        {
+            if (e.Event.GherkinTokenType == GherkinTokenType.SyntaxError)
+                TagsChanged.Invoke(this, new SnapshotSpanEventArgs(e.SnapshotSpan));
         }
 
         public IEnumerable<ITagSpan<IErrorTag>> GetTags(NormalizedSnapshotSpanCollection spans)
@@ -26,8 +35,8 @@ namespace NBehave.VS2010.Plugin.Editor.Domain
             {
                 var tagSpans = tagSpan.Span.GetSpans(spans[0].Snapshot);
                 //TODO: Add tooltip & get error from parser
-                string errorType = "Dont do that!!";
-                var t = new ErrorTag(errorType, "Will this popup?");
+                string errorType = "Failed to parse text!!";
+                var t = new ErrorTag(errorType);
                 yield return new TagSpan<ErrorTag>(tagSpans[0], t);
             }
         }

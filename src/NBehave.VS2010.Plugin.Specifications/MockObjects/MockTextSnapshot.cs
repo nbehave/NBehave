@@ -8,31 +8,31 @@ namespace NBehave.VS2010.Plugin.Specs
 {
     public class MockTextSnapshot : ITextSnapshot
     {
-        private readonly string _text;
+        private readonly string text;
 
         public MockTextSnapshot(string text)
         {
-            _text = text;
+            this.text = text;
         }
 
         public string GetText(Span span)
         {
-            return _text.Substring(span.Start, span.Length);
+            return text.Substring(span.Start, span.Length);
         }
 
         public string GetText(int startIndex, int length)
         {
-            return _text.Substring(startIndex, Length);
+            return text.Substring(startIndex, Length);
         }
 
         public string GetText()
         {
-            return _text;
+            return text;
         }
 
         public char[] ToCharArray(int startIndex, int length)
         {
-            return _text.ToCharArray(startIndex, Length);
+            return text.ToCharArray(startIndex, Length);
         }
 
         public void CopyTo(int sourceIndex, char[] destination, int destinationIndex, int count)
@@ -72,12 +72,25 @@ namespace NBehave.VS2010.Plugin.Specs
 
         public ITextSnapshotLine GetLineFromLineNumber(int lineNumber)
         {
-            return new MockTextSnapshotLine(_text, lineNumber, this);
+            return new MockTextSnapshotLine(text, lineNumber, this);
         }
 
         public ITextSnapshotLine GetLineFromPosition(int position)
         {
-            throw new NotImplementedException();
+            var line = GetLineNumberForPosition(position);
+            return new MockTextSnapshotLine(text, line, this);
+        }
+
+        private int GetLineNumberForPosition(int position)
+        {
+            int line = 0;
+            int pos = 0;
+            while (pos < position)
+            {
+                pos = text.IndexOf('\n', pos);
+                if (pos != -1) line++;
+            }
+            return line;
         }
 
         public int GetLineNumberFromPosition(int position)
@@ -112,12 +125,12 @@ namespace NBehave.VS2010.Plugin.Specs
 
         public int Length
         {
-            get { return _text.Length; }
+            get { return text.Length; }
         }
 
         public int LineCount
         {
-            get 
+            get
             {
                 return GetText().Split(new[] { Environment.NewLine }, StringSplitOptions.None).Length;
             }
@@ -130,9 +143,9 @@ namespace NBehave.VS2010.Plugin.Specs
 
         public IEnumerable<ITextSnapshotLine> Lines
         {
-            get 
+            get
             {
-                var lines = GetText().Split(new[] {Environment.NewLine}, StringSplitOptions.None).Length;
+                var lines = GetText().Split(new[] { Environment.NewLine }, StringSplitOptions.None).Length;
                 for (int i = 0; i < lines; i++)
                 {
                     yield return new MockTextSnapshotLine(GetText(), i, this);

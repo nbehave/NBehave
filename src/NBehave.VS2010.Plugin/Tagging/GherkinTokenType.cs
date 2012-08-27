@@ -1,6 +1,6 @@
 using System;
 
-namespace NBehave.VS2010.Plugin.LanguageService
+namespace NBehave.VS2010.Plugin.Tagging
 {
     public enum GherkinTokenType
     {
@@ -21,8 +21,6 @@ namespace NBehave.VS2010.Plugin.LanguageService
         Table,
         TableHeader,
         TableCell,
-
-        //NewElementHere,
         Eof = Int32.MaxValue,
     }
 }

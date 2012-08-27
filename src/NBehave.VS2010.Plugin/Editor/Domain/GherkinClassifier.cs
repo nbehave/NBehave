@@ -4,7 +4,7 @@ using System.Linq;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Tagging;
-using NBehave.VS2010.Plugin.LanguageService;
+using NBehave.VS2010.Plugin.Tagging;
 
 namespace NBehave.VS2010.Plugin.Editor.Domain
 {
@@ -42,6 +42,7 @@ namespace NBehave.VS2010.Plugin.Editor.Domain
         private void TagsChangedOnAggregator(object sender, TagsChangedEventArgs e)
         {
             tagsChanged.Enqueue(e.Span);
+            NotifyTagChanged(e.Span.AnchorBuffer.CurrentSnapshot);
         }
 
         public IEnumerable<ITagSpan<ClassificationTag>> GetTags(NormalizedSnapshotSpanCollection spans)
@@ -55,11 +56,14 @@ namespace NBehave.VS2010.Plugin.Editor.Domain
         private void NotifyTagsChanged(NormalizedSnapshotSpanCollection spans)
         {
             while (tagsChanged.Any())
-            {
-                IMappingSpan t = tagsChanged.Dequeue();
-                NormalizedSnapshotSpanCollection sp = t.GetSpans(spans[0].Snapshot);
-                TagsChanged.Invoke(this, new SnapshotSpanEventArgs(sp.First()));
-            }
+                NotifyTagChanged(spans[0].Snapshot);
+        }
+
+        private void NotifyTagChanged(ITextSnapshot snapshot)
+        {
+            IMappingSpan t = tagsChanged.Dequeue();
+            NormalizedSnapshotSpanCollection sp = t.GetSpans(snapshot);
+            TagsChanged.Invoke(this, new SnapshotSpanEventArgs(sp.First()));
         }
 
         private ITagSpan<ClassificationTag> CreateTagSpanForTag(ITextSnapshot snapShot, IMappingTagSpan<GherkinTokenTag> tagSpan)

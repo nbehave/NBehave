@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Tagging;
 using NBehave.Gherkin;
 
-namespace NBehave.VS2010.Plugin.LanguageService
+namespace NBehave.VS2010.Plugin.Tagging
 {
     public class GherkinStepTagger
     {
@@ -31,7 +31,7 @@ namespace NBehave.VS2010.Plugin.LanguageService
                 };
         }
 
-        public IEnumerable<ITagSpan<GherkinTokenTag>> CreateTags(List<GherkinParseEvent> events, SnapshotSpan span)
+        public IEnumerable<ITagSpan<GherkinTokenTag>> CreateTags(IEnumerable<GherkinParseEvent> events, SnapshotSpan span)
         {
             var value = span.GetText();
             if (string.IsNullOrWhiteSpace(value))
@@ -55,7 +55,7 @@ namespace NBehave.VS2010.Plugin.LanguageService
             return tags;
         }
 
-        private GherkinParseEvent FindMatchingEvent(List<GherkinParseEvent> events, int lineNumber)
+        private GherkinParseEvent FindMatchingEvent(IEnumerable<GherkinParseEvent> events, int lineNumber)
         {
             var evt = events.FirstOrDefault(_ => _.Tokens.Any(λ => λ.LineInFile.Line == lineNumber))
                       ?? events.Where(_ => _.Tokens.Any(λ => λ.LineInFile.Line < lineNumber))
@@ -73,40 +73,45 @@ namespace NBehave.VS2010.Plugin.LanguageService
 
         private IEnumerable<Tuple<SnapshotSpan, TagSpan<GherkinTokenTag>>> HandleFeature(SnapshotSpan span, GherkinParseEvent evt)
         {
-            var result = HandleIt(span, evt, GherkinTokenType.FeatureTitle).ToList();
+            if (!evt.Tokens.Any())
+                yield break;
+            var t1 = HandleType(span, evt.Tokens.First(), GherkinTokenType.Feature);
+            if (t1 != null) yield return t1;
+            if (evt.Tokens.Count >= 2)
+            {
+                var t2 = HandleTitle(span, evt.Tokens[1], GherkinTokenType.FeatureTitle);
+                foreach (var tuple in t2)
+                    yield return tuple;
+            }
             if (evt.Tokens.Count == 3)
             {
-                Token token = evt.Tokens.Last();
-                string text = span.GetText().TrimEnd(WhiteSpaces);
-                if (!string.IsNullOrWhiteSpace(text) && token.Content.Contains(text))
-                {
-                    ITextSnapshotLine containingLine = span.Start.GetContainingLine();
-                    var tokenSpan = new SnapshotSpan(span.Snapshot, new Span(containingLine.Start.Position, text.Length));
-                    var tagSpan = new TagSpan<GherkinTokenTag>(tokenSpan, new GherkinTokenTag(GherkinTokenType.FeatureDescription));
-                    result.Add(new Tuple<SnapshotSpan, TagSpan<GherkinTokenTag>>(tokenSpan, tagSpan));
-                }
+                var t3 = HandleTitle(span, evt.Tokens[2], GherkinTokenType.FeatureDescription);
+                foreach (var tuple in t3)
+                    yield return tuple;
             }
-            return result;
         }
 
         private IEnumerable<Tuple<SnapshotSpan, TagSpan<GherkinTokenTag>>> HandleScenario(SnapshotSpan span, GherkinParseEvent evt)
         {
-            return HandleIt(span, evt, GherkinTokenType.ScenarioTitle);
+            return HandleTag(span, evt, GherkinTokenType.Scenario, GherkinTokenType.ScenarioTitle);
         }
 
         private IEnumerable<Tuple<SnapshotSpan, TagSpan<GherkinTokenTag>>> HandleBackground(SnapshotSpan span, GherkinParseEvent evt)
         {
-            return HandleIt(span, evt, GherkinTokenType.BackgroundTitle);
+            return HandleTag(span, evt, GherkinTokenType.Background, GherkinTokenType.BackgroundTitle);
         }
 
         private IEnumerable<Tuple<SnapshotSpan, TagSpan<GherkinTokenTag>>> HandleStep(SnapshotSpan span, GherkinParseEvent evt)
         {
-            return HandleIt(span, evt, GherkinTokenType.StepText);
+            return HandleTag(span, evt, GherkinTokenType.Step, GherkinTokenType.StepText);
         }
 
         private IEnumerable<Tuple<SnapshotSpan, TagSpan<GherkinTokenTag>>> HandleTag(SnapshotSpan span, GherkinParseEvent evt)
         {
-            return HandleIt(span, evt, GherkinTokenType.Tag).ToList();
+            var tags = new List<Tuple<SnapshotSpan, TagSpan<GherkinTokenTag>>>();
+            foreach (var token in evt.Tokens)
+                tags.AddRange(HandleTitle(span, token, GherkinTokenType.Tag));
+            return tags;
         }
 
         private IEnumerable<Tuple<SnapshotSpan, TagSpan<GherkinTokenTag>>> HandleComment(SnapshotSpan span, GherkinParseEvent evt)
@@ -161,22 +166,48 @@ namespace NBehave.VS2010.Plugin.LanguageService
                 yield return tag;
         }
 
-        private IEnumerable<Tuple<SnapshotSpan, TagSpan<GherkinTokenTag>>> HandleIt(SnapshotSpan span, GherkinParseEvent evt, GherkinTokenType titleType)
+        private IEnumerable<Tuple<SnapshotSpan, TagSpan<GherkinTokenTag>>> HandleTag(SnapshotSpan span, GherkinParseEvent evt, GherkinTokenType tokenType, GherkinTokenType tokenTitleType)
         {
-            var token = evt.Tokens.First();
-            var text = span.GetText();
-            if (text.TrimStart(WhiteSpaces).StartsWith(token.Content, StringComparison.CurrentCultureIgnoreCase))
+            if (!evt.Tokens.Any())
+                yield break;
+            var t1 = HandleType(span, evt.Tokens.First(), tokenType);
+            if (t1 != null) yield return t1;
+            if (evt.Tokens.Count >= 2)
             {
-                var tag = CreateTag(token, span, evt);
-                if (tag != null)
-                    yield return tag;
+                var t2 = HandleTitle(span, evt.Tokens[1], tokenTitleType);
+                foreach (var tuple in t2)
+                    yield return tuple;
             }
-            if (evt.Tokens.Count > 1)
+        }
+
+        private Tuple<SnapshotSpan, TagSpan<GherkinTokenTag>> HandleType(SnapshotSpan span, Token token, GherkinTokenType tokenType)
+        {
+            var text = span.GetText();
+            if (text.TrimStart(WhiteSpaces).StartsWith(token.Content))
             {
-                token = evt.Tokens.Skip(1).First();
-                var tag = CreateTag(token, span, titleType, text);
-                if (tag != null)
-                    yield return tag;
+                var idx = text.IndexOf(token.Content, StringComparison.Ordinal);
+                ITextSnapshotLine containingLine = span.Start.GetContainingLine();
+                var tokenSpan = new SnapshotSpan(span.Snapshot, new Span(containingLine.Start.Position + idx, token.Content.Length));
+                var tagSpan = new TagSpan<GherkinTokenTag>(tokenSpan, new GherkinTokenTag(tokenType));
+                return new Tuple<SnapshotSpan, TagSpan<GherkinTokenTag>>(tokenSpan, tagSpan);
+            }
+            return null;
+        }
+
+        private IEnumerable<Tuple<SnapshotSpan, TagSpan<GherkinTokenTag>>> HandleTitle(SnapshotSpan span, Token token, GherkinTokenType tokenType)
+        {
+            var spanText = span.GetText();
+            var tokenText = token.Content.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries).Select(_ => _.Trim(WhiteSpaces)).ToList();
+            foreach (var row in tokenText)
+            {
+                var idx = spanText.IndexOf(row, StringComparison.CurrentCulture);
+                if (idx == -1)
+                    continue;
+                ITextSnapshotLine containingLine = span.Start.GetContainingLine();
+                var tokenSpan = new SnapshotSpan(span.Snapshot, new Span(containingLine.Start.Position + idx, row.Length));
+                var tagSpan = new TagSpan<GherkinTokenTag>(tokenSpan, new GherkinTokenTag(tokenType));
+                yield return new Tuple<SnapshotSpan, TagSpan<GherkinTokenTag>>(tokenSpan, tagSpan);
+
             }
         }
 
@@ -188,13 +219,18 @@ namespace NBehave.VS2010.Plugin.LanguageService
 
         private Tuple<SnapshotSpan, TagSpan<GherkinTokenTag>> CreateTag(Token token, SnapshotSpan span, GherkinTokenType tokenType, string text)
         {
-            var idx = text.IndexOf(token.Content, StringComparison.Ordinal);
-            if (idx == -1)
-                return null;
-            ITextSnapshotLine containingLine = span.Start.GetContainingLine();
-            var tokenSpan = new SnapshotSpan(span.Snapshot, new Span(containingLine.Start.Position + idx, token.Content.Length));
-            var tagSpan = new TagSpan<GherkinTokenTag>(tokenSpan, new GherkinTokenTag(tokenType));
-            return new Tuple<SnapshotSpan, TagSpan<GherkinTokenTag>>(tokenSpan, tagSpan);
+            foreach (var row in token.Content.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                string rowText = row.Trim(WhiteSpaces);
+                var idx = text.IndexOf(rowText, StringComparison.Ordinal);
+                if (idx == -1)
+                    continue;
+                ITextSnapshotLine containingLine = span.Start.GetContainingLine();
+                var tokenSpan = new SnapshotSpan(span.Snapshot, new Span(containingLine.Start.Position + idx, rowText.Length));
+                var tagSpan = new TagSpan<GherkinTokenTag>(tokenSpan, new GherkinTokenTag(tokenType));
+                return new Tuple<SnapshotSpan, TagSpan<GherkinTokenTag>>(tokenSpan, tagSpan);
+            }
+            return null;
         }
     }
 }
