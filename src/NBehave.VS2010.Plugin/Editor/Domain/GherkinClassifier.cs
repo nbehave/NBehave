@@ -63,7 +63,8 @@ namespace NBehave.VS2010.Plugin.Editor.Domain
         {
             IMappingSpan t = tagsChanged.Dequeue();
             NormalizedSnapshotSpanCollection sp = t.GetSpans(snapshot);
-            TagsChanged.Invoke(this, new SnapshotSpanEventArgs(sp.First()));
+            if (TagsChanged != null)
+                TagsChanged.Invoke(this, new SnapshotSpanEventArgs(sp.First()));
         }
 
         private ITagSpan<ClassificationTag> CreateTagSpanForTag(ITextSnapshot snapShot, IMappingTagSpan<GherkinTokenTag> tagSpan)
