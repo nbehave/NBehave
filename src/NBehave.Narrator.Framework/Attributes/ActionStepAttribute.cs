@@ -7,6 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Linq;
 using System.Reflection;
 using NBehave.Narrator.Framework.Extensions;
 
@@ -54,20 +55,25 @@ namespace NBehave.Narrator.Framework
 
         private string BuildTokenString(MethodInfo method)
         {
-            var methodName = method.Name.Replace('_', ' ');
+            var words = method.Name.Split(new[] {'_'}, StringSplitOptions.RemoveEmptyEntries).ToList();
             var parameters = method.GetParameters();
 
             foreach (var param in parameters)
             {
                 var paramName = param.Name;
-                var pos = methodName.IndexOf(paramName);
-                if (pos > 0)
+
+                var idx = words.LastIndexOf(paramName.ToUpper());
+                if (idx >= 0)
+                    words[idx] = "$" + paramName;
+                else
                 {
-                    methodName = methodName.Substring(0, pos) + "$" + methodName.Substring(pos);
+                    idx = words.LastIndexOf(paramName);
+                    if (idx >= 0)
+                        words[idx] = "$" + paramName;
                 }
             }
 
-            return methodName;
+            return string.Join(" ", words.ToArray());
         }
     }
 }
