@@ -10,7 +10,7 @@ using Microsoft.VisualStudio.Utilities;
 namespace NBehave.VS2010.Plugin.Editor.Glyphs
 {
     [Export(typeof(IGlyphMouseProcessorProvider))]
-    [ContentType("gherkin")]
+    [ContentType("nbehave.gherkin")]
     [TextViewRole(PredefinedTextViewRoles.Editable)]
     [Name("PlayGlyphMouseProcessorProvider")]
     internal sealed class PlayGlyphMouseProcessorProvider : IGlyphMouseProcessorProvider
@@ -50,7 +50,7 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs
             var tagSpans = _createTagAggregator.GetTags(textViewLine.ExtentAsMappingSpan).ToList();
             var selected = tagSpans.Select(span => span.Tag).ToList();
             PlayGlyphTag tag = selected
-                .FirstOrDefault(_ => _.IsScenario(lineText));
+                .FirstOrDefault(_ => _.IsScenario(lineText, textViewLine.Start.GetContainingLine().LineNumber + 1));
             if (tag != null)
                 tag.Execute(position, textView.VisualElement);
         }

@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.Composition;
-using System.Concurrency;
-using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using MEFedMVVM.Common;
 using MEFedMVVM.ViewModelLocator;
 using Microsoft.Expression.Interactivity.Core;
-using NBehave.Narrator.Framework;
 using NBehave.VS2010.Plugin.Domain;
+using NBehave.VS2010.Plugin.Editor.Domain;
 using NBehave.VS2010.Plugin.Editor.Glyphs.Views;
 
 namespace NBehave.VS2010.Plugin.Editor.Glyphs.ViewModels
@@ -33,6 +30,7 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs.ViewModels
             };
         }
 
+        // must be public or  plugin wont work
         public List<dynamic> Buttons
         {
             get
@@ -41,7 +39,7 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs.ViewModels
             }
         }
 
-        public ICommand RunClicked
+        private ICommand RunClicked
         {
             get
             {
@@ -49,7 +47,7 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs.ViewModels
             }
         }
 
-        public ICommand DebugClicked
+        private ICommand DebugClicked
         {
             get
             {
@@ -64,73 +62,59 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs.ViewModels
 
         private void RunScenario(bool debug)
         {
-            string tempFileName = ScenarioAsString.ToTempFile();
+            string tempFileName = GherkinText.ToString().ToTempFile();
             ScenarioRunner.Run(tempFileName, debug);
         }
 
-        private string ScenarioAsString
-        {
-            get
-            {
-                string str = Scenario.Feature + Environment.NewLine + Environment.NewLine + Scenario;
-                return str;
-            }
-        }
-
         private bool initialized;
-        public void InitialiseProperties(Point position, FrameworkElement visualElement, IRunOrDebugView runOrDebugView, Scenario scenario)
+        public void InitialiseProperties(Point position, FrameworkElement visualElement, IRunOrDebugView runOrDebugView, GherkinText gherkinText)
         {
             View = runOrDebugView;
             RelativeVisualElement = visualElement;
             Position = Point.Subtract(position, new Vector(3, 3));
-            Scenario = scenario;
+            GherkinText = gherkinText;
             
             // Dont want multiple events to fire.
             if (initialized)
                 return;
 
             OnPropertyChanged(() => Buttons);
-
-            Observable
-                .FromEvent<PropertyChangedEventHandler, PropertyChangedEventArgs>(
-                    handler => ((sender, args) => handler(sender, args)),
-                    eventHandler => PropertyChanged += eventHandler,
-                    changedEventHandler => PropertyChanged += changedEventHandler)
-                .Where(@event => @event.EventArgs.PropertyName == "SelectedItem" && SelectedItem != null)
-                .Throttle(TimeSpan.FromSeconds(1))
-                .ObserveOnDispatcher()
-                .Subscribe(event1 =>
+            PropertyChanged += (s, e) =>
                 {
-                    SelectedItem.Command.Execute(null);
-                    View.Deselect();
-                });
+                    if (e.PropertyName == "SelectedItem" && SelectedItem != null)
+                    {
+                        SelectedItem.Command.Execute(null);
+                        View.Deselect();
+                        IsVisible = false;
+                    }
+                };
             initialized = true;
         }
 
-        public Scenario Scenario { get; set; }
+        public GherkinText GherkinText { get; set; }
 
         protected IRunOrDebugView View { get; set; }
 
-        private FrameworkElement _relativeVisualElement;
+        private FrameworkElement relativeVisualElement;
 
         public FrameworkElement RelativeVisualElement
         {
-            get { return _relativeVisualElement; }
+            get { return relativeVisualElement; }
             set
             {
-                _relativeVisualElement = value;
+                relativeVisualElement = value;
                 OnPropertyChanged(() => RelativeVisualElement);
             }
         }
 
-        private Point _position;
+        private Point position;
 
         public Point Position
         {
-            get { return _position; }
+            get { return position; }
             set
             {
-                _position = value;
+                position = value;
                 OnPropertyChanged(() => Position);
             }
         }
@@ -139,22 +123,18 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs.ViewModels
         {
             View.Deselect();
             IsVisible = true;
-
-            Observable
-                .Timer(TimeSpan.FromMilliseconds(250), TimeSpan.FromMilliseconds(250), Scheduler.Dispatcher)
-                .Select(time => View.IsMouseOverPopup)
-                .TakeWhile(isMouseOver => isMouseOver).Subscribe(isMouseOver => { }, () => IsVisible = false);
         }
 
-        private bool _isVisible;
-        private dynamic _selectedItem;
+        private bool isVisible;
+        private dynamic selectedItem;
 
+        // must be public or  plugin wont work
         public bool IsVisible
         {
-            get { return _isVisible; }
+            get { return isVisible; }
             set
             {
-                _isVisible = value;
+                isVisible = value;
                 OnPropertyChanged(() => IsVisible);
             }
         }
@@ -168,12 +148,13 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs.ViewModels
             };
         }
 
+        // must be public or  plugin wont work
         public dynamic SelectedItem
         {
-            get { return _selectedItem; }
+            get { return selectedItem; }
             set
             {
-                _selectedItem = value;
+                selectedItem = value;
                 OnPropertyChanged(() => SelectedItem);
             }
         }

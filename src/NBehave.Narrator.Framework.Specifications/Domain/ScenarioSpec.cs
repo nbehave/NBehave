@@ -34,7 +34,8 @@ namespace NBehave.Narrator.Framework.Specifications.Domain
                                      });
             var scenarioAsString = scenario.ToString();
             string expected = string.Format("Scenario: scenarioTitle{0}  Given a [foo]{0}  And [bar]{0}", Environment.NewLine);
-            expected += "     | foo | bar |" + Environment.NewLine +
+            expected += "Examples:" + Environment.NewLine +
+                        "     | foo | bar |" + Environment.NewLine +
                         "     | 1 | 2 |" + Environment.NewLine +
                         "     | 11 | 22 |";
             Assert.AreEqual(expected, scenarioAsString);

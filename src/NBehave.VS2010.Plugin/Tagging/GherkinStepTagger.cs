@@ -8,11 +8,15 @@ using NBehave.Gherkin;
 
 namespace NBehave.VS2010.Plugin.Tagging
 {
+    public static class WhiteSpaces
+    {
+        public static readonly char[] Chars = new[] { '\t', ' ', '\r', '\n' };
+    }
     public class GherkinStepTagger
     {
-        private static readonly char[] WhiteSpaces = new[] { '\t', ' ', '\r', '\n' };
-
         private readonly Dictionary<GherkinTokenType, Func<SnapshotSpan, GherkinParseEvent, IEnumerable<Tuple<SnapshotSpan, TagSpan<GherkinTokenTag>>>>> tagHandler;
+        private bool cellToggle;
+
         public GherkinStepTagger()
         {
             tagHandler = new Dictionary<GherkinTokenType, Func<SnapshotSpan, GherkinParseEvent, IEnumerable<Tuple<SnapshotSpan, TagSpan<GherkinTokenTag>>>>>
@@ -23,11 +27,11 @@ namespace NBehave.VS2010.Plugin.Tagging
                     {GherkinTokenType.Background, HandleBackground},
                     {GherkinTokenType.Comment, HandleComment},
                     {GherkinTokenType.Tag, HandleTag},
-                    {GherkinTokenType.DocString, NotImplemented},
-                    {GherkinTokenType.Examples, NotImplemented},
+                    {GherkinTokenType.DocString, HandleDocString},
+                    {GherkinTokenType.Examples, HandleSpan},
                     {GherkinTokenType.Step, HandleStep},
-                    {GherkinTokenType.Table, NotImplemented},
-                    {GherkinTokenType.Eof, NotImplemented},
+                    {GherkinTokenType.TableHeader, HandleTableHeader},
+                    {GherkinTokenType.TableCell, HandleTableCell},
                 };
         }
 
@@ -66,9 +70,12 @@ namespace NBehave.VS2010.Plugin.Tagging
             return evt;
         }
 
-        private IEnumerable<Tuple<SnapshotSpan, TagSpan<GherkinTokenTag>>> NotImplemented(SnapshotSpan span, GherkinParseEvent evt)
+        private IEnumerable<Tuple<SnapshotSpan, TagSpan<GherkinTokenTag>>> HandleSpan(SnapshotSpan span, GherkinParseEvent evt)
         {
-            yield break;
+            ITextSnapshotLine containingLine = span.Start.GetContainingLine();
+            var tokenSpan = new SnapshotSpan(span.Snapshot, new Span(containingLine.Start.Position, containingLine.Length));
+            var tagSpan = new TagSpan<GherkinTokenTag>(tokenSpan, new GherkinTokenTag(evt.GherkinTokenType));
+            yield return new Tuple<SnapshotSpan, TagSpan<GherkinTokenTag>>(tokenSpan, tagSpan);
         }
 
         private IEnumerable<Tuple<SnapshotSpan, TagSpan<GherkinTokenTag>>> HandleFeature(SnapshotSpan span, GherkinParseEvent evt)
@@ -148,7 +155,7 @@ namespace NBehave.VS2010.Plugin.Tagging
             var lang = CreateTag(t2, span, new GherkinParseEvent(GherkinTokenType.Tag, evt.Tokens.ToArray()));
             if (lang != null)
                 yield return lang;
-            var t3 = new Token(text.Substring(i + t2.Content.Length).TrimEnd(WhiteSpaces), evt.Tokens[0].LineInFile);
+            var t3 = new Token(text.Substring(i + t2.Content.Length).TrimEnd(WhiteSpaces.Chars), evt.Tokens[0].LineInFile);
             if (t3.Content != "")
             {
                 var end = CreateTag(t3, span, evt);
@@ -164,6 +171,52 @@ namespace NBehave.VS2010.Plugin.Tagging
             var tag = CreateTag(token, span, GherkinTokenType.SyntaxError, text);
             if (tag != null)
                 yield return tag;
+        }
+
+        private IEnumerable<Tuple<SnapshotSpan, TagSpan<GherkinTokenTag>>> HandleTableHeader(SnapshotSpan span, GherkinParseEvent evt)
+        {
+            cellToggle = false;
+            return TableItem(span, evt.GherkinTokenType);
+        }
+
+        private IEnumerable<Tuple<SnapshotSpan, TagSpan<GherkinTokenTag>>> HandleTableCell(SnapshotSpan span, GherkinParseEvent evt)
+        {
+            var tokenType = cellToggle ? GherkinTokenType.TableCell : GherkinTokenType.TableCellAlt;
+            cellToggle = !cellToggle;
+            return TableItem(span, tokenType);
+        }
+
+        private IEnumerable<Tuple<SnapshotSpan, TagSpan<GherkinTokenTag>>> TableItem(SnapshotSpan span, GherkinTokenType tokenType)
+        {
+            return HandleText(span, tokenType, "|");
+        }
+
+        private IEnumerable<Tuple<SnapshotSpan, TagSpan<GherkinTokenTag>>> HandleDocString(SnapshotSpan span, GherkinParseEvent evt)
+        {
+            var text = span.GetText().Trim(WhiteSpaces.Chars);
+            if (text == "\"\"\"")
+                return HandleText(span, GherkinTokenType.Tag, "\"");
+
+            //TODO: dont color the spaces that will be removed
+            ITextSnapshotLine containingLine = span.Start.GetContainingLine();
+            var tokenSpan = new SnapshotSpan(span.Snapshot, new Span(containingLine.Start.Position, containingLine.Length));
+            var tagSpan = new TagSpan<GherkinTokenTag>(tokenSpan, new GherkinTokenTag(evt.GherkinTokenType));
+            return new[] { new Tuple<SnapshotSpan, TagSpan<GherkinTokenTag>>(tokenSpan, tagSpan) };
+        }
+
+        private static IEnumerable<Tuple<SnapshotSpan, TagSpan<GherkinTokenTag>>> HandleText(
+            SnapshotSpan span, GherkinTokenType tokenType,
+            string surroundingText)
+        {
+            var str = span.GetText().TrimEnd(WhiteSpaces.Chars);
+            var idx = str.IndexOf(surroundingText, StringComparison.InvariantCulture);
+            var idx2 = str.LastIndexOf(surroundingText, StringComparison.InvariantCulture);
+            if (idx == -1 || idx2 == -1)
+                yield break;
+            ITextSnapshotLine containingLine = span.Start.GetContainingLine();
+            var tokenSpan = new SnapshotSpan(span.Snapshot, new Span(containingLine.Start.Position + idx, idx2 - idx + 1));
+            var tagSpan = new TagSpan<GherkinTokenTag>(tokenSpan, new GherkinTokenTag(tokenType));
+            yield return new Tuple<SnapshotSpan, TagSpan<GherkinTokenTag>>(tokenSpan, tagSpan);
         }
 
         private IEnumerable<Tuple<SnapshotSpan, TagSpan<GherkinTokenTag>>> HandleTag(SnapshotSpan span, GherkinParseEvent evt, GherkinTokenType tokenType, GherkinTokenType tokenTitleType)
@@ -183,7 +236,7 @@ namespace NBehave.VS2010.Plugin.Tagging
         private Tuple<SnapshotSpan, TagSpan<GherkinTokenTag>> HandleType(SnapshotSpan span, Token token, GherkinTokenType tokenType)
         {
             var text = span.GetText();
-            if (text.TrimStart(WhiteSpaces).StartsWith(token.Content))
+            if (text.TrimStart(WhiteSpaces.Chars).StartsWith(token.Content))
             {
                 var idx = text.IndexOf(token.Content, StringComparison.Ordinal);
                 ITextSnapshotLine containingLine = span.Start.GetContainingLine();
@@ -197,7 +250,7 @@ namespace NBehave.VS2010.Plugin.Tagging
         private IEnumerable<Tuple<SnapshotSpan, TagSpan<GherkinTokenTag>>> HandleTitle(SnapshotSpan span, Token token, GherkinTokenType tokenType)
         {
             var spanText = span.GetText();
-            var tokenText = token.Content.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries).Select(_ => _.Trim(WhiteSpaces)).ToList();
+            var tokenText = token.Content.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries).Select(_ => _.Trim(WhiteSpaces.Chars)).ToList();
             foreach (var row in tokenText)
             {
                 var idx = spanText.IndexOf(row, StringComparison.CurrentCulture);
@@ -221,7 +274,7 @@ namespace NBehave.VS2010.Plugin.Tagging
         {
             foreach (var row in token.Content.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries))
             {
-                string rowText = row.Trim(WhiteSpaces);
+                string rowText = row.Trim(WhiteSpaces.Chars);
                 var idx = text.IndexOf(rowText, StringComparison.Ordinal);
                 if (idx == -1)
                     continue;

@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Utilities;
 
-namespace NBehave.VS2010.Plugin.Specs
+namespace NBehave.VS2010.Plugin.Specifications.MockObjects
 {
     public class MockTextSnapshot : ITextSnapshot
     {
@@ -83,14 +84,8 @@ namespace NBehave.VS2010.Plugin.Specs
 
         private int GetLineNumberForPosition(int position)
         {
-            int line = 0;
-            int pos = 0;
-            while (pos < position)
-            {
-                pos = text.IndexOf('\n', pos);
-                if (pos != -1) line++;
-            }
-            return line;
+            int newLines = text.Substring(0, position).ToCharArray().Count(_=>_ == '\n');
+            return newLines;
         }
 
         public int GetLineNumberFromPosition(int position)

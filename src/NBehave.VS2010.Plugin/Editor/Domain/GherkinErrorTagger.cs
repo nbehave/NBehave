@@ -10,12 +10,10 @@ namespace NBehave.VS2010.Plugin.Editor.Domain
     public class GherkinErrorTagger : ITagger<IErrorTag>
     {
         private readonly ITagAggregator<GherkinTokenTag> aggregator;
-        private readonly TokenParser tokenParser;
 
         public GherkinErrorTagger(ITagAggregator<GherkinTokenTag> aggregator, TokenParser tokenParser)
         {
             this.aggregator = aggregator;
-            this.tokenParser = tokenParser;
             tokenParser.TokenParserEvent += UpdateEvents;
         }
 

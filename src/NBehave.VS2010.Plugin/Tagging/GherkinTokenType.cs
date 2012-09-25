@@ -1,5 +1,3 @@
-using System;
-
 namespace NBehave.VS2010.Plugin.Tagging
 {
     public enum GherkinTokenType
@@ -13,6 +11,7 @@ namespace NBehave.VS2010.Plugin.Tagging
         Background,
         BackgroundTitle,
         Comment,
+        Language,
         Tag,
         DocString,
         Examples,
@@ -21,6 +20,7 @@ namespace NBehave.VS2010.Plugin.Tagging
         Table,
         TableHeader,
         TableCell,
-        Eof = Int32.MaxValue,
+        TableCellAlt,
+        Eof,
     }
 }

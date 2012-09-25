@@ -6,13 +6,16 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.Text;
 using NBehave.Gherkin;
+using NBehave.Narrator.Framework;
+using NBehave.Narrator.Framework.TextParsing;
+using NBehave.VS2010.Plugin.Editor.Glyphs;
 
 namespace NBehave.VS2010.Plugin.Tagging
 {
     public class TokenParser : IDisposable
     {
-        private readonly GherkinEventListener gherkinEventListener = new GherkinEventListener();
         private List<GherkinParseEvent> events = new List<GherkinParseEvent>();
+        private List<Feature> features = new List<Feature>();
         private string lastParsedContent = "";
         private readonly object lockObj = new object();
         private readonly ManualResetEvent isParsing = new ManualResetEvent(true);
@@ -31,12 +34,15 @@ namespace NBehave.VS2010.Plugin.Tagging
             Parallel.Invoke(DoParse);
         }
 
-        public IEnumerable<GherkinParseEvent> Events
+        public IEnumerable<GherkinParseEvent> Events { get { return events; } }
+        public IEnumerable<Feature> Features { get { return features; } }
+
+        public void ForceParse(ITextSnapshot snapshot)
         {
-            get
-            {
-                return events;
-            }
+            isParsing.WaitOne(100);
+            nextTextSnapshotToParse.Enqueue(snapshot);
+            DoParse();
+            NotifyChanges(snapshot, events);
         }
 
         private void BufferChanged(object sender, TextContentChangedEventArgs e)
@@ -55,22 +61,29 @@ namespace NBehave.VS2010.Plugin.Tagging
             string content = string.Empty;
             try
             {
-                Console.WriteLine("--> snapshots? " + nextTextSnapshotToParse.Any());
                 while (nextTextSnapshotToParse.Any())
                 {
                     var textSnapshot = GetTextSnapshotToParse();
                     content = textSnapshot.GetText(0, textSnapshot.Length);
-                    if (content == lastParsedContent)
-                        return;
-                    var oldEvents = Events;
-                    var newEvents = Parse(content);
+                    List<GherkinParseEvent> oldEvents;
+                    Tuple<List<GherkinParseEvent>, List<Feature>> newEvents;
                     lock (lockObj)
                     {
-                        events = newEvents;
+                        oldEvents = events;
+                        newEvents=new Tuple<List<GherkinParseEvent>, List<Feature>>(events, features);
                     }
-                    var newAndChanged = (newEvents.Any(_ => _.GherkinTokenType == GherkinTokenType.SyntaxError) || LinesAddedOrRemoved(newEvents, oldEvents))
-                                            ? newEvents : newEvents.Except(oldEvents).ToList();
-                    NotifyChanges(textSnapshot, newAndChanged);
+                    if (content != lastParsedContent)
+                        newEvents = Parse(content);
+                    lock (lockObj)
+                    {
+                        events = newEvents.Item1;
+                        features = newEvents.Item2;
+                    }
+                    var e = newEvents.Item1;
+                    var newAndChanged = (e.Any(_ => _.GherkinTokenType == GherkinTokenType.SyntaxError) || LinesAddedOrRemoved(e, oldEvents))
+                                            ? e : e.Except(oldEvents).ToList();
+                    if (newAndChanged.Any())
+                        NotifyChanges(textSnapshot, newAndChanged);
                 }
             }
             catch (Exception)
@@ -118,13 +131,22 @@ namespace NBehave.VS2010.Plugin.Tagging
                 TokenParserEvent.Invoke(this, new TokenParserEventArgs(evt, s));
                 previousEvent = evt;
             }
+            var eof = newAndChanged.FirstOrDefault(_ => _.GherkinTokenType == GherkinTokenType.Eof);
+            var lastLine = textSnapshot.GetLineFromLineNumber(to);
+            if (eof != null)
+                TokenParserEvent.Invoke(this, new TokenParserEventArgs(eof, new SnapshotSpan(textSnapshot, lastLine.Start, 0)));
         }
 
-        private List<GherkinParseEvent> Parse(string content)
+        private Tuple<List<GherkinParseEvent>, List<Feature>> Parse(string content)
         {
+            var features = new List<Feature>();
+            var nBehaveConfiguration = NBehaveConfiguration.New.DontIsolateInAppDomain().SetDryRun(true);
+            var gherkinScenarioParser = new GherkinScenarioParser(nBehaveConfiguration);
+            gherkinScenarioParser.FeatureEvent += (s, e) => features.Add(e.EventInfo);
+            var gherkinEventListener = new GherkinEventListener();
+            IListener listener = new CompositeGherkinListener(gherkinEventListener, gherkinScenarioParser);
             var newEvents = new List<GherkinParseEvent>();
-            gherkinEventListener.Events.Clear();
-            var parser = new Parser(gherkinEventListener);
+            var parser = new Parser(listener);
             try
             {
                 parser.Scan(content);
@@ -144,12 +166,12 @@ namespace NBehave.VS2010.Plugin.Tagging
             }
             finally
             {
-                newEvents.AddRange(ToZeroBasedLines().ToList());
+                newEvents.AddRange(ToZeroBasedLines(gherkinEventListener).ToList());
             }
-            return newEvents;
+            return new Tuple<List<GherkinParseEvent>, List<Feature>>(newEvents, features);
         }
 
-        private IEnumerable<GherkinParseEvent> ToZeroBasedLines()
+        private IEnumerable<GherkinParseEvent> ToZeroBasedLines(GherkinEventListener gherkinEventListener)
         {
             return gherkinEventListener.Events
                 .Select(_ => new GherkinParseEvent(_.GherkinTokenType, _.Tokens.Select(t => new Token(t.Content, new LineInFile(t.LineInFile.Line - 1))).ToArray()));

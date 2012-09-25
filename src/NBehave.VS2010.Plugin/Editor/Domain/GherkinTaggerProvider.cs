@@ -10,11 +10,11 @@ namespace NBehave.VS2010.Plugin.Editor.Domain
     [Export(typeof(ITaggerProvider))]
     [ContentType("nbehave.gherkin")]
     [TagType(typeof(ClassificationTag))]
-    internal sealed class GherkinClassifierProvider : ITaggerProvider
+    internal sealed class GherkinTaggerProvider : ITaggerProvider
     {
         [Export]
         [Name("nbehave.gherkin")]
-        [BaseDefinition("code")]
+        [BaseDefinition("text")]
         internal static ContentTypeDefinition GherkinContentTypeDefinition = null;
 
         [Export]
@@ -23,10 +23,10 @@ namespace NBehave.VS2010.Plugin.Editor.Domain
         internal static FileExtensionToContentTypeDefinition GherkinFileExtensionDefinition = null;
 
         [Import]
-        internal IClassificationTypeRegistryService ClassificationTypeRegistry = null;
+        internal IClassificationTypeRegistryService ClassificationTypeRegistry;
 
         [Import]
-        internal IBufferTagAggregatorFactoryService AggregatorFactory = null;
+        internal IBufferTagAggregatorFactoryService AggregatorFactory;
 
         public ITagger<T> CreateTagger<T>(ITextBuffer buffer) where T : ITag
         {

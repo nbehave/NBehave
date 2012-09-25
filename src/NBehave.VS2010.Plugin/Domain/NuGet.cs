@@ -33,6 +33,8 @@ namespace NBehave.VS2010.Plugin.Domain
         public string SolutionPackageVersion(string packageId)
         {
             var item = GetSolutionPackageConfigProjectItem();
+            if (item == null)
+                return null;
             var fileName = item.FileNames[1];
             return PackageVersion(packageId, fileName);
         }
@@ -70,6 +72,8 @@ namespace NBehave.VS2010.Plugin.Domain
         {
             var projs = dteService.Solution.Projects.Cast<Project>().ToList();
             var pNames = projs.FirstOrDefault(_ => _.Name == ".nuget");
+            if (pNames == null)
+                return null;
             var item = pNames.ProjectItems.Cast<ProjectItem>().FirstOrDefault(_ => _.Name == "packages.config");
             return item;
         }

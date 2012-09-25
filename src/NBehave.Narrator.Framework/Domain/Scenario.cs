@@ -106,7 +106,8 @@ namespace NBehave.Narrator.Framework
             if (!_examples.Any())
                 return "";
             var prefix = prefixAllLinesWith + "    ";
-            var str = prefix + _examples.First().ColumnNamesToString() + Environment.NewLine;
+            var str = prefixAllLinesWith + "Examples:" + Environment.NewLine + 
+                prefix + _examples.First().ColumnNamesToString() + Environment.NewLine;
             var colStr = _examples.Select(_ => prefix + _.ColumnValuesToString()).ToArray();
             return str + string.Join(Environment.NewLine, colStr);
         }

@@ -108,6 +108,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Features\simple.feature">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Features\gherkin.feature">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

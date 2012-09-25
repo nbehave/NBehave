@@ -6,79 +6,94 @@ namespace NBehave.VS2010.Plugin.Editor.Domain
 {
     internal static class GherkinFileClassificationDefinitions
     {
-        [Export(typeof(ClassificationTypeDefinition))]
+        [Export]
         [Name("gherkin.syntaxError")]
+        [BaseDefinition("text")]
         internal static ClassificationTypeDefinition GherkinSyntaxErrorClassifierType = null;
 
-        [Export(typeof(ClassificationTypeDefinition))]
+        [Export]
         [Name("gherkin.feature")]
+        [BaseDefinition("text")]
         internal static ClassificationTypeDefinition GherkinFeatureClassifierType = null;
 
-        [Export(typeof(ClassificationTypeDefinition))]
+        [Export]
         [Name("gherkin.featureTitle")]
+        [BaseDefinition("text")]
         internal static ClassificationTypeDefinition GherkinFeatureTitleClassifierType = null;
 
-        [Export(typeof(ClassificationTypeDefinition))]
+        [Export]
         [Name("gherkin.featureDescription")]
+        [BaseDefinition("Plaintext")]
         internal static ClassificationTypeDefinition GherkinFeatureDescriptionClassifierType = null;
 
-        [Export(typeof(ClassificationTypeDefinition))]
+        [Export]
         [Name("gherkin.scenario")]
+        [BaseDefinition("text")]
         internal static ClassificationTypeDefinition GherkinScenarioClassifierType = null;
 
-        [Export(typeof(ClassificationTypeDefinition))]
+        [Export]
         [Name("gherkin.scenarioTitle")]
+        [BaseDefinition("text")]
         internal static ClassificationTypeDefinition GherkinScenarioTitleClassifierType = null;
 
-        [Export(typeof(ClassificationTypeDefinition))]
+        [Export]
         [Name("gherkin.background")]
+        [BaseDefinition("text")]
         internal static ClassificationTypeDefinition GherkinBackgroundClassifierType = null;
 
-        [Export(typeof(ClassificationTypeDefinition))]
+        [Export]
         [Name("gherkin.backgroundTitle")]
+        [BaseDefinition("text")]
         internal static ClassificationTypeDefinition GherkinBackgroundTitleClassifierType = null;
 
-        [Export(typeof(ClassificationTypeDefinition))]
+        [Export]
         [Name("gherkin.comment")]
-        //[BaseDefinition("comment")]
+        [BaseDefinition("text")]
         internal static ClassificationTypeDefinition GherkinCommentClassifierType = null;
 
-        [Export(typeof(ClassificationTypeDefinition))]
+        [Export]
         [Name("gherkin.tag")]
-        //[BaseDefinition("symbol definition")]
+        [BaseDefinition("text")]
         internal static ClassificationTypeDefinition GherkinTagClassifierType = null;
 
-        [Export(typeof(ClassificationTypeDefinition))]
+        [Export]
         [Name("gherkin.docstring")]
-        //[BaseDefinition("string")]
+        [BaseDefinition("text")]
         internal static ClassificationTypeDefinition GherkinDocstringClassifierType = null;
 
-        [Export(typeof(ClassificationTypeDefinition))]
+        [Export]
         [Name("gherkin.examples")]
-        //[BaseDefinition("string")]
+        [BaseDefinition("text")]
         internal static ClassificationTypeDefinition GherkinExamplesClassifierType = null;
 
-        [Export(typeof(ClassificationTypeDefinition))]
+        [Export]
         [Name("gherkin.step")]
-        //[BaseDefinition("keyword")]
+        [BaseDefinition("text")]
         internal static ClassificationTypeDefinition GherkinStepClassifierType = null;
 
-        [Export(typeof(ClassificationTypeDefinition))]
+        [Export]
         [Name("gherkin.stepText")]
-        //[BaseDefinition("keyword")]
+        [BaseDefinition("text")]
         internal static ClassificationTypeDefinition GherkinStepTextClassifierType = null;
 
-        [Export(typeof(ClassificationTypeDefinition))]
+        [Export]
         [Name("gherkin.table")]
+        [BaseDefinition("text")]
         internal static ClassificationTypeDefinition GherkinTableClassifierType = null;
 
-        [Export(typeof(ClassificationTypeDefinition))]
+        [Export]
         [Name("gherkin.tableheader")]
+        [BaseDefinition("text")]
         internal static ClassificationTypeDefinition GherkinTableHeaderClassifierType = null;
 
-        [Export(typeof(ClassificationTypeDefinition))]
+        [Export]
         [Name("gherkin.tablecell")]
-        //[BaseDefinition("string")]
+        [BaseDefinition("text")]
         internal static ClassificationTypeDefinition GherkinTableCellClassifierType = null;
+
+        [Export]
+        [Name("gherkin.tablecellAlt")]
+        [BaseDefinition("text")]
+        internal static ClassificationTypeDefinition GherkinTableCellAltClassifierType = null;
     }
 }

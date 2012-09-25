@@ -11,7 +11,7 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs
     [Export(typeof(IGlyphFactoryProvider))]
     [Name("PlayGlyph")]
     [Order(After = "VsTextMarker")]
-    [ContentType("gherkin")]
+    [ContentType("nbehave.gherkin")]
     [TagType(typeof(PlayGlyphTag))]
     internal sealed class PlayGlyphFactoryProvider : IGlyphFactoryProvider
     {

@@ -1,8 +1,10 @@
 ﻿using System.Windows;
 using Microsoft.VisualStudio.Text.Editor;
 using NBehave.Narrator.Framework;
+using NBehave.VS2010.Plugin.Editor.Domain;
 using NBehave.VS2010.Plugin.Editor.Glyphs.ViewModels;
 using NBehave.VS2010.Plugin.Editor.Glyphs.Views;
+using NBehave.VS2010.Plugin.Tagging;
 
 namespace NBehave.VS2010.Plugin.Editor.Glyphs
 {
@@ -23,13 +25,19 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs
             {
                 viewModel = runOrDebugView.DataContext as RunOrDebugViewModel;
             }
-            viewModel.InitialiseProperties(position, visualElement, runOrDebugView, scenario);
+            viewModel.InitialiseProperties(position, visualElement, runOrDebugView, new GherkinText(scenario));
             viewModel.Show();
         }
 
-        public bool IsScenario(string scenarioTitle)
+        public bool IsScenario(string scenarioTitle, int lineNumber)
         {
-            return scenarioTitle.Contains(scenario.Title);
+            var title = scenarioTitle.Trim(WhiteSpaces.Chars);
+            return lineNumber == scenario.SourceLine && title.EndsWith(scenario.Title);
+        }
+
+        public string GetText()
+        {
+            return scenario.ToString();
         }
     }
 }

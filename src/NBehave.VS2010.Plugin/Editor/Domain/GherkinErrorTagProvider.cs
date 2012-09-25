@@ -19,12 +19,12 @@ namespace NBehave.VS2010.Plugin.Editor.Domain
         internal IBufferTagAggregatorFactoryService AggregatorFactory = null;
 
         [Import]
-        internal TokenParserFactory TokenParserFactory = null;
+        internal TokenFactory TokenFactory = null;
 
         public ITagger<T> CreateTagger<T>(ITextBuffer buffer) where T : ITag
         {
             ITagAggregator<GherkinTokenTag> tagAggregator = AggregatorFactory.CreateTagAggregator<GherkinTokenTag>(buffer);
-            var tp = TokenParserFactory.Build(buffer);
+            var tp = TokenFactory.BuildTokenParser(buffer);
             return new GherkinErrorTagger(tagAggregator, tp) as ITagger<T>;
         }
     }

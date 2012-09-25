@@ -2,24 +2,24 @@
 using System.Linq;
 using Microsoft.VisualStudio.Text;
 
-namespace NBehave.VS2010.Plugin.Specs
+namespace NBehave.VS2010.Plugin.Specifications.MockObjects
 {
     public class MockTextSnapshotLine : ITextSnapshotLine
     {
-        private readonly int _lineNumber;
-        private readonly MockTextSnapshot _snapshot;
-        private string _text;
+        private readonly int lineNumber;
+        private readonly MockTextSnapshot snapshot;
+        private readonly string text;
 
-        public MockTextSnapshotLine(string text, int lineNumber, MockTextSnapshot _snapshot)
+        public MockTextSnapshotLine(string text, int lineNumber, MockTextSnapshot snapshot)
         {
-            _lineNumber = lineNumber;
-            this._snapshot = _snapshot;
-            _text = text.Split(new[] {Environment.NewLine}, StringSplitOptions.None)[lineNumber] + Environment.NewLine;
+            this.lineNumber = lineNumber;
+            this.snapshot = snapshot;
+            this.text = text.Split(new[] { Environment.NewLine }, StringSplitOptions.None)[lineNumber] + Environment.NewLine;
         }
 
         public string GetText()
         {
-            return _text;
+            return text;
         }
 
         public string GetTextIncludingLineBreak()
@@ -34,7 +34,7 @@ namespace NBehave.VS2010.Plugin.Specs
 
         public ITextSnapshot Snapshot
         {
-            get { return _snapshot; }
+            get { return snapshot; }
         }
 
         public SnapshotSpan Extent
@@ -49,7 +49,7 @@ namespace NBehave.VS2010.Plugin.Specs
 
         public int LineNumber
         {
-            get { return _lineNumber; }
+            get { return lineNumber; }
         }
 
         public SnapshotPoint Start
@@ -58,7 +58,7 @@ namespace NBehave.VS2010.Plugin.Specs
             {
                 if (LineNumber == 0)
                 {
-                    return new SnapshotPoint(Snapshot, 0);    
+                    return new SnapshotPoint(Snapshot, 0);
                 }
 
                 string aggregate = Snapshot.Lines.Take(LineNumber).Select(line => line.GetText()).Aggregate((s, s1) => s + s1);
@@ -69,7 +69,7 @@ namespace NBehave.VS2010.Plugin.Specs
 
         public int Length
         {
-            get { return _text.Length; }
+            get { return text.Length; }
         }
 
         public int LengthIncludingLineBreak

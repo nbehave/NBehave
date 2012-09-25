@@ -29,7 +29,7 @@ namespace NBehave.VS2010.Plugin.Editor.Domain
         {
             DisplayName = "Gherkin Feature";
             IsBold = true;
-            FontRenderingSize = 16;
+            FontRenderingSize = 14;
         }
     }
 
@@ -43,7 +43,7 @@ namespace NBehave.VS2010.Plugin.Editor.Domain
         public GherkinFeatureTitleFormat()
         {
             DisplayName = "Gherkin Feature title";
-            FontRenderingSize = 14;
+            FontRenderingSize = 13;
             ForegroundColor = Colors.DarkBlue;
             IsBold = true;
         }
@@ -105,9 +105,9 @@ namespace NBehave.VS2010.Plugin.Editor.Domain
         public GherkinBackgroundTitleClassificationFormat()
         {
             DisplayName = "Gherkin Background";
-            ForegroundColor = Colors.BlueViolet;
             FontRenderingSize = 13;
             IsBold = true;
+            ForegroundColor = Colors.Black;
         }
     }
 
@@ -151,8 +151,8 @@ namespace NBehave.VS2010.Plugin.Editor.Domain
         public GherkinTagClassificationFormat()
         {
             DisplayName = "Gherkin Tag";
-            ForegroundColor = Colors.MediumVioletRed;
-            BackgroundColor = Colors.Bisque;
+            ForegroundColor = Colors.Black;
+            BackgroundColor = Colors.LightGoldenrodYellow;
             IsItalic = true;
         }
     }
@@ -167,7 +167,8 @@ namespace NBehave.VS2010.Plugin.Editor.Domain
         public GherkinDocstringClassificationFormat()
         {
             DisplayName = "Gherkin Docstring (Multi-line Text Argument)";
-            ForegroundColor = Colors.Olive;
+            ForegroundColor = Colors.DarkSlateBlue;
+            BackgroundColor = Color.FromArgb(255, 232, 232, 236);
         }
     }
 
@@ -244,9 +245,9 @@ namespace NBehave.VS2010.Plugin.Editor.Domain
         public GherkinTableHeaderClassificationFormat()
         {
             DisplayName = "Gherkin Table Header";
-            IsItalic = true;
             IsBold = true;
             ForegroundColor = Colors.Black;
+            BackgroundColor = Colors.Silver;
         }
     }
 
@@ -260,8 +261,22 @@ namespace NBehave.VS2010.Plugin.Editor.Domain
         public GherkinTableCellClassificationFormat()
         {
             DisplayName = "Gherkin Table Cell";
-            ForegroundColor = Colors.MintCream;
-            BackgroundColor = Colors.MidnightBlue;
+            ForegroundColor = Colors.Black;
+            BackgroundColor = Color.FromArgb(255, 232, 232, 236);
+        }
+    }
+
+    [Export(typeof(EditorFormatDefinition))]
+    [ClassificationType(ClassificationTypeNames = "gherkin.tablecellalt")]
+    [Name("gherkin.tablecellalt")]
+    [UserVisible(true)]
+    [Order(Before = Priority.Default)]
+    internal sealed class GherkinTableCellAltClassificationFormat : ClassificationFormatDefinition
+    {
+        public GherkinTableCellAltClassificationFormat()
+        {
+            DisplayName = "Gherkin Table Cell (alt)";
+            ForegroundColor = Colors.Black;
         }
     }
 }

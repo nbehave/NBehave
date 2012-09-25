@@ -1,120 +1,52 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.Disposables;
 using System.Linq;
 using Microsoft.VisualStudio.Text;
-using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Tagging;
-using Microsoft.VisualStudio.Utilities;
 using NBehave.Narrator.Framework;
+using NBehave.VS2010.Plugin.Tagging;
 
 namespace NBehave.VS2010.Plugin.Editor.Glyphs
 {
-    [Export(typeof(ITaggerProvider))]
-    [ContentType("gherkin")]
-    [TagType(typeof(PlayGlyphTag))]
-    public class PlayTaggerProvider : ITaggerProvider
-    {
-        [Import]
-        internal IClassifierAggregatorService AggregatorFactory = null;
-
-        /// <summary>
-        /// Creates an instance of our custom TodoTagger for a given buffer.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="buffer">The buffer we are creating the tagger for.</param>
-        /// <returns>An instance of our custom TodoTagger.</returns>
-        public ITagger<T> CreateTagger<T>(ITextBuffer buffer) where T : ITag
-        {
-            return buffer.Properties.GetProperty<ITagger<T>>(typeof(ITagger<PlayGlyphTag>));
-        }
-    }
-
-    /// <summary>
-    /// This class implements ITagger for ToDoTag.  It is responsible for creating
-    /// ToDoTag TagSpans, which our GlyphFactory will then create glyphs for.
-    /// </summary>
     public class PlayTagger : ITagger<PlayGlyphTag>
     {
-        private readonly CompositeDisposable listeners;
-        private readonly List<ITagSpan<PlayGlyphTag>> tagSpans;
+        private readonly TokenParser tokenParser;
+        private List<Feature> features = new List<Feature>();
 
         public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
 
-        public PlayTagger(ITextBuffer buffer)
+        public PlayTagger(TokenParser tokenParser)
         {
-            var currentSnapshot = buffer.CurrentSnapshot;
-            var snapshotSpans = new Stack<ScenarioSnapshotSpan>();
-            listeners = new CompositeDisposable();
-            tagSpans = new List<ITagSpan<PlayGlyphTag>>();
-
-            var parser = buffer.Properties.GetProperty<GherkinFileEditorParser>(typeof(GherkinFileEditorParser));
-
-            listeners.Add(parser.IsParsing.Where(_ => _)
-                .Subscribe(b1 => tagSpans.Clear()));
-
-            listeners.Add(parser.IsParsing.Where(_ => !_)
-                .Subscribe(_ => ConvertSnapshotSpanToPlayGlyphTag(snapshotSpans)));
-
-            listeners.Add(parser.ParserEvents
-                .Where(parserEvent => true)
-                .Subscribe(parserEvent => ScenariosToSnapshotSpan(currentSnapshot, parserEvent).ToList().ForEach(snapshotSpans.Push)));
+            tokenParser.TokenParserEvent += UpdateEvents;
+            this.tokenParser = tokenParser;
         }
 
-        private void ConvertSnapshotSpanToPlayGlyphTag(Stack<ScenarioSnapshotSpan> snapshotSpans)
+        private void UpdateEvents(object sender, TokenParserEventArgs e)
         {
-            while (!snapshotSpans.IsEmpty())
+            if (e.Event.GherkinTokenType == GherkinTokenType.Eof)
+                features = tokenParser.Features.ToList();
+        }
+
+        public IEnumerable<ITagSpan<PlayGlyphTag>> GetTags(NormalizedSnapshotSpanCollection spans)
+        {
+            var textSnapshot = (spans.Any()) ? spans.First().Snapshot : null;
+            if (!features.Any() && textSnapshot != null)
+                tokenParser.ForceParse(textSnapshot);
+
+            var tagSPans = new List<ITagSpan<PlayGlyphTag>>();
+
+            foreach (var line in textSnapshot.Lines)
             {
-                var snapshotSpan = snapshotSpans.Pop();
-                var playGlyphTag = new PlayGlyphTag(snapshotSpan.Scenario);
-                tagSpans.Add(new TagSpan<PlayGlyphTag>(snapshotSpan.SnapshotSpan, playGlyphTag));
+                var spanLine = line.LineNumber + 1;
+
+                var scenario = features.SelectMany(_ => _.Scenarios).FirstOrDefault(_ => _.SourceLine == spanLine);
+                if (scenario != null)
+                {
+                    var span = new SnapshotSpan(textSnapshot, line.Start, line.Length);
+                    tagSPans.Add(new TagSpan<PlayGlyphTag>(span, new PlayGlyphTag(scenario)));
+                }
             }
-            tagSpans.Reverse();
-        }
-
-        private static IEnumerable<ScenarioSnapshotSpan> ScenariosToSnapshotSpan(ITextSnapshot currentSnapshot, Feature parserEvent)
-        {
-            var scenarios = parserEvent.Scenarios;
-            var numberOfScenarios = scenarios.Count;
-            for (int i = 0; i < numberOfScenarios; i++)
-            {
-                var snapshotSpan = ScenarioToSnapshotSpan(scenarios, i, currentSnapshot);
-                yield return new ScenarioSnapshotSpan(snapshotSpan, scenarios[i]);
-            }
-        }
-
-        private static SnapshotSpan ScenarioToSnapshotSpan(List<Scenario> scenarios, int currentIndex, ITextSnapshot currentSnapshot)
-        {
-            var numberOfScenarios = scenarios.Count;
-            ITextSnapshotLine start = currentSnapshot.GetLineFromLineNumber(scenarios[currentIndex].SourceLine - 1);
-            var end = (currentIndex + 1 < numberOfScenarios)
-                          ? currentSnapshot.GetLineFromLineNumber(scenarios[currentIndex + 1].SourceLine - 1).Start
-                          : currentSnapshot.GetLineFromLineNumber(currentSnapshot.LineCount - 1).End;
-            var snapshotSpan = new SnapshotSpan(start.Start, end - start.Start);
-            return snapshotSpan;
-        }
-
-        /// <summary>
-        /// This method creates ToDoTag TagSpans over a set of SnapshotSpans.
-        /// </summary>
-        /// <param name="spans">A set of spans we want to get tags for.</param>
-        /// <returns>The list of ToDoTag TagSpans.</returns>
-        IEnumerable<ITagSpan<PlayGlyphTag>> ITagger<PlayGlyphTag>.GetTags(NormalizedSnapshotSpanCollection spans)
-        {
-            return tagSpans;
-        }
-    }
-
-    public class ScenarioSnapshotSpan
-    {
-        public SnapshotSpan SnapshotSpan { get; set; }
-        public Scenario Scenario { get; set; }
-
-        public ScenarioSnapshotSpan(SnapshotSpan snapshotSpan, Scenario scenario)
-        {
-            SnapshotSpan = snapshotSpan;
-            Scenario = scenario;
+            return tagSPans;
         }
     }
 }

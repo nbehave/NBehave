@@ -9,11 +9,9 @@ using MEFedMVVM.ViewModelLocator;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
-using Microsoft.VisualStudio.Text.Tagging;
 using NBehave.VS2010.Plugin.Contracts;
 using NBehave.VS2010.Plugin.Domain;
-using NBehave.VS2010.Plugin.Editor.Glyphs;
-using NBehave.VS2010.Plugin.Editor.SyntaxHighlighting;
+using NBehave.VS2010.Plugin.Tagging;
 
 namespace NBehave.VS2010.Plugin.Editor
 {
@@ -29,30 +27,21 @@ namespace NBehave.VS2010.Plugin.Editor
 
         public void Initialise(ITextBuffer buffer)
         {
-            if (!buffer.Properties.ContainsProperty(typeof(GherkinFileClassifier)))
+            if (!buffer.Properties.ContainsProperty(typeof(TokenParser)))
             {
-                var pluginLogger = ServiceProvider.GetService(typeof(IPluginLogger)) as IPluginLogger;
+                var pluginLogger = (IPluginLogger)ServiceProvider.GetService(typeof(IPluginLogger));
 
-                AppDomain.CurrentDomain.FirstChanceException += (sender, args) => { pluginLogger.FatalException("", args.Exception); };
+                AppDomain.CurrentDomain.FirstChanceException += (sender, args) => pluginLogger.FatalException("", args.Exception);
 
-                var container = buffer.Properties.GetOrCreateSingletonProperty(() => new CompositionContainer(new AssemblyCatalog(typeof(GherkinFileEditorParser).Assembly)));
+                var container = buffer.Properties.GetOrCreateSingletonProperty(() => new CompositionContainer(new AssemblyCatalog(GetType().Assembly)));
                 container.ComposeExportedValue(ClassificationRegistry);
                 container.ComposeParts();
 
-                container.GetExport<GherkinFileEditorParserFactory>().Value.CreateParser(buffer);
-
                 var scenarioRunner = ServiceProvider.GetService(typeof(IScenarioRunner)) as IScenarioRunner;
-
-                GherkinFileClassifier fileClassifierForBuffer = buffer.Properties.GetOrCreateSingletonProperty(() => new GherkinFileClassifier(buffer));
-                buffer.Properties.GetOrCreateSingletonProperty(() => new PlayTagger(buffer) as ITagger<PlayGlyphTag>);
-
                 container.ComposeExportedValue(scenarioRunner);
-                container.ComposeParts((fileClassifierForBuffer));
 
                 LocatorBootstrapper.ApplyComposer(new VisualStudioRuntimeComposer(container));
                 LocatorBootstrapper.EnsureLocatorBootstrapper();
-
-                fileClassifierForBuffer.BeginClassifications();
             }
         }
     }
@@ -79,7 +68,7 @@ namespace NBehave.VS2010.Plugin.Editor
         private AggregateCatalog GetCatalog()
         {
             var location = (from assembly in AppDomain.CurrentDomain.GetAssemblies()
-                            where assembly == typeof(ServiceRegistrar).Assembly
+                            where assembly == typeof(VisualStudioRuntimeComposer).Assembly
                             select assembly.Location).First();
 
             var directory = Path.GetDirectoryName(location);

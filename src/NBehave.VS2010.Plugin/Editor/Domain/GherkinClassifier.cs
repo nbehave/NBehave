@@ -37,6 +37,7 @@ namespace NBehave.VS2010.Plugin.Editor.Domain
             gherkinTypes[GherkinTokenType.Table] = typeService.GetClassificationType("gherkin.table");
             gherkinTypes[GherkinTokenType.TableHeader] = typeService.GetClassificationType("gherkin.tableheader");
             gherkinTypes[GherkinTokenType.TableCell] = typeService.GetClassificationType("gherkin.tablecell");
+            gherkinTypes[GherkinTokenType.TableCellAlt] = typeService.GetClassificationType("gherkin.tablecellalt");
         }
 
         private void TagsChangedOnAggregator(object sender, TagsChangedEventArgs e)

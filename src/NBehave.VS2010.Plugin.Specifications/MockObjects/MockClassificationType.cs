@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.VisualStudio.Text.Classification;
 
-namespace NBehave.VS2010.Plugin.Specs
+namespace NBehave.VS2010.Plugin.Specifications.MockObjects
 {
     public class MockClassificationType : IClassificationType
     {

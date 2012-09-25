@@ -5,26 +5,23 @@ using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
 using NBehave.VS2010.Plugin.Tagging;
 
-namespace NBehave.VS2010.Plugin.Editor.Domain
+namespace NBehave.VS2010.Plugin.Editor.Glyphs
 {
     [Export(typeof(ITaggerProvider))]
     [ContentType("nbehave.gherkin")]
-    [TagType(typeof(GherkinTokenTag))]
-    internal class GherkinTokenTagProvider : ITaggerProvider
+    [TagType(typeof(PlayGlyphTag))]
+    public class PlayTaggerProvider : ITaggerProvider
     {
         [Import]
-        internal IClassificationTypeRegistryService ClassificationTypeRegistry = null;
-
-        [Import]
-        internal IBufferTagAggregatorFactoryService AggregatorFactory = null;
+        internal IClassifierAggregatorService AggregatorFactory = null;
 
         [Import]
         internal TokenFactory TokenFactory = null;
 
         public ITagger<T> CreateTagger<T>(ITextBuffer buffer) where T : ITag
         {
-            var tp = TokenFactory.BuildTokenParser(buffer);
-            return new GherkinTokenTagger(tp) as ITagger<T>;
+            var tagger = TokenFactory.BuildPlayTagger(buffer);
+            return tagger as ITagger<T>;
         }
     }
 }

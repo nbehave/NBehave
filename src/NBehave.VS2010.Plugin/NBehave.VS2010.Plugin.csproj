@@ -204,8 +204,25 @@
     <Compile Include="Domain\SolutionEventsListener.cs" />
     <Compile Include="Editor\Domain\GherkinErrorTagger.cs" />
     <Compile Include="Editor\Domain\GherkinClassifier.cs" />
-    <Compile Include="Editor\Domain\GherkinClassifierProvider.cs" />
+    <Compile Include="Editor\Domain\GherkinTaggerProvider.cs" />
     <Compile Include="Editor\Domain\GherkinFileClassificationDefinitions.cs" />
+    <Compile Include="Editor\Glyphs\CompositeGherkinListener.cs" />
+    <Compile Include="Editor\Domain\GherkinText.cs" />
+    <Compile Include="Editor\Glyphs\Controls\ContextMenuButton.cs" />
+    <Compile Include="Editor\Glyphs\PlayGlyphFactoryProvider.cs" />
+    <Compile Include="Editor\Glyphs\PlayGlyphMouseProcessorProvider.cs" />
+    <Compile Include="Editor\Glyphs\PlayGlyphTag.cs" />
+    <Compile Include="Editor\Glyphs\PlayTagger.cs" />
+    <Compile Include="Editor\Glyphs\PlayTaggerProvider.cs" />
+    <Compile Include="Editor\Glyphs\ViewModels\RunOrDebugViewModel.cs" />
+    <Compile Include="Editor\Glyphs\Views\IRunOrDebugView.xaml.cs" />
+    <Compile Include="Editor\Glyphs\Views\PlayGlyph.xaml.cs">
+      <DependentUpon>PlayGlyph.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Editor\Glyphs\Views\RunOrDebugView.xaml.cs">
+      <DependentUpon>RunOrDebugView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Editor\ServiceRegistrar.cs" />
     <Compile Include="FileExtensions.cs" />
     <Compile Include="Editor\Domain\GherkinErrorTagProvider.cs" />
     <Compile Include="Tagging\GherkinEventListener.cs" />
@@ -217,7 +234,7 @@
     <Compile Include="Tagging\GherkinTokenType.cs" />
     <Compile Include="Tagging\TokenParser.cs" />
     <Compile Include="Tagging\TokenParserEventArgs.cs" />
-    <Compile Include="Tagging\TokenParserFactory.cs" />
+    <Compile Include="Tagging\TokenFactory.cs" />
     <Compile Include="Tiny\TinyIoCContainerExtension.cs" />
     <Compile Include="Contracts\IVisualStudioService.cs" />
     <Compile Include="Contracts\IPluginLogger.cs" />
@@ -255,6 +272,14 @@
     </VSCTCompile>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Editor\Glyphs\Views\PlayGlyph.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Editor\Glyphs\Views\RunOrDebugView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Editor\Resources\Logo.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -289,6 +314,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\Images.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Editor\SyntaxHighlighting\" />
   </ItemGroup>
   <PropertyGroup>
     <UseCodebase>true</UseCodebase>

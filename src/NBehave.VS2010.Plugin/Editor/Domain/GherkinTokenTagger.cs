@@ -21,7 +21,8 @@ namespace NBehave.VS2010.Plugin.Editor.Domain
 
         private void UpdateEvents(object sender, TokenParserEventArgs e)
         {
-            TagsChanged.Invoke(this, new SnapshotSpanEventArgs(e.SnapshotSpan));
+            if (e.Event.GherkinTokenType != GherkinTokenType.Eof)
+                TagsChanged.Invoke(this, new SnapshotSpanEventArgs(e.SnapshotSpan));
         }
 
         public IEnumerable<ITagSpan<GherkinTokenTag>> GetTags(NormalizedSnapshotSpanCollection spans)
