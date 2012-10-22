@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -61,7 +62,7 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
                 var xmlWriter = new XmlTextWriter(memStream, Encoding.UTF8);
                 _xmlOutputWriter = new XmlOutputWriter(xmlWriter, new List<EventReceived>());
                 var result = new StepResult(Step("Given Foo"), Passed);
-                _xmlOutputWriter.DoActionStep(result);
+                _xmlOutputWriter.DoStringStep(result);
                 xmlWriter.Flush();
                 _xmlDoc = new XmlDocument();
                 memStream.Seek(0, SeekOrigin.Begin);
@@ -69,7 +70,7 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
             }
 
             [Test]
-            public void ShouldHaveActionStepNode()
+            public void ShouldHaveStepNode()
             {
                 var node = _xmlDoc.SelectSingleNode(XPathToNode);
                 Assert.That(node, Is.Not.Null);
@@ -80,6 +81,52 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
             {
                 var node = _xmlDoc.SelectSingleNode(XPathToNode);
                 Assert.That(node.Attributes["name"].Value, Is.EqualTo("Given Foo"));
+            }
+
+            [Test]
+            public void NodeShouldHaveOutcome()
+            {
+                var node = _xmlDoc.SelectSingleNode(XPathToNode);
+                Assert.That(node.Attributes["outcome"].Value, Is.EqualTo("passed"));
+            }
+        }
+
+        [TestFixture]
+        public class StepNode_with_docstring : XmlOutputWriterSpec
+        {
+            const string XPathToNode = @"/step";
+
+            protected override void EstablishContext()
+            {
+                var memStream = new MemoryStream();
+                var xmlWriter = new XmlTextWriter(memStream, Encoding.UTF8);
+                _xmlOutputWriter = new XmlOutputWriter(xmlWriter, new List<EventReceived>());
+                var step = Step("Given Foo");
+                step.AddDocString("docstring");
+                var result = new StepResult(step, Passed);
+                _xmlOutputWriter.DoStringStep(result);
+                xmlWriter.Flush();
+                _xmlDoc = new XmlDocument();
+                memStream.Seek(0, SeekOrigin.Begin);
+                _xmlDoc.Load(memStream);
+            }
+
+            [Test]
+            public void ShouldHaveStepNode()
+            {
+                var node = _xmlDoc.SelectSingleNode(XPathToNode);
+                Assert.That(node, Is.Not.Null);
+            }
+
+            [Test]
+            public void NodeShouldHaveNameAttribute()
+            {
+                var node = _xmlDoc.SelectSingleNode(XPathToNode);
+                Assert.That(node.Attributes["name"].Value, 
+                    Is.EqualTo("Given Foo" + Environment.NewLine +
+                                "\"\"\"" + Environment.NewLine +
+                                "docstring"+ Environment.NewLine +
+                                "\"\"\""));
             }
 
             [Test]

@@ -130,7 +130,7 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
             Writer.WriteAttributeString("outcome", outcome);
 
             foreach (var step in bgSteps)
-                DoActionStep(step);
+                DoStringStep(step);
         }
 
         public void DoScenario(EventReceived evt, ScenarioResult scenarioResult)
@@ -146,16 +146,16 @@ namespace NBehave.Narrator.Framework.EventListeners.Xml
                 CreatePendingSteps(evt, scenarioResult);
 
             foreach (var step in scenarioResult.StepResults)
-                DoActionStep(step);
+                DoStringStep(step);
 
             DoExamplesInScenario(scenarioResult as ScenarioExampleResult);
             Writer.WriteEndElement();
         }
 
-        public void DoActionStep(StepResult result)
+        public void DoStringStep(StepResult result)
         {
             Writer.WriteStartElement("step");
-            Writer.WriteAttributeString("name", result.StringStep.Step);
+            Writer.WriteAttributeString("name", result.StringStep.ToString().TrimEnd());
             Writer.WriteAttributeString("outcome", result.Result.ToString());
             if (result.Result.GetType() == typeof(Failed))
                 Writer.WriteElementString("failure", result.Message);
