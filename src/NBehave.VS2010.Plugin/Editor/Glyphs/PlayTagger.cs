@@ -11,9 +11,9 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs
     public class PlayTagger : ITagger<PlayGlyphTag>
     {
         private readonly TokenParser tokenParser;
-        private List<Feature> features = new List<Feature>();
 
         public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
+        List<Feature> features = new List<Feature>();
 
         public PlayTagger(TokenParser tokenParser)
         {
@@ -30,11 +30,10 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs
         public IEnumerable<ITagSpan<PlayGlyphTag>> GetTags(NormalizedSnapshotSpanCollection spans)
         {
             var textSnapshot = (spans.Any()) ? spans.First().Snapshot : null;
-            if (!features.Any() && textSnapshot != null)
+            if (!features.Any() && textSnapshot != null && !tokenParser.LastParseFailed())
                 tokenParser.ForceParse(textSnapshot);
 
             var tagSPans = new List<ITagSpan<PlayGlyphTag>>();
-
             foreach (var line in textSnapshot.Lines)
             {
                 var spanLine = line.LineNumber + 1;

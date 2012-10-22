@@ -36,6 +36,10 @@ namespace NBehave.VS2010.Plugin.Tagging
 
         public IEnumerable<GherkinParseEvent> Events { get { return events; } }
         public IEnumerable<Feature> Features { get { return features; } }
+        public bool LastParseFailed()
+        {
+            return Events.Any(_ => _.GherkinTokenType == GherkinTokenType.SyntaxError);
+        }
 
         public void ForceParse(ITextSnapshot snapshot)
         {
@@ -70,7 +74,7 @@ namespace NBehave.VS2010.Plugin.Tagging
                     lock (lockObj)
                     {
                         oldEvents = events;
-                        newEvents=new Tuple<List<GherkinParseEvent>, List<Feature>>(events, features);
+                        newEvents = new Tuple<List<GherkinParseEvent>, List<Feature>>(events, features);
                     }
                     if (content != lastParsedContent)
                         newEvents = Parse(content);
@@ -131,10 +135,8 @@ namespace NBehave.VS2010.Plugin.Tagging
                 TokenParserEvent.Invoke(this, new TokenParserEventArgs(evt, s));
                 previousEvent = evt;
             }
-            var eof = newAndChanged.FirstOrDefault(_ => _.GherkinTokenType == GherkinTokenType.Eof);
             var lastLine = textSnapshot.GetLineFromLineNumber(to);
-            if (eof != null)
-                TokenParserEvent.Invoke(this, new TokenParserEventArgs(eof, new SnapshotSpan(textSnapshot, lastLine.Start, 0)));
+            TokenParserEvent.Invoke(this, new TokenParserEventArgs(new GherkinParseEvent(GherkinTokenType.Eof), new SnapshotSpan(textSnapshot, lastLine.Start, 0)));
         }
 
         private Tuple<List<GherkinParseEvent>, List<Feature>> Parse(string content)
