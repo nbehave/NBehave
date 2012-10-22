@@ -62,8 +62,8 @@ namespace NBehave.Narrator.Framework
             }
         }
 
-        public bool HasDocString { get; set; }
-        public string DocString { get; set; }
+        public bool HasDocString { get; private set; }
+        public string DocString { get; private set; }
 
         public void AddDocString(string docString)
         {
@@ -137,7 +137,16 @@ namespace NBehave.Narrator.Framework
 
         public override string ToString()
         {
-            return Step;
+            string s = Step;
+            if (HasDocString)
+            {
+                var spaces = new Regex(@"^\s*").Match(DocString).Length;
+                s += Environment.NewLine +
+                     "\"\"\"".PadLeft(3+spaces, ' ') + Environment.NewLine +
+                     DocString + Environment.NewLine +
+                     "\"\"\"".PadLeft(3 + spaces, ' ') + Environment.NewLine;
+            }
+            return s;
         }
     }
 }

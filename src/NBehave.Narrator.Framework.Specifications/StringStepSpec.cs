@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 
@@ -67,6 +68,30 @@ namespace NBehave.Narrator.Framework.Specifications.Text
                 var example = new Example(new ExampleColumns(new[] { new ExampleColumn("param"), }), new Dictionary<string, string> { { "param", "12" } });
                 var newStep = step.BuildStep(example);
                 Assert.That(newStep.Step, Is.EqualTo("Given a 12"));
+            }
+
+            [Test]
+            public void Should_include_docstring_in_ToString()
+            {
+                var step = new StringStep("Given step with docstring", "source");
+                step.AddDocString("hello");
+
+                Assert.AreEqual("Given step with docstring" + Environment.NewLine +
+                    "\"\"\"" + Environment.NewLine +
+                    "hello" + Environment.NewLine +
+                    "\"\"\"" + Environment.NewLine, step.ToString());
+            }
+
+            [Test]
+            public void Should_handle_spaces_in_docstring_in_ToString()
+            {
+                var step = new StringStep("Given step with docstring", "source");
+                step.AddDocString("  hello");
+
+                Assert.AreEqual("Given step with docstring" + Environment.NewLine +
+                    "  \"\"\"" + Environment.NewLine +
+                    "  hello" + Environment.NewLine +
+                    "  \"\"\"" + Environment.NewLine, step.ToString());
             }
         }
     }
