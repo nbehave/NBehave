@@ -426,7 +426,7 @@ namespace NBehave.Narrator.Framework.Specifications
             }
         }
 
-        [TestFixture, Hooks.Hooks]
+        [TestFixture, Hooks.Hooks, ActionSteps]
         public class HooksSpec : TextRunnerSpec
         {
             private static int _timesBeforeScenarioWasCalled;
@@ -437,6 +437,8 @@ namespace NBehave.Narrator.Framework.Specifications
             private static int _afterRun;
             private static int _beforeFeature;
             private static int _afterFeature;
+            private static bool _backgroundStepWasCalledButNotBeforeScenario;
+            private static bool _backgroundStepWasCalledButNotBeforeStep;
 
             [Hooks.BeforeRun]
             public void OnBeforeRun()
@@ -492,10 +494,39 @@ namespace NBehave.Narrator.Framework.Specifications
                 _afterFeature = 0;
 
                 CreateBasicConfiguration()
-                .SetAssemblies(new[] { "TestPlainTextAssembly.dll", Path.GetFileName(GetType().Assembly.Location) })
-                        .SetScenarioFiles(new[] { TestFeatures.FeatureNamedStory })
+                .SetAssemblies(new[] { GetType().Assembly.Location })
+                        .SetScenarioFiles(new[] { TestFeatures.FeatureWithScenarioBackground })
+                        .SetFilter(new StoryRunnerFilter(".", GetType().Name, "."))
                         .Build()
                         .Run();
+            }
+
+            [Given("this background section declaration")]
+            [Given("this one")]
+            public void background_step()
+            {
+                _backgroundStepWasCalledButNotBeforeScenario = _timesBeforeScenarioWasCalled == 0;
+                _backgroundStepWasCalledButNotBeforeStep = _timesBeforeStepWasCalled == 0;
+            }
+
+            [Given("this scenario under the context of a background section")]
+            [When("the scenario with a background section is executed")]
+            [Then("the background section steps should be called before this scenario")]
+            public void Scenario_step()
+            {
+
+            }
+
+            [Test]
+            public void When_background_step_is_called_beforeScenario_should_not_be_called()
+            {
+                Assert.IsTrue(_backgroundStepWasCalledButNotBeforeScenario);
+            }
+
+            [Test]
+            public void a_background_step_Should_not_trigger_a_before_step()
+            {
+                Assert.IsTrue(_backgroundStepWasCalledButNotBeforeStep);
             }
 
             [Test]
