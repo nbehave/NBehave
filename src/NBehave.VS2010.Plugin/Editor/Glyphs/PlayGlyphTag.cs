@@ -1,6 +1,5 @@
 ﻿using System.Windows;
 using Microsoft.VisualStudio.Text.Editor;
-using NBehave.Narrator.Framework;
 using NBehave.VS2010.Plugin.Editor.Domain;
 using NBehave.VS2010.Plugin.Editor.Glyphs.ViewModels;
 using NBehave.VS2010.Plugin.Editor.Glyphs.Views;
@@ -10,12 +9,12 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs
 {
     public class PlayGlyphTag : IGlyphTag
     {
-        private readonly Scenario scenario;
+        private readonly IGherkinText gherkinText;
         private RunOrDebugViewModel viewModel;
 
-        public PlayGlyphTag(Scenario scenario)
+        public PlayGlyphTag(IGherkinText gherkinText)
         {
-            this.scenario = scenario;
+            this.gherkinText = gherkinText;
         }
 
         public void Execute(Point position, FrameworkElement visualElement)
@@ -25,19 +24,19 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs
             {
                 viewModel = runOrDebugView.DataContext as RunOrDebugViewModel;
             }
-            viewModel.InitialiseProperties(position, visualElement, runOrDebugView, new GherkinText(scenario));
+            viewModel.InitialiseProperties(position, visualElement, runOrDebugView, gherkinText);
             viewModel.Show();
         }
 
         public bool IsScenario(string scenarioTitle, int lineNumber)
         {
             var title = scenarioTitle.Trim(WhiteSpaces.Chars);
-            return lineNumber == scenario.SourceLine && title.EndsWith(scenario.Title);
+            return lineNumber == gherkinText.SourceLine && title.EndsWith(gherkinText.Title);
         }
 
         public string GetText()
         {
-            return scenario.ToString();
+            return gherkinText.AsString;
         }
     }
 }

@@ -83,7 +83,6 @@ namespace NBehave.Narrator.Framework
             if (Background.Steps.Any())
             {
                 var b = Background.ToStringAsBackground();
-                //.Split(Environment.NewLine.ToCharArray(),StringSplitOptions.RemoveEmptyEntries);
                 str += string.Format("{0}{0}{1}", Environment.NewLine, b);
             }
             return str;

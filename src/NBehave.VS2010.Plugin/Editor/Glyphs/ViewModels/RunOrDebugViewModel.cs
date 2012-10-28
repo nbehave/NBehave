@@ -62,12 +62,12 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs.ViewModels
 
         private void RunScenario(bool debug)
         {
-            string tempFileName = GherkinText.ToString().ToTempFile();
+            string tempFileName = GherkinText.AsString.ToTempFile();
             ScenarioRunner.Run(tempFileName, debug);
         }
 
         private bool initialized;
-        public void InitialiseProperties(Point position, FrameworkElement visualElement, IRunOrDebugView runOrDebugView, GherkinText gherkinText)
+        public void InitialiseProperties(Point position, FrameworkElement visualElement, IRunOrDebugView runOrDebugView, IGherkinText gherkinText)
         {
             View = runOrDebugView;
             RelativeVisualElement = visualElement;
@@ -91,7 +91,7 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs.ViewModels
             initialized = true;
         }
 
-        public GherkinText GherkinText { get; set; }
+        private IGherkinText GherkinText { get; set; }
 
         protected IRunOrDebugView View { get; set; }
 

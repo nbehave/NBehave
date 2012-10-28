@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Tagging;
 using NBehave.Narrator.Framework;
+using NBehave.VS2010.Plugin.Editor.Domain;
 using NBehave.VS2010.Plugin.Tagging;
 
 namespace NBehave.VS2010.Plugin.Editor.Glyphs
@@ -38,14 +39,30 @@ namespace NBehave.VS2010.Plugin.Editor.Glyphs
             {
                 var spanLine = line.LineNumber + 1;
 
-                var scenario = features.SelectMany(_ => _.Scenarios).FirstOrDefault(_ => _.SourceLine == spanLine);
-                if (scenario != null)
-                {
-                    var span = new SnapshotSpan(textSnapshot, line.Start, line.Length);
-                    tagSPans.Add(new TagSpan<PlayGlyphTag>(span, new PlayGlyphTag(scenario)));
-                }
+                AddFeatureTagSpan(spanLine, textSnapshot, line, tagSPans);
+                AddScenarioTagSpan(spanLine, textSnapshot, line, tagSPans);
             }
             return tagSPans;
+        }
+
+        private void AddFeatureTagSpan(int spanLine, ITextSnapshot textSnapshot, ITextSnapshotLine line, List<ITagSpan<PlayGlyphTag>> tagSPans)
+        {
+            var feature = features.FirstOrDefault(_=> _.SourceLine == spanLine);
+            if (feature != null)
+            {
+                var span = new SnapshotSpan(textSnapshot, line.Start, line.Length);
+                tagSPans.Add(new TagSpan<PlayGlyphTag>(span, new PlayGlyphTag(new FeatureGherkinText(feature))));
+            }
+        }
+
+        private void AddScenarioTagSpan(int spanLine, ITextSnapshot textSnapshot, ITextSnapshotLine line, List<ITagSpan<PlayGlyphTag>> tagSPans)
+        {
+            var scenario = features.SelectMany(_ => _.Scenarios).FirstOrDefault(_ => _.SourceLine == spanLine);
+            if (scenario != null)
+            {
+                var span = new SnapshotSpan(textSnapshot, line.Start, line.Length);
+                tagSPans.Add(new TagSpan<PlayGlyphTag>(span, new PlayGlyphTag( new ScenarioGherkinText(scenario))));
+            }
         }
     }
 }
