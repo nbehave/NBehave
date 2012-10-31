@@ -4,9 +4,10 @@ using System.IO;
 using System.Linq;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.UnitTestFramework;
+using NBehave.Gherkin;
 using NBehave.Narrator.Framework;
 using NBehave.Narrator.Framework.Internal;
-using NBehave.Narrator.Framework.Tiny;
+using NBehave.Narrator.Framework.TextParsing;
 
 namespace NBehave.ReSharper.Plugin.UnitTestProvider
 {
@@ -16,9 +17,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
         private readonly UnitTestElementConsumer consumer;
         private readonly IProject project;
         private readonly ProjectModelElementEnvoy projectModel;
-        private readonly IFeatureRunner featureRunner;
         private readonly ISolution solution;
-        private readonly IRunContextEvents contextEvents;
 
         public MetadataExplorer(IUnitTestProvider provider, ISolution solution, IProject project, UnitTestElementConsumer consumer)
         {
@@ -28,8 +27,6 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
             this.project = project;
             this.solution = solution;
             projectModel = new ProjectModelElementEnvoy(this.project);
-            featureRunner = TinyIoCContainer.Current.Resolve<IFeatureRunner>();
-            contextEvents = TinyIoCContainer.Current.Resolve<IRunContextEvents>();
         }
 
         public void ExploreProject()
@@ -38,19 +35,31 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
                 .Select(_ => _.Location.FullPath)
                 .ToList();
 
+            var features = ParseFeatures(featureFiles, NBehaveConfiguration.New);
+            var elements = new FeatureMapper(testProvider, projectModel, solution).MapFeatures(features);
+            BindFeatures(elements);
+        }
+
+        private IEnumerable<Feature> ParseFeatures(IEnumerable<string> featureFiles, NBehaveConfiguration configuration)
+        {
             var features = new List<Feature>();
             EventHandler<EventArgs<Feature>> featureStarted = (s, e) => features.Add(e.EventInfo);
-            contextEvents.OnFeatureStarted += featureStarted;
-            try
+
+            var parser = new GherkinScenarioParser(configuration);
+            parser.FeatureEvent += featureStarted;
+            foreach (var featureFile in featureFiles)
             {
-                featureRunner.DryRun(featureFiles);
-                var elements = new FeatureMapper(testProvider, projectModel, solution).MapFeatures(features);
-                BindFeatures(elements);
+                try
+                {
+                    parser.Parse(featureFile);
+                }
+                catch (ParseException)
+                {
+
+                }
             }
-            finally
-            {
-                contextEvents.OnFeatureStarted -= featureStarted;
-            }
+            parser.FeatureEvent -= featureStarted;
+            return features;
         }
 
         private IEnumerable<IProjectFile> GetFeatureFilesFromProject()

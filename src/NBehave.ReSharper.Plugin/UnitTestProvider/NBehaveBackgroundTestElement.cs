@@ -38,7 +38,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
 
         public override IList<UnitTestTask> GetTaskSequence(IList<IUnitTestElement> explicitElements)
         {
-            var taskSequence = (Parent != null) ? Parent.GetTaskSequence(explicitElements) : new List<UnitTestTask>();
+            var taskSequence = (Parent != null) ? DoGetTaskSequence(explicitElements) : new List<UnitTestTask>();
             taskSequence.Add(new UnitTestTask(this, new NBehaveBackgroundTask(FeatureFile, _scenario)));
             return taskSequence;
         }

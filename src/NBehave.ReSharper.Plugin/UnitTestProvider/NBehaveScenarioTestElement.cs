@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.UnitTestFramework;
@@ -40,9 +39,18 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
 
         public override IList<UnitTestTask> GetTaskSequence(IList<IUnitTestElement> explicitElements)
         {
-            var taskSequence = (Parent != null) ? Parent.GetTaskSequence(explicitElements) : new List<UnitTestTask>();
+            var taskSequence = (Parent != null) ? DoGetTaskSequence(explicitElements) : new List<UnitTestTask>();
             taskSequence.Add(new UnitTestTask(this, new NBehaveScenarioTask(FeatureFile, _scenario)));
             return taskSequence;
+        }
+
+        private IList<UnitTestTask> DoGetTaskSequence(IList<IUnitTestElement> explicitElements)
+        {
+#if RESHARPER_701
+            return Parent.GetTaskSequence(explicitElements, null);
+#else
+            return Parent.GetTaskSequence(explicitElements);
+#endif
         }
 
         public override UnitTestElementDisposition GetDisposition()

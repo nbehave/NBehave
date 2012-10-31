@@ -1,7 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.CommonControls;
+#if RESHARPER_701
+using JetBrains.ReSharper.Features.Shared.TreePsiBrowser;
+#else
 using JetBrains.ReSharper.Features.Common.TreePsiBrowser;
+#endif
 using JetBrains.ReSharper.TaskRunnerFramework;
 using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.TreeModels;
@@ -10,6 +14,19 @@ using NBehave.Narrator.Framework;
 
 namespace NBehave.ReSharper.Plugin.UnitTestProvider
 {
+#if RESHARPER_701
+    public class TestPresenter : IUnitTestPresenter
+    {
+        private readonly TestTreePresenter presenter = new TestTreePresenter();
+
+        public void Present(IUnitTestElement element, IPresentableItem item, TreeModelNode node, PresentationState state)
+        {
+            if (element is NBehaveUnitTestElementBase)
+                presenter.UpdateItem(element, node, item, state);
+        }
+    }
+#endif
+
     public class TestTreePresenter : TreeModelBrowserPresenter
     {
         private readonly Dictionary<NBehaveFeatureTestElement, TreeModelNode> _treeModels = new Dictionary<NBehaveFeatureTestElement, TreeModelNode>();
@@ -59,8 +76,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
         }
 
         private void PresentScenario(NBehaveScenarioTestElement value, IPresentableItem item, TreeModelNode modelNode, PresentationState state)
-        {
-        }
+        { }
 
         private void PresentBackgroundScenario(NBehaveBackgroundTestElement value, IPresentableItem item, TreeModelNode structureelement, PresentationState state)
         { }

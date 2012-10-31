@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.UnitTestFramework;
@@ -45,7 +43,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
         {
             var parent = Parent as NBehaveExampleParentTestElement;
             string scenario = (parent.Parent is NBehaveScenarioTestElement) ? ((NBehaveScenarioTestElement)parent.Parent).Scenario : "";
-            var taskSequence = (Parent != null) ? Parent.GetTaskSequence(explicitElements) : new List<UnitTestTask>();
+            var taskSequence = (Parent != null) ? DoGetTaskSequence(explicitElements) : new List<UnitTestTask>();
             taskSequence.Add(new UnitTestTask(this, new NBehaveExampleTask(FeatureFile, scenario, _example)));
             return taskSequence;
         }
