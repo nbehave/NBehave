@@ -162,7 +162,7 @@
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Extensions\NBehaveConfigurationExtensions.cs" />
     <Compile Include="Internal\IRunner.cs" />
-    <Compile Include="Internal\NBehaveInitialiser.cs" />
+    <Compile Include="Internal\NBehaveInitializer.cs" />
     <Compile Include="Internal\ParameterConverter.cs" />
     <Compile Include="Internal\FeatureRunner.cs" />
     <Compile Include="Internal\RunContext.cs" />

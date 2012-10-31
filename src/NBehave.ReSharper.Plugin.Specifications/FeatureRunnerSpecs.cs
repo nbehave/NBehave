@@ -13,7 +13,7 @@ namespace NBehave.ReSharper.Plugin.Specifications
         [SetUp]
         public void SetUp()
         {
-            Initialiser.Initialise();
+            Initializer.Initialize();
             featureRunner = new FeatureRunner();
             results = featureRunner.DryRun(new[] { Feature.Scenario });
         }

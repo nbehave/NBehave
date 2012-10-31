@@ -9,7 +9,7 @@ namespace NBehave.Narrator.Framework.Specifications
         [SetUp]
         public void Initialize()
         {
-            NBehaveInitialiser.Initialise(ConfigurationNoAppDomain.New);
+            NBehaveInitializer.Initialize(ConfigurationNoAppDomain.New);
         }
 
         [Test]

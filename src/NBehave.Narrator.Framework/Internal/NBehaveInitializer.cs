@@ -4,9 +4,9 @@ using NBehave.Narrator.Framework.Tiny;
 
 namespace NBehave.Narrator.Framework.Internal
 {
-    public static class NBehaveInitialiser
+    public static class NBehaveInitializer
     {
-        public static void Initialise(NBehaveConfiguration configuration)
+        public static void Initialize(NBehaveConfiguration configuration)
         {
             TinyIoCContainer container = TinyIoCContainer.Current;
             container.Register<IFeatureRunner, FeatureRunner>();

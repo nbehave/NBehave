@@ -22,7 +22,7 @@ namespace NBehave.Narrator.Framework.Specifications
 
         private void Init()
         {
-            NBehaveInitialiser.Initialise(ConfigurationNoAppDomain.New.SetEventListener(Framework.EventListeners.EventListeners.NullEventListener()));
+            NBehaveInitializer.Initialize(ConfigurationNoAppDomain.New.SetEventListener(Framework.EventListeners.EventListeners.NullEventListener()));
             actionCatalog = TinyIoCContainer.Current.Resolve<ActionCatalog>();
             stringStepRunner = new StringStepRunner(actionCatalog);
             runner = new FeatureRunner(stringStepRunner, TinyIoCContainer.Current.Resolve<IRunContext>());

@@ -17,7 +17,7 @@ namespace NBehave.Narrator.Framework.Internal
 
         public FeatureResults Run()
         {
-            NBehaveInitialiser.Initialise(configuration);
+            NBehaveInitializer.Initialize(configuration);
             actionCatalog = TinyIoCContainer.Current.Resolve<ActionCatalog>();
             var featureRunner = TinyIoCContainer.Current.Resolve<IFeatureRunner>();
             var context = TinyIoCContainer.Current.Resolve<IRunContext>();

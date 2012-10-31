@@ -38,7 +38,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
 
         public override void ExecuteRecursive(TaskExecutionNode node)
         {
-            Initialiser.Initialise();
+            Initializer.Initialize();
             config = TinyIoCContainer.Current.Resolve<NBehaveConfiguration>();
             runner = TinyIoCContainer.Current.Resolve<IFeatureRunner>();
             context = TinyIoCContainer.Current.Resolve<IRunContextEvents>();

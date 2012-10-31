@@ -6,21 +6,21 @@ using NBehave.Narrator.Framework.Tiny;
 
 namespace NBehave.ReSharper.Plugin
 {
-    public static class Initialiser
+    public static class Initializer
     {
-        private static bool _initialized;
+        private static bool Initialized;
 
-        public static void Initialise()
+        public static void Initialize()
         {
-            if (_initialized)
+            if (Initialized)
                 return;
-            _initialized = true;
+            Initialized = true;
             TinyIoCContainer container = TinyIoCContainer.Current;
 
             container.Register<IFeatureRunner, FeatureRunner>();
             container.Register<Narrator.Framework.Internal.IFeatureRunner, FeatureRunner>();
 
-            NBehaveConfiguration configuration = CreateConfiguration(typeof(Initialiser).Assembly.Location.ToLower(), new List<string>());
+            NBehaveConfiguration configuration = CreateConfiguration(typeof(Initializer).Assembly.Location.ToLower(), new List<string>());
             CommonInitializer.Initialise(container, configuration);
 
         }
