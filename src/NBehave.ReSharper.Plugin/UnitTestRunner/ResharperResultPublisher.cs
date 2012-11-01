@@ -29,33 +29,76 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
             }
         }
 
-        private readonly Dictionary<Type, List<TaskState>> _nodes = new Dictionary<Type, List<TaskState>>();
-        private readonly IRemoteTaskServer _server;
-        private readonly CodeGenEventListener _codeGeneration;
+        private readonly Dictionary<Type, List<TaskState>> nodes = new Dictionary<Type, List<TaskState>>();
+        private readonly IRemoteTaskServer server;
+        private readonly CodeGenEventListener codeGeneration;
 
 
         public ResharperResultPublisher(IEnumerable<TaskExecutionNode> nodes, IRemoteTaskServer server, CodeGenEventListener codeGeneration)
         {
-            _server = server;
-            _codeGeneration = codeGeneration;
+            this.server = server;
+            this.codeGeneration = codeGeneration;
             AddNodes(nodes);
         }
 
-        private void AddNodes(IEnumerable<TaskExecutionNode> nodes)
+        private void AddNodes(IEnumerable<TaskExecutionNode> taskExecutionNodes)
         {
-            foreach (var task in nodes.AllTasks())
+            foreach (var task in taskExecutionNodes.AllTasks())
             {
                 var nodeType = task.GetType();
-                if (_nodes.ContainsKey(nodeType) == false)
-                    _nodes.Add(nodeType, new List<TaskState>());
-                _nodes[nodeType].Add(new TaskState(task));
+                if (nodes.ContainsKey(nodeType) == false)
+                    nodes.Add(nodeType, new List<TaskState>());
+                nodes[nodeType].Add(new TaskState(task));
             }
+        }
+
+        public void Notify(FeatureResult result)
+        {
+            List<TaskState> nodes;
+            if (this.nodes.TryGetValue(typeof(NBehaveFeatureTask), out nodes) == false)
+                return;
+            var taskState = nodes.FirstOrDefault(_ => ((NBehaveFeatureTask)_.Task).FeatureTitle == result.FeatureTitle);
+            if (taskState == null)
+                return;
+            server.TaskProgress(taskState.Task, "");
+            PublishTaskResult(taskState.Task, result);
+        }
+
+        private void PublishTaskResult(RemoteTask task, FeatureResult result)
+        {
+            var taskResult = GetFeatureTaskResult(result);
+            string taskResultMessage = "";
+            if (taskResult == TaskResult.Skipped)
+                taskResultMessage = "Skipped";
+            if (taskResult == TaskResult.Inconclusive)
+            {
+                taskResultMessage = "Pending";
+                server.TaskExplain(task, "See pending step(s) for more information");
+            }
+            if (taskResult == TaskResult.Error)
+            {
+                var failure = result.ScenarioResults.First(_ => _.Result is Failed).Result as Failed;
+                taskResultMessage = failure.Exception.Message;
+                var te = new TaskException(failure.Exception);
+                server.TaskException(task, new[] { te });
+            }
+            server.TaskFinished(task, taskResultMessage, taskResult);
+        }
+
+        private TaskResult GetFeatureTaskResult(FeatureResult result)
+        {
+            var results = result.ScenarioResults;
+            var taskResult = (results.Any()) ? TaskResult.Skipped : TaskResult.Exception;
+            taskResult = (results.Any(_ => _.Result is Passed)) ? TaskResult.Success : taskResult;
+            taskResult = (results.Any(_ => _.Result is Pending)) ? TaskResult.Inconclusive : taskResult;
+            taskResult = (results.Any(_ => _.Result is Failed)) ? TaskResult.Error : taskResult;
+            return taskResult;
         }
 
         public void Notify(ScenarioResult result)
         {
             List<TaskState> nodes;
-            if (_nodes.TryGetValue(typeof(NBehaveScenarioTask), out nodes) == false)
+            if (this.nodes.TryGetValue(typeof(NBehaveScenarioTask), out nodes) == false)
                 return;
             var scenario = GetTaskNodesNotStarted<NBehaveScenarioTask>()
                 .FirstOrDefault(_ => ((NBehaveScenarioTask)_.Task).Scenario == result.ScenarioTitle);
@@ -140,7 +183,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
         private TaskState GetTaskStateFor<T>(Predicate<T> where) where T : NBehaveRemoteTask
         {
             List<TaskState> nodes;
-            if (_nodes.TryGetValue(typeof(T), out nodes) == false)
+            if (this.nodes.TryGetValue(typeof(T), out nodes) == false)
                 return null;
             TaskState node = GetTaskNodesNotStarted<T>()
                 .FirstOrDefault(_ => where((T)_.Task));
@@ -150,41 +193,41 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
         private void NotifyResharperOfTaskResult(ScenarioResult scenarioResult, StepResult result, TaskState taskState)
         {
             TaskResult taskResult = GetTaskResult(result.Result);
-            _server.TaskStarting(taskState.Task);
+            server.TaskStarting(taskState.Task);
             taskState.State = SignalState.Started;
             if (taskResult == TaskResult.Error)
-                _server.TaskException(taskState.Task, new[] { new TaskException(((Failed)result.Result).Exception) });
+                server.TaskException(taskState.Task, new[] { new TaskException(((Failed)result.Result).Exception) });
             if (result.StringStep is StringTableStep)
             {
                 var tableStep = result.StringStep as StringTableStep;
                 var x = new ExampleTableFormatter();
                 var msg = x.TableHeader(tableStep.TableSteps) + Environment.NewLine + string.Join(Environment.NewLine, x.TableRows(tableStep.TableSteps));
-                _server.TaskOutput(taskState.Task, msg, TaskOutputType.STDOUT);
+                server.TaskOutput(taskState.Task, msg, TaskOutputType.STDOUT);
             }
             if (taskResult == TaskResult.Inconclusive)
             {
                 var code = GetCodeForPendingStep(scenarioResult, result);
                 var msg = (code == null) ? "" : string.Format("The step can be implemented with:{0}{0}{1}", Environment.NewLine, code.Code);
-                _server.TaskExplain(taskState.Task, msg);
+                server.TaskExplain(taskState.Task, msg);
             }
             if (taskResult == TaskResult.Skipped)
             {
-                _server.TaskExplain(taskState.Task, result.Message);
+                server.TaskExplain(taskState.Task, result.Message);
             }
             taskState.State = SignalState.Finished;
-            _server.TaskFinished(taskState.Task, result.Message, taskResult);
+            server.TaskFinished(taskState.Task, result.Message, taskResult);
         }
 
         private IEnumerable<TaskState> GetTaskNodesNotStarted<T>()
         {
-            if (_nodes.ContainsKey(typeof(T)) == false)
+            if (nodes.ContainsKey(typeof(T)) == false)
                 return new List<TaskState>();
-            return _nodes[typeof(T)].Where(_ => _.State == SignalState.NotStarted);
+            return nodes[typeof(T)].Where(_ => _.State == SignalState.NotStarted);
         }
 
         private CodeGenStep GetCodeForPendingStep(ScenarioResult result, StepResult step)
         {
-            return _codeGeneration.PendingSteps
+            return codeGeneration.PendingSteps
                 .FirstOrDefault(_ => _.Feature == result.FeatureTitle
                                      && _.Scenario == result.ScenarioTitle
                                      && _.Step == step.StringStep.Step);

@@ -91,7 +91,6 @@
   <ItemGroup>
     <Compile Include="Features\Features.cs" />
     <Compile Include="FeatureTaskSpecs.cs" />
-    <Compile Include="FeatureRunnerSpecs.cs" />
     <Compile Include="NBehaveBackgroundScenarioTestElementSpecs.cs" />
     <Compile Include="NBehaveFeatureTestElementSpecs.cs" />
     <Compile Include="NBehaveScenarioTestElementSpecs.cs" />

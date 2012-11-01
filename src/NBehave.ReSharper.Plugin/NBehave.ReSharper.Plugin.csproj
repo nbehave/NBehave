@@ -95,11 +95,8 @@
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Extensions.cs" />
-    <Compile Include="Initialiser.cs" />
     <Compile Include="UnitTestProvider\FeatureMapper.cs" />
-    <Compile Include="FeatureRunner.cs" />
     <Compile Include="UnitTestProvider\IdentityGenerator.cs" />
-    <Compile Include="IFeatureRunner.cs" />
     <Compile Include="UnitTestProvider\MetadataExplorer.cs" />
     <Compile Include="UnitTestProvider\NBehaveBackgroundTestElement.cs" />
     <Compile Include="UnitTestProvider\NBehaveExampleParentTestElement.cs" />
@@ -123,7 +120,6 @@
     <Compile Include="UnitTestProvider\UnitTestMetadataExplorer.cs" />
     <Compile Include="UnitTestRunner\NBehaveTaskRunnerListener.cs" />
     <Compile Include="UnitTestRunner\ResharperResultPublisher.cs" />
-    <Compile Include="UnitTestRunner\ResultPublisher.cs" />
     <Compile Include="UnitTestRunner\TaskExecutionNodeExtensions.cs" />
   </ItemGroup>
   <ItemGroup>

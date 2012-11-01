@@ -1,4 +1,3 @@
-using JetBrains.ReSharper.TaskRunnerFramework;
 using NBehave.Narrator.Framework;
 
 namespace NBehave.ReSharper.Plugin.UnitTestRunner
@@ -14,6 +13,11 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
         }
 
         public override void ScenarioFinished(ScenarioResult result)
+        {
+            publisher.Notify(result);
+        }
+
+        public override void FeatureFinished(FeatureResult result)
         {
             publisher.Notify(result);
         }

@@ -42,6 +42,13 @@ namespace NBehave.Narrator.Framework
     {
         private readonly List<ScenarioResult> _scenarioResults = new List<ScenarioResult>();
 
+        public FeatureResult(string featureTitle)
+        {
+            FeatureTitle = featureTitle;
+        }
+
+        public string FeatureTitle { get; private set; }
+
         public int NumberOfScenariosFound
         {
             get { return _scenarioResults.Count; }

@@ -17,7 +17,7 @@ namespace NBehave.Narrator.Framework.Specifications
 			_writer = new StringWriter();
 			_output = new SummaryWriter(_writer);
 			var feature = new Feature("feature title");
-            var featureResult = new FeatureResult();
+            var featureResult = new FeatureResult(feature.Title);
 			var scenarioResult = new ScenarioResult(feature, "scenario title");
             scenarioResult.AddActionStepResult(new StepResult("a".AsStringStep(""), new Passed()));
             scenarioResult.AddActionStepResult(new StepResult("b".AsStringStep(""), new Passed()));

@@ -4,7 +4,6 @@ using JetBrains.ReSharper.TaskRunnerFramework;
 using NBehave.Narrator.Framework;
 using NBehave.Narrator.Framework.EventListeners;
 using NBehave.Narrator.Framework.Internal;
-using NBehave.Narrator.Framework.Tiny;
 using NBehave.ReSharper.Plugin.UnitTestProvider;
 
 namespace NBehave.ReSharper.Plugin.UnitTestRunner
@@ -12,8 +11,6 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
     public class NBehaveTaskRunner : RecursiveRemoteTaskRunner
     {
         private NBehaveConfiguration config;
-        private IFeatureRunner runner;
-        private IRunContextEvents context;
         public const string RunnerId = TestProvider.NBehaveId;
 
         public NBehaveTaskRunner(IRemoteTaskServer server)
@@ -38,46 +35,52 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
 
         public override void ExecuteRecursive(TaskExecutionNode node)
         {
-            Initializer.Initialize();
-            config = TinyIoCContainer.Current.Resolve<NBehaveConfiguration>();
-            runner = TinyIoCContainer.Current.Resolve<IFeatureRunner>();
-            context = TinyIoCContainer.Current.Resolve<IRunContextEvents>();
             var asm = node.RemoteTask as NBehaveAssemblyTask;
             if (asm == null)
                 return;
-            var assemblies = new[] { asm.AssemblyFile };
-            var files = node.Children.Select(_ => ((NBehaveFeatureTask)_.RemoteTask).FeatureFile).Distinct().ToList();
+            Initialize(node);
+
+            var featureTasks = GetFeatureTasks(node);
+            NotifyTasksStarting(featureTasks.ToList());
+            var runner = new TextRunner(config);
+            runner.Run();
+        }
+
+        private IEnumerable<NBehaveFeatureTask> GetFeatureTasks(TaskExecutionNode node)
+        {
+            var featureTasks = node.Children.Select(_ => (NBehaveFeatureTask) _.RemoteTask);
+            return featureTasks;
+        }
+
+        private void NotifyTasksStarting(IEnumerable<NBehaveFeatureTask> featureTasks)
+        {
+            foreach (var task in featureTasks)
+            {
+                Server.TaskStarting(task);
+                Server.TaskProgress(task, "Running...");
+            }
+        }
+
+        private void Initialize(TaskExecutionNode node)
+        {
+            config = NBehaveConfiguration.New;
+
             var codeGenListener = new CodeGenEventListener();
             var resharperResultNotifier = new ResharperResultPublisher(node.Children, Server, codeGenListener);
             var listener = new NBehaveTaskRunnerListener(resharperResultNotifier);
 
-            var featureTasks = new List<NBehaveFeatureTask>();
-            foreach (var featureNode in node.Children)
-            {
-                var task = featureNode.RemoteTask as NBehaveFeatureTask;
-                featureTasks.Add(task);
-                Server.TaskStarting(task);
-                Server.TaskProgress(task, "Running...");
-            }
-            var evtListener = new MultiOutputEventListener(codeGenListener, listener);
-            ModifyConfig(files, assemblies, evtListener);
-            Run(featureTasks);
+            var files = node.Children.Select(_ => ((NBehaveFeatureTask)_.RemoteTask).FeatureFile).Distinct().ToList();
+            var asm = (NBehaveAssemblyTask)node.RemoteTask;
+            var assemblies = new[] { asm.AssemblyFile };
+            var eventListener = new MultiOutputEventListener(codeGenListener, listener);
+            ModifyConfig(files, assemblies, eventListener);
         }
 
-        private void Run(IEnumerable<NBehaveFeatureTask> tasks)
-        {
-            using (var publisher = new ResultPublisher(Server, context))
-            {
-                runner.Run(config.ScenarioFiles);
-                publisher.PublishResults(tasks);
-            }
-        }
-
-        private void ModifyConfig(IEnumerable<string> featureFiles, IEnumerable<string> assemblies, EventListener evtListener)
+        private void ModifyConfig(IEnumerable<string> featureFiles, IEnumerable<string> assemblies, EventListener eventListener)
         {
             config
                 .SetAssemblies(assemblies)
-                .SetEventListener(evtListener)
+                .SetEventListener(eventListener)
                 .SetScenarioFiles(featureFiles);
         }
     }

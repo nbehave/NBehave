@@ -1,4 +1,5 @@
-﻿using NBehave.Narrator.Framework.EventListeners;
+﻿using System;
+using NBehave.Narrator.Framework.EventListeners;
 using NBehave.Narrator.Framework.Hooks;
 using NBehave.Narrator.Framework.Tiny;
 
@@ -10,7 +11,7 @@ namespace NBehave.Narrator.Framework.Internal
         {
             TinyIoCContainer container = TinyIoCContainer.Current;
             container.Register<IFeatureRunner, FeatureRunner>();
-            CommonInitializer.Initialise(container, configuration);
+            CommonInitializer.Initialize(container, configuration);
             RegisterEventListener(configuration.EventListener, container.Resolve<IRunContextEvents>());
         }
 
@@ -35,7 +36,7 @@ namespace NBehave.Narrator.Framework.Internal
 
     public static class CommonInitializer
     {
-        public static void Initialise(TinyIoCContainer container, NBehaveConfiguration configuration)
+        public static void Initialize(TinyIoCContainer container, NBehaveConfiguration configuration)
         {
             container.Register<ActionCatalog>().AsSingleton();
             container.Register<HooksCatalog>().AsSingleton();

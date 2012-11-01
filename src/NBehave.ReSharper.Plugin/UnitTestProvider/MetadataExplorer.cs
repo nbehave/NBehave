@@ -21,7 +21,6 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
 
         public MetadataExplorer(IUnitTestProvider provider, ISolution solution, IProject project, UnitTestElementConsumer consumer)
         {
-            Initializer.Initialize();
             testProvider = provider;
             this.consumer = consumer;
             this.project = project;

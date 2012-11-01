@@ -72,7 +72,8 @@ namespace NBehave.Narrator.Framework
 
         private FeatureResult GetFeatureResult(IEnumerable<ScenarioResult> scenarioResults)
         {
-            var featureResult = new FeatureResult();
+            var title = scenarioResults.Select(_ => _.FeatureTitle).FirstOrDefault() ?? "";
+            var featureResult = new FeatureResult(title);
             foreach (var result in scenarioResults)
                 featureResult.AddResult(result);
 

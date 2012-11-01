@@ -24,9 +24,10 @@ namespace NBehave.Narrator.Framework
             : this(true)
         { }
 
-        protected NBehaveConfiguration(bool createAppDomain)
+        private NBehaveConfiguration(bool createAppDomain)
         {
             CreateAppDomain = createAppDomain;
+            EventListener = new NullEventListener();
             Filter = new StoryRunnerFilter();
             TagsFilter = new List<string[]>();
             Assemblies = new List<string>();
@@ -38,17 +39,8 @@ namespace NBehave.Narrator.Framework
         public IEventListener EventListener { get; private set; }
         public StoryRunnerFilter Filter { get; private set; }
         public IEnumerable<string[]> TagsFilter { get; private set; }
-        public bool CreateAppDomain { get; protected set; }
+        public bool CreateAppDomain { get; private set; }
 
-        /// <summary>
-        ///   Sets a value indicating whether the action steps should be executed or not.
-        /// </summary>
-        /// <param name = "dryRun">
-        ///   True to execute action steps, false to skip execution.
-        /// </param>
-        /// <returns>
-        ///   The configuration object to resume the fluent interface.
-        /// </returns>
         public NBehaveConfiguration SetDryRun(bool dryRun)
         {
             IsDryRun = dryRun;

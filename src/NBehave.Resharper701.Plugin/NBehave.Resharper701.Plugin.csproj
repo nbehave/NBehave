@@ -97,15 +97,6 @@
     <Compile Include="..\NBehave.ReSharper.Plugin\Extensions.cs">
       <Link>Extensions.cs</Link>
     </Compile>
-    <Compile Include="..\NBehave.ReSharper.Plugin\FeatureRunner.cs">
-      <Link>FeatureRunner.cs</Link>
-    </Compile>
-    <Compile Include="..\NBehave.ReSharper.Plugin\IFeatureRunner.cs">
-      <Link>IFeatureRunner.cs</Link>
-    </Compile>
-    <Compile Include="..\NBehave.ReSharper.Plugin\Initialiser.cs">
-      <Link>Initialiser.cs</Link>
-    </Compile>
     <Compile Include="..\NBehave.ReSharper.Plugin\UnitTestProvider\FeatureMapper.cs">
       <Link>UnitTestProvider\FeatureMapper.cs</Link>
     </Compile>
@@ -177,9 +168,6 @@
     </Compile>
     <Compile Include="..\NBehave.ReSharper.Plugin\UnitTestRunner\ResharperResultPublisher.cs">
       <Link>UnitTestRunner\ResharperResultPublisher.cs</Link>
-    </Compile>
-    <Compile Include="..\NBehave.ReSharper.Plugin\UnitTestRunner\ResultPublisher.cs">
-      <Link>UnitTestRunner\ResultPublisher.cs</Link>
     </Compile>
     <Compile Include="..\NBehave.ReSharper.Plugin\UnitTestRunner\TaskExecutionNodeExtensions.cs">
       <Link>UnitTestRunner\TaskExecutionNodeExtensions.cs</Link>

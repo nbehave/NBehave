@@ -17,7 +17,7 @@ namespace NBehave.Narrator.Framework.Internal
 
         public FeatureResult Run(Feature feature)
         {
-            var featureResult = new FeatureResult();
+            var featureResult = new FeatureResult(feature.Title);
             foreach (var scenario in feature.Scenarios)
             {
                 var backgroundResults = RunBackground(scenario.Feature.Background);
