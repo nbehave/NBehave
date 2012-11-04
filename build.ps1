@@ -1,5 +1,6 @@
 param($build = "", $frameworkVersion = "4.0")
 
+
 Include ".\BuildProperties.ps1"
 Include ".\buildframework\psake_ext.ps1"
 
@@ -55,7 +56,7 @@ Task CompileAnyCpu {
 
 Task Compile-Console-x86 {
 	$params = "Configuration=AutomatedDebug-$frameworkVersion-x86;Platform=x86;OutputPath=$buildDir\Debug-$frameworkVersion\NBehave\"
-	Exec { msbuild "$sourceDir\NBehave.Console\NBehave.Console.csproj" /p:$params /p:TargetFrameworkVersion=v$frameworkVersion /v:m /m /toolsversion:$frameworkVersion /t:Rebuild }
+	Exec { msbuild "$sourceDir\NBehave.Console\NBehave.Console.csproj" /p:$params /p:TargetFrameworkVersion=v$frameworkVersion /v:m /m /toolsversion:4.0 /t:Rebuild }
 	Move-Item "$buildDir\Debug-$frameworkVersion\NBehave\NBehave-Console.exe" "$buildDir\Debug-$frameworkVersion\NBehave\NBehave-Console-x86.exe" -Force
 }
 
