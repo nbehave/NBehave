@@ -22,7 +22,7 @@ task Clean {
 }
 
 Task InstallNunitRunners {
-	Exec { .\src\.nuget\NuGet.exe install nunit.runners -Version 2.6.1 -OutputDirectory src\packages\ }
+	Exec { .\src\.nuget\NuGet.exe install nunit.runners -Version 2.6.2 -OutputDirectory src\packages\ }
 }
 
 Task Version {
@@ -77,7 +77,7 @@ Task Test -depends Compile {
 
 	$arguments = Get-Item "$testDir\*Specifications*.dll"
 	$arguments = $arguments + " /xml:$testReportsDir\UnitTests-$frameworkVersion.xml"
-	$basePath =  (get-item src/packages/nunit.runners*).Name
+	$basePath =  ((get-item src/packages/nunit.runners*) | Select Name | sort-object)[0].Name
 	$nunitExe =  ".\src\packages\$basePath\tools\nunit-console-x86.exe"
 	$cmd = $executioncontext.invokecommand.NewScriptBlock("$nunitExe $arguments")
 	Exec $cmd
