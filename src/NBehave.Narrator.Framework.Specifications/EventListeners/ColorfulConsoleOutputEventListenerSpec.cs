@@ -59,7 +59,7 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
             }
         }
 
-        public class When_running_scenario_with_tables : ColorfulConsoleOutputEventListenerSpec
+        public class When_running_scenario_with_examples : ColorfulConsoleOutputEventListenerSpec
         {
             protected override string FeatureFile { get { return TestFeatures.ScenarioWithExamples; } }
 
@@ -111,5 +111,40 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
                 StringAssert.Contains("Scenarios run: 1, Failures: 0, Pending: 1", _output);
             }
         }
+
+
+        public class When_running_scenario_with_tables : ColorfulConsoleOutputEventListenerSpec
+        {
+            protected override string FeatureFile { get { return TestFeatures.ScenarioWithTables; } }
+
+            [Test]
+            public void Should_write_steps()
+            {
+                var expected = 
+                            "  Given a string [str] - PASSED" + Environment.NewLine +
+                            "    | str |" + Environment.NewLine +
+                            "    | aaa |" + Environment.NewLine +
+                            "    | bbb |" + Environment.NewLine +
+                            "  When string is ecco'ed - PASSED" + Environment.NewLine +
+                            "  Then you should see [strOut] - PASSED" + Environment.NewLine +
+                            "    | strOut |" + Environment.NewLine +
+                            "    | aaa |" + Environment.NewLine +
+                            "    | bbb |";
+                StringAssert.Contains(expected, _output);
+            }
+
+            [Test]
+            public void Should_write_summary_of_steps()
+            {
+                StringAssert.Contains("Steps 3, failed 0, pending 0", _output);
+            }
+
+            [Test]
+            public void Should_write_summary_of_Scenarios()
+            {
+                StringAssert.Contains("Scenarios run: 1, Failures: 0, Pending: 0", _output);
+            }
+        }
+
     }
 }

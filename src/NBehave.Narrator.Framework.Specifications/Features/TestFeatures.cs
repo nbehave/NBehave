@@ -15,6 +15,7 @@
         public const string FeatureInSwedish = "Features\\FeatureInSwedish.feature";
         public const string ScenariosWithoutFeature = "Features\\ScenariosWithoutFeature.feature";
         public const string ScenarioWithExamples = "Features\\ScenarioWithExamples.feature";
+        public const string ScenarioWithTables = "Features\\ScenarioWithTables.feature";
         public const string ScenarioWithNoActionSteps = "Features\\ScenarioWithNoActionSteps.feature";
     }
 }

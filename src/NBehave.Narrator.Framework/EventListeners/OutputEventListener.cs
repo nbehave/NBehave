@@ -72,7 +72,7 @@ namespace NBehave.Narrator.Framework.EventListeners
             allResults.Add(scenarioResult);
             foreach (var stepResult in scenarioResult.StepResults)
             {
-                writer.WriteColorString("  " + stepResult.StringStep + " - " + TypeAsString(stepResult), GetColorForResult(stepResult.Result));
+                writer.WriteColorString("  " + stepResult.StringStep.Step + " - " + TypeAsString(stepResult), GetColorForResult(stepResult.Result));
                 WriteTableSteps(stepResult);
             }
 

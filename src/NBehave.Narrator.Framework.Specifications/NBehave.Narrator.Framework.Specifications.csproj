@@ -189,6 +189,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Features\ScenarioWithTables.feature">
+      <LastGenOutput>GreetingSystem1.feature.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Features\FeatureWithTags.feature">
       <LastGenOutput>GreetingSystem1.feature.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
