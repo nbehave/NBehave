@@ -2,6 +2,7 @@ param($frameworkVersion = "4.0")
 
 Include ".\BuildProperties.ps1"
 Include ".\buildframework\psake_ext.ps1"
+Include ".\ExtraArgs.ps1"
 
 task Init -precondition { return $frameworkVersion -eq "4.0" }
 task Default -depends  NuGet, NuGet-Spec, NuGet-Fluent -precondition { return $frameworkVersion -eq "4.0" }
@@ -39,3 +40,12 @@ task NuGet-Spec -depends NugetClean -precondition{ return $frameworkVersion -eq 
 	Exec { .\src\.nuget\nuget.exe pack "nuget\NBehave.Spec.MbUnit.nuspec"  -Version $buildNumber -OutputDirectory $artifactsDir -Properties mbunitVersion=$ver }
 	Exec { .\src\.nuget\nuget.exe pack "nuget\NBehave.Spec.MsTest.nuspec"  -Version $buildNumber -OutputDirectory $artifactsDir }
 }
+
+task Publish -precondition{ return $frameworkVersion -eq "4.0" } {
+  Get-ChildItem -Path $artifactsDir -Filter *.nupkg | Select FullName | foreach-object {
+  	$package = $_.FullName
+  	Write-Host "Publishing package: $package"
+ 		Exec { src\.nuget\NuGet.exe "push" $package $apiKey }
+ 	}
+}
+
