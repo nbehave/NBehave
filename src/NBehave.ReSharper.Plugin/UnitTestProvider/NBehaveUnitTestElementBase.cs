@@ -93,7 +93,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
         // R# 6.1
         public abstract IList<UnitTestTask> GetTaskSequence(IList<IUnitTestElement> explicitElements);
 
-#if RESHARPER_701
+#if RESHARPER_701 || RESHARPER_71
         public IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements, IUnitTestLaunch launch)
         {
             return GetTaskSequence(explicitElements.ToList());
@@ -102,7 +102,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
 
         protected IList<UnitTestTask> DoGetTaskSequence(IList<IUnitTestElement> explicitElements)
         {
-#if RESHARPER_701
+#if RESHARPER_701 || RESHARPER_71
             return Parent.GetTaskSequence(explicitElements, null);
 #else
             return Parent.GetTaskSequence(explicitElements);
@@ -121,7 +121,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
             return _projectModel.GetValidProjectElement() as IProject;
         }
 
-#if RESHARPER_701
+#if RESHARPER_701 || RESHARPER_71
         public string GetPresentation(IUnitTestElement parent = null)
         {
             return GetPresentation();

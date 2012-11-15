@@ -42,7 +42,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
         }
 #endif
 
-#if !RESHARPER_701
+#if !RESHARPER_701 && !RESHARPER_71
         public System.Drawing.Image Icon
         {
             get { return ImageLoader.GetImage("nbehave", GetType().Assembly); }

@@ -46,7 +46,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
 
         private IList<UnitTestTask> DoGetTaskSequence(IList<IUnitTestElement> explicitElements)
         {
-#if RESHARPER_701
+#if RESHARPER_701 || RESHARPER_71
             return Parent.GetTaskSequence(explicitElements, null);
 #else
             return Parent.GetTaskSequence(explicitElements);
