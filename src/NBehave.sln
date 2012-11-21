@@ -90,7 +90,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuget", "nuget", "{8757BAB5
 		..\nuget\NBehave.Fluent.XUnit.nuspec = ..\nuget\NBehave.Fluent.XUnit.nuspec
 		..\nuget\nbehave.nuspec = ..\nuget\nbehave.nuspec
 		..\nuget\nbehave.resharper60.nuspec = ..\nuget\nbehave.resharper60.nuspec
-		..\nuget\nbehave.resharper61.nuspec = ..\nuget\nbehave.resharper61.nuspec
 		..\nuget\nbehave.resharper701.nuspec = ..\nuget\nbehave.resharper701.nuspec
 		..\nuget\NBehave.Runners.nuspec = ..\nuget\NBehave.Runners.nuspec
 		..\nuget\NBehave.Samples.nuspec = ..\nuget\NBehave.Samples.nuspec
@@ -104,15 +103,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuget", "nuget", "{8757BAB5
 		..\nuget\VsPlugin.feature = ..\nuget\VsPlugin.feature
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.ReSharper61.Plugin", "NBehave.ReSharper61.Plugin\NBehave.ReSharper61.Plugin.csproj", "{C192A6DE-D254-4A69-8232-D4FF298E514E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.ReSharper6.1.1.Plugin", "NBehave.ReSharper61.Plugin\NBehave.ReSharper6.1.1.Plugin.csproj", "{C192A6DE-D254-4A69-8232-D4FF298E514E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{05BB71FF-0047-49D6-83CF-8E4A2A86B0FA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.VS2010.Plugin.Specifications", "NBehave.VS2010.Plugin.Specifications\NBehave.VS2010.Plugin.Specifications.csproj", "{534FD760-E694-481E-B215-419018D1210F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.Resharper701.Plugin", "NBehave.Resharper701.Plugin\NBehave.Resharper701.Plugin.csproj", "{C89D5A65-98CA-4B18-A9F0-156524E3A7A5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.Resharper7.01.Plugin", "NBehave.Resharper701.Plugin\NBehave.Resharper7.01.Plugin.csproj", "{C89D5A65-98CA-4B18-A9F0-156524E3A7A5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.Resharper71.Plugin", "NBehave.Resharper71.Plugin\NBehave.Resharper71.Plugin.csproj", "{592B104D-C1E8-498D-BD48-ACBD0E3EA7B2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.Resharper7.1.Plugin", "NBehave.Resharper71.Plugin\NBehave.Resharper7.1.Plugin.csproj", "{592B104D-C1E8-498D-BD48-ACBD0E3EA7B2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

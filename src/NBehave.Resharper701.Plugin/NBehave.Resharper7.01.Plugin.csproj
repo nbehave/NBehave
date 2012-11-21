@@ -8,8 +8,8 @@
     <ProjectGuid>{C89D5A65-98CA-4B18-A9F0-156524E3A7A5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NBehave.Resharper701.Plugin</RootNamespace>
-    <AssemblyName>NBehave.Resharper701.Plugin</AssemblyName>
+    <RootNamespace>NBehave.Resharper.Plugin</RootNamespace>
+    <AssemblyName>NBehave.Resharper.Plugin</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\src\</SolutionDir>
