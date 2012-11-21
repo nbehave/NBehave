@@ -206,9 +206,12 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
             }
             if (taskResult == TaskResult.Inconclusive)
             {
-                var code = GetCodeForPendingStep(scenarioResult, result);
-                var msg = (code == null) ? "" : string.Format("The step can be implemented with:{0}{0}{1}", Environment.NewLine, code.Code);
-                server.TaskExplain(taskState.Task, msg);
+#if RESHARPER_71
+                Func<RemoteTask, string, bool> f = (task, msg) => server.TaskOutput(task, msg, TaskOutputType.STDOUT);
+                ExplainPendingStep(scenarioResult, result, taskState, f);
+#else
+                ExplainPendingStep(scenarioResult, result, taskState, server.TaskExplain);
+#endif
             }
             if (taskResult == TaskResult.Skipped)
             {
@@ -216,6 +219,19 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
             }
             taskState.State = SignalState.Finished;
             server.TaskFinished(taskState.Task, result.Message, taskResult);
+        }
+
+        private void ExplainPendingStep(ScenarioResult scenarioResult, StepResult result, TaskState taskState, Func<RemoteTask, string, bool> notifier)
+        {
+            var msg = GetPendingStepImplementationSuggestion(scenarioResult, result);
+            notifier(taskState.Task, msg);
+        }
+
+        private string GetPendingStepImplementationSuggestion(ScenarioResult scenarioResult, StepResult result)
+        {
+            var code = GetCodeForPendingStep(scenarioResult, result);
+            var msg = (code == null) ? "" : string.Format("The step can be implemented with:{0}{0}{1}", Environment.NewLine, code.Code);
+            return msg;
         }
 
         private IEnumerable<TaskState> GetTaskNodesNotStarted<T>()
