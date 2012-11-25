@@ -27,7 +27,8 @@ Task InstallNunitRunners {
 }
 
 Task Version {
-	write-host "##teamcity[buildNumber '$assemblyVersion']"
+	$b = BuildNumber
+	write-host "##teamcity[buildNumber '$b']"
 
 	$asmInfo = "$sourceDir\CommonAssemblyInfo.cs"
 	$src = Get-Content $asmInfo
