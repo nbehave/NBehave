@@ -10,16 +10,19 @@ function xunitVersion() {
   return (get-item src/packages/xunit* | Sort-Object Name -descending | Select-Object -first 1).Name -replace "xunit."
 }
 
-
 function AssemblyInformationalVersion {
   $asmInfoVer = "-"
+  $foo = $buildNumber -match "\d+$"
+  $num = $matches[0]
   if ($preReleaseTag -match "^(r|R)elease$")  { $asmInfoVer = $version }
-  else { $asmInfoVer = "$version-$preReleaseTag$buildNumber" }
+  else { $asmInfoVer = "$version-$preReleaseTag$num" }
   return $asmInfoVer
 }
 
 function AssemblyVersion {
-  $asmVersion = "$version.$buildNumber"
+  $foo = $buildNumber -match "\d+$"
+  $num = $matches[0]
+  $asmVersion = "$version.$num"
   return $asmVersion
 }
 
