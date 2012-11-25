@@ -1,8 +1,8 @@
 param($frameworkVersion = "4.0")
 
 Include ".\BuildProperties.ps1"
-Include ".\buildframework\psake_ext.ps1"
 Include ".\ExtraArgs.ps1"
+Include ".\buildframework\psake_ext.ps1"
 
 task Init -precondition { return $frameworkVersion -eq "4.0" }
 task Default -depends  NuGet, NuGet-Spec, NuGet-Fluent -precondition { return $frameworkVersion -eq "4.0" }

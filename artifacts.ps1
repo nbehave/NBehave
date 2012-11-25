@@ -1,6 +1,7 @@
 param($frameworkVersion = "4.0")
 
 Include ".\BuildProperties.ps1"
+Include ".\ExtraArgs.ps1"
 Include ".\buildframework\psake_ext.ps1"
 
 Task Init -depends ArtifactsClean

@@ -1,7 +1,8 @@
 properties {
 	$version            = "0.6.0"
 	$assemblyVersion    = AssemblyVersion
-	$buildNumber        = BuildNumber
+	$assemblyInfoVersion= AssemblyInformationalVersion
+	$buildNumber				= AssemblyInformationalVersion
 	$rootDir            = Split-Path $psake.build_script_file
 	$sourceDir          = "$rootDir\src"
 	$toolsDir           = "$rootDir\tools"

@@ -11,23 +11,22 @@ function xunitVersion() {
 }
 
 
-function BuildNumber {
-  $buildNum = $build
-  if ($build -match "^\d+$") { $buildNum = $version }
-  if ($build -match "^\-")  { $buildNum = "$version$build" }
-  return $buildNum
+function AssemblyInformationalVersion {
+  $asmInfoVer = "-"
+  if ($preReleaseTag -match "^(r|R)elease$")  { $asmInfoVer = $version }
+  else { $asmInfoVer = "$version-$preReleaseTag$buildNumber" }
+  return $asmInfoVer
 }
 
 function AssemblyVersion {
-  if ($build -match '^\d+$') { $asmVersion = "$version.$build" }
-  else { $asmVersion = "$version.0" }
+  $asmVersion = "$version.$buildNumber"
   return $asmVersion
 }
 
 function clearDir($dirToRemove) {
   Get-ChildItem $dirToRemove\* -Recurse | Select -ExpandProperty FullName | Sort {$_.Length} -Descending | ForEach-Object { Remove-Item $_ }
   Write-Host "Files removed."
-  Get-ChildItem $dirToRemove -Recurse -Include * | Select -ExpandProperty FullName | Sort {$_.Length} -Descending | ForEach-Object { Remove-Item $_ }
+  Get-ChildItem $dirToRemove -Recurse -Include * | Select -ExpandProperty FullName | Sort {$_.Length} -Descending | ForEach-Object { Remove-Item $_ -Recurse }
   Write-Host "Folders removed."
 }
 

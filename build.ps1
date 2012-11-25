@@ -1,7 +1,8 @@
-param($build = "", $frameworkVersion = "4.0")
+param($frameworkVersion = "4.0", $buildNumber = "0", $buildPrefix = "-devlocal" )
 
 
 Include ".\BuildProperties.ps1"
+Include ".\ExtraArgs.ps1"
 Include ".\buildframework\psake_ext.ps1"
 
 task Init -depends Clean, Version, InstallNunitRunners
@@ -26,14 +27,14 @@ Task InstallNunitRunners {
 }
 
 Task Version {
-	write-host "##teamcity[buildNumber '$buildNumber']"
+	write-host "##teamcity[buildNumber '$assemblyVersion']"
 
 	$asmInfo = "$sourceDir\CommonAssemblyInfo.cs"
 	$src = Get-Content $asmInfo
 	$newSrc = foreach($row in $src) {
 		if ($row -match 'Assembly((InformationalVersion)|(Version)|(FileVersion))\s*\(\s*"\d+\.\d+\.\d+.*"\s*\)') {
 			if ($row -match 'AssemblyInformationalVersion') {
-				$row -replace '\d+\.\d+\.\d+.*.*"', ("$buildNumber" + '"')
+				$row -replace '\d+\.\d+\.\d+.*.*"', ("$assemblyInfoVersion" + '"')
 			}
 			else { $row -replace "\d+\.\d+\.\d+.\d+", "$assemblyVersion" }
 		}
@@ -58,18 +59,6 @@ Task Compile-Console-x86 {
 	$params = "Configuration=AutomatedDebug-$frameworkVersion-x86;Platform=x86;OutputPath=$buildDir\Debug-$frameworkVersion\NBehave\"
 	Exec { msbuild "$sourceDir\NBehave.Console\NBehave.Console.csproj" /p:$params /p:TargetFrameworkVersion=v$frameworkVersion /v:m /m /toolsversion:4.0 /t:Rebuild }
 	Move-Item "$buildDir\Debug-$frameworkVersion\NBehave\NBehave-Console.exe" "$buildDir\Debug-$frameworkVersion\NBehave\NBehave-Console-x86.exe" -Force
-}
-
-Task ILMerge -depends Compile {
-	$buildDirFramework = "$buildDir\Debug-$frameworkVersion"
-	$directory = "$buildDirFramework\NBehave"
-	$resharperDir = "$buildDirFramework\Resharper"
-	$out = "NBehave.Narrator.Framework.dll"
-	$assemblies = @("$directory\NBehave.Narrator.Framework.dll", "$directory\GurkBurk.dll", "$directory\NBehave.Gherkin.dll")
-
-	Run-ILMerge $snk $directory $out $assemblies
-	Remove-Item "$directory\GurkBurk.dll"
-	Remove-Item "$directory\NBehave.Gherkin.dll"
 }
 
 Task Test -depends Compile {
