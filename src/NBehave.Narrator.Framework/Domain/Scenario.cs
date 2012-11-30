@@ -18,6 +18,7 @@ namespace NBehave.Narrator.Framework
     {
         private readonly List<StringStep> _steps;
         private readonly List<Example> _examples;
+        private readonly List<string> tags = new List<string>();
 
         public Scenario()
             : this(string.Empty, string.Empty)
@@ -65,6 +66,11 @@ namespace NBehave.Narrator.Framework
             }
         }
 
+        public IEnumerable<string> Tags
+        {
+            get { return tags; }
+        }
+
         public void AddStep(string step)
         {
             var stringStringStep = new StringStep(step, Source);
@@ -106,10 +112,15 @@ namespace NBehave.Narrator.Framework
             if (!_examples.Any())
                 return "";
             var prefix = prefixAllLinesWith + "    ";
-            var str = prefixAllLinesWith + "Examples:" + Environment.NewLine + 
+            var str = prefixAllLinesWith + "Examples:" + Environment.NewLine +
                 prefix + _examples.First().ColumnNamesToString() + Environment.NewLine;
             var colStr = _examples.Select(_ => prefix + _.ColumnValuesToString()).ToArray();
             return str + string.Join(Environment.NewLine, colStr);
+        }
+
+        public void AddTags(IEnumerable<string> scenarioTags)
+        {
+            tags.AddRange(scenarioTags);
         }
     }
 }

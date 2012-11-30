@@ -1,3 +1,5 @@
+using NBehave.Narrator.Framework.Internal;
+
 namespace NBehave.Narrator.Framework
 {
     public static class Step
@@ -8,7 +10,7 @@ namespace NBehave.Narrator.Framework
         }
     }
 
-    public class StepContext
+    public class StepContext : NBehaveContext
     {
         public FeatureContext FeatureContext { get; private set; }
         public ScenarioContext ScenarioContext { get; private set; }

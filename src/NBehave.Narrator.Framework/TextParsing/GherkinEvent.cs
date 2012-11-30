@@ -8,7 +8,7 @@ namespace NBehave.Narrator.Framework
     {
         public Feature Feature { get; private set; }
 
-        public FeatureEvent(Feature feature, Action invokeEvent)
+        public FeatureEvent(Feature feature, Action<GherkinEvent> invokeEvent)
             : base(invokeEvent)
         {
             Feature = feature;
@@ -19,7 +19,7 @@ namespace NBehave.Narrator.Framework
     {
         public Scenario Scenario { get; set; }
 
-        public ScenarioEvent(Scenario scenario, Action invokeEvent)
+        public ScenarioEvent(Scenario scenario, Action<GherkinEvent> invokeEvent)
             : base(invokeEvent)
         {
             Scenario = scenario;
@@ -28,13 +28,13 @@ namespace NBehave.Narrator.Framework
 
     public class ExamplesEvent : GherkinEvent
     {
-        public ExamplesEvent(Action invokeEvent)
+        public ExamplesEvent(Action<GherkinEvent> invokeEvent)
             : base(invokeEvent) { }
     }
 
     public class DocStringEvent : GherkinEvent
     {
-        public DocStringEvent(string docString, Action invokeEvent)
+        public DocStringEvent(string docString, Action<GherkinEvent> invokeEvent)
             : base(invokeEvent)
         {
             DocString = docString;
@@ -45,7 +45,7 @@ namespace NBehave.Narrator.Framework
 
     public class StepEvent : GherkinEvent
     {
-        public StepEvent(string stepText, Action invokeEvent)
+        public StepEvent(string stepText, Action<GherkinEvent> invokeEvent)
             : base(invokeEvent)
         {
             Step = stepText;
@@ -59,41 +59,41 @@ namespace NBehave.Narrator.Framework
     {
         public IList<IList<Token>> Columns { get; private set; }
 
-        public TableEvent(IList<IList<Token>> columns, Action invokeEvent)
+        public TableEvent(IList<IList<Token>> columns, Action<GherkinEvent> invokeEvent)
             : base(invokeEvent)
         {
             Columns = columns;
         }
     }
-    
+
     public class BackgroundEvent : GherkinEvent
     {
         public Scenario Scenario { get; set; }
 
-        public BackgroundEvent(Scenario scenario, Action invokeEvent)
+        public BackgroundEvent(Scenario scenario, Action<GherkinEvent> invokeEvent)
             : base(invokeEvent)
         {
             Scenario = scenario;
         }
     }
-    
+
     public class TagEvent : GherkinEvent
     {
-        public TagEvent(string tag, Action invokeEvent)
+        public TagEvent(string tag, Action<GherkinEvent> invokeEvent)
             : base(invokeEvent) { Tags.Add(tag); }
     }
-    
+
     public class EofEvent : GherkinEvent
     {
-        public EofEvent( Action invokeEvent)
+        public EofEvent(Action<GherkinEvent> invokeEvent)
             : base(invokeEvent) { }
     }
-    
+
     public abstract class GherkinEvent : EventArgs, IEquatable<GherkinEvent>
     {
-        private readonly Action eventAction;
+        private readonly Action<GherkinEvent> eventAction;
 
-        protected GherkinEvent(Action eventAction)
+        protected GherkinEvent(Action<GherkinEvent> eventAction)
         {
             this.eventAction = eventAction;
             Tags = new List<string>();
@@ -103,7 +103,7 @@ namespace NBehave.Narrator.Framework
 
         public void RaiseEvent()
         {
-            eventAction.Invoke();
+            eventAction.Invoke(this);
         }
 
         public bool Equals(GherkinEvent other)

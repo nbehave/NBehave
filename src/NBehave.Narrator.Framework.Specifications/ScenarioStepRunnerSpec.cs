@@ -40,7 +40,6 @@ namespace NBehave.Narrator.Framework.Specifications
         [TestFixture]
         public class When_running_a_scenario : ScenarioStepRunnerSpec
         {
-
             [SetUp]
             public void SetUp()
             {

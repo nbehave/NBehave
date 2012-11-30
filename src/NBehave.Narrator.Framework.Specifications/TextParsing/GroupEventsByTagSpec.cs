@@ -13,10 +13,10 @@ namespace NBehave.Narrator.Framework.Specifications.TextParsing
             var feature = new Feature("title", "src");
             var expected = new List<GherkinEvent>
                                {
-                                   new FeatureEvent(feature, () => { }),
-                                   new ScenarioEvent(new Scenario("title", feature.Source, feature), () => { }),
-                                   new StepEvent("step", () => { }),
-                                   new EofEvent(() => { })
+                                   new FeatureEvent(feature, e => { }),
+                                   new ScenarioEvent(new Scenario("title", feature.Source, feature), e => { }),
+                                   new StepEvent("step", e => { }),
+                                   new EofEvent(e => { })
                                };
             var events = new Queue<GherkinEvent>(expected);
             var groupedEvents = GroupEventsByTag.GroupByTag(events);
@@ -29,11 +29,11 @@ namespace NBehave.Narrator.Framework.Specifications.TextParsing
             var feature = new Feature("title", "src");
             var events = new Queue<GherkinEvent>(new List<GherkinEvent>
                                                      {
-                                                         new TagEvent("@tag", () => { }),
-                                                         new FeatureEvent(feature, () => { }),
-                                                         new ScenarioEvent(new Scenario("title", feature.Source, feature), () => { }),
-                                                         new StepEvent("step", () => { }),
-                                                         new EofEvent(() => { })
+                                                         new TagEvent("@tag", e => { }),
+                                                         new FeatureEvent(feature, e => { }),
+                                                         new ScenarioEvent(new Scenario("title", feature.Source, feature), e => { }),
+                                                         new StepEvent("step", e => { }),
+                                                         new EofEvent(e => { })
                                                      });
             var groupedEvents = GroupEventsByTag.GroupByTag(events);
             Assert.AreEqual(4, groupedEvents.Count);

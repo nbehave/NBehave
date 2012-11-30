@@ -577,5 +577,100 @@ namespace NBehave.Narrator.Framework.Specifications
                 Assert.That(_timesAfterStepWasCalled, Is.EqualTo(3));
             }
         }
+
+
+        [TestFixture, Hooks.Hooks, ActionSteps]
+        public class When_Running_step_where_feature_and_scenario_has_tags : TextRunnerSpec
+        {
+            private static List<string> _tagsBeforeFeature = new List<string>();
+            private static List<string> _tagsAfterFeature = new List<string>();
+            private static List<string> _tagsBeforeScenario = new List<string>();
+            private static List<string> _tagsAfterScenario = new List<string>();
+            private static List<string> _tagsBeforeStep = new List<string>();
+            private static List<string> _tagsAfterStep = new List<string>();
+
+            [Hooks.BeforeFeature]
+            public void OnBeforeFeature()
+            {
+                _tagsBeforeFeature.AddRange(FeatureContext.Current.Tags);
+            }
+            [Hooks.AfterFeature]
+            public void OnAfterFeature()
+            {
+                _tagsAfterFeature.AddRange(FeatureContext.Current.Tags);
+            }
+            [Hooks.BeforeScenario]
+            public void OnBeforeScenario()
+            {
+                _tagsBeforeScenario.AddRange(ScenarioContext.Current.Tags);
+            }
+            [Hooks.AfterScenario]
+            public void OnAfterScenario()
+            {
+                _tagsAfterScenario.AddRange(ScenarioContext.Current.Tags);
+            }
+            [Hooks.BeforeStep]
+            public void OnBeforeStep()
+            {
+                _tagsBeforeStep.AddRange(StepContext.Current.Tags);
+            }
+            [Hooks.AfterStep]
+            public void OnAfterStep()
+            {
+                _tagsAfterStep.AddRange(StepContext.Current.Tags);
+            }
+
+            [TestFixtureSetUp]
+            public void Setup()
+            {
+                _tagsBeforeFeature.Clear();
+                _tagsAfterFeature.Clear();
+                _tagsBeforeScenario.Clear();
+                _tagsAfterScenario.Clear();
+                _tagsBeforeStep.Clear();
+                _tagsAfterStep.Clear();
+                ConfigurationNoAppDomain.New
+                .SetAssemblies(new[] { GetType().Assembly.Location })
+                        .SetScenarioFiles(new[] { TestFeatures.FeatureWithTags })
+                        .SetFilter(new StoryRunnerFilter(".", GetType().Name, "."))
+                        .Build()
+                        .Run();
+            }
+
+            [Given("my name is Morgan")]
+            public void Given_step()
+            { }
+
+            [When("I'm greeted")]
+            public void WhenGreeted()
+            { }
+
+            [Then("I should be greeted with “Hello, $name!”")]
+            public void ThenGreeted(string name)
+            {
+                Assert.AreEqual("Morgan", name);
+            }
+
+            [Test]
+            public void FeatureContexct_should_have_tags()
+            {
+                CollectionAssert.IsNotEmpty(_tagsBeforeFeature);
+                CollectionAssert.IsNotEmpty(_tagsAfterFeature);
+            }
+
+            [Test]
+            public void ScenarioContexct_should_have_tags()
+            {
+                CollectionAssert.IsNotEmpty(_tagsBeforeScenario);
+                CollectionAssert.IsNotEmpty(_tagsAfterScenario);
+            }
+
+            [Test]
+            public void StepContexct_should_have_tags()
+            {
+                CollectionAssert.IsNotEmpty(_tagsBeforeStep);
+                CollectionAssert.IsNotEmpty(_tagsAfterStep);
+            }
+        }
     }
 }

@@ -45,17 +45,18 @@ namespace NBehave.Narrator.Framework.Specifications.Internal
             [Test]
             public void Should_set_tags_for_feature_event()
             {
-                sut.OnParsedTagEvent("@tag1");
-                sut.OnParsedTagEvent("@tag2");
-                sut.OnFeatureStartedEvent(new Feature("featureTitle"));
+                var feature = new Feature("featureTitle");
+                feature.AddTags(new[] { "tag1", "tag2" });
+                sut.OnFeatureStartedEvent(feature);
                 CollectionAssert.AreEqual(new[] { "tag1", "tag2" }, featureContext.Tags);
             }
 
             [Test]
-            public void Should_remove_tags_on_featureEnd()
+            public void Should_remove_tags_before_new_feature_starts()
             {
-                sut.OnParsedTagEvent("@tag1");
-                sut.OnFeatureStartedEvent(new Feature("featureTitle"));
+                var feature = new Feature("featureTitle");
+                feature.AddTags(new[] { "tag1", "tag2" });
+                sut.OnFeatureStartedEvent(feature);
                 CollectionAssert.IsNotEmpty(featureContext.Tags);
                 sut.OnFeatureFinishedEvent();
                 CollectionAssert.IsNotEmpty(featureContext.Tags);
@@ -100,25 +101,28 @@ namespace NBehave.Narrator.Framework.Specifications.Internal
             [Test]
             public void Should_set_tags_for_scenario_event()
             {
-                sut.OnParsedTagEvent("@tag1");
-                sut.OnFeatureStartedEvent(new Feature("featureTitle"));
-                sut.OnParsedTagEvent("tag2");
-                sut.OnScenarioStartedEvent(new Scenario("scenario title", "", new Feature("featureTitle")));
-                CollectionAssert.AreEqual(new[] { "tag1" }, featureContext.Tags);
-                CollectionAssert.AreEqual(new[] { "tag1", "tag2" }, scenarioContext.Tags);
+                var feature = new Feature("featureTitle");
+                sut.OnFeatureStartedEvent(feature);
+                var scenario = new Scenario("scenario title", "", feature);
+                scenario.AddTags(new[] { "tag" });
+                sut.OnScenarioStartedEvent(scenario);
+                CollectionAssert.AreEqual(new[] { "tag" }, scenarioContext.Tags);
             }
 
             [Test]
             public void Should_remove_tags_for_previous_scenario_when_next_scenario_is_raised()
             {
-                sut.OnParsedTagEvent("@tag1");
-                sut.OnFeatureStartedEvent(new Feature("featureTitle"));
-                sut.OnParsedTagEvent("@tag2");
-                sut.OnScenarioStartedEvent(new Scenario("scenario title", "", new Feature("featureTitle")));
+                var feature = new Feature("featureTitle");
+                sut.OnFeatureStartedEvent(feature);
+                var scenario = new Scenario("scenario title", "", feature);
+                scenario.AddTags(new[] { "tag2" });
+                sut.OnScenarioStartedEvent(scenario);
                 sut.OnScenarioFinishedEvent();
-                sut.OnParsedTagEvent("@tag3");
-                sut.OnScenarioStartedEvent(new Scenario("scenario title", "", new Feature("featureTitle")));
-                CollectionAssert.AreEqual(new[] { "tag1", "tag3" }, scenarioContext.Tags);
+                var scenario2 = new Scenario("scenario title", "", feature);
+                scenario2.AddTags(new[] { "tag3" });
+                sut.OnScenarioStartedEvent(scenario2);
+                CollectionAssert.IsNotEmpty(scenarioContext.Tags);
+                CollectionAssert.AreEqual(new[] { "tag3" }, scenarioContext.Tags);
             }
         }
 
@@ -144,6 +148,22 @@ namespace NBehave.Narrator.Framework.Specifications.Internal
                 var step = "Given something".AsStringStep("");
                 sut.OnStepStartedEvent(step);
                 Assert.That(stepContext.ScenarioContext, Is.SameAs(scenarioContext));
+            }
+
+            [Test]
+            public void Should_update_stepContext_with_tags()
+            {
+                const string featureTitle = "feature title";
+                var feature = new Feature(featureTitle);
+                feature.AddTags(new[] { "a" });
+                sut.OnFeatureStartedEvent(feature);
+                const string scenarioTitle = "scenario title";
+                var scenario = new Scenario(scenarioTitle, "", new Feature("ignored"));
+                scenario.AddTags(new[] { "a", "b" });
+                sut.OnScenarioStartedEvent(scenario);
+                var step = "Given something".AsStringStep("");
+                sut.OnStepStartedEvent(step);
+                CollectionAssert.AreEquivalent(new[] { "a", "b" }, stepContext.Tags);
             }
         }
     }

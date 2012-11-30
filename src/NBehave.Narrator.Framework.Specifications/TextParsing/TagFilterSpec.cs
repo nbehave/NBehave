@@ -13,10 +13,10 @@ namespace NBehave.Narrator.Framework.Specifications.TextParsing
         {
             var events = new GherkinEvent[]
                              {
-                                 new FeatureEvent(new Feature("title"), () => { }), 
-                                 new ScenarioEvent(new Scenario("title", ""), () => { }), 
-                                 new StepEvent("step", () => { }), 
-                                 new EofEvent(() => { })
+                                 new FeatureEvent(new Feature("title"), e => { }), 
+                                 new ScenarioEvent(new Scenario("title", ""), e => { }), 
+                                 new StepEvent("step", e => { }), 
+                                 new EofEvent(e => { })
                              };
             var filter = new NoFilter();
             var filteredEvents = filter.Filter(events);
@@ -27,14 +27,14 @@ namespace NBehave.Narrator.Framework.Specifications.TextParsing
         public void Should_filter_events_by_tag_with_or()
         {
             var eventsInQueue = new Queue<GherkinEvent>();
-            eventsInQueue.Enqueue(new FeatureEvent(new Feature("title"), () => { }));
-            eventsInQueue.Enqueue(new TagEvent("@tag1", () => { }));
-            eventsInQueue.Enqueue(new ScenarioEvent(new Scenario("title", ""), () => { }));
-            eventsInQueue.Enqueue(new StepEvent("step", () => { }));
-            eventsInQueue.Enqueue(new TagEvent("@tag2", () => { }));
-            eventsInQueue.Enqueue(new ScenarioEvent(new Scenario("title", ""), () => { }));
-            eventsInQueue.Enqueue(new StepEvent("step", () => { }));
-            eventsInQueue.Enqueue(new EofEvent(() => { }));
+            eventsInQueue.Enqueue(new FeatureEvent(new Feature("title"), e => { }));
+            eventsInQueue.Enqueue(new TagEvent("@tag1", e => { }));
+            eventsInQueue.Enqueue(new ScenarioEvent(new Scenario("title", ""), e => { }));
+            eventsInQueue.Enqueue(new StepEvent("step", e => { }));
+            eventsInQueue.Enqueue(new TagEvent("@tag2", e => { }));
+            eventsInQueue.Enqueue(new ScenarioEvent(new Scenario("title", ""), e => { }));
+            eventsInQueue.Enqueue(new StepEvent("step", e => { }));
+            eventsInQueue.Enqueue(new EofEvent(e => { }));
             var events = GroupEventsByTag.GroupByTag(eventsInQueue);
             var filter = new OrFilter(new[] { "@tag1" });
             var filteredEvents = filter.Filter(events).ToList();
@@ -46,14 +46,14 @@ namespace NBehave.Narrator.Framework.Specifications.TextParsing
         public void Should_filter_events_by_exclude_tag_with_or()
         {
             var eventsInQueue = new Queue<GherkinEvent>();
-            eventsInQueue.Enqueue(new FeatureEvent(new Feature("title"), () => { }));
-            eventsInQueue.Enqueue(new TagEvent("@tag1", () => { }));
-            eventsInQueue.Enqueue(new ScenarioEvent(new Scenario("title", ""), () => { }));
-            eventsInQueue.Enqueue(new StepEvent("step", () => { }));
-            eventsInQueue.Enqueue(new TagEvent("@tag2", () => { }));
-            eventsInQueue.Enqueue(new ScenarioEvent(new Scenario("title", ""), () => { }));
-            eventsInQueue.Enqueue(new StepEvent("step", () => { }));
-            eventsInQueue.Enqueue(new EofEvent(() => { }));
+            eventsInQueue.Enqueue(new FeatureEvent(new Feature("title"), e => { }));
+            eventsInQueue.Enqueue(new TagEvent("@tag1", e => { }));
+            eventsInQueue.Enqueue(new ScenarioEvent(new Scenario("title", ""), e => { }));
+            eventsInQueue.Enqueue(new StepEvent("step", e => { }));
+            eventsInQueue.Enqueue(new TagEvent("@tag2", e => { }));
+            eventsInQueue.Enqueue(new ScenarioEvent(new Scenario("title", ""), e => { }));
+            eventsInQueue.Enqueue(new StepEvent("step", e => { }));
+            eventsInQueue.Enqueue(new EofEvent(e => { }));
             var events = GroupEventsByTag.GroupByTag(eventsInQueue);
             var filter = new OrFilter(new[] { "~@tag1" });
             var filteredEvents = filter.Filter(events).ToList();
@@ -65,14 +65,14 @@ namespace NBehave.Narrator.Framework.Specifications.TextParsing
         public void Should_or_multiple_tags()
         {
             var eventsInQueue = new Queue<GherkinEvent>();
-            eventsInQueue.Enqueue(new FeatureEvent(new Feature("title"), () => { }));
-            eventsInQueue.Enqueue(new TagEvent("@tag1", () => { }));
-            eventsInQueue.Enqueue(new ScenarioEvent(new Scenario("title", ""), () => { }));
-            eventsInQueue.Enqueue(new StepEvent("step", () => { }));
-            eventsInQueue.Enqueue(new TagEvent("@tag2", () => { }));
-            eventsInQueue.Enqueue(new ScenarioEvent(new Scenario("title", ""), () => { }));
-            eventsInQueue.Enqueue(new StepEvent("step", () => { }));
-            eventsInQueue.Enqueue(new EofEvent(() => { }));
+            eventsInQueue.Enqueue(new FeatureEvent(new Feature("title"), e => { }));
+            eventsInQueue.Enqueue(new TagEvent("@tag1", e => { }));
+            eventsInQueue.Enqueue(new ScenarioEvent(new Scenario("title", ""), e => { }));
+            eventsInQueue.Enqueue(new StepEvent("step", e => { }));
+            eventsInQueue.Enqueue(new TagEvent("@tag2", e => { }));
+            eventsInQueue.Enqueue(new ScenarioEvent(new Scenario("title", ""), e => { }));
+            eventsInQueue.Enqueue(new StepEvent("step", e => { }));
+            eventsInQueue.Enqueue(new EofEvent(e => { }));
             var events = GroupEventsByTag.GroupByTag(eventsInQueue);
             var filter = new OrFilter(new[] { "@tag1", "@tag2" });
             var filteredEvents = filter.Filter(events).ToList();
@@ -83,16 +83,16 @@ namespace NBehave.Narrator.Framework.Specifications.TextParsing
         public void Should_be_able_to_AND_two_filters()
         {
             var eventsInQueue = new Queue<GherkinEvent>();
-            eventsInQueue.Enqueue(new FeatureEvent(new Feature("feature title"), () => { }));
-            eventsInQueue.Enqueue(new TagEvent("@tag1", () => { }));
-            eventsInQueue.Enqueue(new ScenarioEvent(new Scenario("title t1", ""), () => { }));
-            eventsInQueue.Enqueue(new StepEvent("step", () => { }));
-            eventsInQueue.Enqueue(new StepEvent("step", () => { }));
-            eventsInQueue.Enqueue(new TagEvent("@tag1", () => { }));
-            eventsInQueue.Enqueue(new TagEvent("@tag2", () => { }));
-            eventsInQueue.Enqueue(new ScenarioEvent(new Scenario("title t2", ""), () => { }));
-            eventsInQueue.Enqueue(new StepEvent("step", () => { }));
-            eventsInQueue.Enqueue(new EofEvent(() => { }));
+            eventsInQueue.Enqueue(new FeatureEvent(new Feature("feature title"), e => { }));
+            eventsInQueue.Enqueue(new TagEvent("@tag1", e => { }));
+            eventsInQueue.Enqueue(new ScenarioEvent(new Scenario("title t1", ""), e => { }));
+            eventsInQueue.Enqueue(new StepEvent("step", e => { }));
+            eventsInQueue.Enqueue(new StepEvent("step", e => { }));
+            eventsInQueue.Enqueue(new TagEvent("@tag1", e => { }));
+            eventsInQueue.Enqueue(new TagEvent("@tag2", e => { }));
+            eventsInQueue.Enqueue(new ScenarioEvent(new Scenario("title t2", ""), e => { }));
+            eventsInQueue.Enqueue(new StepEvent("step", e => { }));
+            eventsInQueue.Enqueue(new EofEvent(e => { }));
             var events = GroupEventsByTag.GroupByTag(eventsInQueue);
             var filter1 = new OrFilter(new[] { "@tag1" });
             var filter2 = new OrFilter(new[] { "@tag2" });

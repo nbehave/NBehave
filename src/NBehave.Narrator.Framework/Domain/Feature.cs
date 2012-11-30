@@ -48,6 +48,7 @@ namespace NBehave.Narrator.Framework
         public string Source { get; private set; }
         public int SourceLine { get; private set; }
         public List<Scenario> Scenarios { get; private set; }
+        private readonly List<string> tags = new List<string>();
 
         public void AddScenario(Scenario scenario)
         {
@@ -77,6 +78,11 @@ namespace NBehave.Narrator.Framework
 
         public Scenario Background { get; private set; }
 
+        public IEnumerable<string> Tags
+        {
+            get { return tags; }
+        }
+
         public override string ToString()
         {
             var str = string.Format("Feature: {1}{0}{2}", Environment.NewLine, Title, Narrative);
@@ -86,6 +92,11 @@ namespace NBehave.Narrator.Framework
                 str += string.Format("{0}{0}{1}", Environment.NewLine, b);
             }
             return str;
+        }
+
+        public void AddTags(IEnumerable<string> featureTags)
+        {
+            tags.AddRange(featureTags);            
         }
     }
 }

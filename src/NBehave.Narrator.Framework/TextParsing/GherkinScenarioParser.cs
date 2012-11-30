@@ -73,38 +73,46 @@ namespace NBehave.Narrator.Framework.TextParsing
         {
             var scenario = new Scenario(title.Content, file, currentFeature, keyword.LineInFile.Line);
             currentScenario = scenario;
-            events.Enqueue(new ScenarioEvent(currentScenario, () => ScenarioEvent.Invoke(this, new EventArgs<Scenario>(scenario))));
+            events.Enqueue(new ScenarioEvent(currentScenario, e =>
+                {
+                    scenario.AddTags(e.Tags);
+                    ScenarioEvent.Invoke(this, new EventArgs<Scenario>(scenario));
+                }));
         }
 
         private void CreateFeature(string title, string narrative, int sourceLine)
         {
             var feature = new Feature(title, narrative, file, sourceLine);
             currentFeature = feature;
-            events.Enqueue(new FeatureEvent(feature, () => FeatureEvent.Invoke(this, new EventArgs<Feature>(feature))));
+            events.Enqueue(new FeatureEvent(feature, e =>
+                {
+                    feature.AddTags(e.Tags);
+                    FeatureEvent.Invoke(this, new EventArgs<Feature>(feature));
+                }));
         }
 
         public void Examples(Token keyword, Token name)
         {
-            events.Enqueue(new ExamplesEvent(() => ExamplesEvent.Invoke(this, new EventArgs())));
+            events.Enqueue(new ExamplesEvent(e => ExamplesEvent.Invoke(this, new EventArgs())));
         }
 
         public void Step(Token keyword, Token name)
         {
             string stepText = string.Format("{0} {1}", keyword.Content, name.Content);
             var stringStep = new StringStep(stepText, file, keyword.LineInFile.Line);
-            events.Enqueue(new StepEvent(stepText, () => StepEvent.Invoke(this, new EventArgs<StringStep>(stringStep))));
+            events.Enqueue(new StepEvent(stepText, e => StepEvent.Invoke(this, new EventArgs<StringStep>(stringStep))));
         }
 
         public void Table(IList<IList<Token>> columns, LineInFile lineInFile)
         {
-            events.Enqueue(new TableEvent(columns, () => TableEvent.Invoke(this, new EventArgs<IList<IList<Token>>>(columns))));
+            events.Enqueue(new TableEvent(columns, e => TableEvent.Invoke(this, new EventArgs<IList<IList<Token>>>(columns))));
         }
 
         public void Background(Token keyword, Token name)
         {
             var scenario = new Scenario(name.Content, file, currentFeature, keyword.LineInFile.Line);
             currentScenario = scenario;
-            events.Enqueue(new BackgroundEvent(currentScenario, () => BackgroundEvent.Invoke(this, new EventArgs<Scenario>(scenario))));
+            events.Enqueue(new BackgroundEvent(currentScenario, e => BackgroundEvent.Invoke(this, new EventArgs<Scenario>(scenario))));
         }
 
         public void Comment(Token comment)
@@ -112,7 +120,7 @@ namespace NBehave.Narrator.Framework.TextParsing
 
         public void Tag(Token tag)
         {
-            events.Enqueue(new TagEvent(tag.Content, () => TagEvent.Invoke(this, new EventArgs<string>(tag.Content))));
+            events.Enqueue(new TagEvent(tag.Content, e => TagEvent.Invoke(this, new EventArgs<string>(tag.Content))));
         }
 
         public void SyntaxError(string state, string @event, IEnumerable<string> legalEvents, LineInFile lineInFile)
@@ -121,7 +129,7 @@ namespace NBehave.Narrator.Framework.TextParsing
 
         public void Eof()
         {
-            events.Enqueue(new EofEvent(() => EofEvent.Invoke(this, new EventArgs())));
+            events.Enqueue(new EofEvent(e => EofEvent.Invoke(this, new EventArgs())));
 
             while (events.Any())
             {
@@ -134,16 +142,16 @@ namespace NBehave.Narrator.Framework.TextParsing
         public void DocString(Token docString)
         {
             var docStringText = docString.Content;
-            events.Enqueue(new DocStringEvent(docStringText, () => DocStringEvent.Invoke(this, new EventArgs<string>(docStringText))));
+            events.Enqueue(new DocStringEvent(docStringText, e => DocStringEvent.Invoke(this, new EventArgs<string>(docStringText))));
         }
 
         private IEnumerable<GherkinEvent> FilterByTag()
         {
-            var events = GroupEventsByTag.GroupByTag(this.events);
+            var eventsByTag = GroupEventsByTag.GroupByTag(this.events);
             var eventsToRaise = new List<GherkinEvent>();
-            while (events.Any())
+            while (eventsByTag.Any())
             {
-                var eventsToHandle = new Queue<GherkinEvent>(GroupEventsByFeature.GetEventsForNextFeature(events).ToList());
+                var eventsToHandle = new Queue<GherkinEvent>(GroupEventsByFeature.GetEventsForNextFeature(eventsByTag).ToList());
 
                 var tagsFilter = TagFilterBuilder.Build(configuration.TagsFilter);
                 var filteredEvents = tagsFilter.Filter(eventsToHandle).ToList();

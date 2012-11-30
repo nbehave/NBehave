@@ -15,13 +15,13 @@ namespace NBehave.Narrator.Framework.Specifications.TextParsing
             var filter = TagFilterBuilder.Build(tagsToFilter);
             var events = new GherkinEvent[]
                              {
-                                 new FeatureEvent(new Feature("title"), () => { }),
-                                 new TagEvent("@tag1", () => { }), 
-                                 new ScenarioEvent(new Scenario("title", ""), () => { }),
-                                 new TagEvent("@tag1", () => { }), 
-                                 new TagEvent("@tag2", () => { }),
-                                 new ScenarioEvent(new Scenario("title", ""), () => { }),
-                                 new EofEvent(() => { })
+                                 new FeatureEvent(new Feature("title"), e => { }),
+                                 new TagEvent("@tag1", e => { }), 
+                                 new ScenarioEvent(new Scenario("title", ""), e => { }),
+                                 new TagEvent("@tag1", e => { }), 
+                                 new TagEvent("@tag2", e => { }),
+                                 new ScenarioEvent(new Scenario("title", ""), e => { }),
+                                 new EofEvent(e => { })
                              };
             var filteredEvents = filter.Filter(events).ToList();
             CollectionAssert.AreEqual(events, filteredEvents);
@@ -33,16 +33,16 @@ namespace NBehave.Narrator.Framework.Specifications.TextParsing
             var tagsToFilter = new List<string[]> { new[] { "@tag1", "@tag2" } };
             var filter = TagFilterBuilder.Build(tagsToFilter);
             var eventsInQueue = new Queue<GherkinEvent>();
-            eventsInQueue.Enqueue(new FeatureEvent(new Feature("title"), () => { }));
-            eventsInQueue.Enqueue(new TagEvent("@tag1", () => { }));
-            eventsInQueue.Enqueue(new ScenarioEvent(new Scenario("title", ""), () => { }));
-            eventsInQueue.Enqueue(new TagEvent("@tag3", () => { }));
-            eventsInQueue.Enqueue(new ScenarioEvent(new Scenario("title", ""), () => { }));
-            eventsInQueue.Enqueue(new TagEvent("@tag2", () => { }));
-            eventsInQueue.Enqueue(new ScenarioEvent(new Scenario("title", ""), () => { }));
-            eventsInQueue.Enqueue(new TagEvent("@tag3", () => { }));
-            eventsInQueue.Enqueue(new ScenarioEvent(new Scenario("title", ""), () => { }));
-            eventsInQueue.Enqueue(new EofEvent(() => { }));
+            eventsInQueue.Enqueue(new FeatureEvent(new Feature("title"), e => { }));
+            eventsInQueue.Enqueue(new TagEvent("@tag1", e => { }));
+            eventsInQueue.Enqueue(new ScenarioEvent(new Scenario("title", ""), e => { }));
+            eventsInQueue.Enqueue(new TagEvent("@tag3", e => { }));
+            eventsInQueue.Enqueue(new ScenarioEvent(new Scenario("title", ""), e => { }));
+            eventsInQueue.Enqueue(new TagEvent("@tag2", e => { }));
+            eventsInQueue.Enqueue(new ScenarioEvent(new Scenario("title", ""), e => { }));
+            eventsInQueue.Enqueue(new TagEvent("@tag3", e => { }));
+            eventsInQueue.Enqueue(new ScenarioEvent(new Scenario("title", ""), e => { }));
+            eventsInQueue.Enqueue(new EofEvent(e => { }));
             var events = GroupEventsByTag.GroupByTag(eventsInQueue);
             var filteredEvents = filter.Filter(events).ToList();
             Assert.AreEqual(4, filteredEvents.Count);
