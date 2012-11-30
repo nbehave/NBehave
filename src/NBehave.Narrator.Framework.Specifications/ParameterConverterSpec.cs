@@ -27,7 +27,7 @@ namespace NBehave.Narrator.Framework.Specifications
             [Test]
             public void ShouldGetParameterForActionWithTokenInMiddleOfString()
             {
-                Action<int> action = amount=> { };
+                Action<int> action = amount => { };
 
                 _actionCatalog.Add(new ActionMethodInfo("I have $amount euros on my cash account".AsRegex(), action, action.Method, null));
                 var values = _parameterConverter.GetParametersForStep(new StringStep("Given I have 20 euros on my cash account", ""));
@@ -219,6 +219,27 @@ namespace NBehave.Narrator.Framework.Specifications
                 const string actionString = "Given a book named GoodBook of author Bok Writer with isbn 123";
                 var ex = Assert.Throws<ArgumentException>(() => _parameterConverter.GetParametersForStep(new StringStep(actionString, "")));
                 Assert.AreEqual("Type 'Book' dont have a property with the name 'Foo'", ex.Message);
+            }
+
+            [Test]
+            public void Should_get_a_list_of_complex_types()
+            {
+                Action<List<Book>> actionStep = p => { };
+                _actionCatalog.Add(new ActionMethodInfo(new Regex(@"a list of books:$"), actionStep, actionStep.Method, "Given"));
+                const string actionString = "Given a list of books:";
+                var stringStep = new StringTableStep(actionString, "");
+                var columnNames = new ExampleColumns { new ExampleColumn("name"), new ExampleColumn("author"), new ExampleColumn("isbn") };
+                var stepValues1 = new Dictionary<string, string> { { "name", "n1" }, { "author", "a1" }, { "isbn", "1" } };
+                stringStep.AddTableStep(new Example(columnNames, stepValues1));
+                var stepValues2 = new Dictionary<string, string> { { "name", "n2" }, { "aUthOr", "a2" }, { "isbn", "2" } };
+                stringStep.AddTableStep(new Example(columnNames, stepValues2));
+                var values = _parameterConverter.GetParametersForStep(stringStep);
+                var value = values[0];
+                Assert.That(value, Is.TypeOf(typeof(List<Book>)));
+                var books = (List<Book>)value;
+                Assert.AreEqual(2, books.Count);
+                Assert.AreEqual(1, books[0].ISBN);
+                Assert.AreEqual(2, books[1].ISBN);
             }
         }
 
