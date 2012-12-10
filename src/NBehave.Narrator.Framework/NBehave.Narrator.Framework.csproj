@@ -202,13 +202,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Domain\Result.cs" />
     <Compile Include="Domain\ScenarioResult.cs" />
-    <Compile Include="Attributes\AfterScenarioAttribute.cs" />
-    <Compile Include="Attributes\AfterStepAttribute.cs" />
-    <Compile Include="Attributes\BeforeScenarioAttribute.cs" />
-    <Compile Include="Attributes\BeforeStepAttribute.cs" />
     <Compile Include="Attributes\GivenAttribute.cs" />
     <Compile Include="Contracts\IMatchFiles.cs" />
-    <Compile Include="Attributes\NotificationMethodAttribute.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="TextParsing\ModelBuilders\ExamplesBuilder.cs" />
     <Compile Include="TextParsing\ModelBuilders\FeatureBuilder.cs" />

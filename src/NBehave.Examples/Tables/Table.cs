@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using NBehave.Narrator.Framework;
+using NBehave.Narrator.Framework.Hooks;
 using NBehave.Spec.NUnit;
 
 namespace NBehave.Examples.Tables

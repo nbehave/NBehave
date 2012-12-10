@@ -15,10 +15,6 @@ namespace NBehave.Narrator.Framework.Internal
 {
     public class StringStepRunner : IStringStepRunner
     {
-        private ActionMethodInfo lastAction;
-
-        private bool isFirstStepInScenario = true;
-
         public StringStepRunner(ActionCatalog actionCatalog)
         {
             ActionCatalog = actionCatalog;
@@ -50,27 +46,6 @@ namespace NBehave.Narrator.Framework.Internal
             }
         }
 
-        public void OnCloseScenario()
-        {
-            if (lastAction != null)
-            {
-                lastAction.ExecuteNotificationMethod(typeof(AfterScenarioAttribute));
-            }
-        }
-
-        public void BeforeScenario()
-        {
-            isFirstStepInScenario = true;
-        }
-
-        public void AfterScenario()
-        {
-            if (lastAction != null)
-            {
-                lastAction.ExecuteNotificationMethod(typeof(AfterScenarioAttribute));
-            }
-        }
-
         private Type GetActionType(object action)
         {
             var actionType = action.GetType().IsGenericType
@@ -83,21 +58,10 @@ namespace NBehave.Narrator.Framework.Internal
         {
             var info = ActionCatalog.GetAction(actionStep);
 
-            try
-            {
-                //TODO: Move Before-/After-EachStep to RunContext !!
-                BeforeEachScenario(info);
-                BeforeEachStep(info);
-                if (actionStep is StringTableStep && !ShouldForEachOverStep(info))
-                    ForEachOverStep(actionStep as StringTableStep, info);
-                else
-                    RunStep(info, () => ParameterConverter.GetParametersForStep(actionStep));
-            }
-            finally
-            {
-                lastAction = info;
-                AfterEachStep(info);
-            }
+            if (actionStep is StringTableStep && !ShouldForEachOverStep(info))
+                ForEachOverStep(actionStep as StringTableStep, info);
+            else
+                RunStep(info, () => ParameterConverter.GetParametersForStep(actionStep));
         }
 
         private void ForEachOverStep(StringTableStep actionStep, ActionMethodInfo info)
@@ -122,25 +86,6 @@ namespace NBehave.Narrator.Framework.Internal
                 null,
                 new object[] { actionParamValues },
                 CultureInfo.CurrentCulture);
-        }
-
-        private void BeforeEachStep(ActionMethodInfo info)
-        {
-            info.ExecuteNotificationMethod(typeof(BeforeStepAttribute));
-        }
-
-        private void AfterEachStep(ActionMethodInfo info)
-        {
-            info.ExecuteNotificationMethod(typeof(AfterStepAttribute));
-        }
-
-        private void BeforeEachScenario(ActionMethodInfo info)
-        {
-            if (isFirstStepInScenario)
-            {
-                isFirstStepInScenario = false;
-                info.ExecuteNotificationMethod(typeof(BeforeScenarioAttribute));
-            }
         }
 
         private Exception FindUsefulException(Exception e)

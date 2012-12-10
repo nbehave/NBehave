@@ -21,23 +21,52 @@ namespace NBehave.Narrator.Framework.Internal
             foreach (var scenario in feature.Scenarios)
             {
                 var backgroundResults = RunBackground(scenario.Feature.Background);
-                context.ScenarioStartedEvent(scenario);
-                ScenarioResult scenarioResult = scenario.Examples.Any() ? RunExamples(scenario) : RunScenario(scenario);
+                var scenarioResult = BeforeScenario(scenario);
                 scenarioResult.AddActionStepResults(backgroundResults);
+                if (!scenarioResult.HasFailed)
+                {
+                    scenarioResult = scenario.Examples.Any() ? RunExamples(scenario) : RunScenario(scenario);
+                }
+                AfterScenario(scenarioResult);
                 featureResult.AddResult(scenarioResult);
-                context.ScenarioFinishedEvent(scenarioResult);
             }
             return featureResult;
+        }
+
+        private ScenarioResult BeforeScenario(Scenario scenario)
+        {
+            var result = new ScenarioResult(scenario.Feature, scenario.Title);
+
+            try
+            {
+                context.ScenarioStartedEvent(scenario);
+            }
+            catch (Exception e)
+            {
+                result.Fail(e);
+            }
+            return result;
+        }
+
+        private void AfterScenario(ScenarioResult scenarioResult)
+        {
+            try
+            {
+                context.ScenarioFinishedEvent(scenarioResult);
+            }
+            catch (Exception e)
+            {
+                if (!scenarioResult.HasFailed)
+                    scenarioResult.Fail(e);
+            }
         }
 
         private ScenarioResult RunScenario(Scenario scenario)
         {
             var scenarioResult = new ScenarioResult(scenario.Feature, scenario.Title);
-            BeforeScenario();
             var stepResults = RunSteps(scenario.Steps, BeforeStep, AfterStep);
 
             scenarioResult.AddActionStepResults(stepResults);
-            AfterScenario(scenario, scenarioResult);
             return scenarioResult;
         }
 
@@ -55,7 +84,7 @@ namespace NBehave.Narrator.Framework.Internal
         {
             var runner = new ExampleRunner();
             Func<IEnumerable<StringStep>, IEnumerable<StepResult>> runSteps = steps => RunSteps(steps, BeforeStep, AfterStep);
-            var exampleResults = runner.RunExamples(scenario, runSteps, BeforeScenario, AfterScenario);
+            var exampleResults = runner.RunExamples(scenario, runSteps, () => { }, (a, b) => { });
             return exampleResults;
         }
 
@@ -68,51 +97,36 @@ namespace NBehave.Narrator.Framework.Internal
         }
 
         private IEnumerable<StepResult> RunSteps(IEnumerable<StringStep> stepsToRun,
-            Action<StringStep> beforeStep,
-            Action<StringStep> afterStep)
+            Action<StringStep> beforeStep, Action<StringStep> afterStep)
         {
             var failedStep = false;
             var stepResults = new List<StepResult>();
             foreach (var step in stepsToRun)
             {
-                beforeStep(step);
+                InvokeAction(beforeStep, step);
                 if (failedStep)
-                {
                     step.PendBecauseOfPreviousFailedStep();
-                    stepResults.Add(step.StepResult);
-                    continue;
-                }
+                else
+                    stringStepRunner.Run(step);
 
-                stringStepRunner.Run(step);
-
-                if (step.StepResult.Result is Failed)
-                {
-                    failedStep = true;
-                }
+                InvokeAction(afterStep, step);
                 stepResults.Add(step.StepResult);
-                afterStep(step);
+                if (step.StepResult.Result is Failed)
+                    failedStep = true;
             }
             return stepResults;
         }
 
-        private void BeforeScenario()
+        private void InvokeAction(Action<StringStep> action, StringStep step)
         {
-            stringStepRunner.BeforeScenario();
-        }
-
-        private void AfterScenario(Scenario scenario, ScenarioResult scenarioResult)
-        {
-            if (scenario.Steps.Any())
+            try
             {
-                try
-                {
-                    stringStepRunner.AfterScenario();
-                }
-                catch (Exception e)
-                {
-                    if (!scenarioResult.HasFailedSteps())
-                        scenarioResult.Fail(new WrappedException(e));
-                }
+                action(step);
+            }
+            catch (Exception e)
+            {
+                if (!(step.StepResult.Result is Failed))
+                    step.Fail(e);
             }
         }
     }

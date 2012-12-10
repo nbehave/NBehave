@@ -7,13 +7,15 @@ using NUnit.Framework;
 
 namespace NBehave.Narrator.Framework.Specifications
 {
+    //TODO: Move to FeatureRunnerSpec
+
     [TestFixture]
     public abstract class StringStepRunnerSpec
     {
         private IStringStepRunner runner;
         private ActionCatalog actionCatalog;
 
-        public virtual void Setup()
+        public virtual void SetUp()
         {
             actionCatalog = new ActionCatalog();
             runner = new StringStepRunner(actionCatalog);
@@ -23,9 +25,9 @@ namespace NBehave.Narrator.Framework.Specifications
         public class WhenRunningPlainTextScenarios : StringStepRunnerSpec
         {
             [SetUp]
-            public override void Setup()
+            public override void SetUp()
             {
-                base.Setup();
+                base.SetUp();
             }
 
             [Test]
@@ -93,198 +95,14 @@ namespace NBehave.Narrator.Framework.Specifications
             }
         }
 
-        [TestFixture, ActionSteps]
-        public class WhenClassWithActionStepsImplementsNotificationAttributes : StringStepRunnerSpec
-        {
-            private bool _beforeScenarioWasCalled;
-            private bool _beforeStepWasCalled;
-            private bool _afterStepWasCalled;
-            private bool _afterScenarioWasCalled;
-
-            [Given(@"something$")]
-            public void GivenSomething()
-            { }
-
-            [BeforeScenario]
-            public void OnBeforeScenario()
-            {
-                _beforeScenarioWasCalled = true;
-            }
-
-            [BeforeStep]
-            public void OnBeforeStep()
-            {
-                _beforeStepWasCalled = true;
-            }
-
-            [AfterStep]
-            public void OnAfterStep()
-            {
-                _afterStepWasCalled = true;
-            }
-
-            [AfterScenario]
-            public void OnAfterScenario()
-            {
-                _afterScenarioWasCalled = true;
-            }
-
-            [SetUp]
-            public override void Setup()
-            {
-                base.Setup();
-
-                Action action = GivenSomething;
-                actionCatalog.Add(new ActionMethodInfo(new Regex(@"something"), action, action.Method, "Given", this));
-
-                _beforeScenarioWasCalled = false;
-                _beforeStepWasCalled = false;
-                _afterStepWasCalled = false;
-                _afterScenarioWasCalled = false;
-            }
-
-            [Test]
-            public void RunningAStepShouldCallMostAttributedMethods()
-            {
-                var actionStepText = new StringStep("something", "");
-                runner.Run(actionStepText);
-
-                Assert.That(_beforeScenarioWasCalled);
-                Assert.That(_beforeStepWasCalled);
-                Assert.That(_afterStepWasCalled);
-                Assert.That(!_afterScenarioWasCalled);
-            }
-
-            [Test]
-            public void CompletingAScenarioShouldCallAllAttributedMethods()
-            {
-                var actionStepText = new StringStep("something", "");
-                runner.Run(actionStepText);
-                runner.OnCloseScenario();
-
-                Assert.That(_beforeScenarioWasCalled);
-                Assert.That(_beforeStepWasCalled);
-                Assert.That(_afterStepWasCalled);
-                Assert.That(_afterScenarioWasCalled);
-            }
-        }
-
-        [TestFixture, ActionSteps]
-        public class When_AfterStep_throws_exception : StringStepRunnerSpec
-        {
-            [SetUp]
-            public override void Setup()
-            {
-                base.Setup();
-
-                Action action = GivenSomething;
-                actionCatalog.Add(new ActionMethodInfo(new Regex(@"something"), action, action.Method, "Given", this));
-            }
-
-            [Test]
-            public void RunningAStepShouldCallMostAttributedMethods()
-            {
-                var step = new StringStep("something", "");
-                runner.Run(step);
-                Assert.That(step.StepResult.Result, Is.InstanceOf<Failed>());
-                Assert.That(step.StepResult.Message, Is.StringContaining("ArgumentNullException"));
-            }
-
-            [Given(@"When_AfterStep_throws_exception$")]
-            public void GivenSomething()
-            { }
-
-            [AfterStep]
-            public void AfterStep()
-            {
-                throw new ArgumentNullException("AfterStep");
-            }
-
-        }
-
-        [TestFixture, ActionSteps]
-        public class When_BeforeStep_throws_exception : StringStepRunnerSpec
-        {
-            private bool _afterStepWasCalled;
-
-            [SetUp]
-            public override void Setup()
-            {
-                base.Setup();
-
-                Action action = GivenSomething;
-                actionCatalog.Add(new ActionMethodInfo(new Regex(@"something"), action, action.Method, "Given", this));
-            }
-
-            [Test]
-            public void RunningAStepShouldCallMostAttributedMethods()
-            {
-                var step = new StringStep("something", "");
-                runner.Run(step);
-                Assert.That(step.StepResult.Result, Is.InstanceOf<Failed>());
-                Assert.That(step.StepResult.Message, Is.StringContaining("ArgumentNullException"));
-            }
-
-            [Given(@"When_AfterStep_throws_exception$")]
-            public void GivenSomething()
-            { }
-
-            [BeforeStep]
-            public void BeforeStep()
-            {
-                throw new ArgumentNullException("BeforeStep");
-            }
-
-            [AfterStep]
-            public void AfterStep()
-            {
-                _afterStepWasCalled = true;
-            }
-
-        }
-
-        [TestFixture, ActionSteps]
-        public class When_first_step_throws_exception : StringStepRunnerSpec
-        {
-            private bool _afterStepWasCalled;
-
-            [SetUp]
-            public override void Setup()
-            {
-                base.Setup();
-
-                Action action = GivenSomething;
-                actionCatalog.Add(new ActionMethodInfo(new Regex(@"something"), action, action.Method, "Given", this));
-            }
-
-            [Test]
-            public void Should_Call_afterStep_if_step_fails()
-            {
-                var step = new StringStep("something", "");
-                runner.Run(step);
-                Assert.That(_afterStepWasCalled, Is.True);
-            }
-
-            [Given(@"something")]
-            public void GivenSomething()
-            {
-                throw new NotImplementedException("fail");
-            }
-
-            [AfterStep]
-            public void AfterStep()
-            {
-                _afterStepWasCalled = true;
-            }
-        }
 
         [TestFixture]
         public class When_running_with_step_that_has_docstring : StringStepRunnerSpec
         {
             [SetUp]
-            public override void Setup()
+            public override void SetUp()
             {
-                base.Setup();
+                base.SetUp();
             }
 
             [Test]

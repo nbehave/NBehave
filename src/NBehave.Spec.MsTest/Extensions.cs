@@ -83,18 +83,6 @@ namespace NBehave.Spec.MSTest
             Assert.IsTrue(arg1.CompareTo(arg2) >= 0, string.Format("{0} should be larger than or equal to {1}", arg1, arg2));
         }
 
-        [Obsolete("Use ShouldNotBeInstanceOfType")]
-        public static void ShouldBeInstanceOf<T>(this object value)
-        {
-            value.ShouldBeInstanceOfType(typeof(T));
-        }
-
-        [Obsolete("Use ShouldNotBeInstanceOfType")]
-        public static void ShouldBeInstanceOf(this object value, Type expectedType)
-        {
-            Assert.IsInstanceOfType(value, expectedType);
-        }
-
         public static void ShouldBeInstanceOfType<T>(this object value)
         {
             value.ShouldBeInstanceOfType(typeof(T));
@@ -213,18 +201,6 @@ namespace NBehave.Spec.MSTest
         public static void ShouldNotBeEquivalentTo(this ICollection actual, ICollection expected)
         {
             CollectionAssert.AreNotEquivalent(expected, actual);
-        }
-
-        [Obsolete("Use ShouldNotBeInstanceOfType")]
-        public static void ShouldNotBeInstanceOf<T>(this object value)
-        {
-            value.ShouldNotBeInstanceOfType(typeof(T));
-        }
-
-        [Obsolete("Use ShouldNotBeInstanceOfType")]
-        public static void ShouldNotBeInstanceOf(this object value, Type wrongType)
-        {
-            Assert.IsNotInstanceOfType(value, wrongType);
         }
 
         public static void ShouldNotBeInstanceOfType<T>(this object value)

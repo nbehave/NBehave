@@ -12,8 +12,5 @@ namespace NBehave.Narrator.Framework.Internal
     public interface IStringStepRunner
     {
         void Run(StringStep step);
-        void OnCloseScenario();
-        void BeforeScenario();
-        void AfterScenario();
     }
 }

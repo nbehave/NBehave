@@ -53,6 +53,11 @@ namespace NBehave.Narrator.Framework
             get { return _actionStepResults; }
         }
 
+        public bool HasFailed
+        {
+            get { return _result is Failed || HasFailedSteps(); }
+        }
+
         public virtual void AddActionStepResults(IEnumerable<StepResult> stepResults)
         {
             foreach (var stepResult in stepResults)

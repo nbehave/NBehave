@@ -73,12 +73,6 @@ namespace NBehave.Spec.MbUnit
             Assert.GreaterThanOrEqualTo(arg1, arg2);
         }
 
-        [Obsolete("Use ShouldBeInstanceOfType")]
-        public static void ShouldBeInstanceOf<TExpectedType>(this object actual)
-        {
-            actual.ShouldBeInstanceOfType(typeof(TExpectedType));
-        }
-
         public static void ShouldBeInstanceOfType<TExpectedType>(this object actual)
         {
             actual.ShouldBeInstanceOfType(typeof(TExpectedType));
@@ -197,12 +191,6 @@ namespace NBehave.Spec.MbUnit
         public static void ShouldNotBeEquivalentTo<T>(this IEnumerable<T> actual, IEnumerable<T> expected)
         {
             Assert.AreElementsNotEqual(expected, actual);
-        }
-
-        [Obsolete("Use ShouldNotBeInstanceOfType")]
-        public static void ShouldNotBeInstanceOf<TExpectedType>(this object actual)
-        {
-            actual.ShouldNotBeInstanceOfType(typeof(TExpectedType));
         }
 
         public static void ShouldNotBeInstanceOfType<TExpectedType>(this object actual)

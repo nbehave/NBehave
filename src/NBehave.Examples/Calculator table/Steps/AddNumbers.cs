@@ -1,4 +1,5 @@
 ﻿using NBehave.Narrator.Framework;
+using NBehave.Narrator.Framework.Hooks;
 using NBehave.Spec.NUnit;
 
 namespace NBehave.Examples.Calculator_table.Steps

@@ -81,12 +81,6 @@ namespace NBehave.Spec.NUnit
             Assert.That(arg1, Is.GreaterThanOrEqualTo(arg2));
         }
 
-        [Obsolete("Use ShouldBeInstanceOfType")]
-        public static void ShouldBeInstanceOf<TExpectedType>(this object actual)
-        {
-            actual.ShouldBeInstanceOfType(typeof(TExpectedType));
-        }
-
         public static void ShouldBeInstanceOfType<TExpectedType>(this object actual)
         {
             actual.ShouldBeInstanceOfType(typeof(TExpectedType));
@@ -215,12 +209,6 @@ namespace NBehave.Spec.NUnit
         public static void ShouldNotBeEquivalentTo(this ICollection actual, ICollection expected)
         {
             CollectionAssert.AreNotEquivalent(expected, actual);
-        }
-
-        [Obsolete("Use ShouldNotBeInstanceOfType")]
-        public static void ShouldNotBeInstanceOf<TExpectedType>(this object actual)
-        {
-            actual.ShouldNotBeInstanceOfType(typeof(TExpectedType));
         }
 
         public static void ShouldNotBeInstanceOfType<TExpectedType>(this object actual)

@@ -5,6 +5,7 @@ using System.Threading;
 using System.Xml;
 using NBehave.Narrator.Framework.EventListeners.Xml;
 using NBehave.Narrator.Framework.Extensions;
+using NBehave.Narrator.Framework.Hooks;
 using NBehave.Narrator.Framework.Specifications.Features;
 using NUnit.Framework;
 
