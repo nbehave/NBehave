@@ -1,7 +1,8 @@
 ﻿using System.IO;
+using NBehave.Configuration;
 using NUnit.Framework;
 
-namespace NBehave.Narrator.Framework.Specifications.System.Specs
+namespace NBehave.Specifications.System.Specs
 {
     public class SystemTestContext
     {
@@ -20,7 +21,7 @@ namespace NBehave.Narrator.Framework.Specifications.System.Specs
             _config = ConfigurationNoAppDomain
                 .New
                 .SetAssemblies(new[] { Path.GetFileName(GetType().Assembly.Location) })
-                .SetEventListener(Framework.EventListeners.EventListeners.NullEventListener())
+                .SetEventListener(NBehave.EventListeners.EventListeners.NullEventListener())
                 .SetScenarioFiles(featureFiles);
         }
 

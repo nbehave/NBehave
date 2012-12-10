@@ -6,11 +6,12 @@
 //   Defines the Example type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace NBehave.Narrator.Framework
+namespace NBehave.Domain
 {
     [Serializable]
     public class Example

@@ -1,6 +1,6 @@
 using System;
 
-namespace NBehave.Narrator.Framework
+namespace NBehave.Domain
 {
     [Serializable]
     public class BackgroundStepResult : StepResult

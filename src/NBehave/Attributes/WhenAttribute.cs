@@ -7,9 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using JetBrains.Annotations;
-
-namespace NBehave.Narrator.Framework
+namespace NBehave.Attributes
 {
     public class WhenAttribute : ActionStepAttribute
     {

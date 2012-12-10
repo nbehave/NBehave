@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace NBehave.Narrator.Framework.EventListeners.Xml
+namespace NBehave.EventListeners.Xml
 {
     public enum EventType
     {

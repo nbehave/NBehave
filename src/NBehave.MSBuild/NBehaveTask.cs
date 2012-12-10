@@ -13,10 +13,10 @@ using System.Text;
 
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
+using NBehave.Configuration;
+using NBehave.Domain;
+using NBehave.Internal;
 
-using NBehave.Narrator.Framework;
-using NBehave.Narrator.Framework.EventListeners;
-using NBehave.Narrator.Framework.Internal;
 
 namespace NBehave.MSBuild
 {
@@ -67,7 +67,7 @@ namespace NBehave.MSBuild
                 .SetScenarioFiles(ScenarioFiles)
                 .SetDryRun(DryRun)
                 .SetAssemblies(TestAssemblies)
-                .SetEventListener(EventListeners.CreateEventListenerUsing(msbuildLogWriter, TextOutputFile, XmlOutputFile));
+                .SetEventListener(EventListeners.EventListeners.CreateEventListenerUsing(msbuildLogWriter, TextOutputFile, XmlOutputFile));
             var runner = RunnerFactory.CreateTextRunner(config);
 
             FeatureResults = runner.Run();

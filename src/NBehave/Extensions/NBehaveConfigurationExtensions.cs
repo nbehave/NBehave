@@ -7,9 +7,10 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using NBehave.Narrator.Framework.Internal;
+using NBehave.Configuration;
+using NBehave.Internal;
 
-namespace NBehave.Narrator.Framework.Extensions
+namespace NBehave.Extensions
 {
     public static class NBehaveConfigurationExtensions
     {

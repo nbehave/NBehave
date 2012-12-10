@@ -7,14 +7,14 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using NBehave.Narrator.Framework.Extensions;
+using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using NBehave.Domain;
+using NBehave.Extensions;
 
-namespace NBehave.Narrator.Framework
+namespace NBehave.EventListeners.CodeGeneration
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text.RegularExpressions;
-
     public class ActionStepCodeGenerator
     {
         private readonly Regex _stringRegex = new Regex(@"^('|"").+('|"")$");

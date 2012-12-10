@@ -1,7 +1,8 @@
 using System;
-using NBehave.Narrator.Framework.Hooks;
+using NBehave.Domain;
+using NBehave.Hooks;
 
-namespace NBehave.Narrator.Framework.Internal
+namespace NBehave.Internal
 {
     public class RunContext : IRunContext, IRunContextEvents
     {

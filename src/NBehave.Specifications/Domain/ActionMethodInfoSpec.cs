@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using NBehave.Narrator.Framework.Internal;
+using NBehave.Domain;
+using NBehave.Internal;
 using NUnit.Framework;
 
-namespace NBehave.Narrator.Framework.Specifications.Domain
+namespace NBehave.Specifications.Domain
 {
     [TestFixture]
     public class ActionMethodInfoSpec

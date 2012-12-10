@@ -1,5 +1,6 @@
 using System;
-using NBehave.Narrator.Framework;
+using NBehave.Domain;
+
 using TestDriven.Framework;
 
 namespace NBehave.TestDriven.Plugin

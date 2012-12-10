@@ -2,8 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using NBehave.Domain;
 
-namespace NBehave.Narrator.Framework.EventListeners
+namespace NBehave.EventListeners
 {
     public class FailSpecResultEventListener : EventListener
     {

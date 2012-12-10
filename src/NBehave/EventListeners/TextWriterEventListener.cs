@@ -6,11 +6,13 @@
 //   Defines the TextWriterEventListener type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 using System;
 using System.Collections.Generic;
 using System.IO;
+using NBehave.Domain;
 
-namespace NBehave.Narrator.Framework.EventListeners
+namespace NBehave.EventListeners
 {
     public class TextWriterEventListener : EventListener, IDisposable
     {

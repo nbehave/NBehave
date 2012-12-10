@@ -4,10 +4,12 @@ using System.IO;
 using System.Linq;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.UnitTestFramework;
+using NBehave.Configuration;
+using NBehave.Domain;
 using NBehave.Gherkin;
-using NBehave.Narrator.Framework;
-using NBehave.Narrator.Framework.Internal;
-using NBehave.Narrator.Framework.TextParsing;
+using NBehave.Internal;
+
+using NBehave.TextParsing;
 
 namespace NBehave.ReSharper.Plugin.UnitTestProvider
 {

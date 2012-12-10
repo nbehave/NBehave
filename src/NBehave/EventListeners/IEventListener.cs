@@ -1,4 +1,6 @@
-﻿namespace NBehave.Narrator.Framework.EventListeners
+﻿using NBehave.Domain;
+
+namespace NBehave.EventListeners
 {
     public interface IEventListener
     {

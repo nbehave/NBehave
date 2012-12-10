@@ -1,6 +1,7 @@
 using System;
+using NBehave.Domain;
 
-namespace NBehave.Narrator.Framework.Internal
+namespace NBehave.Internal
 {
     public interface IRunContextEvents
     {

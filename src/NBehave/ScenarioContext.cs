@@ -1,7 +1,8 @@
 using System.Collections.Generic;
-using NBehave.Narrator.Framework.Internal;
+using NBehave.Domain;
+using NBehave.Internal;
 
-namespace NBehave.Narrator.Framework
+namespace NBehave
 {
     public class ScenarioContext : NBehaveContext
     {
@@ -23,7 +24,7 @@ namespace NBehave.Narrator.Framework
 
         public static ScenarioContext Current
         {
-            get { return Tiny.TinyIoCContainer.Current.Resolve<ScenarioContext>(); }
+            get { return Narrator.Framework.Tiny.TinyIoCContainer.Current.Resolve<ScenarioContext>(); }
         }
 
         public override string ToString()

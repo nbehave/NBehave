@@ -9,14 +9,12 @@
 
 using System.Linq;
 using System.Reflection;
-using JetBrains.Annotations;
-using NBehave.Narrator.Framework.Extensions;
-
-namespace NBehave.Narrator.Framework
-{
     using System;
     using System.Text.RegularExpressions;
+using NBehave.Extensions;
 
+namespace NBehave.Attributes
+{
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     [MeansImplicitUse]
     public abstract class ActionStepAttribute : Attribute

@@ -7,10 +7,11 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace NBehave.Narrator.Framework.EventListeners
-{
-    using System;
+using System;
+using NBehave.Domain;
 
+namespace NBehave.EventListeners
+{
     public class MultiOutputEventListener : EventListener
     {
         private readonly IEventListener[] listeners;

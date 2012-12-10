@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Reflection;
 
-namespace NBehave.Narrator.Framework.Remoting
+namespace NBehave.Remoting
 {
     public class AppDomainBootstrapper : MarshalByRefObject
     {

@@ -1,8 +1,10 @@
 using System.Collections.Generic;
-using NBehave.Narrator.Framework.Internal;
+using NBehave.Configuration;
+using NBehave.Domain;
+using NBehave.Internal;
 using NUnit.Framework;
 
-namespace NBehave.Narrator.Framework.Specifications
+namespace NBehave.Specifications
 {
     [TestFixture]
     public class LoadAndParseScenarioFilesSpec

@@ -6,9 +6,10 @@
 //   Defines the StepResult type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 using System;
 
-namespace NBehave.Narrator.Framework
+namespace NBehave.Domain
 {
     [Serializable]
     public class Passed : Result

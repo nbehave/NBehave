@@ -10,8 +10,9 @@
 using System;
 using System.Globalization;
 using System.Reflection;
+using NBehave.Domain;
 
-namespace NBehave.Narrator.Framework.Internal
+namespace NBehave.Internal
 {
     public class StringStepRunner : IStringStepRunner
     {

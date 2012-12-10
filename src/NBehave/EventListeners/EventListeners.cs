@@ -1,9 +1,10 @@
 using System.IO;
 using System.Text;
 using System.Xml;
-using NBehave.Narrator.Framework.EventListeners.Xml;
+using NBehave.EventListeners.CodeGeneration;
+using NBehave.EventListeners.Xml;
 
-namespace NBehave.Narrator.Framework.EventListeners
+namespace NBehave.EventListeners
 {
     public static class EventListeners
     {

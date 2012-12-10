@@ -8,8 +8,9 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System.Text.RegularExpressions;
+using NBehave.Domain;
 
-namespace NBehave.Narrator.Framework.Extensions
+namespace NBehave.Extensions
 {
     public static class StringExtensions
     {

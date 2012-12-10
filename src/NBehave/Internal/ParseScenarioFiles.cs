@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
-using NBehave.Narrator.Framework.TextParsing;
+using NBehave.Configuration;
+using NBehave.Domain;
+using NBehave.TextParsing;
 
-namespace NBehave.Narrator.Framework.Internal
+namespace NBehave.Internal
 {
     public class ParseScenarioFiles
     {

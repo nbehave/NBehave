@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using NBehave.Domain;
 using NUnit.Framework;
 
-namespace NBehave.Narrator.Framework.Specifications.Domain
+namespace NBehave.Specifications.Domain
 {
     [TestFixture]
     public class StringTableStepSpec

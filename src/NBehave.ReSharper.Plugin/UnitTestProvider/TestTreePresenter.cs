@@ -10,7 +10,8 @@ using JetBrains.ReSharper.TaskRunnerFramework;
 using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.TreeModels;
 using JetBrains.UI.TreeView;
-using NBehave.Narrator.Framework;
+using NBehave.Domain;
+
 
 namespace NBehave.ReSharper.Plugin.UnitTestProvider
 {

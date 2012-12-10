@@ -1,12 +1,13 @@
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;
-using NBehave.Narrator.Framework.Hooks;
-using NBehave.Narrator.Framework.Internal;
+using NBehave.Attributes;
+using NBehave.Domain;
+using NBehave.Internal;
 using NBehave.Narrator.Framework.Tiny;
 using NUnit.Framework;
 
-namespace NBehave.Narrator.Framework.Specifications
+namespace NBehave.Specifications
 {
     //TODO: Move to FeatureRunnerSpec
     [TestFixture]
@@ -19,7 +20,7 @@ namespace NBehave.Narrator.Framework.Specifications
 
         private void Init()
         {
-            NBehaveInitializer.Initialize(ConfigurationNoAppDomain.New.SetEventListener(Framework.EventListeners.EventListeners.NullEventListener()));
+            NBehaveInitializer.Initialize(ConfigurationNoAppDomain.New.SetEventListener(NBehave.EventListeners.EventListeners.NullEventListener()));
             actionCatalog = TinyIoCContainer.Current.Resolve<ActionCatalog>();
             stringStepRunner = new StringStepRunner(actionCatalog);
             runner = new FeatureRunner(stringStepRunner, TinyIoCContainer.Current.Resolve<IRunContext>());

@@ -2,7 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using NBehave.Narrator.Framework;
+using NBehave.Configuration;
+
 
 namespace NBehave.TestDriven.Plugin
 {

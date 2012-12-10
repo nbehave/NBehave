@@ -9,8 +9,9 @@
 
 using System.Collections.Generic;
 using System.Xml;
+using NBehave.Domain;
 
-namespace NBehave.Narrator.Framework.EventListeners.Xml
+namespace NBehave.EventListeners.Xml
 {
     public class XmlOutputEventListener : EventListener
     {

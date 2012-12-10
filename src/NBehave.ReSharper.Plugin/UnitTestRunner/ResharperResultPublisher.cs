@@ -2,9 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.ReSharper.TaskRunnerFramework;
-using NBehave.Narrator.Framework;
-using NBehave.Narrator.Framework.EventListeners;
-using NBehave.Narrator.Framework.Extensions;
+using NBehave.Domain;
+using NBehave.EventListeners.CodeGeneration;
+using NBehave.Extensions;
+
 
 namespace NBehave.ReSharper.Plugin.UnitTestRunner
 {

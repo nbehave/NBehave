@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace NBehave.Narrator.Framework.EventListeners
+namespace NBehave.EventListeners
 {
     public class NullEventListener : EventListener
     {

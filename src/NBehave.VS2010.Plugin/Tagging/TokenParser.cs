@@ -5,9 +5,11 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.Text;
+using NBehave.Configuration;
+using NBehave.Domain;
 using NBehave.Gherkin;
-using NBehave.Narrator.Framework;
-using NBehave.Narrator.Framework.TextParsing;
+
+using NBehave.TextParsing;
 using NBehave.VS2010.Plugin.Editor.Glyphs;
 
 namespace NBehave.VS2010.Plugin.Tagging

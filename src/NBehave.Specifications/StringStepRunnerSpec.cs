@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using NBehave.Narrator.Framework.Extensions;
-using NBehave.Narrator.Framework.Internal;
+using NBehave.Domain;
+using NBehave.Extensions;
+using NBehave.Internal;
 using NUnit.Framework;
 
-namespace NBehave.Narrator.Framework.Specifications
+namespace NBehave.Specifications
 {
     //TODO: Move to FeatureRunnerSpec
 

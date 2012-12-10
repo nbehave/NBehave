@@ -1,14 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using NBehave.Domain;
 using NBehave.Gherkin;
-using NBehave.Narrator.Framework.Internal;
-using NBehave.Narrator.Framework.TextParsing;
-using NBehave.Narrator.Framework.TextParsing.ModelBuilders;
+using NBehave.Internal;
+using NBehave.TextParsing;
+using NBehave.TextParsing.ModelBuilders;
 using NUnit.Framework;
 using Rhino.Mocks;
 
-namespace NBehave.Narrator.Framework.Specifications.TextParsing
+namespace NBehave.Specifications.TextParsing
 {
     [TestFixture]
     public class StepBuilderSpec

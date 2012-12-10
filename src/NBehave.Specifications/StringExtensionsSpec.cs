@@ -1,7 +1,7 @@
-using NBehave.Narrator.Framework.Extensions;
+using NBehave.Extensions;
 using NUnit.Framework;
 
-namespace NBehave.Narrator.Framework.Specifications
+namespace NBehave.Specifications
 {
     [TestFixture]
     public class StringExtensionsSpec

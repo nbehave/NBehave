@@ -4,18 +4,18 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Xml;
-using NBehave.Narrator.Framework.EventListeners;
-using NBehave.Narrator.Framework.EventListeners.Xml;
-using NBehave.Narrator.Framework.Internal;
-using NBehave.Narrator.Framework.Remoting;
+using NBehave.Configuration;
+using NBehave.Domain;
+using NBehave.EventListeners;
+using NBehave.EventListeners.Xml;
+using NBehave.Internal;
+using NBehave.Remoting;
 using NUnit.Framework;
 using TestPlainTextAssembly;
-using Context = NUnit.Framework.TestFixtureAttribute;
-using Specification = NUnit.Framework.TestAttribute;
 
-namespace NBehave.Narrator.Framework.Specifications
+namespace NBehave.Specifications
 {
-    [Context]
+    [TestFixture]
     public abstract class RemotableStoryRunnerSpec
     {
         [Explicit("This test crashes the R# test runner")]
@@ -86,7 +86,7 @@ namespace NBehave.Narrator.Framework.Specifications
             return Path.GetDirectoryName(assemblyPath);
         }
 
-        [Context]
+        [TestFixture]
         public class When_creating_a_runner_with_config_file : RemotableStoryRunnerSpec
         {
             private IRunner runner;
@@ -104,14 +104,14 @@ namespace NBehave.Narrator.Framework.Specifications
                 DeleteConfigFile();
             }
 
-            [Specification]
+            [Test]
             public void Should_construct_runner_suited_for_remoting()
             {
                 Assert.IsInstanceOf(typeof(AppDomainRunner), runner);
             }
         }
 
-        [Context]
+        [TestFixture]
         public class When_running_plain_text_scenarios_with_config_file : RemotableStoryRunnerSpec
         {
             private IRunner runner;
@@ -138,7 +138,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 DeleteConfigFile();
             }
 
-            [Specification]
+            [Test]
             public void Should_read_values_from_the_appropriate_config_file()
             {
                 Assert.AreEqual(1, results.NumberOfPassingScenarios);
@@ -146,7 +146,7 @@ namespace NBehave.Narrator.Framework.Specifications
             }
         }
 
-        [Context]
+        [TestFixture]
         public class When_running_failing_plain_text_scenarios_with_config_file : RemotableStoryRunnerSpec
         {
             private IRunner runner;
@@ -182,7 +182,7 @@ namespace NBehave.Narrator.Framework.Specifications
             }
         }
 
-        [Context]
+        [TestFixture]
         public class When_running_text_scenarios_with_no_feature_and_config_file : RemotableStoryRunnerSpec
         {
             private IRunner _runner;
@@ -204,7 +204,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 DeleteConfigFile();
             }
 
-            [Specification]
+            [Test]
             public void Should_run_scenario()
             {
                 var result = _runner.Run();
@@ -214,7 +214,7 @@ namespace NBehave.Narrator.Framework.Specifications
             }
         }
 
-        [Context]
+        [TestFixture]
         public class When_running_plain_text_scenarios_with_listener_and_config_file : RemotableStoryRunnerSpec
         {
             private IRunner runner;
@@ -250,20 +250,20 @@ namespace NBehave.Narrator.Framework.Specifications
                 DeleteConfigFile();
             }
 
-            [Specification]
+            [Test]
             public void Should_read_values_from_the_appropriate_config_file()
             {
                 Assert.AreEqual(1, results.NumberOfPassingScenarios);
             }
 
-            [Specification]
+            [Test]
             public void Should_find_one_feature()
             {
                 var storyNodes = xmlOut.SelectNodes("//feature");
                 Assert.That(storyNodes.Count, Is.EqualTo(1));
             }
 
-            [Specification]
+            [Test]
             public void Should_set_title_of_feature()
             {
                 var storyNodes = xmlOut.SelectSingleNode("//feature").Attributes["name"];
@@ -271,7 +271,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 Assert.That(storyNodes.Value, Is.EqualTo(FeatureTitle));
             }
 
-            [Specification]
+            [Test]
             public void Should_run_one_scenario()
             {
                 var scenarioNodes = xmlOut.SelectNodes("//scenario");

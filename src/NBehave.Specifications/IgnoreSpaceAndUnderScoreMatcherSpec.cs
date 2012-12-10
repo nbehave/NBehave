@@ -1,7 +1,8 @@
 ﻿using System;
+using NBehave.Contracts;
 using NUnit.Framework;
 
-namespace NBehave.Narrator.Framework.Specifications.Text
+namespace NBehave.Specifications
 {
 	public class SomeSpec {}
 // ReSharper disable InconsistentNaming

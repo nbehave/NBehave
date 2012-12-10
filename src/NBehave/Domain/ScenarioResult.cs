@@ -8,13 +8,11 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System.Linq;
+using System;
+using System.Collections.Generic;
 
-namespace NBehave.Narrator.Framework
+namespace NBehave.Domain
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-
     [Serializable]
     public class ScenarioResult
     {

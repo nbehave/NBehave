@@ -1,7 +1,7 @@
-using NBehave.Narrator.Framework.Internal;
+using NBehave.Internal;
 using NUnit.Framework;
 
-namespace NBehave.Narrator.Framework.Specifications
+namespace NBehave.Specifications
 {
     [TestFixture]
     public class ScenarioContextSpec

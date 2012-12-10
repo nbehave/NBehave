@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using NBehave.Domain;
 
-namespace NBehave.Narrator.Framework.EventListeners
+namespace NBehave.EventListeners.CodeGeneration
 {
     public class CodeGenEventListener : EventListener
     {

@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using NBehave.Narrator.Framework.Extensions;
+using NBehave.Attributes;
+using NBehave.Contracts;
+using NBehave.Domain;
 
-namespace NBehave.Narrator.Framework.Internal
+namespace NBehave.Internal
 {
     public class ActionStepParser
     {

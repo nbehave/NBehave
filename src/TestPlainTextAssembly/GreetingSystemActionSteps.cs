@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
-using NBehave.Narrator.Framework;
-using NBehave.Narrator.Framework.Hooks;
+using NBehave.Attributes;
+using NBehave.Hooks;
+
 
 namespace TestPlainTextAssembly
 {

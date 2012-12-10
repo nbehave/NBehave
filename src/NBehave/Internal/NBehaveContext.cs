@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace NBehave.Narrator.Framework.Internal
+namespace NBehave.Internal
 {
     public abstract class NBehaveContext : Dictionary<string, object>
     {

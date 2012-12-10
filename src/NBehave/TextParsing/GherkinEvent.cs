@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
+using NBehave.Domain;
 using NBehave.Gherkin;
 
-namespace NBehave.Narrator.Framework
+namespace NBehave.TextParsing
 {
     public class FeatureEvent : GherkinEvent
     {

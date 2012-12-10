@@ -1,4 +1,4 @@
-﻿using NBehave.Narrator.Framework;
+﻿
 using NBehave.Spec.NUnit;
 
 namespace NBehave.Examples.GameOfLife.Specs

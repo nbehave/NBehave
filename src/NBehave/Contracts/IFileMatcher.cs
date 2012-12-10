@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace NBehave.Narrator.Framework
+namespace NBehave.Contracts
 {
     public interface IFileMatcher
     {

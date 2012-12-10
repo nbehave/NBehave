@@ -1,10 +1,10 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
-using NBehave.Narrator.Framework.Internal;
+using NBehave.Internal;
 using NUnit.Framework;
 using Rhino.Mocks;
 
-namespace NBehave.Narrator.Framework.Specifications
+namespace NBehave.Specifications
 {
     [TestFixture]
     public class StoryRunnerFilterSpecs

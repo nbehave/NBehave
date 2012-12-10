@@ -1,15 +1,15 @@
 ﻿using System;
 using System.IO;
 using System.Text;
-using System.Threading;
 using System.Xml;
-using NBehave.Narrator.Framework.EventListeners.Xml;
-using NBehave.Narrator.Framework.Extensions;
-using NBehave.Narrator.Framework.Hooks;
-using NBehave.Narrator.Framework.Specifications.Features;
+using NBehave.Attributes;
+using NBehave.EventListeners.Xml;
+using NBehave.Extensions;
+using NBehave.Hooks;
+using NBehave.Specifications.Features;
 using NUnit.Framework;
 
-namespace NBehave.Narrator.Framework.Specifications.EventListeners
+namespace NBehave.Specifications.EventListeners
 {
     [ActionSteps]
     public class XmlOutputEventListenerSpec
@@ -150,7 +150,7 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
             public void ShouldHaveLinebreaksBetweenNodes()
             {
                 var memStream = new MemoryStream();
-                var listener = Framework.EventListeners.EventListeners.XmlWriterEventListener(memStream);
+                var listener = NBehave.EventListeners.EventListeners.XmlWriterEventListener(memStream);
 
                 ConfigurationNoAppDomain
                     .New

@@ -8,9 +8,9 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
-using NBehave.Narrator.Framework.EventListeners;
+using NBehave.Domain;
 
-namespace NBehave.Narrator.Framework
+namespace NBehave.EventListeners
 {
     public abstract class EventListener : MarshalByRefObject, IEventListener
     {

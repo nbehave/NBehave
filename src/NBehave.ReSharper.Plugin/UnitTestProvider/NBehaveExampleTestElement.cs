@@ -2,7 +2,8 @@ using System.Collections.Generic;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.UnitTestFramework;
-using NBehave.Narrator.Framework;
+using NBehave.Domain;
+
 using NBehave.ReSharper.Plugin.UnitTestRunner;
 
 namespace NBehave.ReSharper.Plugin.UnitTestProvider

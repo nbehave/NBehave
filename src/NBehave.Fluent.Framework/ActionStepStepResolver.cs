@@ -1,8 +1,9 @@
 using System;
 using System.Linq;
-using NBehave.Narrator.Framework;
-using NBehave.Narrator.Framework.Hooks;
-using NBehave.Narrator.Framework.Internal;
+using NBehave.Domain;
+using NBehave.Hooks;
+using NBehave.Internal;
+
 
 namespace NBehave.Fluent.Framework
 {

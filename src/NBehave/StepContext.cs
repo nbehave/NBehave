@@ -1,6 +1,7 @@
-using NBehave.Narrator.Framework.Internal;
+using NBehave.Domain;
+using NBehave.Internal;
 
-namespace NBehave.Narrator.Framework
+namespace NBehave
 {
     public static class Step
     {
@@ -26,7 +27,7 @@ namespace NBehave.Narrator.Framework
 
         public static StepContext Current
         {
-            get { return Tiny.TinyIoCContainer.Current.Resolve<StepContext>(); }
+            get { return Narrator.Framework.Tiny.TinyIoCContainer.Current.Resolve<StepContext>(); }
         }
 
         public override string ToString()

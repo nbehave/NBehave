@@ -1,6 +1,8 @@
+using NBehave.Domain;
+using NBehave.EventListeners.CodeGeneration;
 using NUnit.Framework;
 
-namespace NBehave.Narrator.Framework.Specifications
+namespace NBehave.Specifications
 {
     [TestFixture]
     public abstract class ActionStepCodeGeneratorSpec

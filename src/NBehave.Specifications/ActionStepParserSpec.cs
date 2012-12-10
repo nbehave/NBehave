@@ -1,7 +1,10 @@
-using NBehave.Narrator.Framework.Internal;
+using NBehave.Attributes;
+using NBehave.Contracts;
+using NBehave.Domain;
+using NBehave.Internal;
 using NUnit.Framework;
 
-namespace NBehave.Narrator.Framework.Specifications
+namespace NBehave.Specifications
 {
     [TestFixture]
     public abstract class ActionStepParserSpec

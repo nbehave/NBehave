@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Xml;
-using NBehave.Narrator.Framework.EventListeners;
-using NBehave.Narrator.Framework.EventListeners.Xml;
-using NBehave.Narrator.Framework.Extensions;
-using NBehave.Narrator.Framework.Internal;
-using NBehave.Narrator.Framework.Specifications.Features;
+using NBehave.Attributes;
+using NBehave.Configuration;
+using NBehave.Domain;
+using NBehave.EventListeners;
+using NBehave.EventListeners.Xml;
+using NBehave.Extensions;
+using NBehave.Internal;
 using NBehave.Narrator.Framework.Tiny;
+using NBehave.Specifications.Features;
 using NUnit.Framework;
 
-namespace NBehave.Narrator.Framework.Specifications
+namespace NBehave.Specifications
 {
     [TestFixture]
     public class TextRunnerSpec

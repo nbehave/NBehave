@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using NBehave.Examples.BowlingGame;
-using NBehave.Narrator.Framework;
+
 using NBehave.Spec.NUnit;
 
 namespace NBehave.Examples.Bowling_Game.Specs

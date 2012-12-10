@@ -11,11 +11,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using NBehave.Configuration;
+using NBehave.Domain;
 using NBehave.Gherkin;
-using NBehave.Narrator.Framework.Internal;
-using NBehave.Narrator.Framework.TextParsing.ModelBuilders;
+using NBehave.Internal;
+using NBehave.TextParsing.ModelBuilders;
 
-namespace NBehave.Narrator.Framework.TextParsing
+namespace NBehave.TextParsing
 {
     public class ModelBuilder
     {

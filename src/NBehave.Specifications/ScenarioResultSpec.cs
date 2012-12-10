@@ -1,8 +1,9 @@
 using System;
-using NBehave.Narrator.Framework.Extensions;
+using NBehave.Domain;
+using NBehave.Extensions;
 using NUnit.Framework;
 
-namespace NBehave.Narrator.Framework.Specifications
+namespace NBehave.Specifications
 {
     [TestFixture]
     public class ScenarioResultSpec

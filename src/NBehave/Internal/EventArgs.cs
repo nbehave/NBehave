@@ -1,6 +1,6 @@
 using System;
 
-namespace NBehave.Narrator.Framework.Internal
+namespace NBehave.Internal
 {
     public class EventArgs<T> : EventArgs
     {

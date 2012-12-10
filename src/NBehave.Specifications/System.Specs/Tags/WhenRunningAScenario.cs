@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using NBehave.Narrator.Framework.Extensions;
-using NBehave.Narrator.Framework.TextParsing.TagFilter;
-using NBehave.Narrator.Framework.Tiny;
+﻿using System.Linq;
+using NBehave.Domain;
+using NBehave.Extensions;
 using NUnit.Framework;
-using Rhino.Mocks;
 
-namespace NBehave.Narrator.Framework.Specifications.System.Specs
+namespace NBehave.Specifications.System.Specs.Tags
 {
     [TestFixture]
     public abstract class WhenRunningAScenarioWithTags : SystemTestContext

@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace NBehave.Narrator.Framework.EventListeners
+namespace NBehave.EventListeners
 {
     public interface IOutputWriter
     {

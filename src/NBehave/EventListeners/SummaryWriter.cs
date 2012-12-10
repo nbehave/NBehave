@@ -6,12 +6,14 @@
 //   Defines the SummaryWriter type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using NBehave.Domain;
 
-namespace NBehave.Narrator.Framework
+namespace NBehave.EventListeners
 {
     public class SummaryWriter
     {

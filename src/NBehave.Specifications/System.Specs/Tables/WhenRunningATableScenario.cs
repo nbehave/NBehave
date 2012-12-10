@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using NBehave.Narrator.Framework.Extensions;
+using NBehave.Attributes;
+using NBehave.Domain;
+using NBehave.Extensions;
 using NUnit.Framework;
 
-namespace NBehave.Narrator.Framework.Specifications.System.Specs
+namespace NBehave.Specifications.System.Specs.Tables
 {
     [TestFixture]
     public class WhenRunningATableScenario : SystemTestContext
@@ -16,7 +18,7 @@ namespace NBehave.Narrator.Framework.Specifications.System.Specs
             _config = ConfigurationNoAppDomain
                 .New
                 .SetAssemblies(new[] { Path.GetFileName(GetType().Assembly.Location) })
-                .SetEventListener(Framework.EventListeners.EventListeners.NullEventListener())
+                .SetEventListener(NBehave.EventListeners.EventListeners.NullEventListener())
                 .SetScenarioFiles(new[] { @"System.Specs\Tables\TableScenario.feature" });
         }
 

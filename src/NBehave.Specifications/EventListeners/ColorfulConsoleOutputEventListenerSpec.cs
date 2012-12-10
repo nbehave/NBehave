@@ -1,11 +1,11 @@
 ﻿using System;
 using System.IO;
-using NBehave.Narrator.Framework.Extensions;
-using NBehave.Narrator.Framework.Specifications.Features;
+using NBehave.Extensions;
+using NBehave.Specifications.Features;
 using NUnit.Framework;
 using TestPlainTextAssembly;
 
-namespace NBehave.Narrator.Framework.Specifications.EventListeners
+namespace NBehave.Specifications.EventListeners
 {
     [TestFixture]
     public abstract class ColorfulConsoleOutputEventListenerSpec
@@ -22,7 +22,7 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
             var writer = new StreamWriter(output);
             _originalConsoleOut = Console.Out;
             Console.SetOut(writer);
-            var listener = Framework.EventListeners.EventListeners.ColorfulConsoleOutputEventListener();
+            var listener = NBehave.EventListeners.EventListeners.ColorfulConsoleOutputEventListener();
             ConfigurationNoAppDomain
                 .New
                 .SetScenarioFiles(new[] { FeatureFile })

@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using NBehave.Narrator.Framework.Extensions;
-using NBehave.Narrator.Framework.Internal;
+using NBehave.Contracts;
+using NBehave.Extensions;
+using NBehave.Internal;
 
-namespace NBehave.Narrator.Framework
+namespace NBehave.Domain
 {
     public class ActionMethodInfo
     {

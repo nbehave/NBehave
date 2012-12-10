@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NBehave.Narrator.Framework.Internal;
+using NBehave.Domain;
+using NBehave.Internal;
 
-namespace NBehave.Narrator.Framework.Hooks
+namespace NBehave.Hooks
 {
     public class HooksHandler : IDisposable
     {

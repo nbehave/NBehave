@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NBehave.Narrator.Framework
+namespace NBehave.TextParsing
 {
     public class GroupEventsByTag
     {

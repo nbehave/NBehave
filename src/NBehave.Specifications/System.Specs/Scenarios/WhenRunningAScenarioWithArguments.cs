@@ -1,8 +1,9 @@
-﻿using System.IO;
-using NBehave.Narrator.Framework.Extensions;
+﻿using NBehave.Attributes;
+using NBehave.Domain;
+using NBehave.Extensions;
 using NUnit.Framework;
 
-namespace NBehave.Narrator.Framework.Specifications.System.Specs
+namespace NBehave.Specifications.System.Specs.Scenarios
 {
     [TestFixture]
     public class WhenRunningAScenarioWithArguments : SystemTestContext

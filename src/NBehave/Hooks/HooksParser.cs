@@ -2,10 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using NBehave.Narrator.Framework.Hooks;
-using NBehave.Narrator.Framework.Internal;
+using NBehave.Internal;
 
-namespace NBehave.Narrator.Framework
+namespace NBehave.Hooks
 {
     public class HooksCatalog
     {

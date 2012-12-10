@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
-using NBehave.Narrator.Framework;
+using NBehave.Domain;
+
 
 namespace NBehave.Fluent.Framework
 {
@@ -25,7 +26,7 @@ namespace NBehave.Fluent.Framework
         {
             get
             {
-                if (_scenario == null)
+                if(_scenario == null)
                 {
                     _scenario = new Scenario(_scenarioTitle, "");
                     Feature.AddScenario(Scenario);

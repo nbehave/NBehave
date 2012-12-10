@@ -9,13 +9,12 @@
 
 using System;
 using System.Linq;
-using NBehave.Narrator.Framework.Extensions;
-using NBehave.Narrator.Framework.Internal;
+using System.Collections.Generic;
+using NBehave.Extensions;
+using NBehave.Internal;
 
-namespace NBehave.Narrator.Framework
+namespace NBehave.Domain
 {
-    using System.Collections.Generic;
-
     [Serializable]
     public class StringTableStep : StringStep
     {

@@ -1,9 +1,9 @@
-﻿using System;
-using NBehave.Narrator.Framework.EventListeners;
-using NBehave.Narrator.Framework.Hooks;
+﻿using NBehave.Configuration;
+using NBehave.EventListeners;
+using NBehave.Hooks;
 using NBehave.Narrator.Framework.Tiny;
 
-namespace NBehave.Narrator.Framework.Internal
+namespace NBehave.Internal
 {
     public static class NBehaveInitializer
     {

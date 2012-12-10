@@ -1,5 +1,6 @@
 using System;
-using NBehave.Narrator.Framework;
+using NBehave.Domain;
+
 
 namespace NBehave.Fluent.Framework
 {

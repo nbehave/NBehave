@@ -1,10 +1,10 @@
 using System.Linq;
-using NBehave.Narrator.Framework.EventListeners;
-using NBehave.Narrator.Framework.Extensions;
-using NBehave.Narrator.Framework.Specifications.Features;
+using NBehave.EventListeners.CodeGeneration;
+using NBehave.Extensions;
+using NBehave.Specifications.Features;
 using NUnit.Framework;
 
-namespace NBehave.Narrator.Framework.Specifications.EventListeners
+namespace NBehave.Specifications.EventListeners
 {
     [TestFixture]
     public class CodeGenEventListenerSpec

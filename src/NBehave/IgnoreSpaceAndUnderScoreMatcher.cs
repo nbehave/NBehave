@@ -7,12 +7,13 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace NBehave.Narrator.Framework
-{
-    using System;
-    using System.IO;
-    using System.Text.RegularExpressions;
+using System;
+using System.IO;
+using System.Text.RegularExpressions;
+using NBehave.Contracts;
 
+namespace NBehave
+{
     public class IgnoreSpaceAndUnderScoreMatcher : IFileMatcher
     {
         private readonly string _className;

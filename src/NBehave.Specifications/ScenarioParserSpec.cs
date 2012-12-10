@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using NBehave.Narrator.Framework.TextParsing;
+using NBehave.Configuration;
+using NBehave.Domain;
+using NBehave.TextParsing;
 using NUnit.Framework;
 
-namespace NBehave.Narrator.Framework.Specifications
+namespace NBehave.Specifications
 {
     [TestFixture]
     public abstract class ScenarioParserSpec

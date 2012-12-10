@@ -1,8 +1,9 @@
-﻿using NBehave.Narrator.Framework.Extensions;
-using NBehave.Narrator.Framework.Internal;
+﻿using NBehave.Domain;
+using NBehave.Extensions;
+using NBehave.Internal;
 using NUnit.Framework;
 
-namespace NBehave.Narrator.Framework.Specifications.Internal
+namespace NBehave.Specifications.Internal
 {
     [TestFixture]
     public abstract class ContextHandlerSpec

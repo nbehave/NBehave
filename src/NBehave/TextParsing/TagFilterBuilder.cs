@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using NBehave.Narrator.Framework.TextParsing.TagFilter;
+using NBehave.TextParsing.TagFilter;
 
-namespace NBehave.Narrator.Framework.TextParsing
+namespace NBehave.TextParsing
 {
     public static class TagFilterBuilder
     {

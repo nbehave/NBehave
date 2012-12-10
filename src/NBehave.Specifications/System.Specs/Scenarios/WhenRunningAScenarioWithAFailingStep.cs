@@ -1,9 +1,10 @@
-﻿using System.IO;
-using NBehave.Narrator.Framework.Extensions;
+﻿using NBehave.Attributes;
+using NBehave.Domain;
+using NBehave.Extensions;
 using NUnit.Framework;
 using Should.Fluent;
 
-namespace NBehave.Narrator.Framework.Specifications.System.Specs
+namespace NBehave.Specifications.System.Specs.Scenarios
 {
     [TestFixture]
     public class WhenRunningAScenarioWithAFailingStep : SystemTestContext

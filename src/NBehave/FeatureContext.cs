@@ -1,7 +1,8 @@
 using System.Collections.Generic;
-using NBehave.Narrator.Framework.Internal;
+using NBehave.Domain;
+using NBehave.Internal;
 
-namespace NBehave.Narrator.Framework
+namespace NBehave
 {
     public class FeatureContext : NBehaveContext
     {
@@ -21,7 +22,7 @@ namespace NBehave.Narrator.Framework
 
         public static FeatureContext Current
         {
-            get { return Tiny.TinyIoCContainer.Current.Resolve<FeatureContext>(); }
+            get { return Narrator.Framework.Tiny.TinyIoCContainer.Current.Resolve<FeatureContext>(); }
         }
 
         public override string ToString()

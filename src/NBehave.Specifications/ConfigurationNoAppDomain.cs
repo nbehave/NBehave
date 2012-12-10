@@ -1,4 +1,6 @@
-namespace NBehave.Narrator.Framework.Specifications
+using NBehave.Configuration;
+
+namespace NBehave.Specifications
 {
     public static class ConfigurationNoAppDomain
     {

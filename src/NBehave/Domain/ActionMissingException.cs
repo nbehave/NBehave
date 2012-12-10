@@ -7,11 +7,11 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace NBehave.Narrator.Framework
-{
-    using System;
-    using System.Runtime.Serialization;
+using System;
+using System.Runtime.Serialization;
 
+namespace NBehave.Domain
+{
     public class ActionMissingException : Exception
     {
         public ActionMissingException()

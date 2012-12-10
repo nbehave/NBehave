@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using NBehave.Narrator.Framework;
-using NBehave.Narrator.Framework.EventListeners;
-using NBehave.Narrator.Framework.EventListeners.Xml;
+using NBehave.EventListeners;
+using NBehave.EventListeners.Xml;
+
 using NUnit.Framework;
 
 namespace NBehave.Console.Specifications

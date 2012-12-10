@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using NBehave.Narrator.Framework;
+using NBehave.Attributes;
+using NBehave.Contracts;
+
 using NBehave.Spec.NUnit;
 
 namespace NBehave.TestDriven.Plugin.Tests

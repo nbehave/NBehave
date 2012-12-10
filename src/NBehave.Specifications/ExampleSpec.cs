@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
+using NBehave.Domain;
 using NUnit.Framework;
 
-namespace NBehave.Narrator.Framework.Specifications.Text
+namespace NBehave.Specifications
 {
     [TestFixture]
     public class ExampleSpec

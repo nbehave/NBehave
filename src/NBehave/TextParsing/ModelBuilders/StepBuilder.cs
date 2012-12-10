@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using NBehave.Domain;
 using NBehave.Gherkin;
 
-namespace NBehave.Narrator.Framework.TextParsing.ModelBuilders
+namespace NBehave.TextParsing.ModelBuilders
 {
     public class StepBuilder
     {

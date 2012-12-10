@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Xml;
-using NBehave.Narrator.Framework.EventListeners.Xml;
+using NBehave.Domain;
+using NBehave.EventListeners.Xml;
 using NUnit.Framework;
 
-namespace NBehave.Narrator.Framework.Specifications.EventListeners
+namespace NBehave.Specifications.EventListeners
 {
     [TestFixture]
     public abstract class XmlOutputWriterSpec

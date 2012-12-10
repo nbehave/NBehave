@@ -1,8 +1,9 @@
 using System.IO;
 using System.Linq;
-using NBehave.Narrator.Framework.Remoting;
+using NBehave.Configuration;
+using NBehave.Remoting;
 
-namespace NBehave.Narrator.Framework.Internal
+namespace NBehave.Internal
 {
     public static class RunnerFactory
     {

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NBehave.Narrator.Framework.TextParsing
+namespace NBehave.TextParsing
 {
     public static class GroupEventsByFeature
     {

@@ -1,7 +1,8 @@
 ﻿using System.Reflection;
+using NBehave.Attributes;
 using NUnit.Framework;
 
-namespace NBehave.Narrator.Framework.Specifications.Text
+namespace NBehave.Specifications
 {
     [TestFixture]
     public class ActionStepAttributeSpec

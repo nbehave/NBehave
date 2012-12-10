@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
-using NBehave.Narrator.Framework.TextParsing.TagFilter;
+using NBehave.Domain;
+using NBehave.TextParsing;
+using NBehave.TextParsing.TagFilter;
 using NUnit.Framework;
 
-namespace NBehave.Narrator.Framework.Specifications.TextParsing
+namespace NBehave.Specifications.TextParsing
 {
     [TestFixture]
     public class TagFilterSpec

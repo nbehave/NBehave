@@ -3,10 +3,11 @@ using System.Text;
 using NAnt.Core;
 using NAnt.Core.Attributes;
 using NAnt.Core.Types;
-using NBehave.Narrator.Framework;
-using NBehave.Narrator.Framework.EventListeners;
-using NBehave.Narrator.Framework.Extensions;
-using NBehave.Narrator.Framework.Internal;
+using NBehave.Configuration;
+using NBehave.Domain;
+using NBehave.Extensions;
+using NBehave.Internal;
+
 using NAntCore = NAnt.Core;
 
 namespace NBehave.NAnt
@@ -49,7 +50,7 @@ namespace NBehave.NAnt
 
             WriteHeaderInto(output);
 
-            var listener = EventListeners.CreateEventListenerUsing(nantLogWriter,
+            var listener = EventListeners.EventListeners.CreateEventListenerUsing(nantLogWriter,
                                                                               TextOutputFile,
                                                                               XmlOutputFile);
 

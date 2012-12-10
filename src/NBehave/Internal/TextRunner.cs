@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using NBehave.Configuration;
+using NBehave.Domain;
 using NBehave.Narrator.Framework.Tiny;
 
-namespace NBehave.Narrator.Framework.Internal
+namespace NBehave.Internal
 {
     public class TextRunner : MarshalByRefObject, IRunner
     {

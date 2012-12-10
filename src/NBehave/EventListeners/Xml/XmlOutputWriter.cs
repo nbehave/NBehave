@@ -8,14 +8,14 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System.Reflection;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Xml;
+using NBehave.Domain;
 
-namespace NBehave.Narrator.Framework.EventListeners.Xml
+namespace NBehave.EventListeners.Xml
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Xml;
-
     public class XmlOutputWriter
     {
         public XmlOutputWriter(XmlWriter xmlWriter, IList<EventReceived> eventsReceived)

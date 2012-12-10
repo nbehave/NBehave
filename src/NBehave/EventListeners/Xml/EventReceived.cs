@@ -7,10 +7,10 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace NBehave.Narrator.Framework.EventListeners.Xml
-{
-    using System;
+using System;
 
+namespace NBehave.EventListeners.Xml
+{
     public class EventReceived
     {
         public EventReceived(string message, EventType eventType)

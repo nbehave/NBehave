@@ -1,4 +1,6 @@
-﻿namespace NBehave.Narrator.Framework.TextParsing.ModelBuilders
+﻿using NBehave.Domain;
+
+namespace NBehave.TextParsing.ModelBuilders
 {
     public class FeatureBuilder
     {

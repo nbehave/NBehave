@@ -1,4 +1,4 @@
-﻿using NBehave.Narrator.Framework;
+﻿
 using NBehave.Narrator.Framework.Hooks;
 using NBehave.Spec.NUnit;
 

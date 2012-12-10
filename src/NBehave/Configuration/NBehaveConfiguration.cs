@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NBehave.Narrator.Framework.EventListeners;
-using NBehave.Narrator.Framework.Internal;
+using NBehave.EventListeners;
+using NBehave.Internal;
 
-namespace NBehave.Narrator.Framework
+namespace NBehave.Configuration
 {
     /// <summary>
     ///   Fluent configuration to declare settings for the text based scenario runner.

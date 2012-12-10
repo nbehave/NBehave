@@ -10,7 +10,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace NBehave.Narrator.Framework.Extensions
+namespace NBehave.Extensions
 {
     public static class EnumerableExtensions
     {

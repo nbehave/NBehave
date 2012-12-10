@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using NBehave.Attributes;
+using NBehave.Domain;
 using NBehave.Fluent.Framework.Extensions;
 using NBehave.Fluent.Framework.NUnit;
-using NBehave.Narrator.Framework;
+
 using NBehave.Spec.NUnit;
 using NUnit.Framework;
 
@@ -19,13 +21,13 @@ namespace NBehave.TestDriven.Plugin.Specs
         }
 
         [Test]
-        public void should_correctly_parse_NBehave_Narrator_Framework()
+        public void should_correctly_parse_NBehave()
         {
-            Feature.AddScenario("Parsing NBehave.Narrator.Framework")
+            Feature.AddScenario("Parsing NBehave")
                 .WithHelperObject<AssemblyHelperSpecSteps>()
-                .Given("A reference to the NBehave.Narrator.Framework assembly")
+                .Given("A reference to the NBehave assembly")
                 .When("We deduce the root namespace")
-                .Then("It should be NBehave.Narrator.Framework")
+                .Then("It should be NBehave")
                 ;
         }
 
@@ -47,7 +49,7 @@ namespace NBehave.TestDriven.Plugin.Specs
         private Assembly _assembly;
         private IEnumerable<string> _deducedRootNamespaceParts;
 
-        [Given("A reference to the NBehave.Narrator.Framework assembly")]
+        [Given("A reference to the NBehave assembly")]
         public void ReferenceNarratorAssembly()
         {
             _assembly = typeof(ScenarioResult).Assembly;

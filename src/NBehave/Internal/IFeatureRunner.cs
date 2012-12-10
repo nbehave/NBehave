@@ -1,4 +1,6 @@
-namespace NBehave.Narrator.Framework.Internal
+using NBehave.Domain;
+
+namespace NBehave.Internal
 {
     public interface IFeatureRunner
     {

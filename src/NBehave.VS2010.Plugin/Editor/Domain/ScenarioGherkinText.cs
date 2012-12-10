@@ -1,4 +1,5 @@
-using NBehave.Narrator.Framework;
+using NBehave.Domain;
+
 
 namespace NBehave.VS2010.Plugin.Editor.Domain
 {

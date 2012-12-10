@@ -9,10 +9,10 @@
 
 using JetBrains.Annotations;
 
-namespace NBehave.Narrator.Framework
-{
     using System;
 
+namespace NBehave.Attributes
+{
     [AttributeUsage(AttributeTargets.Class)]
     [MeansImplicitUse]
     public class ActionStepsAttribute : Attribute

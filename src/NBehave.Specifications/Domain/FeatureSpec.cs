@@ -1,7 +1,8 @@
 using System;
+using NBehave.Domain;
 using NUnit.Framework;
 
-namespace NBehave.Narrator.Framework.Specifications.Domain
+namespace NBehave.Specifications.Domain
 {
     [TestFixture]
     public class FeatureSpec

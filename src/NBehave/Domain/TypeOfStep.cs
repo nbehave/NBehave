@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace NBehave.Narrator.Framework
+namespace NBehave.Domain
 {
     public enum TypeOfStep
     {

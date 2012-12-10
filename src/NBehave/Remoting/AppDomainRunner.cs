@@ -1,9 +1,11 @@
 using System;
 using System.IO;
 using System.Reflection;
-using NBehave.Narrator.Framework.Internal;
+using NBehave.Configuration;
+using NBehave.Domain;
+using NBehave.Internal;
 
-namespace NBehave.Narrator.Framework.Remoting
+namespace NBehave.Remoting
 {
     public class AppDomainRunner : IRunner
     {

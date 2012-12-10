@@ -6,11 +6,12 @@
 //   Defines the Feature type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NBehave.Narrator.Framework
+namespace NBehave.Domain
 {
 
     [Serializable]

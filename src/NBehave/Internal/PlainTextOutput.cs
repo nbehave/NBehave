@@ -11,7 +11,7 @@ using System;
 using System.IO;
 using System.Reflection;
 
-namespace NBehave.Narrator.Framework.Internal
+namespace NBehave.Internal
 {
     public class PlainTextOutput : MarshalByRefObject
     {

@@ -1,10 +1,10 @@
 using System.IO;
-using NBehave.Narrator.Framework.EventListeners;
-using NBehave.Narrator.Framework.Specifications.Features;
+using NBehave.EventListeners;
+using NBehave.Specifications.Features;
 using NUnit.Framework;
 using TestPlainTextAssembly;
 
-namespace NBehave.Narrator.Framework.Specifications
+namespace NBehave.Specifications
 {
     [TestFixture]
     public abstract class EmbeddedRunnerSpec

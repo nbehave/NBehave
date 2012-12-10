@@ -4,10 +4,11 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using NBehave.Narrator.Framework.EventListeners;
-using NBehave.Narrator.Framework.Extensions;
+using NBehave.Configuration;
+using NBehave.EventListeners;
+using NBehave.Extensions;
 
-namespace NBehave.Narrator.Framework
+namespace NBehave
 {
     public static class EmbeddedRunner
     {

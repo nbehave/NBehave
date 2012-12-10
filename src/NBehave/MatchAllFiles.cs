@@ -7,7 +7,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace NBehave.Narrator.Framework
+using NBehave.Contracts;
+
+namespace NBehave
 {
     public class MatchAllFiles : IFileMatcher
     {

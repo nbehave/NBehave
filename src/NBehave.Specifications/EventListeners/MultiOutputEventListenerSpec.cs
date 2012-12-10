@@ -1,8 +1,8 @@
-using NBehave.Narrator.Framework.EventListeners;
+using NBehave.EventListeners;
 using NUnit.Framework;
 using Rhino.Mocks;
 
-namespace NBehave.Narrator.Framework.Specifications.EventListeners
+namespace NBehave.Specifications.EventListeners
 {
     [TestFixture]
     public class MultiOutputEventListenerSpec

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NBehave.Narrator.Framework.TextParsing.TagFilter
+namespace NBehave.TextParsing.TagFilter
 {
     public abstract class TagFilter
     {

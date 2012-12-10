@@ -1,4 +1,4 @@
-﻿namespace NBehave.Narrator.Framework.Specifications.Features
+﻿namespace NBehave.Specifications.Features
 {
     public static class TestFeatures
     {

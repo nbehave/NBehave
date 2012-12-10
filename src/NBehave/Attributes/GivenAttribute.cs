@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace NBehave.Narrator.Framework
+namespace NBehave.Attributes
 {
     public class GivenAttribute : ActionStepAttribute
     {

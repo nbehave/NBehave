@@ -12,7 +12,7 @@ using System.Runtime.Serialization;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
-namespace NBehave.Narrator.Framework.Internal
+namespace NBehave.Internal
 {
     [Serializable]
     public class StoryRunnerFilter : ISerializable

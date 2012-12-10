@@ -4,10 +4,12 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using NBehave.Narrator.Framework;
-using NBehave.Narrator.Framework.EventListeners;
-using NBehave.Narrator.Framework.Extensions;
-using NBehave.Narrator.Framework.Internal;
+using NBehave.Configuration;
+using NBehave.Domain;
+using NBehave.EventListeners;
+using NBehave.Extensions;
+using NBehave.Internal;
+
 
 namespace NBehave.Console
 {
@@ -160,19 +162,19 @@ namespace NBehave.Console
         {
             var eventListeners = new List<EventListener>();
             if (options.HasStoryOutput)
-                eventListeners.Add(EventListeners.FileOutputEventListener(options.StoryOutput));
+                eventListeners.Add(EventListeners.EventListeners.FileOutputEventListener(options.StoryOutput));
 
             if (options.HasStoryXmlOutput)
-                eventListeners.Add(EventListeners.XmlWriterEventListener(options.Xml));
+                eventListeners.Add(EventListeners.EventListeners.XmlWriterEventListener(options.Xml));
 
             if (options.Console)
-                eventListeners.Add(EventListeners.ColorfulConsoleOutputEventListener());
+                eventListeners.Add(EventListeners.EventListeners.ColorfulConsoleOutputEventListener());
 
             if (eventListeners.Count == 0)
-                eventListeners.Add(EventListeners.ColorfulConsoleOutputEventListener());
+                eventListeners.Add(EventListeners.EventListeners.ColorfulConsoleOutputEventListener());
 
             if (options.Codegen)
-                eventListeners.Add(EventListeners.CodeGenEventListener(System.Console.Out));
+                eventListeners.Add(EventListeners.EventListeners.CodeGenEventListener(System.Console.Out));
 
             return new MultiOutputEventListener(eventListeners.ToArray());
         }

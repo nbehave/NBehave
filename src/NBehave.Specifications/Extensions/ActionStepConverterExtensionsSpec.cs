@@ -1,7 +1,7 @@
-using NBehave.Narrator.Framework.Extensions;
+using NBehave.Extensions;
 using NUnit.Framework;
 
-namespace NBehave.Narrator.Framework.Specifications.Extensions
+namespace NBehave.Specifications.Extensions
 {
     [TestFixture]
     public class ActionStepConverterExtensionsSpec

@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using NBehave.Narrator.Framework.Extensions;
+using NBehave.Domain;
+using NBehave.Extensions;
 using NUnit.Framework;
 
-namespace NBehave.Narrator.Framework.Specifications.System.Specs
+namespace NBehave.Specifications.System.Specs.Examples
 {
     [TestFixture]
     public class WhenRunningAScenarioWithScenarioOutlinesButNoActionSteps : SystemTestContext

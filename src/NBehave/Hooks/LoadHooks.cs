@@ -1,6 +1,7 @@
 using System.Reflection;
+using NBehave.Configuration;
 
-namespace NBehave.Narrator.Framework.Hooks
+namespace NBehave.Hooks
 {
     public class LoadHooks
     {
