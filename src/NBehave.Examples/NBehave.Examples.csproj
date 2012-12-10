@@ -104,19 +104,10 @@
     <Compile Include="Tables\Table.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Bowling Game\BowlingGame.msbuild">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Bowling Game\BowlingGame.nant.build">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Bowling Game\features\bowling.feature">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Calculator table\features\AddNumbers.feature">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Game of life\GameOfLife.nant.build">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Game of life\features\I_can_toggle_a_cell.feature">
