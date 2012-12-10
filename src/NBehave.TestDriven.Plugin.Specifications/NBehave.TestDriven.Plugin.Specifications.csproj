@@ -105,9 +105,9 @@
     <Compile Include="StoryLocatorSpecs.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NBehave.Narrator.Framework\NBehave.Narrator.Framework.csproj">
+    <ProjectReference Include="..\NBehave\NBehave.csproj">
       <Project>{9C2E9E17-2A2C-4F6C-8072-D160A7EA9A51}</Project>
-      <Name>NBehave.Narrator.Framework</Name>
+      <Name>NBehave</Name>
     </ProjectReference>
     <ProjectReference Include="..\NBehave.Spec.NUnit.Specifications\NBehave.Spec.NUnit.Specifications.csproj">
       <Project>{B7F6CEC7-B298-467F-ABE2-9ABCF4394FAD}</Project>

@@ -8,8 +8,8 @@
     <ProjectGuid>{9C2E9E17-2A2C-4F6C-8072-D160A7EA9A51}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NBehave.Narrator.Framework</RootNamespace>
-    <AssemblyName>NBehave.Narrator.Framework</AssemblyName>
+    <RootNamespace>NBehave</RootNamespace>
+    <AssemblyName>NBehave</AssemblyName>
     <SccProjectName>
     </SccProjectName>
     <SccLocalPath>

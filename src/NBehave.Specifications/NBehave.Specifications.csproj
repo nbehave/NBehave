@@ -8,8 +8,8 @@
     <ProjectGuid>{9F7DCAC2-5148-40AF-B588-A784C646E12E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NBehave.Narrator.Framework.Specifications</RootNamespace>
-    <AssemblyName>NBehave.Narrator.Framework.Specifications</AssemblyName>
+    <RootNamespace>NBehave.Specifications</RootNamespace>
+    <AssemblyName>NBehave.Specifications</AssemblyName>
     <SccProjectName>
     </SccProjectName>
     <SccLocalPath>
@@ -179,9 +179,9 @@
       <Project>{9AFBC5C5-DC22-4E9B-8811-4A38BDCFD037}</Project>
       <Name>NBehave.Gherkin</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NBehave.Narrator.Framework\NBehave.Narrator.Framework.csproj">
+    <ProjectReference Include="..\NBehave\NBehave.csproj">
       <Project>{9C2E9E17-2A2C-4F6C-8072-D160A7EA9A51}</Project>
-      <Name>NBehave.Narrator.Framework</Name>
+      <Name>NBehave</Name>
     </ProjectReference>
     <ProjectReference Include="..\TestPlainTextAssembly\TestPlainTextAssembly.csproj">
       <Project>{B734DE3F-E1EC-42B4-8AB1-A55A934584CF}</Project>

@@ -68,9 +68,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.Spec.MSTest.Specifi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.Examples", "NBehave.Examples\NBehave.Examples.csproj", "{5CBAFACF-8BD9-46FB-A0BC-276EDE593186}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.Narrator.Framework", "NBehave.Narrator.Framework\NBehave.Narrator.Framework.csproj", "{9C2E9E17-2A2C-4F6C-8072-D160A7EA9A51}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave", "NBehave\NBehave.csproj", "{9C2E9E17-2A2C-4F6C-8072-D160A7EA9A51}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.Narrator.Framework.Specifications", "NBehave.Narrator.Framework.Specifications\NBehave.Narrator.Framework.Specifications.csproj", "{9F7DCAC2-5148-40AF-B588-A784C646E12E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.Specifications", "NBehave.Specifications\NBehave.Specifications.csproj", "{9F7DCAC2-5148-40AF-B588-A784C646E12E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.ReSharper.Plugin", "NBehave.ReSharper.Plugin\NBehave.ReSharper.Plugin.csproj", "{AA9C7D40-A49C-4522-938B-BD1A99EE3E78}"
 EndProject

@@ -115,9 +115,9 @@
       <Project>{2162701A-70E9-4659-B17C-DEBA72C175D4}</Project>
       <Name>NBehave.Console</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NBehave.Narrator.Framework\NBehave.Narrator.Framework.csproj">
+    <ProjectReference Include="..\NBehave\NBehave.csproj">
       <Project>{9C2E9E17-2A2C-4F6C-8072-D160A7EA9A51}</Project>
-      <Name>NBehave.Narrator.Framework</Name>
+      <Name>NBehave</Name>
     </ProjectReference>
     <ProjectReference Include="..\TestPlainTextAssembly\TestPlainTextAssembly.csproj">
       <Project>{B734DE3F-E1EC-42B4-8AB1-A55A934584CF}</Project>
