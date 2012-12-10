@@ -1,6 +1,6 @@
 using System.Linq;
 using Microsoft.VisualStudio.Text;
-using NBehave.Gherkin;
+using NBehave.Internal.Gherkin;
 using NBehave.VS2010.Plugin.Specifications.MockObjects;
 using NBehave.VS2010.Plugin.Tagging;
 using NUnit.Framework;

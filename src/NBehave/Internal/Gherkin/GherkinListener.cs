@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NBehave.Gherkin
+namespace NBehave.Internal.Gherkin
 {
     public class GherkinListener : GurkBurk.IListener
     {

@@ -13,8 +13,8 @@ using System.IO;
 using System.Linq;
 using NBehave.Configuration;
 using NBehave.Domain;
-using NBehave.Gherkin;
 using NBehave.Internal;
+using NBehave.Internal.Gherkin;
 using NBehave.TextParsing.ModelBuilders;
 
 namespace NBehave.TextParsing

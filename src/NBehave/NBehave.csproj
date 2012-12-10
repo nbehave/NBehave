@@ -91,6 +91,10 @@
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="GurkBurk, Version=0.1.0.15, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\GurkBurk\GurkBurk.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core">
@@ -135,6 +139,13 @@
     <Compile Include="FeatureContext.cs" />
     <Compile Include="Hooks\HooksParser.cs" />
     <Compile Include="Hooks\BeforeStepAttribute.cs" />
+    <Compile Include="Internal\Gherkin\GherkinListener.cs" />
+    <Compile Include="Internal\Gherkin\IListener.cs" />
+    <Compile Include="Internal\Gherkin\LineInFile.cs" />
+    <Compile Include="Internal\Gherkin\ParseException.cs" />
+    <Compile Include="Internal\Gherkin\Parser.cs" />
+    <Compile Include="Internal\Gherkin\StepKind.cs" />
+    <Compile Include="Internal\Gherkin\Token.cs" />
     <Compile Include="Internal\MethodWithAttributeFinder.cs" />
     <Compile Include="Internal\NBehaveContext.cs" />
     <Compile Include="Internal\ContextHandler.cs" />
@@ -243,12 +254,6 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\NBehave.Gherkin\NBehave.Gherkin.csproj">
-      <Project>{9AFBC5C5-DC22-4E9B-8811-4A38BDCFD037}</Project>
-      <Name>NBehave.Gherkin</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

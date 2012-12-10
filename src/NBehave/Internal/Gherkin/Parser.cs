@@ -1,16 +1,15 @@
 using System.IO;
 using GurkBurk;
-//using gherkin.lexer;
 
-namespace NBehave.Gherkin
+namespace NBehave.Internal.Gherkin
 {
     public class Parser
     {
-        private readonly IListener _listener;
+        private readonly IListener listener;
 
         public Parser(IListener listener)
         {
-            _listener = listener;
+            this.listener = listener;
         }
 
         public void Scan(string source)
@@ -22,7 +21,7 @@ namespace NBehave.Gherkin
         public void Scan(TextReader stream)
         {
             var feature = stream.ReadToEnd();
-            var lexer = new I18nLexer(new GherkinListener(_listener));
+            var lexer = new I18nLexer(new GherkinListener(listener));
             try
             {
                 lexer.scan(feature);

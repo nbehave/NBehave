@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using NBehave.Gherkin;
+using NBehave.Internal.Gherkin;
 
 namespace NBehave.VS2010.Plugin.Tagging
 {

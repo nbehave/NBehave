@@ -1,4 +1,4 @@
-namespace NBehave.Gherkin
+namespace NBehave.Internal.Gherkin
 {
     public struct LineInFile
     {

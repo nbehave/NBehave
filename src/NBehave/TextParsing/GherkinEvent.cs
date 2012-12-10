@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using NBehave.Domain;
-using NBehave.Gherkin;
+using NBehave.Internal.Gherkin;
 
 namespace NBehave.TextParsing
 {

@@ -6,9 +6,8 @@ using JetBrains.ProjectModel;
 using JetBrains.ReSharper.UnitTestFramework;
 using NBehave.Configuration;
 using NBehave.Domain;
-using NBehave.Gherkin;
 using NBehave.Internal;
-
+using NBehave.Internal.Gherkin;
 using NBehave.TextParsing;
 
 namespace NBehave.ReSharper.Plugin.UnitTestProvider

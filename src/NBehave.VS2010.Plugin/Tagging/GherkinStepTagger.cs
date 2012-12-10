@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Tagging;
-using NBehave.Gherkin;
+using NBehave.Internal.Gherkin;
 
 namespace NBehave.VS2010.Plugin.Tagging
 {

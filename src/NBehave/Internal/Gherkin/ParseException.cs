@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace NBehave.Gherkin
+namespace NBehave.Internal.Gherkin
 {
     [Serializable]
     public class ParseException : Exception

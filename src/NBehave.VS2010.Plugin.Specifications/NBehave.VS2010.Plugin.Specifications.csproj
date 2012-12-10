@@ -99,13 +99,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NBehave.Gherkin\NBehave.Gherkin.csproj">
-      <Project>{9AFBC5C5-DC22-4E9B-8811-4A38BDCFD037}</Project>
-      <Name>NBehave.Gherkin</Name>
-    </ProjectReference>
     <ProjectReference Include="..\NBehave.VS2010.Plugin\NBehave.VS2010.Plugin.csproj">
       <Project>{E2EF537E-04C9-4804-9848-4205277D74AF}</Project>
       <Name>NBehave.VS2010.Plugin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NBehave\NBehave.csproj">
+      <Project>{9C2E9E17-2A2C-4F6C-8072-D160A7EA9A51}</Project>
+      <Name>NBehave</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
