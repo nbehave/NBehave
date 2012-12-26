@@ -72,7 +72,7 @@
     </Reference>
     <Reference Include="NBehave.Narrator.Framework">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\Debug-3.5\NBehave\NBehave.Narrator.Framework.dll</HintPath>
+      <HintPath>..\..\build\Debug-3.5\NBehave\NBehave.dll</HintPath>
     </Reference>
     <Reference Include="NBehave.Spec.NUnit">
       <SpecificVersion>False</SpecificVersion>

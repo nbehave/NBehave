@@ -106,7 +106,7 @@
     <Compile Include="StoryRunnerEventListenerProxy.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="NBehave.Narrator.Framework.dll.tdnet">
+    <Content Include="NBehave.dll.tdnet">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
