@@ -97,7 +97,7 @@
     </ProjectReference>
     <ProjectReference Include="..\NBehave.ReSharper.Plugin\NBehave.ReSharper.Plugin.csproj">
       <Project>{AA9C7D40-A49C-4522-938B-BD1A99EE3E78}</Project>
-      <Name>NBehave.ReSharper.Plugin %28NBehave.ReSharper.Plugin\NBehave.ReSharper.Plugin%29</Name>
+      <Name>NBehave.ReSharper.Plugin</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
