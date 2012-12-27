@@ -1,5 +1,5 @@
 properties {
-	$version            = "0.6.2"
+	$version            = "0.7.0"
 	$assemblyVersion    = AssemblyVersion
 	$assemblyInfoVersion= AssemblyInformationalVersion
 	$nugetVersionNumber = AssemblyInformationalVersion
