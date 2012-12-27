@@ -1,19 +1,10 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="StringTableStep.cs" company="NBehave">
-//   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
-// </copyright>
-// <summary>
-//   Defines the StringTableStep type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 using System.Linq;
 using System.Collections.Generic;
 using NBehave.Extensions;
 using NBehave.Internal;
 
-namespace NBehave.Domain
+namespace NBehave
 {
     [Serializable]
     public class StringTableStep : StringStep

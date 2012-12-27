@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using NBehave.Domain;
 using NBehave.Extensions;
 using NBehave.Internal;
 using NUnit.Framework;

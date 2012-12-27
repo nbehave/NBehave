@@ -1,6 +1,4 @@
-﻿using NBehave.Domain;
-
-namespace NBehave.EventListeners
+﻿namespace NBehave.EventListeners
 {
     public interface IEventListener
     {

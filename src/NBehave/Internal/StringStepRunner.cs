@@ -10,7 +10,6 @@
 using System;
 using System.Globalization;
 using System.Reflection;
-using NBehave.Domain;
 
 namespace NBehave.Internal
 {

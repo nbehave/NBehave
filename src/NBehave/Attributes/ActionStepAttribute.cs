@@ -1,19 +1,10 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ActionStepAttribute.cs" company="NBehave">
-//   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
-// </copyright>
-// <summary>
-//   Defines the ActionStepAttribute type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System.Linq;
 using System.Reflection;
     using System;
     using System.Text.RegularExpressions;
 using NBehave.Extensions;
 
-namespace NBehave.Attributes
+namespace NBehave
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     [MeansImplicitUse]

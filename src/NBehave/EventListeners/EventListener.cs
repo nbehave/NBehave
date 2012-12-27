@@ -1,14 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="EventListener.cs" company="NBehave">
-//   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
-// </copyright>
-// <summary>
-//   Defines the EventListener type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
-using NBehave.Domain;
 
 namespace NBehave.EventListeners
 {

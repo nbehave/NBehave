@@ -1,4 +1,3 @@
-using NBehave.Domain;
 using NBehave.EventListeners.CodeGeneration;
 using NUnit.Framework;
 

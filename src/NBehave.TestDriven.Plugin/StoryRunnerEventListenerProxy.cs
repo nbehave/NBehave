@@ -1,5 +1,4 @@
-﻿using NBehave.Domain;
-using NBehave.EventListeners;
+﻿using NBehave.EventListeners;
 
 using TestDriven.Framework;
 

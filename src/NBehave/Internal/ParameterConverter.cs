@@ -11,7 +11,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using NBehave.Domain;
 using NBehave.Extensions;
 
 namespace NBehave.Internal

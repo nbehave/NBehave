@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using NBehave.Attributes;
-using NBehave.Domain;
 using NBehave.Extensions;
 using NUnit.Framework;
 

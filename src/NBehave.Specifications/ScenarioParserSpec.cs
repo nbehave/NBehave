@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NBehave.Configuration;
-using NBehave.Domain;
 using NBehave.TextParsing;
 using NUnit.Framework;
 

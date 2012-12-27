@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using NBehave.Domain;
 using NBehave.TextParsing;
 using NBehave.TextParsing.TagFilter;
 using NUnit.Framework;

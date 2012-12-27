@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using NBehave.Domain;
 using NBehave.Extensions;
 using NUnit.Framework;
 

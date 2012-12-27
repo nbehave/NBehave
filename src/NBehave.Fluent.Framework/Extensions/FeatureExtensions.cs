@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using NBehave.Domain;
-
 
 namespace NBehave.Fluent.Framework.Extensions
 {

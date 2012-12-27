@@ -1,5 +1,4 @@
 using System;
-using NBehave.Domain;
 using NBehave.Hooks;
 
 namespace NBehave.Internal

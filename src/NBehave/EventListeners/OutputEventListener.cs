@@ -1,17 +1,7 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="OutputEventListener.cs" company="NBehave">
-//   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
-// </copyright>
-// <summary>
-//   Defines the OutputEventListener type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using NBehave.Domain;
 
 namespace NBehave.EventListeners
 {

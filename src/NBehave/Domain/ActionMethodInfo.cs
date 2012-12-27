@@ -7,7 +7,7 @@ using NBehave.Contracts;
 using NBehave.Extensions;
 using NBehave.Internal;
 
-namespace NBehave.Domain
+namespace NBehave
 {
     public class ActionMethodInfo
     {

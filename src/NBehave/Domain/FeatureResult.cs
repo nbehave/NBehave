@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace NBehave.Domain
+namespace NBehave
 {
     [Serializable]
     public class FeatureResults : List<FeatureResult>

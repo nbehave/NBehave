@@ -1,7 +1,7 @@
+using NBehave;
 using NBehave.Examples.Calculator_table.Steps;
 using NBehave.Fluent.Framework.Extensions;
 using NBehave.Fluent.Framework.NUnit;
-
 using NUnit.Framework;
 
 namespace NBehave.Examples.Calculator_table

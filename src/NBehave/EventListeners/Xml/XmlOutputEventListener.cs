@@ -9,7 +9,6 @@
 
 using System.Collections.Generic;
 using System.Xml;
-using NBehave.Domain;
 
 namespace NBehave.EventListeners.Xml
 {

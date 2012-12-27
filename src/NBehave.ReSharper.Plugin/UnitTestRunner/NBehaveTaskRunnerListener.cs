@@ -1,6 +1,4 @@
-using NBehave.Domain;
 using NBehave.EventListeners;
-
 
 namespace NBehave.ReSharper.Plugin.UnitTestRunner
 {

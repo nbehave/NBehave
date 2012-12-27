@@ -1,7 +1,5 @@
 using MbUnit.Framework;
-using NBehave.Domain;
 using NBehave.Fluent.Framework.Extensions;
-
 
 namespace NBehave.Fluent.Framework.Specifications
 {

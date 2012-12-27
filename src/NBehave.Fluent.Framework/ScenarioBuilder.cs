@@ -1,7 +1,5 @@
 using System;
 using System.Linq;
-using NBehave.Domain;
-
 
 namespace NBehave.Fluent.Framework
 {

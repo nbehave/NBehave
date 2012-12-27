@@ -1,7 +1,5 @@
 using System;
 using System.Linq;
-using NBehave.Domain;
-
 
 namespace NBehave.VS2010.Plugin.Editor.Domain
 {

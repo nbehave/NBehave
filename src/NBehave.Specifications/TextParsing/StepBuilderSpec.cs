@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NBehave.Domain;
 using NBehave.Internal;
 using NBehave.Internal.Gherkin;
 using NBehave.TextParsing;

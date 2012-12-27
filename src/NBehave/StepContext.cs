@@ -1,4 +1,3 @@
-using NBehave.Domain;
 using NBehave.Internal;
 
 namespace NBehave

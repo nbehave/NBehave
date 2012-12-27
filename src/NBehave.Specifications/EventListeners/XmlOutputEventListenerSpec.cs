@@ -2,7 +2,6 @@
 using System.IO;
 using System.Text;
 using System.Xml;
-using NBehave.Attributes;
 using NBehave.EventListeners.Xml;
 using NBehave.Extensions;
 using NBehave.Hooks;

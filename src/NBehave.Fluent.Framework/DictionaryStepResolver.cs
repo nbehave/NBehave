@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using NBehave.Domain;
-
 
 namespace NBehave.Fluent.Framework
 {

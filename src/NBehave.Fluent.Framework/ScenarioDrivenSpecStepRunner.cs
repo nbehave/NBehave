@@ -2,10 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using NBehave.Attributes;
-using NBehave.Domain;
 using NBehave.Internal;
-
 
 namespace NBehave.Fluent.Framework
 {

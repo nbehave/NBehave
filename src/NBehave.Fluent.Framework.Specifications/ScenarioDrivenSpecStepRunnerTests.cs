@@ -1,6 +1,3 @@
-using NBehave.Attributes;
-using NBehave.Domain;
-
 using NUnit.Framework;
 
 namespace NBehave.Fluent.Framework.Specifications

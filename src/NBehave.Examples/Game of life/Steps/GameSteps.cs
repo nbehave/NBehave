@@ -1,4 +1,4 @@
-﻿
+﻿using NBehave;
 using NBehave.Spec.NUnit;
 
 namespace NBehave.Examples.GameOfLife.Specs

@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using NBehave.Domain;
 using NBehave.Extensions;
 using NBehave.Hooks;
 using NBehave.Internal;

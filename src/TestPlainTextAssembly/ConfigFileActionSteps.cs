@@ -1,6 +1,5 @@
 using System.Configuration;
-using NBehave.Attributes;
-
+using NBehave;
 using Should.Fluent;
 
 namespace TestPlainTextAssembly

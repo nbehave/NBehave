@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Tagging;
-using NBehave.Domain;
-
 using NBehave.VS2010.Plugin.Editor.Domain;
 using NBehave.VS2010.Plugin.Tagging;
 

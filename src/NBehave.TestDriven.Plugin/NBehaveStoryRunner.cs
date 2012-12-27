@@ -2,7 +2,6 @@
 using System.IO;
 using System.Reflection;
 using NBehave.Configuration;
-using NBehave.Domain;
 using NBehave.Extensions;
 using NBehave.Internal;
 

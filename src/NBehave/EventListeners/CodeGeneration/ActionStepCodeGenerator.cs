@@ -1,25 +1,15 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ActionStepCodeGenerator.cs" company="NBehave">
-//   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
-// </copyright>
-// <summary>
-//   Defines the ActionStepCodeGenerator type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using NBehave.Domain;
 using NBehave.Extensions;
 
 namespace NBehave.EventListeners.CodeGeneration
 {
     public class ActionStepCodeGenerator
     {
-        private readonly Regex _stringRegex = new Regex(@"^('|"").+('|"")$");
-        private readonly char[] _whiteSpaces = new[] { ' ', '\n', '\r', '\t' };
-        private TypeOfStep _lastTypeOfStep = TypeOfStep.Given;
+        private readonly Regex stringRegex = new Regex(@"^('|"").+('|"")$");
+        private readonly char[] whiteSpaces = new[] { ' ', '\n', '\r', '\t' };
+        private TypeOfStep lastTypeOfStep = TypeOfStep.Given;
 
         public string GenerateMethodFor(StringStep step)
         {
@@ -40,8 +30,8 @@ namespace NBehave.EventListeners.CodeGeneration
         private TypeOfStep DetermineTypeOfStep(StringStep stringStep)
         {
             var step = stringStep.TypeOfStep;
-            step = (step == TypeOfStep.Unknown) ? _lastTypeOfStep : step;
-            _lastTypeOfStep = step;
+            step = (step == TypeOfStep.Unknown) ? lastTypeOfStep : step;
+            lastTypeOfStep = step;
             return step;
         }
 
@@ -100,13 +90,13 @@ namespace NBehave.EventListeners.CodeGeneration
         private IEnumerable<string> SplitStringToWords(string row)
         {
             row = TrimRow(row).RemoveFirstWord();
-            var words = row.Split(_whiteSpaces, StringSplitOptions.RemoveEmptyEntries);
+            var words = row.Split(whiteSpaces, StringSplitOptions.RemoveEmptyEntries);
             return words;
         }
 
         private bool IsParameter(string word)
         {
-            return IsInt(word) || _stringRegex.IsMatch(word);
+            return IsInt(word) || stringRegex.IsMatch(word);
         }
 
         private bool IsInt(string word)

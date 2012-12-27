@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using NBehave.Domain;
 using NBehave.Internal;
 using NUnit.Framework;
 

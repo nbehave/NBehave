@@ -10,7 +10,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using NBehave.Domain;
 
 namespace NBehave.EventListeners
 {

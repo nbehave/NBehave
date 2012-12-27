@@ -4,7 +4,6 @@ using System.Linq;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.Util;
-using NBehave.Domain;
 
 
 namespace NBehave.ReSharper.Plugin.UnitTestProvider

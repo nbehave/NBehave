@@ -3,7 +3,6 @@ using System.Linq;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.UnitTestFramework;
-using NBehave.Domain;
 
 using NBehave.ReSharper.Plugin.UnitTestRunner;
 

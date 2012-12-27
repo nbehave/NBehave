@@ -1,6 +1,4 @@
-using NBehave.Domain;
 using NBehave.Fluent.Framework.Extensions;
-
 using Xunit;
 
 namespace NBehave.Fluent.Framework.Specifications

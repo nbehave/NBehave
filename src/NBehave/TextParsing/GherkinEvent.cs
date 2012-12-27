@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using NBehave.Domain;
 using NBehave.Internal.Gherkin;
 
 namespace NBehave.TextParsing

@@ -1,6 +1,4 @@
 using System;
-using NBehave.Domain;
-
 
 namespace NBehave.Fluent.Framework
 {

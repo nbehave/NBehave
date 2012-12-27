@@ -186,7 +186,6 @@
     <Compile Include="Domain\ScenarioExampleResult.cs" />
     <Compile Include="EventListeners\SummaryWriter.cs" />
     <Compile Include="Domain\ActionMethodInfo.cs" />
-    <Compile Include="Domain\ActionMissingException.cs" />
     <Compile Include="Attributes\ActionStepAttribute.cs" />
     <Compile Include="Extensions\ActionStepConverterExtensions.cs" />
     <Compile Include="EmbeddedRunner.cs" />

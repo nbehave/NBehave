@@ -1,6 +1,6 @@
 using System;
 
-namespace NBehave.Domain
+namespace NBehave
 {
     [Serializable]
     public class StepResult : Result

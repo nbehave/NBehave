@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using NBehave.Configuration;
-using NBehave.Domain;
 using NBehave.Internal;
 using NUnit.Framework;
 

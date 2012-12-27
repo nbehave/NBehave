@@ -1,17 +1,8 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Feature.cs" company="NBehave">
-//   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
-// </copyright>
-// <summary>
-//   Defines the Feature type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NBehave.Domain
+namespace NBehave
 {
 
     [Serializable]

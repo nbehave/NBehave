@@ -1,5 +1,4 @@
 using System;
-using NBehave.Domain;
 using NUnit.Framework;
 
 namespace NBehave.Specifications.Domain

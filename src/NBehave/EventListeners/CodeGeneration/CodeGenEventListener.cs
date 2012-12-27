@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using NBehave.Domain;
 
 namespace NBehave.EventListeners.CodeGeneration
 {

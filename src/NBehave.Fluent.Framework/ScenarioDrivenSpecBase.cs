@@ -1,9 +1,7 @@
 using System;
 using System.Linq;
 using System.Text;
-using NBehave.Domain;
 using NBehave.Fluent.Framework.Extensions;
-
 using Rhino.Mocks;
 
 namespace NBehave.Fluent.Framework

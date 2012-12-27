@@ -7,8 +7,6 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using NBehave.Domain;
-
 namespace NBehave.EventListeners.Xml
 {
     public class ScenarioResultEventReceived : EventReceived

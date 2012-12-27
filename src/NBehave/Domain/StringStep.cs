@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 using NBehave.Extensions;
 using NBehave.Internal;
 
-namespace NBehave.Domain
+namespace NBehave
 {
     [Serializable]
     public class StringStep

@@ -6,7 +6,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.Text;
 using NBehave.Configuration;
-using NBehave.Domain;
 using NBehave.Internal.Gherkin;
 using NBehave.TextParsing;
 using NBehave.VS2010.Plugin.Editor.Glyphs;

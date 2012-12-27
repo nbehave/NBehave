@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Xml;
-using NBehave.Domain;
 using NBehave.EventListeners.Xml;
 using NUnit.Framework;
 

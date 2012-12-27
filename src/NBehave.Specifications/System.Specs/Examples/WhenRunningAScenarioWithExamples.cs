@@ -1,6 +1,4 @@
-﻿using NBehave.Attributes;
-using NBehave.Domain;
-using NBehave.Extensions;
+﻿using NBehave.Extensions;
 using NUnit.Framework;
 
 namespace NBehave.Specifications.System.Specs.Examples

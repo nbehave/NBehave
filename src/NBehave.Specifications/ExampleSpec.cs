@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using NBehave.Domain;
 using NUnit.Framework;
 
 namespace NBehave.Specifications

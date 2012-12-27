@@ -1,8 +1,5 @@
 ﻿using System.Linq;
-using NBehave.Attributes;
-using NBehave.Domain;
 using NBehave.Fluent.Framework.Extensions;
-
 using NUnit.Framework;
 
 namespace NBehave.Fluent.Framework.Specifications

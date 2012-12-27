@@ -1,14 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MultiOutputEventListener.cs" company="NBehave">
-//   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
-// </copyright>
-// <summary>
-//   Defines the MultiOutputEventListener type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
-using NBehave.Domain;
 
 namespace NBehave.EventListeners
 {

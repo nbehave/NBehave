@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using NBehave.Attributes;
+using NBehave;
 using NBehave.Hooks;
 
 

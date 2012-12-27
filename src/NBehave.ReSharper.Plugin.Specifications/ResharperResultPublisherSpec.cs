@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using JetBrains.Util;
-using NBehave.Domain;
 using NBehave.EventListeners.CodeGeneration;
-
 using NBehave.ReSharper.Plugin.UnitTestRunner;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -19,7 +17,7 @@ namespace NBehave.ReSharper.Plugin.Specifications
         private const string ScenarioTitle = "scenario title";
 
         private IRemoteTaskServer server;
-        private Domain.Feature feature;
+        private NBehave.Feature feature;
         private ResharperResultPublisher resultPublisher;
         private NBehaveStepTask task;
         private NBehaveScenarioTask scenarioTask;
@@ -40,7 +38,7 @@ namespace NBehave.ReSharper.Plugin.Specifications
             var nodes = new List<TaskExecutionNode> { scenarioTaskNode, stepTaskNode };
             resultPublisher = new ResharperResultPublisher(nodes, server, codeGeneration);
 
-            feature = new Domain.Feature("feature title");
+            feature = new NBehave.Feature("feature title");
             Because_of();
         }
 

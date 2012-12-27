@@ -1,13 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WhenAttribute.cs" company="NBehave">
-//   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
-// </copyright>
-// <summary>
-//   Defines the WhenAttribute type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace NBehave.Attributes
+namespace NBehave
 {
     public class WhenAttribute : ActionStepAttribute
     {

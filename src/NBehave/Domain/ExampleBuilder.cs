@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace NBehave.Domain
+namespace NBehave
 {
     public static class ExampleBuilder
     {

@@ -1,15 +1,6 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Result.cs" company="NBehave">
-//   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
-// </copyright>
-// <summary>
-//   Defines the StepResult type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 
-namespace NBehave.Domain
+namespace NBehave
 {
     [Serializable]
     public class Passed : Result

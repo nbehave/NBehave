@@ -1,6 +1,6 @@
+using NBehave;
 using NBehave.Fluent.Framework.Extensions;
 using NBehave.Fluent.Framework.NUnit;
-
 using NBehave.Spec.NUnit;
 using NUnit.Framework;
 

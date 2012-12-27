@@ -2,7 +2,7 @@ using System;
 using System.Runtime.Serialization;
 using System.Text;
 
-namespace NBehave.Domain
+namespace NBehave
 {
     [Serializable]
     public class WrappedException : Exception

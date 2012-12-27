@@ -7,8 +7,6 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using NBehave.Domain;
-
 namespace NBehave.Internal
 {
     public interface IStringStepRunner

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using NBehave.Attributes;
 using NBehave.Contracts;
 
 using NBehave.Spec.NUnit;

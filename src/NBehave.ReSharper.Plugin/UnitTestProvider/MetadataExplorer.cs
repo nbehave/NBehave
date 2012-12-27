@@ -5,7 +5,6 @@ using System.Linq;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.UnitTestFramework;
 using NBehave.Configuration;
-using NBehave.Domain;
 using NBehave.Internal;
 using NBehave.Internal.Gherkin;
 using NBehave.TextParsing;

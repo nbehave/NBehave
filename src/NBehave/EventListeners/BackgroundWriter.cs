@@ -1,24 +1,23 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using NBehave.Domain;
 
 namespace NBehave.EventListeners
 {
     public class BackgroundWriter
     {
-        private readonly TextWriter _writer;
+        private readonly TextWriter writer;
 
         public BackgroundWriter(TextWriter writer)
         {
-            _writer = writer;
+            this.writer = writer;
         }
 
         public void Write(IEnumerable<BackgroundStepResult> backgroundSteps)
         {
-            _writer.WriteLine("Background: " + backgroundSteps.First().BackgroundTitle);
+            writer.WriteLine("Background: " + backgroundSteps.First().BackgroundTitle);
             foreach (var step in backgroundSteps)
-                _writer.WriteLine("  " + step.StringStep);
+                writer.WriteLine("  " + step.StringStep);
         }
     }
 }

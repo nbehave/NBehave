@@ -1,5 +1,4 @@
-﻿using NBehave.Domain;
-using NBehave.Extensions;
+﻿using NBehave.Extensions;
 using NBehave.Internal;
 using NUnit.Framework;
 

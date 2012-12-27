@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using NBehave.Domain;
 using NBehave.EventListeners;
 using NBehave.Extensions;
 using NUnit.Framework;

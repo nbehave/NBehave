@@ -1,6 +1,4 @@
-﻿using NBehave.Domain;
-
-namespace NBehave.TextParsing.ModelBuilders
+﻿namespace NBehave.TextParsing.ModelBuilders
 {
     public class FeatureBuilder
     {

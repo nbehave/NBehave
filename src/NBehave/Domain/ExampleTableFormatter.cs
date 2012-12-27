@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NBehave.Domain
+namespace NBehave
 {
     public class ExampleTableFormatter
     {

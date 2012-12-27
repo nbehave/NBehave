@@ -1,17 +1,8 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ScenarioResult.cs" company="NBehave">
-//   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
-// </copyright>
-// <summary>
-//   Defines the ScenarioResult type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System.Linq;
 using System;
 using System.Collections.Generic;
 
-namespace NBehave.Domain
+namespace NBehave
 {
     [Serializable]
     public class ScenarioResult

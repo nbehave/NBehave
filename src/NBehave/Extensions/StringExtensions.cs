@@ -8,7 +8,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System.Text.RegularExpressions;
-using NBehave.Domain;
 
 namespace NBehave.Extensions
 {

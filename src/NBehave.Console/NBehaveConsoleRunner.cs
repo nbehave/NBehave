@@ -5,11 +5,9 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using NBehave.Configuration;
-using NBehave.Domain;
 using NBehave.EventListeners;
 using NBehave.Extensions;
 using NBehave.Internal;
-
 
 namespace NBehave.Console
 {

@@ -1,8 +1,6 @@
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;
-using NBehave.Attributes;
-using NBehave.Domain;
 using NBehave.Internal;
 using NBehave.Narrator.Framework.Tiny;
 using NUnit.Framework;

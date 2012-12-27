@@ -2,12 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using NBehave.Attributes;
-using NBehave.Domain;
 using NBehave.Fluent.Framework.Extensions;
 using NBehave.Fluent.Framework.NUnit;
-
-using NBehave.Spec.NUnit;
 using NUnit.Framework;
 
 namespace NBehave.TestDriven.Plugin.Specs

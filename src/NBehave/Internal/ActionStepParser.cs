@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using NBehave.Attributes;
 using NBehave.Contracts;
-using NBehave.Domain;
 
 namespace NBehave.Internal
 {

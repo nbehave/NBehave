@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using NBehave.Attributes;
 using NUnit.Framework;
 
 namespace NBehave.Specifications

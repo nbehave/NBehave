@@ -1,7 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NBehave.Domain;
 using NBehave.Fluent.Framework.Extensions;
-
 
 namespace NBehave.Fluent.Framework.Specifications
 {

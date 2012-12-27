@@ -5,7 +5,6 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Xml;
 using NBehave.Configuration;
-using NBehave.Domain;
 using NBehave.EventListeners;
 using NBehave.EventListeners.Xml;
 using NBehave.Internal;

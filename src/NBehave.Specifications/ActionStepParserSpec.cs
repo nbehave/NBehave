@@ -1,6 +1,4 @@
-using NBehave.Attributes;
 using NBehave.Contracts;
-using NBehave.Domain;
 using NBehave.Internal;
 using NUnit.Framework;
 

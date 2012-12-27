@@ -1,9 +1,7 @@
 using System;
 using System.Linq;
-using NBehave.Domain;
 using NBehave.Hooks;
 using NBehave.Internal;
-
 
 namespace NBehave.Fluent.Framework
 {
