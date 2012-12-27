@@ -1,16 +1,16 @@
 using System.Collections.Generic;
-using NBehave.Narrator.Framework;
+using NBehave;
 
-namespace $rootnamespace$
+namespace $rootnamespace$.Gherkin
 {
-	[ActionSteps]
-	public class SimpleSteps
-	{
-		[Given("an empty list")]
-		public void EmptyList()
-		{
-			ScenarioContext.Current.Add("list", new List<string>());
-		}
+    [ActionSteps]
+    public class SimpleSteps
+    {
+        [Given("an empty list")]
+        public void EmptyList()
+        {
+            ScenarioContext.Current.Add("list", new List<string>());
+        }
 
         [When("I add $x to list")]
         public void AddToList(string x)
@@ -23,7 +23,7 @@ namespace $rootnamespace$
         public void ListShouldContain(string y)
         {
             var list = ScenarioContext.Current.Get<List<string>>("list");
-            NUnit.Framework.CollectionAssert.Contains(list, y);              
+            NUnit.Framework.CollectionAssert.Contains(list, y);
         }
-	}
+    }
 }

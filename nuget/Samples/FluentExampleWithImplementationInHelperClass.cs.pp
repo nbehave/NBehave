@@ -1,14 +1,15 @@
-using System.Collections.Generic;
+using NBehave;
 using NBehave.Fluent.Framework.Extensions;
 using NBehave.Fluent.Framework.NUnit;
-using NBehave.Narrator.Framework;
+using NBehave.Hooks;
 using NBehave.Spec.NUnit;
 using NUnit.Framework;
 
 namespace $rootnamespace$
 {
-	public class FluentExample : ScenarioDrivenSpecBase
-	{
+    [TestFixture]
+    public class FluentExampleWithImplementationInHelperClass : ScenarioDrivenSpecBase
+    {
         protected override Feature CreateFeature()
         {
             return new Feature("addition of two numbers")
@@ -29,8 +30,8 @@ namespace $rootnamespace$
                 .Then("the sum should be 2");
         }
     }
-	
-	[ActionSteps]
+
+    [ActionSteps]
     public class AddNumbers
     {
         private Calculator _calculator;
@@ -59,24 +60,5 @@ namespace $rootnamespace$
             _calculator.Value().ShouldEqual(result);
         }
     }
-	
-	public class Calculator
-    {
-        private readonly Queue<int> _buffer = new Queue<int>();
 
-        public void Enter(int number)
-        {
-            _buffer.Enqueue(number);
-        }
-
-        public void Add()
-        {
-            _buffer.Enqueue(_buffer.Dequeue() + _buffer.Dequeue());
-        }
-
-        public int Value()
-        {
-            return _buffer.Peek();
-        }
-    }
 }
