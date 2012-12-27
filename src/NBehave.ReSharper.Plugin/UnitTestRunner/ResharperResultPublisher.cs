@@ -158,7 +158,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
             foreach (var result in results)
             {
                 backgroundResult = (result.Result is Failed) ? result : backgroundResult;
-                backgroundResult = (result.Result is Pending && backgroundResult is Passed) ? result : backgroundResult;
+                backgroundResult = (result.Result is Pending && backgroundResult.Result is Passed) ? result : backgroundResult;
             }
             return backgroundResult;
         }
