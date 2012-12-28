@@ -10,6 +10,13 @@ It shifts the vocabulary from being test-based to behaviour-based, and positions
  * [Documentation](https://github.com/nbehave/NBehave/wiki/Documentation)
 
 
+Build status
+============
+<a href="http://teamcity.codebetter.com/viewType.html?buildTypeId=bt50&guest=1">
+<img src="http://teamcity.codebetter.com/app/rest/builds/buildType:(id:bt50)/statusIcon" alt="current build status" />
+</a>
+
+
 Contribute
 =======
 We would love your help. Send us patches, report/fix bugs, request features etc.
