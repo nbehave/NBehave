@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="StoryResultsEventReceived.cs" company="NBehave">
-//   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
-// </copyright>
-// <summary>
-//   Defines the ScenarioResultEventReceived type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 namespace NBehave.EventListeners.Xml
 {
     public class ScenarioResultEventReceived : EventReceived

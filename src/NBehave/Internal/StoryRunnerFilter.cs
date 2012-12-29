@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="StoryRunnerFilter.cs" company="NBehave">
-//   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
-// </copyright>
-// <summary>
-//   Defines the StoryRunnerFilter type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-using System;
+﻿using System;
 using System.Runtime.Serialization;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -17,9 +8,9 @@ namespace NBehave.Internal
     [Serializable]
     public class StoryRunnerFilter : ISerializable
     {
-        private readonly Regex _namespaceFilter;
-        private readonly Regex _classNameFilter;
-        private readonly Regex _methodNameFilter;
+        private readonly Regex namespaceFilter;
+        private readonly Regex classNameFilter;
+        private readonly Regex methodNameFilter;
 
         public StoryRunnerFilter()
             : this(".", ".", ".")
@@ -28,24 +19,24 @@ namespace NBehave.Internal
 
         public StoryRunnerFilter(string namespaceFilter, string classNameFilter, string methodNameFilter)
         {
-            _namespaceFilter = new Regex(AnchorValue(namespaceFilter));
-            _classNameFilter = new Regex(AnchorValue(classNameFilter));
-            _methodNameFilter = new Regex(AnchorValue(methodNameFilter));
+            this.namespaceFilter = new Regex(AnchorValue(namespaceFilter));
+            this.classNameFilter = new Regex(AnchorValue(classNameFilter));
+            this.methodNameFilter = new Regex(AnchorValue(methodNameFilter));
         }
 
         public Regex NamespaceFilter
         {
-            get { return this._namespaceFilter; }
+            get { return this.namespaceFilter; }
         }
 
         public Regex ClassNameFilter
         {
-            get { return this._classNameFilter; }
+            get { return this.classNameFilter; }
         }
 
         public Regex MethodNameFiler
         {
-            get { return this._methodNameFilter; }
+            get { return this.methodNameFilter; }
         }
 
         public static StoryRunnerFilter GetFilter(MemberInfo member)
@@ -99,16 +90,16 @@ namespace NBehave.Internal
 
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue("n", _namespaceFilter);
-            info.AddValue("c", _classNameFilter);
-            info.AddValue("m", _methodNameFilter);
+            info.AddValue("n", namespaceFilter);
+            info.AddValue("c", classNameFilter);
+            info.AddValue("m", methodNameFilter);
         }
 
         protected StoryRunnerFilter(SerializationInfo info, StreamingContext context)
         {
-            _namespaceFilter = (Regex) info.GetValue("n", typeof (Regex));
-            _classNameFilter = (Regex) info.GetValue("c", typeof (Regex));
-            _methodNameFilter = (Regex) info.GetValue("m", typeof (Regex));
+            namespaceFilter = (Regex) info.GetValue("n", typeof (Regex));
+            classNameFilter = (Regex) info.GetValue("c", typeof (Regex));
+            methodNameFilter = (Regex) info.GetValue("m", typeof (Regex));
         }
     }
 }

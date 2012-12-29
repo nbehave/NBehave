@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PlainTextOutput.cs" company="NBehave">
-//   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
-// </copyright>
-// <summary>
-//   Defines the PlainTextOutput type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 using System.IO;
 using System.Reflection;
@@ -15,16 +6,16 @@ namespace NBehave.Internal
 {
     public class PlainTextOutput : MarshalByRefObject
     {
-        private readonly TextWriter _writer;
+        private readonly TextWriter writer;
 
         public PlainTextOutput(TextWriter writer)
         {
-            _writer = writer;
+            this.writer = writer;
         }
 
         public void WriteLine(string text)
         {
-            _writer.WriteLine(text);
+            writer.WriteLine(text);
         }
 
         public void WriteHeader()
@@ -35,22 +26,22 @@ namespace NBehave.Internal
             var copyrights = (AssemblyCopyrightAttribute[])
                 Attribute.GetCustomAttributes(executingAssembly, typeof(AssemblyCopyrightAttribute));
 
-            _writer.WriteLine("NBehave version {0}", semVer.InformationalVersion);
+            writer.WriteLine("NBehave version {0}", semVer.InformationalVersion);
 
             foreach (var copyrightAttribute in copyrights)
             {
-                _writer.WriteLine(copyrightAttribute.Copyright);
+                writer.WriteLine(copyrightAttribute.Copyright);
             }
 
             if (copyrights.Length > 0)
             {
-                _writer.WriteLine("All Rights Reserved.");
+                writer.WriteLine("All Rights Reserved.");
             }
         }
 
         public void WriteSeparator()
         {
-            _writer.WriteLine(string.Empty);
+            writer.WriteLine(string.Empty);
         }
 
         public void WriteRuntimeEnvironment()
@@ -59,7 +50,7 @@ namespace NBehave.Internal
                 "Runtime Environment -\r\n   OS Version: {0}\r\n  CLR Version: {1}",
                 Environment.OSVersion,
                 Environment.Version);
-            _writer.WriteLine(runtimeEnv);
+            writer.WriteLine(runtimeEnv);
         }
 
         public override object InitializeLifetimeService()

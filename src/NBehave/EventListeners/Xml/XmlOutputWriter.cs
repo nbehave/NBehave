@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="XmlOutputWriter.cs" company="NBehave">
-//   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
-// </copyright>
-// <summary>
-//   Defines the XmlOutputWriter type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System.Reflection;
 using System;
 using System.Collections.Generic;

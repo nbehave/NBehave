@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IgnoreSpaceAndUnderScoreMatcher.cs" company="NBehave">
-//   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
-// </copyright>
-// <summary>
-//   Defines the IgnoreSpaceAndUnderScoreMatcher type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 using System.IO;
 using System.Text.RegularExpressions;

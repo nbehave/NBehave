@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="StringExtensions.cs" company="NBehave">
-//   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
-// </copyright>
-// <summary>
-//   Defines the StringExtensions type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace NBehave.Extensions
 {

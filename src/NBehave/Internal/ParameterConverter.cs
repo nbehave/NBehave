@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ParameterConverter.cs" company="NBehave">
-//   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
-// </copyright>
-// <summary>
-//   Defines the ParameterConverter type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,17 +8,17 @@ namespace NBehave.Internal
 {
     public class ParameterConverter
     {
-        private readonly ActionCatalog _actionCatalog;
+        private readonly ActionCatalog actionCatalog;
         private readonly TypeConverter typeConverter = new TypeConverter();
 
         public ParameterConverter(ActionCatalog actionCatalog)
         {
-            _actionCatalog = actionCatalog;
+            this.actionCatalog = actionCatalog;
         }
 
         public object[] GetParametersForStep(StringStep stringStep)
         {
-            var action = _actionCatalog.GetAction(stringStep);
+            var action = actionCatalog.GetAction(stringStep);
 
             object[] parametersForStep;
             if (IsListStep(action, stringStep))
@@ -63,7 +54,7 @@ namespace NBehave.Internal
 
         public object[] GetParametersForStep(StringStep stringStep, Example example)
         {
-            var action = _actionCatalog.GetAction(stringStep);
+            var action = actionCatalog.GetAction(stringStep);
             Func<string, string> getValues = i => example.ColumnValues[i];
             var paramNames = action.ParameterInfo.Select(a => a.Name).ToList();
             return GetParametersForStep(action, paramNames, getValues);

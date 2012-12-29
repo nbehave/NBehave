@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="GherkinScenarioParser.cs" company="NBehave">
-//   Copyright (c) 2007, NBehave - http://nbehave.codeplex.com/license
-// </copyright>
-// <summary>
-//   Defines the GherkinScenarioParser type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -20,9 +11,9 @@ namespace NBehave.TextParsing
 {
     public class ModelBuilder
     {
-        private FeatureBuilder featureBuilder;
-        private ExamplesBuilder examplesBuilder;
-        private StepBuilder inlineStepBuilderBuilder;
+        private readonly FeatureBuilder featureBuilder;
+        private readonly ExamplesBuilder examplesBuilder;
+        private readonly StepBuilder inlineStepBuilderBuilder;
 
         public ModelBuilder(IGherkinParserEvents gherkinEvents)
         {
@@ -38,7 +29,7 @@ namespace NBehave.TextParsing
         private readonly NBehaveConfiguration configuration;
         private string file;
         private Scenario currentScenario;
-        private ModelBuilder modelBuilder;
+        private readonly ModelBuilder modelBuilder;
         private Feature currentFeature;
 
         public event EventHandler<EventArgs<Feature>> FeatureEvent;
