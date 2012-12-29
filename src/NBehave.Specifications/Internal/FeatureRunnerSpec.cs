@@ -60,8 +60,8 @@ namespace NBehave.Specifications.Internal
 
                 var f = FeatureWithScenario();
                 var scenario = f.Scenarios[0];
-                scenario.AddStep("And my name is Morgan");
-                scenario.AddStep("Given my name is Axel");
+                scenario.AddStep(new StringStep("And my name is Morgan", ""));
+                scenario.AddStep(new StringStep("Given my name is Axel", ""));
                 featureResult = featureRunner.Run(f);
             }
 
@@ -167,10 +167,10 @@ namespace NBehave.Specifications.Internal
                 var f = new Feature("title", "");
                 var firstScenario = new Scenario();
 
-                firstScenario.AddStep("Given something to count");
+                firstScenario.AddStep(new StringStep("Given something to count", ""));
                 var secondScenario = new Scenario();
-                secondScenario.AddStep("Given something to count");
-                secondScenario.AddStep("Given something to count");
+                secondScenario.AddStep(new StringStep("Given something to count", ""));
+                secondScenario.AddStep(new StringStep("Given something to count", ""));
                 f.AddScenario(firstScenario);
                 f.AddScenario(secondScenario);
                 featureRunner.Run(f);
@@ -266,7 +266,7 @@ namespace NBehave.Specifications.Internal
             [Test]
             public void Step_Result_should_have_exception_message()
             {
-                Assert.That(step.StepResult.Message, Is.StringContaining("ArgumentNullException"));                
+                Assert.That(step.StepResult.Message, Is.StringContaining("ArgumentNullException"));
             }
         }
 
@@ -282,7 +282,7 @@ namespace NBehave.Specifications.Internal
                 base.SetUp();
                 var feature = FeatureWithOneScenarioWithOneStep();
                 hooksCatalog.Add(new DelegateHookMetaData(() => { throw new ApplicationException("OnBeforeScenario failed"); }, new BeforeScenarioAttribute()));
-                hooksCatalog.Add(new DelegateHookMetaData(() => { afterStepWasCalled=true; }, new AfterScenarioAttribute()));
+                hooksCatalog.Add(new DelegateHookMetaData(() => { afterStepWasCalled = true; }, new AfterScenarioAttribute()));
 
                 var featureResult = featureRunner.Run(feature);
                 scenarioResult = featureResult.ScenarioResults[0];

@@ -51,9 +51,9 @@ namespace NBehave.Specifications
                 actionCatalog.Add(new ActionMethodInfo(new Regex(@"that happens$"), when, when.Method, "Then", this));
 
                 var scenario = new Scenario();
-                scenario.AddStep("Given something");
-                scenario.AddStep("When this");
-                scenario.AddStep("Then that happens");
+                scenario.AddStep(new StringStep("Given something", ""));
+                scenario.AddStep(new StringStep("When this", ""));
+                scenario.AddStep(new StringStep("Then that happens", ""));
                 RunScenarios(scenario);
             }
 
@@ -91,8 +91,8 @@ namespace NBehave.Specifications
                 actionCatalog.Add(new ActionMethodInfo(new Regex(@"pend me$"), pendAction, action.Method, "Given", this));
 
                 var scenario = new Scenario();
-                scenario.AddStep("Given something");
-                scenario.AddStep("And pend me");
+                scenario.AddStep(new StringStep("Given something", ""));
+                scenario.AddStep(new StringStep("And pend me", ""));
 
                 RunScenarios(scenario);
             }

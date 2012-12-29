@@ -62,12 +62,6 @@ namespace NBehave
             get { return tags; }
         }
 
-        public void AddStep(string step)
-        {
-            var stringStringStep = new StringStep(step, Source);
-            AddStep(stringStringStep);
-        }
-
         public void AddStep(StringStep step)
         {
             _steps.Add(step);
