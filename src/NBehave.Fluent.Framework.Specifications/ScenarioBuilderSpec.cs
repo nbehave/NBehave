@@ -1,3 +1,4 @@
+using System;
 using NBehave.Fluent.Framework.Extensions;
 using NBehave.Narrator.Framework;
 using NUnit.Framework;
@@ -54,7 +55,6 @@ namespace NBehave.Fluent.Framework.Specifications
                     .And("something else")
                     .When("method should be called")
                     .Then("this should work");
-
             }
 
             [Test]
@@ -170,6 +170,54 @@ namespace NBehave.Fluent.Framework.Specifications
             Assert.IsTrue(andWasCalled, "And step was not invoked");
             Assert.IsTrue(whenWasCalled, "When step was not invoked");
             Assert.IsTrue(thenWasCalled, "Then step was not invoked");
+        }
+
+        [Test]
+        public void Should_use_And_for_second_Given()
+        {
+            var feature = new Feature("Hello");
+            var scenarioBuilder = feature.AddScenario();
+            var fragment = scenarioBuilder.Given("foo");
+            fragment.And("bar");
+            var scenario = feature.Scenarios[0].ToString();
+            Assert.AreEqual(
+                "Scenario: " + Environment.NewLine +
+                "  Given foo" + Environment.NewLine +
+                "  And bar", scenario);
+        }
+
+        [Test]
+        public void Should_use_And_for_second_When()
+        {
+            var feature = new Feature("Hello");
+            var scenarioBuilder = feature.AddScenario();
+            var fragment = scenarioBuilder.Given("foo");
+            var whenFragment = fragment.When("bar");
+            whenFragment.And("baz");
+            var scenario = feature.Scenarios[0].ToString();
+            Assert.AreEqual(
+                "Scenario: " + Environment.NewLine +
+                "  Given foo" + Environment.NewLine +
+                "  When bar" + Environment.NewLine +
+                "  And baz", scenario);
+        }
+
+        [Test]
+        public void Should_use_And_for_second_Then()
+        {
+            var feature = new Feature("Hello");
+            var scenarioBuilder = feature.AddScenario();
+            var fragment = scenarioBuilder.Given("foo");
+            var whenFragment = fragment.When("bar");
+            var thenFragment = whenFragment.Then("moo");
+            thenFragment.And("moo-moo");
+            var scenario = feature.Scenarios[0].ToString();
+            Assert.AreEqual(
+                "Scenario: " + Environment.NewLine +
+                "  Given foo" + Environment.NewLine +
+                "  When bar" + Environment.NewLine +
+                "  Then moo" + Environment.NewLine +
+                "  And moo-moo", scenario);
         }
     }
 }

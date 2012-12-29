@@ -17,6 +17,7 @@ namespace NBehave.Fluent.Framework
         private ScenarioDrivenSpecStepRunner _stepRunner;
         private Scenario _scenario;
         private readonly string _scenarioTitle;
+        private ScenarioFragment previousStage = ScenarioFragment.Given;
 
         protected Feature Feature { get; private set; }
 
@@ -24,7 +25,7 @@ namespace NBehave.Fluent.Framework
         {
             get
             {
-                if(_scenario == null)
+                if (_scenario == null)
                 {
                     _scenario = new Scenario(_scenarioTitle, "");
                     Feature.AddScenario(Scenario);
@@ -51,19 +52,16 @@ namespace NBehave.Fluent.Framework
 
         private void AddStepAndExecute(ScenarioFragment currentStage, string step, Action inlineImplementation)
         {
-            StepRunner.CurrentScenarioStage = currentStage;
-
             if (inlineImplementation != null)
-                StepRunner.RegisterImplementation(step, inlineImplementation);
+                StepRunner.RegisterImplementation(currentStage, step, inlineImplementation);
 
-            if(Scenario.Steps.Count() == 0)
+            if (!Scenario.Steps.Any())
                 StepRunner.BeforeScenario();
 
-            var stringStep = new StringStep(string.Format("{0} {1}", currentStage, step), Scenario.Source);
-            Scenario.AddStep(stringStep);
+            var stringStep = AddStepToScenario(currentStage, step);
+            RunStep(currentStage, step, stringStep);
 
-            StepRunner.Run(stringStep);
-
+            previousStage = currentStage;
             var failure = stringStep.StepResult.Result as Failed;
             if (failure != null)
             {
@@ -71,11 +69,35 @@ namespace NBehave.Fluent.Framework
             }
         }
 
+        private StringStep AddStepToScenario(ScenarioFragment currentStage, string step)
+        {
+            var stringStep = CreateStringStep(step, currentStage);
+            Scenario.AddStep(stringStep);
+            return stringStep;
+        }
+
+        private void RunStep(ScenarioFragment currentStage, string step, StringStep stringStep)
+        {
+            var stepToRun = new StringStep(string.Format("{0} {1}", currentStage, step), Scenario.Source);
+            StepRunner.Run(stepToRun);
+            stringStep.StepResult = new StepResult(stringStep, stepToRun.StepResult.Result);
+        }
+
+        private StringStep CreateStringStep(string step, ScenarioFragment currentStage)
+        {
+            string stepType = currentStage.ToString();
+            if (Scenario.Steps.Any() && previousStage == currentStage)
+                stepType = "And";
+            var stringStep = new StringStep(string.Format("{0} {1}", stepType, step), Scenario.Source);
+            return stringStep;
+        }
+
         internal class StartFragment : IScenarioBuilderStartWithHelperObject
         {
             private readonly ScenarioBuilder _builder;
 
-            public StartFragment(Feature feature) : this(feature, null)
+            public StartFragment(Feature feature)
+                : this(feature, null)
             {
             }
 

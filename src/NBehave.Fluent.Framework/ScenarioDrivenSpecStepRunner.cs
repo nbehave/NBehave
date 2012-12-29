@@ -10,14 +10,12 @@ namespace NBehave.Fluent.Framework
     public class ScenarioDrivenSpecStepRunner : IStringStepRunner
     {
         private readonly DictionaryStepResolver _inlineImplementations;
-        private readonly List<IStepResolver> _resolvers;
-
-        public ScenarioFragment CurrentScenarioStage { get; set; }
+        private readonly List<IStepResolver> resolvers;
 
         public ScenarioDrivenSpecStepRunner(object stepHelper)
         {
             _inlineImplementations = new DictionaryStepResolver();
-            _resolvers = new List<IStepResolver>
+            resolvers = new List<IStepResolver>
                              {
                                  _inlineImplementations
                              };
@@ -29,24 +27,24 @@ namespace NBehave.Fluent.Framework
                 .GetCustomAttributes(typeof(ActionStepsAttribute), true)
                 .Length > 0)
             {
-                _resolvers.Add(new ActionStepStepResolver(stepHelper));
+                resolvers.Add(new ActionStepStepResolver(stepHelper));
             }
             else
             {
-                _resolvers.Add(new ReflectedMethodStepResolver(stepHelper));
+                resolvers.Add(new ReflectedMethodStepResolver(stepHelper));
             }
         }
 
-        public void RegisterImplementation(string step, Action implementation)
+        public void RegisterImplementation(ScenarioFragment scenarioStage, string step, Action implementation)
         {
-            _inlineImplementations.RegisterImplementation(CurrentScenarioStage, step, implementation);
+            _inlineImplementations.RegisterImplementation(scenarioStage, step, implementation);
         }
 
         public void Run(StringStep step)
         {
-            var stepImplementation = _resolvers.Select(resolver => resolver.ResolveStep(step))
-                                                  .Where(action => action != null)
-                                                  .FirstOrDefault();
+            var stepImplementation = resolvers
+                .Select(resolver => resolver.ResolveStep(step))
+                .FirstOrDefault(action => action != null);
             if (stepImplementation == null)
             {
                 step.PendNotImplemented("No implementation found");
@@ -71,27 +69,27 @@ namespace NBehave.Fluent.Framework
 
         public void OnCloseScenario()
         {
-            var closeAction = _resolvers.Select(resolver => resolver.ResolveOnCloseScenario())
-                                                  .Where(action => action != null)
-                                                  .FirstOrDefault();
+            var closeAction = resolvers
+                .Select(resolver => resolver.ResolveOnCloseScenario())
+                .FirstOrDefault(action => action != null);
             if (closeAction != null)
                 closeAction();
         }
 
         public void BeforeScenario()
         {
-            var beforeAction = _resolvers.Select(resolver => resolver.ResolveOnBeforeScenario())
-                                                  .Where(action => action != null)
-                                                  .FirstOrDefault();
+            var beforeAction = resolvers
+                .Select(resolver => resolver.ResolveOnBeforeScenario())
+                .FirstOrDefault(action => action != null);
             if (beforeAction != null)
                 beforeAction();
         }
 
         public void AfterScenario()
         {
-            var afterAction = _resolvers.Select(resolver => resolver.ResolveOnAfterScenario())
-                                                  .Where(action => action != null)
-                                                  .FirstOrDefault();
+            var afterAction = resolvers
+                .Select(resolver => resolver.ResolveOnAfterScenario())
+                .FirstOrDefault(action => action != null);
             if (afterAction != null)
                 afterAction();
         }
@@ -99,7 +97,7 @@ namespace NBehave.Fluent.Framework
         private Exception FindUsefulException(Exception e)
         {
             var realException = e;
-            while (realException != null && realException.GetType() == typeof(TargetInvocationException))
+            while (realException is TargetInvocationException)
             {
                 realException = realException.InnerException;
             }

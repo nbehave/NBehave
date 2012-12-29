@@ -13,7 +13,7 @@ namespace NBehave.Fluent.Framework.Specifications
 
             var didRun = false;
 
-            stepRunner.RegisterImplementation("change my flag", () => didRun = true);
+            stepRunner.RegisterImplementation(ScenarioFragment.Given, "change my flag", () => didRun = true);
 
             stepRunner.Run(new StringStep("Given change my flag", null));
 
@@ -24,10 +24,7 @@ namespace NBehave.Fluent.Framework.Specifications
         public void Should_pick_up_step_implementations_via_reflection_from_supplied_helper_object()
         {
             var helper = new ReflectionBasedScenarioHelper();
-            var stepRunner = new ScenarioDrivenSpecStepRunner(helper)
-                                 {
-                                     CurrentScenarioStage = ScenarioFragment.When
-                                 };
+            var stepRunner = new ScenarioDrivenSpecStepRunner(helper);
 
             stepRunner.Run(new StringStep("When using reflection to obtain a step", null));
 
@@ -38,10 +35,7 @@ namespace NBehave.Fluent.Framework.Specifications
         public void Should_pick_up_step_implementations_via_attributes_from_supplied_helper_object()
         {
             var helper = new AttributedScenarioHelper();
-            var stepRunner = new ScenarioDrivenSpecStepRunner(helper)
-            {
-                CurrentScenarioStage = ScenarioFragment.When
-            };
+            var stepRunner = new ScenarioDrivenSpecStepRunner(helper);
 
             stepRunner.Run(new StringStep("Given using attributes to obtain a step", null));
 
@@ -52,10 +46,7 @@ namespace NBehave.Fluent.Framework.Specifications
         public void Should_pick_up_step_implementations_via_attributes_from_supplied_helper_object_and_obtain_regex_captures()
         {
             var helper = new AttributedScenarioHelper();
-            var stepRunner = new ScenarioDrivenSpecStepRunner(helper)
-            {
-                CurrentScenarioStage = ScenarioFragment.When
-            };
+            var stepRunner = new ScenarioDrivenSpecStepRunner(helper);
 
             stepRunner.Run(new StringStep("Given setting result via regex capture to 12", null));
 
