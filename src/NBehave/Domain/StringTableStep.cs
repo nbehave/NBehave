@@ -11,12 +11,12 @@ namespace NBehave
     {
         private readonly List<Example> tableSteps = new List<Example>();
 
-        public StringTableStep(string step, string source)
-            : base(step, source)
+        public StringTableStep(string token, string step, string source)
+            : base(token, step, source)
         { }
 
-        public StringTableStep(string step, string source, int sourceLine)
-            : base(step, source, sourceLine)
+        public StringTableStep(string token, string step, string source, int sourceLine)
+            : base(token, step, source, sourceLine)
         { }
 
         public IEnumerable<Example> TableSteps
@@ -42,7 +42,7 @@ namespace NBehave
 
         public override StringStep BuildStep(Example values)
         {
-            var template = Step;
+            var template = MatchableStep;
             foreach (var columnName in values.ColumnNames)
             {
                 var columnValue = values.ColumnValues[columnName.Name].TrimWhiteSpaceChars();
@@ -57,7 +57,7 @@ namespace NBehave
                         row.ColumnValues.Add(pair.Key, pair.Value);
                 }
             }
-            var clone = new StringTableStep(template, Source, SourceLine);
+            var clone = new StringTableStep(Token, template, Source, SourceLine);
             CloneTableSteps(clone);
             return clone;
         }

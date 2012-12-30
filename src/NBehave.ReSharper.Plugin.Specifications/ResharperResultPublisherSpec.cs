@@ -49,7 +49,7 @@ namespace NBehave.ReSharper.Plugin.Specifications
             protected override void Because_of()
             {
                 var result = new ScenarioResult(feature, ScenarioTitle);
-                result.AddActionStepResult(new StepResult(new StringStep("Given something", Source), new Passed()));
+                result.AddActionStepResult(new StepResult(new StringStep("Given", "something", Source), new Passed()));
                 resultPublisher.Notify(result);
             }
 
@@ -71,7 +71,7 @@ namespace NBehave.ReSharper.Plugin.Specifications
             protected override void Because_of()
             {
                 var result = new ScenarioResult(feature, ScenarioTitle);
-                result.AddActionStepResult(new StepResult(new StringStep("Given something", Source), new Failed(new ArgumentNullException("wtf!"))));
+                result.AddActionStepResult(new StepResult(new StringStep("Given", "something", Source), new Failed(new ArgumentNullException("wtf!"))));
                 resultPublisher.Notify(result);
             }
 
@@ -95,8 +95,8 @@ namespace NBehave.ReSharper.Plugin.Specifications
             protected override void Because_of()
             {
                 var result = new ScenarioResult(feature, ScenarioTitle);
-                result.AddActionStepResult(new StepResult(new StringStep("Given something that passes", Source), new Passed()));
-                result.AddActionStepResult(new StepResult(new StringStep("Given something", Source), new PendingNotImplemented("not implemented")));
+                result.AddActionStepResult(new StepResult(new StringStep("Given", "something that passes", Source), new Passed()));
+                result.AddActionStepResult(new StepResult(new StringStep("Given", "something", Source), new PendingNotImplemented("not implemented")));
                 resultPublisher.Notify(result);
             }
 
@@ -119,7 +119,7 @@ namespace NBehave.ReSharper.Plugin.Specifications
             protected override void Because_of()
             {
                 var result = new ScenarioResult(feature, ScenarioTitle);
-                var stringTableStep = new StringTableStep("Given something", Source);
+                var stringTableStep = new StringTableStep("Given", "something", Source);
                 stringTableStep.AddTableStep(new Example(new ExampleColumns(new[] { new ExampleColumn("A"), new ExampleColumn("B"), }),
                                                          new Dictionary<string, string> { { "A", "aaa" }, { "B", "bb" } }));
                 result.AddActionStepResult(new StepResult(stringTableStep, new Passed()));

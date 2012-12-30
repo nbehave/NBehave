@@ -90,9 +90,8 @@ namespace NBehave.TextParsing
 
         public void Step(Token keyword, Token name)
         {
-            string stepText = string.Format("{0} {1}", keyword.Content, name.Content);
-            var stringStep = new StringStep(stepText, file, keyword.LineInFile.Line);
-            events.Enqueue(new StepEvent(stepText, e => StepEvent.Invoke(this, new EventArgs<StringStep>(stringStep))));
+            var stringStep = new StringStep(keyword.Content, name.Content, file, keyword.LineInFile.Line);
+            events.Enqueue(new StepEvent(stringStep.Step, e => StepEvent.Invoke(this, new EventArgs<StringStep>(stringStep))));
         }
 
         public void Table(IList<IList<Token>> columns, LineInFile lineInFile)

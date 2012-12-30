@@ -12,8 +12,8 @@ namespace NBehave.Specifications.Domain
         {
             var feature = new Feature("featureTitle", "", "source", 1);
             var scenario = new Scenario("scenarioTitle", "source", feature, 3);
-            scenario.AddStep(new StringStep("Given a step", "source, 4"));
-            scenario.AddStep(new StringStep("And another step", "source, 5"));
+            scenario.AddStep(new StringStep("Given", "a step", "source, 4"));
+            scenario.AddStep(new StringStep("And", "another step", "source, 5"));
             var scenarioAsString = scenario.ToString();
             string expected = string.Format("Scenario: scenarioTitle{0}  Given a step{0}  And another step", Environment.NewLine);
             Assert.AreEqual(expected, scenarioAsString);
@@ -24,8 +24,8 @@ namespace NBehave.Specifications.Domain
         {
             var feature = new Feature("featureTitle", "", "source", 1);
             var scenario = new Scenario("scenarioTitle", "source", feature, 3);
-            scenario.AddStep(new StringStep("Given a [foo]", "source, 4"));
-            scenario.AddStep(new StringStep("And [bar]", "source, 5"));
+            scenario.AddStep(new StringStep("Given", "a [foo]", "source, 4"));
+            scenario.AddStep(new StringStep("And", "[bar]", "source, 5"));
             var columnNames = new ExampleColumns { new ExampleColumn("foo"), new ExampleColumn("bar") };
             scenario.AddExamples(new[]
                                      {

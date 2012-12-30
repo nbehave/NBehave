@@ -33,7 +33,7 @@ namespace NBehave.Extensions
 
         public static StringStep AsStringStep(this string text, string source)
         {
-            return new StringStep(text, source);
+            return new StringStep(text.GetFirstWord(), text.RemoveFirstWord(), source);
         }
     }
 }

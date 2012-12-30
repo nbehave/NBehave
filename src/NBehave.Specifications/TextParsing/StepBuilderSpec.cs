@@ -22,8 +22,8 @@ namespace NBehave.Specifications.TextParsing
             var scenario = new Scenario("title", "source", feature);
             gherkinEvents.Raise(_ => _.FeatureEvent += null, this, new EventArgs<Feature>(feature));
             gherkinEvents.Raise(_ => _.ScenarioEvent += null, this, new EventArgs<Scenario>(scenario));
-            gherkinEvents.Raise(_ => _.StepEvent += null, this, new EventArgs<StringStep>(new StringStep("step 1", "source")));
-            gherkinEvents.Raise(_ => _.StepEvent += null, this, new EventArgs<StringStep>(new StringStep("step 2", "source")));
+            gherkinEvents.Raise(_ => _.StepEvent += null, this, new EventArgs<StringStep>(new StringStep("Given", "step 1", "source")));
+            gherkinEvents.Raise(_ => _.StepEvent += null, this, new EventArgs<StringStep>(new StringStep("Given", "step 2", "source")));
             gherkinEvents.Raise(_ => _.EofEvent += null, this, new EventArgs());
 
             Assert.That(scenario.Steps.Count(), Is.EqualTo(2));
@@ -38,8 +38,8 @@ namespace NBehave.Specifications.TextParsing
             var scenario = new Scenario("title", "source", feature);
             gherkinEvents.Raise(_ => _.FeatureEvent += null, this, new EventArgs<Feature>(feature));
             gherkinEvents.Raise(_ => _.ScenarioEvent += null, this, new EventArgs<Scenario>(scenario));
-            gherkinEvents.Raise(_ => _.StepEvent += null, this, new EventArgs<StringStep>(new StringStep("step 1", "source")));
-            gherkinEvents.Raise(_ => _.StepEvent += null, this, new EventArgs<StringStep>(new StringStep("step 2", "source")));
+            gherkinEvents.Raise(_ => _.StepEvent += null, this, new EventArgs<StringStep>(new StringStep("Given", "step 1", "source")));
+            gherkinEvents.Raise(_ => _.StepEvent += null, this, new EventArgs<StringStep>(new StringStep("Given", "step 2", "source")));
             gherkinEvents.Raise(_ => _.TableEvent += null, this,
                                 new EventArgs<IList<IList<Token>>>(new List<IList<Token>>
                                                                        {
@@ -71,8 +71,8 @@ namespace NBehave.Specifications.TextParsing
             var scenario = new Scenario("title", "source", feature);
             gherkinEvents.Raise(_ => _.FeatureEvent += null, this, new EventArgs<Feature>(feature));
             gherkinEvents.Raise(_ => _.ScenarioEvent += null, this, new EventArgs<Scenario>(scenario));
-            gherkinEvents.Raise(_ => _.StepEvent += null, this, new EventArgs<StringStep>(new StringStep("step 1", "source")));
-            gherkinEvents.Raise(_ => _.StepEvent += null, this, new EventArgs<StringStep>(new StringStep("step 2", "source")));
+            gherkinEvents.Raise(_ => _.StepEvent += null, this, new EventArgs<StringStep>(new StringStep("Given", "step 1", "source")));
+            gherkinEvents.Raise(_ => _.StepEvent += null, this, new EventArgs<StringStep>(new StringStep("Given", "step 2", "source")));
             gherkinEvents.Raise(_ => _.DocStringEvent += null, this, new EventArgs<string>("docstring"));
             gherkinEvents.Raise(_ => _.EofEvent += null, this, new EventArgs());
 

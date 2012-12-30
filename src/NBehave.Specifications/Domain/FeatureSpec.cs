@@ -20,7 +20,7 @@ namespace NBehave.Specifications.Domain
         {
             var feature = new Feature("Title", string.Format("  As a x{0}  I want y{0}  So that z", Environment.NewLine), "source", 1);
             var background = new Scenario("backgroundTitle", "source", feature, 4);
-            background.AddStep(new StringStep("Given a background step", "source, 5"));
+            background.AddStep(new StringStep("Given", "a background step", "source, 5"));
             feature.AddBackground(background);
             var featureAsString = feature.ToString();
             string expected = string.Format("Feature: Title{0}  As a x{0}  I want y{0}  So that z", Environment.NewLine);

@@ -51,9 +51,9 @@ namespace NBehave.Specifications
                 actionCatalog.Add(new ActionMethodInfo(new Regex(@"that happens$"), when, when.Method, "Then", this));
 
                 var scenario = new Scenario();
-                scenario.AddStep(new StringStep("Given something", ""));
-                scenario.AddStep(new StringStep("When this", ""));
-                scenario.AddStep(new StringStep("Then that happens", ""));
+                scenario.AddStep(new StringStep("Given", "something", ""));
+                scenario.AddStep(new StringStep("When", "this", ""));
+                scenario.AddStep(new StringStep("Then", "that happens", ""));
                 RunScenarios(scenario);
             }
 
@@ -91,8 +91,8 @@ namespace NBehave.Specifications
                 actionCatalog.Add(new ActionMethodInfo(new Regex(@"pend me$"), pendAction, action.Method, "Given", this));
 
                 var scenario = new Scenario();
-                scenario.AddStep(new StringStep("Given something", ""));
-                scenario.AddStep(new StringStep("And pend me", ""));
+                scenario.AddStep(new StringStep("Given", "something", ""));
+                scenario.AddStep(new StringStep("And", "pend me", ""));
 
                 RunScenarios(scenario);
             }
@@ -108,7 +108,7 @@ namespace NBehave.Specifications
             {
                 Assert.AreEqual(1, scenarioResult.StepResults.Count(_ => _.StringStep.StepResult.Result is Pending));
                 var stepResult = scenarioResult.StepResults.FirstOrDefault(_ => _.StringStep.StepResult.Result is Pending);
-                Assert.That("And pend me", Is.EqualTo(stepResult.StringStep.Step));
+                Assert.That(stepResult.StringStep.Step, Is.EqualTo("And pend me"));
             }
         }
     }

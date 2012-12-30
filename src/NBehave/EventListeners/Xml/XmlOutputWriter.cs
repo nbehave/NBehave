@@ -261,7 +261,7 @@ namespace NBehave.EventListeners.Xml
             var featureMessages = from m in events
                                   where m.EventType == EventType.FeatureNarrative
                                   select m.Message;
-            if (featureMessages.Count() > 0)
+            if (featureMessages.Any())
             {
                 Writer.WriteStartElement("narrative");
                 foreach (var row in featureMessages)
@@ -297,7 +297,7 @@ namespace NBehave.EventListeners.Xml
                               where e.EventType == EventType.ScenarioStart
                               select e;
             foreach (var step in actionSteps)
-                scenarioResult.AddActionStepResult(new StepResult(new StringStep(step.Message, "lost it"), new Pending(scenarioResult.Message)));
+                scenarioResult.AddActionStepResult(new StepResult(new StringStep("", step.Message, "lost it"), new Pending(scenarioResult.Message)));
         }
 
         private int CountFeatures()

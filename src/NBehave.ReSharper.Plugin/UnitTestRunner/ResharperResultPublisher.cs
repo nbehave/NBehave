@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using NBehave.EventListeners.CodeGeneration;
-using NBehave.Extensions;
 
 namespace NBehave.ReSharper.Plugin.UnitTestRunner
 {
@@ -130,8 +129,8 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
 
         private static StepResult CreateStepResult(Example example, ScenarioResult scenarioResult)
         {
-            var source = scenarioResult.StepResults.First().StringStep.Source;
-            return new StepResult(new StringStep(example.ColumnValuesToString(), source), scenarioResult.Result);
+            var step = scenarioResult.StepResults.First().StringStep;
+            return new StepResult(new StringStep(step.Token, example.ColumnValuesToString(), step.Source, step.SourceLine), scenarioResult.Result);
         }
 
         private void NotifyResharperOfBackgroundResult(ScenarioResult scenarioResult)
@@ -163,7 +162,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
 
         private void NotifyResharperOfScenarioResult(ScenarioResult result, TaskState scenario)
         {
-            var stepResult = new StepResult(result.ScenarioTitle.AsStringStep(""), result.Result);
+            var stepResult = new StepResult(new StringStep("Scenario:", result.ScenarioTitle, ""), result.Result);
             NotifyResharperOfTaskResult(result, stepResult, scenario);
         }
 

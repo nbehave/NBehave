@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using System.Xml;
 using NBehave.EventListeners.Xml;
+using NBehave.Extensions;
 using NUnit.Framework;
 
 namespace NBehave.Specifications.EventListeners
@@ -11,8 +12,8 @@ namespace NBehave.Specifications.EventListeners
     [TestFixture]
     public abstract class XmlOutputWriterSpec
     {
-        private XmlOutputWriter _xmlOutputWriter;
-        private XmlDocument _xmlDoc;
+        private XmlOutputWriter xmlOutputWriter;
+        private XmlDocument xmlDoc;
 
         [SetUp]
         public void SetUp()
@@ -22,7 +23,7 @@ namespace NBehave.Specifications.EventListeners
 
         private StringStep Step(string step)
         {
-            return new StringStep(step, "");
+            return new StringStep(step.GetFirstWord(), step.RemoveFirstWord(), "");
         }
 
         private Result Passed { get { return new Passed(); } }
@@ -48,7 +49,7 @@ namespace NBehave.Specifications.EventListeners
 										 new EventReceived("", EventType.RunFinished)
 									 };
 
-            _xmlOutputWriter = new XmlOutputWriter(xmlWriter, eventsReceived);
+            xmlOutputWriter = new XmlOutputWriter(xmlWriter, eventsReceived);
         }
 
         [TestFixture]
@@ -60,33 +61,33 @@ namespace NBehave.Specifications.EventListeners
             {
                 var memStream = new MemoryStream();
                 var xmlWriter = new XmlTextWriter(memStream, Encoding.UTF8);
-                _xmlOutputWriter = new XmlOutputWriter(xmlWriter, new List<EventReceived>());
+                xmlOutputWriter = new XmlOutputWriter(xmlWriter, new List<EventReceived>());
                 var result = new StepResult(Step("Given Foo"), Passed);
-                _xmlOutputWriter.DoStringStep(result);
+                xmlOutputWriter.DoStringStep(result);
                 xmlWriter.Flush();
-                _xmlDoc = new XmlDocument();
+                xmlDoc = new XmlDocument();
                 memStream.Seek(0, SeekOrigin.Begin);
-                _xmlDoc.Load(memStream);
+                xmlDoc.Load(memStream);
             }
 
             [Test]
             public void ShouldHaveStepNode()
             {
-                var node = _xmlDoc.SelectSingleNode(XPathToNode);
+                var node = xmlDoc.SelectSingleNode(XPathToNode);
                 Assert.That(node, Is.Not.Null);
             }
 
             [Test]
             public void NodeShouldHaveNameAttribute()
             {
-                var node = _xmlDoc.SelectSingleNode(XPathToNode);
+                var node = xmlDoc.SelectSingleNode(XPathToNode);
                 Assert.That(node.Attributes["name"].Value, Is.EqualTo("Given Foo"));
             }
 
             [Test]
             public void NodeShouldHaveOutcome()
             {
-                var node = _xmlDoc.SelectSingleNode(XPathToNode);
+                var node = xmlDoc.SelectSingleNode(XPathToNode);
                 Assert.That(node.Attributes["outcome"].Value, Is.EqualTo("passed"));
             }
         }
@@ -100,28 +101,28 @@ namespace NBehave.Specifications.EventListeners
             {
                 var memStream = new MemoryStream();
                 var xmlWriter = new XmlTextWriter(memStream, Encoding.UTF8);
-                _xmlOutputWriter = new XmlOutputWriter(xmlWriter, new List<EventReceived>());
+                xmlOutputWriter = new XmlOutputWriter(xmlWriter, new List<EventReceived>());
                 var step = Step("Given Foo");
                 step.AddDocString("docstring");
                 var result = new StepResult(step, Passed);
-                _xmlOutputWriter.DoStringStep(result);
+                xmlOutputWriter.DoStringStep(result);
                 xmlWriter.Flush();
-                _xmlDoc = new XmlDocument();
+                xmlDoc = new XmlDocument();
                 memStream.Seek(0, SeekOrigin.Begin);
-                _xmlDoc.Load(memStream);
+                xmlDoc.Load(memStream);
             }
 
             [Test]
             public void ShouldHaveStepNode()
             {
-                var node = _xmlDoc.SelectSingleNode(XPathToNode);
+                var node = xmlDoc.SelectSingleNode(XPathToNode);
                 Assert.That(node, Is.Not.Null);
             }
 
             [Test]
             public void NodeShouldHaveNameAttribute()
             {
-                var node = _xmlDoc.SelectSingleNode(XPathToNode);
+                var node = xmlDoc.SelectSingleNode(XPathToNode);
                 Assert.That(node.Attributes["name"].Value, 
                     Is.EqualTo("Given Foo" + Environment.NewLine +
                                 "\"\"\"" + Environment.NewLine +
@@ -132,7 +133,7 @@ namespace NBehave.Specifications.EventListeners
             [Test]
             public void NodeShouldHaveOutcome()
             {
-                var node = _xmlDoc.SelectSingleNode(XPathToNode);
+                var node = xmlDoc.SelectSingleNode(XPathToNode);
                 Assert.That(node.Attributes["outcome"].Value, Is.EqualTo("passed"));
             }
         }
@@ -162,39 +163,39 @@ namespace NBehave.Specifications.EventListeners
 				                             new ScenarioResultEventReceived(scenarioResult)
 				                         };
 
-                _xmlOutputWriter = new XmlOutputWriter(xmlWriter, eventsReceived);
-                _xmlOutputWriter.DoScenario(eventsReceived[0], scenarioResult);
+                xmlOutputWriter = new XmlOutputWriter(xmlWriter, eventsReceived);
+                xmlOutputWriter.DoScenario(eventsReceived[0], scenarioResult);
                 xmlWriter.Flush();
-                _xmlDoc = new XmlDocument();
+                xmlDoc = new XmlDocument();
                 memStream.Seek(0, SeekOrigin.Begin);
-                _xmlDoc.Load(memStream);
+                xmlDoc.Load(memStream);
             }
 
             [Test]
             public void ShouldHaveScenarioNode()
             {
-                var node = _xmlDoc.SelectSingleNode(XPathToNode);
+                var node = xmlDoc.SelectSingleNode(XPathToNode);
                 Assert.That(node, Is.Not.Null);
             }
 
             [Test]
             public void NodeShouldHaveNameAttribute()
             {
-                var node = _xmlDoc.SelectSingleNode(XPathToNode);
+                var node = xmlDoc.SelectSingleNode(XPathToNode);
                 Assert.That(node.Attributes["name"].Value, Is.EqualTo("ScenarioTitle"));
             }
 
             [Test]
             public void NodeShouldHaveTimeAttribute()
             {
-                var node = _xmlDoc.SelectSingleNode(XPathToNode);
+                var node = xmlDoc.SelectSingleNode(XPathToNode);
                 Assert.That(node.Attributes["time"], Is.Not.Null);
             }
 
             [Test]
             public void NodeShouldHaveOutcome()
             {
-                var node = _xmlDoc.SelectSingleNode(XPathToNode);
+                var node = xmlDoc.SelectSingleNode(XPathToNode);
                 Assert.That(node.Attributes["outcome"].Value, Is.EqualTo("passed"));
             }
         }
@@ -228,32 +229,32 @@ namespace NBehave.Specifications.EventListeners
 				                             new ScenarioResultEventReceived(scenarioResult)
 				                         };
 
-                _xmlOutputWriter = new XmlOutputWriter(xmlWriter, eventsReceived);
-                _xmlOutputWriter.DoBackground(scenarioResult);
+                xmlOutputWriter = new XmlOutputWriter(xmlWriter, eventsReceived);
+                xmlOutputWriter.DoBackground(scenarioResult);
                 xmlWriter.Flush();
-                _xmlDoc = new XmlDocument();
+                xmlDoc = new XmlDocument();
                 memStream.Seek(0, SeekOrigin.Begin);
-                _xmlDoc.Load(memStream);
+                xmlDoc.Load(memStream);
             }
 
             [Test]
             public void Should_have_background_node()
             {
-                var node = _xmlDoc.SelectSingleNode(XPathToNode);
+                var node = xmlDoc.SelectSingleNode(XPathToNode);
                 Assert.That(node, Is.Not.Null);
             }
 
             [Test]
             public void NodeShouldHaveNameAttribute()
             {
-                var node = _xmlDoc.SelectSingleNode(XPathToNode);
+                var node = xmlDoc.SelectSingleNode(XPathToNode);
                 Assert.That(node.Attributes["name"].Value, Is.EqualTo("background title"));
             }
 
             [Test]
             public void NodeShouldHaveOutcomeAttribute()
             {
-                var node = _xmlDoc.SelectSingleNode(XPathToNode);
+                var node = xmlDoc.SelectSingleNode(XPathToNode);
                 Assert.That(node.Attributes["outcome"].Value, Is.EqualTo("passed"));
             }
         }
@@ -284,46 +285,46 @@ namespace NBehave.Specifications.EventListeners
 				                             new EventReceived("ScenarioTitle", EventType.ScenarioStart),
 				                             new ScenarioResultEventReceived(scenarioResult)
 				                         };
-                _xmlOutputWriter = new XmlOutputWriter(xmlWriter, eventsReceived);
-                _xmlOutputWriter.DoFeature(eventsReceived[0]);
+                xmlOutputWriter = new XmlOutputWriter(xmlWriter, eventsReceived);
+                xmlOutputWriter.DoFeature(eventsReceived[0]);
                 xmlWriter.Flush();
-                _xmlDoc = new XmlDocument();
+                xmlDoc = new XmlDocument();
                 memStream.Seek(0, SeekOrigin.Begin);
-                _xmlDoc.Load(memStream);
+                xmlDoc.Load(memStream);
             }
 
             [Test]
             public void ShouldHaveFeatureNode()
             {
-                var node = _xmlDoc.SelectSingleNode(XPathToNode);
+                var node = xmlDoc.SelectSingleNode(XPathToNode);
                 Assert.That(node, Is.Not.Null);
             }
 
             [Test]
             public void NodeShouldHaveNameAttribute()
             {
-                var node = _xmlDoc.SelectSingleNode(XPathToNode);
+                var node = xmlDoc.SelectSingleNode(XPathToNode);
                 Assert.That(node.Attributes["name"].Value, Is.EqualTo("FeatureTitle"));
             }
 
             [Test]
             public void NodeShouldHaveTimeAttribute()
             {
-                var node = _xmlDoc.SelectSingleNode(XPathToNode);
+                var node = xmlDoc.SelectSingleNode(XPathToNode);
                 Assert.That(node.Attributes["time"], Is.Not.Null);
             }
 
             [Test]
             public void NodeShouldHaveScenariosSubnode()
             {
-                var node = _xmlDoc.SelectSingleNode(XPathToNode + @"/scenarios");
+                var node = xmlDoc.SelectSingleNode(XPathToNode + @"/scenarios");
                 Assert.That(node, Is.Not.Null);
             }
 
             [Test]
             public void NodeShouldHaveScenarioCountAttributes()
             {
-                var node = _xmlDoc.SelectSingleNode(XPathToNode);
+                var node = xmlDoc.SelectSingleNode(XPathToNode);
                 Assert.That(node.Attributes["scenarios"].Value, Is.EqualTo("1"));
                 Assert.That(node.Attributes["scenariosFailed"].Value, Is.EqualTo("0"));
                 Assert.That(node.Attributes["scenariosPending"].Value, Is.EqualTo("0"));
@@ -347,12 +348,12 @@ namespace NBehave.Specifications.EventListeners
                 eventsReceived.AddRange(CreateFirstFeature());
                 eventsReceived.AddRange(CreateSecondFeature());
                 eventsReceived.Add(new EventReceived("", EventType.RunFinished));
-                _xmlOutputWriter = new XmlOutputWriter(xmlWriter, eventsReceived);
-                _xmlOutputWriter.WriteAllXml();
+                xmlOutputWriter = new XmlOutputWriter(xmlWriter, eventsReceived);
+                xmlOutputWriter.WriteAllXml();
                 xmlWriter.Flush();
-                _xmlDoc = new XmlDocument();
+                xmlDoc = new XmlDocument();
                 memStream.Seek(0, SeekOrigin.Begin);
-                _xmlDoc.Load(memStream);
+                xmlDoc.Load(memStream);
             }
 
             IEnumerable<EventReceived> CreateFirstFeature()
@@ -402,7 +403,7 @@ namespace NBehave.Specifications.EventListeners
             [Test]
             public void ResultsNodeShouldHaveFeatureCount()
             {
-                var node = _xmlDoc.SelectSingleNode(XPathToNode);
+                var node = xmlDoc.SelectSingleNode(XPathToNode);
                 var storyNode = node.Attributes["features"];
                 Assert.That(storyNode, Is.Not.Null);
                 Assert.That(storyNode.Value, Is.EqualTo("2"));
@@ -411,7 +412,7 @@ namespace NBehave.Specifications.EventListeners
             [Test]
             public void ResultsNodeShouldHaveScenarioCount()
             {
-                var node = _xmlDoc.SelectSingleNode(XPathToNode);
+                var node = xmlDoc.SelectSingleNode(XPathToNode);
                 Assert.That(node.Attributes["scenarios"].Value, Is.EqualTo("2"));
                 Assert.That(node.Attributes["scenariosFailed"].Value, Is.EqualTo("0"));
                 Assert.That(node.Attributes["scenariosPending"].Value, Is.EqualTo("0"));
@@ -420,14 +421,14 @@ namespace NBehave.Specifications.EventListeners
             [Test]
             public void FirstFeatureShouldHaveOneScenario()
             {
-                var node = _xmlDoc.SelectSingleNode(XPathToNode + @"/features/feature[@name='First feature']");
+                var node = xmlDoc.SelectSingleNode(XPathToNode + @"/features/feature[@name='First feature']");
                 Assert.That(node.Attributes["scenarios"].Value, Is.EqualTo("1"));
             }
 
             [Test]
             public void SecondFeatureShouldHaveOneScenario()
             {
-                var node = _xmlDoc.SelectSingleNode(XPathToNode + @"/features/feature[@name='Second feature']");
+                var node = xmlDoc.SelectSingleNode(XPathToNode + @"/features/feature[@name='Second feature']");
                 Assert.That(node.Attributes["scenarios"].Value, Is.EqualTo("1"));
             }
         }

@@ -11,7 +11,7 @@ namespace NBehave.Specifications.Domain
         [Test]
         public void Should_be_able_to_serialize_binary()
         {
-            var s = new StringTableStep("Given x", "source");
+            var s = new StringTableStep("Given", "x", "source");
             var columns = new ExampleColumns(new[] { new ExampleColumn("a") });
             var values = new Dictionary<string, string> { { "a", "value" } };
             var row = new Example(columns, values);

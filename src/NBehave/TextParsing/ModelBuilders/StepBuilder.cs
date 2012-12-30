@@ -55,7 +55,7 @@ namespace NBehave.TextParsing.ModelBuilders
         {
             if (previousStep == null)
                 return;
-            var stringTableStep = new StringTableStep(previousStep.Step, scenario.Source, previousStep.SourceLine);
+            var stringTableStep = new StringTableStep(previousStep.Token, previousStep.MatchableStep, scenario.Source, previousStep.SourceLine);
             scenario.AddStep(stringTableStep);
 
             var columns = content.First().Select(token => new ExampleColumn(token.Content));

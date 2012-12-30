@@ -125,7 +125,7 @@ namespace NBehave.Specifications
         [Test]
         public void Should_pend_scenario_with_PendingNotImplemented()
         {
-            _results.AddActionStepResult(new StepResult(new StringStep("Given foo", ""), new PendingNotImplemented("not implemented")));
+            _results.AddActionStepResult(new StepResult(new StringStep("Given", "foo", ""), new PendingNotImplemented("not implemented")));
             Assert.That(_results.Result, Is.TypeOf(typeof(Pending)));
         }
     }

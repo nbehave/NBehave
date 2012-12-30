@@ -36,7 +36,7 @@ namespace NBehave.Specifications
                 var wasCalled = false;
                 Action<string> action = name => { wasCalled = true; };
                 actionCatalog.Add(new ActionMethodInfo(new Regex(@"my name is (?<name>\w+)"), action, action.Method, "Given"));
-                runner.Run(new StringStep("Given my name is Morgan", ""));
+                runner.Run(new StringStep("Given", "my name is Morgan", ""));
                 Assert.IsTrue(wasCalled, "Action was not called");
             }
 
@@ -46,14 +46,14 @@ namespace NBehave.Specifications
                 var actual = string.Empty;
                 Action<string> action = name => { actual = name; };
                 actionCatalog.Add(new ActionMethodInfo(new Regex(@"my name is (?<name>\w+)"), action, action.Method, "Given"));
-                runner.Run(new StringStep("Given my name is Morgan", ""));
+                runner.Run(new StringStep("Given", "my name is Morgan", ""));
                 Assert.That(actual, Is.EqualTo("Morgan"));
             }
 
             [Test]
             public void ShouldReturnPendingIfActionGivenInTokenStringDoesntExist()
             {
-                var step = new StringStep("Given this doesnt exist", "");
+                var step = new StringStep("Given", "this doesnt exist", "");
                 runner.Run(step);
                 Assert.That(step.StepResult.Result, Is.TypeOf(typeof(PendingNotImplemented)));
             }
@@ -70,7 +70,7 @@ namespace NBehave.Specifications
                 UserClass actual = null;
                 Action<UserClass> action = _ => { actual = _; };
                 actionCatalog.Add(new ActionMethodInfo(new Regex(@"my name is (?<name>\w+) and I'm (?<age>\d+) years old"), action, action.Method, "Given"));
-                runner.Run(new StringStep("Given my name is Morgan and I'm 42 years old", ""));
+                runner.Run(new StringStep("Given", "my name is Morgan and I'm 42 years old", ""));
                 Assert.That(actual, Is.Not.Null);
                 Assert.That(actual.Name, Is.EqualTo("Morgan"));
                 Assert.That(actual.Age, Is.EqualTo(42));
@@ -82,7 +82,7 @@ namespace NBehave.Specifications
                 List<UserClass> actual = null;
                 Action<List<UserClass>> action = _ => { actual = _; };
                 actionCatalog.Add(new ActionMethodInfo(new Regex(@"some users:"), action, action.Method, "Given"));
-                var tableStep = new StringTableStep("Given some users:", "");
+                var tableStep = new StringTableStep("Given", "some users:", "");
                 tableStep.AddTableStep(new Example(new ExampleColumns { new ExampleColumn("age"), new ExampleColumn("name") }, new Dictionary<string, string> { { "age", "42" }, { "name", "Morgan" } }));
                 tableStep.AddTableStep(new Example(new ExampleColumns { new ExampleColumn("age"), new ExampleColumn("name") }, new Dictionary<string, string> { { "age", "666" }, { "name", "Lucifer" } }));
                 runner.Run(tableStep);
@@ -116,7 +116,7 @@ namespace NBehave.Specifications
                     docString = thisIsThedocString;
                 };
                 actionCatalog.Add(new ActionMethodInfo("a value $value followed by docstring".AsRegex(), action, action.Method, "Given"));
-                var stringStep = new StringStep("Given a value 42 followed by docstring", "");
+                var stringStep = new StringStep("Given", "a value 42 followed by docstring", "");
                 stringStep.AddDocString("docString");
                 runner.Run(stringStep);
                 Assert.IsTrue(wasCalled, "Action was not called");

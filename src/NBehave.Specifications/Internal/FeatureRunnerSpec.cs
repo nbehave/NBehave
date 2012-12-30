@@ -41,7 +41,7 @@ namespace NBehave.Specifications.Internal
             actionCatalog.Add(new ActionMethodInfo(new Regex(@"something"), action, action.Method, "Given", this));
 
             var feature = FeatureWithScenario();
-            var step = new StringStep("something", "");
+            var step = new StringStep("Given", "something", "");
             feature.Scenarios[0].AddStep(step);
             return feature;
         }
@@ -60,8 +60,8 @@ namespace NBehave.Specifications.Internal
 
                 var f = FeatureWithScenario();
                 var scenario = f.Scenarios[0];
-                scenario.AddStep(new StringStep("And my name is Morgan", ""));
-                scenario.AddStep(new StringStep("Given my name is Axel", ""));
+                scenario.AddStep(new StringStep("And", "my name is Morgan", ""));
+                scenario.AddStep(new StringStep("Given", "my name is Axel", ""));
                 featureResult = featureRunner.Run(f);
             }
 
@@ -101,12 +101,12 @@ namespace NBehave.Specifications.Internal
             private Scenario CreateScenarioWithTable(Feature feature)
             {
                 var scenario = new Scenario("title", "", feature);
-                var givenStep = new StringTableStep("Given name [x]", "");
+                var givenStep = new StringTableStep("Given", "name [x]", "");
                 givenStep.AddTableStep(new Example(new ExampleColumns(new[] { new ExampleColumn("x") }), new Dictionary<string, string> { { "x", "Nisse" } }));
                 givenStep.AddTableStep(new Example(new ExampleColumns(new[] { new ExampleColumn("x") }), new Dictionary<string, string> { { "x", "Kalle" } }));
                 scenario.AddStep(givenStep);
-                scenario.AddStep(new StringStep("When greeted", ""));
-                var thenStep = new StringTableStep("Then Hello [y]", "");
+                scenario.AddStep(new StringStep("When", "greeted", ""));
+                var thenStep = new StringTableStep("Then", "Hello [y]", "");
                 thenStep.AddTableStep(new Example(new ExampleColumns(new[] { new ExampleColumn("y"), }), new Dictionary<string, string> { { "y", "Nisse" } }));
                 thenStep.AddTableStep(new Example(new ExampleColumns(new[] { new ExampleColumn("y"), }), new Dictionary<string, string> { { "y", "Kålle" } }));
                 scenario.AddStep(thenStep);
@@ -167,10 +167,10 @@ namespace NBehave.Specifications.Internal
                 var f = new Feature("title", "");
                 var firstScenario = new Scenario();
 
-                firstScenario.AddStep(new StringStep("Given something to count", ""));
+                firstScenario.AddStep(new StringStep("Given", "something to count", ""));
                 var secondScenario = new Scenario();
-                secondScenario.AddStep(new StringStep("Given something to count", ""));
-                secondScenario.AddStep(new StringStep("Given something to count", ""));
+                secondScenario.AddStep(new StringStep("Given", "something to count", ""));
+                secondScenario.AddStep(new StringStep("Given", "something to count", ""));
                 f.AddScenario(firstScenario);
                 f.AddScenario(secondScenario);
                 featureRunner.Run(f);
@@ -212,7 +212,7 @@ namespace NBehave.Specifications.Internal
                 actionCatalog.Add(new ActionMethodInfo(new Regex(@"something"), action, action.Method, "Given", this));
                 hooksCatalog.Add(new DelegateHookMetaData(() => afterStepWasCalled = true, new AfterStepAttribute()));
                 var feature = FeatureWithScenario();
-                var step = new StringStep("something", "");
+                var step = new StringStep("Given", "something", "");
                 feature.Scenarios[0].AddStep(step);
                 featureRunner.Run(feature);
                 Assert.That(afterStepWasCalled, Is.True);

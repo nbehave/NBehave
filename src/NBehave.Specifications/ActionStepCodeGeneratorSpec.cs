@@ -1,4 +1,5 @@
 using NBehave.EventListeners.CodeGeneration;
+using NBehave.Extensions;
 using NUnit.Framework;
 
 namespace NBehave.Specifications
@@ -6,16 +7,16 @@ namespace NBehave.Specifications
     [TestFixture]
     public abstract class ActionStepCodeGeneratorSpec
     {
-        private ActionStepCodeGenerator _codeGen;
-        private string _generatedCode;
+        private ActionStepCodeGenerator codeGen;
+        private string generatedCode;
 
         private string StepText { get; set; }
 
         [SetUp]
         public virtual void GivenTheseConditions()
         {
-            _codeGen = new ActionStepCodeGenerator();
-            _generatedCode = _codeGen.GenerateMethodFor(new StringStep(StepText, "a.feature"));
+            codeGen = new ActionStepCodeGenerator();
+            generatedCode = codeGen.GenerateMethodFor(new StringStep(StepText.GetFirstWord(), StepText.RemoveFirstWord(), "a.feature"));
         }
 
 
@@ -32,19 +33,19 @@ namespace NBehave.Specifications
             [Test]
             public void ShouldCreateMethod()
             {
-                Assert.That(_generatedCode, Is.Not.Null);
+                Assert.That(generatedCode, Is.Not.Null);
             }
 
             [Test]
             public void MethodShouldHaveActionStepAttribute()
             {
-                StringAssert.Contains(@"[Given(""some stuff"")]", _generatedCode);
+                StringAssert.Contains(@"[Given(""some stuff"")]", generatedCode);
             }
 
             [Test]
             public void MethodShouldHaveName()
             {
-                StringAssert.Contains(@"public void Given_some_stuff()", _generatedCode);
+                StringAssert.Contains(@"public void Given_some_stuff()", generatedCode);
             }
         }
 
@@ -60,19 +61,19 @@ namespace NBehave.Specifications
             [Test]
             public void ShouldCreateMethod()
             {
-                Assert.That(_generatedCode, Is.Not.Null);
+                Assert.That(generatedCode, Is.Not.Null);
             }
 
             [Test]
             public void MethodShouldHaveActionStepAttribute()
             {
-                StringAssert.Contains(@"[Given(""some stuff"")]", _generatedCode);
+                StringAssert.Contains(@"[Given(""some stuff"")]", generatedCode);
             }
 
             [Test]
             public void MethodShouldHaveName()
             {
-                StringAssert.Contains(@"public void Given_some_stuff()", _generatedCode);
+                StringAssert.Contains(@"public void Given_some_stuff()", generatedCode);
             }
         }
 
@@ -88,13 +89,13 @@ namespace NBehave.Specifications
             [Test]
             public void MethodShouldHaveActionStepAttributeWithParameter()
             {
-                StringAssert.Contains(@"[Given(""$param1 choices"")]", _generatedCode);
+                StringAssert.Contains(@"[Given(""$param1 choices"")]", generatedCode);
             }
 
             [Test]
             public void MethodShouldHaveValidName()
             {
-                StringAssert.Contains(@"public void Given_param1_choices(int param1)", _generatedCode);
+                StringAssert.Contains(@"public void Given_param1_choices(int param1)", generatedCode);
             }
         }
 
@@ -110,13 +111,13 @@ namespace NBehave.Specifications
             [Test]
             public void MethodShouldHaveActionStepAttributeWithParameter()
             {
-                StringAssert.Contains(@"[Given(""$param1"")]", _generatedCode);
+                StringAssert.Contains(@"[Given(""$param1"")]", generatedCode);
             }
 
             [Test]
             public void MethodShouldHaveName()
             {
-                StringAssert.Contains(@"public void Given_param1(string param1)", _generatedCode);
+                StringAssert.Contains(@"public void Given_param1(string param1)", generatedCode);
             }
         }
 
@@ -132,13 +133,13 @@ namespace NBehave.Specifications
             [Test]
             public void MethodShouldHaveActionStepAttributeWithNoParameters()
             {
-                StringAssert.Contains(@"[Given(""I'm using a special char"")]", _generatedCode);
+                StringAssert.Contains(@"[Given(""I'm using a special char"")]", generatedCode);
             }
 
             [Test]
             public void MethodShouldHaveName()
             {
-                StringAssert.Contains(@"public void Given_I_m_using_a_special_char()", _generatedCode);
+                StringAssert.Contains(@"public void Given_I_m_using_a_special_char()", generatedCode);
             }
         }
 
@@ -154,13 +155,13 @@ namespace NBehave.Specifications
             [Test]
             public void MethodShouldHaveActionStepAttributeWithParameter()
             {
-                StringAssert.Contains(@"[When(""$param1 for $param2"")]", _generatedCode);
+                StringAssert.Contains(@"[When(""$param1 for $param2"")]", generatedCode);
             }
 
             [Test]
             public void MethodShouldHaveName()
             {
-                StringAssert.Contains(@"public void When_param1_for_param2(int param1, int param2)", _generatedCode);
+                StringAssert.Contains(@"public void When_param1_for_param2(int param1, int param2)", generatedCode);
             }
         }
     }

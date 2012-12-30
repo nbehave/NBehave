@@ -10,35 +10,23 @@ namespace NBehave
     [Serializable]
     public class StringStep
     {
-        public StringStep(string step, string source)
-            : this(step, source, -1)
+        public StringStep(string token, string step, string source)
+            : this(token, step, source, -1)
         { }
 
-        public StringStep(string step, string source, int sourceLine)
+        public StringStep(string token, string step, string source, int sourceLine)
         {
-            Step = step;
+            Token = token;
+            MatchableStep = step;
+            Step = token + " " + step;
             Source = source;
             SourceLine = sourceLine;
             StepResult = new StepResult(this, new Passed());
         }
 
-        private string _matchableStep;
-        private string _step;
-
-        public string MatchableStep
-        {
-            get { return _matchableStep; }
-        }
-
-        public string Step
-        {
-            get { return _step; }
-            private set
-            {
-                _step = value;
-                _matchableStep = value.RemoveFirstWord();
-            }
-        }
+        public string Token { get; private set; }
+        public string MatchableStep { get; private set; }
+        public string Step { get; private set; }
 
         public string Source { get; private set; }
         public int SourceLine { get; private set; }
@@ -50,6 +38,7 @@ namespace NBehave
             get { return new[] { MethodParametersType.TypedStep, MethodParametersType.UntypedStep, MethodParametersType.UntypedListStep, MethodParametersType.TypedListStep }; }
         }
 
+        [Obsolete("Use Token")]
         public TypeOfStep TypeOfStep
         {
             get
@@ -73,14 +62,14 @@ namespace NBehave
 
         public virtual StringStep BuildStep(Example values)
         {
-            var template = Step;
+            var template = MatchableStep;
             foreach (var columnName in values.ColumnNames)
             {
                 var columnValue = values.ColumnValues[columnName.Name].TrimWhiteSpaceChars();
                 var replace = BuildColumnValueReplaceRegex(columnName);
                 template = replace.Replace(template, columnValue);
             }
-            return new StringStep(template, Source);
+            return new StringStep(Token, template, Source, SourceLine);
         }
 
         protected static Regex BuildColumnValueReplaceRegex(ExampleColumn columnName)

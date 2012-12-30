@@ -54,7 +54,7 @@ namespace NBehave.Fluent.Framework
             if (inlineImplementation != null)
                 StepRunner.RegisterImplementation(currentStage, step, inlineImplementation);
 
-            if (!Scenario.Steps.Any())
+            if(!Scenario.Steps.Any())
                 StepRunner.BeforeScenario();
 
             var stringStep = AddStepToScenario(currentStage, step);

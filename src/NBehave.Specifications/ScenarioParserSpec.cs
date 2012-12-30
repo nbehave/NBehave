@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NBehave.Configuration;
+using NBehave.Extensions;
 using NBehave.TextParsing;
 using NUnit.Framework;
 
@@ -22,7 +23,7 @@ namespace NBehave.Specifications
 
         private StringStep NewStringStep(string step)
         {
-            return new StringStep(step, featureFileName);
+            return new StringStep(step.GetFirstWord(), step.RemoveFirstWord(), featureFileName);
         }
 
         private void Parse(string scenario)
