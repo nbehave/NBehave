@@ -48,7 +48,7 @@ namespace NBehave.Specifications
         }
 
         [TestFixture]
-        public class ScenarioSimpleScenarioWithoutTitle : ScenarioParserSpec
+        public class SimpleScenarioWithoutTitle : ScenarioParserSpec
         {
             [SetUp]
             public void Scenario()
@@ -81,7 +81,7 @@ namespace NBehave.Specifications
             }
         }
 
-        public class ScenarioSimpleScenarioWithTitle : ScenarioParserSpec
+        public class SimpleScenarioWithTitle : ScenarioParserSpec
         {
             [SetUp]
             public void Scenario()
@@ -107,7 +107,7 @@ namespace NBehave.Specifications
             }
         }
 
-        public class ScenarioTwoScenariosWithTitle : ScenarioParserSpec
+        public class TwoScenariosWithTitle : ScenarioParserSpec
         {
             [SetUp]
             public void Scenario()
@@ -139,7 +139,7 @@ namespace NBehave.Specifications
             }
         }
 
-        public class ScenarioFeatureWithScenario : ScenarioParserSpec
+        public class FeatureWithScenario : ScenarioParserSpec
         {
             [SetUp]
             public void Scenario()
@@ -171,7 +171,7 @@ namespace NBehave.Specifications
             }
         }
 
-        public class ScenarioFeatureNarrativeIsAllTextUptoNextStepKeyWord : ScenarioParserSpec
+        public class FeatureNarrativeIsAllTextUptoNextStepKeyWord : ScenarioParserSpec
         {
             [SetUp]
             public void Scenario()
@@ -213,7 +213,7 @@ namespace NBehave.Specifications
             }
         }
 
-        public class ScenarioScenarioWithExampleTable : ScenarioParserSpec
+        public class ScenarioWithExampleTable : ScenarioParserSpec
         {
             [SetUp]
             public void Scenario()
@@ -262,7 +262,7 @@ namespace NBehave.Specifications
             }
         }
 
-        public class ScenarioScenarioWithTableOnGiven : ScenarioParserSpec
+        public class ScenarioWithTableOnGiven : ScenarioParserSpec
         {
             private StringTableStep givenStep;
             private StringTableStep thenStep;
@@ -327,7 +327,7 @@ namespace NBehave.Specifications
             }
         }
 
-        public class ScenarioMultipleFeatures : ScenarioParserSpec
+        public class MultipleFeatures : ScenarioParserSpec
         {
             [SetUp]
             public void Scenario()
@@ -360,7 +360,7 @@ namespace NBehave.Specifications
             }
         }
 
-        public class ScenarioWithBackground : ScenarioParserSpec
+        public class WithBackground : ScenarioParserSpec
         {
             [SetUp]
             public void Scenario()
