@@ -106,6 +106,7 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Internal\ResharperCodeAnnotations.cs" />
     <Compile Include="EventListeners\ConsoleWriter.cs" />
     <Compile Include="EventListeners\IOutputWriter.cs" />
     <Compile Include="Hooks\AfterFeatureAttribute.cs" />

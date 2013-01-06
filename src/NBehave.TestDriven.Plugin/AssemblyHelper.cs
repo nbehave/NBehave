@@ -12,6 +12,7 @@ namespace NBehave.TestDriven.Plugin
                 .Where(type => type.IsPublic)
                 .Select(type => type.Namespace)
                 .Distinct()
+                .Where(_ => _ != "JetBrains.Annotations")
                 .Select(ns => ns.Split('.'))
                 .ToArray();
 

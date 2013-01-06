@@ -7,11 +7,14 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using JetBrains.Annotations;
+
 namespace NBehave.Narrator.Framework
 {
     using System;
 
     [AttributeUsage(AttributeTargets.Class)]
+    [MeansImplicitUse]
     public class ActionStepsAttribute : Attribute
     {
     }

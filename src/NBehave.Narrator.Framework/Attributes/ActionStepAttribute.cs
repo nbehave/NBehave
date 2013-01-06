@@ -9,6 +9,7 @@
 
 using System.Linq;
 using System.Reflection;
+using JetBrains.Annotations;
 using NBehave.Narrator.Framework.Extensions;
 
 namespace NBehave.Narrator.Framework
@@ -17,6 +18,7 @@ namespace NBehave.Narrator.Framework
     using System.Text.RegularExpressions;
 
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
+    [MeansImplicitUse]
     public abstract class ActionStepAttribute : Attribute
     {
         protected ActionStepAttribute()

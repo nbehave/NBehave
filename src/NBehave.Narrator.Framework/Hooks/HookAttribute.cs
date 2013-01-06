@@ -1,8 +1,10 @@
 using System;
+using JetBrains.Annotations;
 
 namespace NBehave.Narrator.Framework.Hooks
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+    [MeansImplicitUse]
     public class HookAttribute : Attribute
     {
         public string[] RunIfHasTags { get; set; }
