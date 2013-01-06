@@ -6,16 +6,17 @@
     <Version>0.6.1.0</Version>
     <Description xml:space="preserve">Allows execution of NBehave scenario files from within the IDE. More information at http://www.nbehave.org.</Description>
     <Locale>1033</Locale>
-    <MoreInfoUrl>
-      http://nbehave.org
-    </MoreInfoUrl>
+    <MoreInfoUrl>http://nbehave.org</MoreInfoUrl>
     <InstalledByMsi>false</InstalledByMsi>
     <SupportedProducts>
       <VisualStudio Version="10.0">
+        <Edition>Ultimate</Edition>
+        <Edition>Premium</Edition>
         <Edition>Pro</Edition>
+        <Edition>Express_All</Edition>
       </VisualStudio>
     </SupportedProducts>
-    <SupportedFrameworkRuntimeEdition MinVersion="4.0" MaxVersion="4.0" />
+    <SupportedFrameworkRuntimeEdition MinVersion="4.0" />
   </Identifier>
   <References>
     <Reference Id="Microsoft.VisualStudio.MPF" MinVersion="10.0">
