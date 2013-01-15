@@ -113,6 +113,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.Resharper7.01.Plugi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.Resharper7.1.Plugin", "NBehave.Resharper71.Plugin\NBehave.Resharper7.1.Plugin.csproj", "{592B104D-C1E8-498D-BD48-ACBD0E3EA7B2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.Resharper7.1.1.Plugin", "NBehave.Resharper711.Plugin\NBehave.Resharper7.1.1.Plugin.csproj", "{EECEE153-CC2B-4DEC-9768-F7E99918E80A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		AutomatedDebug-3.5|Any CPU = AutomatedDebug-3.5|Any CPU
@@ -737,6 +739,26 @@ Global
 		{592B104D-C1E8-498D-BD48-ACBD0E3EA7B2}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{592B104D-C1E8-498D-BD48-ACBD0E3EA7B2}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{592B104D-C1E8-498D-BD48-ACBD0E3EA7B2}.Release|x86.ActiveCfg = Release|Any CPU
+		{EECEE153-CC2B-4DEC-9768-F7E99918E80A}.AutomatedDebug-3.5|Any CPU.ActiveCfg = AutomatedDebug-3.5|Any CPU
+		{EECEE153-CC2B-4DEC-9768-F7E99918E80A}.AutomatedDebug-3.5|Any CPU.Build.0 = AutomatedDebug-3.5|Any CPU
+		{EECEE153-CC2B-4DEC-9768-F7E99918E80A}.AutomatedDebug-3.5|Mixed Platforms.ActiveCfg = AutomatedDebug-3.5|Any CPU
+		{EECEE153-CC2B-4DEC-9768-F7E99918E80A}.AutomatedDebug-3.5|Mixed Platforms.Build.0 = AutomatedDebug-3.5|Any CPU
+		{EECEE153-CC2B-4DEC-9768-F7E99918E80A}.AutomatedDebug-3.5|x86.ActiveCfg = AutomatedDebug-3.5|Any CPU
+		{EECEE153-CC2B-4DEC-9768-F7E99918E80A}.AutomatedDebug-4.0|Any CPU.ActiveCfg = AutomatedDebug-4.0|Any CPU
+		{EECEE153-CC2B-4DEC-9768-F7E99918E80A}.AutomatedDebug-4.0|Any CPU.Build.0 = AutomatedDebug-4.0|Any CPU
+		{EECEE153-CC2B-4DEC-9768-F7E99918E80A}.AutomatedDebug-4.0|Mixed Platforms.ActiveCfg = AutomatedDebug-4.0|Any CPU
+		{EECEE153-CC2B-4DEC-9768-F7E99918E80A}.AutomatedDebug-4.0|Mixed Platforms.Build.0 = AutomatedDebug-4.0|Any CPU
+		{EECEE153-CC2B-4DEC-9768-F7E99918E80A}.AutomatedDebug-4.0|x86.ActiveCfg = AutomatedDebug-4.0|Any CPU
+		{EECEE153-CC2B-4DEC-9768-F7E99918E80A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EECEE153-CC2B-4DEC-9768-F7E99918E80A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EECEE153-CC2B-4DEC-9768-F7E99918E80A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{EECEE153-CC2B-4DEC-9768-F7E99918E80A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{EECEE153-CC2B-4DEC-9768-F7E99918E80A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EECEE153-CC2B-4DEC-9768-F7E99918E80A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EECEE153-CC2B-4DEC-9768-F7E99918E80A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EECEE153-CC2B-4DEC-9768-F7E99918E80A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{EECEE153-CC2B-4DEC-9768-F7E99918E80A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{EECEE153-CC2B-4DEC-9768-F7E99918E80A}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -773,6 +795,7 @@ Global
 		{C192A6DE-D254-4A69-8232-D4FF298E514E} = {4A5E0FD3-7225-4AA1-A3AB-E27CADF30896}
 		{C89D5A65-98CA-4B18-A9F0-156524E3A7A5} = {4A5E0FD3-7225-4AA1-A3AB-E27CADF30896}
 		{592B104D-C1E8-498D-BD48-ACBD0E3EA7B2} = {4A5E0FD3-7225-4AA1-A3AB-E27CADF30896}
+		{EECEE153-CC2B-4DEC-9768-F7E99918E80A} = {4A5E0FD3-7225-4AA1-A3AB-E27CADF30896}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		CodeStyleEnforcer_Active = 0

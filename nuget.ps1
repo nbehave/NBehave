@@ -19,6 +19,7 @@ task NuGet -depends NugetClean -precondition{ return $frameworkVersion -eq "4.0"
 	Exec { .\src\.nuget\nuget.exe pack nuget\NBehave.Resharper611.nuspec -Version $nugetVersionNumber -OutputDirectory $artifactsDir}
 	Exec { .\src\.nuget\nuget.exe pack nuget\NBehave.Resharper701.nuspec -Version $nugetVersionNumber -OutputDirectory $artifactsDir}
 	Exec { .\src\.nuget\nuget.exe pack nuget\NBehave.Resharper71.nuspec -Version $nugetVersionNumber -OutputDirectory $artifactsDir}
+	Exec { .\src\.nuget\nuget.exe pack nuget\NBehave.Resharper711.nuspec -Version $nugetVersionNumber -OutputDirectory $artifactsDir}
 	#Exec { .\src\.nuget\nuget.exe pack nuget\NBehave.VsPlugin.nuspec -Version $nugetVersionNumber -OutputDirectory $artifactsDir}
 }
 
