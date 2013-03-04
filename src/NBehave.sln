@@ -115,6 +115,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.Resharper7.1.Plugin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.Resharper7.1.1.Plugin", "NBehave.Resharper711.Plugin\NBehave.Resharper7.1.1.Plugin.csproj", "{EECEE153-CC2B-4DEC-9768-F7E99918E80A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.Resharper7.1.2.Plugin", "NBehave.Resharper712.Plugin\NBehave.Resharper7.1.2.Plugin.csproj", "{DB921D3F-FCE5-4739-A5B2-C11BE522B2C7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		AutomatedDebug-3.5|Any CPU = AutomatedDebug-3.5|Any CPU
@@ -759,6 +761,26 @@ Global
 		{EECEE153-CC2B-4DEC-9768-F7E99918E80A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{EECEE153-CC2B-4DEC-9768-F7E99918E80A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{EECEE153-CC2B-4DEC-9768-F7E99918E80A}.Release|x86.ActiveCfg = Release|Any CPU
+		{DB921D3F-FCE5-4739-A5B2-C11BE522B2C7}.AutomatedDebug-3.5|Any CPU.ActiveCfg = AutomatedDebug-3.5|Any CPU
+		{DB921D3F-FCE5-4739-A5B2-C11BE522B2C7}.AutomatedDebug-3.5|Any CPU.Build.0 = AutomatedDebug-3.5|Any CPU
+		{DB921D3F-FCE5-4739-A5B2-C11BE522B2C7}.AutomatedDebug-3.5|Mixed Platforms.ActiveCfg = AutomatedDebug-3.5|Any CPU
+		{DB921D3F-FCE5-4739-A5B2-C11BE522B2C7}.AutomatedDebug-3.5|Mixed Platforms.Build.0 = AutomatedDebug-3.5|Any CPU
+		{DB921D3F-FCE5-4739-A5B2-C11BE522B2C7}.AutomatedDebug-3.5|x86.ActiveCfg = AutomatedDebug-3.5|Any CPU
+		{DB921D3F-FCE5-4739-A5B2-C11BE522B2C7}.AutomatedDebug-4.0|Any CPU.ActiveCfg = AutomatedDebug-4.0|Any CPU
+		{DB921D3F-FCE5-4739-A5B2-C11BE522B2C7}.AutomatedDebug-4.0|Any CPU.Build.0 = AutomatedDebug-4.0|Any CPU
+		{DB921D3F-FCE5-4739-A5B2-C11BE522B2C7}.AutomatedDebug-4.0|Mixed Platforms.ActiveCfg = AutomatedDebug-4.0|Any CPU
+		{DB921D3F-FCE5-4739-A5B2-C11BE522B2C7}.AutomatedDebug-4.0|Mixed Platforms.Build.0 = AutomatedDebug-4.0|Any CPU
+		{DB921D3F-FCE5-4739-A5B2-C11BE522B2C7}.AutomatedDebug-4.0|x86.ActiveCfg = AutomatedDebug-4.0|Any CPU
+		{DB921D3F-FCE5-4739-A5B2-C11BE522B2C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB921D3F-FCE5-4739-A5B2-C11BE522B2C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB921D3F-FCE5-4739-A5B2-C11BE522B2C7}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{DB921D3F-FCE5-4739-A5B2-C11BE522B2C7}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{DB921D3F-FCE5-4739-A5B2-C11BE522B2C7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DB921D3F-FCE5-4739-A5B2-C11BE522B2C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB921D3F-FCE5-4739-A5B2-C11BE522B2C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB921D3F-FCE5-4739-A5B2-C11BE522B2C7}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{DB921D3F-FCE5-4739-A5B2-C11BE522B2C7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{DB921D3F-FCE5-4739-A5B2-C11BE522B2C7}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -796,6 +818,7 @@ Global
 		{C89D5A65-98CA-4B18-A9F0-156524E3A7A5} = {4A5E0FD3-7225-4AA1-A3AB-E27CADF30896}
 		{592B104D-C1E8-498D-BD48-ACBD0E3EA7B2} = {4A5E0FD3-7225-4AA1-A3AB-E27CADF30896}
 		{EECEE153-CC2B-4DEC-9768-F7E99918E80A} = {4A5E0FD3-7225-4AA1-A3AB-E27CADF30896}
+		{DB921D3F-FCE5-4739-A5B2-C11BE522B2C7} = {4A5E0FD3-7225-4AA1-A3AB-E27CADF30896}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		CodeStyleEnforcer_Active = 0

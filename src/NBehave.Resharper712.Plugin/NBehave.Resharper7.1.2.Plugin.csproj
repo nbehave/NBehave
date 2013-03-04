@@ -1,0 +1,199 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{DB921D3F-FCE5-4739-A5B2-C11BE522B2C7}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NBehave.Resharper.Plugin</RootNamespace>
+    <AssemblyName>NBehave.Resharper.Plugin</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\src\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;RESHARPER_71</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'AutomatedDebug-3.5|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\..\build\Debug-3.5\ReSharper712\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;AUTODEBUG;RESHARPER_71</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'AutomatedDebug-4.0|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\..\build\Debug-4.0\ReSharper712\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;AUTODEBUG;RESHARPER_71</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="JetBrains.Platform.ReSharper.ComponentModel">
+      <HintPath>..\..\lib\ReSharper\7.1.2\JetBrains.Platform.ReSharper.ComponentModel.dll</HintPath>
+    </Reference>
+    <Reference Include="JetBrains.Platform.ReSharper.Metadata">
+      <HintPath>..\..\lib\ReSharper\7.1.2\JetBrains.Platform.ReSharper.Metadata.dll</HintPath>
+    </Reference>
+    <Reference Include="JetBrains.Platform.ReSharper.ProjectModel">
+      <HintPath>..\..\lib\ReSharper\7.1.2\JetBrains.Platform.ReSharper.ProjectModel.dll</HintPath>
+    </Reference>
+    <Reference Include="JetBrains.Platform.ReSharper.Shell">
+      <HintPath>..\..\lib\ReSharper\7.1.2\JetBrains.Platform.ReSharper.Shell.dll</HintPath>
+    </Reference>
+    <Reference Include="JetBrains.Platform.ReSharper.UI">
+      <HintPath>..\..\lib\ReSharper\7.1.2\JetBrains.Platform.ReSharper.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="JetBrains.Platform.ReSharper.Util">
+      <HintPath>..\..\lib\ReSharper\7.1.2\JetBrains.Platform.ReSharper.Util.dll</HintPath>
+    </Reference>
+    <Reference Include="JetBrains.ReSharper.Features.Common">
+      <HintPath>..\..\lib\ReSharper\7.1.2\JetBrains.ReSharper.Features.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="JetBrains.ReSharper.Features.Shared">
+      <HintPath>..\..\lib\ReSharper\7.1.2\JetBrains.ReSharper.Features.Shared.dll</HintPath>
+    </Reference>
+    <Reference Include="JetBrains.ReSharper.Psi">
+      <HintPath>..\..\lib\ReSharper\7.1.2\JetBrains.ReSharper.Psi.dll</HintPath>
+    </Reference>
+    <Reference Include="JetBrains.ReSharper.TaskRunnerFramework">
+      <HintPath>..\..\lib\ReSharper\7.1.2\JetBrains.ReSharper.TaskRunnerFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="JetBrains.ReSharper.UnitTestFramework">
+      <HintPath>..\..\lib\ReSharper\7.1.2\JetBrains.ReSharper.UnitTestFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\CommonAssemblyInfo.cs">
+      <Link>CommonAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\NBehave.ReSharper.Plugin\Extensions.cs">
+      <Link>Extensions.cs</Link>
+    </Compile>
+    <Compile Include="..\NBehave.ReSharper.Plugin\UnitTestProvider\FeatureMapper.cs">
+      <Link>UnitTestProvider\FeatureMapper.cs</Link>
+    </Compile>
+    <Compile Include="..\NBehave.ReSharper.Plugin\UnitTestProvider\IdentityGenerator.cs">
+      <Link>UnitTestProvider\IdentityGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\NBehave.ReSharper.Plugin\UnitTestProvider\MetadataExplorer.cs">
+      <Link>UnitTestProvider\MetadataExplorer.cs</Link>
+    </Compile>
+    <Compile Include="..\NBehave.ReSharper.Plugin\UnitTestProvider\NBehaveBackgroundTestElement.cs">
+      <Link>UnitTestProvider\NBehaveBackgroundTestElement.cs</Link>
+    </Compile>
+    <Compile Include="..\NBehave.ReSharper.Plugin\UnitTestProvider\NBehaveExampleParentTestElement.cs">
+      <Link>UnitTestProvider\NBehaveExampleParentTestElement.cs</Link>
+    </Compile>
+    <Compile Include="..\NBehave.ReSharper.Plugin\UnitTestProvider\NBehaveExampleTestElement.cs">
+      <Link>UnitTestProvider\NBehaveExampleTestElement.cs</Link>
+    </Compile>
+    <Compile Include="..\NBehave.ReSharper.Plugin\UnitTestProvider\NBehaveFeatureTestElement.cs">
+      <Link>UnitTestProvider\NBehaveFeatureTestElement.cs</Link>
+    </Compile>
+    <Compile Include="..\NBehave.ReSharper.Plugin\UnitTestProvider\NBehaveScenarioTestElement.cs">
+      <Link>UnitTestProvider\NBehaveScenarioTestElement.cs</Link>
+    </Compile>
+    <Compile Include="..\NBehave.ReSharper.Plugin\UnitTestProvider\NBehaveStepTestElement.cs">
+      <Link>UnitTestProvider\NBehaveStepTestElement.cs</Link>
+    </Compile>
+    <Compile Include="..\NBehave.ReSharper.Plugin\UnitTestProvider\NBehaveUnitTestElementBase.cs">
+      <Link>UnitTestProvider\NBehaveUnitTestElementBase.cs</Link>
+    </Compile>
+    <Compile Include="..\NBehave.ReSharper.Plugin\UnitTestProvider\Presenter.cs">
+      <Link>UnitTestProvider\Presenter.cs</Link>
+    </Compile>
+    <Compile Include="..\NBehave.ReSharper.Plugin\UnitTestProvider\TestProvider.cs">
+      <Link>UnitTestProvider\TestProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\NBehave.ReSharper.Plugin\UnitTestProvider\TestTreePresenter.cs">
+      <Link>UnitTestProvider\TestTreePresenter.cs</Link>
+    </Compile>
+    <Compile Include="..\NBehave.ReSharper.Plugin\UnitTestProvider\UnitTestMetadataExplorer.cs">
+      <Link>UnitTestProvider\UnitTestMetadataExplorer.cs</Link>
+    </Compile>
+    <Compile Include="..\NBehave.ReSharper.Plugin\UnitTestRunner\NBehaveAssemblyTask.cs">
+      <Link>UnitTestRunner\NBehaveAssemblyTask.cs</Link>
+    </Compile>
+    <Compile Include="..\NBehave.ReSharper.Plugin\UnitTestRunner\NBehaveBackgroundTask.cs">
+      <Link>UnitTestRunner\NBehaveBackgroundTask.cs</Link>
+    </Compile>
+    <Compile Include="..\NBehave.ReSharper.Plugin\UnitTestRunner\NBehaveExampleParentTask.cs">
+      <Link>UnitTestRunner\NBehaveExampleParentTask.cs</Link>
+    </Compile>
+    <Compile Include="..\NBehave.ReSharper.Plugin\UnitTestRunner\NBehaveExampleTask.cs">
+      <Link>UnitTestRunner\NBehaveExampleTask.cs</Link>
+    </Compile>
+    <Compile Include="..\NBehave.ReSharper.Plugin\UnitTestRunner\NBehaveFeatureTask.cs">
+      <Link>UnitTestRunner\NBehaveFeatureTask.cs</Link>
+    </Compile>
+    <Compile Include="..\NBehave.ReSharper.Plugin\UnitTestRunner\NBehaveScenarioTask.cs">
+      <Link>UnitTestRunner\NBehaveScenarioTask.cs</Link>
+    </Compile>
+    <Compile Include="..\NBehave.ReSharper.Plugin\UnitTestRunner\NBehaveStepTask.cs">
+      <Link>UnitTestRunner\NBehaveStepTask.cs</Link>
+    </Compile>
+    <Compile Include="..\NBehave.ReSharper.Plugin\UnitTestRunner\NBehaveTaskRunner.cs">
+      <Link>UnitTestRunner\NBehaveTaskRunner.cs</Link>
+    </Compile>
+    <Compile Include="..\NBehave.ReSharper.Plugin\UnitTestRunner\NBehaveTaskRunnerListener.cs">
+      <Link>UnitTestRunner\NBehaveTaskRunnerListener.cs</Link>
+    </Compile>
+    <Compile Include="..\NBehave.ReSharper.Plugin\UnitTestRunner\ResharperResultPublisher.cs">
+      <Link>UnitTestRunner\ResharperResultPublisher.cs</Link>
+    </Compile>
+    <Compile Include="..\NBehave.ReSharper.Plugin\UnitTestRunner\TaskExecutionNodeExtensions.cs">
+      <Link>UnitTestRunner\TaskExecutionNodeExtensions.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\NBehave.ReSharper.Plugin\__ReadMe__.txt">
+      <Link>__ReadMe__.txt</Link>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NBehave.Gherkin\NBehave.Gherkin.csproj">
+      <Project>{9AFBC5C5-DC22-4E9B-8811-4A38BDCFD037}</Project>
+      <Name>NBehave.Gherkin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NBehave.Narrator.Framework\NBehave.Narrator.Framework.csproj">
+      <Project>{9C2E9E17-2A2C-4F6C-8072-D160A7EA9A51}</Project>
+      <Name>NBehave.Narrator.Framework</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
