@@ -5,6 +5,7 @@ using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition.Primitives;
 using System.IO;
 using System.Linq;
+using System.Runtime.ExceptionServices;
 using MEFedMVVM.ViewModelLocator;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Text;
@@ -31,7 +32,7 @@ namespace NBehave.VS2010.Plugin.Editor
             {
                 var pluginLogger = (IPluginLogger)ServiceProvider.GetService(typeof(IPluginLogger));
 
-                AppDomain.CurrentDomain.FirstChanceException += (sender, args) => pluginLogger.FatalException("", args.Exception);
+                AppDomain.CurrentDomain.FirstChanceException += (sender, args) => pluginLogger.LogFirstChanceException(args);
 
                 var container = buffer.Properties.GetOrCreateSingletonProperty(() => new CompositionContainer(new AssemblyCatalog(GetType().Assembly)));
                 container.ComposeExportedValue(ClassificationRegistry);

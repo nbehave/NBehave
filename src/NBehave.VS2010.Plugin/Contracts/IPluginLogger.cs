@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
 
 namespace NBehave.VS2010.Plugin.Contracts
@@ -8,5 +9,6 @@ namespace NBehave.VS2010.Plugin.Contracts
     {
         void ErrorException(string message, Exception exception);
         void FatalException(string message, Exception exception);
+        void LogFirstChanceException(FirstChanceExceptionEventArgs args);
     }
 }
