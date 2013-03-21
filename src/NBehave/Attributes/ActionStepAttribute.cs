@@ -1,7 +1,8 @@
+using System;
 using System.Linq;
 using System.Reflection;
-    using System;
-    using System.Text.RegularExpressions;
+using System.Text.RegularExpressions;
+using JetBrains.Annotations;
 using NBehave.Extensions;
 
 namespace NBehave
@@ -46,7 +47,7 @@ namespace NBehave
 
         private string BuildTokenString(MethodInfo method)
         {
-            var words = method.Name.Split(new[] {'_'}, StringSplitOptions.RemoveEmptyEntries).ToList();
+            var words = method.Name.Split(new[] { '_' }, StringSplitOptions.RemoveEmptyEntries).ToList();
             var parameters = method.GetParameters();
 
             foreach (var param in parameters)

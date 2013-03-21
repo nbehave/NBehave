@@ -70,24 +70,24 @@ namespace NBehave.Fluent.Framework
 
         private StringStep AddStepToScenario(ScenarioFragment currentStage, string step)
         {
-            var stringStep = CreateStringStep(step, currentStage);
+            var stringStep = CreateStringStep(currentStage, step);
             Scenario.AddStep(stringStep);
             return stringStep;
         }
 
         private void RunStep(ScenarioFragment currentStage, string step, StringStep stringStep)
         {
-            var stepToRun = new StringStep(string.Format("{0} {1}", currentStage, step), Scenario.Source);
+            var stepToRun = new StringStep(currentStage.ToString(), step, Scenario.Source);
             StepRunner.Run(stepToRun);
             stringStep.StepResult = new StepResult(stringStep, stepToRun.StepResult.Result);
         }
 
-        private StringStep CreateStringStep(string step, ScenarioFragment currentStage)
+        private StringStep CreateStringStep(ScenarioFragment currentStage, string step)
         {
             string stepType = currentStage.ToString();
             if (Scenario.Steps.Any() && previousStage == currentStage)
                 stepType = "And";
-            var stringStep = new StringStep(string.Format("{0} {1}", stepType, step), Scenario.Source);
+            var stringStep = new StringStep(stepType, step, Scenario.Source);
             return stringStep;
         }
 
