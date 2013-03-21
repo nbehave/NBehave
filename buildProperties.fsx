@@ -12,7 +12,7 @@ module Properties
   let buildTag          = getBuildParamOrDefault "buildTag" "devlocal" // For release, set this to ""
   let frameworkVersions = ["3.5"; "4.0"]
 
-  let version             = "0.6.2"
+  let version             = "0.7.0"
   let assemblyVersion     = version + "." + buildNumber
   let assemblyInfoVersion = match buildTag.ToLower() with
                              | "release"  -> version + "." + buildNumber
