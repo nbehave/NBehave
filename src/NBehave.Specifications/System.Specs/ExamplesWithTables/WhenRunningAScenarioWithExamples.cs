@@ -1,6 +1,6 @@
 ﻿using NBehave.Extensions;
 using NUnit.Framework;
-using Should.Fluent;
+using Should;
 
 namespace NBehave.Specifications.System.Specs.ExamplesWithTables
 {
@@ -47,7 +47,7 @@ namespace NBehave.Specifications.System.Specs.ExamplesWithTables
         [Then("the table should be templated into the scenario outline and executed with each row:")]
         public void Then(int sum)
         {
-            sum.Should().Equal(_left + _right);
+            sum.ShouldEqual(_left + _right);
         }
     }
 }

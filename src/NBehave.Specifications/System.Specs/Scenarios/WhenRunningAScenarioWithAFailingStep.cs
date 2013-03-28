@@ -1,6 +1,6 @@
 ﻿using NBehave.Extensions;
 using NUnit.Framework;
-using Should.Fluent;
+using Should;
 
 namespace NBehave.Specifications.System.Specs.Scenarios
 {
@@ -43,7 +43,7 @@ namespace NBehave.Specifications.System.Specs.Scenarios
         [Then("the failing scenario should display an error message")]
         public void Then()
         {
-            1.Should().Equal(2);
+            1.ShouldEqual(2);
         }
     }
 }
