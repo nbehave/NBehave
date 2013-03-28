@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Xml;
 using NBehave.Configuration;
@@ -10,27 +9,13 @@ using NBehave.EventListeners.Xml;
 using NBehave.Internal;
 using NBehave.Remoting;
 using NUnit.Framework;
-using TestPlainTextAssembly;
+using TestLib;
 
 namespace NBehave.Specifications
 {
     [TestFixture]
     public abstract class RemotableStoryRunnerSpec
     {
-        [Explicit("This test crashes the R# test runner")]
-        public void RawDeserialization()
-        {
-            object o;
-            using (var fileStream = new FileStream("MyFile.bin", FileMode.Open, FileAccess.Read, FileShare.None))
-            {
-                o = new BinaryFormatter()
-                    .Deserialize(fileStream);
-            }
-
-            var result = o as ScenarioResult;
-            Assert.IsNotNull(result);
-        }
-
         private string tempFileName;
 
         private IRunner CreateTextRunner(IEnumerable<string> assemblies)
@@ -66,13 +51,13 @@ namespace NBehave.Specifications
 
         private void SetupConfigFile()
         {
-            File.WriteAllText(Path.Combine(GetAssemblyLocation(), "TestPlainTextAssembly.dll.config"),
+            File.WriteAllText(Path.Combine(GetAssemblyLocation(), "TestLib.dll.config"),
                             "<configuration><appSettings><add key=\"foo\" value=\"bar\" /></appSettings></configuration>");
         }
 
         private void DeleteConfigFile()
         {
-            File.Delete(Path.Combine(GetAssemblyLocation(), "TestPlainTextAssembly.dll.config"));
+            File.Delete(Path.Combine(GetAssemblyLocation(), "TestLib.dll.config"));
             if (!String.IsNullOrEmpty(tempFileName))
                 File.Delete(tempFileName);
         }
@@ -94,7 +79,7 @@ namespace NBehave.Specifications
             public void SetUp()
             {
                 SetupConfigFile();
-                runner = CreateTextRunner(new[] { "TestPlainTextAssembly.dll" });
+                runner = CreateTextRunner(new[] { "TestLib.dll" });
             }
 
             [TearDown]
@@ -125,10 +110,9 @@ namespace NBehave.Specifications
                                     "When the value of setting foo is read\r\n" +
                                     "Then the value should be bar";
                 SetupConfigFile();
-                runner = CreateTextRunner(new[] { "TestPlainTextAssembly.dll" }, scenarioText);
+                runner = CreateTextRunner(new[] { "TestLib.dll" }, scenarioText);
 
                 results = runner.Run();
-
             }
 
             [TearDown]
@@ -160,7 +144,7 @@ namespace NBehave.Specifications
                                     "When the value of setting foo is read\r\n" +
                                     "Then the value should be meeble";
                 SetupConfigFile();
-                runner = CreateTextRunner(new[] { "TestPlainTextAssembly.dll" }, scenarioText);
+                runner = CreateTextRunner(new[] { "TestLib.dll" }, scenarioText);
 
                 results = runner.Run();
 
@@ -194,7 +178,7 @@ namespace NBehave.Specifications
                                     "When the value of setting foo is read\r\n" +
                                     "Then the value should be bar";
                 SetupConfigFile();
-                _runner = CreateTextRunner(new[] { "TestPlainTextAssembly.dll" }, scenarioText);
+                _runner = CreateTextRunner(new[] { "TestLib.dll" }, scenarioText);
             }
 
             [TearDown]
@@ -234,7 +218,7 @@ namespace NBehave.Specifications
                                             "Then the value should be bar";
 
                 SetupConfigFile();
-                runner = CreateTextRunner(new[] { "TestPlainTextAssembly.dll" }, listener, scenarioText);
+                runner = CreateTextRunner(new[] { "TestLib.dll" }, listener, scenarioText);
 
                 results = runner.Run();
 

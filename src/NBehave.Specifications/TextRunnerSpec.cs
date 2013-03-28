@@ -30,7 +30,7 @@ namespace NBehave.Specifications
 
             var config = ConfigurationNoAppDomain
                 .New
-                .SetAssemblies(new[] { "TestPlainTextAssembly.dll" })
+                .SetAssemblies(new[] { "TestLib.dll" })
                 .SetEventListener(listener)
                 .SetScenarioFiles(new[] { TestFeatures.FeatureWithManyScenarios });
             return config;
@@ -88,7 +88,7 @@ namespace NBehave.Specifications
                     .Run();
 
                 Assert.That(_results.NumberOfFailingScenarios, Is.EqualTo(1));
-                Assert.That(_results[0].ScenarioResults[0].Message.StartsWith("Should.Core.Exceptions.EqualException"), Is.True);
+                Assert.That(_results[0].ScenarioResults[0].Message.StartsWith("Should.Core.Exceptions"), Is.True);
             }
 
             [Test]
@@ -497,7 +497,7 @@ namespace NBehave.Specifications
                 CreateBasicConfiguration()
                 .SetAssemblies(new[] { GetType().Assembly.Location })
                         .SetScenarioFiles(new[] { TestFeatures.FeatureWithScenarioBackground })
-                        .SetFilter(new StoryRunnerFilter(".", GetType().Name, "."))
+                        .SetFilter(new StoryRunnerFilter(StoryRunnerFilter.MatchAnything, GetType().Name, StoryRunnerFilter.MatchAnything))
                         .Build()
                         .Run();
             }

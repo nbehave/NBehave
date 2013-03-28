@@ -8,42 +8,29 @@ namespace NBehave.Internal
     [Serializable]
     public class StoryRunnerFilter : ISerializable
     {
-        private readonly Regex namespaceFilter;
-        private readonly Regex classNameFilter;
-        private readonly Regex methodNameFilter;
+        public const string MatchAnything = ".*";
 
         public StoryRunnerFilter()
-            : this(".", ".", ".")
+            : this(MatchAnything, MatchAnything, MatchAnything)
         {
         }
 
         public StoryRunnerFilter(string namespaceFilter, string classNameFilter, string methodNameFilter)
         {
-            this.namespaceFilter = new Regex(AnchorValue(namespaceFilter));
-            this.classNameFilter = new Regex(AnchorValue(classNameFilter));
-            this.methodNameFilter = new Regex(AnchorValue(methodNameFilter));
+            NamespaceFilter = new Regex(AnchorValue(namespaceFilter));
+            ClassNameFilter = new Regex(AnchorValue(classNameFilter));
+            MethodNameFiler = new Regex(AnchorValue(methodNameFilter));
         }
 
-        public Regex NamespaceFilter
-        {
-            get { return this.namespaceFilter; }
-        }
-
-        public Regex ClassNameFilter
-        {
-            get { return this.classNameFilter; }
-        }
-
-        public Regex MethodNameFiler
-        {
-            get { return this.methodNameFilter; }
-        }
+        public Regex NamespaceFilter { get; private set; }
+        public Regex ClassNameFilter { get; private set; }
+        public Regex MethodNameFiler { get; private set; }
 
         public static StoryRunnerFilter GetFilter(MemberInfo member)
         {
-            var nsFilter = ".";
-            var clsFilter = ".";
-            var memberNameFilter = ".";
+            var nsFilter = MatchAnything;
+            var clsFilter = MatchAnything;
+            var memberNameFilter = MatchAnything;
             if (member != null)
             {
                 switch (member.MemberType)
@@ -70,8 +57,6 @@ namespace NBehave.Internal
                         break;
                     case MemberTypes.Property:
                         break;
-                    default:
-                        break;
                 }
             }
 
@@ -80,26 +65,23 @@ namespace NBehave.Internal
 
         private string AnchorValue(string value)
         {
-            if (value == ".")
-            {
+            if (value == MatchAnything)
                 return value;
-            }
-
             return "^" + value + "$";
         }
 
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue("n", namespaceFilter);
-            info.AddValue("c", classNameFilter);
-            info.AddValue("m", methodNameFilter);
+            info.AddValue("n", NamespaceFilter);
+            info.AddValue("c", ClassNameFilter);
+            info.AddValue("m", MethodNameFiler);
         }
 
         protected StoryRunnerFilter(SerializationInfo info, StreamingContext context)
         {
-            namespaceFilter = (Regex) info.GetValue("n", typeof (Regex));
-            classNameFilter = (Regex) info.GetValue("c", typeof (Regex));
-            methodNameFilter = (Regex) info.GetValue("m", typeof (Regex));
+            NamespaceFilter = (Regex)info.GetValue("n", typeof(Regex));
+            ClassNameFilter = (Regex)info.GetValue("c", typeof(Regex));
+            MethodNameFiler = (Regex)info.GetValue("m", typeof(Regex));
         }
     }
 }

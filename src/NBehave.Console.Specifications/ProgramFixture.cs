@@ -35,7 +35,7 @@ namespace NBehave.Console.Specifications
         [Test]
         public void Should_run_example_framework_correctly()
         {
-            NBehaveConsoleRunner.Main(new[] { "TestPlainTextAssembly.dll", "/sf=*.scenario" });
+            NBehaveConsoleRunner.Main(new[] { "TestLib.dll", "/sf=*.scenario" });
 
             Assert.That(_output.ToString(), Is.StringContaining("Scenarios"));
         }

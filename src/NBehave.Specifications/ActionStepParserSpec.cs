@@ -9,7 +9,7 @@ namespace NBehave.Specifications
     {
         private ActionStepParser _actionStepParser;
         private ActionCatalog _actionCatalog;
-        private StoryRunnerFilter _storyRunnerFilter = new StoryRunnerFilter(".", ".", ".");
+        private StoryRunnerFilter _storyRunnerFilter = new StoryRunnerFilter();
 
         [SetUp]
         public virtual void SetUp()
@@ -199,7 +199,6 @@ namespace NBehave.Specifications
             }
         }
 
-
         [TestFixture]
         public class WhenHavingActionStepAttributeOnAbstractClass : ActionStepParserSpec
         {
@@ -220,7 +219,7 @@ namespace NBehave.Specifications
 
             public override void SetUp()
             {
-                _storyRunnerFilter = new StoryRunnerFilter(GetType().Namespace, ".", ".");
+                _storyRunnerFilter = new StoryRunnerFilter(GetType().Namespace, StoryRunnerFilter.MatchAnything, StoryRunnerFilter.MatchAnything);
                 base.SetUp();
             }
 
@@ -229,6 +228,23 @@ namespace NBehave.Specifications
             {
                 var action = _actionCatalog.GetAction(new StringStep("Given", "one abstract", ""));
                 Assert.That(action, Is.Not.Null);
+            }
+        }
+    
+        public class When_ActionStepAttribute_in_FSharp_module : ActionStepParserSpec
+        {
+            public override void SetUp()
+            {
+                _actionCatalog = new ActionCatalog();
+                _actionStepParser = new ActionStepParser(_storyRunnerFilter, _actionCatalog);
+                _actionStepParser.FindActionSteps(typeof(TestLib.ConfigFileActionSteps).Assembly);
+            }             
+
+            [Test]
+            public void Should_find_step_from_method_name_with_spaces()
+            {
+                var step = new StringStep("When", "the value of setting Foo.Bar is read", "");
+                Assert.IsTrue(_actionCatalog.ActionExists(step));
             }
         }
     }

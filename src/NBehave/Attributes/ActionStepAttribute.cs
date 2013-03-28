@@ -15,12 +15,6 @@ namespace NBehave
         {
         }
 
-        protected ActionStepAttribute(Regex actionMatch)
-        {
-            ActionMatch = actionMatch;
-            Type = actionMatch.ToString().GetFirstWord();
-        }
-
         protected ActionStepAttribute(string regexOrTokenString)
         {
             if (regexOrTokenString.IsRegex())
@@ -37,17 +31,19 @@ namespace NBehave
 
         public string Type { get; protected set; }
 
-        public void BuildActionMatchFromMethodInfo(MethodInfo method)
+        public void BuildActionMatchFromMethodInfo(MethodInfo method, ActionStepAttribute attrib)
         {
             var tokenString = BuildTokenString(method);
-            var tokenStringWithoutFirstWord = tokenString.RemoveFirstWord();
+            var chars = new[] {' ', '$', '['};
+            var specialMethod = chars.Any(c => method.Name.Contains(c));
+            var tokenStringWithoutFirstWord = specialMethod ? tokenString : tokenString.RemoveFirstWord();
             ActionMatch = tokenStringWithoutFirstWord.AsRegex();
-            Type = tokenString.GetFirstWord();
+            Type = specialMethod ? attrib.Type : tokenString.GetFirstWord();
         }
 
         private string BuildTokenString(MethodInfo method)
         {
-            var words = method.Name.Split(new[] { '_' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            var words = method.Name.Split(new[] { '_', ' ' }, StringSplitOptions.RemoveEmptyEntries).ToList();
             var parameters = method.GetParameters();
 
             foreach (var param in parameters)

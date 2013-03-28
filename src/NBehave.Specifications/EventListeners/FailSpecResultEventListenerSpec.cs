@@ -15,7 +15,7 @@ namespace NBehave.Specifications.EventListeners
             var runner = ConfigurationNoAppDomain
                 .New
                 .SetScenarioFiles(new[] { TestFeatures.FeatureNamedStory })
-                .SetAssemblies(new[] { "TestPlainTextAssembly.dll" })
+                .SetAssemblies(new[] { "TestLib.dll" })
                 .SetEventListener(listener)
                 .Build(); Assert.DoesNotThrow(() => runner.Run());
         }
@@ -27,7 +27,7 @@ namespace NBehave.Specifications.EventListeners
             var runner = ConfigurationNoAppDomain
                 .New
                 .SetScenarioFiles(new[] { TestFeatures.FeatureWithFailingStep })
-                .SetAssemblies(new[] { "TestPlainTextAssembly.dll" })
+                .SetAssemblies(new[] { "TestLib.dll" })
                 .SetEventListener(listener)
                 .Build();
             Assert.Throws<StepFailedException>(() => runner.Run());

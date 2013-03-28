@@ -25,13 +25,35 @@ namespace NBehave.Internal
             {
                 if (t.GetCustomAttributes(typeof(ActionStepsAttribute), true).Length > 0)
                 {
-                    if (t.IsAbstract == false && storyRunnerFilter.NamespaceFilter.IsMatch(t.Namespace ?? string.Empty)
+                    if (storyRunnerFilter.NamespaceFilter.IsMatch(t.Namespace ?? string.Empty)
                         && storyRunnerFilter.ClassNameFilter.IsMatch(t.Name))
                     {
-                        FindActionStepMethods(t);
+                        if (!t.IsAbstract)
+                            FindActionStepMethods(t);
+                        FindStaticActionStepMethods(t);
                     }
                 }
             }
+        }
+
+        private void FindStaticActionStepMethods(Type actionSteps)
+        {
+            var instance = new object(); //ExpandoObject? And add the methods to it?
+            var methods = methodWithAttributeFinder.FindStaticMethodsWithAttribute<ActionMethodInfo, ActionStepAttribute>(actionSteps, BuildActionMethodInfo);
+            foreach (var method in methods)
+            {
+                var action = CreateAction(instance, method);
+                var m = new ActionMethodInfo(method.ActionStepMatcher, action, method.MethodInfo, method.ActionType, instance);
+                AddFileMatcher(m, instance);
+                actionCatalog.Add(m);
+            }
+            
+        }
+
+        private void FindActionStepMethods(Type actionSteps)
+        {
+            var instance = Activator.CreateInstance(actionSteps);
+            FindActionStepMethods(actionSteps, instance);
         }
 
         public void FindActionStepMethods(Type actionSteps, object instance)
@@ -44,12 +66,6 @@ namespace NBehave.Internal
                 AddFileMatcher(m, instance);
                 actionCatalog.Add(m);
             }
-        }
-
-        private void FindActionStepMethods(Type actionSteps)
-        {
-            var instance = Activator.CreateInstance(actionSteps);
-            FindActionStepMethods(actionSteps, instance);
         }
 
         private void AddFileMatcher(ActionMethodInfo action, object instance)
@@ -199,7 +215,7 @@ namespace NBehave.Internal
         private ActionMethodInfo BuildActionMethodInfo(ActionStepAttribute actionStep, MethodInfo method)
         {
             if (actionStep.ActionMatch == null)
-                actionStep.BuildActionMatchFromMethodInfo(method);
+                actionStep.BuildActionMatchFromMethodInfo(method, actionStep);
 
             return new ActionMethodInfo(actionStep.ActionMatch, null, method, actionStep.Type);
         }

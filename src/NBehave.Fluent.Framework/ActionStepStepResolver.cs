@@ -53,10 +53,10 @@ namespace NBehave.Fluent.Framework
 
         private Action LocateNotificationAction(Type notificationType)
         {
-            var methodInfo = _stepHelper.GetType()
+            var methodInfo = _stepHelper
+                .GetType()
                 .GetMethods()
-                .Where(info => info.GetCustomAttributes(notificationType, true).Length > 0)
-                .FirstOrDefault();
+                .FirstOrDefault(info => info.GetCustomAttributes(notificationType, true).Length > 0);
             if (methodInfo == null)
                 return null;
             return () => methodInfo.Invoke(_stepHelper, new object[0]);

@@ -2,7 +2,6 @@ using System.IO;
 using NBehave.EventListeners;
 using NBehave.Specifications.Features;
 using NUnit.Framework;
-using TestPlainTextAssembly;
 
 namespace NBehave.Specifications
 {
@@ -16,13 +15,13 @@ namespace NBehave.Specifications
                 [Test]
                 public void Running_a_passing_feature()
                 {
-                    TestFeatures.FeatureNamedStory.ExecuteFile(typeof(GreetingSystemActionSteps).Assembly, new TextWriterEventListener(new StringWriter()));
+                    TestFeatures.FeatureNamedStory.ExecuteFile(typeof(GreetingSystemSteps.GreetingSystem).Assembly, new TextWriterEventListener(new StringWriter()));
                 }
 
                 [Test]
                 public void Running_a_failing_feature()
                 {
-                    Assert.Throws<StepFailedException>(() => TestFeatures.FeatureWithFailingStep.ExecuteFile(typeof(GreetingSystemActionSteps).Assembly, new TextWriterEventListener(new StringWriter())));
+                    Assert.Throws<StepFailedException>(() => TestFeatures.FeatureWithFailingStep.ExecuteFile(typeof(GreetingSystemSteps.GreetingSystem).Assembly, new TextWriterEventListener(new StringWriter())));
                 }
             }
 
@@ -35,7 +34,7 @@ namespace NBehave.Specifications
                 {
                     var messages = new StringWriter();
                     var listener = new TextWriterEventListener(messages);
-                    TestFeatures.FeatureNamedStory.ExecuteFile(typeof(GreetingSystemActionSteps).Assembly, listener);
+                    TestFeatures.FeatureNamedStory.ExecuteFile(typeof(GreetingSystemSteps.GreetingSystem).Assembly, listener);
                     _messages = messages.ToString();
                 }
 
@@ -86,7 +85,7 @@ namespace NBehave.Specifications
                     try
                     {
                         var listener = new TextWriterEventListener(messages);
-                        TestFeatures.FeatureWithFailingStep.ExecuteFile(typeof(GreetingSystemActionSteps).Assembly, listener);
+                        TestFeatures.FeatureWithFailingStep.ExecuteFile(typeof(GreetingSystemSteps.GreetingSystem).Assembly, listener);
                     }
                     catch (StepFailedException)
                     {
@@ -203,7 +202,7 @@ namespace NBehave.Specifications
                     var messages = new StringWriter();
                     var listener = new TextWriterEventListener(messages);
                     var feature = File.ReadAllText(TestFeatures.FeatureNamedStory);
-                    feature.ExecuteText(typeof(GreetingSystemActionSteps).Assembly, listener);
+                    feature.ExecuteText(typeof(GreetingSystemSteps.GreetingSystem).Assembly, listener);
                     _messages = messages.ToString();
                 }
 

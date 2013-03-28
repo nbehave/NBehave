@@ -119,9 +119,9 @@
       <Project>{9C2E9E17-2A2C-4F6C-8072-D160A7EA9A51}</Project>
       <Name>NBehave</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TestPlainTextAssembly\TestPlainTextAssembly.csproj">
-      <Project>{B734DE3F-E1EC-42B4-8AB1-A55A934584CF}</Project>
-      <Name>TestPlainTextAssembly</Name>
+    <ProjectReference Include="..\TestLib\TestLib.fsproj">
+      <Project>{BE54FC84-B1B4-4EBF-A880-604C4D97F547}</Project>
+      <Name>TestLib</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

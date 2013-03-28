@@ -3,7 +3,6 @@ using System.IO;
 using NBehave.Extensions;
 using NBehave.Specifications.Features;
 using NUnit.Framework;
-using TestPlainTextAssembly;
 
 namespace NBehave.Specifications.EventListeners
 {
@@ -26,7 +25,7 @@ namespace NBehave.Specifications.EventListeners
             ConfigurationNoAppDomain
                 .New
                 .SetScenarioFiles(new[] { FeatureFile })
-                .SetAssemblies(new[] { typeof(GreetingSystemActionSteps).Assembly.Location, GetType().Assembly.Location })
+                .SetAssemblies(new[] { typeof(GreetingSystemSteps.GreetingSystem).Assembly.Location, GetType().Assembly.Location })
                 .SetEventListener(listener)
                 .Build()
                 .Run();

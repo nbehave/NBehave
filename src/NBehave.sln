@@ -60,8 +60,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.VS2010.Plugin", "NB
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBehave.VS2010.Plugin.Specifications", "NBehave.VS2010.Plugin.Specifications\NBehave.VS2010.Plugin.Specifications.csproj", "{534FD760-E694-481E-B215-419018D1210F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestPlainTextAssembly", "TestPlainTextAssembly\TestPlainTextAssembly.csproj", "{B734DE3F-E1EC-42B4-8AB1-A55A934584CF}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ReSharper Plugin", "ReSharper Plugin", "{6FB8F917-682C-4865-8179-6D982222E69C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Spec Framework", "Spec Framework", "{538DA503-F944-49A3-8D07-BFB4CBB98FF4}"
@@ -71,6 +69,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "VS Plugin", "VS Plugin", "{4FA61734-F4E4-4561-A2BB-6540F1FD9829}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Fluent Framework", "Fluent Framework", "{71B3190A-B959-4CE5-A42A-6484107C10F5}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "TestLib", "TestLib\TestLib.fsproj", "{BE54FC84-B1B4-4EBF-A880-604C4D97F547}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -638,27 +638,27 @@ Global
 		{534FD760-E694-481E-B215-419018D1210F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{534FD760-E694-481E-B215-419018D1210F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{534FD760-E694-481E-B215-419018D1210F}.Release|x86.ActiveCfg = Release|Any CPU
-		{B734DE3F-E1EC-42B4-8AB1-A55A934584CF}.AutomatedDebug-3.5|Any CPU.ActiveCfg = AutomatedDebug-3.5|Any CPU
-		{B734DE3F-E1EC-42B4-8AB1-A55A934584CF}.AutomatedDebug-3.5|Any CPU.Build.0 = AutomatedDebug-3.5|Any CPU
-		{B734DE3F-E1EC-42B4-8AB1-A55A934584CF}.AutomatedDebug-3.5|x86.ActiveCfg = AutomatedDebug-3.5|Any CPU
-		{B734DE3F-E1EC-42B4-8AB1-A55A934584CF}.AutomatedDebug-3.5-x86|Any CPU.ActiveCfg = AutomatedDebug-3.5|Any CPU
-		{B734DE3F-E1EC-42B4-8AB1-A55A934584CF}.AutomatedDebug-3.5-x86|Any CPU.Build.0 = AutomatedDebug-3.5|Any CPU
-		{B734DE3F-E1EC-42B4-8AB1-A55A934584CF}.AutomatedDebug-3.5-x86|x86.ActiveCfg = AutomatedDebug-3.5|Any CPU
-		{B734DE3F-E1EC-42B4-8AB1-A55A934584CF}.AutomatedDebug-4.0|Any CPU.ActiveCfg = AutomatedDebug-4.0|Any CPU
-		{B734DE3F-E1EC-42B4-8AB1-A55A934584CF}.AutomatedDebug-4.0|Any CPU.Build.0 = AutomatedDebug-4.0|Any CPU
-		{B734DE3F-E1EC-42B4-8AB1-A55A934584CF}.AutomatedDebug-4.0|x86.ActiveCfg = AutomatedDebug-4.0|Any CPU
-		{B734DE3F-E1EC-42B4-8AB1-A55A934584CF}.AutomatedDebug-4.0-x86|Any CPU.ActiveCfg = AutomatedDebug-4.0|Any CPU
-		{B734DE3F-E1EC-42B4-8AB1-A55A934584CF}.AutomatedDebug-4.0-x86|Any CPU.Build.0 = AutomatedDebug-4.0|Any CPU
-		{B734DE3F-E1EC-42B4-8AB1-A55A934584CF}.AutomatedDebug-4.0-x86|x86.ActiveCfg = AutomatedDebug-4.0|Any CPU
-		{B734DE3F-E1EC-42B4-8AB1-A55A934584CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B734DE3F-E1EC-42B4-8AB1-A55A934584CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B734DE3F-E1EC-42B4-8AB1-A55A934584CF}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{B734DE3F-E1EC-42B4-8AB1-A55A934584CF}.ExpressionBlend|Any CPU.ActiveCfg = AutomatedDebug-4.0|Any CPU
-		{B734DE3F-E1EC-42B4-8AB1-A55A934584CF}.ExpressionBlend|Any CPU.Build.0 = AutomatedDebug-4.0|Any CPU
-		{B734DE3F-E1EC-42B4-8AB1-A55A934584CF}.ExpressionBlend|x86.ActiveCfg = AutomatedDebug-4.0|Any CPU
-		{B734DE3F-E1EC-42B4-8AB1-A55A934584CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B734DE3F-E1EC-42B4-8AB1-A55A934584CF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B734DE3F-E1EC-42B4-8AB1-A55A934584CF}.Release|x86.ActiveCfg = Release|Any CPU
+		{BE54FC84-B1B4-4EBF-A880-604C4D97F547}.AutomatedDebug-3.5|Any CPU.ActiveCfg = AutomatedDebug-3.5|Any CPU
+		{BE54FC84-B1B4-4EBF-A880-604C4D97F547}.AutomatedDebug-3.5|Any CPU.Build.0 = AutomatedDebug-3.5|Any CPU
+		{BE54FC84-B1B4-4EBF-A880-604C4D97F547}.AutomatedDebug-3.5|x86.ActiveCfg = Debug|Any CPU
+		{BE54FC84-B1B4-4EBF-A880-604C4D97F547}.AutomatedDebug-3.5-x86|Any CPU.ActiveCfg = AutomatedDebug-3.5|Any CPU
+		{BE54FC84-B1B4-4EBF-A880-604C4D97F547}.AutomatedDebug-3.5-x86|Any CPU.Build.0 = AutomatedDebug-3.5|Any CPU
+		{BE54FC84-B1B4-4EBF-A880-604C4D97F547}.AutomatedDebug-3.5-x86|x86.ActiveCfg = Debug|Any CPU
+		{BE54FC84-B1B4-4EBF-A880-604C4D97F547}.AutomatedDebug-4.0|Any CPU.ActiveCfg = AutomatedDebug-4.0|Any CPU
+		{BE54FC84-B1B4-4EBF-A880-604C4D97F547}.AutomatedDebug-4.0|Any CPU.Build.0 = AutomatedDebug-4.0|Any CPU
+		{BE54FC84-B1B4-4EBF-A880-604C4D97F547}.AutomatedDebug-4.0|x86.ActiveCfg = Debug|Any CPU
+		{BE54FC84-B1B4-4EBF-A880-604C4D97F547}.AutomatedDebug-4.0-x86|Any CPU.ActiveCfg = AutomatedDebug-4.0|Any CPU
+		{BE54FC84-B1B4-4EBF-A880-604C4D97F547}.AutomatedDebug-4.0-x86|Any CPU.Build.0 = AutomatedDebug-4.0|Any CPU
+		{BE54FC84-B1B4-4EBF-A880-604C4D97F547}.AutomatedDebug-4.0-x86|x86.ActiveCfg = Debug|Any CPU
+		{BE54FC84-B1B4-4EBF-A880-604C4D97F547}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE54FC84-B1B4-4EBF-A880-604C4D97F547}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE54FC84-B1B4-4EBF-A880-604C4D97F547}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BE54FC84-B1B4-4EBF-A880-604C4D97F547}.ExpressionBlend|Any CPU.ActiveCfg = Release|Any CPU
+		{BE54FC84-B1B4-4EBF-A880-604C4D97F547}.ExpressionBlend|Any CPU.Build.0 = Release|Any CPU
+		{BE54FC84-B1B4-4EBF-A880-604C4D97F547}.ExpressionBlend|x86.ActiveCfg = Release|Any CPU
+		{BE54FC84-B1B4-4EBF-A880-604C4D97F547}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE54FC84-B1B4-4EBF-A880-604C4D97F547}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE54FC84-B1B4-4EBF-A880-604C4D97F547}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

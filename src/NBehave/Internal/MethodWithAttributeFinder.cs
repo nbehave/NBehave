@@ -57,14 +57,23 @@ namespace NBehave.Internal
             this.storyRunnerFilter = storyRunnerFilter;
         }
 
-        public IEnumerable<T> FindMethodsWithAttribute<T, TAttrib>(Type actionSteps, Func<TAttrib, MethodInfo, T> buildReturnType)
+        public IEnumerable<T> FindStaticMethodsWithAttribute<T, TAttrib>(Type actionSteps, Func<TAttrib, MethodInfo, T> buildReturnType)
         {
-            var methodsWithActionStepAttribute = FindAllMethodsWithAttribute(actionSteps, typeof(TAttrib));
+            var methodsWithActionStepAttribute = FindAllMethodsWithAttribute(actionSteps, typeof(TAttrib), BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
             var allMethods = FindAllMethodsWithAttribute(methodsWithActionStepAttribute, buildReturnType);
             return allMethods;
         }
 
-        private IEnumerable<T> FindAllMethodsWithAttribute<T, TAttrib>(IEnumerable<MethodInfo> methodsWithActionStepAttribute, Func<TAttrib, MethodInfo, T> buildReturnType)
+        public IEnumerable<T> FindMethodsWithAttribute<T, TAttrib>(Type actionSteps, Func<TAttrib, MethodInfo, T> buildReturnType)
+        {
+            var methodsWithActionStepAttribute = FindAllMethodsWithAttribute(actionSteps, typeof(TAttrib), BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            var allMethods = FindAllMethodsWithAttribute(methodsWithActionStepAttribute, buildReturnType);
+            return allMethods;
+        }
+
+        private IEnumerable<T> FindAllMethodsWithAttribute<T, TAttrib>(
+            IEnumerable<MethodInfo> methodsWithActionStepAttribute, 
+            Func<TAttrib, MethodInfo, T> buildReturnType)
         {
             var allMethods = new List<T>();
             foreach (var method in methodsWithActionStepAttribute)
@@ -79,11 +88,11 @@ namespace NBehave.Internal
             return allMethods;
         }
 
-        private IEnumerable<MethodInfo> FindAllMethodsWithAttribute(Type actionSteps, Type attributeToFind)
+        private IEnumerable<MethodInfo> FindAllMethodsWithAttribute(Type actionSteps, Type attributeToFind, BindingFlags bindingFlags)
         {
             return
                 from method in
-                    actionSteps.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                    actionSteps.GetMethods(bindingFlags)
                 where
                     method.GetCustomAttributes(attributeToFind, true).Length > 0 &&
                     storyRunnerFilter.MethodNameFiler.IsMatch(method.Name)

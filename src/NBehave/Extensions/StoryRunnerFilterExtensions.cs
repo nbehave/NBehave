@@ -30,10 +30,8 @@ namespace NBehave.Extensions
         private static string UpdateWith(this Regex initialFilter, string valueToApply)
         {
             string filterValue = initialFilter.ToString().TrimStart('^').TrimEnd('$');
-            if (filterValue == ".")
-            {
+            if (filterValue == StoryRunnerFilter.MatchAnything)
                 return valueToApply;
-            }
             return filterValue + string.Format("|{0}", valueToApply);
         }
 
