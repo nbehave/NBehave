@@ -2,7 +2,7 @@ bin
 obj
 build
 packages
-buildframework/psake*
+buildframework/*
 
 _NCrunch_*
 *.ncrunchproject
