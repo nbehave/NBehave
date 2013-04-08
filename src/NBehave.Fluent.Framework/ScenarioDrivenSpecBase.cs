@@ -20,11 +20,9 @@ namespace NBehave.Fluent.Framework
         public virtual void MainTeardown()
         {
             var scenariosWithPendingSteps = Feature.FindPendingSteps();
-            if (scenariosWithPendingSteps.Count() <= 0)
-            {
+            if (!scenariosWithPendingSteps.Any())
                 return;
-            }
-            
+
             // Some steps are still pending an implementation.  Let's build up a message about them.
             var message = new StringBuilder();
             foreach (var scenarioStruct in scenariosWithPendingSteps)

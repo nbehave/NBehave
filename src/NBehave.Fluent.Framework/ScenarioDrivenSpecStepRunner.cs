@@ -66,33 +66,6 @@ namespace NBehave.Fluent.Framework
             throw new NotSupportedException("NBehave.Spec does not support example-driven scenarios");
         }
 
-        public void OnCloseScenario()
-        {
-            var closeAction = resolvers
-                .Select(resolver => resolver.ResolveOnCloseScenario())
-                .FirstOrDefault(action => action != null);
-            if (closeAction != null)
-                closeAction();
-        }
-
-        public void BeforeScenario()
-        {
-            var beforeAction = resolvers
-                .Select(resolver => resolver.ResolveOnBeforeScenario())
-                .FirstOrDefault(action => action != null);
-            if (beforeAction != null)
-                beforeAction();
-        }
-
-        public void AfterScenario()
-        {
-            var afterAction = resolvers
-                .Select(resolver => resolver.ResolveOnAfterScenario())
-                .FirstOrDefault(action => action != null);
-            if (afterAction != null)
-                afterAction();
-        }
-
         private Exception FindUsefulException(Exception e)
         {
             var realException = e;

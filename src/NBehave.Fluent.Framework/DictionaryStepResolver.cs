@@ -29,20 +29,5 @@ namespace NBehave.Fluent.Framework
             Action step;
             return inlineImplementations.TryGetValue(stringStep.Step, out step) ? step : null;
         }
-
-        public Action ResolveOnCloseScenario()
-        {
-            return null;
-        }
-
-        public Action ResolveOnBeforeScenario()
-        {
-            return null;
-        }
-
-        public Action ResolveOnAfterScenario()
-        {
-            return null;
-        }
     }
 }

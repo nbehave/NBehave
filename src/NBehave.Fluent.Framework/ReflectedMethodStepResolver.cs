@@ -23,20 +23,5 @@ namespace NBehave.Fluent.Framework
 
             return null;
         }
-
-        public Action ResolveOnCloseScenario()
-        {
-            return null;
-        }
-
-        public Action ResolveOnBeforeScenario()
-        {
-            return null;
-        }
-
-        public Action ResolveOnAfterScenario()
-        {
-            return null;
-        }
     }
 }

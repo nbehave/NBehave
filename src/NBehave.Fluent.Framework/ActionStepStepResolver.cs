@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using NBehave.Hooks;
 using NBehave.Internal;
 
@@ -34,32 +33,6 @@ namespace NBehave.Fluent.Framework
                            actionMethodInfo.MethodInfo.Invoke(_stepHelper, parameters);
                            actionMethodInfo.ExecuteNotificationMethod(typeof(AfterStepAttribute));
                        };
-        }
-
-        public Action ResolveOnCloseScenario()
-        {
-            return LocateNotificationAction(typeof (AfterScenarioAttribute));
-        }
-
-        public Action ResolveOnBeforeScenario()
-        {
-            return LocateNotificationAction(typeof(BeforeScenarioAttribute));
-        }
-
-        public Action ResolveOnAfterScenario()
-        {
-            return LocateNotificationAction(typeof(AfterScenarioAttribute));
-        }
-
-        private Action LocateNotificationAction(Type notificationType)
-        {
-            var methodInfo = _stepHelper
-                .GetType()
-                .GetMethods()
-                .FirstOrDefault(info => info.GetCustomAttributes(notificationType, true).Length > 0);
-            if (methodInfo == null)
-                return null;
-            return () => methodInfo.Invoke(_stepHelper, new object[0]);
         }
     }
 }
