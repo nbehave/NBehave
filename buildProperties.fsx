@@ -31,7 +31,7 @@ module Properties
   let nugetAccessKey      = getBuildParamOrDefault "nugetAccessKey" "NotSet"
 
   let getpackageFolder dirFilter runnerFilter =
-    Directory.EnumerateDirectories(nugetPackageDir, dirFilter, SearchOption.AllDirectories)
+    Directory.GetDirectories(nugetPackageDir, dirFilter, SearchOption.AllDirectories)
     |> Seq.map (fun d -> Path.GetFileName(d))
     |> Seq.filter (fun d -> d.ToLower().StartsWith(runnerFilter) = false)
     |> Seq.sort
