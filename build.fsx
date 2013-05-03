@@ -2,6 +2,9 @@
 #I "buildframework/FAKE/tools"
 #r "FakeLib.dll"
 
+#I "src/packages/DotNetZip/lib/net20"
+#r "Ionic.Zip.dll"
+
 #load "buildProperties.fsx"
 
 open Properties
@@ -10,6 +13,7 @@ open Fake.RestorePackageHelper
 open System
 open System.Diagnostics
 open System.IO
+open System.Net
 open System.Text.RegularExpressions
 open System.Xml
 
@@ -40,6 +44,38 @@ Target "InstallNUnitRunners" (fun _ ->
 
 Target "Set teamcity buildnumber" (fun _ ->
   SetBuildNumber nugetVersionNumber
+)
+
+Target "Install R# SDK" (fun _ ->
+  let sdkPath = rootDir + @"\lib\ReSharper\8.0.631"
+  if (Directory.Exists sdkPath) then
+    trace "R# SDK 8.0.631 already installed."
+  else
+    // download SDK
+    trace "Downloading R# SDK 8.0.631..."
+    let wc = new WebClient()
+    wc.DownloadFile(@"http://download.jetbrains.com/resharper/ReSharperSDK-8.0.631.zip", rootDir + "RSharperSDK-8.0.631.zip")
+    (
+      use zip = new Ionic.Zip.ZipFile(rootDir + @"RSharperSDK-8.0.631.zip")
+      trace "Extracting files..."
+      zip.ExtractAll(rootDir + @"\lib\ReSharper\8.0.631")
+    )
+    File.Delete(rootDir + @"RSharperSDK-8.0.631.zip")
+)
+
+Target "R# SDK path" (fun _ ->
+  // Search rootDir + "\lib" efter Plugin.Common.Targets och fixa alla
+  let sdkPath = rootDir + @"\lib\ReSharper\8.0.631"
+
+  let fileName = sdkPath + @"\Targets\Plugin.Common.Targets"
+  let xml = XmlDocument()
+  xml.Load(fileName)
+  let nsmgr = XmlNamespaceManager(xml.NameTable)
+  nsmgr.AddNamespace("x", "http://schemas.microsoft.com/developer/msbuild/2003")
+  //multiple nodes?
+  let node = xml.SelectSingleNode("//x:ReSharperSdk", nsmgr)
+  node.InnerText <- sdkPath
+  xml.Save(fileName)
 )
 
 Target "AssemblyInfo" (fun _ ->
@@ -204,9 +240,11 @@ Target "Default" (fun _ -> () )
 // Dependencies
 "Clean"
   ==> "Set teamcity buildnumber"
-  ==> "AssemblyInfo"
+  ==> "Install R# SDK"
+  ==> "R# SDK path"
   ==> "Restore nuget packages"
   ==> "InstallNUnitRunners"
+  ==> "AssemblyInfo"
   ==> "Compile"
   ==> "Test"
   ==> "VSPlugin artifact"
