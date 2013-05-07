@@ -46,26 +46,27 @@ Target "Set teamcity buildnumber" (fun _ ->
   SetBuildNumber nugetVersionNumber
 )
 
-Target "Install R# SDK" (fun _ ->
-  let sdkPath = rootDir + @"\lib\ReSharper\8.0.631"
+
+let ReSharperSdkInstall version (urlToSdk:string) =
+  let sdkPath = rootDir + @"\lib\ReSharper\" + version
   if (Directory.Exists sdkPath) then
-    trace "R# SDK 8.0.631 already installed."
+    trace (sprintf "R# SDK %s already installed." version)
   else
     // download SDK
-    trace "Downloading R# SDK 8.0.631..."
+    trace (sprintf "Downloading R# SDK %s ..." version)
     let wc = new WebClient()
-    wc.DownloadFile(@"http://download.jetbrains.com/resharper/ReSharperSDK-8.0.631.zip", rootDir + "RSharperSDK-8.0.631.zip")
+    let downloadedFile = rootDir + "RSharperSDK-" + version + ".zip"
+    wc.DownloadFile(urlToSdk, downloadedFile)
     (
-      use zip = new Ionic.Zip.ZipFile(rootDir + @"RSharperSDK-8.0.631.zip")
+      use zip = new Ionic.Zip.ZipFile(downloadedFile)
       trace "Extracting files..."
-      zip.ExtractAll(rootDir + @"\lib\ReSharper\8.0.631")
+      zip.ExtractAll(rootDir + @"\lib\ReSharper\" + version)
     )
-    File.Delete(rootDir + @"RSharperSDK-8.0.631.zip")
-)
+    File.Delete(downloadedFile)
 
-Target "R# SDK path" (fun _ ->
+let ReSharperSdkPath version =
   // Search rootDir + "\lib" efter Plugin.Common.Targets och fixa alla
-  let sdkPath = rootDir + @"\lib\ReSharper\8.0.631"
+  let sdkPath = rootDir + @"\lib\ReSharper\" + version
 
   let fileName = sdkPath + @"\Targets\Plugin.Common.Targets"
   let xml = XmlDocument()
@@ -76,6 +77,17 @@ Target "R# SDK path" (fun _ ->
   let node = xml.SelectSingleNode("//x:ReSharperSdk", nsmgr)
   node.InnerText <- sdkPath
   xml.Save(fileName)
+
+Target "Install R# 7 SDK" (fun _ ->
+  let version = "7.1.96"
+  ReSharperSdkInstall version "http://download.jetbrains.com/resharper/ReSharperSDK-7.1.96.zip"
+  ReSharperSdkPath version
+)
+
+Target "Install R# 8 SDK" (fun _ ->
+  let version = "8.0.631"
+  ReSharperSdkInstall version @"http://download.jetbrains.com/resharper/ReSharperSDK-8.0.631.zip"
+  ReSharperSdkPath version
 )
 
 Target "AssemblyInfo" (fun _ ->
@@ -240,8 +252,8 @@ Target "Default" (fun _ -> () )
 // Dependencies
 "Clean"
   ==> "Set teamcity buildnumber"
-  ==> "Install R# SDK"
-  ==> "R# SDK path"
+  ==> "Install R# 7 SDK"
+  ==> "Install R# 8 SDK"
   ==> "Restore nuget packages"
   ==> "InstallNUnitRunners"
   ==> "AssemblyInfo"
