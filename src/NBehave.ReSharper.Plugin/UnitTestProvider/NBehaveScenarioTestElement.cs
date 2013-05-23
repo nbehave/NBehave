@@ -32,25 +32,16 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
             get { return _scenario; }
         }
 
-        public override string GetPresentation()
+        public override string GetPresentation(IUnitTestElement parent = null)
         {
             return Scenario;
         }
 
         public override IList<UnitTestTask> GetTaskSequence(IList<IUnitTestElement> explicitElements)
         {
-            var taskSequence = (Parent != null) ? DoGetTaskSequence(explicitElements) : new List<UnitTestTask>();
+            var taskSequence = (Parent != null) ? Parent.GetTaskSequence(explicitElements, null) : new List<UnitTestTask>();
             taskSequence.Add(new UnitTestTask(this, new NBehaveScenarioTask(FeatureFile, _scenario)));
             return taskSequence;
-        }
-
-        private IList<UnitTestTask> DoGetTaskSequence(IList<IUnitTestElement> explicitElements)
-        {
-#if RESHARPER_701 || RESHARPER_71
-            return Parent.GetTaskSequence(explicitElements, null);
-#else
-            return Parent.GetTaskSequence(explicitElements);
-#endif
         }
 
         public override UnitTestElementDisposition GetDisposition()

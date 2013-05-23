@@ -23,8 +23,6 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
         private IProject _project;
 
         public IProjectFile FeatureFile { get; private set; }
-        //public string AssemblyOutFile { get { return _project.GetOutputAssemblyFile().Location.FullPath; } }
-        public string AssemblyOutFile { get { return _project.GetOutputAssemblyInfo().Location.FullPath; } }
 
         protected NBehaveUnitTestElementBase(IProjectFile featureFile, IUnitTestProvider testProvider, string id, ProjectModelElementEnvoy pointer, NBehaveUnitTestElementBase parent)
         {

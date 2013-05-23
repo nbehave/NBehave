@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Application;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.UnitTestFramework;
 
 namespace NBehave.ReSharper.Plugin.UnitTestProvider
 {
-    public abstract class NBehaveUnitTestElementBase : IUnitTestElement
+    public abstract partial class NBehaveUnitTestElementBase : IUnitTestElement
     {
         private readonly IUnitTestProvider _testProvider;
         private readonly string _id;
@@ -14,17 +15,17 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
         private readonly IList<IUnitTestElement> _children = new List<IUnitTestElement>();
         private NBehaveUnitTestElementBase _parent;
         private readonly IEnumerable<UnitTestElementCategory> _categories = new List<UnitTestElementCategory>(UnitTestElementCategory.Uncategorized);
-        private readonly IProject _project;
+        private IProject _project;
 
         public IProjectFile FeatureFile { get; private set; }
-        public string AssemblyOutFile { get { return _project.GetOutputAssemblyFile().Location.FullPath; } }
 
         protected NBehaveUnitTestElementBase(IProjectFile featureFile, IUnitTestProvider testProvider, string id, ProjectModelElementEnvoy pointer, NBehaveUnitTestElementBase parent)
         {
             FeatureFile = featureFile;
-            //FeatureFile = featureFile.Location.FullPath;
-            _project = featureFile.GetProject();
-            //ProjectFile = _project.Name;
+            ReadLockCookie.Execute(() =>
+            {
+                _project = featureFile.GetProject();
+            });
 
             _testProvider = testProvider;
             _id = id;
@@ -83,31 +84,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
             get { return _categories; }
         }
 
-#if RESHARPER_60
-        public IList<UnitTestTask> GetTaskSequence(IEnumerable<IUnitTestElement> explicitElements)
-        {
-            return GetTaskSequence(explicitElements.ToList());
-        }
-#endif
-
-        // R# 6.1
         public abstract IList<UnitTestTask> GetTaskSequence(IList<IUnitTestElement> explicitElements);
-
-#if RESHARPER_701 || RESHARPER_71
-        public IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements, IUnitTestLaunch launch)
-        {
-            return GetTaskSequence(explicitElements.ToList());
-        }
-#endif
-
-        protected IList<UnitTestTask> DoGetTaskSequence(IList<IUnitTestElement> explicitElements)
-        {
-#if RESHARPER_701 || RESHARPER_71
-            return Parent.GetTaskSequence(explicitElements, null);
-#else
-            return Parent.GetTaskSequence(explicitElements);
-#endif
-        }
 
         public virtual IEnumerable<IProjectFile> GetProjectFiles()
         {
@@ -121,14 +98,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
             return _projectModel.GetValidProjectElement() as IProject;
         }
 
-#if RESHARPER_701 || RESHARPER_71
-        public string GetPresentation(IUnitTestElement parent = null)
-        {
-            return GetPresentation();
-        }
-#endif
-
-        public abstract string GetPresentation();
+        public abstract string GetPresentation(IUnitTestElement parent = null);
 
         public UnitTestNamespace GetNamespace()
         {

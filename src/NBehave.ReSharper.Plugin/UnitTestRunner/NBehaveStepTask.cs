@@ -12,6 +12,31 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
         public string FeatureFile { get; private set; }
         public string Scenario { get; private set; }
 
+        public override bool Equals(RemoteTask other)
+        {
+            return Equals(other as NBehaveRemoteTask);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as NBehaveRemoteTask);
+        }
+
+        public bool Equals(NBehaveRemoteTask task)
+        {
+            return task != null
+                && FeatureFile == task.FeatureFile
+                && Scenario == task.Scenario;
+        }
+
+
+        public override int GetHashCode()
+        {
+            int result = FeatureFile.GetHashCode();
+            result = (result * 397) ^ Scenario.GetHashCode();
+            return result;
+        }
+
         public override bool IsMeaningfulTask
         {
             get { return true; }
@@ -79,14 +104,10 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
 
         public override int GetHashCode()
         {
-            unchecked
-            {
-                int result = base.GetHashCode();
-                result = (result * 397) ^ FeatureFile.GetHashCode();
+            int result = FeatureFile.GetHashCode();
                 result = (result * 397) ^ Scenario.GetHashCode();
                 result = (result * 397) ^ Step.GetHashCode();
                 return result;
-            }
         }
     }
 }

@@ -1,3 +1,4 @@
+using JetBrains.Application;
 using JetBrains.Metadata.Reader.API;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.UnitTestFramework;
@@ -26,7 +27,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
 
         public void ExploreAssembly(IProject project, IMetadataAssembly assembly, UnitTestElementConsumer consumer)
         {
-            new MetadataExplorer(_provider, _solution, project, consumer).ExploreProject();
+            ReadLockCookie.Execute(() => new MetadataExplorer(_provider, _solution, project, consumer).ExploreProject());
         }
     }
 }

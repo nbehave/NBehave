@@ -52,7 +52,10 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
 
         public override int GetHashCode()
         {
+            unchecked
+            {
             return AssemblyFile.GetHashCode();
+            }
         }
     }
 }

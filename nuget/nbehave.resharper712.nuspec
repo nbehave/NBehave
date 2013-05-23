@@ -12,7 +12,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Resharper 7.1.2 plugin for nbehave so that you can run and debug your features from Visual Studio</description>
     <!-- <summary></summary> -->
-    <copyright>Copyright © NBehave 2007-2013</copyright>
+    <copyright>Copyright &#x00A9; NBehave 2007-2013</copyright>
     <language>en-US</language>
     <tags>nbehave bdd atdd gherkin cucumber resharper</tags>
   <dependencies>
@@ -20,8 +20,8 @@
   </dependencies>
   </metadata>
   <files>
-    <file src="..\build\Debug-3.5\ReSharper712\NBehave*.dll" target="tools\ReSharper" />
-    <file src="..\build\Debug-3.5\ReSharper712\GurkBurk.dll" target="tools\ReSharper" />
+    <file src="..\build\Debug-3.5\ReSharper71\NBehave*.dll" target="tools\ReSharper" />
+    <file src="..\build\Debug-3.5\ReSharper71\GurkBurk.dll" target="tools\ReSharper" />
     <file src="..\build\Install.ps1" target="tools\Install.ps1" />
     <file src="..\build\UnInstall.ps1" target="tools\UnInstall.ps1" />
     <file src="ReSharper.feature" target="content\Resharper.feature" />

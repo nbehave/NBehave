@@ -12,7 +12,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Resharper 7.1 plugin for nbehave so that you can run and debug your features from Visual Studio</description>
     <!-- <summary></summary> -->
-    <copyright>Copyright © NBehave 2007-2012</copyright>
+    <copyright>Copyright &#x00A9; NBehave 2007-2013</copyright>
     <language>en-US</language>
     <tags>nbehave bdd atdd gherkin cucumber resharper</tags>
   <dependencies>

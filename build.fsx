@@ -48,7 +48,7 @@ Target "Set teamcity buildnumber" (fun _ ->
 
 
 let ReSharperSdkInstall version (urlToSdk:string) =
-  let sdkPath = rootDir + @"\lib\ReSharper\" + version
+  let sdkPath = rootDir + @"lib\ReSharper\" + version
   if (Directory.Exists sdkPath) then
     trace (sprintf "R# SDK %s already installed." version)
   else
@@ -60,13 +60,13 @@ let ReSharperSdkInstall version (urlToSdk:string) =
     (
       use zip = new Ionic.Zip.ZipFile(downloadedFile)
       trace "Extracting files..."
-      zip.ExtractAll(rootDir + @"\lib\ReSharper\" + version)
+      zip.ExtractAll(rootDir + @"lib\ReSharper\" + version)
     )
     File.Delete(downloadedFile)
 
 let ReSharperSdkPath version =
   // Search rootDir + "\lib" efter Plugin.Common.Targets och fixa alla
-  let sdkPath = rootDir + @"\lib\ReSharper\" + version
+  let sdkPath = rootDir + @"lib\ReSharper\" + version
 
   let fileName = sdkPath + @"\Targets\Plugin.Common.Targets"
   let xml = XmlDocument()
@@ -206,16 +206,11 @@ Target "Create NuGet packages" (fun _ ->
 )
 
 Target "Create NuGet packages for R#" (fun _ ->
-  resharper_install_scripts "6.0"
-  NuGetPack nugetParams (packageTemplateDir + "/nbehave.Resharper60.nuspec")
-  resharper_install_scripts "6.1.1"
-  NuGetPack nugetParams (packageTemplateDir + "/nbehave.Resharper611.nuspec")
-  resharper_install_scripts "7.0"
-  NuGetPack nugetParams (packageTemplateDir + "/nbehave.Resharper701.nuspec")
   resharper_install_scripts "7.1"
   NuGetPack nugetParams (packageTemplateDir + "/nbehave.Resharper71.nuspec")
   NuGetPack nugetParams (packageTemplateDir + "/nbehave.Resharper711.nuspec")
   NuGetPack nugetParams (packageTemplateDir + "/nbehave.Resharper712.nuspec")
+  NuGetPack nugetParams (packageTemplateDir + "/nbehave.Resharper80.nuspec")
 )
 
 Target "Create NuGet packages Fluent" (fun _ ->

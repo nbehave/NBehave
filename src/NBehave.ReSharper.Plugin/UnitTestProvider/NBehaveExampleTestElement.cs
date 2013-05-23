@@ -34,7 +34,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
             get { return _example; }
         }
 
-        public override string GetPresentation()
+        public override string GetPresentation(IUnitTestElement parent = null)
         {
             return Example.ColumnValuesToString();
         }
@@ -43,7 +43,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
         {
             var parent = Parent as NBehaveExampleParentTestElement;
             string scenario = (parent.Parent is NBehaveScenarioTestElement) ? ((NBehaveScenarioTestElement)parent.Parent).Scenario : "";
-            var taskSequence = (Parent != null) ? DoGetTaskSequence(explicitElements) : new List<UnitTestTask>();
+            var taskSequence = (Parent != null) ? Parent.GetTaskSequence(explicitElements, null) : new List<UnitTestTask>();
             taskSequence.Add(new UnitTestTask(this, new NBehaveExampleTask(FeatureFile, scenario, _example)));
             return taskSequence;
         }

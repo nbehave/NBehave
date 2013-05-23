@@ -2,9 +2,9 @@
 using System.Runtime.InteropServices;
 using JetBrains.Application.PluginSupport;
 
-[assembly: AssemblyTitle("NBehave.ReSharper.Plugin")]
-[assembly: Guid("0FB76103-6201-46BD-8C84-BD462663AE84")]
+[assembly: AssemblyTitle("NBehave.Resharper.Plugin")]
+[assembly: Guid("3fe3da9c-2877-4210-8f15-ca9defe78764")]
 
-[assembly: PluginTitle("NBehave R# 6.0 runner")]
+[assembly: PluginTitle("NBehave R# 8 runner")]
 [assembly: PluginDescription("Run text based feature files with NBehave")]
 [assembly: PluginVendor("NBehave")]

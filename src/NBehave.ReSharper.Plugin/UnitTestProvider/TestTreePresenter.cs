@@ -1,11 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.CommonControls;
-#if RESHARPER_701 || RESHARPER_71
 using JetBrains.ReSharper.Features.Shared.TreePsiBrowser;
-#else
-using JetBrains.ReSharper.Features.Common.TreePsiBrowser;
-#endif
 using JetBrains.ReSharper.TaskRunnerFramework;
 using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.TreeModels;
@@ -14,7 +10,6 @@ using NBehave.Narrator.Framework;
 
 namespace NBehave.ReSharper.Plugin.UnitTestProvider
 {
-#if RESHARPER_701 || RESHARPER_71
     public class TestPresenter : IUnitTestPresenter
     {
         private readonly TestTreePresenter presenter = new TestTreePresenter();
@@ -25,7 +20,6 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
                 presenter.UpdateItem(element, node, item, state);
         }
     }
-#endif
 
     public class TestTreePresenter : TreeModelBrowserPresenter
     {

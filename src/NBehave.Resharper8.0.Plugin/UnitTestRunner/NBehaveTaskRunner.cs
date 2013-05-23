@@ -1,7 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using NBehave.Narrator.Framework;
@@ -11,37 +8,27 @@ using NBehave.ReSharper.Plugin.UnitTestProvider;
 
 namespace NBehave.ReSharper.Plugin.UnitTestRunner
 {
-    public class NBehaveTaskRunner : RecursiveRemoteTaskRunner
+    public partial class NBehaveTaskRunner : RecursiveRemoteTaskRunner
     {
         private NBehaveConfiguration config;
         public const string RunnerId = TestProvider.NBehaveId;
 
         public NBehaveTaskRunner(IRemoteTaskServer server)
             : base(server)
-        { }
+        {
+        }
 
         public override void ExecuteRecursive(TaskExecutionNode node)
         {
-            if (Debugger.IsAttached)
-                Debugger.Break();
+            var asm = node.RemoteTask as NBehaveAssemblyTask;
+            if (asm == null)
+                return;
+            Initialize(node);
 
-            File.AppendAllText(@"C:\Temp\ReSharperLog.txt", "Runner started.\n");
-            try
-            {
-                var asm = node.RemoteTask as NBehaveAssemblyTask;
-                if (asm == null)
-                    return;
-                Initialize(node);
-
-                var featureTasks = GetFeatureTasks(node);
-                NotifyTasksStarting(featureTasks.ToList());
-                var runner = new TextRunner(config);
-                runner.Run();
-            }
-            catch (Exception e)
-            {
-                File.AppendAllText(@"C:\Temp\ReSharperLog.txt", e.Message);
-            }
+            var featureTasks = GetFeatureTasks(node);
+            NotifyTasksStarting(featureTasks.ToList());
+            var runner = new TextRunner(config);
+            runner.Run();
         }
 
         private IEnumerable<NBehaveFeatureTask> GetFeatureTasks(TaskExecutionNode node)

@@ -31,14 +31,14 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
             get { return _scenario; }
         }
 
-        public override string GetPresentation()
+        public override string GetPresentation(IUnitTestElement parent = null)
         {
             return ShortName;
         }
 
         public override IList<UnitTestTask> GetTaskSequence(IList<IUnitTestElement> explicitElements)
         {
-            var taskSequence = (Parent != null) ? DoGetTaskSequence(explicitElements) : new List<UnitTestTask>();
+            var taskSequence = (Parent != null) ? Parent.GetTaskSequence(explicitElements, null) : new List<UnitTestTask>();
             taskSequence.Add(new UnitTestTask(this, new NBehaveBackgroundTask(FeatureFile, _scenario)));
             return taskSequence;
         }
