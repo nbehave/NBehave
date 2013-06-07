@@ -2,7 +2,7 @@ bin
 obj
 build
 packages
-buildframework/psake*
+buildframework
 
 _NCrunch_*
 *.ncrunchproject
@@ -15,5 +15,5 @@ _NCrunch_*
 *.user
 
 TestResult.xml
-8.0.631
 7.1.96
+8.0.778
