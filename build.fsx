@@ -80,13 +80,13 @@ let ReSharperSdkPath version =
 
 Target "Install R# 7 SDK" (fun _ ->
   let version = "7.1.96"
-  ReSharperSdkInstall version "http://download.jetbrains.com/resharper/ReSharperSDK-7.1.96.zip"
+  ReSharperSdkInstall version ("http://download.jetbrains.com/resharper/ReSharperSDK-" + version + ".zip")
   ReSharperSdkPath version
 )
 
 Target "Install R# 8 SDK" (fun _ ->
-  let version = "8.0.631"
-  ReSharperSdkInstall version @"http://download.jetbrains.com/resharper/ReSharperSDK-8.0.631.zip"
+  let version = "8.0.778"
+  ReSharperSdkInstall version ("http://download.jetbrains.com/resharper/ReSharperSDK-" + version + ".zip")
   ReSharperSdkPath version
 )
 

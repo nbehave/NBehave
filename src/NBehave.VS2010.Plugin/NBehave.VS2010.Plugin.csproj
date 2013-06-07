@@ -97,12 +97,12 @@
     <Reference Include="Microsoft.VisualStudio.OLE.Interop">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\vs2010.sdk\Microsoft.VisualStudio.OLE.Interop.dll</HintPath>
-    </Reference>	
+    </Reference>
     <Reference Include="Microsoft.VisualStudio.Shell.10.0, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\vs2010.sdk\Microsoft.VisualStudio.Shell.10.0.dll</HintPath>
     </Reference>
-	
+
     <Reference Include="Microsoft.VisualStudio.Shell.Interop">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\vs2010.sdk\Microsoft.VisualStudio.Shell.Interop.dll</HintPath>
@@ -119,8 +119,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\vs2010.sdk\Microsoft.VisualStudio.Shell.Interop.10.0.dll</HintPath>
     </Reference>
-	
-	
+
+
     <Reference Include="Microsoft.VisualStudio.Text.Data, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\tools\vs2010.sdk\Microsoft.VisualStudio.Text.Data.dll</HintPath>
