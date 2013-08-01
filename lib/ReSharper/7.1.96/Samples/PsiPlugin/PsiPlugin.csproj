@@ -1,0 +1,345 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ReSharperSdkTargets Condition=" '$(ReSharperSdkTargets)' == '' ">$(MSBuildExtensionsPath)\JetBrains\ReSharper.SDK\v7.1</ReSharperSdkTargets>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{F412CECA-91A8-4175-85A2-E7F7B72F30CE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>JetBrains.ReSharper.PsiPlugin</RootNamespace>
+    <AssemblyName>JetBrains.ReSharper.PsiPlugin</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <PsiLanguageName>Psi</PsiLanguageName>
+    <ProductHomeDir>$(MSBuildProjectDirectory)</ProductHomeDir>
+    <TargetFrameworkProfile />
+    <ParserGenOutputBase>$(MSBuildProjectDirectory)\src\Gen</ParserGenOutputBase>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin</OutputPath>
+    <DefineConstants>TRACE;DEBUG;JET_MODE_ASSERT</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="JetBrains.Platform.CommonServices">
+      <HintPath>$(ReSharperSdkBinaries)\JetBrains.Platform.CommonServices.dll</HintPath>
+    </Reference>
+    <Reference Include="JetBrains.Platform.ReSharper.ComponentModel">
+      <HintPath>$(ReSharperSdkBinaries)\JetBrains.Platform.ReSharper.ComponentModel.dll</HintPath>
+    </Reference>
+    <Reference Include="JetBrains.Platform.ReSharper.DocumentManager">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ReSharperSdkBinaries)\JetBrains.Platform.ReSharper.DocumentManager.dll</HintPath>
+    </Reference>
+    <Reference Include="JetBrains.Platform.ReSharper.DocumentModel">
+      <HintPath>$(ReSharperSdkBinaries)\JetBrains.Platform.ReSharper.DocumentModel.dll</HintPath>
+    </Reference>
+    <Reference Include="JetBrains.Platform.ReSharper.IDE">
+      <HintPath>$(ReSharperSdkBinaries)\JetBrains.Platform.ReSharper.IDE.dll</HintPath>
+    </Reference>
+    <Reference Include="JetBrains.Platform.ReSharper.ProjectModel">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ReSharperSdkBinaries)\JetBrains.Platform.ReSharper.ProjectModel.dll</HintPath>
+    </Reference>
+    <Reference Include="JetBrains.Platform.ReSharper.Shell">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ReSharperSdkBinaries)\JetBrains.Platform.ReSharper.Shell.dll</HintPath>
+    </Reference>
+    <Reference Include="JetBrains.Platform.ReSharper.TextControl">
+      <HintPath>$(ReSharperSdkBinaries)\JetBrains.Platform.ReSharper.TextControl.dll</HintPath>
+    </Reference>
+    <Reference Include="JetBrains.Platform.ReSharper.UI">
+      <HintPath>$(ReSharperSdkBinaries)\JetBrains.Platform.ReSharper.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="JetBrains.Platform.ReSharper.Util">
+      <HintPath>$(ReSharperSdkBinaries)\JetBrains.Platform.ReSharper.Util.dll</HintPath>
+    </Reference>
+    <Reference Include="JetBrains.ReSharper.Daemon">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ReSharperSdkBinaries)\JetBrains.ReSharper.Daemon.dll</HintPath>
+    </Reference>
+    <Reference Include="JetBrains.ReSharper.Daemon.Engine">
+      <HintPath>$(ReSharperSdkBinaries)\JetBrains.ReSharper.Daemon.Engine.dll</HintPath>
+    </Reference>
+    <Reference Include="JetBrains.ReSharper.Feature.Services">
+      <HintPath>$(ReSharperSdkBinaries)\JetBrains.ReSharper.Feature.Services.dll</HintPath>
+    </Reference>
+    <Reference Include="JetBrains.ReSharper.Feature.Services.CSharp">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ReSharperSdkBinaries)\JetBrains.ReSharper.Feature.Services.CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="JetBrains.ReSharper.Feature.Services.Navigation">
+      <HintPath>$(ReSharperSdkBinaries)\JetBrains.ReSharper.Feature.Services.Navigation.dll</HintPath>
+    </Reference>
+    <Reference Include="JetBrains.ReSharper.Features.Common">
+      <HintPath>$(ReSharperSdkBinaries)\JetBrains.ReSharper.Features.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="JetBrains.ReSharper.Features.Finding">
+      <HintPath>$(ReSharperSdkBinaries)\JetBrains.ReSharper.Features.Finding.dll</HintPath>
+    </Reference>
+    <Reference Include="JetBrains.ReSharper.Intentions">
+      <HintPath>$(ReSharperSdkBinaries)\JetBrains.ReSharper.Intentions.dll</HintPath>
+    </Reference>
+    <Reference Include="JetBrains.ReSharper.NewRefactorings">
+      <HintPath>$(ReSharperSdkBinaries)\JetBrains.ReSharper.NewRefactorings.dll</HintPath>
+    </Reference>
+    <Reference Include="JetBrains.ReSharper.Psi">
+      <HintPath>$(ReSharperSdkBinaries)\JetBrains.ReSharper.Psi.dll</HintPath>
+    </Reference>
+    <Reference Include="JetBrains.ReSharper.Psi.CSharp">
+      <HintPath>$(ReSharperSdkBinaries)\JetBrains.ReSharper.Psi.CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="JetBrains.ReSharper.Psi.Services">
+      <HintPath>$(ReSharperSdkBinaries)\JetBrains.ReSharper.Psi.Services.dll</HintPath>
+    </Reference>
+    <Reference Include="JetBrains.ReSharper.Psi.Web">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ReSharperSdkBinaries)\JetBrains.ReSharper.Psi.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="JetBrains.ReSharper.Resources">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ReSharperSdkBinaries)\JetBrains.ReSharper.Resources.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Build" />
+    <Reference Include="Microsoft.Build.Framework" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.XML" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="resources\PsiPluginSymbolIcons\ThemedIcons.PsiPluginSymbol.Generated.cs" />
+    <Compile Include="src\Cache\IPsiSymbol.cs" />
+    <Compile Include="src\Cache\MSBuildPropertiesCache.cs" />
+    <Compile Include="src\Cache\PsiCacheBuilder.cs" />
+    <Compile Include="src\Cache\PsiCache.cs" />
+    <Compile Include="src\Cache\PsiOptionSymbol.cs" />
+    <Compile Include="src\Cache\PsiRuleSymbol.cs" />
+    <Compile Include="src\CodeInspections\Psi\Highlightings\DuplicatingLocalDeclarationError.cs" />
+    <Compile Include="src\CodeInspections\Psi\ErrorElementHighlighting.cs" />
+    <Compile Include="src\CodeInspections\Psi\Highlightings\LeftRecursionWarning.cs" />
+    <Compile Include="src\CodeInspections\Psi\Highlightings\PsiCommentHighlighting.cs" />
+    <Compile Include="src\CodeInspections\Psi\Highlightings\PsiErrorElementHighlighting.cs" />
+    <Compile Include="src\CodeInspections\Psi\Highlightings\PsiKeywordHighlighting.cs" />
+    <Compile Include="src\CodeInspections\Psi\Highlightings\PsiRuleHighlighting.cs" />
+    <Compile Include="src\CodeInspections\Psi\Highlightings\PsiStringLiteralHighlighting.cs" />
+    <Compile Include="src\CodeInspections\Psi\Highlightings\PsiUnresolvedPathReferenceHighlighting.cs" />
+    <Compile Include="src\CodeInspections\Psi\Highlightings\PsiUnresolvedRuleReferenceHighlighting.cs" />
+    <Compile Include="src\CodeInspections\Psi\Highlightings\PsiUnresolvedVariableReferenceHighlighting.cs" />
+    <Compile Include="src\CodeInspections\Psi\Highlightings\PsiVariableHighlighting.cs" />
+    <Compile Include="src\CodeInspections\Psi\Highlightings\RepeatedChoiceWarning.cs" />
+    <Compile Include="src\CodeInspections\Psi\PsiFileStructure.cs" />
+    <Compile Include="src\CodeInspections\Psi\SmartResolverProcess.cs" />
+    <Compile Include="src\Completion\KeywordCompletionUtil.cs" />
+    <Compile Include="src\Completion\KeywordsBetterFilter.cs" />
+    <Compile Include="src\Completion\LookupItems\PsiKeywordLookupItem.cs" />
+    <Compile Include="src\Completion\PsiAutomaticStrategy.cs" />
+    <Compile Include="src\Completion\PsiCodeCompletionContext.cs" />
+    <Compile Include="src\Completion\PsiCodeCompletionContextProvider.cs" />
+    <Compile Include="src\Completion\PsiCodeCompletionItemsProvider.cs" />
+    <Compile Include="src\Completion\PsiCompletionItemsProviderKeywords.cs" />
+    <Compile Include="src\Completion\PsiIntellisenseManager.cs" />
+    <Compile Include="src\Completion\PsiReparsedCompletionContext.cs" />
+    <Compile Include="src\CodeInspections\Psi\IdentifierHighlightingStage.cs" />
+    <Compile Include="src\CodeInspections\Psi\IdentifierHighlighterProcess.cs" />
+    <Compile Include="src\CodeInspections\Psi\PsiDaemonStageProcessBase.cs" />
+    <Compile Include="src\CodeInspections\Psi\PsiFileIndexProcess.cs" />
+    <Compile Include="src\CodeInspections\Psi\PsiFileIndexStage.cs" />
+    <Compile Include="src\CodeInspections\Psi\PsiIdentifierToolTipProvider.cs" />
+    <Compile Include="src\CodeInspections\Psi\PsiIncrementalDaemonStageProcessBase.cs" />
+    <Compile Include="src\CodeInspections\Psi\SmartResolverStage.cs" />
+    <Compile Include="src\Feature\Finding\GotoMember\PsiGotoFileMemberProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\Feature\Services\FindUsages\PsiReferenceSearcher.cs" />
+    <Compile Include="src\Feature\Services\FindUsages\PsiReferenceSearcherFactory.cs" />
+    <Compile Include="src\Feature\Services\ParameterInfo\PsiParameterInfoCandidate.cs" />
+    <Compile Include="src\Feature\Services\ParameterInfo\PsiParameterInfoContext.cs" />
+    <Compile Include="src\Feature\Services\ParameterInfo\PsiParameterInfoContextFactory.cs" />
+    <Compile Include="src\Feature\Services\ParameterInfo\PsiRuleSignature.cs" />
+    <Compile Include="src\Feature\Services\RearrangeCode\RearrangeableRuleDeclaration.cs" />
+    <Compile Include="src\Formatter\IPsiCodeFormatterFactory.cs" />
+    <Compile Include="src\Formatter\PsiCodeFormatterFactory.cs" />
+    <Compile Include="src\Formatter\PsiIndentCache.cs" />
+    <Compile Include="src\Formatter\ReformatCode.cs" />
+    <Compile Include="src\Formatter\PsiFormatterHelper.cs" />
+    <Compile Include="src\Formatter\PsiFormattingStage.cs" />
+    <Compile Include="src\Formatter\PsiFormattingVisitor.cs" />
+    <Compile Include="src\Formatter\PsiIndentingStage.cs" />
+    <Compile Include="src\Formatter\PsiIndentVisitor.cs" />
+    <Compile Include="src\GeneratedDocument\Psi\CSharpFromPsiGeneratedDocumentService.cs" />
+    <Compile Include="src\GeneratedDocument\Psi\CSharpFromPsiGenerator.cs" />
+    <Compile Include="src\GeneratedDocument\Psi\CSharpInPsiCustomModificationHandler.cs" />
+    <Compile Include="src\CodeInspections\Psi\PsiFileStructureExplorer.cs" />
+    <Compile Include="src\CodeInspections\Psi\KeywordHighlightingStage.cs" />
+    <Compile Include="src\CodeInspections\Psi\PsiDaemonStageBase.cs" />
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="src\Formatter\PsiCodeFormatter.cs" />
+    <Compile Include="src\Grammar\PsiLanguageService.cs" />
+    <Compile Include="src\Grammar\PsiProjectFileLanguageService.cs" />
+    <Compile Include="src\Grammar\PsiLanguage.cs" />
+    <Compile Include="src\Grammar\PsiProjectFileType.cs" />
+    <Compile Include="src\Grammar\PsiWordIndexProvider.cs" />
+    <Compile Include="src\CodeInspections\Psi\InspectionsProcess.cs" />
+    <Compile Include="src\CodeInspections\Psi\InspectionStage.cs" />
+    <Compile Include="src\Intentions\CreateFromUsage\CreatePsiRuleContext.cs" />
+    <Compile Include="src\Intentions\CreateFromUsage\CreatePsiRuleFromUsage.cs" />
+    <Compile Include="src\Intentions\CreateFromUsage\CreatePsiRuleIntention.cs" />
+    <Compile Include="src\Intentions\CreateFromUsage\CreatePsiRuleItem.cs" />
+    <Compile Include="src\Intentions\CreateFromUsage\CreatePsiRuleTarget.cs" />
+    <Compile Include="src\Intentions\CreateFromUsage\ICreatePsiRuleIntention.cs" />
+    <Compile Include="src\Intentions\CreateFromUsage\PsiIntentionResult.cs" />
+    <Compile Include="src\Intentions\CreateFromUsage\PsiIntentionResultBehavior.cs" />
+    <Compile Include="src\Intentions\CreateFromUsage\PsiRuleBuilder.cs" />
+    <Compile Include="src\Intentions\PsiIntentionsUtil.cs" />
+    <Compile Include="src\Intentions\PsiRuleInserter.cs" />
+    <Compile Include="src\Lexer\Psi\PsiLexerFactory.cs" />
+    <Compile Include="src\Lexer\Psi\FilteringPsiLexer.cs" />
+    <Compile Include="src\Navigation\CSharpToPsi\CSharpToPsiContextSearch.cs" />
+    <Compile Include="src\Navigation\CSharpToPsi\CSharpToPsiNavigateProvider.cs" />
+    <Compile Include="src\Navigation\CSharpToPsi\CSharpToPsiSearchRequest.cs" />
+    <Compile Include="src\Navigation\CSharpToPsi\GotoPsiRuleAction.cs" />
+    <Compile Include="src\Navigation\CSharpToPsi\GotoPsiRuleDescriptor.cs" />
+    <Compile Include="src\Navigation\PsiToCSharp\GeneratedClass\GeneratedClassContextSearch.cs" />
+    <Compile Include="src\Navigation\PsiToCSharp\GeneratedClass\GeneratedClassSearchRequest.cs" />
+    <Compile Include="src\Navigation\PsiToCSharp\GeneratedClass\GotoGeneratedClassAction.cs" />
+    <Compile Include="src\Navigation\PsiToCSharp\GeneratedContextSearch.cs" />
+    <Compile Include="src\Navigation\PsiToCSharp\GeneratedInterface\GeneratedInterfaceContextSearch.cs" />
+    <Compile Include="src\Navigation\PsiToCSharp\GeneratedInterface\GotoGeneratedInterfaceAction.cs" />
+    <Compile Include="src\Navigation\PsiToCSharp\GeneratedInterface\GeneratedInterfaceSearchRequest.cs" />
+    <Compile Include="src\Navigation\PsiToCSharp\GeneratedInterface\PsiNavigateGeneratedInterfaceProvider.cs" />
+    <Compile Include="src\Navigation\PsiToCSharp\GeneratedMethod\GeneratedMethodContextSearch.cs" />
+    <Compile Include="src\Navigation\PsiToCSharp\GeneratedMethod\GeneratedMethodSearchRequest.cs" />
+    <Compile Include="src\Navigation\PsiToCSharp\GeneratedMethod\PsiNavigateGeneratedMethodProvider.cs" />
+    <Compile Include="src\Navigation\PsiToCSharp\GotoGeneratedDescriptor.cs" />
+    <Compile Include="src\Navigation\PsiToCSharp\GeneratedSearchRequest.cs" />
+    <Compile Include="src\Navigation\PsiToCSharp\GeneratedMethod\GotoGeneratedMethodAction.cs" />
+    <Compile Include="src\Navigation\PsiToCSharp\GeneratedClass\PsiNavigateGeneratedClassProvider.cs" />
+    <Compile Include="src\Navigation\PsiNavigateFromHereProvider.cs" />
+    <Compile Include="src\Psi\Psi\Parsing\IPsiParser.cs" />
+    <Compile Include="src\Psi\Psi\Parsing\ParserMessages.cs" />
+    <Compile Include="src\Psi\Psi\Parsing\PsiLexer.cs" />
+    <Compile Include="src\Psi\Psi\Parsing\PsiLexerSupplemential.cs" />
+    <Compile Include="src\Psi\Psi\Parsing\PsiMissingsTokenInserter.cs" />
+    <Compile Include="src\Psi\Psi\Parsing\PsiParser.cs" />
+    <Compile Include="src\Psi\Psi\Parsing\PsiTokenType.cs" />
+    <Compile Include="src\Psi\Psi\Parsing\PsiTokenTypeGenerated.cs" />
+    <Compile Include="src\Psi\Psi\Parsing\psi_lex.cs" />
+    <Compile Include="src\Psi\Psi\Tree\Impl\ChildRole.cs" />
+    <Compile Include="src\Psi\Psi\Tree\Impl\Comment.cs" />
+    <Compile Include="src\Psi\Psi\Tree\Impl\Identifier.cs" />
+    <Compile Include="src\Psi\Psi\Tree\Impl\OptionName.cs" />
+    <Compile Include="src\Psi\Psi\Tree\Impl\OptionStringValue.cs" />
+    <Compile Include="src\Psi\Psi\Tree\Impl\PathDeclaration.cs" />
+    <Compile Include="src\Psi\Psi\Tree\Impl\PathName.cs" />
+    <Compile Include="src\Psi\Psi\Tree\Impl\PsiCompositeElement.cs" />
+    <Compile Include="src\Psi\Psi\Tree\Impl\PsiFile.cs" />
+    <Compile Include="src\Psi\Psi\Tree\Impl\PsiFileElement.cs" />
+    <Compile Include="src\Psi\Psi\Tree\Impl\PsiGenericToken.cs" />
+    <Compile Include="src\Psi\Psi\Tree\Impl\PsiTokenBase.cs" />
+    <Compile Include="src\Psi\Psi\Tree\Impl\RoleName.cs" />
+    <Compile Include="src\Psi\Psi\Tree\Impl\RuleDeclaration.cs" />
+    <Compile Include="src\Psi\Psi\Tree\Impl\RuleName.cs" />
+    <Compile Include="src\Psi\Psi\Tree\Impl\VariableDeclaration.cs" />
+    <Compile Include="src\Psi\Psi\Tree\Impl\VariableName.cs" />
+    <Compile Include="src\Psi\Psi\Tree\Impl\Whitespace.cs" />
+    <Compile Include="src\Psi\Psi\Tree\IPathDeclaration.cs" />
+    <Compile Include="src\Psi\Psi\Tree\IPathName.cs" />
+    <Compile Include="src\Psi\Psi\Tree\IPsiCommentNode.cs" />
+    <Compile Include="src\Psi\Psi\Tree\IPsiFile.cs" />
+    <Compile Include="src\Psi\Psi\Tree\IPsiIdentifier.cs" />
+    <Compile Include="src\Psi\Psi\Tree\IPsiTreeNode.cs" />
+    <Compile Include="src\Psi\Psi\Tree\IRoleName.cs" />
+    <Compile Include="src\Psi\Psi\Tree\IRuleDeclaration.cs" />
+    <Compile Include="src\Psi\Psi\Tree\IRuleName.cs" />
+    <Compile Include="src\Psi\Psi\Tree\IVariableDeclaration.cs" />
+    <Compile Include="src\Psi\Psi\Tree\IVariableName.cs" />
+    <Compile Include="src\Psi\Psi\Tree\IWhitespaceNode.cs" />
+    <Compile Include="src\Psi\Psi\Tree\PsiCompositeNodeType.cs" />
+    <Compile Include="src\Refactoring\DerivedDeclaredElementUtil.cs" />
+    <Compile Include="src\Refactoring\Rename\PsiAtomicRename.cs" />
+    <Compile Include="src\Refactoring\Rename\PsiDerivedElementRename.cs" />
+    <Compile Include="src\Refactoring\Rename\PsiPrimaryDeclaredElementForRenameProvider.cs" />
+    <Compile Include="src\Refactoring\Rename\PsiRenamesFactory.cs" />
+    <Compile Include="src\Resolve\OptionDeclaredElements.cs" />
+    <Compile Include="src\Resolve\OptionPropertyDeclaredElement.cs" />
+    <Compile Include="src\Resolve\PsiDeclaredElementType.cs" />
+    <Compile Include="src\Resolve\PsiFileReference.cs" />
+    <Compile Include="src\Resolve\PsiOptionReference.cs" />
+    <Compile Include="src\Resolve\PsiPathReference.cs" />
+    <Compile Include="src\Resolve\PsiPathReferenceUtil.cs" />
+    <Compile Include="src\Resolve\PsiResolveUtil.cs" />
+    <Compile Include="src\Resolve\PsiRoleReference.cs" />
+    <Compile Include="src\Resolve\PsiRuleReference.cs" />
+    <Compile Include="src\Resolve\PsiSearcherFactory.cs" />
+    <Compile Include="src\Resolve\PsiVariableReference.cs" />
+    <Compile Include="src\Resolve\RoleDeclaredElement.cs" />
+    <Compile Include="src\Resolve\UnresolvedRuleInterfacesDeclaredElement.cs" />
+    <Compile Include="src\Services\PsiDeclaredElementPresenter.cs" />
+    <Compile Include="src\Resolve\PsiReferenceBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\TypingAssist\PsiBracketMatcher.cs" />
+    <Compile Include="src\TypingAssist\PsiTypingAssist.cs" />
+    <Compile Include="src\Util\PsiDataContextEx.cs" />
+    <Compile Include="src\Util\PsiElementFactory.cs" />
+    <Compile Include="src\Util\PsiElementFactoryImpl.cs" />
+    <Compile Include="src\Util\PsiTreeUtil.cs" />
+    <Compile Include="src\Gen\**\*.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ParserGen Include="src\Grammar\psi.psi" />
+  </ItemGroup>
+  <ItemGroup>
+    <CsLex Include="src\Psi\Psi\Parsing\psi.lex" />
+  </ItemGroup>
+  <ItemGroup>
+    <ThemedIconPng Include="resources\PsiPluginSymbolIcons\psiRule[SymbolsIdea].png" />
+    <ThemedIconPng Include="resources\PsiPluginSymbolIcons\psiRule.png" />
+    <ThemedIconPng Include="resources\PsiPluginSymbolIcons\psiFile[SymbolsIdea].png" />
+    <ThemedIconPng Include="resources\PsiPluginSymbolIcons\psiOption[SymbolsIdea].png" />
+    <ThemedIconPng Include="resources\PsiPluginSymbolIcons\psiOption.png" />
+    <ThemedIconPng Include="resources\PsiPluginSymbolIcons\psiRole[SymbolsIdea].png" />
+    <ThemedIconPng Include="resources\PsiPluginSymbolIcons\psiRole.png" />
+    <ThemedIconPng Include="resources\PsiPluginSymbolIcons\psiVariable[SymbolsIdea].png" />
+    <ThemedIconPng Include="resources\PsiPluginSymbolIcons\psiVariable.png" />
+    <ThemedIconPng Include="resources\PsiPluginSymbolIcons\psiPath[SymbolsIdea].png" />
+    <ThemedIconPng Include="resources\PsiPluginSymbolIcons\psiPath.png" />
+    <EmbeddedResource Include="resources\actions.xml" />
+    <Content Include="src\Psi\Psi\Parsing\Tokens.xml">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(ReSharperSdkTargets)\Plugin.NoReferences.Targets" />
+  <Import Project="$(ReSharperSdkTools)\parserGen\ParserGen.Targets" />
+  <Import Project="$(ReSharperSdkTools)\MSBuild\JetBrains.Build.Common.Targets" />
+  <Import Project="$(ReSharperSdkTools)\CsLex\CsLex.Targets" />
+  <Target Name="BeforeBuild">
+    <MakeDir Directories="$(MSBuildProjectDirectory)\obj" />
+    <Copy SourceFiles="$(ReSharperSdkTools)\parserGen\Unicode.lex" DestinationFolder="$(MSBuildProjectDirectory)\obj" />
+  </Target>
+  <Import Project="$(ReSharperSdkTools)\MSBuild\JetBrains.Build.Platform.ThemedIconsConverter.Targets" />
+</Project>

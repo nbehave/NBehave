@@ -39,7 +39,7 @@ namespace NBehave.Console
         /// </returns>
         [STAThread]
         public static int Main(string[] args)
-        {
+        {            
             var t0 = DateTime.Now;
             var output = new PlainTextOutput(System.Console.Out);
             var options = CommandLineParser<ConsoleOptions>.Parse(args);

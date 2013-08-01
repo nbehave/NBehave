@@ -40,6 +40,11 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
             return other.AssemblyFile == AssemblyFile;
         }
 
+        public override bool Equals(RemoteTask other)
+        {
+            return Equals(other as NBehaveAssemblyTask);
+        }
+
         public override bool Equals(object obj)
         {
             return Equals(obj as NBehaveAssemblyTask);
@@ -49,7 +54,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
         {
             unchecked
             {
-                return (base.GetHashCode() * 397) ^ AssemblyFile.GetHashCode();
+            return AssemblyFile.GetHashCode();
             }
         }
     }

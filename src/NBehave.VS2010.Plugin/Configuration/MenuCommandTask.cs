@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Text.Editor;
 using NBehave.Narrator.Framework.Tiny;
 using NBehave.VS2010.Plugin.Contracts;
 using NBehave.VS2010.Plugin.Domain;

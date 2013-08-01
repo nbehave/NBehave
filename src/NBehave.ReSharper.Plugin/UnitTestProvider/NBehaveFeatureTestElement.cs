@@ -36,7 +36,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
             get { return "NBehave feature"; }
         }
 
-        public override string GetPresentation()
+        public override string GetPresentation(IUnitTestElement parent = null)
         {
             return Feature;
         }

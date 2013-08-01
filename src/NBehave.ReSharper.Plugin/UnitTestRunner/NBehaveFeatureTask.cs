@@ -55,10 +55,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
 
         public override int GetHashCode()
         {
-            unchecked
-            {
-                return (base.GetHashCode() * 397) ^ (FeatureFile.GetHashCode());
-            }
+            return FeatureFile.GetHashCode();
         }
     }
 }

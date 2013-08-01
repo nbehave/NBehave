@@ -10,7 +10,7 @@ using NBehave.ReSharper.Plugin.UnitTestProvider;
 
 namespace NBehave.ReSharper.Plugin.UnitTestRunner
 {
-    public class NBehaveTaskRunner : RecursiveRemoteTaskRunner
+    public partial class NBehaveTaskRunner : RecursiveRemoteTaskRunner
     {
         private NBehaveConfiguration config;
         public const string RunnerId = TestProvider.NBehaveId;
@@ -18,21 +18,6 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
         public NBehaveTaskRunner(IRemoteTaskServer server)
             : base(server)
         {
-        }
-
-        public override TaskResult Start(TaskExecutionNode node)
-        {
-            return TaskResult.Success;
-        }
-
-        public override TaskResult Execute(TaskExecutionNode node)
-        {
-            return TaskResult.Success;
-        }
-
-        public override TaskResult Finish(TaskExecutionNode node)
-        {
-            return TaskResult.Success;
         }
 
         public override void ExecuteRecursive(TaskExecutionNode node)
@@ -50,7 +35,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
 
         private IEnumerable<NBehaveFeatureTask> GetFeatureTasks(TaskExecutionNode node)
         {
-            var featureTasks = node.Children.Select(_ => (NBehaveFeatureTask) _.RemoteTask);
+            var featureTasks = node.Children.Select(_ => (NBehaveFeatureTask)_.RemoteTask);
             return featureTasks;
         }
 
@@ -59,7 +44,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
             foreach (var task in featureTasks)
             {
                 Server.TaskStarting(task);
-                Server.TaskProgress(task, "Running...");
+                //Server.TaskProgress(task, "Running...");
             }
         }
 

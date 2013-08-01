@@ -2,6 +2,9 @@
 #I "buildframework/FAKE/tools"
 #r "FakeLib.dll"
 
+#I "src/packages/DotNetZip/lib/net20"
+#r "Ionic.Zip.dll"
+
 #load "buildProperties.fsx"
 
 open Properties
@@ -10,6 +13,7 @@ open Fake.RestorePackageHelper
 open System
 open System.Diagnostics
 open System.IO
+open System.Net
 open System.Text.RegularExpressions
 open System.Xml
 
@@ -40,6 +44,50 @@ Target "InstallNUnitRunners" (fun _ ->
 
 Target "Set teamcity buildnumber" (fun _ ->
   SetBuildNumber nugetVersionNumber
+)
+
+
+let ReSharperSdkInstall version (urlToSdk:string) =
+  let sdkPath = rootDir + @"lib\ReSharper\" + version
+  if (Directory.Exists sdkPath) then
+    trace (sprintf "R# SDK %s already installed." version)
+  else
+    // download SDK
+    trace (sprintf "Downloading R# SDK %s ..." version)
+    let wc = new WebClient()
+    let downloadedFile = rootDir + "RSharperSDK-" + version + ".zip"
+    wc.DownloadFile(urlToSdk, downloadedFile)
+    (
+      use zip = new Ionic.Zip.ZipFile(downloadedFile)
+      trace "Extracting files..."
+      zip.ExtractAll(rootDir + @"lib\ReSharper\" + version)
+    )
+    File.Delete(downloadedFile)
+
+let ReSharperSdkPath version =
+  // Search rootDir + "\lib" efter Plugin.Common.Targets och fixa alla
+  let sdkPath = rootDir + @"lib\ReSharper\" + version
+
+  let fileName = sdkPath + @"\Targets\Plugin.Common.Targets"
+  let xml = XmlDocument()
+  xml.Load(fileName)
+  let nsmgr = XmlNamespaceManager(xml.NameTable)
+  nsmgr.AddNamespace("x", "http://schemas.microsoft.com/developer/msbuild/2003")
+  //multiple nodes?
+  let node = xml.SelectSingleNode("//x:ReSharperSdk", nsmgr)
+  node.InnerText <- sdkPath
+  xml.Save(fileName)
+
+Target "Install R# 7 SDK" (fun _ ->
+  let version = "7.1.96"
+  ReSharperSdkInstall version ("http://download.jetbrains.com/resharper/ReSharperSDK-" + version + ".zip")
+  ReSharperSdkPath version
+)
+
+Target "Install R# 8 SDK" (fun _ ->
+  let version = "8.0.1086"
+  ReSharperSdkInstall version ("http://download.jetbrains.com/resharper/ReSharperSDK-" + version + ".zip")
+  ReSharperSdkPath version
 )
 
 Target "AssemblyInfo" (fun _ ->
@@ -158,16 +206,11 @@ Target "Create NuGet packages" (fun _ ->
 )
 
 Target "Create NuGet packages for R#" (fun _ ->
-  resharper_install_scripts "6.0"
-  NuGetPack nugetParams (packageTemplateDir + "/nbehave.Resharper60.nuspec")
-  resharper_install_scripts "6.1.1"
-  NuGetPack nugetParams (packageTemplateDir + "/nbehave.Resharper611.nuspec")
-  resharper_install_scripts "7.0"
-  NuGetPack nugetParams (packageTemplateDir + "/nbehave.Resharper701.nuspec")
   resharper_install_scripts "7.1"
   NuGetPack nugetParams (packageTemplateDir + "/nbehave.Resharper71.nuspec")
   NuGetPack nugetParams (packageTemplateDir + "/nbehave.Resharper711.nuspec")
   NuGetPack nugetParams (packageTemplateDir + "/nbehave.Resharper712.nuspec")
+  NuGetPack nugetParams (packageTemplateDir + "/nbehave.Resharper80.nuspec")
 )
 
 Target "Create NuGet packages Fluent" (fun _ ->
@@ -204,9 +247,11 @@ Target "Default" (fun _ -> () )
 // Dependencies
 "Clean"
   ==> "Set teamcity buildnumber"
-  ==> "AssemblyInfo"
+  ==> "Install R# 7 SDK"
+  ==> "Install R# 8 SDK"
   ==> "Restore nuget packages"
   ==> "InstallNUnitRunners"
+  ==> "AssemblyInfo"
   ==> "Compile"
   ==> "Test"
   ==> "VSPlugin artifact"
