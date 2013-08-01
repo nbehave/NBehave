@@ -9,7 +9,7 @@ module Properties
 
   // params from teamcity
   let buildNumber       = getBuildParamOrDefault "buildNumber" "0"
-  let buildTag          = getBuildParamOrDefault "buildTag" "devlocal" // For release, set this to ""
+  let buildTag          = getBuildParamOrDefault "buildTag" "devlocal" // For release, set this to "release"
   let frameworkVersions = ["3.5"; "4.0"]
 
   let version             = "0.7.0"
@@ -31,7 +31,7 @@ module Properties
   let nugetAccessKey      = getBuildParamOrDefault "nugetAccessKey" "NotSet"
 
   let getpackageFolder dirFilter runnerFilter =
-    Directory.EnumerateDirectories(nugetPackageDir, dirFilter, SearchOption.AllDirectories)
+    Directory.GetDirectories(nugetPackageDir, dirFilter, SearchOption.AllDirectories)
     |> Seq.map (fun d -> Path.GetFileName(d))
     |> Seq.filter (fun d -> d.ToLower().StartsWith(runnerFilter) = false)
     |> Seq.sort

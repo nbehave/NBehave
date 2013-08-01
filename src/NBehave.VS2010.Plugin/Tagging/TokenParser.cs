@@ -123,6 +123,8 @@ namespace NBehave.VS2010.Plugin.Tagging
                 .Where(_ => _.Tokens.Any())
                 .Select(_ => _.Tokens[0].LineInFile.Line)
                 .Distinct().ToArray();
+            if (!linesChanged.Any())
+                return;
             int from = linesChanged.Min();
             int to = linesChanged.Max();
             var previousEvent = new GherkinParseEvent(GherkinTokenType.Feature, new Token("", new LineInFile(0)));

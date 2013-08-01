@@ -32,8 +32,7 @@ namespace NBehave.VS2010.Plugin.Domain
 
         private bool IsExceptionFromNBehave(Exception exception)
         {
-            return exception.StackTrace.ToLower().Contains("nbehave");
+            return (exception != null && (exception.StackTrace ?? "").ToLower().Contains("nbehave"));
         }
-
     }
 }
