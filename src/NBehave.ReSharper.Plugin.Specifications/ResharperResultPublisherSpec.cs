@@ -29,7 +29,7 @@ namespace NBehave.ReSharper.Plugin.Specifications
             server = MockRepository.GenerateMock<IRemoteTaskServer>();
 
             var featureFile = MockRepository.GenerateStub<IProjectFile>();
-            featureFile.Stub(_ => _.Location).Return(new FileSystemPath(Source));
+            featureFile.Stub(_ => _.Location).Return(FileSystemPath.Parse(Source));
             scenarioTask = new NBehaveScenarioTask(featureFile, ScenarioTitle);
             var scenarioTaskNode = new TaskExecutionNode(null, scenarioTask);
 

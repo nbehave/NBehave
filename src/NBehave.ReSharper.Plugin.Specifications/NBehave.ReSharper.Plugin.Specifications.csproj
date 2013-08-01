@@ -79,13 +79,13 @@
     <Compile Include="ResharperStubs.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\NBehave.ReSharper.Plugin\NBehave.Resharper8.0.Plugin.csproj">
+      <Project>{4A8A63EF-C8E3-437C-BF7B-43692CC89F3B}</Project>
+      <Name>NBehave.Resharper8.0.Plugin</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NBehave\NBehave.csproj">
       <Project>{9C2E9E17-2A2C-4F6C-8072-D160A7EA9A51}</Project>
       <Name>NBehave</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NBehave.ReSharper.Plugin\NBehave.ReSharper.Plugin.csproj">
-      <Project>{AA9C7D40-A49C-4522-938B-BD1A99EE3E78}</Project>
-      <Name>NBehave.ReSharper.Plugin %28NBehave.ReSharper.Plugin\NBehave.ReSharper.Plugin%29</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
