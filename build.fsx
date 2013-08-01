@@ -85,7 +85,7 @@ Target "Install R# 7 SDK" (fun _ ->
 )
 
 Target "Install R# 8 SDK" (fun _ ->
-  let version = "8.0.778"
+  let version = "8.0.1086"
   ReSharperSdkInstall version ("http://download.jetbrains.com/resharper/ReSharperSDK-" + version + ".zip")
   ReSharperSdkPath version
 )
