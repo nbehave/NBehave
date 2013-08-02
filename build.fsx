@@ -235,11 +235,20 @@ Target "Create NuGet packages Spec" (fun _ ->
 )
 
 Target "Publish to NuGet" (fun _ ->
-  //Get-ChildItem -Path $artifactsDir -Filter *.nupkg | Select FullName | foreach-object {
-  //  $package = $_.FullName
-  //  Write-Host "Publishing package: $package"
-  //  Exec { src\.nuget\NuGet.exe "push" $package $apiKey }
-  ()
+  let nugetParams p project = 
+    { p with
+          WorkingDir = rootDir
+          ToolPath = nugetExe
+          AccessKey = nugetAccessKey
+          OutputPath = artifactsDir
+          Project = project
+          Version = nugetVersionNumber
+    }
+  let publish pkg =
+    let project = Path.GetFileName(pkg).Replace(nugetVersionNumber, "").Replace(Path.GetExtension(pkg), "").TrimEnd([|'.'|])
+    NuGetPublish (fun p -> nuGetParams p project) pkg
+  let files = Directory.GetFiles(artifactsDir, "*.nupkg")
+  files |> Array.iter (fun pkg -> publish pkg)
 )
 
 Target "Default" (fun _ -> () )
