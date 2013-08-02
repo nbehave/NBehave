@@ -2,9 +2,6 @@
 #I "buildframework/FAKE/tools"
 #r "FakeLib.dll"
 
-#I "src/packages/DotNetZip/lib/net20"
-#r "Ionic.Zip.dll"
-
 #load "buildProperties.fsx"
 
 open Properties
@@ -48,7 +45,7 @@ Target "Set teamcity buildnumber" (fun _ ->
 
 
 let ReSharperSdkInstall version (urlToSdk:string) =
-  let sdkPath = rootDir + @"lib\ReSharper\" + version
+  let sdkPath = rootDir + "lib\\ReSharper\\" + version
   if (Directory.Exists sdkPath) then
     trace (sprintf "R# SDK %s already installed." version)
   else
@@ -57,18 +54,14 @@ let ReSharperSdkInstall version (urlToSdk:string) =
     let wc = new WebClient()
     let downloadedFile = rootDir + "RSharperSDK-" + version + ".zip"
     wc.DownloadFile(urlToSdk, downloadedFile)
-    (
-      use zip = new Ionic.Zip.ZipFile(downloadedFile)
-      trace "Extracting files..."
-      zip.ExtractAll(rootDir + @"lib\ReSharper\" + version)
-    )
+    Unzip (rootDir + "lib\\ReSharper\\" + version) downloadedFile
     File.Delete(downloadedFile)
 
 let ReSharperSdkPath version =
   // Search rootDir + "\lib" efter Plugin.Common.Targets och fixa alla
-  let sdkPath = rootDir + @"lib\ReSharper\" + version
+  let sdkPath = rootDir + "lib\\ReSharper\\" + version
 
-  let fileName = sdkPath + @"\Targets\Plugin.Common.Targets"
+  let fileName = sdkPath + "\\Targets\\Plugin.Common.Targets"
   let xml = XmlDocument()
   xml.Load(fileName)
   let nsmgr = XmlNamespaceManager(xml.NameTable)
@@ -246,7 +239,8 @@ Target "Publish to NuGet" (fun _ ->
     }
   let publish pkg =
     let project = Path.GetFileName(pkg).Replace(nugetVersionNumber, "").Replace(Path.GetExtension(pkg), "").TrimEnd([|'.'|])
-    NuGetPublish (fun p -> nuGetParams p project) pkg
+    //NuGetPublish (fun p -> nuGetParams p project) pkg
+    ()
   let files = Directory.GetFiles(artifactsDir, "*.nupkg")
   files |> Array.iter (fun pkg -> publish pkg)
 )
