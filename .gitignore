@@ -9,7 +9,6 @@ _NCrunch_*
 *.ncrunchsolution
 
 *_ReSharper*
-*.resharper.*
 
 *.suo
 *.user
