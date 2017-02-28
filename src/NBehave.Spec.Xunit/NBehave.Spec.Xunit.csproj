@@ -98,19 +98,19 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\nbehave.spec\ActionSpecification.cs">
+    <Compile Include="..\NBehave.Spec\ActionSpecification.cs">
       <Link>Base\ActionSpecification.cs</Link>
     </Compile>
-    <Compile Include="..\nbehave.spec\IActionSpecification.cs">
+    <Compile Include="..\NBehave.Spec\IActionSpecification.cs">
       <Link>Base\IActionSpecification.cs</Link>
     </Compile>
-    <Compile Include="..\nbehave.spec\SpecBase.cs">
+    <Compile Include="..\NBehave.Spec\SpecBase.cs">
       <Link>Base\SpecBase.cs</Link>
     </Compile>
-    <Compile Include="..\nbehave.spec\SpecBase_generic.cs">
+    <Compile Include="..\NBehave.Spec\SpecBase_generic.cs">
       <Link>Base\SpecBase_generic.cs</Link>
     </Compile>
-    <Compile Include="..\nbehave.spec\ThrowingAction.cs">
+    <Compile Include="..\NBehave.Spec\ThrowingAction.cs">
       <Link>Base\ThrowingAction.cs</Link>
     </Compile>
     <Compile Include="Extensions.cs" />
@@ -140,8 +140,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <Import Project="..\.nuget\nuget.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

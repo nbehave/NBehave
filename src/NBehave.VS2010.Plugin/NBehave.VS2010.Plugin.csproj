@@ -334,7 +334,7 @@
   <Target Name="ConfigureVsSDKBuild">
     <EnvironmentVariable TaskAction="Set" Variable="VsSDKToolsPath" Value="$(VsSDKInstall)" />
   </Target>
-  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <Import Project="..\.nuget\nuget.targets" />
   <!--<Target Name="AfterBuild">
   </Target>
   -->
