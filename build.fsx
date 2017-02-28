@@ -45,8 +45,8 @@ Target "Set teamcity buildnumber" (fun _ ->
 
 
 let ReSharperSdkInstall version (urlToSdk:string) =
-  let sdkPath = rootDir + "lib\\ReSharper\\" + version
-  if (Directory.Exists(sdkPath + "\\Targets")) && (Directory.Exists(sdkPath + "\\bin")) then
+  let sdkPath = rootDir + "lib/ReSharper/" + version
+  if (Directory.Exists(sdkPath + "/Targets")) && (Directory.Exists(sdkPath + "/bin")) then
     trace (sprintf "R# SDK %s already installed." version)
   else
     // download SDK
@@ -54,14 +54,14 @@ let ReSharperSdkInstall version (urlToSdk:string) =
     let wc = new WebClient()
     let downloadedFile = rootDir + "RSharperSDK-" + version + ".zip"
     wc.DownloadFile(urlToSdk, downloadedFile)
-    Unzip (rootDir + "lib\\ReSharper\\" + version) downloadedFile
+    Unzip (rootDir + "lib/ReSharper/" + version) downloadedFile
     File.Delete(downloadedFile)
 
 let ReSharperSdkPath version =
   // Search rootDir + "\lib" efter Plugin.Common.Targets och fixa alla
-  let sdkPath = rootDir + "lib\\ReSharper\\" + version
+  let sdkPath = rootDir + "lib/ReSharper/" + version
 
-  let fileName = sdkPath + "\\Targets\\Plugin.Common.Targets"
+  let fileName = sdkPath + "/Targets/Plugin.Common.Targets"
   let xml = XmlDocument()
   xml.Load(fileName)
   let nsmgr = XmlNamespaceManager(xml.NameTable)
@@ -104,7 +104,7 @@ Target "AssemblyInfo" (fun _ ->
   xml.Save(vsixFile)
 
   //Version for VS plugin package
-  let package =  sourceDir + @"\NBehave.VS2010.Plugin\NBehaveRunnerPackage.cs"
+  let package =  sourceDir + @"/NBehave.VS2010.Plugin/NBehaveRunnerPackage.cs"
   let content = File.ReadAllLines(package)
   let changeVersion (str:string) =
     match str.Contains("[InstalledProductRegistration(") with
@@ -131,7 +131,7 @@ let compileAnyCpu frameworkVer =
           }) sln
 
 let compileConsolex86 frameworkVer =
-  let sln = sourceDir + @"\NBehave.Console\NBehave.Console.csproj"
+  let sln = sourceDir + @"/NBehave.Console/NBehave.Console.csproj"
   let folder = outputPath frameworkVer
   build (fun f ->
           { f with
@@ -158,7 +158,7 @@ Target "Test" (fun _ ->
   |> Seq.iter(fun frameworkVer ->
                 let testDir = (buildDir + "/Debug-" + frameworkVer + "/UnitTests") |> FullName
                 let testDlls = !! (testDir + "/*.Specifications.dll")
-                let xmlFile = (testReportsDir + @"\UnitTests-" + frameworkVer + ".xml") |> FullName
+                let xmlFile = (testReportsDir + @"/UnitTests-" + frameworkVer + ".xml") |> FullName
                 NUnit (fun p ->
                         {p with
                           ToolPath = (nugetPackageDir + "/NUnit.Runners/tools/") |> FullName
@@ -228,7 +228,7 @@ Target "Create NuGet packages Spec" (fun _ ->
 )
 
 Target "Publish to NuGet" (fun _ ->
-  let nugetParams p project = 
+  let nugetParams p project =
     { p with
           WorkingDir = rootDir
           ToolPath = nugetExe
