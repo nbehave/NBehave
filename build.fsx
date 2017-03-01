@@ -46,7 +46,7 @@ Target "Set teamcity buildnumber" (fun _ ->
 
 let ReSharperSdkInstall version (urlToSdk:string) =
   let sdkPath = rootDir + "lib/ReSharper/" + version
-  if (Directory.Exists(sdkPath + "/Targets")) && (Directory.Exists(sdkPath + "/bin")) then
+  if (Directory.Exists(sdkPath + "/Targets")) && (Directory.Exists(sdkPath + "/Bin")) then
     trace (sprintf "R# SDK %s already installed." version)
   else
     // download SDK
