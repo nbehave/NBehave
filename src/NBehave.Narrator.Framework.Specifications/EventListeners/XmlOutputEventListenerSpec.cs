@@ -16,7 +16,7 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
         private XmlDocument _xmlDoc;
         private string[] _feature;
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public virtual void Setup()
         {
             var memStream = new MemoryStream();

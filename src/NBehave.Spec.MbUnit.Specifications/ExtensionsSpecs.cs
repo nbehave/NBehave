@@ -339,18 +339,20 @@ namespace NBehave.Spec.MbUnit.Specs
     public class When_specifying_exceptions_to_be_thrown : ConsoleRedirect
 	{
 		[Test]
-		[ExpectedException(typeof(AssertionFailureException))]
 		public void Should_fail_when_exception_is_a_different_type()
 		{
-			(typeof(SystemException)).ShouldBeThrownBy(
-				delegate { throw new ApplicationException(); });
+			Assert.Throws<AssertionFailureException>(() =>
+			{
+				(typeof(SystemException)).ShouldBeThrownBy(
+					delegate { throw new ApplicationException(); });
+			});
+
 		}
 
 		[Test]
-		[ExpectedException(typeof(AssertionFailureException))]
 		public void Should_fail_when_exception_is_not_thrown()
 		{
-			(typeof(ApplicationException)).ShouldBeThrownBy(delegate { });
+			Assert.Throws<AssertionFailureException>(() => { (typeof(ApplicationException)).ShouldBeThrownBy(delegate { }); });
 		}
 
 		[Test]

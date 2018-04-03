@@ -56,7 +56,7 @@ namespace NBehave.Narrator.Framework.Specifications.Internal
                 scenario.AddStep(new StringStep("When greeted", ""));
                 var thenStep = new StringTableStep("Then Hello [y]", "");
                 thenStep.AddTableStep(new Example(new ExampleColumns(new[] { new ExampleColumn("y"), }), new Dictionary<string, string> { { "y", "Nisse" } }));
-                thenStep.AddTableStep(new Example(new ExampleColumns(new[] { new ExampleColumn("y"), }), new Dictionary<string, string> { { "y", "Kålle" } }));
+                thenStep.AddTableStep(new Example(new ExampleColumns(new[] { new ExampleColumn("y"), }), new Dictionary<string, string> { { "y", "KÃ¥lle" } }));
                 scenario.AddStep(thenStep);
                 return scenario;
             }

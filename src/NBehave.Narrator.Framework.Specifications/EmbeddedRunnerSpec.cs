@@ -30,7 +30,7 @@ namespace NBehave.Narrator.Framework.Specifications
             {
                 private string _messages;
 
-                [TestFixtureSetUp]
+                [OneTimeSetUp]
                 public void Run_Feature()
                 {
                     var messages = new StringWriter();
@@ -64,7 +64,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 {
                     StringAssert.Contains("Given my name is Morgan", _messages);
                     StringAssert.Contains("When I'm greeted", _messages);
-                    StringAssert.Contains("Then I should be greeted with “Hello, Morgan!”", _messages);
+                    StringAssert.Contains("Then I should be greeted with ï¿½Hello, Morgan!ï¿½", _messages);
                 }
 
                 [Test]
@@ -79,7 +79,7 @@ namespace NBehave.Narrator.Framework.Specifications
             {
                 private string _messages;
 
-                [TestFixtureSetUp]
+                [OneTimeSetUp]
                 public void Run_Feature()
                 {
                     var messages = new StringWriter();
@@ -122,7 +122,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 {
                     StringAssert.Contains("Given my name is Morgan", _messages);
                     StringAssert.Contains("When I'm greeted", _messages);
-                    StringAssert.Contains("Then I should be greeted with “Hello, Scott!”", _messages);
+                    StringAssert.Contains("Then I should be greeted with ï¿½Hello, Scott!ï¿½", _messages);
                 }
 
                 [Test]
@@ -145,7 +145,7 @@ namespace NBehave.Narrator.Framework.Specifications
             {
                 private string _messages;
 
-                [TestFixtureSetUp]
+                [OneTimeSetUp]
                 public void Run_Feature()
                 {
                     var messages = new StringWriter();
@@ -197,7 +197,7 @@ namespace NBehave.Narrator.Framework.Specifications
             {
                 private string _messages;
 
-                [TestFixtureSetUp]
+                [OneTimeSetUp]
                 public void Run_Feature()
                 {
                     var messages = new StringWriter();
@@ -232,7 +232,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 {
                     StringAssert.Contains("Given my name is Morgan", _messages);
                     StringAssert.Contains("When I'm greeted", _messages);
-                    StringAssert.Contains("Then I should be greeted with “Hello, Morgan!”", _messages);
+                    StringAssert.Contains("Then I should be greeted with ï¿½Hello, Morgan!ï¿½", _messages);
                 }
 
                 [Test]

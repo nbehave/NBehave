@@ -222,7 +222,7 @@ namespace NBehave.Narrator.Framework.Specifications
             private XmlDocument xmlOut;
             private const string FeatureTitle = "Scenario runner that can read from its own config file";
 
-            [TestFixtureSetUp]
+            [OneTimeSetUp]
             public void SetUp()
             {
                 var writer = new XmlTextWriter(new MemoryStream(), Encoding.UTF8);
@@ -244,7 +244,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 xmlOut.Load(writer.BaseStream);
             }
 
-            [TestFixtureTearDown]
+            [OneTimeTearDown]
             public void TearDown()
             {
                 DeleteConfigFile();

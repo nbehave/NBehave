@@ -5,13 +5,13 @@ namespace NBehave.Spec.NUnit
 	[TestFixture]
     public abstract class SpecBase<TContext> : Spec.SpecBase<TContext>
 	{
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public override void MainSetup()
         {
             base.MainSetup();
         }
         
-        [TestFixtureTearDown]
+        [OneTimeTearDown]
         public override void MainTeardown()
         {
             base.MainTeardown();
