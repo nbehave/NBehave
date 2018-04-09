@@ -10,7 +10,7 @@ module Properties
   // params from teamcity
   let buildNumber       = getBuildParamOrDefault "buildNumber" "0"
   let buildTag          = getBuildParamOrDefault "buildTag" "devlocal" // For release, set this to "release"
-  let frameworkVersions = ["3.5"; "4.0"]
+  let frameworkVersions = ["4.5"]
 
   let version             = "0.7.0"
   let assemblyVersion     = version + "." + buildNumber
