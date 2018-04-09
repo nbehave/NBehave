@@ -32,10 +32,11 @@ Target "Restore nuget packages" (fun _ ->
 
 Target "InstallNUnitRunners" (fun _ ->
   let settings = { RestoreSinglePackageDefaults with
+                    Version = Some <| Version(2, 6, 2)
+                    ExcludeVersion = true
                     ToolPath = nugetExe
                     OutputPath = nugetPackageDir
-                    ExcludeVersion = true
-                  }
+                 }
   RestorePackageId (fun _ -> settings) "nunit.runners"
 )
 
