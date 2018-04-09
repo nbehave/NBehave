@@ -1,4 +1,4 @@
-using System.Reflection;
+ï»¿using System.Reflection;
 using System.Runtime.InteropServices;
 
 [assembly: ComVisible(false)]
@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("0.7.0.0")]
 [assembly: AssemblyFileVersion("0.7.0.0")]
 [assembly: AssemblyInformationalVersion("0.7.0-devlocal0000")]
-[assembly: AssemblyCopyright("Copyright © NBehave 2007-2012")]
+[assembly: AssemblyCopyright("Copyright ï¿½ NBehave 2007-2018")]
 [assembly: AssemblyProduct("NBehave")]
 [assembly: AssemblyCompany("NBehave")]
 [assembly: AssemblyConfiguration("release")]
