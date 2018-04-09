@@ -17,7 +17,7 @@ namespace NBehave.Specifications.System.Specs.Tables
                 .New
                 .SetAssemblies(new[] { Path.GetFileName(GetType().Assembly.Location) })
                 .SetEventListener(NBehave.EventListeners.EventListeners.NullEventListener())
-                .SetScenarioFiles(new[] { @"System.Specs\Tables\TableScenario.feature" });
+                .SetScenarioFiles(new[] { Path.Combine("System.Specs", "Tables", "TableScenario.feature") });
         }
 
         protected override void Because()

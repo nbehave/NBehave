@@ -24,7 +24,7 @@ namespace NBehave.Specifications
         [Test]
         public void ShouldBeAbleToUseRelativePathsWithDots()
         {
-            config = ConfigurationNoAppDomain.New.SetScenarioFiles(new[] { @".\*.feature" });
+            config = ConfigurationNoAppDomain.New.SetScenarioFiles(new[] { @"./*.feature" });
 
             CreateLoaderAndParser();
             CollectionAssert.IsNotEmpty(features);

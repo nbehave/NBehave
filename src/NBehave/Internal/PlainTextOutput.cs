@@ -47,9 +47,10 @@ namespace NBehave.Internal
         public void WriteRuntimeEnvironment()
         {
             var runtimeEnv = string.Format(
-                "Runtime Environment -\r\n   OS Version: {0}\r\n  CLR Version: {1}",
+                "Runtime Environment -{2}   OS Version: {0}{2}  CLR Version: {1}",
                 Environment.OSVersion,
-                Environment.Version);
+                Environment.Version,
+                Environment.NewLine);
             writer.WriteLine(runtimeEnv);
         }
 

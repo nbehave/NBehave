@@ -48,9 +48,9 @@ namespace NBehave.VS2010.Plugin.Specifications
             var gherkinStepTagger = new GherkinStepTagger();
             var line = new LineInFile(0);
             var evt = new GherkinParseEvent(GherkinTokenType.Feature,
-                new Token("Feature", line), new Token("title", line), new Token("foo\r\n\tbar", line));
+                new Token("Feature", line), new Token("title", line), new Token("foo" + Environment.NewLine + "\tbar", line));
 
-            ITextSnapshot snapshot = new MockTextSnapshot("\tbar\r\n");
+            ITextSnapshot snapshot = new MockTextSnapshot("\tbar" + Environment.NewLine);
             var span = new SnapshotSpan(snapshot, 0, snapshot.Length);
             var tags = gherkinStepTagger.CreateTags(new[] { evt }, span).ToArray();
             Assert.AreEqual(GherkinTokenType.FeatureDescription, tags[0].Tag.Type);

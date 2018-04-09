@@ -27,14 +27,14 @@ namespace NBehave.Fluent.Framework
             var message = new StringBuilder();
             foreach (var scenarioStruct in scenariosWithPendingSteps)
             {
-                message.AppendFormat("Scenario: {0}\r\n", scenarioStruct.Key.Title);
+                message.AppendFormat("Scenario: {0}{1}", scenarioStruct.Key.Title, Environment.NewLine);
                 foreach (var pendingStep in scenarioStruct)
                 {
-                    message.AppendFormat("  Step: {0}\r\n", pendingStep.Step);
+                    message.AppendFormat("  Step: {0}{1}", pendingStep.Step, Environment.NewLine);
                 }
-                message.AppendFormat("\r\n");
+                message.AppendFormat(Environment.NewLine);
             }
-            throw new ApplicationException("The following implementations are still pending:\r\n" + message);
+            throw new ApplicationException("The following implementations are still pending:" + Environment.NewLine + message);
         }
 
         protected TType CreateDependency<TType>()

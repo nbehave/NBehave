@@ -157,7 +157,8 @@ namespace NBehave.Specifications
             [Test]
             public void ShouldUseWildcardAndRunAllScenariosInAllMatchingTextFiles()
             {
-                _results = CreateBasicConfiguration().SetScenarioFiles(new[] { @"Features\\Feature*.feature" }).Build().Run();
+                _results = CreateBasicConfiguration().SetScenarioFiles(new[] {
+                    Path.Combine("Features", "Feature*.feature") }).Build().Run();
 
                 Assert.That(_results.Count, Is.EqualTo(12));
                 Assert.That(_results.NumberOfScenariosFound, Is.EqualTo(17));

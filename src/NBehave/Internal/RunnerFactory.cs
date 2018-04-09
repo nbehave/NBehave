@@ -13,13 +13,14 @@ namespace NBehave.Internal
                                                       .Where(path => File.Exists(path + ".config"))
                                                       .Select(path => path + ".config")
                                                       .FirstOrDefault();
-            if (assemblyWithConfigFile == null)
+            if (assemblyWithConfigFile == null) {
                 assemblyWithConfigFile = configuration.Assemblies.First() + ".config";
+            }
 
             if (configuration.CreateAppDomain == false)
                 return new TextRunner(configuration);
 
-            return new AppDomainRunner(configuration, assemblyWithConfigFile);    
+            return new AppDomainRunner(configuration, assemblyWithConfigFile);
         }
     }
 }

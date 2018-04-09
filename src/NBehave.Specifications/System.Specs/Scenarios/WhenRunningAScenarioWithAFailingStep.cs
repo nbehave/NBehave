@@ -1,4 +1,5 @@
-﻿using NBehave.Extensions;
+﻿using System.IO;
+using NBehave.Extensions;
 using NUnit.Framework;
 using Should;
 
@@ -11,7 +12,7 @@ namespace NBehave.Specifications.System.Specs.Scenarios
 
         protected override void EstablishContext()
         {
-           Configure_With(@"System.Specs\Scenarios\ScenarioWithFailingStep.feature");
+           Configure_With(Path.Combine("System.Specs", "Scenarios", "ScenarioWithFailingStep.feature"));
         }
 
         protected override void Because()

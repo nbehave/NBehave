@@ -1,4 +1,5 @@
-﻿using NBehave.Extensions;
+﻿using System.IO;
+using NBehave.Extensions;
 using NUnit.Framework;
 using Should;
 
@@ -11,7 +12,7 @@ namespace NBehave.Specifications.System.Specs.ExamplesWithTables
 
         protected override void EstablishContext()
         {
-           Configure_With(@"System.Specs\ExamplesWithTables\ExamplesWithTables.feature");
+           Configure_With(Path.Combine("System.Specs", "ExamplesWithTables", "ExamplesWithTables.feature"));
         }
 
         protected override void Because()

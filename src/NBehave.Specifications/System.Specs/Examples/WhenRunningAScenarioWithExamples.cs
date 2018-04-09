@@ -1,4 +1,5 @@
-﻿using NBehave.Extensions;
+﻿using System.IO;
+using NBehave.Extensions;
 using NUnit.Framework;
 
 namespace NBehave.Specifications.System.Specs.Examples
@@ -10,7 +11,7 @@ namespace NBehave.Specifications.System.Specs.Examples
 
         protected override void EstablishContext()
         {
-            Configure_With(@"System.Specs\Examples\Examples.feature");
+            Configure_With(Path.Combine("System.Specs", "Examples", "Examples.feature"));
         }
 
         protected override void Because()

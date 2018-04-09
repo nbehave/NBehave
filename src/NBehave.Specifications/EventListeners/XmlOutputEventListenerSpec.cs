@@ -110,9 +110,9 @@ namespace NBehave.Specifications.EventListeners
                 Assert.IsNotNull(
                     _xmlDoc.SelectSingleNode("results/features/feature[@name='S1']/narrative"));
                 var narrative = _xmlDoc.SelectSingleNode("results/features/feature/narrative").InnerText;
-                StringAssert.Contains("As a X1" + Environment.NewLine, narrative);
-                StringAssert.Contains("I want Y1" + Environment.NewLine, narrative);
-                StringAssert.Contains("So that Z1" + Environment.NewLine, narrative);
+                StringAssert.Contains("As a X1\r\n", narrative);
+                StringAssert.Contains("I want Y1\r\n", narrative);
+                StringAssert.Contains("So that Z1\n", narrative);
             }
 
             [Test]

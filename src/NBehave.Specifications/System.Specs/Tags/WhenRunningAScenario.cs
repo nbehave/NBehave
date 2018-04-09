@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
 using NBehave.Extensions;
 using NUnit.Framework;
 
@@ -11,7 +12,7 @@ namespace NBehave.Specifications.System.Specs.Tags
 
         protected override void EstablishContext()
         {
-            Configure_With(@"System.Specs\Tags\Tags.feature");
+            Configure_With(Path.Combine("System.Specs", "Tags", "Tags.feature"));
         }
 
         protected override void Because()

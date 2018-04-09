@@ -81,14 +81,14 @@ namespace NBehave.ReSharper.Plugin.Specifications
             public void Should_notify_of_failed_step()
             {
                 server.AssertWasCalled(_ => _.TaskException(Arg<RemoteTask>.Is.Same(task), Arg<TaskException[]>.Is.NotNull));
-                server.AssertWasCalled(_ => _.TaskFinished(task, "System.ArgumentNullException: Value cannot be null.\r\nParameter name: wtf!", TaskResult.Error));
+                server.AssertWasCalled(_ => _.TaskFinished(task, "System.ArgumentNullException: Value cannot be null." + Environment.NewLine + "Parameter name: wtf!", TaskResult.Error));
             }
 
             [Test]
             public void Should_notify_of_failed_scenario()
             {
                 server.AssertWasCalled(_ => _.TaskException(Arg<RemoteTask>.Is.Same(scenarioTask), Arg<TaskException[]>.Is.NotNull));
-                server.AssertWasCalled(_ => _.TaskFinished(scenarioTask, "System.ArgumentNullException: Value cannot be null.\r\nParameter name: wtf!", TaskResult.Error));
+                server.AssertWasCalled(_ => _.TaskFinished(scenarioTask, "System.ArgumentNullException: Value cannot be null." + Environment.NewLine + "Parameter name: wtf!", TaskResult.Error));
             }
         }
 
@@ -133,7 +133,7 @@ namespace NBehave.ReSharper.Plugin.Specifications
             [Test]
             public void Should_add_table_to_explanation()
             {
-                server.AssertWasCalled(_ => _.TaskOutput(task, "| A   | B  |\r\n| aaa | bb |", TaskOutputType.STDOUT));
+                server.AssertWasCalled(_ => _.TaskOutput(task, "| A   | B  |" + Environment.NewLine + "| aaa | bb |", TaskOutputType.STDOUT));
             }
         }
     }

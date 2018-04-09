@@ -1,4 +1,5 @@
-﻿using NBehave.Extensions;
+﻿using System.IO;
+using NBehave.Extensions;
 using NUnit.Framework;
 
 namespace NBehave.Specifications.System.Specs.Scenarios
@@ -10,7 +11,7 @@ namespace NBehave.Specifications.System.Specs.Scenarios
 
         protected override void EstablishContext()
         {
-            Configure_With(@"System.Specs\Scenarios\ScenarioWithArguments.feature");
+            Configure_With(Path.Combine("System.Specs", "Scenarios", "ScenarioWithArguments.feature"));
         }
 
         protected override void Because()

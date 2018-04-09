@@ -32,7 +32,7 @@ namespace NBehave.Specifications
             _results.Fail(outer);
 
             Assert.That(_results.Result, Is.TypeOf(typeof(Failed)));
-            Assert.That(_results.Message, Is.EqualTo("System.Exception : Outer\r\n  ----> System.ApplicationException : Inner"));
+            Assert.That(_results.Message, Is.EqualTo("System.Exception : Outer" + Environment.NewLine + "  ----> System.ApplicationException : Inner"));
         }
 
         [Test]
@@ -86,7 +86,7 @@ namespace NBehave.Specifications
 
             _results.Fail(ex);
 
-            var expected = ex.StackTrace + "\r\n--ApplicationException\r\n" + ex.InnerException.StackTrace;
+            var expected = ex.StackTrace + Environment.NewLine +"--ApplicationException" + Environment.NewLine + ex.InnerException.StackTrace;
 
             Assert.That(_results.StackTrace, Is.EqualTo(expected));
         }

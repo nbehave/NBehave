@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using NBehave.Extensions;
 using NUnit.Framework;
@@ -12,7 +13,7 @@ namespace NBehave.Specifications.System.Specs.Backgrounds
 
         protected override void EstablishContext()
         {
-            Configure_With(@"System.Specs\Backgrounds\Background.feature");
+            Configure_With(Path.Combine("System.Specs", "Backgrounds", "Background.feature"));
         }
 
         protected override void Because()

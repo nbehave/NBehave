@@ -63,7 +63,7 @@ namespace NBehave.Specifications
                 {
                     StringAssert.Contains("Given my name is Morgan", _messages);
                     StringAssert.Contains("When I'm greeted", _messages);
-                    StringAssert.Contains("Then I should be greeted with “Hello, Morgan!”", _messages);
+                    StringAssert.Contains("Then I should be greeted with â€œHello, Morgan!â€", _messages);
                 }
 
                 [Test]
@@ -121,7 +121,7 @@ namespace NBehave.Specifications
                 {
                     StringAssert.Contains("Given my name is Morgan", _messages);
                     StringAssert.Contains("When I'm greeted", _messages);
-                    StringAssert.Contains("Then I should be greeted with “Hello, Scott!”", _messages);
+                    StringAssert.Contains("Then I should be greeted with â€œHello, Scott!â€", _messages);
                 }
 
                 [Test]
@@ -231,7 +231,7 @@ namespace NBehave.Specifications
                 {
                     StringAssert.Contains("Given my name is Morgan", _messages);
                     StringAssert.Contains("When I'm greeted", _messages);
-                    StringAssert.Contains("Then I should be greeted with “Hello, Morgan!”", _messages);
+                    StringAssert.Contains("Then I should be greeted with â€œHello, Morgan!â€", _messages);
                 }
 
                 [Test]

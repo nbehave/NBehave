@@ -64,10 +64,8 @@ namespace NBehave.Specifications
 
         private string GetAssemblyLocation()
         {
-            var assemblyPath = typeof(ConfigFileActionSteps).Assembly
-                                                             .CodeBase
-                                                             .Replace("file:///", "");
-            return Path.GetDirectoryName(assemblyPath);
+            var uri = new Uri(typeof(ConfigFileActionSteps).Assembly.CodeBase);
+            return Path.GetDirectoryName(uri.LocalPath);
         }
 
         [TestFixture]
@@ -104,10 +102,10 @@ namespace NBehave.Specifications
             [SetUp]
             public void SetUp()
             {
-                var scenarioText = "Feature: Config file support\r\n" +
-                                    "Scenario: Reading values from a config file\r\n" +
-                                    "Given an assembly with a matching configuration file\r\n" +
-                                    "When the value of setting foo is read\r\n" +
+                var scenarioText = "Feature: Config file support" + Environment.NewLine +
+                                    "Scenario: Reading values from a config file" + Environment.NewLine +
+                                    "Given an assembly with a matching configuration file" + Environment.NewLine +
+                                    "When the value of setting foo is read" + Environment.NewLine +
                                     "Then the value should be bar";
                 SetupConfigFile();
                 runner = CreateTextRunner(new[] { "TestLib.dll" }, scenarioText);
@@ -138,10 +136,10 @@ namespace NBehave.Specifications
             [SetUp]
             public void SetUp()
             {
-                var scenarioText = "Feature: Config file support\r\n" +
-                                    "Scenario: Reading values from a config file\r\n" +
-                                    "Given an assembly with a matching configuration file\r\n" +
-                                    "When the value of setting foo is read\r\n" +
+                var scenarioText = "Feature: Config file support" + Environment.NewLine +
+                                    "Scenario: Reading values from a config file" + Environment.NewLine +
+                                    "Given an assembly with a matching configuration file" + Environment.NewLine +
+                                    "When the value of setting foo is read" + Environment.NewLine +
                                     "Then the value should be meeble";
                 SetupConfigFile();
                 runner = CreateTextRunner(new[] { "TestLib.dll" }, scenarioText);
@@ -173,9 +171,9 @@ namespace NBehave.Specifications
             [SetUp]
             public void SetUp()
             {
-                var scenarioText = "Scenario: Reading values from a config file\r\n" +
-                                    "Given an assembly with a matching configuration file\r\n" +
-                                    "When the value of setting foo is read\r\n" +
+                var scenarioText = "Scenario: Reading values from a config file" + Environment.NewLine +
+                                    "Given an assembly with a matching configuration file" + Environment.NewLine +
+                                    "When the value of setting foo is read" + Environment.NewLine +
                                     "Then the value should be bar";
                 SetupConfigFile();
                 _runner = CreateTextRunner(new[] { "TestLib.dll" }, scenarioText);
@@ -211,11 +209,11 @@ namespace NBehave.Specifications
                 var writer = new XmlTextWriter(new MemoryStream(), Encoding.UTF8);
                 var listener = new XmlOutputEventListener(writer);
 
-                const string scenarioText = "Feature: " + FeatureTitle + "\r\n" +
-                                            "Scenario: Reading values from a config file\r\n" +
-                                            "Given an assembly with a matching configuration file\r\n" +
-                                            "When the value of setting foo is read\r\n" +
-                                            "Then the value should be bar";
+                var scenarioText = "Feature: " + FeatureTitle + Environment.NewLine +
+                                    "Scenario: Reading values from a config file" + Environment.NewLine +
+                                    "Given an assembly with a matching configuration file" + Environment.NewLine +
+                                    "When the value of setting foo is read" + Environment.NewLine +
+                                    "Then the value should be bar";
 
                 SetupConfigFile();
                 runner = CreateTextRunner(new[] { "TestLib.dll" }, listener, scenarioText);
