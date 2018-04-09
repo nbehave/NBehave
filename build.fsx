@@ -36,17 +36,16 @@ Target "InstallNUnitRunners" (fun _ ->
                     OutputPath = nugetPackageDir
                     ExcludeVersion = true
                   }
-  RestorePackageId (fun p -> settings) "nunit.runners"
+  RestorePackageId (fun _ -> settings) "nunit.runners"
 )
 
 Target "Set teamcity buildnumber" (fun _ ->
   SetBuildNumber nugetVersionNumber
 )
 
-
 let ReSharperSdkInstall version (urlToSdk:string) =
-  let sdkPath = rootDir + "lib/ReSharper/" + version
-  if (Directory.Exists(sdkPath + "/Targets")) && (Directory.Exists(sdkPath + "/Bin")) then
+  let sdkPath = Path.Combine(rootDir, "lib", "ReSharper", version)
+  if (Directory.Exists(Path.Combine(sdkPath, "Targets"))) && (Directory.Exists(Path.Combine(sdkPath, "Bin"))) then
     trace (sprintf "R# SDK %s already installed." version)
   else
     // download SDK
@@ -54,14 +53,14 @@ let ReSharperSdkInstall version (urlToSdk:string) =
     let wc = new WebClient()
     let downloadedFile = rootDir + "RSharperSDK-" + version + ".zip"
     wc.DownloadFile(urlToSdk, downloadedFile)
-    Unzip (rootDir + "lib/ReSharper/" + version) downloadedFile
+    Unzip (Path.Combine(rootDir, "lib", "ReSharper", version)) downloadedFile
     File.Delete(downloadedFile)
 
 let ReSharperSdkPath version =
   // Search rootDir + "\lib" efter Plugin.Common.Targets och fixa alla
-  let sdkPath = rootDir + "lib/ReSharper/" + version
+  let sdkPath = Path.Combine(rootDir, "lib", "ReSharper", version)
 
-  let fileName = sdkPath + "/Targets/Plugin.Common.Targets"
+  let fileName = Path.Combine(sdkPath, "Targets", "Plugin.Common.Targets")
   let xml = XmlDocument()
   xml.Load(fileName)
   let nsmgr = XmlNamespaceManager(xml.NameTable)
@@ -84,7 +83,7 @@ Target "Install R# 8 SDK" (fun _ ->
 )
 
 Target "AssemblyInfo" (fun _ ->
-  let fileName = (sourceDir + "/CommonAssemblyInfo.cs") |> FullName
+  let fileName = (Path.Combine(sourceDir, "CommonAssemblyInfo.cs")) |> FullName
   ReplaceAssemblyInfoVersions (fun p ->
     { p with
         AssemblyVersion = assemblyVersion
@@ -94,7 +93,7 @@ Target "AssemblyInfo" (fun _ ->
     })
 
   //Version for source.extension.vsixmanifest
-  let vsixFile = (sourceDir + "/NBehave.VS2010.Plugin/source.extension.vsixmanifest") |> FullName
+  let vsixFile = Path.Combine(sourceDir, "NBehave.VS2010.Plugin", "source.extension.vsixmanifest") |> FullName
   let xml = new XmlDocument()
   xml.Load(vsixFile)
   let nsmgr = new XmlNamespaceManager(xml.NameTable)
@@ -104,21 +103,21 @@ Target "AssemblyInfo" (fun _ ->
   xml.Save(vsixFile)
 
   //Version for VS plugin package
-  let package =  sourceDir + @"/NBehave.VS2010.Plugin/NBehaveRunnerPackage.cs"
+  let package = Path.Combine(sourceDir, "NBehave.VS2010.Plugin", "NBehaveRunnerPackage.cs")
   let content = File.ReadAllLines(package)
   let changeVersion (str:string) =
     match str.Contains("[InstalledProductRegistration(") with
       | true  -> Regex.Replace(str, @"\d+\.\d+\.\d+", version)
       | false -> str
-  let rows = content |> Seq.map (fun l -> changeVersion l)
+  let rows = content |> Seq.map changeVersion
   File.WriteAllLines(package, rows)
 )
 
 let outputPath frameworkVer =
-  (buildDir + "/Debug-" + frameworkVer + "/NBehave") |> FullName
+  Path.Combine(buildDir, "Debug-" + frameworkVer, "NBehave") |> FullName
 
 let compileAnyCpu frameworkVer =
-  let sln = sourceDir + "/NBehave.sln"
+  let sln = Path.Combine(sourceDir, "NBehave.sln")
   build (fun f ->
           { f with
               MaxCpuCount = Some (Some Environment.ProcessorCount)
@@ -131,7 +130,7 @@ let compileAnyCpu frameworkVer =
           }) sln
 
 let compileConsolex86 frameworkVer =
-  let sln = sourceDir + @"/NBehave.Console/NBehave.Console.csproj"
+  let sln = Path.Combine(sourceDir, "NBehave.Console", "NBehave.Console.csproj")
   let folder = outputPath frameworkVer
   build (fun f ->
           { f with
@@ -144,7 +143,7 @@ let compileConsolex86 frameworkVer =
                             ]
               Targets = ["Rebuild"]
           }) sln
-  Rename (folder + "/NBehave-Console-x86.exe") (folder + "/NBehave-Console.exe")
+  Rename (Path.Combine(folder, "NBehave-Console-x86.exe")) (Path.Combine(folder, "NBehave-Console.exe"))
 
 Target "Compile" (fun _ ->
   frameworkVersions |> Seq.iter (fun v ->
@@ -152,16 +151,15 @@ Target "Compile" (fun _ ->
                                   compileAnyCpu v)
 )
 
-
 Target "Test" (fun _ ->
   frameworkVersions
   |> Seq.iter(fun frameworkVer ->
-                let testDir = (buildDir + "/Debug-" + frameworkVer + "/UnitTests") |> FullName
+                let testDir = (Path.Combine(buildDir, "Debug-" + frameworkVer, "UnitTests")) |> FullName
                 let testDlls = !! (testDir + "/*.Specifications.dll")
-                let xmlFile = (testReportsDir + @"/UnitTests-" + frameworkVer + ".xml") |> FullName
+                let xmlFile = (Path.Combine(testReportsDir, "UnitTests-" + frameworkVer + ".xml")) |> FullName
                 NUnit (fun p ->
                         {p with
-                          ToolPath = (nugetPackageDir + "/NUnit.Runners/tools/") |> FullName
+                          ToolPath = (Path.Combine(nugetPackageDir, "NUnit.Runners", "tools")) |> FullName
                           OutputFile = xmlFile
                           Framework = frameworkVer
                           ShowLabels = false
@@ -176,12 +174,12 @@ Target "VSPlugin artifact" (fun _ ->
 )
 
 let resharper_install_scripts (version:string) =
-  let content = File.ReadAllText (packageTemplateDir + "/Resharper.scripts/Install.ps1")
+  let content = File.ReadAllText (Path.Combine(packageTemplateDir, "Resharper.scripts", "Install.ps1"))
   let out = Regex.Replace(content, @"\%version\%", version)
-  File.WriteAllText (buildDir + "/Install.ps1", out)
-  let content = File.ReadAllText (packageTemplateDir + "/Resharper.scripts/UnInstall.ps1")
+  File.WriteAllText (Path.Combine(buildDir, "Install.ps1"), out)
+  let content = File.ReadAllText (Path.Combine(packageTemplateDir, "Resharper.scripts", "UnInstall.ps1"))
   let out = Regex.Replace(content, @"\%version\%", version)
-  File.WriteAllText ( buildDir + "/UnInstall.ps1", out)
+  File.WriteAllText (Path.Combine(buildDir, "UnInstall.ps1"), out)
 
 let nugetParams p =
   { p with
@@ -193,37 +191,37 @@ let nugetParams p =
   }
 
 Target "Create NuGet packages" (fun _ ->
-  NuGetPack nugetParams (packageTemplateDir + "/nbehave.nuspec")
-  NuGetPack nugetParams (packageTemplateDir + "/nbehave.runners.nuspec")
-  NuGetPack nugetParams (packageTemplateDir + "/nbehave.samples.nuspec")
+  NuGetPack nugetParams (Path.Combine(packageTemplateDir, "nbehave.nuspec"))
+  NuGetPack nugetParams (Path.Combine(packageTemplateDir, "nbehave.runners.nuspec"))
+  NuGetPack nugetParams (Path.Combine(packageTemplateDir, "nbehave.samples.nuspec"))
 )
 
 Target "Create NuGet packages for R#" (fun _ ->
   resharper_install_scripts "7.1"
-  NuGetPack nugetParams (packageTemplateDir + "/nbehave.Resharper71.nuspec")
-  NuGetPack nugetParams (packageTemplateDir + "/nbehave.Resharper711.nuspec")
-  NuGetPack nugetParams (packageTemplateDir + "/nbehave.Resharper712.nuspec")
-  NuGetPack nugetParams (packageTemplateDir + "/nbehave.Resharper80.nuspec")
+  NuGetPack nugetParams (Path.Combine(packageTemplateDir, "nbehave.Resharper71.nuspec"))
+  NuGetPack nugetParams (Path.Combine(packageTemplateDir, "nbehave.Resharper711.nuspec"))
+  NuGetPack nugetParams (Path.Combine(packageTemplateDir, "nbehave.Resharper712.nuspec"))
+  NuGetPack nugetParams (Path.Combine(packageTemplateDir, "nbehave.Resharper80.nuspec"))
 )
 
 Target "Create NuGet packages Fluent" (fun _ ->
   NuGetPack (fun p -> { (nugetParams p) with Properties = ["nunitVersion", nunitVersion()] } )
-            (packageTemplateDir + "/nbehave.Fluent.NUnit.nuspec")
+            (Path.Combine(packageTemplateDir, "nbehave.Fluent.NUnit.nuspec"))
   NuGetPack (fun p -> { (nugetParams p) with Properties = ["xunitVersion", xunitVersion()] } )
-            (packageTemplateDir + "/nbehave.Fluent.XUnit.nuspec")
+            (Path.Combine(packageTemplateDir, "nbehave.Fluent.XUnit.nuspec"))
   NuGetPack (fun p -> { (nugetParams p) with Properties = ["mbunitVersion", mbUnitVersion()] } )
-            (packageTemplateDir + "/nbehave.Fluent.MbUnit.nuspec")
-  NuGetPack nugetParams (packageTemplateDir + "/nbehave.Fluent.MsTest.nuspec")
+            (Path.Combine(packageTemplateDir, "nbehave.Fluent.MbUnit.nuspec"))
+  NuGetPack nugetParams (Path.Combine(packageTemplateDir, "nbehave.Fluent.MsTest.nuspec"))
 )
 
 Target "Create NuGet packages Spec" (fun _ ->
   NuGetPack (fun p -> { (nugetParams p) with Properties = ["nunitVersion", nunitVersion()] } )
-            (packageTemplateDir + "/nbehave.Spec.NUnit.nuspec")
+            (Path.Combine(packageTemplateDir, "nbehave.Spec.NUnit.nuspec"))
   NuGetPack (fun p -> { (nugetParams p) with Properties = ["xunitVersion", xunitVersion()] } )
-            (packageTemplateDir + "/nbehave.Spec.XUnit.nuspec")
+            (Path.Combine(packageTemplateDir, "nbehave.Spec.XUnit.nuspec"))
   NuGetPack (fun p -> { (nugetParams p) with Properties = ["mbunitVersion", mbUnitVersion()] } )
-            (packageTemplateDir + "/nbehave.Spec.MbUnit.nuspec")
-  NuGetPack nugetParams (packageTemplateDir + "/nbehave.Spec.MsTest.nuspec")
+            (Path.Combine(packageTemplateDir, "nbehave.Spec.MbUnit.nuspec"))
+  NuGetPack nugetParams (Path.Combine(packageTemplateDir, "nbehave.Spec.MsTest.nuspec"))
   ()
 )
 
@@ -242,10 +240,10 @@ Target "Publish to NuGet" (fun _ ->
     //NuGetPublish (fun p -> nuGetParams p project) pkg
     ()
   let files = Directory.GetFiles(artifactsDir, "*.nupkg")
-  files |> Array.iter (fun pkg -> publish pkg)
+  files |> Array.iter publish
 )
 
-Target "Default" (fun _ -> () )
+Target "Default" (fun _ -> ())
 
 // Dependencies
 "Clean"

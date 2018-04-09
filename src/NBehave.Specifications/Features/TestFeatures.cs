@@ -1,21 +1,23 @@
-﻿namespace NBehave.Specifications.Features
+﻿using System.IO;
+
+namespace NBehave.Specifications.Features
 {
     public static class TestFeatures
     {
-        public const string FeatureWithScenarioBackground = "System.Specs\\Backgrounds\\Background.feature";
-        public const string FeatureWithPendingStep = "Features\\FeatureWithPendingStep.feature";
-        public const string FeatureWithCommentOnLastRow = "Features\\FeatureWithCommentOnLastRow.feature";
-        public const string FeatureWithLowerCaseSteps = "Features\\FeatureWithLowerCaseSteps.feature";
-        public const string FeatureWithNewLineInGivenClause = "Features\\FeatureWithNewLineInGivenClause.feature";
-        public const string FeatureWithManyScenarios = "Features\\FeatureWithManyScenarios.feature";
-        public const string FeatureWithFailingStep = "Features\\FeatureWithFailingStep.feature";
-        public const string FeaturesAndScenarios = "Features\\FeaturesAndScenarios.feature";
-        public const string FeatureNamedStory = "Features\\FeatureNamedStory.feature";
-        public const string FeatureWithTags = "Features\\FeatureWithTags.feature";
-        public const string FeatureInSwedish = "Features\\FeatureInSwedish.feature";
-        public const string ScenariosWithoutFeature = "Features\\ScenariosWithoutFeature.feature";
-        public const string ScenarioWithExamples = "Features\\ScenarioWithExamples.feature";
-        public const string ScenarioWithTables = "Features\\ScenarioWithTables.feature";
-        public const string ScenarioWithNoActionSteps = "Features\\ScenarioWithNoActionSteps.feature";
+        public static readonly string FeatureWithScenarioBackground = Path.Combine("System.Specs", "Backgrounds", "Background.feature");
+        public static readonly string FeatureWithPendingStep = Path.Combine("Features", "FeatureWithPendingStep.feature");
+        public static readonly string FeatureWithCommentOnLastRow = Path.Combine("Features", "FeatureWithCommentOnLastRow.feature");
+        public static readonly string FeatureWithLowerCaseSteps = Path.Combine("Features", "FeatureWithLowerCaseSteps.feature");
+        public static readonly string FeatureWithNewLineInGivenClause = Path.Combine("Features", "FeatureWithNewLineInGivenClause.feature");
+        public static readonly string FeatureWithManyScenarios = Path.Combine("Features", "FeatureWithManyScenarios.feature");
+        public static readonly string FeatureWithFailingStep = Path.Combine("Features", "FeatureWithFailingStep.feature");
+        public static readonly string FeaturesAndScenarios = Path.Combine("Features", "FeaturesAndScenarios.feature");
+        public static readonly string FeatureNamedStory = Path.Combine("Features", "FeatureNamedStory.feature");
+        public static readonly string FeatureWithTags = Path.Combine("Features", "FeatureWithTags.feature");
+        public static readonly string FeatureInSwedish = Path.Combine("Features", "FeatureInSwedish.feature");
+        public static readonly string ScenariosWithoutFeature = Path.Combine("Features", "ScenariosWithoutFeature.feature");
+        public static readonly string ScenarioWithExamples = Path.Combine("Features", "ScenarioWithExamples.feature");
+        public static readonly string ScenarioWithTables = Path.Combine("Features", "ScenarioWithTables.feature");
+        public static readonly string ScenarioWithNoActionSteps = Path.Combine("Features", "ScenarioWithNoActionSteps.feature");
     }
 }
