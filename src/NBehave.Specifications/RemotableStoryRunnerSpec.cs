@@ -108,7 +108,7 @@ namespace NBehave.Specifications
                                     "When the value of setting foo is read" + Environment.NewLine +
                                     "Then the value should be bar";
                 SetupConfigFile();
-                runner = CreateTextRunner(new[] { "TestLib.dll" }, scenarioText);
+                runner = CreateTextRunner(new[] { Path.Combine(GetAssemblyLocation(), "TestLib.dll") }, scenarioText);
 
                 results = runner.Run();
             }
@@ -142,7 +142,7 @@ namespace NBehave.Specifications
                                     "When the value of setting foo is read" + Environment.NewLine +
                                     "Then the value should be meeble";
                 SetupConfigFile();
-                runner = CreateTextRunner(new[] { "TestLib.dll" }, scenarioText);
+                runner = CreateTextRunner(new[] { Path.Combine(GetAssemblyLocation(), "TestLib.dll") }, scenarioText);
 
                 results = runner.Run();
 
@@ -154,10 +154,9 @@ namespace NBehave.Specifications
                 DeleteConfigFile();
             }
 
-            [Explicit("This test crashes the R# test runner")]
+            [Test]
             public void Should_read_values_from_the_appropriate_config_file()
             {
-                //WARNING: This test crashes the R# test runner, v 5.1.3000.12 anyway
                 Assert.AreEqual(0, results.NumberOfPassingScenarios);
                 Assert.AreEqual(1, results.NumberOfFailingScenarios);
             }
@@ -176,7 +175,7 @@ namespace NBehave.Specifications
                                     "When the value of setting foo is read" + Environment.NewLine +
                                     "Then the value should be bar";
                 SetupConfigFile();
-                _runner = CreateTextRunner(new[] { "TestLib.dll" }, scenarioText);
+                _runner = CreateTextRunner(new[] { Path.Combine(GetAssemblyLocation(), "TestLib.dll") }, scenarioText);
             }
 
             [TearDown]
@@ -216,7 +215,7 @@ namespace NBehave.Specifications
                                     "Then the value should be bar";
 
                 SetupConfigFile();
-                runner = CreateTextRunner(new[] { "TestLib.dll" }, listener, scenarioText);
+                runner = CreateTextRunner(new[] { Path.Combine(GetAssemblyLocation(), "TestLib.dll") }, listener, scenarioText);
 
                 results = runner.Run();
 
