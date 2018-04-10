@@ -189,6 +189,7 @@ let nugetParams p =
       OutputPath = artifactsDir
       WorkingDir = artifactsDir
       AccessKey = nugetAccessKey
+      NoDefaultExcludes = true
   }
 
 Target "Create NuGet packages" (fun _ ->
@@ -207,22 +208,22 @@ Target "Create NuGet packages for R#" (fun _ ->
 
 Target "Create NuGet packages Fluent" (fun _ ->
   NuGetPack (fun p -> { (nugetParams p) with Properties = ["nunitVersion", nunitVersion()] } )
-            (Path.Combine(packageTemplateDir, "nbehave.Fluent.NUnit.nuspec"))
+            (Path.Combine(packageTemplateDir, "nbehave.fluent.nunit.nuspec"))
   NuGetPack (fun p -> { (nugetParams p) with Properties = ["xunitVersion", xunitVersion()] } )
-            (Path.Combine(packageTemplateDir, "nbehave.Fluent.XUnit.nuspec"))
+            (Path.Combine(packageTemplateDir, "nbehave.fluent.xunit.nuspec"))
   NuGetPack (fun p -> { (nugetParams p) with Properties = ["mbunitVersion", mbUnitVersion()] } )
-            (Path.Combine(packageTemplateDir, "nbehave.Fluent.MbUnit.nuspec"))
-  NuGetPack nugetParams (Path.Combine(packageTemplateDir, "nbehave.Fluent.MsTest.nuspec"))
+            (Path.Combine(packageTemplateDir, "nbehave.fluent.mbunit.nuspec"))
+  NuGetPack nugetParams (Path.Combine(packageTemplateDir, "nbehave.fluent.mstest.nuspec"))
 )
 
 Target "Create NuGet packages Spec" (fun _ ->
   NuGetPack (fun p -> { (nugetParams p) with Properties = ["nunitVersion", nunitVersion()] } )
-            (Path.Combine(packageTemplateDir, "nbehave.Spec.NUnit.nuspec"))
+            (Path.Combine(packageTemplateDir, "nbehave.spec.nunit.nuspec"))
   NuGetPack (fun p -> { (nugetParams p) with Properties = ["xunitVersion", xunitVersion()] } )
-            (Path.Combine(packageTemplateDir, "nbehave.Spec.XUnit.nuspec"))
+            (Path.Combine(packageTemplateDir, "nbehave.spec.xunit.nuspec"))
   NuGetPack (fun p -> { (nugetParams p) with Properties = ["mbunitVersion", mbUnitVersion()] } )
-            (Path.Combine(packageTemplateDir, "nbehave.Spec.MbUnit.nuspec"))
-  NuGetPack nugetParams (Path.Combine(packageTemplateDir, "nbehave.Spec.MsTest.nuspec"))
+            (Path.Combine(packageTemplateDir, "nbehave.spec.mbunit.nuspec"))
+  NuGetPack nugetParams (Path.Combine(packageTemplateDir, "nbehave.spec.mstest.nuspec"))
   ()
 )
 

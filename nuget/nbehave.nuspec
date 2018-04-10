@@ -12,14 +12,12 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Simple approach to Behaviour Driven Development for .NET projects.</description>
      <!-- <summary></summary> -->
-    <copyright>Copyright © NBehave 2007-2012</copyright>
+    <copyright>Copyright © NBehave 2007-2018</copyright>
    <language>en-US</language>
     <tags>nbehave bdd atdd gherkin cucumber</tags>
   </metadata>
   <files>
-    <file src="..\build\Debug-3.5\NBehave\NBehave.dll" target="lib\net35" />
-    <file src="..\build\Debug-3.5\NBehave\GurkBurk.dll" target="lib\net35" />
-    <file src="..\build\Debug-4.0\NBehave\NBehave.dll" target="lib\net40" />
-    <file src="..\build\Debug-4.0\NBehave\GurkBurk.dll" target="lib\net40" />
+    <file src="../Debug-4.5/NBehave/NBehave.dll" target="lib/net45" />
+    <file src="../Debug-4.5/NBehave/GurkBurk.dll" target="lib/net45" />
   </files>
 </package>

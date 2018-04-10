@@ -25,7 +25,7 @@ module Properties
   let toolsDir            = (rootDir + "/tools") |> FullName
   let buildDir            = (rootDir + "/build") |> FullName
   let testReportsDir      = (buildDir + "/test-reports") |> FullName
-  let artifactsDir        = (buildDir + "/Artifacts") |> FullName
+  let artifactsDir        = (buildDir + "/artifacts") |> FullName
   let nugetExe            = (sourceDir + "/.nuget/nuget.exe") |> FullName
   let nugetPackageDir     = (sourceDir + "/packages") |> FullName
   let nugetAccessKey      = getBuildParamOrDefault "nugetAccessKey" "NotSet"
