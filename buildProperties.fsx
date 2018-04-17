@@ -1,5 +1,5 @@
 module Properties
-  #I "buildframework/FAKE/tools"
+  #I "./packages/FAKE/tools"
   #r "FakeLib.dll"
 
   open Fake

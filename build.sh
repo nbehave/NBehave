@@ -1,13 +1,20 @@
 #!/bin/bash
+if test "$OS" = "Windows_NT"
+then
+  # use .Net
+  .paket/paket.exe restore
+  exit_code=$?
+  if [ $exit_code -ne 0 ]; then
+  	exit $exit_code
+  fi
 
-# ********
-# To pass parameters
-# ./buildframework/FAKE/tools/FAKE.exe build.fsx Compile
-# ********
-clear
-#IF EXIST ./buildframework/FAKE GOTO RunBuild
-if [ ! -d ./buildframework/FAKE ]; then
-	mono ./src/.nuget/NuGet.exe install FAKE -OutputDirectory ./buildframework/ -ExcludeVersion -Pre
+  packages/FAKE/tools/FAKE.exe $@ --fsiargs build.fsx
+else
+  # use mono
+  mono .paket/paket.exe restore
+  exit_code=$?
+  if [ $exit_code -ne 0 ]; then
+  	exit $exit_code
+  fi
+  mono packages/FAKE/tools/FAKE.exe $@ --fsiargs -d:MONO build.fsx
 fi
-
-mono ./buildframework/FAKE/tools/FAKE.exe build.fsx

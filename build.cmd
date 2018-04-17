@@ -2,10 +2,12 @@
 @REM To pass parameters
 @REM .\buildframework\FAKE\tools\FAKE.exe build.fsx Compile
 @REM ********
-@ECHO OFF
-CLS
-IF EXIST .\buildframework\FAKE GOTO RunBuild
-.\src\.nuget\NuGet.exe install FAKE -OutputDirectory .\buildframework\ -ExcludeVersion -Pre
+@echo off
+cls
 
-:RunBuild
-.\buildframework\FAKE\tools\FAKE.exe build.fsx %1 %2 %3 %4 %5 %6 %7 %8 %9
+.paket\paket.exe restore
+if errorlevel 1 (
+  exit /b %errorlevel%
+)
+
+packages\FAKE\tools\FAKE.exe build.fsx %*

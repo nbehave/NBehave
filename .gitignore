@@ -2,7 +2,6 @@ bin
 obj
 build
 packages
-buildframework/*
 
 _NCrunch_*
 *.ncrunchproject
@@ -16,3 +15,14 @@ _NCrunch_*
 TestResult.xml
 7.1.96
 8.0.*
+
+### VisualStudioCode ###
+.vscode
+
+# Paket dependency manager
+.paket/paket.exe
+paket-files/
+
+# FAKE - F# Make
+.fake/
+
