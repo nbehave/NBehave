@@ -1,10 +1,8 @@
 // include Fake libs
-#I "buildframework/FAKE/tools"
+#I "./packages/FAKE/tools"
+
 #r "FakeLib.dll"
 
-#load "buildProperties.fsx"
-
-open Properties
 open Fake
 open Fake.RestorePackageHelper
 open System
@@ -14,73 +12,144 @@ open System.Net
 open System.Text.RegularExpressions
 open System.Xml
 
+// params from teamcity
+let buildNumber = getBuildParamOrDefault "buildNumber" "0"
+let buildTag = getBuildParamOrDefault "buildTag" "devlocal" // For release, set this to "release"
+let frameworkVersions = ["4.6"]
+
+let version             = "0.7.0"
+let assemblyVersion     = version + "." + buildNumber
+let assemblyInfoVersion = match buildTag.ToLower() with
+                           | "release"  -> version + "." + buildNumber
+                           | _          -> version + "-" + buildTag + buildNumber.PadLeft(4, '0')
+let nugetVersionNumber  = assemblyInfoVersion
+
+let rootDir             = "./" |> FullName
+let sourceDir           = (rootDir + "/src") |> FullName
+let packageTemplateDir  = (rootDir + "/nuget") |> FullName
+let buildDir            = (rootDir + "/build") |> FullName
+let testReportsDir      = (buildDir + "/test-reports") |> FullName
+let artifactsDir        = (buildDir + "/artifacts") |> FullName
+let nugetPackageDir     = (sourceDir + "/packages") |> FullName
+let nugetExe = (nugetPackageDir + "/NuGet.CommandLine/tools/NuGet.exe") |> FullName
+let nugetAccessKey      = getBuildParamOrDefault "nugetAccessKey" "NotSet"
+
+let getpackageFolder dirFilter runnerFilter =
+  Directory.GetDirectories(nugetPackageDir, dirFilter, SearchOption.AllDirectories)
+  |> Seq.map (fun d -> Path.GetFileName(d))
+  |> Seq.filter (fun d -> not <| d.ToLower().StartsWith(runnerFilter))
+  |> Seq.sort
+  |> Seq.head
+
+let nunitVersion () =
+  (getpackageFolder "NUnit*" "nunit.runners").ToLower().Replace("nunit.", "")
+
+let xunitVersion () =
+  (getpackageFolder "xunit*" "_").ToLower().Replace("xunit.", "")
+
+let mbUnitVersion () =
+  (getpackageFolder "mbunit*" "_").ToLower().Replace("mbunit.", "")
+
+let dotnetcliVersion = "2.1.104"
+let mutable dotnetExePath = "/Users/morganpersson/.local/share/dotnetcore/dotnet"
+
+// let appReferences = !! "/**/*.csproj"
+let appReferences = [
+  "src/NBehave/NBehave.csproj"
+  "src/NBehave.Console/NBehave.Console.csproj"
+  "src/NBehave.Fluent.Framework/NBehave.Fluent.Framework.csproj"
+  "src/NBehave.Spec.MbUnit/NBehave.Spec.MbUnit.csproj"
+  "src/NBehave.Spec.MSTest/NBehave.Spec.MSTest.csproj"
+  "src/NBehave.Spec.NUnit/NBehave.Spec.NUnit.csproj"
+  "src/NBehave.Spec.Xunit/NBehave.Spec.Xunit.csproj"
+]
+let testReferences = [
+  "src/NBehave.Specifications/NBehave.Specifications.csproj"
+  "src/NBehave.Console.Specifications/NBehave.Console.Specifications.csproj"
+  "src/NBehave.Fluent.Framework.Specifications/NBehave.Fluent.Framework.Specifications.csproj"
+  "src/NBehave.Spec.MbUnit.Specifications/NBehave.Spec.MbUnit.Specifications.csproj"
+  "src/NBehave.Spec.MSTest.Specifications/NBehave.Spec.MSTest.Specifications.csproj"
+  "src/NBehave.Spec.NUnit.Specifications/NBehave.Spec.NUnit.Specifications.csproj"
+  "src/NBehave.Spec.Xunit.Specifications/NBehave.Spec.Xunit.Specifications.csproj"
+]
+
+
+// --------------------------------------------------------------------------------------
+// Helpers
+// --------------------------------------------------------------------------------------
+let deleteObjectDirs () =
+  DeleteDirs (!! "src/**/obj")
+  DeleteDirs (!! "src/**/bin")
+
+
+let run' timeout cmd args dir =
+    if execProcess (fun info ->
+        info.FileName <- cmd
+        if not (String.IsNullOrWhiteSpace dir) then
+            info.WorkingDirectory <- dir
+        info.Arguments <- args
+    ) timeout |> not then
+        failwithf "Error while running '%s' with args: %s" cmd args
+
+let run = run' System.TimeSpan.MaxValue
+
+let runDotnet workingDir args =
+    let result =
+        ExecProcess (fun info ->
+            info.FileName <- dotnetExePath
+            info.WorkingDirectory <- workingDir
+            info.Arguments <- args) TimeSpan.MaxValue
+    if result <> 0 then failwithf "dotnet %s failed" args
+
+
+let compileAnyCpu frameworkVer outputPathPrefix proj =
+  build (fun f ->
+    { f with
+        MaxCpuCount = Some (Some Environment.ProcessorCount)
+        ToolsVersion = Some "14.0"
+        Verbosity = Some MSBuildVerbosity.Minimal
+        Properties =  [ ("Configuration", "Debug");
+                        ("TargetFrameworkVersion", "v" + frameworkVer)
+                        ("OutputPath", Path.Combine(buildDir, outputPathPrefix + frameworkVer))
+                      ]
+        Targets = ["Build"]
+    }) proj
+
+// --------------------------------------------------------------------------------------
 // Targets
+// --------------------------------------------------------------------------------------
+
 Target "Clean" (fun _ ->
   killMSBuild()
-  CleanDir buildDir
+  deleteObjectDirs ()
+  DeleteDirs [buildDir]
   CleanDirs [testReportsDir; artifactsDir]
 )
 
-Target "Restore nuget packages" (fun _ ->
-  !! (sourceDir + "/**/packages.config")
-  |> Seq.iter (RestorePackage (fun p ->
-                { p with
-                    ToolPath = nugetExe
-                    OutputPath = nugetPackageDir
-                }))
-)
+// Target "InstallDotNetCLI" (fun _ ->
+//     dotnetExePath <- DotNetCli.InstallDotNetSDK dotnetcliVersion
+// )
 
-Target "InstallNUnitRunners" (fun _ ->
-  let settings = { RestoreSinglePackageDefaults with
-                    Version = Some <| Version(2, 6, 2)
-                    ExcludeVersion = true
-                    ToolPath = nugetExe
-                    OutputPath = nugetPackageDir
-                 }
-  RestorePackageId (fun _ -> settings) "nunit.runners"
-)
+// Target "Restore" (fun _ ->
+//     appReferences
+//     |> Seq.iter (fun p ->
+//         let dir = System.IO.Path.GetDirectoryName p
+//     //     runDotnet dir "restore"
+//         DotNetCli.Restore (fun p -> { p with WorkingDir = dir } )
+//     )
+// )
+
+// Target "Build" (fun _ ->
+//     appReferences
+//     |> Seq.iter (fun p ->
+//         let dir = System.IO.Path.GetDirectoryName p
+//         printfn "--DIR-- '%s'" dir
+//         runDotnet dir "build"
+//     )
+// )
 
 Target "Set teamcity buildnumber" (fun _ ->
   SetBuildNumber nugetVersionNumber
-)
-
-let ReSharperSdkInstall version (urlToSdk:string) =
-  let sdkPath = Path.Combine(rootDir, "lib", "ReSharper", version)
-  if (Directory.Exists(Path.Combine(sdkPath, "Targets"))) && (Directory.Exists(Path.Combine(sdkPath, "Bin"))) then
-    trace (sprintf "R# SDK %s already installed." version)
-  else
-    // download SDK
-    trace (sprintf "Downloading R# SDK %s ..." version)
-    let wc = new WebClient()
-    let downloadedFile = rootDir + "RSharperSDK-" + version + ".zip"
-    wc.DownloadFile(urlToSdk, downloadedFile)
-    Unzip (Path.Combine(rootDir, "lib", "ReSharper", version)) downloadedFile
-    File.Delete(downloadedFile)
-
-let ReSharperSdkPath version =
-  // Search rootDir + "\lib" efter Plugin.Common.Targets och fixa alla
-  let sdkPath = Path.Combine(rootDir, "lib", "ReSharper", version)
-
-  let fileName = Path.Combine(sdkPath, "Targets", "Plugin.Common.Targets")
-  let xml = XmlDocument()
-  xml.Load(fileName)
-  let nsmgr = XmlNamespaceManager(xml.NameTable)
-  nsmgr.AddNamespace("x", "http://schemas.microsoft.com/developer/msbuild/2003")
-  //multiple nodes?
-  let node = xml.SelectSingleNode("//x:ReSharperSdk", nsmgr)
-  node.InnerText <- sdkPath
-  xml.Save(fileName)
-
-Target "Install R# 7 SDK" (fun _ ->
-  let version = "7.1.96"
-  ReSharperSdkInstall version ("http://download.jetbrains.com/resharper/ReSharperSDK-" + version + ".zip")
-  ReSharperSdkPath version
-)
-
-Target "Install R# 8 SDK" (fun _ ->
-  let version = "8.0.1086"
-  ReSharperSdkInstall version ("http://download.jetbrains.com/resharper/ReSharperSDK-" + version + ".zip")
-  ReSharperSdkPath version
 )
 
 Target "AssemblyInfo" (fun _ ->
@@ -92,95 +161,47 @@ Target "AssemblyInfo" (fun _ ->
         AssemblyInformationalVersion = assemblyInfoVersion
         OutputFileName = fileName
     })
-
-  //Version for source.extension.vsixmanifest
-  let vsixFile = Path.Combine(sourceDir, "NBehave.VS2010.Plugin", "source.extension.vsixmanifest") |> FullName
-  let xml = new XmlDocument()
-  xml.Load(vsixFile)
-  let nsmgr = new XmlNamespaceManager(xml.NameTable)
-  nsmgr.AddNamespace("x", @"http://schemas.microsoft.com/developer/vsx-schema/2010")
-  let node = xml.SelectSingleNode(@"x:Vsix/x:Identifier/x:Version", nsmgr)
-  node.InnerText <- assemblyVersion
-  xml.Save(vsixFile)
-
-  //Version for VS plugin package
-  let package = Path.Combine(sourceDir, "NBehave.VS2010.Plugin", "NBehaveRunnerPackage.cs")
-  let content = File.ReadAllLines(package)
-  let changeVersion (str:string) =
-    match str.Contains("[InstalledProductRegistration(") with
-      | true  -> Regex.Replace(str, @"\d+\.\d+\.\d+", version)
-      | false -> str
-  let rows = content |> Seq.map changeVersion
-  File.WriteAllLines(package, rows)
 )
 
-let outputPath frameworkVer =
-  Path.Combine(buildDir, "Debug-" + frameworkVer, "NBehave") |> FullName
-
-let compileAnyCpu frameworkVer =
-  let sln = Path.Combine(sourceDir, "NBehave.sln")
-  build (fun f ->
-          { f with
-              MaxCpuCount = Some (Some Environment.ProcessorCount)
-              ToolsVersion = Some "4.0"
-              Verbosity = Some MSBuildVerbosity.Minimal
-              Properties =  [ ("Configuration", "AutomatedDebug-" + frameworkVer);
-                              ("TargetFrameworkVersion", "v" + frameworkVer)
-                            ]
-              Targets = ["Rebuild"]
-          }) sln
-
-let compileConsolex86 frameworkVer =
-  let sln = Path.Combine(sourceDir, "NBehave.Console", "NBehave.Console.csproj")
-  let folder = outputPath frameworkVer
-  build (fun f ->
-          { f with
-              MaxCpuCount = Some (Some Environment.ProcessorCount)
-              ToolsVersion = Some "4.0"
-              Verbosity = Some MSBuildVerbosity.Minimal
-              Properties =  [ ("Configuration", "AutomatedDebug-" + frameworkVer + "-x86")
-                              ("TargetFrameworkVersion", "v" + frameworkVer)
-                              ("OutputPath", folder)
-                            ]
-              Targets = ["Rebuild"]
-          }) sln
-  Rename (Path.Combine(folder, "NBehave-Console-x86.exe")) (Path.Combine(folder, "NBehave-Console.exe"))
-
 Target "Compile" (fun _ ->
-  frameworkVersions |> Seq.iter (fun v ->
-                                  compileConsolex86 v
-                                  compileAnyCpu v)
+  frameworkVersions
+  |> Seq.iter (fun v ->
+    appReferences
+    |> Seq.iter (fun p ->
+        // let dir = System.IO.Path.GetDirectoryName p
+        // printfn "--DIR-- '%s'" dir
+        // runDotnet dir "build"
+        compileAnyCpu v "" p
+    )
+  )
+)
+
+Target "Compile Tests" (fun _ ->
+  frameworkVersions
+  |> Seq.iter (fun v ->
+    testReferences
+    |> Seq.iter (fun p ->
+        compileAnyCpu v "specs_" p
+    )
+  )
 )
 
 Target "Test" (fun _ ->
   frameworkVersions
   |> Seq.iter(fun frameworkVer ->
-                let testDir = (Path.Combine(buildDir, "Debug-" + frameworkVer, "UnitTests")) |> FullName
-                let testDlls = !! (testDir + "/*.Specifications.dll")
-                let xmlFile = (Path.Combine(testReportsDir, "UnitTests-" + frameworkVer + ".xml")) |> FullName
-                NUnit (fun p ->
-                        {p with
-                          ToolPath = (Path.Combine(nugetPackageDir, "NUnit.Runners", "tools")) |> FullName
-                          OutputFile = xmlFile
-                          Framework = frameworkVer
-                          ShowLabels = false
-                        }) testDlls
-                sendTeamCityNUnitImport xmlFile
-              )
+        let testDir = (Path.Combine(buildDir, "Debug-" + frameworkVer, "UnitTests")) |> FullName
+        let testDlls = !! (testDir + "/*.Specifications.dll")
+        let xmlFile = (Path.Combine(testReportsDir, "UnitTests-" + frameworkVer + ".xml")) |> FullName
+        NUnit (fun p ->
+                {p with
+                  ToolPath = (Path.Combine(nugetPackageDir, "NUnit.Runners", "tools")) |> FullName
+                  OutputFile = xmlFile
+                  Framework = frameworkVer
+                  ShowLabels = false
+                }) testDlls
+        sendTeamCityNUnitImport xmlFile
+      )
 )
-
-Target "VSPlugin artifact" (fun _ ->
-  !! (buildDir + "/**/*.vsix")
-  |> CopyFiles artifactsDir
-)
-
-let resharper_install_scripts (version:string) =
-  let content = File.ReadAllText (Path.Combine(packageTemplateDir, "Resharper.scripts", "Install.ps1"))
-  let out = Regex.Replace(content, @"\%version\%", version)
-  File.WriteAllText (Path.Combine(buildDir, "Install.ps1"), out)
-  let content = File.ReadAllText (Path.Combine(packageTemplateDir, "Resharper.scripts", "UnInstall.ps1"))
-  let out = Regex.Replace(content, @"\%version\%", version)
-  File.WriteAllText (Path.Combine(buildDir, "UnInstall.ps1"), out)
 
 let nugetParams p =
   { p with
@@ -196,14 +217,6 @@ Target "Create NuGet packages" (fun _ ->
   NuGetPack nugetParams (Path.Combine(packageTemplateDir, "nbehave.nuspec"))
   NuGetPack nugetParams (Path.Combine(packageTemplateDir, "nbehave.runners.nuspec"))
   NuGetPack nugetParams (Path.Combine(packageTemplateDir, "nbehave.samples.nuspec"))
-)
-
-Target "Create NuGet packages for R#" (fun _ ->
-  resharper_install_scripts "7.1"
-  NuGetPack nugetParams (Path.Combine(packageTemplateDir, "nbehave.Resharper71.nuspec"))
-  NuGetPack nugetParams (Path.Combine(packageTemplateDir, "nbehave.Resharper711.nuspec"))
-  NuGetPack nugetParams (Path.Combine(packageTemplateDir, "nbehave.Resharper712.nuspec"))
-  NuGetPack nugetParams (Path.Combine(packageTemplateDir, "nbehave.Resharper80.nuspec"))
 )
 
 Target "Create NuGet packages Fluent" (fun _ ->
@@ -245,24 +258,19 @@ Target "Publish to NuGet" (fun _ ->
   files |> Array.iter publish
 )
 
-Target "Default" (fun _ -> ())
 
 // Dependencies
 "Clean"
-  ==> "Set teamcity buildnumber"
-  // ==> "Install R# 7 SDK"
-  // ==> "Install R# 8 SDK"
-  ==> "Restore nuget packages"
-  ==> "InstallNUnitRunners"
   ==> "AssemblyInfo"
+  ==> "Set teamcity buildnumber"
+  // ==> "Restore"
+  // ==> "Build"
   ==> "Compile"
-  ==> "Test"
-  // ==> "VSPlugin artifact"
-  ==> "Create NuGet packages"
-  // ==> "Create NuGet packages for R#"
-  ==> "Create NuGet packages Fluent"
-  ==> "Create NuGet packages Spec"
-  ==> "Default"
+  ==> "Compile Tests"
+  // ==> "Create NuGet packages"
+  // ==> "Create NuGet packages Fluent"
+  // ==> "Create NuGet packages Spec"
+
 
 // Start build
-Run <| getBuildParamOrDefault "target" "Default"
+RunTargetOrDefault "Compile Tests"

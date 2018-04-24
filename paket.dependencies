@@ -1,4 +1,13 @@
 source https://www.nuget.org/api/v2
 nuget fake
 nuget FSharp.Core
-nuget gurkburk
+nuget GurkBurk ~> 2.0
+nuget mbunit >= 3.3.454.0
+nuget MEFedMVVM >= 1.4 restriction: >= net40
+nuget Mono.Reflection >= 1.0.0.0 restriction: >= net40
+nuget NLog >= 2.0.0.2000
+nuget NuGet.CommandLine ~> 4.6.2
+nuget NUnit ~> 2.6.4 restriction: >= net40
+nuget RhinoMocks >= 3.6.1
+nuget Should >= 1.1.12.0
+nuget xunit >= 1.9.1
