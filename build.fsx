@@ -189,16 +189,16 @@ Target "Compile Tests" (fun _ ->
 Target "Test" (fun _ ->
   frameworkVersions
   |> Seq.iter(fun frameworkVer ->
-        let testDir = (Path.Combine(buildDir, "Debug-" + frameworkVer, "UnitTests")) |> FullName
+        let testDir = (Path.Combine(buildDir, "specs_" + frameworkVer)) |> FullName
         let testDlls = !! (testDir + "/*.Specifications.dll")
-        let xmlFile = (Path.Combine(testReportsDir, "UnitTests-" + frameworkVer + ".xml")) |> FullName
+        let xmlFile = (Path.Combine(testReportsDir, "specs_" + frameworkVer + ".xml")) |> FullName
         NUnit (fun p ->
-                {p with
-                  ToolPath = (Path.Combine(nugetPackageDir, "NUnit.Runners", "tools")) |> FullName
-                  OutputFile = xmlFile
-                  Framework = frameworkVer
-                  ShowLabels = false
-                }) testDlls
+          {p with
+            ToolPath = (Path.Combine(nugetPackageDir, "NUnit.Runners", "tools")) |> FullName
+            OutputFile = xmlFile
+            Framework = frameworkVer
+            ShowLabels = false
+          }) testDlls
         sendTeamCityNUnitImport xmlFile
       )
 )
@@ -267,10 +267,11 @@ Target "Publish to NuGet" (fun _ ->
   // ==> "Build"
   ==> "Compile"
   ==> "Compile Tests"
+  ==> "Test"
   // ==> "Create NuGet packages"
   // ==> "Create NuGet packages Fluent"
   // ==> "Create NuGet packages Spec"
 
 
 // Start build
-RunTargetOrDefault "Compile Tests"
+RunTargetOrDefault "Test"
