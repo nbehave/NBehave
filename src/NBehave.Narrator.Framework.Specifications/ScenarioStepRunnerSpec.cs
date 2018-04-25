@@ -112,7 +112,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 timesAfterScenarioWasCalled++;
             }
 
-            [TestFixtureSetUp]
+            [OneTimeSetUp]
             public void Setup()
             {
                 Init();
@@ -170,7 +170,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 throw new ApplicationException("AfterScenario failed");
             }
 
-            [TestFixtureSetUp]
+            [OneTimeSetUp]
             public void Setup()
             {
                 Init();
@@ -221,7 +221,7 @@ namespace NBehave.Narrator.Framework.Specifications
             {
                 afterStepWasCalled = true;
             }
-            [TestFixtureSetUp]
+            [OneTimeSetUp]
             public void Setup()
             {
                 Init();
@@ -303,7 +303,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 Step.Pend("some reason");
             }
 
-            [TestFixtureSetUp]
+            [OneTimeSetUp]
             public void Setup()
             {
                 Init();

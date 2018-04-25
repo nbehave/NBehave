@@ -15,7 +15,7 @@ namespace NBehave.Narrator.Framework.Specifications.EventListeners
         
         protected abstract string FeatureFile { get; }
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void Setup()
         {
             var output = new MemoryStream();

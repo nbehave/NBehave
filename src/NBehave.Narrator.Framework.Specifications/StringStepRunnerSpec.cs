@@ -187,7 +187,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 var step = new StringStep("something", "");
                 runner.Run(step);
                 Assert.That(step.StepResult.Result, Is.InstanceOf<Failed>());
-                Assert.That(step.StepResult.Message, Is.StringContaining("ArgumentNullException"));
+                Assert.That(step.StepResult.Message, Does.Contain("ArgumentNullException"));
             }
 
             [Given(@"When_AfterStep_throws_exception$")]
@@ -222,7 +222,7 @@ namespace NBehave.Narrator.Framework.Specifications
                 var step = new StringStep("something", "");
                 runner.Run(step);
                 Assert.That(step.StepResult.Result, Is.InstanceOf<Failed>());
-                Assert.That(step.StepResult.Message, Is.StringContaining("ArgumentNullException"));
+                Assert.That(step.StepResult.Message, Does.Contain("ArgumentNullException"));
             }
 
             [Given(@"When_AfterStep_throws_exception$")]

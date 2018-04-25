@@ -32,19 +32,19 @@ namespace NBehave.Narrator.Framework.Specifications
 		[Test]
 		public void ShouldWriteNumberOfActionstepsInSummary()
 		{
-			Assert.That(_writer.ToString(),Is.StringContaining("Steps 6"));
+			Assert.That(_writer.ToString(),Does.Contain("Steps 6"));
 		}
 		
 		[Test]
 		public void ShouldWriteNumberOfFailedActionstepsInSummary()
 		{
-			Assert.That(_writer.ToString(),Is.StringContaining("failed 1"));
+			Assert.That(_writer.ToString(),Does.Contain("failed 1"));
 		}
 		
 		[Test]
 		public void ShouldWriteNumberOfPendingActionstepsInSummary()
 		{
-			Assert.That(_writer.ToString(),Is.StringContaining("pending 3"));
+			Assert.That(_writer.ToString(),Does.Contain("pending 3"));
 		}
 	}
 }
