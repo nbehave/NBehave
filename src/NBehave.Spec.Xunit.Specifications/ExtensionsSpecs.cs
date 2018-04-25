@@ -367,7 +367,8 @@ namespace NBehave.Spec.Xunit.Specs
             action.ShouldThrow<ArgumentException>();
         }
 
-        [Test, ExpectedException(typeof(FalseException), ExpectedMessage = "Exception of type <System.ArgumentException> expected but no exception occurred")]
+        [Test]
+        [ExpectedException(typeof(FalseException), ExpectedMessage = "Exception of type <System.ArgumentException> expected but no exception occurred\nExpected: False\nActual:   True")]
         public void Should_fail_when_no_exception_occurs()
         {
             Action action = () => { };
