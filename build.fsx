@@ -4,13 +4,8 @@
 #r "FakeLib.dll"
 
 open Fake
-open Fake.RestorePackageHelper
 open System
-open System.Diagnostics
 open System.IO
-open System.Net
-open System.Text.RegularExpressions
-open System.Xml
 
 // params from teamcity
 let buildNumber = getBuildParamOrDefault "buildNumber" "0"
@@ -30,7 +25,7 @@ let packageTemplateDir  = (rootDir + "/nuget") |> FullName
 let buildDir            = (rootDir + "/build") |> FullName
 let testReportsDir      = (buildDir + "/test-reports") |> FullName
 let artifactsDir        = (buildDir + "/artifacts") |> FullName
-let nugetPackageDir     = (sourceDir + "/packages") |> FullName
+let nugetPackageDir     = (rootDir + "/packages") |> FullName
 let nugetExe = (nugetPackageDir + "/NuGet.CommandLine/tools/NuGet.exe") |> FullName
 let nugetAccessKey      = getBuildParamOrDefault "nugetAccessKey" "NotSet"
 
@@ -42,13 +37,19 @@ let getpackageFolder dirFilter runnerFilter =
   |> Seq.head
 
 let nunitVersion () =
-  (getpackageFolder "NUnit*" "nunit.runners").ToLower().Replace("nunit.", "")
+  File.ReadAllLines(Path.Combine(rootDir, "paket.lock"))
+  |> Array.find(fun x -> x.Trim().ToLower().StartsWith("nunit ("))
+  |> fun x -> x.Trim().Split([|' '|]).[1].Replace("(", "").Replace(")", "")
 
 let xunitVersion () =
-  (getpackageFolder "xunit*" "_").ToLower().Replace("xunit.", "")
+  File.ReadAllLines(Path.Combine(rootDir, "paket.lock"))
+  |> Array.find(fun x -> x.Trim().ToLower().StartsWith("xunit ("))
+  |> fun x -> x.Trim().Split([|' '|]).[1].Replace("(", "").Replace(")", "")
 
 let mbUnitVersion () =
-  (getpackageFolder "mbunit*" "_").ToLower().Replace("mbunit.", "")
+  File.ReadAllLines(Path.Combine(rootDir, "paket.lock"))
+  |> Array.find(fun x -> x.Trim().ToLower().StartsWith("mbunit ("))
+  |> fun x -> x.Trim().Split([|' '|]).[1].Replace("(", "").Replace(")", "")
 
 let dotnetcliVersion = "2.1.104"
 let mutable dotnetExePath = "/Users/morganpersson/.local/share/dotnetcore/dotnet"
@@ -119,11 +120,15 @@ let compileAnyCpu frameworkVer outputPathPrefix proj =
 // Targets
 // --------------------------------------------------------------------------------------
 
+Target "Clean Artifacts" (fun _ ->
+  CleanDirs [artifactsDir]
+)
+
 Target "Clean" (fun _ ->
   killMSBuild()
   deleteObjectDirs ()
-  DeleteDirs [buildDir]
-  CleanDirs [testReportsDir; artifactsDir]
+  DeleteDir buildDir
+  CleanDir testReportsDir
 )
 
 // Target "InstallDotNetCLI" (fun _ ->
@@ -213,13 +218,11 @@ let nugetParams p =
       NoDefaultExcludes = true
   }
 
-Target "Create NuGet packages" (fun _ ->
+Target "Package" (fun _ ->
   NuGetPack nugetParams (Path.Combine(packageTemplateDir, "nbehave.nuspec"))
   NuGetPack nugetParams (Path.Combine(packageTemplateDir, "nbehave.runners.nuspec"))
   NuGetPack nugetParams (Path.Combine(packageTemplateDir, "nbehave.samples.nuspec"))
-)
 
-Target "Create NuGet packages Fluent" (fun _ ->
   NuGetPack (fun p -> { (nugetParams p) with Properties = ["nunitVersion", nunitVersion()] } )
             (Path.Combine(packageTemplateDir, "nbehave.fluent.nunit.nuspec"))
   NuGetPack (fun p -> { (nugetParams p) with Properties = ["xunitVersion", xunitVersion()] } )
@@ -227,9 +230,7 @@ Target "Create NuGet packages Fluent" (fun _ ->
   NuGetPack (fun p -> { (nugetParams p) with Properties = ["mbunitVersion", mbUnitVersion()] } )
             (Path.Combine(packageTemplateDir, "nbehave.fluent.mbunit.nuspec"))
   NuGetPack nugetParams (Path.Combine(packageTemplateDir, "nbehave.fluent.mstest.nuspec"))
-)
 
-Target "Create NuGet packages Spec" (fun _ ->
   NuGetPack (fun p -> { (nugetParams p) with Properties = ["nunitVersion", nunitVersion()] } )
             (Path.Combine(packageTemplateDir, "nbehave.spec.nunit.nuspec"))
   NuGetPack (fun p -> { (nugetParams p) with Properties = ["xunitVersion", xunitVersion()] } )
@@ -237,10 +238,9 @@ Target "Create NuGet packages Spec" (fun _ ->
   NuGetPack (fun p -> { (nugetParams p) with Properties = ["mbunitVersion", mbUnitVersion()] } )
             (Path.Combine(packageTemplateDir, "nbehave.spec.mbunit.nuspec"))
   NuGetPack nugetParams (Path.Combine(packageTemplateDir, "nbehave.spec.mstest.nuspec"))
-  ()
 )
 
-Target "Publish to NuGet" (fun _ ->
+Target "Publish" (fun _ ->
   let nugetParams p project =
     { p with
           WorkingDir = rootDir
@@ -260,7 +260,8 @@ Target "Publish to NuGet" (fun _ ->
 
 
 // Dependencies
-"Clean"
+"Clean Artifacts"
+  ==> "Clean"
   ==> "AssemblyInfo"
   ==> "Set teamcity buildnumber"
   // ==> "Restore"
@@ -268,9 +269,10 @@ Target "Publish to NuGet" (fun _ ->
   ==> "Compile"
   ==> "Compile Tests"
   ==> "Test"
-  // ==> "Create NuGet packages"
-  // ==> "Create NuGet packages Fluent"
-  // ==> "Create NuGet packages Spec"
+
+"Clean Artifacts"
+  ==> "Package"
+  ==> "Publish"
 
 
 // Start build
