@@ -381,9 +381,11 @@ namespace NBehave.Spec.Xunit.Specs
                 Action action = () => { };
                 action.ShouldThrow<ArgumentException>();
             });
-            Assert.AreEqual(
-                "Exception of type <System.ArgumentException> expected but no exception occurred\nExpected: False\nActual:   True",
-                ex.Message);
+            var expected =
+                "Exception of type <System.ArgumentException> expected but no exception occurred" + Environment.NewLine +
+                "Expected: False" + Environment.NewLine +
+                "Actual:   True";
+            Assert.AreEqual(expected, ex.Message);
         }
 
         [Test]
