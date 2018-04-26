@@ -9,10 +9,9 @@ The Spec samples are based on nunit but you may use xunit, mbunit or mstest if y
 The same is true for the fluent samples.
 
 To run the features, just go to the same package manager console where you installed the samples and run.
-.\packages\nbehave.0.1.0.0\tools\net40\NBehave-Console.exe .\bin\debug\YourTestProjectAssembly.dll /sf=Gherkin\*.feature
+.\packages\nbehave.0.1.0.0\tools\net46\NBehave-Console.exe .\bin\debug\YourTestProjectAssembly.dll /sf=Gherkin\*.feature
 
 You will have to change 0.1.0.0 to the version of nbehave you installed, and you will have to change .\bin\debug\YourTestProjectAssembly.dll to point to the dll that will be created when you compile the samples.
-If you dont want to run from the command line install the Visual Studio and/or R# packages.
 
-For more info see http://nbehave.org/
+For more info goto https://github.com/nbehave/NBehave
 

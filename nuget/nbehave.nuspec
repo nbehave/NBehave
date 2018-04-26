@@ -17,7 +17,7 @@
     <tags>nbehave bdd atdd gherkin cucumber</tags>
   </metadata>
   <files>
-    <file src="../Debug-4.5/NBehave/NBehave.dll" target="lib/net45" />
-    <file src="../Debug-4.5/NBehave/GurkBurk.dll" target="lib/net45" />
+    <file src="../4.6/NBehave.dll" target="lib/net46" />
+    <file src="../4.6/GurkBurk.dll" target="lib/net46" />
   </files>
 </package>

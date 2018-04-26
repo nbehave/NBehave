@@ -17,9 +17,8 @@
     <tags>nbehave bdd atdd gherkin cucumber</tags>
   </metadata>
   <files>
-  <file src="../Debug-4.5/NBehave/NBehave-Console.exe" target="tools/net45" />
-  <file src="../Debug-4.5/NBehave/NBehave-Console-x86.exe" target="tools/net45" />
-  <file src="../Debug-4.5/NBehave/NBehave.dll" target="tools/net45" />
-  <file src="../Debug-4.5/NBehave/GurkBurk.dll" target="tools/net45" />
+  <file src="../4.6/NBehave-Console.exe" target="tools/net46" />
+  <file src="../4.6/NBehave.dll" target="tools/net46" />
+  <file src="../4.6/GurkBurk.dll" target="tools/net46" />
   </files>
 </package>
