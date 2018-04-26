@@ -37,7 +37,7 @@ namespace NBehave.Console.Specifications
         {
             NBehaveConsoleRunner.Main(new[] { "TestLib.dll", "/sf=*.scenario" });
 
-            Assert.That(_output.ToString(), Is.StringContaining("Scenarios"));
+            Assert.That(_output.ToString(), Does.Contain("Scenarios"));
         }
 
         [Test]

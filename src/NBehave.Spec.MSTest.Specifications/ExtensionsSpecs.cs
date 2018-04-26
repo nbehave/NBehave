@@ -71,7 +71,7 @@ namespace NBehave.Spec.MSTest.Specifications
         {
             5.ShouldBeAssignableFrom(typeof(int));
         }
-        
+
         [Test]
         public void Should_allow_substitution_for_IsNotAssignableFrom()
         {
@@ -123,10 +123,11 @@ namespace NBehave.Spec.MSTest.Specifications
     public class When_specifying_an_exception_to_be_thrown
     {
         [Test]
-        [NUnit.Framework.ExpectedException(typeof(AssertFailedException))]
         public void Should_fail_when_exception_is_of_a_different_type()
         {
-            (typeof(SystemException)).ShouldBeThrownBy(() => { throw new ApplicationException(); });
+            NUnit.Framework.Assert.Throws<AssertFailedException>(() => {
+                (typeof(SystemException)).ShouldBeThrownBy(() => { throw new ApplicationException(); });
+            });
         }
 
         [Test]
@@ -136,17 +137,19 @@ namespace NBehave.Spec.MSTest.Specifications
         }
 
         [Test]
-        [NUnit.Framework.ExpectedException(typeof(AssertFailedException))]
         public void Should_fail_when_exception_is_not_thrown()
         {
-            (typeof(ApplicationException)).ShouldBeThrownBy(() => { });
+            NUnit.Framework.Assert.Throws<AssertFailedException>(() => {
+                (typeof(ApplicationException)).ShouldBeThrownBy(() => { });
+            });
         }
 
         [Test]
-        [NUnit.Framework.ExpectedException(typeof(AssertFailedException))]
         public void Should_fail_when_exception_is_of_a_different_type_using_actions()
         {
-            (typeof(ApplicationException)).ShouldBeThrownBy(() => { throw new ArgumentException(); });
+            NUnit.Framework.Assert.Throws<AssertFailedException>(() => {
+                (typeof(ApplicationException)).ShouldBeThrownBy(() => { throw new ArgumentException(); });
+            });
         }
 
         [Test]
@@ -236,17 +239,19 @@ namespace NBehave.Spec.MSTest.Specifications
         {
             "blarg".ShouldNotBeEmpty();
         }
-        
+
         [Test]
         public void Should_allow_substitution_for_ShouldNotContain_for_string()
         {
             "Lorem ipsum dolor sit amet.".ShouldNotContain("foo");
         }
 
-        [Test, NUnit.Framework.ExpectedException(typeof(AssertFailedException))]
+        [Test]
         public void Should_allow_substitution_for_ShouldNotContain__for_string_failing()
         {
-            "Lorem ipsum dolor sit amet.".ShouldNotContain("ipsum");
+            NUnit.Framework.Assert.Throws<AssertFailedException>(() => {
+                "Lorem ipsum dolor sit amet.".ShouldNotContain("ipsum");
+            });
         }
 
         [Test]
@@ -256,11 +261,13 @@ namespace NBehave.Spec.MSTest.Specifications
             str.ShouldContain("Hell");
         }
 
-        [Test, NUnit.Framework.ExpectedException(typeof(AssertFailedException))]
+        [Test]
         public void Should_allow_substitution_for_ShouldContain_for_string_failing()
         {
-            string str = "Hello";
-            str.ShouldContain("Foo");
+            NUnit.Framework.Assert.Throws<AssertFailedException>(() => {
+                string str = "Hello";
+                str.ShouldContain("Foo");
+            });
         }
     }
 

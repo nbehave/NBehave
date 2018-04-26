@@ -222,10 +222,13 @@ namespace NBehave.Spec.NUnit.Specs
             "Lorem ipsum dolor sit amet.".ShouldNotContain("foo");
         }
 
-        [Specification, ExpectedException(typeof(AssertionException))]
+        [Specification]
         public void Should_allow_substitution_for_ShouldNotContain__for_string_failing()
         {
-            "Lorem ipsum dolor sit amet.".ShouldNotContain("ipsum");
+
+            Assert.Throws<AssertionException>(() => {
+                "Lorem ipsum dolor sit amet.".ShouldNotContain("ipsum");
+            });
         }
 
         [Test]
@@ -235,11 +238,13 @@ namespace NBehave.Spec.NUnit.Specs
             str.ShouldContain("Hell");
         }
 
-        [Specification, ExpectedException(typeof(AssertionException))]
+        [Specification]
         public void Should_allow_substitution_for_ShouldContain_for_string_failing()
         {
-            var str = "Hello";
-            str.ShouldContain("Foo");
+            Assert.Throws<AssertionException>(() => {
+                var str = "Hello";
+                str.ShouldContain("Foo");
+            });
         }
     }
 
@@ -319,10 +324,11 @@ namespace NBehave.Spec.NUnit.Specs
     public class When_specifying_exceptions_to_be_thrown
     {
         [Test]
-        [ExpectedException(typeof(AssertionException))]
         public void Should_fail_when_exception_is_of_a_different_type()
         {
-            (typeof(SystemException)).ShouldBeThrownBy(() => { throw new ApplicationException(); });
+            Assert.Throws<AssertionException>(() => {
+                (typeof(SystemException)).ShouldBeThrownBy(() => { throw new ApplicationException(); });
+            });
         }
 
         [Test]
@@ -332,17 +338,19 @@ namespace NBehave.Spec.NUnit.Specs
         }
 
         [Test]
-        [ExpectedException(typeof(AssertionException))]
         public void Should_fail_when_exception_is_not_thrown()
         {
-            (typeof(ApplicationException)).ShouldBeThrownBy(() => { });
+            Assert.Throws<AssertionException>(() => {
+                (typeof(ApplicationException)).ShouldBeThrownBy(() => { });
+            });
         }
 
         [Test]
-        [ExpectedException(typeof(AssertionException))]
         public void Should_fail_when_exception_is_of_a_different_type_using_actions()
         {
-            (typeof(SystemException)).ShouldBeThrownBy(() => { throw new ApplicationException(); });
+            Assert.Throws<AssertionException>(() => {
+                (typeof(SystemException)).ShouldBeThrownBy(() => { throw new ApplicationException(); });
+            });
         }
 
         [Test]
@@ -366,18 +374,23 @@ namespace NBehave.Spec.NUnit.Specs
             action.ShouldThrow<ArgumentException>();
         }
 
-        [Specification, ExpectedException(typeof(AssertionException), ExpectedMessage = "Exception of type <System.ArgumentException> expected but no exception occurred")]
+        [Specification]
         public void Should_fail_when_no_exception_occurs()
         {
-            Action action = () => {  };
-            action.ShouldThrow<ArgumentException>();
+            var ex = Assert.Throws(typeof(AssertionException), () => {
+                Action action = () => {  };
+                action.ShouldThrow<ArgumentException>();
+            });
+            Assert.AreEqual("Exception of type <System.ArgumentException> expected but no exception occurred", ex.Message);
         }
 
-        [Specification, ExpectedException(typeof(AssertionException))]
+        [Specification]
         public void Should_pass_fail_when_exception_is_not_correct_type()
         {
-            Action action = () => { throw new ApplicationException("blerg"); };
-            action.ShouldThrow<ArgumentException>();
+            Assert.Throws<AssertionException>(() => {
+                Action action = () => { throw new ApplicationException("blerg"); };
+                action.ShouldThrow<ArgumentException>();
+            });
         }
 
         [Test]

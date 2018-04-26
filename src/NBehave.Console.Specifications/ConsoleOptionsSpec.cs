@@ -65,13 +65,13 @@ namespace NBehave.Console.Specifications
             [Test]
             public void Should_display_description_of_parameter()
             {
-                Assert.That(_output, Is.StringContaining("/scenarioFiles=STR    Scenario files(s) to run. Ex: scenarioFiles:scenario1.txt;scenario2.txt (Short format: /sf=STR)"));
+                Assert.That(_output, Does.Contain("/scenarioFiles=STR    Scenario files(s) to run. Ex: scenarioFiles:scenario1.txt;scenario2.txt (Short format: /sf=STR)"));
             }
 
             [Test]
             public void Should_display_description_of_boolean_parameter()
             {
-                Assert.That(_output, Is.StringContaining("/nologo               Do not display the logo"));
+                Assert.That(_output, Does.Contain("/nologo               Do not display the logo"));
             }
         }
     }

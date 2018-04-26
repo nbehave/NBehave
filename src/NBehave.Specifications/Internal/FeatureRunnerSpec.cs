@@ -108,7 +108,7 @@ namespace NBehave.Specifications.Internal
                 scenario.AddStep(new StringStep("When", "greeted", ""));
                 var thenStep = new StringTableStep("Then", "Hello [y]", "");
                 thenStep.AddTableStep(new Example(new ExampleColumns(new[] { new ExampleColumn("y"), }), new Dictionary<string, string> { { "y", "Nisse" } }));
-                thenStep.AddTableStep(new Example(new ExampleColumns(new[] { new ExampleColumn("y"), }), new Dictionary<string, string> { { "y", "Kålle" } }));
+                thenStep.AddTableStep(new Example(new ExampleColumns(new[] { new ExampleColumn("y"), }), new Dictionary<string, string> { { "y", "Kï¿½lle" } }));
                 scenario.AddStep(thenStep);
                 return scenario;
             }
@@ -238,7 +238,7 @@ namespace NBehave.Specifications.Internal
             public void should_fail_step()
             {
                 Assert.That(step.StepResult.Result, Is.InstanceOf<Failed>());
-                Assert.That(step.StepResult.Message, Is.StringContaining("ArgumentException"));
+                Assert.That(step.StepResult.Message, Does.Contain("ArgumentException"));
             }
         }
 
@@ -266,7 +266,7 @@ namespace NBehave.Specifications.Internal
             [Test]
             public void Step_Result_should_have_exception_message()
             {
-                Assert.That(step.StepResult.Message, Is.StringContaining("ArgumentNullException"));
+                Assert.That(step.StepResult.Message, Does.Contain("ArgumentNullException"));
             }
         }
 
