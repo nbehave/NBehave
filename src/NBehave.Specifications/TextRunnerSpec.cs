@@ -339,7 +339,7 @@ namespace NBehave.Specifications
                 _thenWasCalled = true;
             }
 
-            [TestFixtureSetUp]
+            [OneTimeSetUp]
             public void SetUp()
             {
                 _featureResults = CreateBasicConfiguration()
@@ -483,7 +483,7 @@ namespace NBehave.Specifications
                 _timesAfterScenarioWasCalled++;
             }
 
-            [TestFixtureSetUp]
+            [OneTimeSetUp]
             public void Setup()
             {
                 _timesBeforeScenarioWasCalled = 0;
@@ -622,7 +622,7 @@ namespace NBehave.Specifications
                 _tagsAfterStep.AddRange(StepContext.Current.Tags);
             }
 
-            [TestFixtureSetUp]
+            [OneTimeSetUp]
             public void Setup()
             {
                 _tagsBeforeFeature.Clear();

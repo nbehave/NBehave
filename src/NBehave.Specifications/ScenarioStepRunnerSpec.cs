@@ -80,7 +80,7 @@ namespace NBehave.Specifications
                 Step.Pend("some reason");
             }
 
-            [TestFixtureSetUp]
+            [OneTimeSetUp]
             public void Setup()
             {
                 Init();

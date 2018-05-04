@@ -4,6 +4,7 @@
 #r "FakeLib.dll"
 
 open Fake
+open Fake.Testing.NUnit3
 open System
 open System.IO
 
@@ -51,7 +52,7 @@ let mbUnitVersion () =
   |> Array.find(fun x -> x.Trim().ToLower().StartsWith("mbunit ("))
   |> fun x -> x.Trim().Split([|' '|]).[1].Replace("(", "").Replace(")", "")
 
-let dotnetcliVersion = "2.1.104"
+let dotnetcliVersion = "2.1.105"
 let mutable dotnetExePath = "/Users/morganpersson/.local/share/dotnetcore/dotnet"
 
 // let appReferences = !! "/**/*.csproj"
@@ -191,18 +192,23 @@ Target "Compile Tests" (fun _ ->
   )
 )
 
+
 Target "Test" (fun _ ->
   frameworkVersions
   |> Seq.iter(fun frameworkVer ->
         let testDir = (Path.Combine(buildDir, "specs_" + frameworkVer)) |> FullName
         let testDlls = !! (testDir + "/*.Specifications.dll")
         let xmlFile = (Path.Combine(testReportsDir, "specs_" + frameworkVer + ".xml")) |> FullName
-        NUnit (fun p ->
+        NUnit3 (fun p ->
           {p with
-            ToolPath = (Path.Combine(nugetPackageDir, "NUnit.Runners", "tools")) |> FullName
-            OutputFile = xmlFile
-            Framework = frameworkVer
-            ShowLabels = false
+            ToolPath = (Path.Combine(nugetPackageDir, "NUnit.ConsoleRunner", "tools", "nunit3-console.exe")) |> FullName
+            WorkingDir = testDir
+            // OutputFile = xmlFile
+            // OutputDir = testReportsDir
+            Framework = NUnit3Runtime.Default //frameworkVer
+            Labels = LabelsLevel.On
+            TimeOut = TimeSpan(0, 5, 0)
+            TeamCity = buildServer = TeamCity
           }) testDlls
         sendTeamCityNUnitImport xmlFile
       )

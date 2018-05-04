@@ -29,7 +29,7 @@ namespace NBehave.Specifications
             {
                 private string _messages;
 
-                [TestFixtureSetUp]
+                [OneTimeSetUp]
                 public void Run_Feature()
                 {
                     var messages = new StringWriter();
@@ -78,7 +78,7 @@ namespace NBehave.Specifications
             {
                 private string _messages;
 
-                [TestFixtureSetUp]
+                [OneTimeSetUp]
                 public void Run_Feature()
                 {
                     var messages = new StringWriter();
@@ -144,7 +144,7 @@ namespace NBehave.Specifications
             {
                 private string _messages;
 
-                [TestFixtureSetUp]
+                [OneTimeSetUp]
                 public void Run_Feature()
                 {
                     var messages = new StringWriter();
@@ -196,7 +196,7 @@ namespace NBehave.Specifications
             {
                 private string _messages;
 
-                [TestFixtureSetUp]
+                [OneTimeSetUp]
                 public void Run_Feature()
                 {
                     var messages = new StringWriter();

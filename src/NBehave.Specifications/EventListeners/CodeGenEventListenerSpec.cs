@@ -12,7 +12,7 @@ namespace NBehave.Specifications.EventListeners
         private string _output;
         private CodeGenEventListener _listener;
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public virtual void SetUp()
         {
             _listener = new CodeGenEventListener();

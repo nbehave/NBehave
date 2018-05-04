@@ -17,7 +17,7 @@ namespace NBehave.Specifications.Internal
         private ActionCatalog actionCatalog;
         private HooksCatalog hooksCatalog;
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public virtual void SetUp()
         {
             hooksCatalog = new HooksCatalog();
@@ -51,7 +51,7 @@ namespace NBehave.Specifications.Internal
         {
             private FeatureResult featureResult;
 
-            [TestFixtureSetUp]
+            [OneTimeSetUp]
             public override void SetUp()
             {
                 base.SetUp();
@@ -120,7 +120,7 @@ namespace NBehave.Specifications.Internal
             bool beforeScenarioWasCalled;
             bool afterScenarioWasCalled;
 
-            [TestFixtureSetUp]
+            [OneTimeSetUp]
             public override void SetUp()
             {
                 base.SetUp();
@@ -153,7 +153,7 @@ namespace NBehave.Specifications.Internal
             private int timesAfterStepWasCalled;
             private int timesAfterScenarioWasCalled;
 
-            [TestFixtureSetUp]
+            [OneTimeSetUp]
             public override void SetUp()
             {
                 base.SetUp();
@@ -224,7 +224,7 @@ namespace NBehave.Specifications.Internal
         {
             private StringStep step;
 
-            [TestFixtureSetUp]
+            [OneTimeSetUp]
             public override void SetUp()
             {
                 base.SetUp();
@@ -247,7 +247,7 @@ namespace NBehave.Specifications.Internal
         {
             private StringStep step;
 
-            [TestFixtureSetUp]
+            [OneTimeSetUp]
             public override void SetUp()
             {
                 base.SetUp();
@@ -276,7 +276,7 @@ namespace NBehave.Specifications.Internal
             private bool afterStepWasCalled;
             private ScenarioResult scenarioResult;
 
-            [TestFixtureSetUp]
+            [OneTimeSetUp]
             public override void SetUp()
             {
                 base.SetUp();
@@ -312,7 +312,7 @@ namespace NBehave.Specifications.Internal
         {
             private ScenarioResult scenarioResult;
 
-            [TestFixtureSetUp]
+            [OneTimeSetUp]
             public override void SetUp()
             {
                 base.SetUp();
