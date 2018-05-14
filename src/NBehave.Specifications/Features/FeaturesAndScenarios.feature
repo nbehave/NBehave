@@ -17,8 +17,8 @@
     And something more pending
     When some pending event occurs
     And some more pending event occurs
-    Then this text should still show up in xml output 
-                                         
+    Then this text should still show up in xml output
+
 Feature: S2
   As a X2
   I want Y2
@@ -28,7 +28,7 @@ Feature: S2
     Given something
     When some event occurs
     Then there is some outcome
-                                         
+
 Feature: S3
   As a X3
   I want Y3
