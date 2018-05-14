@@ -39,7 +39,7 @@ namespace NBehave.Console
         /// </returns>
         [STAThread]
         public static int Main(string[] args)
-        {            
+        {
             var t0 = DateTime.Now;
             var output = new PlainTextOutput(System.Console.Out);
             var options = CommandLineParser<ConsoleOptions>.Parse(args);
@@ -111,7 +111,8 @@ namespace NBehave.Console
         private static void WriteInvalidArguments(ConsoleOptions options)
         {
             System.Console.ForegroundColor = ConsoleColor.DarkRed;
-            System.Console.Error.WriteLine("fatal error: invalid arguments");
+            System.Console.Error.WriteLine("fatal error: invalid arguments.");
+            System.Console.Error.WriteLine(String.Join(Environment.NewLine, options.Errors()));
             System.Console.ResetColor();
             options.ShowHelp();
         }
