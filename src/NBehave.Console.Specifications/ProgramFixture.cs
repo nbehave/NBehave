@@ -45,7 +45,7 @@ namespace NBehave.Console.Specifications
         {
             NBehaveConsoleRunner.Main(new[] { "TestAssembly.dll", "/nologo", "/sf=*.scenario" });
 
-            Assert.That(_output.ToString(), Is.Not.StringContaining("Copyright"));
+            Assert.That(_output.ToString(), Does.Not.Contain("Copyright"));
         }
 
         [Test]
