@@ -112,7 +112,7 @@ namespace NBehave.Specifications.EventListeners
                 var narrative = _xmlDoc.SelectSingleNode("results/features/feature/narrative").InnerText;
                 StringAssert.Contains("As a X1\r\n", narrative);
                 StringAssert.Contains("I want Y1\r\n", narrative);
-                StringAssert.Contains("So that Z1\n", narrative);
+                StringAssert.Contains("So that Z1" + Environment.NewLine, narrative);
             }
 
             [Test]
