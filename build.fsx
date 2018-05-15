@@ -198,7 +198,7 @@ Target "Test" (fun _ ->
   |> Seq.iter(fun frameworkVer ->
         let testDir = (Path.Combine(buildDir, "specs_" + frameworkVer)) |> FullName
         let testDlls = !! (testDir + "/*.Specifications.dll")
-        let xmlFile = (Path.Combine(testReportsDir, "specs_" + frameworkVer + ".xml")) |> FullName
+        // let xmlFile = (Path.Combine(testReportsDir, "specs_" + frameworkVer + ".xml")) |> FullName
         NUnit3 (fun p ->
           {p with
             ToolPath = (Path.Combine(nugetPackageDir, "NUnit.ConsoleRunner", "tools", "nunit3-console.exe")) |> FullName
@@ -210,7 +210,7 @@ Target "Test" (fun _ ->
             TimeOut = TimeSpan(0, 5, 0)
             TeamCity = buildServer = TeamCity
           }) testDlls
-        sendTeamCityNUnitImport xmlFile
+        // sendTeamCityNUnitImport xmlFile
       )
 )
 
