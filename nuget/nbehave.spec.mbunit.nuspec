@@ -18,7 +18,7 @@
     <tags>nbehave bdd atdd tdd</tags>
     <dependencies>
         <dependency id="RhinoMocks" version="[3.6.1]" />
-        <dependency id="MbUnit" version="[$mbunitVersion$]" />
+        <dependency id="MbUnit" version="[$mbunitMinVersion$,$mbunitMaxVersion$)" />
     </dependencies>
   </metadata>
   <files>

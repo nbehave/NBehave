@@ -1,7 +1,7 @@
 source https://www.nuget.org/api/v2
 nuget fake
 nuget FSharp.Core
-nuget GurkBurk ~> 2.0
+nuget GurkBurk ~> 2.0.0
 nuget mbunit >= 3.3.454.0
 nuget MEFedMVVM >= 1.4 restriction: >= net40
 nuget Mono.Reflection >= 1.0.0.0 restriction: >= net40

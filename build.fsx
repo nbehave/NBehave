@@ -38,19 +38,24 @@ let getpackageFolder dirFilter runnerFilter =
   |> Seq.head
 
 let nunitVersion () =
-  File.ReadAllLines(Path.Combine(rootDir, "paket.lock"))
-  |> Array.find(fun x -> x.Trim().ToLower().StartsWith("nunit ("))
-  |> fun x -> x.Trim().Split([|' '|]).[1].Replace("(", "").Replace(")", "")
+  File.ReadAllLines(Path.Combine(rootDir, "paket.dependencies"))
+  |> Array.find(fun x -> x.Trim().ToLower().Contains("nunit"))
+  |> fun x -> x.Trim().Split([|' '|]).[3]
 
 let xunitVersion () =
-  File.ReadAllLines(Path.Combine(rootDir, "paket.lock"))
-  |> Array.find(fun x -> x.Trim().ToLower().StartsWith("xunit ("))
-  |> fun x -> x.Trim().Split([|' '|]).[1].Replace("(", "").Replace(")", "")
+  File.ReadAllLines(Path.Combine(rootDir, "paket.dependencies"))
+  |> Array.find(fun x -> x.Trim().ToLower().Contains("xunit"))
+  |> fun x -> x.Trim().Split([|' '|]).[3]
 
 let mbUnitVersion () =
-  File.ReadAllLines(Path.Combine(rootDir, "paket.lock"))
-  |> Array.find(fun x -> x.Trim().ToLower().StartsWith("mbunit ("))
-  |> fun x -> x.Trim().Split([|' '|]).[1].Replace("(", "").Replace(")", "")
+  File.ReadAllLines(Path.Combine(rootDir, "paket.dependencies"))
+  |> Array.find(fun x -> x.Trim().ToLower().Contains("mbunit"))
+  |> fun x -> x.Trim().Split([|' '|]).[3]
+
+let gurkburkVersion () =
+  File.ReadAllLines(Path.Combine(rootDir, "paket.dependencies"))
+  |> Array.find(fun x -> x.Trim().ToLower().Contains("gurkburk"))
+  |> fun x -> x.Trim().Split([|' '|]).[3]
 
 let dotnetcliVersion = "2.1.105"
 let mutable dotnetExePath = "/Users/morganpersson/.local/share/dotnetcore/dotnet"
@@ -83,6 +88,13 @@ let deleteObjectDirs () =
   DeleteDirs (!! "src/**/obj")
   DeleteDirs (!! "src/**/bin")
 
+let upToVersion v =
+  let ver = Version(v)
+  match (v.Split([|'.'|]).Length) with
+  | 1 -> sprintf "%i" (ver.Major + 1)
+  | 2 -> sprintf "%i.0" (ver.Major + 1)
+  | 3 -> sprintf "%i.%i.0" ver.Major (ver.Minor + 1)
+  | _ -> sprintf "%i.%i.0.0" ver.Major (ver.Minor + 1)
 
 let run' timeout cmd args dir =
     if execProcess (fun info ->
@@ -103,7 +115,6 @@ let runDotnet workingDir args =
             info.Arguments <- args) TimeSpan.MaxValue
     if result <> 0 then failwithf "dotnet %s failed" args
 
-
 let compileAnyCpu frameworkVer outputPathPrefix proj =
   build (fun f ->
     { f with
@@ -120,6 +131,7 @@ let compileAnyCpu frameworkVer outputPathPrefix proj =
 // --------------------------------------------------------------------------------------
 // Targets
 // --------------------------------------------------------------------------------------
+
 
 Target "Clean Artifacts" (fun _ ->
   CleanDirs [artifactsDir]
@@ -229,19 +241,22 @@ Target "Package" (fun _ ->
   NuGetPack nugetParams (Path.Combine(packageTemplateDir, "nbehave.runners.nuspec"))
   NuGetPack nugetParams (Path.Combine(packageTemplateDir, "nbehave.samples.nuspec"))
 
-  NuGetPack (fun p -> { (nugetParams p) with Properties = ["nunitVersion", nunitVersion()] } )
+  let nunitVer = (nunitVersion (), upToVersion <| nunitVersion ())
+  let xunitVer = (xunitVersion (), upToVersion <| xunitVersion ())
+  let mbUnitVer = (mbUnitVersion (), upToVersion <| mbUnitVersion ())
+  NuGetPack (fun p -> { (nugetParams p) with Properties = ["nunitMinVersion", fst nunitVer; "nunitMaxVersion", snd nunitVer] } )
             (Path.Combine(packageTemplateDir, "nbehave.fluent.nunit.nuspec"))
-  NuGetPack (fun p -> { (nugetParams p) with Properties = ["xunitVersion", xunitVersion()] } )
+  NuGetPack (fun p -> { (nugetParams p) with Properties = ["xunitMinVersion", fst xunitVer; "xunitMaxVersion", snd xunitVer] } )
             (Path.Combine(packageTemplateDir, "nbehave.fluent.xunit.nuspec"))
-  NuGetPack (fun p -> { (nugetParams p) with Properties = ["mbunitVersion", mbUnitVersion()] } )
+  NuGetPack (fun p -> { (nugetParams p) with Properties = ["mbunitMinVersion", fst mbUnitVer; "mbunitMaxVersion", snd mbUnitVer] } )
             (Path.Combine(packageTemplateDir, "nbehave.fluent.mbunit.nuspec"))
   NuGetPack nugetParams (Path.Combine(packageTemplateDir, "nbehave.fluent.mstest.nuspec"))
 
-  NuGetPack (fun p -> { (nugetParams p) with Properties = ["nunitVersion", nunitVersion()] } )
+  NuGetPack (fun p -> { (nugetParams p) with Properties = ["nunitMinVersion", fst nunitVer; "nunitMaxVersion", snd nunitVer] } )
             (Path.Combine(packageTemplateDir, "nbehave.spec.nunit.nuspec"))
-  NuGetPack (fun p -> { (nugetParams p) with Properties = ["xunitVersion", xunitVersion()] } )
+  NuGetPack (fun p -> { (nugetParams p) with Properties = ["xunitMinVersion", fst xunitVer; "xunitMaxVersion", snd xunitVer] } )
             (Path.Combine(packageTemplateDir, "nbehave.spec.xunit.nuspec"))
-  NuGetPack (fun p -> { (nugetParams p) with Properties = ["mbunitVersion", mbUnitVersion()] } )
+  NuGetPack (fun p -> { (nugetParams p) with Properties = ["mbunitMinVersion", fst mbUnitVer; "mbunitMaxVersion", snd mbUnitVer] } )
             (Path.Combine(packageTemplateDir, "nbehave.spec.mbunit.nuspec"))
   NuGetPack nugetParams (Path.Combine(packageTemplateDir, "nbehave.spec.mstest.nuspec"))
 )
@@ -258,7 +273,8 @@ Target "Publish" (fun _ ->
     }
   let publish pkg =
     let project = Path.GetFileName(pkg).Replace(nugetVersionNumber, "").Replace(Path.GetExtension(pkg), "").TrimEnd([|'.'|])
-    //NuGetPublish (fun p -> nuGetParams p project) pkg
+    printfn "%s / %s" project nugetVersionNumber
+    NuGetPublish (fun p -> nugetParams p project) //pkg
     ()
   let files = Directory.GetFiles(artifactsDir, "*.nupkg")
   files |> Array.iter publish

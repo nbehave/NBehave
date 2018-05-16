@@ -17,8 +17,8 @@
     <language>en-US</language>
     <tags>nbehave bdd atdd tdd</tags>
     <dependencies>
+        <dependency id="NUnit" version="[$nunitMinVersion$,$nunitMaxVersion$)" />
         <dependency id="RhinoMocks" version="[3.6.1]" />
-        <dependency id="NUnit" version="[$nunitVersion$]" />
     </dependencies>
   </metadata>
   <files>
