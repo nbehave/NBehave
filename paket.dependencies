@@ -10,3 +10,4 @@ nuget NUnit.ConsoleRunner ~> 3.8.0
 nuget RhinoMocks = 3.6.1
 nuget Should ~> 1.1.12.0
 nuget xunit = 2.3.0
+nuget MSTest.TestFramework = 1.2.0

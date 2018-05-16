@@ -3,3 +3,4 @@ Mono.Reflection
 NUnit
 RhinoMocks
 xunit
+MSTest.TestFramework
