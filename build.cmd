@@ -5,7 +5,7 @@
 @echo off
 cls
 
-.paket\paket.exe restore
+.paket\paket.exe install
 if errorlevel 1 (
   exit /b %errorlevel%
 )
