@@ -29,8 +29,8 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\lib\Tiny\TinyIoC.cs">
-      <Link>Tiny\TinyIoC.cs</Link>
+    <Compile Include="TinyIoC.cs">
+      <Paket>True</Paket>
     </Compile>
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>

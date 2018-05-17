@@ -23,7 +23,7 @@ namespace NBehave
 
         public static ScenarioContext Current
         {
-            get { return Narrator.Framework.Tiny.TinyIoCContainer.Current.Resolve<ScenarioContext>(); }
+            get { return TinyIoC.TinyIoCContainer.Current.Resolve<ScenarioContext>(); }
         }
 
         public override string ToString()

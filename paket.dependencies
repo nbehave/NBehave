@@ -11,3 +11,4 @@ nuget RhinoMocks = 3.6.1
 nuget Should ~> 1.1.12.0
 nuget xunit = 2.3.0
 nuget MSTest.TestFramework = 1.2.0
+nuget TinyIoC ~> 1.3.0

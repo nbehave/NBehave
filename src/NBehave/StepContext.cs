@@ -26,7 +26,7 @@ namespace NBehave
 
         public static StepContext Current
         {
-            get { return Narrator.Framework.Tiny.TinyIoCContainer.Current.Resolve<StepContext>(); }
+            get { return TinyIoC.TinyIoCContainer.Current.Resolve<StepContext>(); }
         }
 
         public override string ToString()

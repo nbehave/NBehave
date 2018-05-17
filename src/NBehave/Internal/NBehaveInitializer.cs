@@ -1,7 +1,7 @@
 ﻿using NBehave.Configuration;
 using NBehave.EventListeners;
 using NBehave.Hooks;
-using NBehave.Narrator.Framework.Tiny;
+using TinyIoC;
 
 namespace NBehave.Internal
 {

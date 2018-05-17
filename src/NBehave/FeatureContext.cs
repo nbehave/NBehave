@@ -10,9 +10,9 @@ namespace NBehave
 
         public FeatureContext(Feature feature)
         {
-            Feature = feature;            
+            Feature = feature;
         }
-        
+
         public FeatureContext(Feature feature, IEnumerable<string> tags)
             :this(feature)
         {
@@ -21,7 +21,7 @@ namespace NBehave
 
         public static FeatureContext Current
         {
-            get { return Narrator.Framework.Tiny.TinyIoCContainer.Current.Resolve<FeatureContext>(); }
+            get { return TinyIoC.TinyIoCContainer.Current.Resolve<FeatureContext>(); }
         }
 
         public override string ToString()

@@ -8,7 +8,7 @@ using NBehave.EventListeners;
 using NBehave.EventListeners.Xml;
 using NBehave.Extensions;
 using NBehave.Internal;
-using NBehave.Narrator.Framework.Tiny;
+using TinyIoC;
 using NBehave.Specifications.Features;
 using NUnit.Framework;
 

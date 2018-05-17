@@ -127,9 +127,9 @@ namespace NBehave.Specifications
                 protected override void SetupContextTags()
                 {
                     var f = new FeatureContext(null, new[] { "tag1" });
-                    Narrator.Framework.Tiny.TinyIoCContainer.Current.Register(f);
+                    TinyIoC.TinyIoCContainer.Current.Register(f);
                     var c = new ScenarioContext(f, null, new[] { "tag2", "tag5" });
-                    Narrator.Framework.Tiny.TinyIoCContainer.Current.Register(c);
+                    TinyIoC.TinyIoCContainer.Current.Register(c);
                 }
 
                 [Test]
@@ -170,9 +170,9 @@ namespace NBehave.Specifications
                 protected override void SetupContextTags()
                 {
                     var f = new FeatureContext(null, new[] { "Foo" });
-                    Narrator.Framework.Tiny.TinyIoCContainer.Current.Register(f);
+                    TinyIoC.TinyIoCContainer.Current.Register(f);
                     var c = new ScenarioContext(f, null, new[] { "Bar" });
-                    Narrator.Framework.Tiny.TinyIoCContainer.Current.Register(c);
+                    TinyIoC.TinyIoCContainer.Current.Register(c);
                 }
 
                 [Test]
@@ -197,9 +197,9 @@ namespace NBehave.Specifications
                 protected override void SetupContextTags()
                 {
                     var f = new FeatureContext(null, new string[0]);
-                    Narrator.Framework.Tiny.TinyIoCContainer.Current.Register(f);
+                    TinyIoC.TinyIoCContainer.Current.Register(f);
                     var c = new ScenarioContext(f, null, new[] { "DontRun" });
-                    Narrator.Framework.Tiny.TinyIoCContainer.Current.Register(c);
+                    TinyIoC.TinyIoCContainer.Current.Register(c);
                 }
 
                 [Test]
@@ -224,9 +224,9 @@ namespace NBehave.Specifications
                 protected override void SetupContextTags()
                 {
                     var f = new FeatureContext(null, new string[0]);
-                    Narrator.Framework.Tiny.TinyIoCContainer.Current.Register(f);
+                    TinyIoC.TinyIoCContainer.Current.Register(f);
                     var c = new ScenarioContext(f, null, new[] { "DontRun" });
-                    Narrator.Framework.Tiny.TinyIoCContainer.Current.Register(c);
+                    TinyIoC.TinyIoCContainer.Current.Register(c);
                 }
 
                 [Test]

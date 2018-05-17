@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NBehave.Internal;
-using NBehave.Narrator.Framework.Tiny;
+using TinyIoC;
 using NUnit.Framework;
 
 namespace NBehave.Specifications

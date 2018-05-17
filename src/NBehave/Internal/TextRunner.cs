@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using NBehave.Configuration;
-using NBehave.Narrator.Framework.Tiny;
+using TinyIoC;
 
 namespace NBehave.Internal
 {
