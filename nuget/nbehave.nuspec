@@ -15,9 +15,11 @@
     <copyright>Copyright © NBehave 2007-2018</copyright>
    <language>en-US</language>
     <tags>nbehave bdd atdd gherkin cucumber</tags>
+    <dependencies>
+        <dependency id="gurkburk" version="[$gurkburkMinVersion$,$gurkburkMaxVersion$)" />
+    </dependencies>
   </metadata>
   <files>
     <file src="../4.6/NBehave.dll" target="lib/net46" />
-    <file src="../4.6/GurkBurk.dll" target="lib/net46" />
   </files>
 </package>

@@ -37,22 +37,22 @@ let getpackageFolder dirFilter runnerFilter =
   |> Seq.sort
   |> Seq.head
 
-let nunitVersion () =
+let nunitVersion =
   File.ReadAllLines(Path.Combine(rootDir, "paket.dependencies"))
   |> Array.find(fun x -> x.Trim().ToLower().Contains("nunit"))
   |> fun x -> x.Trim().Split([|' '|]).[3]
 
-let xunitVersion () =
+let xunitVersion =
   File.ReadAllLines(Path.Combine(rootDir, "paket.dependencies"))
   |> Array.find(fun x -> x.Trim().ToLower().Contains("xunit"))
   |> fun x -> x.Trim().Split([|' '|]).[3]
 
-let mbUnitVersion () =
+let mbUnitVersion =
   File.ReadAllLines(Path.Combine(rootDir, "paket.dependencies"))
   |> Array.find(fun x -> x.Trim().ToLower().Contains("mbunit"))
   |> fun x -> x.Trim().Split([|' '|]).[3]
 
-let gurkburkVersion () =
+let gurkburkVersion =
   File.ReadAllLines(Path.Combine(rootDir, "paket.dependencies"))
   |> Array.find(fun x -> x.Trim().ToLower().Contains("gurkburk"))
   |> fun x -> x.Trim().Split([|' '|]).[3]
@@ -237,28 +237,36 @@ let nugetParams p =
   }
 
 Target "Package" (fun _ ->
-  NuGetPack nugetParams (Path.Combine(packageTemplateDir, "nbehave.nuspec"))
-  NuGetPack nugetParams (Path.Combine(packageTemplateDir, "nbehave.runners.nuspec"))
-  NuGetPack nugetParams (Path.Combine(packageTemplateDir, "nbehave.samples.nuspec"))
+  let properties = [
+    "nunitMinVersion", nunitVersion; "nunitMaxVersion", upToVersion nunitVersion;
+    "xunitMinVersion", xunitVersion; "xunitMaxVersion", upToVersion xunitVersion;
+    "mbunitMinVersion", mbUnitVersion; "mbunitMaxVersion", upToVersion mbUnitVersion;
+    "gurkburkMinVersion", gurkburkVersion; "gurkburkMaxVersion", upToVersion gurkburkVersion
+  ]
 
-  let nunitVer = (nunitVersion (), upToVersion <| nunitVersion ())
-  let xunitVer = (xunitVersion (), upToVersion <| xunitVersion ())
-  let mbUnitVer = (mbUnitVersion (), upToVersion <| mbUnitVersion ())
-  NuGetPack (fun p -> { (nugetParams p) with Properties = ["nunitMinVersion", fst nunitVer; "nunitMaxVersion", snd nunitVer] } )
+  NuGetPack (fun p -> { (nugetParams p) with Properties = properties } )
+            (Path.Combine(packageTemplateDir, "nbehave.nuspec"))
+  NuGetPack (fun p -> { (nugetParams p) with Properties = properties } )
+            (Path.Combine(packageTemplateDir, "nbehave.runners.nuspec"))
+  NuGetPack (fun p -> { (nugetParams p) with Properties = properties } )
+            (Path.Combine(packageTemplateDir, "nbehave.samples.nuspec"))
+
+  NuGetPack (fun p -> { (nugetParams p) with Properties = properties } )
             (Path.Combine(packageTemplateDir, "nbehave.fluent.nunit.nuspec"))
-  NuGetPack (fun p -> { (nugetParams p) with Properties = ["xunitMinVersion", fst xunitVer; "xunitMaxVersion", snd xunitVer] } )
+  NuGetPack (fun p -> { (nugetParams p) with Properties = properties } )
             (Path.Combine(packageTemplateDir, "nbehave.fluent.xunit.nuspec"))
-  NuGetPack (fun p -> { (nugetParams p) with Properties = ["mbunitMinVersion", fst mbUnitVer; "mbunitMaxVersion", snd mbUnitVer] } )
+  NuGetPack (fun p -> { (nugetParams p) with Properties = properties } )
             (Path.Combine(packageTemplateDir, "nbehave.fluent.mbunit.nuspec"))
   NuGetPack nugetParams (Path.Combine(packageTemplateDir, "nbehave.fluent.mstest.nuspec"))
 
-  NuGetPack (fun p -> { (nugetParams p) with Properties = ["nunitMinVersion", fst nunitVer; "nunitMaxVersion", snd nunitVer] } )
+  NuGetPack (fun p -> { (nugetParams p) with Properties = properties } )
             (Path.Combine(packageTemplateDir, "nbehave.spec.nunit.nuspec"))
-  NuGetPack (fun p -> { (nugetParams p) with Properties = ["xunitMinVersion", fst xunitVer; "xunitMaxVersion", snd xunitVer] } )
+  NuGetPack (fun p -> { (nugetParams p) with Properties = properties } )
             (Path.Combine(packageTemplateDir, "nbehave.spec.xunit.nuspec"))
-  NuGetPack (fun p -> { (nugetParams p) with Properties = ["mbunitMinVersion", fst mbUnitVer; "mbunitMaxVersion", snd mbUnitVer] } )
+  NuGetPack (fun p -> { (nugetParams p) with Properties = properties } )
             (Path.Combine(packageTemplateDir, "nbehave.spec.mbunit.nuspec"))
-  NuGetPack nugetParams (Path.Combine(packageTemplateDir, "nbehave.spec.mstest.nuspec"))
+  NuGetPack (fun p -> { (nugetParams p) with Properties = properties } )
+            (Path.Combine(packageTemplateDir, "nbehave.spec.mstest.nuspec"))
 )
 
 Target "Publish" (fun _ ->
