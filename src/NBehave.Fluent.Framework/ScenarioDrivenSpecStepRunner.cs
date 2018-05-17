@@ -2,8 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using NBehave.Narrator.Framework;
-using NBehave.Narrator.Framework.Internal;
+using NBehave.Internal;
 
 namespace NBehave.Fluent.Framework
 {
@@ -65,33 +64,6 @@ namespace NBehave.Fluent.Framework
         public void Run(StringStep step, Example example)
         {
             throw new NotSupportedException("NBehave.Spec does not support example-driven scenarios");
-        }
-
-        public void OnCloseScenario()
-        {
-            var closeAction = resolvers
-                .Select(resolver => resolver.ResolveOnCloseScenario())
-                .FirstOrDefault(action => action != null);
-            if (closeAction != null)
-                closeAction();
-        }
-
-        public void BeforeScenario()
-        {
-            var beforeAction = resolvers
-                .Select(resolver => resolver.ResolveOnBeforeScenario())
-                .FirstOrDefault(action => action != null);
-            if (beforeAction != null)
-                beforeAction();
-        }
-
-        public void AfterScenario()
-        {
-            var afterAction = resolvers
-                .Select(resolver => resolver.ResolveOnAfterScenario())
-                .FirstOrDefault(action => action != null);
-            if (afterAction != null)
-                afterAction();
         }
 
         private Exception FindUsefulException(Exception e)

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Xml;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.TaskRunnerFramework;
-using NBehave.Narrator.Framework;
 
 namespace NBehave.ReSharper.Plugin.UnitTestRunner
 {
@@ -82,8 +81,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
         {
             unchecked
             {
-                int result = base.GetHashCode();
-                result = (result * 397) ^ FeatureFile.GetHashCode();
+                int result = FeatureFile.GetHashCode();
                 result = (result * 397) ^ Scenario.GetHashCode();
                 result = (result * 397) ^ Examples.AsString().GetHashCode();
                 return result;

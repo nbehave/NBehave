@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using NBehave.Narrator.Framework;
-using NBehave.Narrator.Framework.EventListeners;
-using NBehave.Narrator.Framework.EventListeners.Xml;
+using NBehave.EventListeners;
+using NBehave.EventListeners.Xml;
+
 using NUnit.Framework;
 
 namespace NBehave.Console.Specifications
@@ -35,7 +35,7 @@ namespace NBehave.Console.Specifications
         [Test]
         public void Should_run_example_framework_correctly()
         {
-            NBehaveConsoleRunner.Main(new[] { "TestPlainTextAssembly.dll", "/sf=*.scenario" });
+            NBehaveConsoleRunner.Main(new[] { "TestLib.dll", "/sf=*.scenario" });
 
             Assert.That(_output.ToString(), Does.Contain("Scenarios"));
         }
@@ -45,7 +45,7 @@ namespace NBehave.Console.Specifications
         {
             NBehaveConsoleRunner.Main(new[] { "TestAssembly.dll", "/nologo", "/sf=*.scenario" });
 
-            Assert.That(_output.ToString(), Is.Not.StringContaining("Copyright"));
+            Assert.That(_output.ToString(), Does.Not.Contain("Copyright"));
         }
 
         [Test]

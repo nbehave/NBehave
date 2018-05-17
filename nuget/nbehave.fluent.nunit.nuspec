@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>nbehave.fluent.nunit</id>
+    <version>$version$</version>
+    <title>NBehave Fluent - NUnit</title>
+    <authors>NBehave</authors>
+    <owners>NBehave</owners>
+    <licenseUrl>http://www.opensource.org/licenses/bsd-license.php</licenseUrl>
+    <projectUrl>http://nbehave.org/</projectUrl>
+    <iconUrl>http://static.tumblr.com/z2xvmc8/mhzlb82x5/logo.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Fluent interface for writing BDD scenarios</description>
+     <!-- <summary></summary> -->
+    <copyright>Copyright © NBehave 2007-2018</copyright>
+   <language>en-US</language>
+    <tags>nbehave bdd atdd</tags>
+    <dependencies>
+        <dependency id="nbehave" version="$version$" />
+        <dependency id="NUnit" version="[$nunitMinVersion$,$nunitMaxVersion$)" />
+        <dependency id="RhinoMocks" version="[3.6.1]" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="../4.6/NBehave.Fluent.Framework.dll" target="lib/net46" />
+  </files>
+</package>

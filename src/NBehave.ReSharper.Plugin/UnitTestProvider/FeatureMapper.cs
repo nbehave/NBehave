@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using JetBrains.Application;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.Util;
-using NBehave.Narrator.Framework;
+
 
 namespace NBehave.ReSharper.Plugin.UnitTestProvider
 {
@@ -97,13 +98,18 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
 
         private IProjectFile FindFile(Feature feature)
         {
-            ICollection<IProjectItem> proj = _solution.FindProjectItemsByLocation(new FileSystemPath(feature.Source));
+            var proj = new List<IProjectItem>();
+            ReadLockCookie.Execute(() => proj.AddRange(_solution.FindProjectItemsByLocation(new FileSystemPath(feature.Source))));
 
             string featureFileName = Path.GetFileName(feature.Source.ToLower());
             foreach (var item in proj)
             {
-                var project = item.GetProject();
-                var file = project.GetAllProjectFiles().SingleOrDefault(_ => Path.GetFileName(_.Location.FullPath.ToLower()) == featureFileName);
+                IProjectFile file = null;
+                ReadLockCookie.Execute(() =>
+                {
+                    var project = item.GetProject();
+                    file = project.GetAllProjectFiles().SingleOrDefault(_ => Path.GetFileName(_.Location.FullPath.ToLower()) == featureFileName);
+                });
                 if (file != null)
                     return file;
             }

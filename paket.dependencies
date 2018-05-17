@@ -1,0 +1,14 @@
+source https://www.nuget.org/api/v2
+nuget fake
+nuget FSharp.Core
+nuget GurkBurk ~> 2.0.0
+nuget mbunit = 3.4.14
+nuget Mono.Reflection ~> 1.1.0 restriction: >= net40
+nuget NuGet.CommandLine ~> 4.6.2
+nuget NUnit = 3.9.0 restriction: >= net40
+nuget NUnit.ConsoleRunner ~> 3.8.0
+nuget RhinoMocks = 3.6.1
+nuget Should ~> 1.1.12.0
+nuget xunit = 2.3.0
+nuget MSTest.TestFramework = 1.2.0
+nuget TinyIoC ~> 1.3.0

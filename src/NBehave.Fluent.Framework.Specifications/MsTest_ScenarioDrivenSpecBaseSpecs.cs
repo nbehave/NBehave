@@ -1,6 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NBehave.Fluent.Framework.Extensions;
-using NBehave.Narrator.Framework;
 
 namespace NBehave.Fluent.Framework.Specifications
 {

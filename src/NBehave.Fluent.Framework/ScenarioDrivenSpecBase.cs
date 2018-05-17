@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using System.Text;
 using NBehave.Fluent.Framework.Extensions;
-using NBehave.Narrator.Framework;
 using Rhino.Mocks;
 
 namespace NBehave.Fluent.Framework
@@ -21,23 +20,21 @@ namespace NBehave.Fluent.Framework
         public virtual void MainTeardown()
         {
             var scenariosWithPendingSteps = Feature.FindPendingSteps();
-            if (scenariosWithPendingSteps.Count() <= 0)
-            {
+            if (!scenariosWithPendingSteps.Any())
                 return;
-            }
-            
+
             // Some steps are still pending an implementation.  Let's build up a message about them.
             var message = new StringBuilder();
             foreach (var scenarioStruct in scenariosWithPendingSteps)
             {
-                message.AppendFormat("Scenario: {0}\r\n", scenarioStruct.Key.Title);
+                message.AppendFormat("Scenario: {0}{1}", scenarioStruct.Key.Title, Environment.NewLine);
                 foreach (var pendingStep in scenarioStruct)
                 {
-                    message.AppendFormat("  Step: {0}\r\n", pendingStep.Step);
+                    message.AppendFormat("  Step: {0}{1}", pendingStep.Step, Environment.NewLine);
                 }
-                message.AppendFormat("\r\n");
+                message.AppendFormat(Environment.NewLine);
             }
-            throw new ApplicationException("The following implementations are still pending:\r\n" + message);
+            throw new ApplicationException("The following implementations are still pending:" + Environment.NewLine + message);
         }
 
         protected TType CreateDependency<TType>()

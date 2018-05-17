@@ -1,4 +1,4 @@
-using NBehave.Narrator.Framework;
+using NBehave.EventListeners;
 
 namespace NBehave.ReSharper.Plugin.UnitTestRunner
 {

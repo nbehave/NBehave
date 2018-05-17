@@ -1,5 +1,4 @@
 using NBehave.Fluent.Framework.Extensions;
-using NBehave.Narrator.Framework;
 using Xunit;
 
 namespace NBehave.Fluent.Framework.Specifications

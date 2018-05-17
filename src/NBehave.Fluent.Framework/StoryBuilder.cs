@@ -1,5 +1,4 @@
 using System;
-using NBehave.Narrator.Framework;
 
 namespace NBehave.Fluent.Framework
 {

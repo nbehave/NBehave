@@ -1,6 +1,5 @@
 using System;
 using System.Reflection;
-using NBehave.Narrator.Framework;
 
 namespace NBehave.Fluent.Framework
 {
@@ -22,21 +21,6 @@ namespace NBehave.Fluent.Framework
             if (method != null)
                 return () => method.Invoke(_methodProvider, new object[0]);
 
-            return null;
-        }
-
-        public Action ResolveOnCloseScenario()
-        {
-            return null;
-        }
-
-        public Action ResolveOnBeforeScenario()
-        {
-            return null;
-        }
-
-        public Action ResolveOnAfterScenario()
-        {
             return null;
         }
     }

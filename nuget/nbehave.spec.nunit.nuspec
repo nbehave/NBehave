@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>nbehave.spec.nunit</id>
+    <version>$version$</version>
+    <title>NBehave Spec - NUnit</title>
+    <authors>NBehave</authors>
+    <owners>NBehave</owners>
+    <licenseUrl>http://www.opensource.org/licenses/bsd-license.php</licenseUrl>
+    <projectUrl>http://nbehave.org/</projectUrl>
+    <iconUrl>http://static.tumblr.com/z2xvmc8/mhzlb82x5/logo.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Extension methods for asserts for a more readable assert.
+	Ex: 1.ShouldNotBeEqualTo(2)</description>
+    <!-- <summary></summary> -->
+    <copyright>Copyright © NBehave 2007-2018</copyright>
+    <language>en-US</language>
+    <tags>nbehave bdd atdd tdd</tags>
+    <dependencies>
+        <dependency id="NUnit" version="[$nunitMinVersion$,$nunitMaxVersion$)" />
+        <dependency id="RhinoMocks" version="[3.6.1]" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="../4.6/NBehave.Spec.NUnit.dll" target="lib/net46" />
+  </files>
+</package>

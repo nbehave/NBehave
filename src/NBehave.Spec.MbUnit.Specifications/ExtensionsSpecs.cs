@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Text.RegularExpressions;
 using Gallio.Framework.Assertions;
@@ -343,8 +343,8 @@ namespace NBehave.Spec.MbUnit.Specs
 		{
 			Assert.Throws<AssertionFailureException>(() =>
 			{
-				(typeof(SystemException)).ShouldBeThrownBy(
-					delegate { throw new ApplicationException(); });
+			(typeof(SystemException)).ShouldBeThrownBy(
+				delegate { throw new ApplicationException(); });
 			});
 
 		}

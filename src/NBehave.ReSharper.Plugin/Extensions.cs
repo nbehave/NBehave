@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using NBehave.Narrator.Framework;
-using NBehave.Narrator.Framework.Extensions;
+using NBehave.Extensions;
+
 
 namespace NBehave.ReSharper.Plugin
 {

@@ -139,7 +139,7 @@ namespace NBehave.Spec.Xunit
 
         public static void ShouldBeThrownBy(this Type exceptionType, ThrowingAction action)
         {
-            Assert.ThrowsDelegate a = action.Invoke;
+            Action a = action.Invoke;
             Assert.Throws(exceptionType, a);
         }
 

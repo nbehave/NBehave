@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
@@ -240,8 +240,8 @@ namespace NBehave.Spec.NUnit.Specs
         {
             Assert.Throws<AssertionException>(() =>
             {
-                var str = "Hello";
-                str.ShouldContain("Foo");
+            var str = "Hello";
+            str.ShouldContain("Foo");
             });
         }
     }
@@ -326,7 +326,7 @@ namespace NBehave.Spec.NUnit.Specs
         {
             Assert.Throws<AssertionException>(() =>
             {
-                (typeof(SystemException)).ShouldBeThrownBy(() => { throw new ApplicationException(); });
+            (typeof(SystemException)).ShouldBeThrownBy(() => { throw new ApplicationException(); });
             });
         }
 
@@ -342,7 +342,7 @@ namespace NBehave.Spec.NUnit.Specs
         {
             Assert.Throws<AssertionException>(() =>
             {
-                (typeof(ApplicationException)).ShouldBeThrownBy(() => { });
+            (typeof(ApplicationException)).ShouldBeThrownBy(() => { });
             });
         }
 
@@ -351,7 +351,7 @@ namespace NBehave.Spec.NUnit.Specs
         {
             Assert.Throws<AssertionException>(() =>
             {
-                (typeof(SystemException)).ShouldBeThrownBy(() => { throw new ApplicationException(); });
+            (typeof(SystemException)).ShouldBeThrownBy(() => { throw new ApplicationException(); });
             });
         }
 
@@ -381,10 +381,10 @@ namespace NBehave.Spec.NUnit.Specs
         {
             var ex = Assert.Throws<AssertionException>(() =>
             {
-                Action action = () => {  };
-                action.ShouldThrow<ArgumentException>();
+            Action action = () => {  };
+            action.ShouldThrow<ArgumentException>();
             });
-            Assert.That(ex.Message, Is.EqualTo("Exception of type <System.ArgumentException> expected but no exception occurred"));
+            Assert.AreEqual("Exception of type <System.ArgumentException> expected but no exception occurred", ex.Message);
         }
 
         [Specification]
@@ -392,8 +392,8 @@ namespace NBehave.Spec.NUnit.Specs
         {
             Assert.Throws<AssertionException>(() =>
             {
-                Action action = () => { throw new ApplicationException("blerg"); };
-                action.ShouldThrow<ArgumentException>();
+            Action action = () => { throw new ApplicationException("blerg"); };
+            action.ShouldThrow<ArgumentException>();
             });
         }
 

@@ -1,0 +1,172 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--Project Sdk="Microsoft.NET.Sdk" -->
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{9C2E9E17-2A2C-4F6C-8072-D160A7EA9A51}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NBehave</RootNamespace>
+    <AssemblyName>NBehave</AssemblyName>
+    <TargetFramework>net46</TargetFramework>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.XML" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="TinyIoC.cs">
+      <Paket>True</Paket>
+    </Compile>
+    <Compile Include="..\CommonAssemblyInfo.cs">
+      <Link>CommonAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="Internal\ResharperCodeAnnotations.cs" />
+    <Compile Include="EventListeners\ConsoleWriter.cs" />
+    <Compile Include="EventListeners\IOutputWriter.cs" />
+    <Compile Include="Hooks\AfterFeatureAttribute.cs" />
+    <Compile Include="Hooks\AfterRunAttribute.cs" />
+    <Compile Include="Hooks\AfterScenarioAttribute.cs" />
+    <Compile Include="Hooks\AfterStepAttribute.cs" />
+    <Compile Include="Hooks\BeforeFeatureAttribute.cs" />
+    <Compile Include="Hooks\BeforeRunAttribute.cs" />
+    <Compile Include="Hooks\BeforeScenarioAttribute.cs" />
+    <Compile Include="Hooks\HookAttribute.cs" />
+    <Compile Include="Hooks\HooksAttribute.cs" />
+    <Compile Include="Internal\ActionCatalog.cs" />
+    <Compile Include="Domain\BackgroundStepResult.cs" />
+    <Compile Include="Domain\ColumnValues.cs" />
+    <Compile Include="Domain\ExampleBuilder.cs" />
+    <Compile Include="Domain\ExampleColumn.cs" />
+    <Compile Include="Domain\ExampleTableFormatter.cs" />
+    <Compile Include="Domain\FeatureResult.cs" />
+    <Compile Include="Domain\StepResult.cs" />
+    <Compile Include="Domain\WrappedException.cs" />
+    <Compile Include="EventListeners\BackgroundWriter.cs" />
+    <Compile Include="EventListeners\FailSpecResultEventListener.cs" />
+    <Compile Include="EventListeners\IEventListener.cs" />
+    <Compile Include="Extensions\ReflectionExtensions.cs" />
+    <Compile Include="Extensions\StoryRunnerFilterExtensions.cs" />
+    <Compile Include="FeatureContext.cs" />
+    <Compile Include="Hooks\HooksParser.cs" />
+    <Compile Include="Hooks\BeforeStepAttribute.cs" />
+    <Compile Include="Internal\Gherkin\GherkinListener.cs" />
+    <Compile Include="Internal\Gherkin\IListener.cs" />
+    <Compile Include="Internal\Gherkin\LineInFile.cs" />
+    <Compile Include="Internal\Gherkin\ParseException.cs" />
+    <Compile Include="Internal\Gherkin\Parser.cs" />
+    <Compile Include="Internal\Gherkin\StepKind.cs" />
+    <Compile Include="Internal\Gherkin\Token.cs" />
+    <Compile Include="Internal\MethodWithAttributeFinder.cs" />
+    <Compile Include="Internal\NBehaveContext.cs" />
+    <Compile Include="Internal\ContextHandler.cs" />
+    <Compile Include="Internal\EventArgs.cs" />
+    <Compile Include="Internal\ExampleRunner.cs" />
+    <Compile Include="Hooks\HooksHandler.cs" />
+    <Compile Include="Internal\IContextHandler.cs" />
+    <Compile Include="Internal\IFeatureRunner.cs" />
+    <Compile Include="Hooks\LoadHooks.cs" />
+    <Compile Include="Internal\IRunContext.cs" />
+    <Compile Include="Internal\IRunContextEvents.cs" />
+    <Compile Include="Internal\ParseScenarioFiles.cs" />
+    <Compile Include="Internal\LoadScenarioFiles.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\NBehaveConfiguration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="EventListeners\CodeGeneration\ActionStepCodeGenerator.cs" />
+    <Compile Include="EventListeners\CodeGeneration\CodeGenEventListener.cs" />
+    <Compile Include="EventListeners\OutputEventListener.cs" />
+    <Compile Include="EventListeners\Xml\EventReceived.cs" />
+    <Compile Include="EventListeners\Xml\EventType.cs" />
+    <Compile Include="EventListeners\Xml\StoryResultsEventReceived.cs" />
+    <Compile Include="EventListeners\Xml\XmlOutputWriter.cs" />
+    <Compile Include="Extensions\EnumerableExtensions.cs" />
+    <Compile Include="Extensions\NBehaveConfigurationExtensions.cs" />
+    <Compile Include="Internal\IRunner.cs" />
+    <Compile Include="Internal\NBehaveInitializer.cs" />
+    <Compile Include="Internal\ParameterConverter.cs" />
+    <Compile Include="Internal\FeatureRunner.cs" />
+    <Compile Include="Internal\RunContext.cs" />
+    <Compile Include="Remoting\AppDomainBootstrapper.cs" />
+    <Compile Include="Remoting\AppDomainRunner.cs" />
+    <Compile Include="Remoting\RemotableStoryRunner.cs" />
+    <Compile Include="Internal\RunnerFactory.cs" />
+    <Compile Include="ScenarioContext.cs" />
+    <Compile Include="Domain\ScenarioExampleResult.cs" />
+    <Compile Include="EventListeners\SummaryWriter.cs" />
+    <Compile Include="Domain\ActionMethodInfo.cs" />
+    <Compile Include="Attributes\ActionStepAttribute.cs" />
+    <Compile Include="Extensions\ActionStepConverterExtensions.cs" />
+    <Compile Include="EmbeddedRunner.cs" />
+    <Compile Include="StepContext.cs" />
+    <Compile Include="TextParsing\GherkinEvent.cs" />
+    <Compile Include="TextParsing\GroupEventsByFeature.cs" />
+    <Compile Include="TextParsing\TagFilterBuilder.cs" />
+    <Compile Include="TextParsing\TagFilter\TagFilter.cs" />
+    <Compile Include="TextParsing\GherkinScenarioParser.cs" />
+    <Compile Include="Contracts\IFileMatcher.cs" />
+    <Compile Include="IgnoreSpaceAndUnderScoreMatcher.cs" />
+    <Compile Include="Internal\IStringStepRunner.cs" />
+    <Compile Include="MatchAllFiles.cs" />
+    <Compile Include="Internal\StringStepRunner.cs" />
+    <Compile Include="Attributes\ActionStepsAttribute.cs" />
+    <Compile Include="Internal\ActionStepParser.cs" />
+    <Compile Include="EventListeners\EventListeners.cs" />
+    <Compile Include="EventListeners\MultiOutputEventListener.cs" />
+    <Compile Include="EventListeners\NullEventListener.cs" />
+    <Compile Include="EventListeners\TextWriterEventListener.cs" />
+    <Compile Include="EventListeners\Xml\XmlOutputEventListener.cs" />
+    <Compile Include="EventListeners\EventListener.cs" />
+    <Compile Include="Internal\PlainTextOutput.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Domain\Result.cs" />
+    <Compile Include="Domain\ScenarioResult.cs" />
+    <Compile Include="Attributes\GivenAttribute.cs" />
+    <Compile Include="Contracts\IMatchFiles.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="TextParsing\ModelBuilders\ExamplesBuilder.cs" />
+    <Compile Include="TextParsing\ModelBuilders\FeatureBuilder.cs" />
+    <Compile Include="TextParsing\ModelBuilders\StepBuilder.cs" />
+    <Compile Include="TextParsing\GroupEventsByTag.cs" />
+    <Compile Include="Internal\TextRunner.cs" />
+    <Compile Include="Internal\StoryRunnerFilter.cs" />
+    <Compile Include="Attributes\ThenAttribute.cs" />
+    <Compile Include="Domain\Example.cs" />
+    <Compile Include="Domain\ExampleColumns.cs" />
+    <Compile Include="Domain\Feature.cs" />
+    <Compile Include="Domain\Scenario.cs" />
+    <Compile Include="Domain\StringStep.cs" />
+    <Compile Include="Domain\StringTableStep.cs" />
+    <Compile Include="Attributes\WhenAttribute.cs" />
+    <Compile Include="Domain\TypeOfStep.cs" />
+    <Compile Include="Internal\TypeConverter.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3' Or $(TargetFrameworkVersion) == 'v4.7' Or $(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2')">
+      <ItemGroup>
+        <Reference Include="GurkBurk">
+          <HintPath>..\..\packages\GurkBurk\lib\net46\GurkBurk.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+</Project>

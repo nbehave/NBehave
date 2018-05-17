@@ -1,4 +1,3 @@
-using NBehave.Narrator.Framework;
 using NUnit.Framework;
 
 namespace NBehave.Fluent.Framework.Specifications
@@ -15,7 +14,7 @@ namespace NBehave.Fluent.Framework.Specifications
 
             stepRunner.RegisterImplementation(ScenarioFragment.Given, "change my flag", () => didRun = true);
 
-            stepRunner.Run(new StringStep("Given change my flag", null));
+            stepRunner.Run(new StringStep("Given", "change my flag", null));
 
             Assert.IsTrue(didRun);
         }
@@ -26,7 +25,7 @@ namespace NBehave.Fluent.Framework.Specifications
             var helper = new ReflectionBasedScenarioHelper();
             var stepRunner = new ScenarioDrivenSpecStepRunner(helper);
 
-            stepRunner.Run(new StringStep("When using reflection to obtain a step", null));
+            stepRunner.Run(new StringStep("When", "using reflection to obtain a step", null));
 
             Assert.IsTrue(helper.HasRun);
         }
@@ -37,7 +36,7 @@ namespace NBehave.Fluent.Framework.Specifications
             var helper = new AttributedScenarioHelper();
             var stepRunner = new ScenarioDrivenSpecStepRunner(helper);
 
-            stepRunner.Run(new StringStep("Given using attributes to obtain a step", null));
+            stepRunner.Run(new StringStep("Given", "using attributes to obtain a step", null));
 
             Assert.That(helper.StepResult, Is.EqualTo(1));
         }
@@ -48,7 +47,7 @@ namespace NBehave.Fluent.Framework.Specifications
             var helper = new AttributedScenarioHelper();
             var stepRunner = new ScenarioDrivenSpecStepRunner(helper);
 
-            stepRunner.Run(new StringStep("Given setting result via regex capture to 12", null));
+            stepRunner.Run(new StringStep("Given", "setting result via regex capture to 12", null));
 
             Assert.That(helper.StepResult, Is.EqualTo(12));
         }

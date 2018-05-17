@@ -15,6 +15,6 @@ namespace NBehave.Fluent.Framework.NUnit
         public override void MainTeardown()
         {
             base.MainTeardown();
-        }        
+        }
     }
 }

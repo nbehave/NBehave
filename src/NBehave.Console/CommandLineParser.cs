@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using NBehave.Narrator.Framework.Extensions;
-using NBehave.Narrator.Framework.Internal;
+using NBehave.Extensions;
+using NBehave.Internal;
 
 namespace NBehave.Console
 {
@@ -46,7 +46,7 @@ namespace NBehave.Console
             return property.Name[0].ToString(CultureInfo.CurrentUICulture).ToLower() + property.Name.Substring(1);
         }
 
-        public bool IsInvalid { get; set; }
+        public Exception Exception { get; set; }
     }
 
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
@@ -91,9 +91,9 @@ namespace NBehave.Console
                         AddParameter(arg);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                options.IsInvalid = true;
+                options.Exception = ex;
             }
             return options;
         }

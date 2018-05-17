@@ -2,9 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.ReSharper.TaskRunnerFramework;
-using NBehave.Narrator.Framework;
-using NBehave.Narrator.Framework.EventListeners;
-using NBehave.Narrator.Framework.Extensions;
+using NBehave.EventListeners.CodeGeneration;
 
 namespace NBehave.ReSharper.Plugin.UnitTestRunner
 {
@@ -60,7 +58,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
             var taskState = nodes.FirstOrDefault(_ => ((NBehaveFeatureTask)_.Task).FeatureTitle == result.FeatureTitle);
             if (taskState == null)
                 return;
-            server.TaskProgress(taskState.Task, "");
+            //server.TaskProgress(taskState.Task, "");
             PublishTaskResult(taskState.Task, result);
         }
 
@@ -73,7 +71,8 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
             if (taskResult == TaskResult.Inconclusive)
             {
                 taskResultMessage = "Pending";
-                server.TaskExplain(task, "See pending step(s) for more information");
+                server.TaskOutput(task, "See pending step(s) for more information", TaskOutputType.STDOUT);
+                //server.TaskExplain(task, "See pending step(s) for more information");
             }
             if (taskResult == TaskResult.Error)
             {
@@ -131,8 +130,8 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
 
         private static StepResult CreateStepResult(Example example, ScenarioResult scenarioResult)
         {
-            var source = scenarioResult.StepResults.First().StringStep.Source;
-            return new StepResult(new StringStep(example.ColumnValuesToString(), source), scenarioResult.Result);
+            var step = scenarioResult.StepResults.First().StringStep;
+            return new StepResult(new StringStep(step.Token, example.ColumnValuesToString(), step.Source, step.SourceLine), scenarioResult.Result);
         }
 
         private void NotifyResharperOfBackgroundResult(ScenarioResult scenarioResult)
@@ -157,14 +156,14 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
             foreach (var result in results)
             {
                 backgroundResult = (result.Result is Failed) ? result : backgroundResult;
-                backgroundResult = (result.Result is Pending && backgroundResult is Passed) ? result : backgroundResult;
+                backgroundResult = (result.Result is Pending && backgroundResult.Result is Passed) ? result : backgroundResult;
             }
             return backgroundResult;
         }
 
         private void NotifyResharperOfScenarioResult(ScenarioResult result, TaskState scenario)
         {
-            var stepResult = new StepResult(result.ScenarioTitle.AsStringStep(""), result.Result);
+            var stepResult = new StepResult(new StringStep("Scenario:", result.ScenarioTitle, ""), result.Result);
             NotifyResharperOfTaskResult(result, stepResult, scenario);
         }
 
@@ -206,22 +205,18 @@ namespace NBehave.ReSharper.Plugin.UnitTestRunner
             }
             if (taskResult == TaskResult.Inconclusive)
             {
-#if RESHARPER_71
-                Func<RemoteTask, string, bool> f = (task, msg) => server.TaskOutput(task, msg, TaskOutputType.STDOUT);
+                Action<RemoteTask, string> f = (task, msg) => server.TaskOutput(task, msg, TaskOutputType.STDOUT);
                 ExplainPendingStep(scenarioResult, result, taskState, f);
-#else
-                ExplainPendingStep(scenarioResult, result, taskState, server.TaskExplain);
-#endif
             }
             if (taskResult == TaskResult.Skipped)
             {
-                server.TaskExplain(taskState.Task, result.Message);
+                server.TaskOutput(taskState.Task, result.Message, TaskOutputType.STDOUT);
             }
             taskState.State = SignalState.Finished;
             server.TaskFinished(taskState.Task, result.Message, taskResult);
         }
 
-        private void ExplainPendingStep(ScenarioResult scenarioResult, StepResult result, TaskState taskState, Func<RemoteTask, string, bool> notifier)
+        private void ExplainPendingStep(ScenarioResult scenarioResult, StepResult result, TaskState taskState, Action<RemoteTask, string> notifier)
         {
             var msg = GetPendingStepImplementationSuggestion(scenarioResult, result);
             notifier(taskState.Task, msg);

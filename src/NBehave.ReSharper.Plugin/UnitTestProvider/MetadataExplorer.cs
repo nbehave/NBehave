@@ -2,12 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using JetBrains.Application;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.UnitTestFramework;
-using NBehave.Gherkin;
-using NBehave.Narrator.Framework;
-using NBehave.Narrator.Framework.Internal;
-using NBehave.Narrator.Framework.TextParsing;
+using NBehave.Configuration;
+using NBehave.Internal;
+using NBehave.Internal.Gherkin;
+using NBehave.TextParsing;
 
 namespace NBehave.ReSharper.Plugin.UnitTestProvider
 {
@@ -25,7 +26,13 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
             this.consumer = consumer;
             this.project = project;
             this.solution = solution;
-            projectModel = new ProjectModelElementEnvoy(this.project);
+            ProjectModelElementEnvoy p = null;
+            ReadLockCookie.Execute(() =>
+            {
+                p = new ProjectModelElementEnvoy(this.project);
+            });
+            projectModel = p;
+
         }
 
         public void ExploreProject()
@@ -64,10 +71,11 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
         private IEnumerable<IProjectFile> GetFeatureFilesFromProject()
         {
             var validExtensions = NBehaveConfiguration.FeatureFileExtensions;
-            var featureFiles = project
+            var featureFiles = new List<IProjectFile>();
+                ReadLockCookie.Execute(() => featureFiles.AddRange(
+                    project
                 .GetAllProjectFiles()
-                .Where(_ => validExtensions.Any(e => e.Equals(Path.GetExtension(_.Name), StringComparison.CurrentCultureIgnoreCase)))
-                .ToList();
+                        .Where(_ => validExtensions.Any(e => e.Equals(Path.GetExtension(_.Name), StringComparison.CurrentCultureIgnoreCase)))));
             return featureFiles;
         }
 

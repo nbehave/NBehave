@@ -1,6 +1,5 @@
 using MbUnit.Framework;
 using NBehave.Fluent.Framework.Extensions;
-using NBehave.Narrator.Framework;
 
 namespace NBehave.Fluent.Framework.Specifications
 {

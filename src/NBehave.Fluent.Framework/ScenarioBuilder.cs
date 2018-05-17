@@ -1,6 +1,9 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
-using NBehave.Narrator.Framework;
+using System.Reflection;
+using NBehave.Hooks;
+using Mono.Reflection;
 
 namespace NBehave.Fluent.Framework
 {
@@ -18,6 +21,9 @@ namespace NBehave.Fluent.Framework
         private Scenario _scenario;
         private readonly string _scenarioTitle;
         private ScenarioFragment previousStage = ScenarioFragment.Given;
+        private readonly HooksCatalog hooksCatalog;
+        int stepsCalled;
+        private int stepsToRunBeforeAfterScenario;
 
         protected Feature Feature { get; private set; }
 
@@ -43,6 +49,14 @@ namespace NBehave.Fluent.Framework
         {
             Feature = feature;
             _scenarioTitle = scenarioTitle;
+            hooksCatalog = new HooksCatalog();
+            SetupHooks();
+        }
+
+        private void SetupHooks()
+        {
+            var h = new HooksParser(hooksCatalog);
+            h.FindHooks(GetTypeByCallStack());
         }
 
         private void SetHelperObject(object helper)
@@ -56,10 +70,15 @@ namespace NBehave.Fluent.Framework
                 StepRunner.RegisterImplementation(currentStage, step, inlineImplementation);
 
             if (!Scenario.Steps.Any())
-                StepRunner.BeforeScenario();
-
+            {
+                RunHooks<BeforeScenarioAttribute>();
+                CountStepsToRunBeforeCallingAfterScenario();
+            }
+            stepsCalled++;
             var stringStep = AddStepToScenario(currentStage, step);
             RunStep(currentStage, step, stringStep);
+
+            RunAfterScenario();
 
             previousStage = currentStage;
             var failure = stringStep.StepResult.Result as Failed;
@@ -69,27 +88,100 @@ namespace NBehave.Fluent.Framework
             }
         }
 
+        private readonly Type[] virtualCallsTo = new[] { typeof(IGivenFragment), typeof(IWhenFragment), typeof(IGivenFragment) };
+        private bool CallsNBehave(Instruction i)
+        {
+            var callvirt = i.OpCode.Name == "callvirt";
+            if (callvirt)
+            {
+                var m = (MethodInfo)i.Operand;
+                var returnType = m.ReturnParameter;
+                if (returnType != null)
+                    return virtualCallsTo.Contains(returnType.ParameterType);
+            }
+            return false;
+        }
+
         private StringStep AddStepToScenario(ScenarioFragment currentStage, string step)
         {
-            var stringStep = CreateStringStep(step, currentStage);
+            var stringStep = CreateStringStep(currentStage, step);
             Scenario.AddStep(stringStep);
             return stringStep;
         }
 
         private void RunStep(ScenarioFragment currentStage, string step, StringStep stringStep)
         {
-            var stepToRun = new StringStep(string.Format("{0} {1}", currentStage, step), Scenario.Source);
-            StepRunner.Run(stepToRun);
-            stringStep.StepResult = new StepResult(stringStep, stepToRun.StepResult.Result);
+            var stepToRun = new StringStep(currentStage.ToString(), step, Scenario.Source);
+            try
+            {
+                RunHooks<BeforeStepAttribute>();
+            }
+            catch (Exception e)
+            {
+                stringStep.StepResult = new StepResult(stringStep, new Failed(e));
+            }
+            try
+            {
+                StepRunner.Run(stepToRun);
+                stringStep.StepResult = new StepResult(stringStep, stepToRun.StepResult.Result);
+            }
+            finally
+            {
+                RunHooks<AfterStepAttribute>();
+            }
         }
 
-        private StringStep CreateStringStep(string step, ScenarioFragment currentStage)
+        private void RunAfterScenario()
+        {
+            if (stepsCalled == stepsToRunBeforeAfterScenario)
+            {
+                stepsCalled = 0;
+                stepsToRunBeforeAfterScenario = -1;
+                RunHooks<AfterScenarioAttribute>();
+            }
+        }
+
+        private void RunHooks<T>()
+        {
+            hooksCatalog.OfType<T>().ToList().ForEach(_ => _.Invoke());
+        }
+
+        private StringStep CreateStringStep(ScenarioFragment currentStage, string step)
         {
             string stepType = currentStage.ToString();
             if (Scenario.Steps.Any() && previousStage == currentStage)
                 stepType = "And";
-            var stringStep = new StringStep(string.Format("{0} {1}", stepType, step), Scenario.Source);
+            var stringStep = new StringStep(stepType, step, Scenario.Source);
             return stringStep;
+        }
+
+        private Assembly GetTypeByCallStack()
+        {
+            int i = -1;
+            Type declaringType;
+            do
+            {
+                i++;
+                var stackFrame = new StackFrame(i);
+                declaringType = stackFrame.GetMethod().DeclaringType;
+            } while (declaringType.Assembly == typeof(ScenarioBuilder).Assembly);
+            return declaringType.Assembly;
+        }
+
+        private void CountStepsToRunBeforeCallingAfterScenario()
+        {
+            int i = -1;
+            StackFrame stackFrame;
+            do
+            {
+                i++;
+                stackFrame = new StackFrame(i);
+            } while (stackFrame.GetMethod().DeclaringType.Assembly == typeof(ScenarioBuilder).Assembly);
+
+            var instructions = Disassembler.GetInstructions(stackFrame.GetMethod())
+                .Where(CallsNBehave)
+                .ToList();
+            stepsToRunBeforeAfterScenario = instructions.Count;
         }
 
         internal class StartFragment : IScenarioBuilderStartWithHelperObject

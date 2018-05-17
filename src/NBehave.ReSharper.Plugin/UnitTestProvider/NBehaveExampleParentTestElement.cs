@@ -3,7 +3,7 @@ using System.Linq;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.UnitTestFramework;
-using NBehave.Narrator.Framework;
+
 using NBehave.ReSharper.Plugin.UnitTestRunner;
 
 namespace NBehave.ReSharper.Plugin.UnitTestProvider
@@ -30,7 +30,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
             get { return "NBehave examples"; }
         }
 
-        public override string GetPresentation()
+        public override string GetPresentation(IUnitTestElement parent = null)
         {
             var e = _examples.First();
             return e.ColumnNamesToString();
@@ -38,7 +38,7 @@ namespace NBehave.ReSharper.Plugin.UnitTestProvider
 
         public override IList<UnitTestTask> GetTaskSequence(IList<IUnitTestElement> explicitElements)
         {
-            var taskSequence = (Parent != null) ? DoGetTaskSequence(explicitElements) : new List<UnitTestTask>();
+            var taskSequence = (Parent != null) ? Parent.GetTaskSequence(explicitElements, null) : new List<UnitTestTask>();
             string scenario = (Parent is NBehaveBackgroundTestElement) ? ((NBehaveBackgroundTestElement)Parent).Scenario : "";
             scenario = (Parent is NBehaveScenarioTestElement) ? ((NBehaveScenarioTestElement)Parent).Scenario : scenario;
             taskSequence.Add(new UnitTestTask(this, new NBehaveExampleParentTask(FeatureFile, scenario, _examples)));

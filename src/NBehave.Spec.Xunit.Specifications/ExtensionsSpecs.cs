@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
@@ -241,8 +241,8 @@ namespace NBehave.Spec.Xunit.Specs
         {
             Assert.Throws<ContainsException>(() =>
             {
-                var str = "Hello";
-                str.ShouldContain("Foo");
+            var str = "Hello";
+            str.ShouldContain("Foo");
             });
         }
     }
@@ -370,13 +370,16 @@ namespace NBehave.Spec.Xunit.Specs
         [Test]
         public void Should_fail_when_no_exception_occurs()
         {
-            var e = Assert.Throws<FalseException>(() =>
+            var ex = Assert.Throws<FalseException>(() =>
             {
                 Action action = () => { };
                 action.ShouldThrow<ArgumentException>();
             });
-
-            Assert.That(e.Message, Is.EqualTo("Exception of type <System.ArgumentException> expected but no exception occurred"));
+            var expected =
+                "Exception of type <System.ArgumentException> expected but no exception occurred" + Environment.NewLine +
+                "Expected: False" + Environment.NewLine +
+                "Actual:   True";
+            Assert.AreEqual(expected, ex.Message);
         }
 
         [Test]
@@ -384,8 +387,8 @@ namespace NBehave.Spec.Xunit.Specs
         {
             Assert.Throws<IsTypeException>(() =>
             {
-                Action action = () => { throw new ApplicationException("blerg"); };
-                action.ShouldThrow<ArgumentException>();
+            Action action = () => { throw new ApplicationException("blerg"); };
+            action.ShouldThrow<ArgumentException>();
             });
         }
 

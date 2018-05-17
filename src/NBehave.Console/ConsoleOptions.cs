@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace NBehave.Console
@@ -60,7 +61,7 @@ namespace NBehave.Console
 
         public bool IsValid()
         {
-            if (IsInvalid)
+            if (Exception != null)
                 return false;
 
             if (Help)
@@ -73,6 +74,28 @@ namespace NBehave.Console
                 return false;
 
             return Parameters.Count >= 1;
+        }
+
+        public IEnumerable<string> Errors()
+        {
+            if (Help)
+                yield break;
+            else
+            {
+                if (ScenarioFiles == null)
+                    yield return "* No scenario files found.";
+
+                if (DryRun && !HasStoryOutput)
+                    yield return "* Need story output file on dry run.";
+
+                if (Parameters.Count == 0)
+                    yield return String.Format("* No assemblies specified.");
+
+                if (Exception != null)
+                    yield return String.Format("* An error occurred when parsing the command line arguments: '{0}'", Exception.Message);
+
+                yield break;
+            }
         }
 
         public override void ShowHelp()

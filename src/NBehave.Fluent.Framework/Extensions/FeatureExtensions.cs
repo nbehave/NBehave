@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using NBehave.Narrator.Framework;
 
 namespace NBehave.Fluent.Framework.Extensions
 {

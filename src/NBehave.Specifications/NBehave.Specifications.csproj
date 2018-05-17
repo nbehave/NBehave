@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{9F7DCAC2-5148-40AF-B588-A784C646E12E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NBehave.Specifications</RootNamespace>
+    <AssemblyName>NBehave.Specifications</AssemblyName>
+    <TargetFramework>net46</TargetFramework>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.XML" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\CommonAssemblyInfo.cs">
+      <Link>CommonAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="ActionCatalogSpec.cs" />
+    <Compile Include="ActionStepCodeGeneratorSpec.cs" />
+    <Compile Include="Domain\ActionMethodInfoSpec.cs" />
+    <Compile Include="Domain\ExampleBuilderSpec.cs" />
+    <Compile Include="Domain\ExampleTableFormatterSpec.cs" />
+    <Compile Include="Domain\FeatureSpec.cs" />
+    <Compile Include="Domain\ScenarioSpec.cs" />
+    <Compile Include="Domain\StringTableStepSpec.cs" />
+    <Compile Include="EventListeners\ColorfulConsoleOutputEventListenerSpec.cs" />
+    <Compile Include="EmbeddedRunnerSpec.cs" />
+    <Compile Include="EventListeners\FailSpecResultEventListenerSpec.cs" />
+    <Compile Include="ConfigurationNoAppDomain.cs" />
+    <Compile Include="Extensions\StoryRunnerFilterExtensionsSpec.cs" />
+    <Compile Include="HooksSpec.cs" />
+    <Compile Include="LoadAndParseScenarioFilesSpec.cs" />
+    <Compile Include="ActionStepParserSpec.cs" />
+    <Compile Include="EventListeners\CodeGenEventListenerSpec.cs" />
+    <Compile Include="EventListeners\MultiOutputEventListenerSpec.cs" />
+    <Compile Include="EventListeners\XmlOutputEventListenerSpec.cs" />
+    <Compile Include="Features\TestFeatures.cs" />
+    <Compile Include="ParameterConverterSpec.cs" />
+    <Compile Include="Extensions\ActionStepConverterExtensionsSpec.cs" />
+    <Compile Include="Internal\ContextHandlerSpec.cs" />
+    <Compile Include="Internal\FeatureRunnerSpec.cs" />
+    <Compile Include="RemotableStoryRunnerSpec.cs" />
+    <Compile Include="ScenarioContextSpec.cs" />
+    <Compile Include="StringExtensionsSpec.cs" />
+    <Compile Include="StringStepRunnerSpec.cs" />
+    <Compile Include="EventListeners\XmlOutputWriterSpec.cs" />
+    <Compile Include="SummaryWriterSpec.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScenarioResultSpec.cs" />
+    <Compile Include="ScenarioStepRunnerSpec.cs" />
+    <Compile Include="System.Specs\Backgrounds\WhenRunningAScenarioWithABackgroundSection.cs" />
+    <Compile Include="System.Specs\ExamplesWithTables\WhenRunningAScenarioWithExamples.cs" />
+    <Compile Include="System.Specs\Examples\WhenRunningAScenarioWithExamplesButNoActionSteps.cs" />
+    <Compile Include="System.Specs\Scenarios\WhenRunningAScenarioWithAFailingStep.cs" />
+    <Compile Include="System.Specs\Scenarios\WhenRunningAScenarioWithoutAFeature.cs" />
+    <Compile Include="System.Specs\Scenarios\WhenRunningAScenarioWithArguments.cs" />
+    <Compile Include="System.Specs\Scenarios\WhenRunningAScenario.cs" />
+    <Compile Include="System.Specs\SystemTestContext.cs" />
+    <Compile Include="System.Specs\Examples\WhenRunningAScenarioWithExamples.cs" />
+    <Compile Include="System.Specs\Tables\WhenRunningATableScenario.cs" />
+    <Compile Include="System.Specs\Tags\WhenRunningAScenario.cs" />
+    <Compile Include="TextParsing\GroupEventsByTagSpec.cs" />
+    <Compile Include="TextParsing\StepBuilderSpec.cs" />
+    <Compile Include="TextParsing\TagFilterBuilderSpec.cs" />
+    <Compile Include="TextParsing\TagFilterSpec.cs" />
+    <Compile Include="TextRunnerSpec.cs" />
+    <Compile Include="StoryRunnerFilterSpecs.cs" />
+    <Compile Include="ActionStepAttributeSpec.cs" />
+    <Compile Include="IgnoreSpaceAndUnderScoreMatcherSpec.cs" />
+    <Compile Include="ExampleSpec.cs" />
+    <Compile Include="ScenarioParserSpec.cs" />
+    <Compile Include="StringStepSpec.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Features\ScenarioWithTables.feature">
+      <LastGenOutput>GreetingSystem1.feature.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Features\FeatureWithTags.feature">
+      <LastGenOutput>GreetingSystem1.feature.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Features\FeatureWithPendingStep.feature">
+      <LastGenOutput>GreetingSystem1.feature.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Features\FeatureWithCommentOnLastRow.feature">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Features\FeatureWithLowerCaseSteps.feature">
+      <LastGenOutput>GreetingSystem1.feature.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Features\FeatureInSwedish.feature">
+      <LastGenOutput>GreetingSystem1.feature.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Features\ScenarioWithNoActionSteps.feature">
+      <LastGenOutput>GreetingSystem1.feature.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Features\FeatureWithNewLineInGivenClause.feature">
+      <LastGenOutput>GreetingSystem1.feature.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Features\FeatureNamedStory.feature">
+      <LastGenOutput>GreetingSystem1.feature.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Features\ScenarioWithExamples.feature">
+      <LastGenOutput>GreetingSystem1.feature.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Features\FeaturesAndScenarios.feature">
+      <LastGenOutput>GreetingSystem1.feature.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Features\ScenariosWithoutFeature.feature">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Features\FeatureWithManyScenarios.feature">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Features\FeatureWithFailingStep.feature">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="paket.references">
+    </None>
+    <None Include="System.Specs\Backgrounds\Background.feature">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="System.Specs\ExamplesWithTables\ExamplesWithTables.feature">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="System.Specs\Examples\ExamplesWithPendingSteps.feature">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="System.Specs\Examples\Examples.feature">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="System.Specs\Scenarios\ScenarioWithFailingStep.feature">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="System.Specs\Scenarios\ScenarioWithoutFeature.feature">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="System.Specs\Scenarios\ScenarioWithArguments.feature">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="System.Specs\Scenarios\Scenario.feature">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="System.Specs\Tables\TableScenario.feature">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="System.Specs\Tags\Tags.feature">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NBehave\NBehave.csproj">
+      <Project>{9C2E9E17-2A2C-4F6C-8072-D160A7EA9A51}</Project>
+      <Name>NBehave</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TestLib\TestLib.fsproj">
+      <Project>{BE54FC84-B1B4-4EBF-A880-604C4D97F547}</Project>
+      <Name>TestLib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.0' Or $(TargetFrameworkVersion) == 'v4.0.3')">
+      <ItemGroup>
+        <Reference Include="nunit.framework">
+          <HintPath>..\..\packages\NUnit\lib\net40\nunit.framework.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3' Or $(TargetFrameworkVersion) == 'v4.7' Or $(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2')">
+      <ItemGroup>
+        <Reference Include="nunit.framework">
+          <HintPath>..\..\packages\NUnit\lib\net45\nunit.framework.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework'">
+      <ItemGroup>
+        <Reference Include="Rhino.Mocks">
+          <HintPath>..\..\packages\RhinoMocks\lib\net\Rhino.Mocks.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <ItemGroup>
+    <Reference Include="Should">
+      <HintPath>..\..\packages\Should\lib\Should.dll</HintPath>
+      <Private>True</Private>
+      <Paket>True</Paket>
+    </Reference>
+  </ItemGroup>
+</Project>
